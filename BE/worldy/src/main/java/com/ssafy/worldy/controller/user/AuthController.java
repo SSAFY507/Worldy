@@ -1,4 +1,4 @@
-package com.ssafy.worldy.controller;
+package com.ssafy.worldy.controller.user;
 
 import com.ssafy.worldy.jwt.JwtFilter;
 import com.ssafy.worldy.jwt.TokenProvider;

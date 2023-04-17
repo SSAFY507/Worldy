@@ -1,4 +1,4 @@
-package com.ssafy.worldy.controller;
+package com.ssafy.worldy.controller.user;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
