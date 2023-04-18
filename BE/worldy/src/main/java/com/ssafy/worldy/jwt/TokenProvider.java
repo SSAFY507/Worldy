@@ -26,14 +26,16 @@ public class TokenProvider implements InitializingBean {
     private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
     private static final String AUTHORITIES_KEY = "auth";
     private final String secret;
-    private final long tokenValidityInMilliseconds;
+    private final long accessTokenValidTime;
+    private final long refreshTokenValidTime;
     private Key key;
 
     public TokenProvider(
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
         this.secret = secret;
-        this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
+        this.accessTokenValidTime = tokenValidityInSeconds * 2 * 1000; // 2시간
+        this.refreshTokenValidTime = accessTokenValidTime * 5; // 2시간의 5배
     }
 
     @Override
@@ -42,8 +44,8 @@ public class TokenProvider implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // Authentication 객체의 권한 정보를 이용해서 토큰 생성
-    public String createToken(Authentication authentication) {
+    // Authentication 객체의 권한 정보를 이용해서 access 토큰 생성
+    public String createAccessToken(Authentication authentication) {
 
         // 권한 설정
         String authorities = authentication.getAuthorities().stream()
@@ -52,12 +54,26 @@ public class TokenProvider implements InitializingBean {
 
         // 만료 시간 설정
         long now = (new Date()).getTime();
-        Date validity = new Date(now + this.tokenValidityInMilliseconds);
+        Date validity = new Date(now + this.accessTokenValidTime);
 
         // JWT 토큰 생성하여 리턴
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .setExpiration(validity)
+                .compact();
+    }
+
+    // Authentication 객체의 권한 정보를 이용해서 refresh 토큰 생성
+    public String createRefreshToken() {
+
+        // 만료 시간 설정
+        long now = (new Date()).getTime();
+        Date validity = new Date(now + this.refreshTokenValidTime);
+
+        // JWT 토큰 생성하여 리턴
+        return Jwts.builder()
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity)
                 .compact();

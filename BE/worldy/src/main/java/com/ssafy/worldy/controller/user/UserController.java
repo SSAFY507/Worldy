@@ -39,21 +39,25 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@RequestBody LoginDto loginDto) {
 
+        String kakaoId = loginDto.getKakaoId();
+
         // username(kakaoId)과 password를 이용하여 인증을 진행
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginDto.getKakaoId(), loginDto.getPassword());
+                new UsernamePasswordAuthenticationToken(kakaoId, loginDto.getPassword());
 
         // SecurityContextHolder에 저장
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // JWT 토큰 생성
-        String jwt = tokenProvider.createToken(authentication);
+        String accessToken = tokenProvider.createAccessToken(authentication);
+        String refreshToken = tokenProvider.createRefreshToken();
+        userSerivce.saveRefreshToken(kakaoId, refreshToken);
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
+        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + accessToken);
 
-        return new ResponseEntity<>(new TokenDto(jwt), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(new TokenDto(accessToken, refreshToken), httpHeaders, HttpStatus.OK);
     }
 
     /***

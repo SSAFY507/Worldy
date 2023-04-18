@@ -31,6 +31,9 @@ public class User {
     @Column(name = "activated")
     private boolean activated;  // 활성화 여부
 
+    @Column(name = "refresh_token")
+    private String refreshToken;    // refresh 토큰
+
     @ManyToMany
     @JoinTable(
             name = "user_authority",
@@ -45,6 +48,7 @@ public class User {
                 .kakaoId(this.kakaoId)
                 .password(this.password)
                 .activated(this.activated)
+                .refreshToken(this.refreshToken)
                 .build();
     }
 }

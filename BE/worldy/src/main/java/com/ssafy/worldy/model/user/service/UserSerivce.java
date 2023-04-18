@@ -27,6 +27,20 @@ public class UserSerivce {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // refresh 토큰 업데이트
+    @Transactional
+    public void saveRefreshToken(String kakaoId, String refreshToken) {
+
+        Optional<User> user = userRepo.findByKakaoId(kakaoId);
+        if(user.isEmpty()) {
+            throw new RuntimeException("없는 회원");
+        }
+
+        UserDto userDto = user.get().toDto();
+        userDto.setRefreshToken(refreshToken);
+        userRepo.save(userDto.toEntity());
+    }
+
     // 회원 가입
     @Transactional
     public String regist(UserDto userDto) {
@@ -53,15 +67,4 @@ public class UserSerivce {
 
         return userDto.getKakaoId() + " 사용자 가입 완료";
     }
-
-//    // kakaoId로 UserDto 찾기
-//    public UserDto getUserDto(String kakaoId) {
-//
-//        Optional<User> user = userRepo.findByKakaoId(kakaoId);
-//        if(user.isEmpty()) {
-//            throw new RuntimeException("해당하는 회원 없음"); // 유저 찾지 못함
-//        }
-//
-//        return user.get().toDto();
-//    }
 }

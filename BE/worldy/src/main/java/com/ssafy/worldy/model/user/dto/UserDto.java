@@ -20,12 +20,15 @@ public class UserDto {
 
     private boolean activated;
 
+    private String refreshToken;
+
     // DTO -> Entity 변환
     public User toEntity() {
         return User.builder()
                 .userId(this.userId)
                 .kakaoId(this.kakaoId)
                 .password(this.password)
-                .activated(this.activated).build();
+                .activated(this.activated)
+                .refreshToken(this.refreshToken).build();
     }
 }
