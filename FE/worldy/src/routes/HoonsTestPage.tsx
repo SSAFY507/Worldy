@@ -1,4 +1,5 @@
 import TestFor3D from '../components/TestFor3D';
+import TestFor3DEdit from '../components/TestFor3DEdit';
 
 function HoonsTestPage() {
   return (
@@ -9,7 +10,7 @@ function HoonsTestPage() {
       >
         Hoons
       </h1>
-      <TestFor3D />
+      <TestFor3DEdit />
     </div>
   );
 }
