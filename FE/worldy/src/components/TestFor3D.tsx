@@ -40,6 +40,13 @@ const MeshButton = ({
 function TestFor3D() {
   // hoonsCamera.position.set(10, 32, 50);
 
+  const [rolledDice, setRolledDice] = useState<number>(0);
+  const getRandomInt = () => {
+    const newDice = Math.floor(Math.random() * (12 - 1) + 1);
+    setRolledDice(newDice);
+    moveCounted(newDice);
+  };
+
   const defaultCamera = new PerspectiveCamera(
     75,
     window.innerWidth / window.innerHeight,
@@ -49,7 +56,7 @@ function TestFor3D() {
   const [camera, setCamera] = useState<PerspectiveCamera>(defaultCamera);
 
   useEffect(() => {
-    camera.position.set(0, 70, 150);
+    camera.position.set(0, 50, 170);
   }, []);
 
   const [vector, setVector] = useState<THREE.Vector3>();
@@ -62,15 +69,15 @@ function TestFor3D() {
 
   const rotateCamera = (dir: number): Promise<void> => {
     return new Promise((resolve) => {
-      const newX = 150 * (dir % 2) * Math.pow(-1, dir % 3);
-      const newZ = 150 * ((dir + 1) % 2) * Math.pow(-1, Math.floor(dir / 2));
+      const newX = 170 * (dir % 2) * Math.pow(-1, dir % 3);
+      const newZ = 170 * ((dir + 1) % 2) * Math.pow(-1, Math.floor(dir / 2));
       gsap.to(camera.position, {
         duration: 1,
         x: newX,
-        y: 70,
+        y: 50,
         z: newZ,
         onUpdate: () => {
-          camera.position.set(camera.position.x, 70, camera.position.z);
+          camera.position.set(camera.position.x, 50, camera.position.z);
         },
         onComplete: () => {
           resolve();
@@ -118,7 +125,7 @@ function TestFor3D() {
     if (event.target.value) setCount(parseInt(event.target.value));
   };
 
-  const moveCounted = async () => {
+  const moveCounted = async (count: number) => {
     // var prevDir: number = -1;
     var presentDir = 0;
     for (let i = 1; i <= count; i++) {
@@ -150,6 +157,7 @@ function TestFor3D() {
         position={[82.5 - i * dist, 0, 82.5]}
         scale={[10, 5, 10]}
         transparent={false}
+        color={i === 0 ? 'blue' : undefined}
       />
     );
   }
@@ -161,6 +169,7 @@ function TestFor3D() {
         position={[-82.5, 0, 82.5 - i * dist]}
         scale={[10, 5, 10]}
         transparent={false}
+        color={i === 0 ? 'orange' : undefined}
       />
     );
   }
@@ -172,6 +181,7 @@ function TestFor3D() {
         position={[-82.5 + i * dist, 0, -82.5]}
         scale={[10, 5, 10]}
         transparent={false}
+        color={i === 0 ? 'green' : undefined}
       />
     );
   }
@@ -183,6 +193,7 @@ function TestFor3D() {
         position={[82.5, 0, -82.5 + i * dist]}
         scale={[10, 5, 10]}
         transparent={false}
+        color={i === 0 ? 'brown' : undefined}
       />
     );
   }
@@ -221,7 +232,17 @@ function TestFor3D() {
           </button>
           <div>
             <input type='number' value={count} onChange={handleCount} />
-            <button onClick={moveCounted}>돌리기</button>
+            <button
+              onClick={() => {
+                moveCounted(count);
+              }}
+            >
+              돌리기
+            </button>
+          </div>
+          <div>
+            <button onClick={getRandomInt}>주사위 돌리기</button>
+            <h2> 주사위값 : {rolledDice}</h2>
           </div>
         </div>
         <Canvas camera={camera}>
