@@ -1,0 +1,46 @@
+package com.ssafy.worldy.config;
+
+import com.ssafy.worldy.util.StompHandler;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
+import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
+import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+
+@Configuration
+@EnableWebSocketMessageBroker
+@RequiredArgsConstructor
+public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    private final StompHandler stompHandler;
+
+    /**
+     * publish와 subscribe할 prefix 주소를 등록
+     * 메시지 발행 요청 : /pub (Application Destination Prefix) ex) /pub
+     * 메시지 구독 요청 : /sub (enable Simple Broker) ex) /sub/{Channel}
+     **/
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry registry) {
+        registry.enableSimpleBroker("/sub");
+        registry.setApplicationDestinationPrefixes("/pub");
+    }
+
+    /**
+     * 클라이언트에서 WebSocket에 접속할 수 있는 endpoint를 지정
+     **/
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/ws-stomp") // ex) ws://localhost:9090/ws-stomp
+                .setAllowedOriginPatterns("*").withSockJS(); // 클라이언트와의 연결은 SocketJS()하므로 설정
+    }
+
+    /**
+     *  StompHandler가 WebSocket 앞단에서 Token 및 소켓 연결 끊김 등을 체크
+     **/
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(stompHandler);
+    }
+}
