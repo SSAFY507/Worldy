@@ -15,21 +15,16 @@ import java.util.Set;
 @Table(name = "user")
 public class User {
 
-    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
     private Long userId;    // 아이디
 
-    @Column(name = "user_name", length = 50, nullable = false, unique = true)
-    private String userName;    // 이름
-
-    @JsonIgnore
-    @Column(name = "password", length = 100, nullable = false)
+    @Column(name = "password", nullable = false)
     private String password;    // 비밀번호
 
-    @Column(name = "nick_name", length = 50)
-    private String nickName;    // 닉네임
+    @Column(name = "kakao_id", length = 50, nullable = false, unique = true)
+    private String kakaoId;    // 카카오 아이디
 
     @JsonIgnore
     @Column(name = "activated")

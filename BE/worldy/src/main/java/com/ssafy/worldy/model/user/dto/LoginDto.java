@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 public class LoginDto {
 
     @NotNull
-    private String userName;
+    private String kakaoId;
 
     @NotNull
     private String password;
