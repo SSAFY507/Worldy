@@ -14,4 +14,6 @@ public interface UserRepo extends JpaRepository<User, Long> {
     // EntityGraph는 Eager 조회로 authorities 정보를 같이 가져오게 함
     @EntityGraph(attributePaths = "authorities")
     Optional<User> findOneWithAuthoritiesByKakaoId(String kakaoId);
+
+    Optional<User> findByKakaoId(String kakaoId);
 }
