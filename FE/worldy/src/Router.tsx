@@ -1,17 +1,35 @@
+import React, { useState } from 'react';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 
 import Navbar from './components/Nvabar';
 import HoonsTestPage from './routes/HoonsTestPage';
 import IntroPage from './routes/IntroPage';
+import LoginModal from './components/LoginModal';
+import LoginModalBackground from './components/LoginModalBackground';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
   const location = useLocation(); //현재 브라우저의 URL 위치 반환
 
+  const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
+
+  //네브바에서 무료 플레이 버튼 누르면 모달 토글
+  const handleLoginModal = () => {
+    setShowLoginModal(!showLoginModal);
+    console.log(showLoginModal);
+  };
+
+  const closeLoginModal = () => {
+    setShowLoginModal(false);
+  };
+
   //페이지 이동 Route용으로 <Route><Route> => <Routes><Route>로 변경했습니다.
   return (
     <>
-      {location.pathname !== '/hoons' && <Navbar />}
+      {location.pathname !== '/hoons' && (
+        <Navbar onLoginClick={handleLoginModal} />
+      )}
+      {showLoginModal && <LoginModal onClose={closeLoginModal} />}
       {/* Routes : 여러 컴퍼넌트 중 URL과 일치하는 '첫번째' Route 컴퍼넌트만 렌더링 */}
       <Routes>
         <Route path='/' element={<IntroPage />} />
