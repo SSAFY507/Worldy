@@ -319,11 +319,6 @@ function TestFor3DEdit() {
     const animate = () => {
       requestAnimationFrame(animate);
       controls.update();
-      //   meshPlayer.position.set(
-      //     playerLoc.current.x,
-      //     playerLoc.current.y,
-      //     playerLoc.current.z
-      //   );
       meshPlayer.position.copy(playerLoc.current);
 
       renderer.render(scene, camera);
