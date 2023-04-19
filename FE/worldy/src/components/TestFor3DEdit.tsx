@@ -89,9 +89,6 @@ function TestFor3DEdit() {
       gsap.to(playerLoc.current, {
         duration: 0.2,
         ease: 'power0.inOut',
-        // x: (newPosition.x += dir === 0 ? -dist / 2 : dir === 2 ? dist / 2 : 0),
-        // y: (newPosition.y += 3),
-        // z: (newPosition.z += dir === 3 ? dist / 2 : dir === 1 ? -dist / 2 : 0),
         x: newX,
         y: newY,
         z: newZ,
@@ -116,10 +113,6 @@ function TestFor3DEdit() {
             duration: 0.2,
             ease: 'power0.out',
             // x: (newPosition.x +=h
-            //   dir === 0 ? -dist / 2 :  dir === 2 ? dist / 2 : 0),
-            // y: (newPosition.y -= 3),
-            // z: (newPosition.z +=
-            //   dir === 3 ? dist / 2 : dir ===  1 ? -dist / 2 : 0),
             x: newnewX,
             y: newnewY,
             z: newnewZ,
@@ -140,24 +133,6 @@ function TestFor3DEdit() {
     });
   };
   ////////////////////////////////
-  const addMeshButton = ({
-    position,
-    scale,
-    color,
-    transparent = false,
-  }: MeshButtonProps) => {
-    const geometry = new THREE.BoxGeometry(...scale);
-    const material = new THREE.MeshStandardMaterial({
-      color: color,
-      transparent: transparent,
-      opacity: transparent ? 0 : 1,
-    });
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(position.x, position.y, position.z);
-    // scene.add(mesh);
-
-    return mesh;
-  };
 
   //카메라 함수
   const rotateCamera = (dir: number): Promise<void> => {
@@ -184,20 +159,32 @@ function TestFor3DEdit() {
   };
   ////////////////////////////////
 
+  const addMeshButton = ({
+    position,
+    scale,
+    color,
+    transparent = false,
+  }: MeshButtonProps) => {
+    const geometry = new THREE.BoxGeometry(...scale);
+    const material = new THREE.MeshStandardMaterial({
+      color: color,
+      transparent: transparent,
+      opacity: transparent ? 0 : 1,
+    });
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(position.x, position.y, position.z);
+    // scene.add(mesh);
+
+    return mesh;
+  };
+
   const scene = new THREE.Scene();
 
   useEffect(() => {
     if (!mountRef.current) return;
 
-    // const camera = new THREE.PerspectiveCamera(
-    //   75,
-    //   window.innerWidth / window.innerHeight,
-    //   0.1,
-    //   1000
-    // );
-
     const camera = cameraRef.current;
-    camera.position.set(0, 50, 170);
+    if (camera.position.x === 0) camera.position.set(0, 50, 170);
 
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
