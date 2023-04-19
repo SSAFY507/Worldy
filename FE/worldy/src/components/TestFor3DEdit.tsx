@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { gsap } from 'gsap';
+import { relative } from 'path';
+import './TempButton.css';
 
 type MeshButtonProps = {
   position: THREE.Vector3;
@@ -11,6 +13,8 @@ type MeshButtonProps = {
 };
 
 function TestFor3DEdit() {
+  ///////////////////////////////////////////
+
   const mountRef = useRef<HTMLDivElement | null>(null);
 
   const dist = 15;
@@ -179,6 +183,7 @@ function TestFor3DEdit() {
   };
 
   const scene = new THREE.Scene();
+  scene.background = new THREE.Color('white');
 
   useEffect(() => {
     if (!mountRef.current) return;
@@ -216,7 +221,7 @@ function TestFor3DEdit() {
       );
       const scale: [number, number, number] = [10, 5, 10];
       const transparent: boolean = false;
-      const color: THREE.ColorRepresentation = i === 0 ? 'green' : 'gray';
+      const color: THREE.ColorRepresentation = i === 0 ? 'green' : '#1E1E1E';
 
       const meshButton = addMeshButton({
         position,
@@ -237,7 +242,7 @@ function TestFor3DEdit() {
       );
       const scale: [number, number, number] = [10, 5, 10];
       const transparent: boolean = false;
-      const color: THREE.ColorRepresentation = i === 0 ? 'blue' : 'gray';
+      const color: THREE.ColorRepresentation = i === 0 ? 'blue' : '#1E1E1E';
 
       const meshButton = addMeshButton({
         position,
@@ -258,7 +263,7 @@ function TestFor3DEdit() {
       );
       const scale: [number, number, number] = [10, 5, 10];
       const transparent: boolean = false;
-      const color: THREE.ColorRepresentation = i === 0 ? 'red' : 'gray';
+      const color: THREE.ColorRepresentation = i === 0 ? 'red' : '#1E1E1E';
 
       const meshButton = addMeshButton({
         position,
@@ -279,7 +284,7 @@ function TestFor3DEdit() {
       );
       const scale: [number, number, number] = [10, 5, 10];
       const transparent: boolean = false;
-      const color: THREE.ColorRepresentation = i === 0 ? 'purple' : 'gray';
+      const color: THREE.ColorRepresentation = i === 0 ? 'purple' : '#1E1E1E';
 
       const meshButton = addMeshButton({
         position,
@@ -330,7 +335,7 @@ function TestFor3DEdit() {
         ref={mountRef}
       >
         <div>
-          <button
+          {/* <button
             className={'border-2 border-black'}
             onClick={() => {
               movePlayerDir(0);
@@ -358,20 +363,45 @@ function TestFor3DEdit() {
             }}
           >
             <h2>위</h2>
-          </button>
-          <div>
-            <input type='number' value={count} onChange={handleCount} />
-            <button
-              onClick={() => {
-                moveCounted(count);
-              }}
-            >
-              돌리기
-            </button>
-          </div>
-          <div>
-            <button onClick={getRandomInt}>주사위 돌리기</button>
-            <h2> 주사위값 : {rolledDice}</h2>
+          </button> */}
+          <div className='flex flex-row justify-start items-center h-20'>
+            <div className='mx-10'>
+              <button id='tempButton' onClick={getRandomInt}>
+                <span
+                  id='tempButtonText'
+                  className='flex items-center justify-center flex-row'
+                >
+                  <svg
+                    stroke='currentColor'
+                    fill='currentColor'
+                    stroke-width='0'
+                    viewBox='0 0 512 512'
+                    height='1em'
+                    width='1em'
+                    xmlns='http://www.w3.org/2000/svg'
+                  >
+                    <path d='M255.76 44.764c-6.176 0-12.353 1.384-17.137 4.152L85.87 137.276c-9.57 5.536-9.57 14.29 0 19.826l152.753 88.36c9.57 5.536 24.703 5.536 34.272 0l152.753-88.36c9.57-5.535 9.57-14.29 0-19.825l-152.753-88.36c-4.785-2.77-10.96-4.153-17.135-4.153zm.926 82.855a31.953 18.96 0 0 1 22.127 32.362 31.953 18.96 0 1 1-45.188-26.812 31.953 18.96 0 0 1 23.06-5.55zM75.67 173.84c-5.753-.155-9.664 4.336-9.664 12.28v157.696c0 11.052 7.57 24.163 17.14 29.69l146.93 84.848c9.57 5.526 17.14 1.156 17.14-9.895V290.76c0-11.052-7.57-24.16-17.14-29.688l-146.93-84.847c-2.69-1.555-5.225-2.327-7.476-2.387zm360.773.002c-2.25.06-4.783.83-7.474 2.385l-146.935 84.847c-9.57 5.527-17.14 18.638-17.14 29.69v157.7c0 11.05 7.57 15.418 17.14 9.89L428.97 373.51c9.57-5.527 17.137-18.636 17.137-29.688v-157.7c0-7.942-3.91-12.432-9.664-12.278zM89.297 195.77a31.236 18.008 58.094 0 1 33.818 41.183 31.236 18.008 58.094 1 1-45-25.98 31.236 18.008 58.094 0 1 11.182-15.203zm221.52 64.664A18.008 31.236 31.906 0 1 322 275.637a18.008 31.236 31.906 0 1-45 25.98 18.008 31.236 31.906 0 1 33.818-41.183zM145.296 289.1a31.236 18.008 58.094 0 1 33.818 41.183 31.236 18.008 58.094 0 1-45-25.98 31.236 18.008 58.094 0 1 11.182-15.203zm277.523 29.38A18.008 31.236 31.906 0 1 434 333.684a18.008 31.236 31.906 0 1-45 25.98 18.008 31.236 31.906 0 1 33.818-41.184zm-221.52 64.663a31.236 18.008 58.094 0 1 33.817 41.183 31.236 18.008 58.094 1 1-45-25.98 31.236 18.008 58.094 0 1 11.182-15.203z'></path>
+                  </svg>
+                  <div className='ml-4'>( {rolledDice} )</div>
+                </span>
+              </button>
+            </div>
+            <div id='input-container' className='mx-10'>
+              <input
+                id='tempInput'
+                type='number'
+                value={count}
+                onChange={handleCount}
+              />
+              <button
+                id='invite-btn'
+                onClick={() => {
+                  moveCounted(count);
+                }}
+              >
+                돌리기
+              </button>
+            </div>
           </div>
         </div>
       </div>
