@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router';
 import { createRoot } from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
-import router from './Router';
+import Router from './Router';
 import { store } from './_store/store';
 
 const container = document.getElementById('root')!;
@@ -14,7 +14,8 @@ const root = createRoot(container);
 root.render(
   <Provider store={store}>
     <GlobalStyle />
-    <RouterProvider router={router} />
+    <Router />
+    {/* <RouterProvider router={Router} /> */}
   </Provider>
 );
 
