@@ -119,8 +119,6 @@ function TestFor3D() {
   //Contorls
   const [playerMovedCount, setPlayerMovedCount] = useState<number>(0);
   const [count, setCount] = useState<number>(0);
-  const [line, setLine] = useState<number>(0);
-  const [blocks, setBlocks] = useState<number>(0);
   const handleCount = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value) setCount(parseInt(event.target.value));
   };
@@ -131,13 +129,11 @@ function TestFor3D() {
     for (let i = 1; i <= count; i++) {
       presentDir = Math.floor((playerMovedCount - 1 + i) / 11);
       if (presentDir === 4) presentDir = 0;
-
       // if (prevDir === -1) prevDir = presentDir;
       // else if (prevDir !== presentDir) {
       //   await rotateCamera(presentDir);
       //   prevDir = presentDir;
       // }
-
       console.log('presentDir', presentDir);
       await movePlayerDir(presentDir);
     }
@@ -203,6 +199,7 @@ function TestFor3D() {
       <div style={{ backgroundColor: 'grey', width: '100%', height: 1000 }}>
         <div>
           <button
+            className={'border-2 border-black'}
             onClick={() => {
               movePlayerDir(0);
             }}
