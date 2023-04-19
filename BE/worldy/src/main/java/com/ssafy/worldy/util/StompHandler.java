@@ -1,12 +1,18 @@
 package com.ssafy.worldy.util;
 
+import com.ssafy.worldy.model.game.exception.CustomException;
+import com.ssafy.worldy.model.game.exception.CustomExceptionList;
+import com.ssafy.worldy.model.game.repo.GameRoomRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 /**
  * interceptor 역할
@@ -16,6 +22,8 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
 public class StompHandler implements ChannelInterceptor {
+
+    private GameRoomRepo gameRoomRepo;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -27,8 +35,27 @@ public class StompHandler implements ChannelInterceptor {
 //            // spring security 구현 후 토큰 검증
 //            if(!tokenProvider.validateToken(accessor.getFirstNativeHeader("Authorization")))
 //                throw new AccessDeniedException("");
+        } else if (accessor.getCommand() == StompCommand.SUBSCRIBE) { // 최초 연결
+
+            String roomId = getRoomId(Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId"));
+
+            if(gameRoomRepo.playerCnt(roomId)==4) {
+                new CustomException(CustomExceptionList.ENTER_GAME_ERROR);
+            } else {
+                String kakaoId = SecurityContextHolder.getContext().getAuthentication().getName();
+                gameRoomRepo.enterGameRoom(kakaoId,roomId); // 게임방에 플레이어 저장
+            }
         }
 
         return message;
+    }
+
+    private String getRoomId(String destination) {
+        int lastIndex = destination.lastIndexOf('/');
+        if (lastIndex != -1) {
+            return destination.substring(lastIndex + 1);
+        } else {
+            return null;
+        }
     }
 }

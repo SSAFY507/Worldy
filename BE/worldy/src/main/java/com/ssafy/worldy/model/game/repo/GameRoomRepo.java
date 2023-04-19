@@ -1,6 +1,7 @@
 package com.ssafy.worldy.model.game.repo;
 
 import com.ssafy.worldy.model.game.dto.GameRoom;
+import com.ssafy.worldy.model.game.dto.Player;
 import com.ssafy.worldy.model.game.service.RedisPublisher;
 import com.ssafy.worldy.model.game.service.RedisSubscriber;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,11 +31,14 @@ public class GameRoomRepo {
     private final RedisMessageListenerContainer redisMessageListenerContainer;
     private final RedisSubscriber redisSubscriber;
     private static final String GAME_ROOMS = "GAME_ROOM";
-
+     private static final String GAME_PLYER = "GAME_PLAYER";
     private final RedisTemplate<String, Object> redisTemplate;
     private HashOperations<String, String, GameRoom> opsHashGameRoom;
+    private HashOperations<String, String, List<String>> opsHashGameRoomPlayer;
+
     // 메시지를 발행하기 위한 redis topic 정보. 서버별로 채팅방에 매치되는 topic정보를 Map에 넣어 roomId로 찾을수 있도록 한다.
     private Map<String, ChannelTopic> topics;
+    private ChannelTopic channelTopic;
 
     @PostConstruct
     private void init() {
@@ -49,27 +54,60 @@ public class GameRoomRepo {
     }
 
      /**
-      * 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장
+      * 게임방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장
       */
     public GameRoom createGameRoom(String name) {
+
         GameRoom gameRoom = GameRoom.create(name);
         opsHashGameRoom.put(GAME_ROOMS, gameRoom.getRoomId(), gameRoom);
         return gameRoom;
     }
 
-     /**
-      * 채팅방 입장 : redis에 topic을 만들고 pub/sub 통신을 하기 위해 리스너를 설정
-      */
-     public void enterGameRoom(String roomId) {
-         ChannelTopic topic = topics.get(roomId);
+//     /**
+//      * 게임방 입장 : redis에 topic을 만들고 pub/sub 통신을 하기 위해 리스너를 설정
+//      */
+//     public void enterGameRoom(String roomId) {
+//         ChannelTopic topic = topics.get(roomId);
+//
+//         if(topic==null) {
+//             topic = new ChannelTopic(roomId);
+//             redisMessageListenerContainer.addMessageListener(redisSubscriber, topic);
+//             topics.put(roomId, topic);
+//         }
+//     }
 
-         if(topic==null) {
-             topic = new ChannelTopic(roomId);
-             redisMessageListenerContainer.addMessageListener(redisSubscriber, topic);
-             topics.put(roomId, topic);
-         }
+     /**
+      * 게임에 입장한 플레이어
+      */
+    public void enterGameRoom(String kakaoId, String roomId) {
+
+        List<String> player = opsHashGameRoomPlayer.get(GAME_PLYER, roomId);
+
+        if(player == null) player = new ArrayList<>();
+        player.add(kakaoId);
+
+        opsHashGameRoomPlayer.put(GAME_PLYER, roomId, player);
      }
+
+     /**
+      * 게임에 입장한 플레이어 수
+      */
+     public double playerCnt(String roomId) {
+         List<String> player = opsHashGameRoomPlayer.get(GAME_PLYER, roomId);
+         return player.size();
+     }
+
      public ChannelTopic getTopic(String roomId) {
+
          return topics.get(roomId);
+     }
+
+     /**
+      * 게임방 삭제
+      */
+     public void deleteGameRoom(String roomId) {
+
+         opsHashGameRoom.delete(GAME_ROOMS, roomId);
+         opsHashGameRoomPlayer.delete(GAME_ROOMS, roomId);
      }
 }

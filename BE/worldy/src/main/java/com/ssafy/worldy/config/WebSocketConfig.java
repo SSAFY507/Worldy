@@ -20,6 +20,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
      * publish와 subscribe할 prefix 주소를 등록
      * 메시지 발행 요청 : /pub (Application Destination Prefix) ex) /pub
      * 메시지 구독 요청 : /sub (enable Simple Broker) ex) /sub/{Channel}
+     *
+     * pub 요청 시 메시지 보낼 때 관련 경로 설정
+     * sub 요청 시 messageBroker가 중간에서 해당 방을 구독하고 있는 클라이언트에게 메시지 전송
      **/
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
@@ -28,11 +31,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     }
 
     /**
-     * 클라이언트에서 WebSocket에 접속할 수 있는 endpoint를 지정
+     * 클라이언트에서 WebSocket 연결 시 사용할 API경로의 endpoint를 지정
      **/
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws-stomp") // ex) ws://localhost:9090/ws-stomp
+        registry.addEndpoint("/stomp/game") // ex) ws://localhost:9090/stomp/game
                 .setAllowedOriginPatterns("*").withSockJS(); // 클라이언트와의 연결은 SocketJS()하므로 설정
     }
 
