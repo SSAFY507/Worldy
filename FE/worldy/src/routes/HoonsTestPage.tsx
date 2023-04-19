@@ -8,7 +8,7 @@ function HoonsTestPage() {
         className='text-3xl font-bold underline'
         style={{ color: `var(--purple500-color)` }}
       >
-        Hoons
+        {/* Hoons */}
       </h1>
       <TestFor3DEdit />
     </div>

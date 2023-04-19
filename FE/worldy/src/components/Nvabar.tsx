@@ -35,7 +35,7 @@ export default function Navbar({ onLoginClick }: any) {
               {navList.map((item, index) => (
                 <li key={index} className='mx-10'>
                   <a href={item[1]}>
-                    <div className='w-20 text-base  text-center text-white'>
+                    <div className='w-20 text-base h-10 flex flex-row items-center justify-center text-center text-white'>
                       {item[0]}
                     </div>
                   </a>
