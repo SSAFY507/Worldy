@@ -10,6 +10,12 @@ import IntroPage from './routes/IntroPage';
 import LoginModal from './components/LoginModal';
 import LoginModalBackground from './components/LoginModalBackground';
 import LoaderPyramid from './components/LoaderPyramid';
+import MainPageAfterLogin from './components/MainPageAfterLogin';
+import GameInfo from './routes/GameInfo';
+import Updates from './routes/Updates';
+import Explore from './routes/Explore';
+import Monopoly from './routes/Monopoly';
+import Support from './routes/Support';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -30,15 +36,27 @@ const AppLayout = () => {
   const [loadedBackgroundImage, setLoadedBackgroundImage] =
     useState<boolean>(false);
 
-  const imageBackgroundImage = new Image();
+  const [imageBackgroundImage, setImageBackgroundImage] =
+    useState<HTMLImageElement>(new Image());
   useEffect(() => {
     imageBackgroundImage.src = BackgroundImage;
+    // setLoadedBackgroundImage(true);
     imageBackgroundImage.onload = () => {
       setTimeout(() => {
         setLoadedBackgroundImage(true);
       }, 1000);
     };
   }, [BackgroundImage]);
+
+  const [login, setLogin] = useState<boolean>(false);
+
+  const handleLoginAdmin = () => {
+    setLogin(!login);
+  };
+
+  useEffect(() => {
+    if (login) setImageBackgroundImage(new Image());
+  }, [login]);
 
   //페이지 이동 Route용으로 <Route><Route> => <Routes><Route>로 변경했습니다.
   return (
@@ -52,19 +70,32 @@ const AppLayout = () => {
           }}
         >
           <div className='z-10'>
-            {location.pathname !== '/hoons' && (
-              <Navbar onLoginClick={handleLoginModal} />
-            )}
+            {location.pathname !== '/explore' &&
+              location.pathname !== '/monopoly' && (
+                <Navbar
+                  onLoginClick={handleLoginModal}
+                  onLoginAdmin={handleLoginAdmin}
+                />
+              )}
             {showLoginModal && <LoginModal onClose={closeLoginModal} />}
             {/* Routes : 여러 컴퍼넌트 중 URL과 일치하는 '첫번째' Route 컴퍼넌트만 렌더링 */}
           </div>
           <div className='flex-1 h-full'>
             <Routes>
-              <Route
-                path='/'
-                element={<IntroPage onLoginClick={handleLoginModal} />}
-              />
+              {login ? (
+                <Route path='/' element={<MainPageAfterLogin />} />
+              ) : (
+                <Route
+                  path='/'
+                  element={<IntroPage onLoginClick={handleLoginModal} />}
+                />
+              )}
               <Route path='/hoons' element={<HoonsTestPage />} />
+              <Route path='/gameinfo' element={<GameInfo />} />
+              <Route path='/updates' element={<Updates />} />
+              <Route path='/explore' element={<Explore />} />
+              <Route path='/monopoly' element={<Monopoly />} />
+              <Route path='/support' element={<Support />} />
             </Routes>
           </div>
         </div>
