@@ -5,6 +5,7 @@ import com.ssafy.worldy.model.game.dto.Player;
 import com.ssafy.worldy.model.game.service.RedisPublisher;
 import com.ssafy.worldy.model.game.service.RedisSubscriber;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -28,9 +29,7 @@ import java.util.Map;
 public class GameRoomRepo {
 
     // Topic에 발행되는 메시지를 처리할 Listner
-    private final RedisMessageListenerContainer redisMessageListenerContainer;
-    private final RedisSubscriber redisSubscriber;
-    private static final String GAME_ROOMS = "GAME_ROOM";
+     private static final String GAME_ROOMS = "GAME_ROOM";
      private static final String GAME_PLYER = "GAME_PLAYER";
     private final RedisTemplate<String, Object> redisTemplate;
     private HashOperations<String, String, GameRoom> opsHashGameRoom;
@@ -64,19 +63,6 @@ public class GameRoomRepo {
         return gameRoom;
     }
 
-//     /**
-//      * 게임방 입장 : redis에 topic을 만들고 pub/sub 통신을 하기 위해 리스너를 설정
-//      */
-//     public void enterGameRoom(String roomId) {
-//         ChannelTopic topic = topics.get(roomId);
-//
-//         if(topic==null) {
-//             topic = new ChannelTopic(roomId);
-//             redisMessageListenerContainer.addMessageListener(redisSubscriber, topic);
-//             topics.put(roomId, topic);
-//         }
-//     }
-
      /**
       * 게임에 입장한 플레이어
       */
@@ -95,12 +81,10 @@ public class GameRoomRepo {
       */
      public double playerCnt(String roomId) {
          List<String> player = opsHashGameRoomPlayer.get(GAME_PLYER, roomId);
+
+         if(player==null) return 0;
+
          return player.size();
-     }
-
-     public ChannelTopic getTopic(String roomId) {
-
-         return topics.get(roomId);
      }
 
      /**

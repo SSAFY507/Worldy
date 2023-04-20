@@ -17,38 +17,33 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 @Slf4j
-public class RedisSubscriber implements MessageListener {
+public class RedisSubscriber {
 
     private final ObjectMapper objectMapper;
     private final RedisTemplate<String, Object> redisTemplate;
     private final SimpMessageSendingOperations template;
 
-    @Override
-    public void onMessage(Message message, byte[] pattern) {
+    public void sendMessage(String publishMessage) {
 
         try {
 
             // 발행된 데이터를 역직렬화
             log.info("Redis Subscriber 호출");
-            String publishMessage = redisTemplate.getStringSerializer().deserialize(message.getBody());
-
             log.info("Publish Message : " + publishMessage);
-            Object object = objectMapper.readValue(publishMessage, Object.class);
 
-            if (object instanceof Emoticon) {
-                Emoticon emoticon = (Emoticon) object;
+            if (publishMessage.contains("emoticon")) {
+                Emoticon emoticon = objectMapper.readValue(publishMessage, Emoticon.class);
 
                 // subscriber에게 메시지 전송
                 log.info("Redis Subscribe Message : " + emoticon.toString());
-                template.convertAndSend("/sub/chat/room/" + emoticon.getRoomId(), emoticon);
-            } else if (object instanceof Player) {
-                Player player = (Player) object;
+                template.convertAndSend("/sub/" + emoticon.getRoomId(), emoticon);
+            } else if (publishMessage.contains("player")) {
+                Player player = objectMapper.readValue(publishMessage, Player.class);
 
                 // subscriber에게 메시지 전송
                 log.info("Redis Subscribe Message : " + player.toString());
-                template.convertAndSend("/sub/chat/room/" + player.getRoomId(), player);
+                template.convertAndSend("/sub/" + player.getRoomId(), player);
             }
-
         } catch (JsonProcessingException e) {
             log.error(e.getMessage());
             new CustomException(CustomExceptionList.SERIALIZER_ERROR);

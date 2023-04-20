@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service;
 public class RedisPublisher {
 
     private final RedisTemplate<String, Object> redisTemplate;
-
+    private final ChannelTopic topic;
     /**
      * 게임 중 이모티콘 전송
      **/
-    public void publish(ChannelTopic topic, Emoticon emoticon) {
+    public void publish(Emoticon emoticon) {
 
-        log.info("Topic : " + topic.getTopic() + " Emoticon : " + emoticon.getEmoticon());
+        log.info("Topic : " + topic.getTopic() + " Emoticon : " + emoticon.toString());
 
         redisTemplate.convertAndSend(topic.getTopic(), emoticon);
     }
@@ -28,7 +28,7 @@ public class RedisPublisher {
     /**
      * 게임 데이터 전송
      **/
-    public void publish (ChannelTopic topic, Player player) {
+    public void publish (Player player) {
 
         log.info("Topic : " + topic.getTopic());
         log.info("Player : " + player.toString());

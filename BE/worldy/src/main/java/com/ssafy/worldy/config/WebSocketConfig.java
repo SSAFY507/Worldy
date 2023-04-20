@@ -2,6 +2,7 @@ package com.ssafy.worldy.config;
 
 import com.ssafy.worldy.util.StompHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
