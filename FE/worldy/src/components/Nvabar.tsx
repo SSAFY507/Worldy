@@ -46,7 +46,7 @@ export default function Navbar({
               {navList.map((item, index) => (
                 <li key={index} className='mx-10'>
                   <a href={item[1]}>
-                    <div className='w-20 text-lg h-10 flex flex-row items-center justify-center text-center text-white font-PtdBold '>
+                    <div className='w-20 text-lg h-10 flex flex-row items-center justify-center text-center text-white font-PtdRegular '>
                       {item[0]}
                     </div>
                   </a>
@@ -65,13 +65,13 @@ export default function Navbar({
             </div>
             <div className=' w-1/2 h-ful flex flex-row justify-start items-center'>
               <BUTTON_RED
-                fontSize={18}
+                fontSize={16}
                 width={100}
-                // height={null}
+                // height={40}
                 rounded={true}
                 onClick={handleLoginModalClick}
                 text='로그인'
-                // fontFamily={null}
+                fontFamily={'font-PtdRegular'}
               />
             </div>
           </div>
