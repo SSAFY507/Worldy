@@ -42,7 +42,7 @@ function TestFor3DEdit() {
 
   //주사위 굴리는 함수
   const getRandomInt = () => {
-    const newDice = Math.floor(Math.random() * (12 - 1) + 1);
+    const newDice = Math.floor(Math.random() * (13 - 1) + 1);
     setRolledDice(newDice);
     moveCounted(newDice);
   };
@@ -329,9 +329,9 @@ function TestFor3DEdit() {
   }, []);
 
   return (
-    <div className='App'>
+    <div className='App w-full h-full'>
       <div
-        style={{ backgroundColor: 'grey', width: '100%', height: 1000 }}
+        className='outline outline-red-600 outline-4 bg-gray-500'
         ref={mountRef}
       >
         <div>

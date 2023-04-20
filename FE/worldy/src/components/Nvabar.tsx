@@ -4,6 +4,7 @@ import { ImSearch } from 'react-icons/im';
 import { AiOutlineGlobal } from 'react-icons/ai';
 import LoginModal from './LoginModal';
 import ReactDOM from 'react-dom';
+import BUTTON_RED from './Button_Red';
 
 export default function Navbar({ onLoginClick }: any) {
   const navList = [];
@@ -52,13 +53,16 @@ export default function Navbar({ onLoginClick }: any) {
                 <AiOutlineGlobal size='20' color='white' />
               </button>
             </div>
-            <div className='w-1/2 h-ful flex flex-row justify-center items-center'>
-              <button
+            <div className=' w-1/2 h-ful flex flex-row justify-center items-center'>
+              <BUTTON_RED
+                fontSize={14}
+                // width={null}
+                // height={null}
+                rounded={true}
                 onClick={handleLoginModalClick}
-                className='bg-buttonRed rounded-full h-10 w-32 text-white text-sm'
-              >
-                무료 플레이하기
-              </button>
+                text='무료 플레이하기'
+                // fontFamily={null}
+              />
             </div>
           </div>
         </div>
