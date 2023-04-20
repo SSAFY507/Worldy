@@ -1,7 +1,6 @@
 package com.ssafy.worldy.model.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ssafy.worldy.model.user.dto.UserDto;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -50,19 +49,19 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
     private Set<Authority> authorities;
 
-    // Entity -> DTO 변환
-    public UserDto toDto() {
-        return UserDto.builder()
-                .userId(this.userId)
-                .kakaoId(this.kakaoId)
-                .password(this.password)
-                .activated(this.activated)
-                .refreshToken(this.refreshToken)
-                .build();
-    }
-
     // refresh 토큰 업데이트
     public void updateToken(String refreshToken){
         this.refreshToken = refreshToken;
     }
+
+//    // Entity -> DTO 변환
+//    public UserDto toDto() {
+//        return UserDto.builder()
+//                .userId(this.userId)
+//                .kakaoId(this.kakaoId)
+//                .password(this.password)
+//                .activated(this.activated)
+//                .refreshToken(this.refreshToken)
+//                .build();
+//    }
 }
