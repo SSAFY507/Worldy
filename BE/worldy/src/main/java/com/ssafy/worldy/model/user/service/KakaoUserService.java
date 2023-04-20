@@ -48,8 +48,6 @@ public class KakaoUserService {
         // 1. 인가코드로 access 토큰 요청
         String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback");
 
-        System.out.println("===== 인가코드 =====" + accessToken);
-
         // 2. 없는 회원의 경우 회원가입
         User user = registKakaoUser(accessToken);
 
@@ -89,14 +87,9 @@ public class KakaoUserService {
         body.add("redirect_uri", redirectUri);
         body.add("code", code);
 
-        System.out.println("headers : " + headers);
-        System.out.println("body : " + body);
-
         // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(body, headers);
-
         RestTemplate rt = new RestTemplate();
-//        ResponseEntity<String> stringResponseEntity = rt.postForEntity("https://kauth.kakao.com/oauth/token", kakaoTokenRequest, String.class);
         ResponseEntity<String> response = rt.exchange(
                 "https://kauth.kakao.com/oauth/token",
                 HttpMethod.POST,
@@ -141,6 +134,7 @@ public class KakaoUserService {
                 gender = jsonNode.get("kakao_account").get("gender").asText();
             }
 
+            // 비밀번호 암호화 (kakaoId를 암호화해서 비밀번호로 저장)
             String encodedPassword = passwordEncoder.encode(kakaoId);
 
             Authority authority = Authority.builder()

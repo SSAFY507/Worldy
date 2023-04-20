@@ -68,29 +68,21 @@ public class UserController {
         return new ResponseEntity<>(new TokenDto(accessToken, refreshToken), httpHeaders, HttpStatus.OK);
     }
 
-    /***
-     * [ 회원가입 ]
-     * 가입, 권한 부여, 비밀번호 암호화
-     ***/
-    @PostMapping("/regist")
-    public ResponseEntity<String> regist(@RequestBody UserDto userDto) {
-        return new ResponseEntity<>(userSerivce.regist(userDto), HttpStatus.OK);
-    }
+//    /***
+//     * [ 회원가입 ]
+//     * 가입, 권한 부여, 비밀번호 암호화
+//     ***/
+//    @PostMapping("/regist")
+//    public ResponseEntity<String> regist(@RequestBody UserDto userDto) {
+//        return new ResponseEntity<>(userSerivce.regist(userDto), HttpStatus.OK);
+//    }
 
     @GetMapping("/kakao/login")
     public ResponseEntity<KakaoLoginDto> kakaoLogin(@RequestParam String code) throws JsonProcessingException {
 
-        System.out.println("1. ddddddddddddddddddddddddddddddddd");
-
         KakaoLoginDto kakaoLoginDto = kakaoUserService.kakaoLogin(code);
 
-        System.out.println("2. ddddddddddddddddddddddddddddddddd");
-
         HttpHeaders httpHeaders = new HttpHeaders();
-
-        System.out.println("3. ddddddddddddddddddddddddddddddddd");
-        String kakaoId = kakaoLoginDto.getKakaoId();
-        System.out.println("kakaoId : " + kakaoId);
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + kakaoLoginDto.getTokenDto().getAccessToken());
 
         return new ResponseEntity<>(kakaoLoginDto, httpHeaders, HttpStatus.OK);
