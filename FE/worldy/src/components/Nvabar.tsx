@@ -6,18 +6,28 @@ import LoginModal from './LoginModal';
 import ReactDOM from 'react-dom';
 import BUTTON_RED from './Button_Red';
 
-export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
+export default function Navbar({
+  onLoginClick,
+  onLoginAdmin,
+}: {
+  onLoginClick: () => void;
+  onLoginAdmin: () => void;
+}) {
   const navList = [];
   navList.push(['홈', '/']);
-  navList.push(['게임 정보', '/']);
-  navList.push(['업데이트', '/']);
-  navList.push(['세계 탐험', '/']);
-  navList.push(['모노폴리', '/hoons']);
-  navList.push(['고객 지원', '/']);
+  navList.push(['게임 정보', '/gameinfo']);
+  navList.push(['업데이트', '/updates']);
+  navList.push(['세계 탐험', '/explore']);
+  navList.push(['모노폴리', '/monopoly']);
+  navList.push(['고객 지원', '/support']);
 
   const handleLoginModalClick = (e: any) => {
     e.preventDefault();
     onLoginClick();
+  };
+
+  const adminLogin = () => {
+    onLoginAdmin();
   };
 
   return (
@@ -49,7 +59,7 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
               <button className='w-1/3'>
                 <ImSearch color='white' />
               </button>
-              <button className='w-1/3'>
+              <button className='w-1/3' onClick={adminLogin}>
                 <AiOutlineGlobal size='20' color='white' />
               </button>
             </div>
