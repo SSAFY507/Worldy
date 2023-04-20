@@ -13,9 +13,9 @@ export default function LoginModal({ onClose }: PointerOutProps) {
   const [loadedGameController, setLoadedGameController] =
     useState<boolean>(false);
 
+  const LoginLogoImg = new Image();
+  const GameControllerImg = new Image();
   useEffect(() => {
-    const LoginLogoImg = new Image();
-    const GameControllerImg = new Image();
     LoginLogoImg.src = LoginLogo;
     GameControllerImg.src = GameController;
     LoginLogoImg.onload = () => {
@@ -92,7 +92,7 @@ export default function LoginModal({ onClose }: PointerOutProps) {
           </div>
         ) : (
           <div className='w-full h-full flex flex-row justify-center items-center'>
-            <LoaderPyramid />
+            <LoaderPyramid text='첫 인사 생각 중...' />
           </div>
         )}
       </div>
