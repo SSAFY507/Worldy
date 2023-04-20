@@ -43,6 +43,7 @@ public class GameRoomRepo {
     @PostConstruct
     private void init() {
         opsHashGameRoom = redisTemplate.opsForHash();
+        opsHashGameRoomPlayer = redisTemplate.opsForHash();
         topics = new HashMap<>();
     }
 
@@ -56,9 +57,9 @@ public class GameRoomRepo {
      /**
       * 게임방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장
       */
-    public GameRoom createGameRoom(String name) {
+    public GameRoom createGameRoom() {
 
-        GameRoom gameRoom = GameRoom.create(name);
+        GameRoom gameRoom = GameRoom.create();
         opsHashGameRoom.put(GAME_ROOMS, gameRoom.getRoomId(), gameRoom);
         return gameRoom;
     }

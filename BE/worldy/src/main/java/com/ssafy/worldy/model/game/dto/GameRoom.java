@@ -15,12 +15,10 @@ public class GameRoom implements Serializable {
 
     private static final long serialVersionUID = 6494678977089006639L;
     private String roomId;
-    private String name;
 
-    public static GameRoom create(String name) {
+    public static GameRoom create() {
         GameRoom gameRoom = new GameRoom();
         gameRoom.roomId = UUID.randomUUID().toString();
-        gameRoom.name = name;
         return gameRoom;
     }
 }
