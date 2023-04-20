@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -41,5 +42,18 @@ public class UserController {
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + kakaoLoginDto.getTokenDto().getAccessToken());
 
         return new ResponseEntity<>(kakaoLoginDto, httpHeaders, HttpStatus.OK);
+    }
+
+    /***
+     * [ 로그아웃 ]
+     * - refresh 토큰을 null로 변경
+     ***/
+    @GetMapping("/logout")
+    public ResponseEntity<String> logout() {
+
+        String kakaoId = SecurityContextHolder.getContext().getAuthentication().getName();
+        kakaoUserService.logout(kakaoId);
+
+        return new ResponseEntity<>("[kakaoId : " + kakaoId + "] logout success", HttpStatus.OK);
     }
 }

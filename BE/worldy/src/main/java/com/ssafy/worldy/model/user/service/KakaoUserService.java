@@ -24,6 +24,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -177,5 +178,18 @@ public class KakaoUserService {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readTree(responseBody);
+    }
+
+    // 로그아웃
+    @Transactional
+    public void logout(String kakaoId) {
+
+        Optional<User> user = userRepo.findByKakaoId(kakaoId);
+        if(user.isEmpty()) {
+            throw new RuntimeException("해당하는 회원 없음");
+        }
+
+        user.get().setRefreshToken(null);
+        userRepo.save(user.get());
     }
 }
