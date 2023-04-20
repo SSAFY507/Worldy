@@ -18,7 +18,7 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
 
   return (
     <div
-      style={{ backgroundColor: 'rgba(27, 27, 27, 0.5)' }}
+      // style={{ backgroundColor: 'rgba(27, 27, 27, 0.5)' }}
       className='h-full flex flex-col justify-center items-center'
     >
       {moreInfo && (

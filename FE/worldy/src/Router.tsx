@@ -62,7 +62,7 @@ const AppLayout = () => {
     <>
       {loadedBackgroundImage ? (
         <div
-          className='w-screen h-screen flex flex-col'
+          className='w-screen h-screen flex flex-col bg-slate-50'
           style={{
             backgroundImage: login ? undefined : `url(${BackgroundImage})`,
             backgroundSize: '100%',
