@@ -11,7 +11,11 @@ function HoonsTestPage() {
   }, 1000);
   return (
     <div className='w-screen h-screen'>
-      {loaded ? <TestFor3DEdit /> : <LoaderPyramid />}
+      {loaded ? (
+        <TestFor3DEdit />
+      ) : (
+        <LoaderPyramid text='3D 급하게 조립 중...' />
+      )}
     </div>
   );
 }

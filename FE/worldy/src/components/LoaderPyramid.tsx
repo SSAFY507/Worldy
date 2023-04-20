@@ -1,6 +1,6 @@
 import './LoaderPyramidStyle.css';
 
-export default function LoaderPyramid() {
+export default function LoaderPyramid({ text }: { text: string }) {
   return (
     <div className='w-full h-full flex flex-col justify-center items-center'>
       <div className='pyramid-loader'>
@@ -13,7 +13,7 @@ export default function LoaderPyramid() {
         </div>
       </div>
       <div className='text-2xl font-PtdBold h-16'>
-        <h2>Loading...</h2>
+        <h2>{text}</h2>
       </div>
     </div>
   );
