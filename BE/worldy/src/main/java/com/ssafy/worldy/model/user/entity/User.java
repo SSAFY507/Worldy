@@ -27,6 +27,15 @@ public class User {
     @Column(name = "kakao_id", length = 50, nullable = false, unique = true)
     private String kakaoId;    // 카카오 아이디
 
+    @Column(name = "profile_img")
+    private String profileImg;  // 카카오 프로필 이미지
+
+    @Column(name = "sex")
+    private String sex; // 성별
+
+    @Column(name = "age")
+    private String age; // 나이
+
     @JsonIgnore
     @Column(name = "activated")
     private boolean activated;  // 활성화 여부
@@ -50,5 +59,10 @@ public class User {
                 .activated(this.activated)
                 .refreshToken(this.refreshToken)
                 .build();
+    }
+
+    // refresh 토큰 업데이트
+    public void updateToken(String refreshToken){
+        this.refreshToken = refreshToken;
     }
 }
