@@ -17,9 +17,7 @@ import java.io.IOException;
 public class JwtFilter extends GenericFilterBean {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
-
     public static final String AUTHORIZATION_HEADER = "Authorization";
-
     private TokenProvider tokenProvider;
 
     public JwtFilter(TokenProvider tokenProvider) {
@@ -27,7 +25,7 @@ public class JwtFilter extends GenericFilterBean {
     }
 
     // 필터링 로직
-    // JWT 토큰의 인증 정보를 현재 실행 중인 SecurityContext에 저장하는 역할
+    // JWT 토큰의 인증 정보를 현재 실행 중인 SecurityContext에 저장
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 

@@ -11,7 +11,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class TokenDto {
 
-    private String accessToken;
+    private String accessToken; // access 토큰
 
-    private String refreshToken;
+    private String refreshToken; // refresh 토큰
 }

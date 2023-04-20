@@ -30,13 +30,9 @@ import java.util.Collections;
 public class KakaoUserService {
 
     private final PasswordEncoder passwordEncoder;
-
     private final UserRepo userRepo;
-
     private final TokenProvider tokenProvider;
-
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
     private final static String ROLE_USER = "ROLE_USER";
 
     @Value("${kakao.client.id}")

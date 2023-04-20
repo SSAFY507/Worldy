@@ -26,6 +26,12 @@ public class UserController {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
     }
 
+    /***
+     * [ 카카오 소셜 로그인 ]
+     * - 카카오 인가 코드 받아온 후, 인가 코드를 이용해서 access 토큰을 받아와 사용자 정보 요청하기
+     * - 카카오에서 받은 사용자 정보를 토대로 회원 가입 or 로그인 (이미 가입된 사용자일 경우 로그인, 아니면 회원가입)
+     * - access, refresh 토큰 발급하고 refresh 토큰 저장
+     ***/
     @GetMapping("/kakao/login")
     public ResponseEntity<KakaoLoginDto> kakaoLogin(@RequestParam String code) throws JsonProcessingException {
 
