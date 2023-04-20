@@ -50,7 +50,7 @@ export default function LoginModal({ onClose }: PointerOutProps) {
                   <svg
                     stroke='currentColor'
                     fill='black'
-                    stroke-width='0'
+                    strokeWidth='0'
                     viewBox='0 0 1024 1024'
                     height='1.9em'
                     width='1.9em'
