@@ -53,15 +53,4 @@ public class User {
     public void updateToken(String refreshToken){
         this.refreshToken = refreshToken;
     }
-
-//    // Entity -> DTO 변환
-//    public UserDto toDto() {
-//        return UserDto.builder()
-//                .userId(this.userId)
-//                .kakaoId(this.kakaoId)
-//                .password(this.password)
-//                .activated(this.activated)
-//                .refreshToken(this.refreshToken)
-//                .build();
-//    }
 }
