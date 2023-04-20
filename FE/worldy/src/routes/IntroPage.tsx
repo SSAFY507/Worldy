@@ -18,7 +18,7 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
 
   return (
     <div
-      style={{ backgroundColor: 'rgba(27, 27, 27, 0.5)' }}
+      // style={{ backgroundColor: 'rgba(27, 27, 27, 0.5)' }}
       className='h-full flex flex-col justify-center items-center'
     >
       {moreInfo && (
@@ -43,7 +43,7 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
               <svg
                 stroke='currentColor'
                 fill='rgba(148, 148, 152, 1)'
-                stroke-width='0'
+                strokeWidth='0'
                 viewBox='0 0 1024 1024'
                 height='1em'
                 width='1em'
