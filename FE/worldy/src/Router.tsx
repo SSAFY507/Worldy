@@ -5,7 +5,6 @@ import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import BackgroundImage from './assets/images/MainPageBackground.png';
 
 import Navbar from './components/Nvabar';
-import HoonsTestPage from './routes/HoonsTestPage';
 import IntroPage from './routes/IntroPage';
 import LoginModal from './components/LoginModal';
 import LoginModalBackground from './components/LoginModalBackground';
@@ -65,7 +64,7 @@ const AppLayout = () => {
         <div
           className='w-screen h-screen flex flex-col'
           style={{
-            backgroundImage: `url(${BackgroundImage})`,
+            backgroundImage: login ? undefined : `url(${BackgroundImage})`,
             backgroundSize: '100%',
           }}
         >
@@ -90,7 +89,6 @@ const AppLayout = () => {
                   element={<IntroPage onLoginClick={handleLoginModal} />}
                 />
               )}
-              <Route path='/hoons' element={<HoonsTestPage />} />
               <Route path='/gameinfo' element={<GameInfo />} />
               <Route path='/updates' element={<Updates />} />
               <Route path='/explore' element={<Explore />} />
