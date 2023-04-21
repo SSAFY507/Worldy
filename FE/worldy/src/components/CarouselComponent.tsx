@@ -3,7 +3,9 @@ import { useState, useEffect } from 'react';
 
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import './react-responsive-carousel-customstyle.css';
 import BUTTON_RED from './Button_Red';
+import LoaderLinear from './LoaderLinear';
 
 type ImageListType = {
   headerImage: string;
@@ -12,70 +14,140 @@ type ImageListType = {
   contentText: string;
   buttonText: string;
   image: string;
+  textBlack: boolean;
+  thumb: string;
+  // loaded: boolean;
 };
 
 export default function CarouselComponent({
   images,
+  loaded,
 }: {
   images: ImageListType[];
+  loaded: boolean;
 }) {
-  const [carouselHeight, setCarouselHeight] = useState<number>(0);
+  const [carouselHeight, setCarouselHeight] = useState<number>(680);
+  // useEffect(() => {
+  //   setCarouselHeight(680);
+  // }, []);
+
   useEffect(() => {
-    setCarouselHeight(680);
-  }, []);
+    console.log(images);
+  }, [images]);
+
+  // const [loadedAll, setLoadedAll] = useState<boolean>(false);
+  // useEffect((()=>{
+  //   if(loaded)
+  // }))
+
+  const [currentSlideIndex, setCurrentSlideindex] = useState<number>(0);
+  const handleThumbnailClick = (index: number) => {
+    setCurrentSlideindex(index);
+  };
 
   return (
-    <div className='w-full bg-red-300' style={{ height: carouselHeight }}>
+    <div className={`w-screen outline h-full ${loaded ? '' : 'hide-things'}`}>
       <Carousel
+        selectedItem={currentSlideIndex}
         showArrows={true}
         infiniteLoop={true}
-        interval={3000}
-        autoPlay={false}
+        interval={5000}
+        autoPlay={true}
         swipeable={true}
+        transitionTime={1500}
+        stopOnHover={true}
+        showThumbs={false}
+        // showIndicators={true}
+        showStatus={false}
+        onChange={(index) => setCurrentSlideindex(index)}
       >
-        {images.map((item, index) => (
-          <div
-            key={index}
-            className={` outline-blue-500 flex flex-row justify-start items-center pl-20`}
-            style={{
-              height: carouselHeight,
-              backgroundImage: `url(${item.image})`,
-              backgroundSize: '100%',
-            }}
-          >
-            <div className=' outline-black w-1/2 h-fit flex flex-col justify-stretch items-center'>
-              <div className='mb-4  outline-red-400 w-full h-1/6 flex flex-row justify-start items-center'>
-                <div className='w-14 h-14 mr-4'>
-                  <img src={item.headerImage} alt='headerImage' />
+        {images.map((item, index) =>
+          loaded ? (
+            <div
+              key={index}
+              className={` outline-blue-500 flex flex-row justify-start items-center pl-20`}
+              style={{
+                height: carouselHeight,
+                backgroundImage: `url(${item.image})`,
+                backgroundSize: '100%',
+              }}
+            >
+              <div className=' outline-black w-1/2 h-fit flex flex-col justify-stretch items-center'>
+                <div className='mb-4  outline-red-400 w-full h-1/6 flex flex-row justify-start items-center'>
+                  <div className='w-14 h-14 mr-4'>
+                    <img src={item.headerImage} alt='headerImage' />
+                  </div>
+                  <div className='h-full flex flex-1 items-center justify-start'>
+                    <span
+                      className='font-PtdSemiBOld text-4xl'
+                      style={
+                        item.textBlack ? { color: 'black' } : { color: 'white' }
+                      }
+                    >
+                      {item.headerText}
+                    </span>
+                  </div>
                 </div>
-                <div className='h-full flex flex-1 items-center justify-start'>
-                  <span className='font-PtdSemiBOld text-4xl'>
-                    {item.headerText}
-                  </span>
+                <div className='mb-6  outline-red-400 w-full h-1/6 flex flex-row justify-start items-center'>
+                  <h1
+                    className='text-6xl font-PtdExtraBold'
+                    style={
+                      item.textBlack ? { color: 'black' } : { color: 'white' }
+                    }
+                  >
+                    {item.TitleText}
+                  </h1>
                 </div>
-              </div>
-              <div className='mb-6  outline-red-400 w-full h-1/6 flex flex-row justify-start items-center'>
-                <h1 className='text-6xl font-PtdExtraBold'>{item.TitleText}</h1>
-              </div>
-              <div className='mb-6  outline-red-400 w-full h-fit flex flex-row justify-start items-center'>
-                <div className=' outline-blue-400 w-4/6 text-start font-PtdLight text-xl'>
-                  {item.contentText}
+                <div className='mb-6  outline-red-400 w-full h-fit flex flex-row justify-start items-center'>
+                  <div
+                    className=' outline-blue-400 w-4/6 text-start font-PtdLight text-xl'
+                    style={
+                      item.textBlack ? { color: 'black' } : { color: 'white' }
+                    }
+                  >
+                    {item.contentText}
+                  </div>
                 </div>
-              </div>
-              <div className='mb-4  outline-red-800 w-full h-fit flex flex-row justify-start items-center'>
-                <BUTTON_RED
-                  text={item.buttonText}
-                  fontSize={20}
-                  onClick={null}
-                  width={200}
-                  height={50}
-                  rounded={false}
-                />
+                <div className='mb-4 outline-red-800 w-full h-fit flex flex-row justify-start items-center'>
+                  <BUTTON_RED
+                    text={item.buttonText}
+                    fontSize={20}
+                    onClick={null}
+                    width={200}
+                    height={50}
+                    rounded={false}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ) : (
+            <div className='h-[680px] flex flex-row justify-center items-center'>
+              <LoaderLinear text='loading...' />
+            </div>
+          )
+        )}
       </Carousel>
+      {loaded ? (
+        <div className='mt-2 px-[300px] w-fuil h-[150px] flex justify-between items-start pt-2'>
+          {images.map((item, index) => (
+            <div
+              className={`flex flex-row justify-center items-start p-[5px] h-[137px]
+            ${currentSlideIndex === index ? ' bg-red-300 rounded-[14px]' : ''}
+            `}
+            >
+              <button
+                key={index}
+                onClick={() => handleThumbnailClick(index)}
+                className='w-[210px] h-[120px] '
+              >
+                <img src={item.thumb} alt='Thumbnail' sizes='100%' />
+              </button>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
