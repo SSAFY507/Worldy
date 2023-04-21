@@ -20,14 +20,14 @@
 
 .carousel .control-arrow {
   /* 화살표 버튼 가로 영역 늘리기 */
-  width: 280px;
+  width: 300px;
 }
 
 .carousel .control-prev.control-arrow {
   /* 왼쪽 버튼 그라데이션 적용 */
   background: linear-gradient(
     to right,
-    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.3) 0%,
     rgba(0, 0, 0, 0) 90%,
     rgba(0, 0, 0, 0) 100%
   );
@@ -41,7 +41,7 @@
   /* 오른쪽 버튼 그라데이션 적용 */
   background: linear-gradient(
     to left,
-    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.3) 0%,
     rgba(0, 0, 0, 0) 90%,
     rgba(0, 0, 0, 0) 100%
   );
@@ -55,7 +55,7 @@
   /* 왼쪽 버튼 그라데이션 적용 */
   background: linear-gradient(
     to right,
-    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.3) 0%,
     rgba(0, 0, 0, 0) 90%,
     rgba(0, 0, 0, 0) 100%
   );
@@ -65,16 +65,18 @@
   /* 오른쪽 버튼 그라데이션 적용 */
   background: linear-gradient(
     to left,
-    rgba(0, 0, 0, 0.6) 0%,
+    rgba(0, 0, 0, 0.3) 0%,
     rgba(0, 0, 0, 0) 90%,
     rgba(0, 0, 0, 0) 100%
   );
 }
 .carousel .control-prev.control-arrow:before {
   border-right: 20px solid #fff;
+  display: none;
 }
 .carousel .control-next.control-arrow:before {
   border-left: 20px solid #fff;
+  display: none;
 }
 
 .hide-things .carousel .control-dots {
