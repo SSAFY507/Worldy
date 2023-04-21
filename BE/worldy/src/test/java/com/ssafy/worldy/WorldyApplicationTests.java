@@ -9,5 +9,4 @@ class WorldyApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }

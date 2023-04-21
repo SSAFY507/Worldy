@@ -24,19 +24,16 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
 public class KakaoUserService {
 
     private final PasswordEncoder passwordEncoder;
-
     private final UserRepo userRepo;
-
     private final TokenProvider tokenProvider;
-
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
     private final static String ROLE_USER = "ROLE_USER";
 
     @Value("${kakao.client.id}")
@@ -47,8 +44,6 @@ public class KakaoUserService {
 
         // 1. 인가코드로 access 토큰 요청
         String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback");
-
-        System.out.println("===== 인가코드 =====" + accessToken);
 
         // 2. 없는 회원의 경우 회원가입
         User user = registKakaoUser(accessToken);
@@ -89,14 +84,9 @@ public class KakaoUserService {
         body.add("redirect_uri", redirectUri);
         body.add("code", code);
 
-        System.out.println("headers : " + headers);
-        System.out.println("body : " + body);
-
         // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, String>> kakaoTokenRequest = new HttpEntity<>(body, headers);
-
         RestTemplate rt = new RestTemplate();
-//        ResponseEntity<String> stringResponseEntity = rt.postForEntity("https://kauth.kakao.com/oauth/token", kakaoTokenRequest, String.class);
         ResponseEntity<String> response = rt.exchange(
                 "https://kauth.kakao.com/oauth/token",
                 HttpMethod.POST,
@@ -122,10 +112,10 @@ public class KakaoUserService {
 
         // 회원가입
         if (user == null) {
-            String profileImg = jsonNode.get("properties").get("profile_image").asText();
             String age = null;
             String gender = null;
 
+            // 연령
             if(jsonNode.get("kakao_account").has("age_range")) {
                 age = jsonNode.get("kakao_account").get("age_range").asText();
 
@@ -137,12 +127,15 @@ public class KakaoUserService {
                 else if (age.equals("60~69")) age = "60S";
             }
 
+            // 성별
             if(jsonNode.get("kakao_account").has("gender")) {
                 gender = jsonNode.get("kakao_account").get("gender").asText();
             }
 
+            // 비밀번호 암호화 (kakaoId를 암호화해서 비밀번호로 저장)
             String encodedPassword = passwordEncoder.encode(kakaoId);
 
+            // 권한 부여
             Authority authority = Authority.builder()
                     .authorityName(ROLE_USER)
                     .build();
@@ -150,15 +143,17 @@ public class KakaoUserService {
             user = User.builder()
                     .kakaoId(kakaoId)
                     .password(encodedPassword)
-                    .profileImg(profileImg)
                     .age(age)
                     .sex(gender)
                     .activated(true)
                     .authorities(Collections.singleton(authority)).build();
-
-            userRepo.save(user);
         }
 
+        // 프로필 이미지는 로그인 할 때마다 업데이트
+        String profileImg = jsonNode.get("properties").get("profile_image").asText();
+        user.setProfileImg(profileImg);
+
+        userRepo.save(user);
         return user;
     }
 
@@ -183,5 +178,18 @@ public class KakaoUserService {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         return objectMapper.readTree(responseBody);
+    }
+
+    // 로그아웃
+    @Transactional
+    public void logout(String kakaoId) {
+
+        Optional<User> user = userRepo.findByKakaoId(kakaoId);
+        if(user.isEmpty()) {
+            throw new RuntimeException("해당하는 회원 없음");
+        }
+
+        user.get().setRefreshToken(null);
+        userRepo.save(user.get());
     }
 }

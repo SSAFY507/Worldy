@@ -9,5 +9,4 @@ public class WorldyApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(WorldyApplication.class, args);
 	}
-
 }
