@@ -43,7 +43,7 @@ export default function BUTTON_RED({
   return (
     <div>
       <button
-        className={`${contentFontFamily} bg-buttonRed px-6 py-4 text-white`}
+        className={`${contentFontFamily} bg-buttonRed px-3 py-2 text-white`}
         style={Button_Red_Style}
         onClick={onClick}
       >
