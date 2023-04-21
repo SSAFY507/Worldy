@@ -19,7 +19,7 @@ public class GameSocketController {
     private final GameRoomRepo gameRoomRepo;
 
     /**
-     * /pub/chat/emoticon로 들어오는 메시징을 처리
+     * [/pub/chat/emoticon로 들어오는 메시징을 처리]
      **/
     @MessageMapping("/game/emoticon")
     public void emoticon(Emoticon emoticon) {
@@ -31,7 +31,7 @@ public class GameSocketController {
     }
 
     /**
-     * /pub/game/data로 들어오는 메시징을 처리
+     * [/pub/game/data로 들어오는 메시징을 처리]
      **/
     @MessageMapping("/game/player")
     public void player(Player player) {

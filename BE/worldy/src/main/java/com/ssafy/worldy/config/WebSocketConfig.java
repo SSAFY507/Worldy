@@ -12,10 +12,11 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 @Configuration
 @EnableWebSocketMessageBroker
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final StompHandler stompHandler;
+    @Autowired
+    StompHandler stompHandler;
 
     /**
      * publish와 subscribe할 prefix 주소를 등록

@@ -1,5 +1,6 @@
 package com.ssafy.worldy.model.game.controller;
 
+import com.ssafy.worldy.model.game.dto.GameResultDto;
 import com.ssafy.worldy.model.game.dto.GameRoom;
 import com.ssafy.worldy.model.game.repo.GameRoomRepo;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class GameController {
     private static final String SUCCESS = "success";
 
     /**
-     * 친구와 같이하는 게임
+     * [친구와 같이하는 게임]
      **/
     @GetMapping("/with/friend")
     public ResponseEntity<GameRoom> gameWithFriend() {
@@ -30,12 +31,23 @@ public class GameController {
     }
 
     /**
-     * 게임 종료
+     * [게임 종료]
      **/
     @GetMapping("/finish")
     public ResponseEntity<String> gameFinish(@RequestParam String roomId) {
 
         gameRoomRepo.deleteGameRoom(roomId);
+
+        return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+    }
+
+    /**
+     * [게임 정보 저장]
+     **/
+    @PostMapping("/result")
+    public ResponseEntity<String> gameResult(@RequestBody GameResultDto gameResultDto) {
+
+
 
         return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
     }

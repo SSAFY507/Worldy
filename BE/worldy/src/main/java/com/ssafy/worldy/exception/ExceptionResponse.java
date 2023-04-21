@@ -1,4 +1,4 @@
-package com.ssafy.worldy.model.game.exception;
+package com.ssafy.worldy.exception;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.ssafy.worldy.model.game.exception;
+package com.ssafy.worldy.exception;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
