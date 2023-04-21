@@ -1,5 +1,7 @@
 package com.ssafy.worldy.model.user.service;
 
+import com.ssafy.worldy.exception.CustomException;
+import com.ssafy.worldy.exception.CustomExceptionList;
 import com.ssafy.worldy.model.user.entity.User;
 import com.ssafy.worldy.model.user.repo.UserRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +42,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     private org.springframework.security.core.userdetails.User createUser(String kakaoId, User user) {
 
         if (!user.isActivated()) {
-            throw new RuntimeException(kakaoId + " -> 활성화되어 있지 않습니다.");
+            throw new CustomException(CustomExceptionList.NOT_ACTIVATED);
         }
 
         List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
