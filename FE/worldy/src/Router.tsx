@@ -37,6 +37,7 @@ const AppLayout = () => {
 
   const [imageBackgroundImage, setImageBackgroundImage] =
     useState<HTMLImageElement>(new Image());
+
   useEffect(() => {
     imageBackgroundImage.src = BackgroundImage;
     // setLoadedBackgroundImage(true);
@@ -53,9 +54,9 @@ const AppLayout = () => {
     setLogin(!login);
   };
 
-  useEffect(() => {
-    if (login) setImageBackgroundImage(new Image());
-  }, [login]);
+  // useEffect(() => {
+  //   if (login) setImageBackgroundImage(new Image());
+  // }, [login]);
 
   //페이지 이동 Route용으로 <Route><Route> => <Routes><Route>로 변경했습니다.
   return (

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import LogoWhite from '../assets/images/Logo-white.png';
+import WorldySoftLogo from '../assets/images/WorldySoftLogo.png';
 import { ImSearch } from 'react-icons/im';
 import { AiOutlineGlobal } from 'react-icons/ai';
 import LoginModal from './LoginModal';
@@ -34,10 +35,14 @@ export default function Navbar({
     <>
       <nav>
         <div className='w-screen h-20 bg-neutral-950 flex flex-row items-center justify-between px-6'>
-          <div className='w-1/6 h-full'>
-            <div className='w-fit h-full'>
+          <div className='w-1/6 h-full flex flex-row justify-start items-center'>
+            <div className='w-fit h-fit'>
               <a href='/'>
-                <img src={LogoWhite} className='h-full' />
+                <img
+                  src={WorldySoftLogo}
+                  className='h-[40px]'
+                  alt='Worldy Soft Comp'
+                />
               </a>
             </div>
           </div>
@@ -66,8 +71,8 @@ export default function Navbar({
             <div className=' w-1/2 h-ful flex flex-row justify-start items-center'>
               <BUTTON_RED
                 fontSize={16}
-                width={100}
-                // height={40}
+                width={80}
+                height={35}
                 rounded={true}
                 onClick={handleLoginModalClick}
                 text='로그인'
