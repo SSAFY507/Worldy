@@ -1,20 +1,21 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
 
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
-import BackgroundImage from './assets/images/MainPageBackground.png';
+import { useEffect, useState } from 'react';
 
-import Navbar from './components/Nvabar';
+import BackgroundImage from './assets/images/MainPageBackground.png';
+import Explore from './routes/Explore';
+import GameInfo from './routes/GameInfo';
 import IntroPage from './routes/IntroPage';
+import LoaderPyramid from './components/LoaderPyramid';
 import LoginModal from './components/LoginModal';
 import LoginModalBackground from './components/LoginModalBackground';
-import LoaderPyramid from './components/LoaderPyramid';
 import MainPageAfterLogin from './components/MainPageAfterLogin';
-import GameInfo from './routes/GameInfo';
-import Updates from './routes/Updates';
-import Explore from './routes/Explore';
 import Monopoly from './routes/Monopoly';
+import Navbar from './components/Nvabar';
 import Support from './routes/Support';
+import Updates from './routes/Updates';
+import WorldAdventure from './routes/WorldAdventure';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -95,6 +96,7 @@ const AppLayout = () => {
               <Route path='/explore' element={<Explore />} />
               <Route path='/monopoly' element={<Monopoly />} />
               <Route path='/support' element={<Support />} />
+              <Route path='/adventure' element={<WorldAdventure />} />
             </Routes>
           </div>
         </div>
