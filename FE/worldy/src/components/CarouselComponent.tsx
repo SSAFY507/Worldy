@@ -16,6 +16,7 @@ type ImageListType = {
   image: string;
   textBlack: boolean;
   thumb: string;
+  buttonClick?: () => void;
   // loaded: boolean;
 };
 
@@ -57,7 +58,7 @@ export default function CarouselComponent({
       <div className='absolute  top-20 left-0 w-screen h-[680px] justify-center flex items-center'>
         <div className=' h-10 w-full z-10 flex flex-row justify-between items-center'>
           <button
-            className=' h-10 w-[300px] px-5 flex flex-row justify-start items-center'
+            className='h-10 w-[90px] pl-[10px] flex flex-row justify-start items-center'
             onClick={prevArrowClick}
           >
             <svg
@@ -74,7 +75,7 @@ export default function CarouselComponent({
             </svg>
           </button>
           <button
-            className=' h-10 w-[300px] px-5 flex flex-row justify-end items-center'
+            className=' h-10 w-[90px] pr-[10px] flex flex-row justify-end items-center'
             onClick={nextArrowClick}
           >
             <svg
@@ -97,7 +98,7 @@ export default function CarouselComponent({
         showArrows={true}
         infiniteLoop={true}
         interval={5000}
-        autoPlay={true}
+        autoPlay={false}
         swipeable={true}
         transitionTime={1500}
         stopOnHover={true}
@@ -117,7 +118,7 @@ export default function CarouselComponent({
                 backgroundSize: '100%',
               }}
             >
-              <div className=' outline-black w-1/2 h-fit flex flex-col justify-stretch items-center'>
+              <div className='ml-[15px] outline-black w-1/2 h-fit flex flex-col justify-stretch items-center'>
                 <div className='mb-4  outline-red-400 w-full h-1/6 flex flex-row justify-start items-center'>
                   <div className='w-14 h-14 mr-4'>
                     <img src={item.headerImage} alt='headerImage' />
@@ -157,7 +158,7 @@ export default function CarouselComponent({
                   <BUTTON_RED
                     text={item.buttonText}
                     fontSize={20}
-                    onClick={null}
+                    onClick={item.buttonClick}
                     width={200}
                     height={50}
                     rounded={false}

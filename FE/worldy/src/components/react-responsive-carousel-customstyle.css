@@ -20,7 +20,7 @@
 
 .carousel .control-arrow {
   /* 화살표 버튼 가로 영역 늘리기 */
-  width: 300px;
+  width: 90px;
 }
 
 .carousel .control-prev.control-arrow {
@@ -34,7 +34,7 @@
   display: flex;
   justify-content: start;
   align-items: center;
-  padding-left: 20px;
+  padding-left: 10px;
 }
 
 .carousel .control-next.control-arrow {
@@ -48,7 +48,7 @@
   display: flex;
   justify-content: end;
   align-items: center;
-  padding-right: 30px;
+  padding-right: 10px;
 }
 
 .carousel .control-prev.control-arrow:hover {
@@ -70,6 +70,7 @@
     rgba(0, 0, 0, 0) 100%
   );
 }
+
 .carousel .control-prev.control-arrow:before {
   border-right: 20px solid #fff;
   display: none;

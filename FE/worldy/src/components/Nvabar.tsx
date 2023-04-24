@@ -27,8 +27,10 @@ export default function Navbar({
     onLoginClick();
   };
 
+  const [tempLoginColor, setTempLoginColor] = useState<boolean>(false);
   const adminLogin = () => {
     onLoginAdmin();
+    setTempLoginColor((prev) => !prev);
   };
 
   return (
@@ -65,7 +67,10 @@ export default function Navbar({
                 <ImSearch color='white' />
               </button>
               <button className='w-1/3' onClick={adminLogin}>
-                <AiOutlineGlobal size='20' color='white' />
+                <AiOutlineGlobal
+                  size='20'
+                  color={tempLoginColor ? 'green' : 'white'}
+                />
               </button>
             </div>
             <div className=' w-1/2 h-ful flex flex-row justify-start items-center'>

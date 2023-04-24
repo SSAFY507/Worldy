@@ -1,7 +1,13 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from 'react-router-dom';
 import BackgroundImage from './assets/images/MainPageBackground.png';
 
 import Navbar from './components/Nvabar';
@@ -9,16 +15,18 @@ import IntroPage from './routes/IntroPage';
 import LoginModal from './components/LoginModal';
 import LoginModalBackground from './components/LoginModalBackground';
 import LoaderPyramid from './components/LoaderPyramid';
-import MainPageAfterLogin from './components/MainPageAfterLogin';
+import MainPageAfterLogin from './routes/MainPageAfterLogin';
 import GameInfo from './routes/GameInfo';
 import Updates from './routes/Updates';
 import Explore from './routes/Explore';
 import Monopoly from './routes/Monopoly';
 import Support from './routes/Support';
+import Tutorial from './routes/Tutorial';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
   const location = useLocation(); //현재 브라우저의 URL 위치 반환
+  const navigate = useNavigate();
 
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
 
@@ -59,6 +67,20 @@ const AppLayout = () => {
   // }, [login]);
 
   //페이지 이동 Route용으로 <Route><Route> => <Routes><Route>로 변경했습니다.
+
+  //카카오 로그인 눌렀을 때, 첫 로그인이면 Tutorial로, 아니면 Mainpage로
+  const [firstLoginState, setFirstLoginState] = useState<boolean>(false);
+
+  const handleFirstLogin = (firstLogin: boolean) => {
+    console.log('LoginModal로부터 넘어온 firstLogin', firstLogin);
+    if (firstLogin) {
+      navigate('/tutorial');
+    } else {
+      navigate('/');
+    }
+    closeLoginModal();
+  };
+
   return (
     <>
       {loadedBackgroundImage ? (
@@ -77,7 +99,12 @@ const AppLayout = () => {
                   onLoginAdmin={handleLoginAdmin}
                 />
               )}
-            {showLoginModal && <LoginModal onClose={closeLoginModal} />}
+            {showLoginModal && (
+              <LoginModal
+                onClose={closeLoginModal}
+                onClickKakaoLogin={handleFirstLogin}
+              />
+            )}
             {/* Routes : 여러 컴퍼넌트 중 URL과 일치하는 '첫번째' Route 컴퍼넌트만 렌더링 */}
           </div>
           <div className='flex-1 h-full'>
@@ -95,6 +122,7 @@ const AppLayout = () => {
               <Route path='/explore' element={<Explore />} />
               <Route path='/monopoly' element={<Monopoly />} />
               <Route path='/support' element={<Support />} />
+              <Route path='/tutorial' element={<Tutorial />} />
             </Routes>
           </div>
         </div>
