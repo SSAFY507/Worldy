@@ -75,7 +75,7 @@ export default function LoginModal({
             <div className='h-full my-4 flex flex-col justify-between px-12'>
               <div className=' w-full h-24 flex flex-row justify-between px-10'>
                 <div className=' bg-gray-50 w-32'>
-                  <img src={GameController} />
+                  <img src={GameController} alt='컨트롤 아이콘' />
                 </div>
                 <div className='w-full h-full flex flex-row justify-start items-center text-3xl font-PtdBold px-10'>
                   월디에 오신 것을

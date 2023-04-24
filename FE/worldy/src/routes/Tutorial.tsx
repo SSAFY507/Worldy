@@ -3,11 +3,13 @@ import { useState, useEffect } from 'react';
 import TutorialBackground from '../assets/images/TutorialBackground.png';
 import JoshHoldingBook from '../assets/images/JoshHoldingBook.png';
 import JoshCurious from '../assets/images/JoshCurious.png';
-import { Style } from 'util';
+import JoshSitting from '../assets/images/JoshSitting.png';
+import JoshPanic from '../assets/images/JoshPanic.png';
+import JoshJumping from '../assets/images/JoshJumping.png';
 
 type TutorialItemType = {
   imgsrc: string;
-  contentText: string;
+  contentText?: string;
   contentCoreText?: string;
   contentItem: React.ReactNode;
   onClick?: () => void;
@@ -51,7 +53,7 @@ export default function Tutorial() {
   //닉네임이 미중복 확인 됐으니 다음으로 넘어가기(submit)
   const handleSubmitNickName = () => {
     console.log('넘어가기', targetIndex);
-    setTargetindex(1);
+    setTargetIndex(1);
   };
 
   const eneterNickNameContentItem = (
@@ -123,21 +125,24 @@ export default function Tutorial() {
     </div>
   );
 
+  //////////////////////////////////////////////////// 관심있는 분야
+  const interestsItems: string[] = ['언어', '역사', '지리', '경제', '없음'];
+  const [selectedInterest, setSelectedInterest] = useState<string>('');
+
+  const submitInterest = (index: number) => {
+    const tempInterest = interestsItems[index];
+    setSelectedInterest(interestsItems[index]);
+    if (tempInterest === '없음') setTargetIndex(3);
+    else setTargetIndex(2);
+  };
   const [hoveredIndex, setHoveredIndex] = useState<number>(-1);
 
   const hoveredStyle: React.CSSProperties = {
     backgroundColor: 'rgba(255,255,255,0.3)',
   };
 
-  //////////////////////////////////////////////////// 관심있는 분야
-  const interestsItems: string[] = ['언어', '역사', '지리', '경제', '없음'];
-
-  const submitInterest = (index: number) => {
-    console.log('선택한 관심 분야 : ', index);
-  };
-
   const selectInterests = (
-    <div className='outline outline-white h-[130px] py-[15px] flex justify-self-start'>
+    <div className='outline-white h-[130px] py-[15px] flex justify-self-start'>
       <div className='w-5/6 h-full flex flex-row justify-between items-center '>
         {interestsItems.map((item, index) => (
           <button
@@ -159,6 +164,49 @@ export default function Tutorial() {
   );
 
   /////////////////////////////////////////////////
+
+  const takeQuiz = (
+    <div className=' outline-white h-[180px] flex flex-col justify-between items-center'>
+      <button
+        className='w-full h-[80px] bg-[rgba(255,255,255,0.15)] rounded-[5px] text-left text-white pl-[20px] font-PtdLight text-[30px]'
+        style={hoveredIndex === -3 ? hoveredStyle : {}}
+        onClick={() => setTargetIndex(4)}
+        onMouseEnter={() => setHoveredIndex(-3)}
+        onMouseLeave={() => setHoveredIndex(-1)}
+      >
+        "좋아, 얼마든지 내보라구!"
+      </button>
+      <button
+        className='w-full h-[80px] bg-[rgba(255,255,255,0.15)] rounded-[5px] text-left text-white pl-[20px] font-PtdLight text-[30px]'
+        style={hoveredIndex === -4 ? hoveredStyle : {}}
+        onClick={() => setTargetIndex(3)}
+        onMouseEnter={() => setHoveredIndex(-4)}
+        onMouseLeave={() => setHoveredIndex(-1)}
+      >
+        "아니... 난 관심이 있다고 했지, 잘 한다고 한 적 없어"
+      </button>
+    </div>
+  );
+
+  const mustTakeQuiz = (
+    <div className=' outline-white h-[180px] flex flex-col justify-between items-center'>
+      <button
+        className='w-full h-[80px] bg-[rgba(255,255,255,0.15)] rounded-[5px] text-left text-white pl-[20px] font-PtdLight text-[30px]'
+        style={hoveredIndex === -7 ? hoveredStyle : {}}
+        onClick={() => setTargetIndex(4)}
+        onMouseEnter={() => setHoveredIndex(-7)}
+        onMouseLeave={() => setHoveredIndex(-1)}
+      >
+        "그래 좋아! 일단 해보지 뭐!"
+      </button>
+    </div>
+  );
+
+  /////////////////////////////////////////////////
+
+  const showQuiz = <div className='bg-white w-full h-full'>헉</div>;
+  /////////////////////////////////////////////////
+
   const TutorialItemList: TutorialItemType[] = [
     {
       imgsrc: JoshHoldingBook,
@@ -173,9 +221,24 @@ export default function Tutorial() {
       contentCoreText: '혹시 평소에 관심있는 분야가 있니?',
       contentItem: selectInterests,
     },
+    {
+      imgsrc: JoshJumping,
+      contentText: `오! ${selectedInterest}에 대해 관심이 많구나! 그렇다면 내가 ${selectedInterest} 퀴즈를 하나 내보도록 하지! 실력이 얼마나 되는지 한 번 확인해 볼까?`,
+      contentItem: takeQuiz,
+    },
+    {
+      imgsrc: JoshPanic,
+      contentText:
+        '이런, 아직은 자신있는 분야가 없구나? 그렇다면 내가 랜덤한 분야의 퀴즈를 하나 내볼게, 한 번 맞춰볼래? 너무 어렵진 않을 거야!',
+      contentItem: mustTakeQuiz,
+    },
+    {
+      imgsrc: JoshSitting,
+      contentItem: showQuiz,
+    },
   ];
 
-  const [targetIndex, setTargetindex] = useState<number>(0);
+  const [targetIndex, setTargetIndex] = useState<number>(0);
 
   return (
     <div
@@ -205,7 +268,7 @@ export default function Tutorial() {
                   {TutorialItemList[targetIndex].contentCoreText}
                 </div>
               </div>
-              <div className=' outline-white flex-1 w-full flex flex-col justify-end items-center'>
+              <div className='outline outline-white flex-1 max-h-full w-full flex flex-col justify-end items-center'>
                 <div className='w-full h-fit  outline-red-400'>
                   {TutorialItemList[targetIndex].contentItem}
                 </div>
