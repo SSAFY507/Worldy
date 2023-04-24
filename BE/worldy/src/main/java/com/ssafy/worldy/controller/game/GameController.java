@@ -1,8 +1,9 @@
-package com.ssafy.worldy.model.game.controller;
+package com.ssafy.worldy.controller.game;
 
 import com.ssafy.worldy.model.game.dto.GameResultDto;
 import com.ssafy.worldy.model.game.dto.GameRoom;
 import com.ssafy.worldy.model.game.repo.GameRoomRepo;
+import com.ssafy.worldy.model.game.service.GameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class GameController {
 
     private final GameRoomRepo gameRoomRepo;
+    private final GameService gameService;
     private static final String SUCCESS = "success";
 
     /**
@@ -47,7 +49,7 @@ public class GameController {
     @PostMapping("/result")
     public ResponseEntity<String> gameResult(@RequestBody GameResultDto gameResultDto) {
 
-
+        gameService.gameResult(gameResultDto);
 
         return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
     }

@@ -1,4 +1,4 @@
-package com.ssafy.worldy.model.game.controller;
+package com.ssafy.worldy.controller.game;
 
 import com.ssafy.worldy.model.game.dto.Emoticon;
 import com.ssafy.worldy.model.game.dto.Player;
