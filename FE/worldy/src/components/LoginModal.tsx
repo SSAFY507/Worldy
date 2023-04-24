@@ -7,8 +7,12 @@ import LoaderPyramid from './LoaderPyramid';
 
 type PointerOutProps = {
   onClose: () => void;
+  onClickKakaoLogin: (firstLogin: boolean) => void;
 };
-export default function LoginModal({ onClose }: PointerOutProps) {
+export default function LoginModal({
+  onClose,
+  onClickKakaoLogin,
+}: PointerOutProps) {
   const [loadedLoginLogo, setLoadedLoginLogo] = useState<boolean>(false);
   const [loadedGameController, setLoadedGameController] =
     useState<boolean>(false);
@@ -31,6 +35,13 @@ export default function LoginModal({ onClose }: PointerOutProps) {
       console.log('GameController 로드');
     };
   }, [LoginLogo, GameController]);
+
+  const firstLogin: boolean = true;
+
+  const clickKakaoLogin = () => {
+    //게임 시작 눌렀을 때 처음 로그인이면 튜토리얼로, 아니면 메인페이지로
+    onClickKakaoLogin(firstLogin);
+  };
 
   return (
     <div
@@ -75,7 +86,7 @@ export default function LoginModal({ onClose }: PointerOutProps) {
                 <img src={LoginLogo} alt='로그인 로고' />
               </div>
               <div className=' w-full h-fit'>
-                <button onClick={undefined}>
+                <button onClick={clickKakaoLogin}>
                   <img src={KakaoLoginButton} alt='카카오 로그인 버튼' />
                 </button>
               </div>
