@@ -72,10 +72,12 @@ export default function LoginModal({ onClose }: PointerOutProps) {
                 </div>
               </div>
               <div className=' w-full h-fit'>
-                <img src={LoginLogo} />
+                <img src={LoginLogo} alt='로그인 로고' />
               </div>
               <div className=' w-full h-fit'>
-                <img src={KakaoLoginButton} />
+                <button onClick={undefined}>
+                  <img src={KakaoLoginButton} alt='카카오 로그인 버튼' />
+                </button>
               </div>
               <div className=' w-full h-20 flex flex-col items-center justify-between py-4 font-PtdMedium text-base'>
                 <div className='flex flex-row justify-center items-center'>
