@@ -6,6 +6,7 @@ import JoshCurious from '../assets/images/JoshCurious.png';
 import JoshSitting from '../assets/images/JoshSitting.png';
 import JoshPanic from '../assets/images/JoshPanic.png';
 import JoshJumping from '../assets/images/JoshJumping.png';
+import TutorialQuizText from '../assets/images/TutorialQuizText.png';
 
 type TutorialItemType = {
   imgsrc: string;
@@ -13,6 +14,14 @@ type TutorialItemType = {
   contentCoreText?: string;
   contentItem: React.ReactNode;
   onClick?: () => void;
+};
+
+type quizItemType = {
+  difficulty: string;
+  category: string;
+  quizText: string;
+  answer: string;
+  selections: string[];
 };
 
 export default function Tutorial() {
@@ -201,10 +210,85 @@ export default function Tutorial() {
       </button>
     </div>
   );
+  const [quizTargetIndex, setQuizTargetIndex] = useState<number>(0);
 
   /////////////////////////////////////////////////
 
-  const showQuiz = <div className='bg-white w-full h-full'>헉</div>;
+  const quizList: quizItemType[] = [
+    {
+      difficulty: '상',
+      category: '역사',
+      quizText: '다음 중 가장 오래된 고대 문명은 어디인가요?',
+      answer: '메소포타미아',
+      selections: ['메소포타미아', '이집트', '중국', '인도문명'],
+    },
+    {
+      difficulty: '하',
+      category: '역사',
+      quizText: '역사 문제 2?',
+      answer: '메소포타미아',
+      selections: ['메소포타미아', '이집트', '중국', '인도문명'],
+    },
+    {
+      difficulty: '중',
+      category: '역사',
+      quizText: '역사 문제 3?',
+      answer: '메소포타미아',
+      selections: ['메소포타미아', '이집트', '중국', '인도문명'],
+    },
+    {
+      difficulty: '헉',
+      category: '역사',
+      quizText: '역사 문제 4?',
+      answer: '메소포타미아',
+      selections: ['메소포타미아', '이집트', '중국', '인도문명'],
+    },
+  ];
+
+  const showQuiz = (
+    <div className=' outline-white absolute w-[600px] h-[720px] bottom-[100px] flex flex-col justify-stretch items-center '>
+      <div className='h-[80px]  outline-red-400 w-full flex flex-col justify-end items-center'>
+        <div className='w-full h-[60px] flex flex-row justify-between items-center rounded-t-[10px] bg-buttonRed font-PtdRegular text-white text-[18px]'>
+          <div className='w-1/4 h-full  outline-blue-400 flex justify-center items-center'>
+            난이도 : {quizList[quizTargetIndex].difficulty}
+          </div>
+          <div className='w-1/2 h-[60px]  outline-green-200 flex justify-center items-end'>
+            <img src={TutorialQuizText} alt='QUIZ' className='h-[90px]' />
+          </div>
+          <div className='w-1/4 h-full  outline-blue-400 flex justify-center items-center'>
+            카테고리 : {quizList[quizTargetIndex].category}
+          </div>
+        </div>
+      </div>
+      <div className='h-[10px] bg-[#d9d9d9] w-full'>
+        <div
+          className='h-full bg-[#34e7ff]'
+          style={{
+            width: `${((quizTargetIndex + 1) * 100) / quizList.length}%`,
+          }}
+        ></div>
+      </div>
+      <div className='w-full flex-1 bg-white py-[25px] px-[40px] rounded-b-[10px]'>
+        <div className='w-full h-full  flex flex-col justify-between items-center'>
+          <div className=' outline-blue-400 w-full h-fit mb-[10px] font-PtdSemiBOld leading-[40px] flex justify-center items-center px-[30px] text-[35px] text-center py-[10px]'>
+            {quizList[quizTargetIndex].quizText}
+          </div>
+          <div className=' outline-blue-200 flex-1 w-full flex flex-wrap justify-between content-between'>
+            {quizList[quizTargetIndex].selections.map((item, key) => (
+              <div className='h-[47%] w-[47%] rounded-[15px] bg-[#ededed] flex justify-center items-center text-[24px] font-PtdMedium'>
+                {item}
+              </div>
+            ))}
+          </div>
+          <div className=' outline-blue-200 h-[80px] w-full mt-[20px]'>
+            <button className='rounded-[10px] bg-[#d9d9d9] w-full h-full text-[30px] font-medium text-white'>
+              제출하기
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
   /////////////////////////////////////////////////
 
   const TutorialItemList: TutorialItemType[] = [
@@ -268,7 +352,7 @@ export default function Tutorial() {
                   {TutorialItemList[targetIndex].contentCoreText}
                 </div>
               </div>
-              <div className='outline outline-white flex-1 max-h-full w-full flex flex-col justify-end items-center'>
+              <div className=' outline-white flex-1 max-h-full w-full flex flex-col justify-end items-center'>
                 <div className='w-full h-fit  outline-red-400'>
                   {TutorialItemList[targetIndex].contentItem}
                 </div>
