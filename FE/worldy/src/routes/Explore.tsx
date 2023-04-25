@@ -17,8 +17,12 @@ const Explore = () => {
   const SetupCamera = () => {
     const width = divContainer.current?.clientWidth || 0;
     const height = divContainer.current?.clientHeight || 0;
-    const cam = new THREE.PerspectiveCamera(75, width / height, 0.1, 100);
-    cam.position.z = 1;
+    const cam = new THREE.PerspectiveCamera(50, width / height, 0.1, 30000);
+    // cam.position.z = 1;
+    cam.position.set(0, 11000, 11000);      // 카메라의 위치는 7, 7, 0
+    cam.rotation.set(0, 0, 50);
+    cam.lookAt(150, 100, 100);          // 카메라가 바라보는 곳이 0, 0, 0
+    
     camera.current = cam;
 
     scene.current?.add(cam)
@@ -86,9 +90,9 @@ const Explore = () => {
         const root = glb.scene;
         scene.current?.add(root)
 
-        if (camera.current) {
-          ZoomFit(root, camera.current)
-        }
+        // if (camera.current) {
+        //   ZoomFit(root, camera.current)
+        // }
       }
     )
   };
