@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Ptd-Black';
+  src: url('./fonts/Pretendard-Black.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Ptd-Bold';
+  src: url('./fonts/Pretendard-Bold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Ptd-ExtraBold';
+  src: url('./fonts/Pretendard-ExtraBold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Ptd-ExtraLight';
+  src: url('./fonts/Pretendard-ExtraLight.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Ptd-Light';
+  src: url('./fonts/Pretendard-Light.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Ptd-Medium';
+  src: url('./fonts/Pretendard-Medium.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Ptd-Regular';
+  src: url('./fonts/Pretendard-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Ptd-SemiBold';
+  src: url('./fonts/Pretendard-SemiBold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Ptd-Thin';
+  src: url('./fonts/Pretendard-Thin.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
