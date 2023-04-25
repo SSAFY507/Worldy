@@ -3,7 +3,9 @@ from fastapi import FastAPI
 import news_naver
 import sched
 from apscheduler.schedulers.background import BackgroundScheduler
- 
+
+# uvicorn main:app --reload
+
 sched = BackgroundScheduler(timezone='Asia/Seoul')
 
 app = FastAPI()
@@ -14,17 +16,18 @@ nations = ["한국", "미국", "중국", "일본", "사우디아라비아", "인
 
 
 
-
-#----------------------- 뉴스 크롤링 -----------------------
-
-
-@sched.scheduled_job('cron', hour='12', minute='30', id='test_2')
-def crawling():
-    news_naver.find_news(nations)
+#----------------------- news crawling -----------------------
 
 
+@sched.scheduled_job('cron', hour='9', minute='0', id='test_2')
+def crawling_naver():
+    for nation in nations:
+        news_naver.find_news(nation)
 
+def start_image_scheduler():
+    sched.start()
 
+start_image_scheduler()
 
 
 
