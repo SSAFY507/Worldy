@@ -7,6 +7,7 @@ import { createRoot } from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import Router from './Router';
 import { store } from './_store/store';
+import { useEffect } from 'react';
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
