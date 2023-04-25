@@ -7,8 +7,12 @@ import LoaderPyramid from './LoaderPyramid';
 
 type PointerOutProps = {
   onClose: () => void;
+  onClickKakaoLogin: (firstLogin: boolean) => void;
 };
-export default function LoginModal({ onClose }: PointerOutProps) {
+export default function LoginModal({
+  onClose,
+  onClickKakaoLogin,
+}: PointerOutProps) {
   const [loadedLoginLogo, setLoadedLoginLogo] = useState<boolean>(false);
   const [loadedGameController, setLoadedGameController] =
     useState<boolean>(false);
@@ -31,6 +35,13 @@ export default function LoginModal({ onClose }: PointerOutProps) {
       console.log('GameController 로드');
     };
   }, [LoginLogo, GameController]);
+
+  const firstLogin: boolean = true;
+
+  const clickKakaoLogin = () => {
+    //게임 시작 눌렀을 때 처음 로그인이면 튜토리얼로, 아니면 메인페이지로
+    onClickKakaoLogin(firstLogin);
+  };
 
   return (
     <div
@@ -64,7 +75,7 @@ export default function LoginModal({ onClose }: PointerOutProps) {
             <div className='h-full my-4 flex flex-col justify-between px-12'>
               <div className=' w-full h-24 flex flex-row justify-between px-10'>
                 <div className=' bg-gray-50 w-32'>
-                  <img src={GameController} />
+                  <img src={GameController} alt='컨트롤 아이콘' />
                 </div>
                 <div className='w-full h-full flex flex-row justify-start items-center text-3xl font-PtdBold px-10'>
                   월디에 오신 것을
@@ -72,10 +83,12 @@ export default function LoginModal({ onClose }: PointerOutProps) {
                 </div>
               </div>
               <div className=' w-full h-fit'>
-                <img src={LoginLogo} />
+                <img src={LoginLogo} alt='로그인 로고' />
               </div>
               <div className=' w-full h-fit'>
-                <img src={KakaoLoginButton} />
+                <button onClick={clickKakaoLogin}>
+                  <img src={KakaoLoginButton} alt='카카오 로그인 버튼' />
+                </button>
               </div>
               <div className=' w-full h-20 flex flex-col items-center justify-between py-4 font-PtdMedium text-base'>
                 <div className='flex flex-row justify-center items-center'>

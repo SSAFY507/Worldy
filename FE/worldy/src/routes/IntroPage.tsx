@@ -69,6 +69,8 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
             text='무료 플레이하기'
             rounded={true}
             fontSize={20}
+            width={200}
+            height={50}
             onClick={tempClick}
           />
         </div>
