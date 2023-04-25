@@ -246,7 +246,7 @@ export default function Tutorial() {
   ];
 
   const showQuiz = (
-    <div className=' outline-white absolute w-[600px] h-[720px] bottom-[100px] flex flex-col justify-stretch items-center '>
+    <div className=' outline-white absolute w-[600px] h-[720px] left-1/3 bottom-[100px] flex flex-col justify-stretch items-center '>
       <div className='h-[80px]  outline-red-400 w-full flex flex-col justify-end items-center'>
         <div className='w-full h-[60px] flex flex-row justify-between items-center rounded-t-[10px] bg-buttonRed font-PtdRegular text-white text-[18px]'>
           <div className='w-1/4 h-full  outline-blue-400 flex justify-center items-center'>
@@ -275,7 +275,10 @@ export default function Tutorial() {
           </div>
           <div className=' outline-blue-200 flex-1 w-full flex flex-wrap justify-between content-between'>
             {quizList[quizTargetIndex].selections.map((item, key) => (
-              <div className='h-[47%] w-[47%] rounded-[15px] bg-[#ededed] flex justify-center items-center text-[24px] font-PtdMedium'>
+              <div
+                key={key}
+                className='h-[47%] w-[47%] rounded-[15px] bg-[#ededed] flex justify-center items-center text-[24px] font-PtdMedium'
+              >
                 {item}
               </div>
             ))}
@@ -344,7 +347,7 @@ export default function Tutorial() {
           <div className='h-full w-3/4 py-10 pl-20 pr-10'>
             <div className='w-3/5 h-full flex flex-col justify-between items-start'>
               <div className='outline-white h-[30px] w-full font-PtdLight text-[#f9c53a] text-[20px] flex justify-start items-center'>
-                {name}
+                {targetIndex !== 4 ? name : null}
               </div>
               <div className='h-fit w-full my-[10px] text-white text-[30px] font-PtdExtraLight leading-[45px] py-[5px]'>
                 {TutorialItemList[targetIndex].contentText}
