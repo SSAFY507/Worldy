@@ -88,8 +88,7 @@ export default function LoginModal({
     >
       <div
         id='LoginWholeModalFrame'
-        className='bg-white py-5 px-10 rounded-xl w-1/3 h-3/4 flex flex-col z-20'
-        onClick={undefined}
+        className='bg-white pt-[10px] px-[10px] rounded-xl w-[480px] h-2/3 flex flex-col z-20'
       >
         {loadedLoginLogo && loadedGameController ? (
           <div>
@@ -111,11 +110,13 @@ export default function LoginModal({
               </button>
             </div>
             <div className='h-full my-4 flex flex-col justify-between px-12'>
-              <div className=' w-full h-24 flex flex-row justify-between px-10'>
-                <div className=' bg-gray-50 w-32'>
+              <div className=' w-full h-24 flex flex-row justify-center items-center px-[10px] '>
+                <div className=' w-[90px] h-[90px] '>
                   <img src={GameController} alt='컨트롤 아이콘' />
                 </div>
-                <div className='w-full h-full flex flex-row justify-start items-center text-3xl font-PtdBold px-10'>
+                <div className='w-[px]'></div>
+
+                <div className='w-fit h-full flex flex-row justify-start items-center text-[32px] font-PtdBold px-[20px] '>
                   월디에 오신 것을
                   <br /> 환영합니다.
                 </div>
@@ -123,7 +124,7 @@ export default function LoginModal({
               <div className=' w-full h-fit'>
                 <img src={LoginLogo} alt='로그인 로고' />
               </div>
-              <div className=' w-full h-fit flex justify-center items-center'>
+              <div className=' w-full h-fit flex justify-center items-center mt-[15px]'>
                 <KakaoLogin
                   onSuccess={handleKakaoLoginSuccess}
                   onFailure={handleKakaoLoginFailure}
