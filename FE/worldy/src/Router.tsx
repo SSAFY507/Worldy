@@ -20,7 +20,6 @@ import Navbar from './components/Nvabar';
 import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
 import Updates from './routes/Updates';
-import WorldAdventure from './routes/WorldAdventure';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -121,7 +120,6 @@ const AppLayout = () => {
               <Route path='/explore' element={<Explore />} />
               <Route path='/monopoly' element={<Monopoly />} />
               <Route path='/support' element={<Support />} />
-              <Route path='/adventure' element={<WorldAdventure />} />
               <Route path='/tutorial' element={<Tutorial />} />
             </Routes>
           </div>
