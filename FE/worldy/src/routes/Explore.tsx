@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import bg from "../assets/images/WorldBackgrorund.jpg"
 import worldmap from "../assets/lowpoly/World Map.glb"
 
 const Explore = () => {
@@ -15,13 +16,14 @@ const Explore = () => {
 
   /** 카메라 커스텀 함수 */
   const SetupCamera = () => {
-    const width = divContainer.current?.clientWidth || 0;
-    const height = divContainer.current?.clientHeight || 0;
-    const cam = new THREE.PerspectiveCamera(50, width / height, 0.1, 30000);
+    // const width = divContainer.current?.clientWidth || 0;
+    // const height = divContainer.current?.clientHeight || 0;
+    const cam = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 30000);
     // cam.position.z = 1;
-    cam.position.set(0, 11000, 11000);      // 카메라의 위치는 7, 7, 0
-    cam.rotation.set(0, 0, 50);
-    cam.lookAt(150, 100, 100);          // 카메라가 바라보는 곳이 0, 0, 0
+    // cam.position.set(1000, 10000, 10000);      // 카메라의 위치는 7, 7, 0
+    cam.position.set(0, 13000, 10000);      // 카메라의 위치는 7, 7, 0
+    cam.rotation.set(0, 0, 0);
+    cam.lookAt(0, 0, 0);          // 카메라가 바라보는 곳이 0, 0, 0
     
     camera.current = cam;
 
@@ -30,10 +32,17 @@ const Explore = () => {
 
   /** 조명 커스텀 함수 */
   const SetupLight = () => {
+
+
     const color = 0xffffff;
-    const intensity = 4;
+    const intensity = 3;
     const light = new THREE.DirectionalLight(color, intensity);
-    light.position.set(-1, 2, 4);
+    // light.position.set(-1, 2, 4);
+
+    light.position.set(0, 5, 0);
+    light.target.position.set(0, 0, 0);
+    scene.current?.add(light.target);    // 조명의 위치와 조명이 가리키는 방향을 알려줌
+
     // scene.current?.add(light);
     // 카메라에 조명을 달았음
     camera.current?.add(light)
@@ -109,6 +118,21 @@ const Explore = () => {
     renderer.current?.setSize(width, height);
   };
 
+   /** 배경함수 */
+   const Background = () => {
+
+     //2. 이미지를 배경으로 (방법 여러개지만, 여기서는 Texture 이용)
+     const loader = new THREE.TextureLoader();
+
+     loader.load(bg, texture => {
+         scene.current!.background = texture;
+         
+         // SetupModel이 없는 상태에서 background를 받으려니 문제 생김!
+         // => Backround를 호출할 때, 모델을 호출해주자
+         SetupModel();
+     })
+  } 
+
   const render = (time: number) => {
     renderer.current?.render(scene.current!, camera.current!);
     update(time);
@@ -119,7 +143,10 @@ const Explore = () => {
   const SetupControls = () => {
     if (camera.current) {
       controls.current = new OrbitControls(camera.current, divContainer.current!); // OrbitControls를 초기화합니다.
-      controls.current.enableDamping = true;
+      controls.current.target.set(0, 5000, 4000)    // 카메라 회전점
+      controls.current.enableDamping = true;        // 부드럽게 돌아가
+      controls.current.minPolarAngle = THREE.MathUtils.degToRad(0);   // 0도 부터
+      controls.current.maxPolarAngle = THREE.MathUtils.degToRad(60);  // 60도 까지 회전 가능
     }
   }
 
@@ -143,6 +170,7 @@ const Explore = () => {
       SetupLight();
       SetupModel();
       SetupControls();
+      Background();
 
       // scene.current.background = new THREE.Color("#0000");
       // let light =new THREE.DirectionalLight(0xffff00, 10);
