@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 import {
   BrowserRouter,
@@ -39,21 +39,6 @@ const AppLayout = () => {
     setShowLoginModal(false);
   };
 
-  const myImageList = {
-    BackgroundImage: pathBI,
-  };
-
-  const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
-  const [loadedAll, setLoadedAll] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (isLoaded) {
-      setTimeout(() => {
-        setLoadedAll(true);
-      }, 300);
-    }
-  }, [isLoaded]);
-
   const [login, setLogin] = useState<boolean>(false);
 
   const handleLoginAdmin = () => {
@@ -80,58 +65,48 @@ const AppLayout = () => {
   };
 
   return (
-    <>
-      {loadedAll ? (
-        <div
-          className='w-screen h-screen flex flex-col bg-slate-50'
-          style={{
-            backgroundImage: login
-              ? undefined
-              : `url(${loadedImages['BackgroundImage']})`,
-            backgroundSize: '100%',
-          }}
-        >
-          <div className='z-10'>
-            {location.pathname !== '/explore' &&
-              location.pathname !== '/monopoly' && (
-                <Navbar
-                  onLoginClick={handleLoginModal}
-                  onLoginAdmin={handleLoginAdmin}
-                />
-              )}
-            {showLoginModal && (
-              <LoginModal
-                onClose={closeLoginModal}
-                onClickKakaoLogin={handleFirstLogin}
-              />
-            )}
-            {/* Routes : 여러 컴퍼넌트 중 URL과 일치하는 '첫번째' Route 컴퍼넌트만 렌더링 */}
-          </div>
-          <div className='flex-1 h-full'>
-            <Routes>
-              {login ? (
-                <Route path='/' element={<MainPageAfterLogin />} />
-              ) : (
-                <Route
-                  path='/'
-                  element={<IntroPage onLoginClick={handleLoginModal} />}
-                />
-              )}
-              <Route path='/gameinfo' element={<GameInfo />} />
-              <Route path='/updates' element={<Updates />} />
-              <Route path='/explore' element={<Explore />} />
-              <Route path='/monopoly' element={<Monopoly />} />
-              <Route path='/support' element={<Support />} />
-              <Route path='/tutorial' element={<Tutorial />} />
-            </Routes>
-          </div>
-        </div>
-      ) : (
-        <div className='h-screen w-screen'>
-          <LoaderPyramid text='탐험가 모실 준비 중...' />
-        </div>
-      )}
-    </>
+    <div
+      className='w-screen h-screen flex flex-col bg-slate-50'
+      style={{
+        backgroundImage: login ? undefined : `url(${pathBI})`,
+        backgroundSize: '100%',
+      }}
+    >
+      <div className='z-10'>
+        {location.pathname !== '/explore' &&
+          location.pathname !== '/monopoly' && (
+            <Navbar
+              onLoginClick={handleLoginModal}
+              onLoginAdmin={handleLoginAdmin}
+            />
+          )}
+        {showLoginModal && (
+          <LoginModal
+            onClose={closeLoginModal}
+            onClickKakaoLogin={handleFirstLogin}
+          />
+        )}
+        {/* Routes : 여러 컴퍼넌트 중 URL과 일치하는 '첫번째' Route 컴퍼넌트만 렌더링 */}
+      </div>
+      <div className='flex-1 h-full'>
+        <Routes>
+          {login ? (
+            <Route path='/' element={<MainPageAfterLogin />} />
+          ) : (
+            <Route
+              path='/'
+              element={<IntroPage onLoginClick={handleLoginModal} />}
+            />
+          )}
+          <Route path='/gameinfo' element={<GameInfo />} />
+          <Route path='/updates' element={<Updates />} />
+          <Route path='/explore' element={<Explore />} />
+          <Route path='/monopoly' element={<Monopoly />} />
+          <Route path='/support' element={<Support />} />
+          <Route path='/tutorial' element={<Tutorial />} />
+        </Routes>
+      </div>
+    </div>
   );
 };
 
