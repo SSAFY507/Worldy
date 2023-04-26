@@ -211,7 +211,7 @@ const Explore = () => {
     }
     renderer.current?.setSize(width, height);
     composerRef.current?.setSize(width*window.devicePixelRatio, height*window.devicePixelRatio);
-    effectFXAARef.uniforms["resolution"].value.set(1/(window.innerWidth*window.devicePixelRatio), 1/(window.innerHeight*window.devicePixelRatio));
+    // effectFXAARef.uniforms["resolution"].value.set(1/(window.innerWidth*window.devicePixelRatio), 1/(window.innerHeight*window.devicePixelRatio));
   };
 
   const Render = (time: number) => {
