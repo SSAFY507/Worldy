@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   BrowserRouter,
@@ -8,20 +7,20 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom';
-import BackgroundImage from './assets/images/MainPageBackground.png';
+import pathBI from './assets/images/MainPageBackground.png';
 
-import Navbar from './components/Nvabar';
-import IntroPage from './routes/IntroPage';
-import LoginModal from './components/LoginModal';
-import LoginModalBackground from './components/LoginModalBackground';
 import LoaderPyramid from './components/LoaderPyramid';
-import MainPageAfterLogin from './routes/MainPageAfterLogin';
-import GameInfo from './routes/GameInfo';
-import Updates from './routes/Updates';
+import LoginModal from './components/LoginModal';
+import Navbar from './components/Nvabar';
 import Explore from './routes/Explore';
+import GameInfo from './routes/GameInfo';
+import IntroPage from './routes/IntroPage';
+import MainPageAfterLogin from './routes/MainPageAfterLogin';
 import Monopoly from './routes/Monopoly';
 import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
+import Updates from './routes/Updates';
+import useLoadImagesHook from './_hooks/useLoadImagesHook';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -40,21 +39,20 @@ const AppLayout = () => {
     setShowLoginModal(false);
   };
 
-  const [loadedBackgroundImage, setLoadedBackgroundImage] =
-    useState<boolean>(false);
+  const myImageList = {
+    BackgroundImage: pathBI,
+  };
 
-  const [imageBackgroundImage, setImageBackgroundImage] =
-    useState<HTMLImageElement>(new Image());
+  const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
+  const [loadedAll, setLoadedAll] = useState<boolean>(false);
 
   useEffect(() => {
-    imageBackgroundImage.src = BackgroundImage;
-    // setLoadedBackgroundImage(true);
-    imageBackgroundImage.onload = () => {
+    if (isLoaded) {
       setTimeout(() => {
-        setLoadedBackgroundImage(true);
-      }, 1000);
-    };
-  }, [BackgroundImage]);
+        setLoadedAll(true);
+      }, 300);
+    }
+  }, [isLoaded]);
 
   const [login, setLogin] = useState<boolean>(false);
 
@@ -83,11 +81,13 @@ const AppLayout = () => {
 
   return (
     <>
-      {loadedBackgroundImage ? (
+      {loadedAll ? (
         <div
           className='w-screen h-screen flex flex-col bg-slate-50'
           style={{
-            backgroundImage: login ? undefined : `url(${BackgroundImage})`,
+            backgroundImage: login
+              ? undefined
+              : `url(${loadedImages['BackgroundImage']})`,
             backgroundSize: '100%',
           }}
         >
