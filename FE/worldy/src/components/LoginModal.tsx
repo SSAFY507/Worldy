@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import GameController from '../assets/images/GameController.png';
-import LoginLogo from '../assets/images/LoginLogo.png';
-import KakaoLoginButton from '../assets/images/KakaoLoginButton.png';
+import pathGC from '../assets/images/GameController.png';
+import pathLL from '../assets/images/LoginLogo.png';
+import pathKLB from '../assets/images/KakaoLoginButton.png';
 import LoaderPyramid from './LoaderPyramid';
 import KakaoLogin from './KakaoLogin';
 import axios from 'axios';
 import { access } from 'fs';
+import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 
 type PointerOutProps = {
   onClose: () => void;
@@ -16,28 +17,22 @@ export default function LoginModal({
   onClose,
   onClickKakaoLogin,
 }: PointerOutProps) {
-  const [loadedLoginLogo, setLoadedLoginLogo] = useState<boolean>(false);
-  const [loadedGameController, setLoadedGameController] =
-    useState<boolean>(false);
+  const myImageList = {
+    GameController: pathGC,
+    LoginLogo: pathLL,
+    KakaoLoginButton: pathKLB,
+  };
 
-  const LoginLogoImg = new Image();
-  const GameControllerImg = new Image();
+  const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
+  const [loadedAll, setLoadedAll] = useState<boolean>(false);
+
   useEffect(() => {
-    LoginLogoImg.src = LoginLogo;
-    GameControllerImg.src = GameController;
-    LoginLogoImg.onload = () => {
+    if (isLoaded) {
       setTimeout(() => {
-        setLoadedLoginLogo(true);
+        setLoadedAll(true);
       }, 300);
-      console.log('LoginLogo 로드');
-    };
-    GameControllerImg.onload = () => {
-      setTimeout(() => {
-        setLoadedGameController(true);
-      }, 300);
-      console.log('GameController 로드');
-    };
-  }, [LoginLogo, GameController]);
+    }
+  }, [isLoaded]);
 
   const firstLogin: boolean = true;
 
@@ -90,7 +85,7 @@ export default function LoginModal({
         id='LoginWholeModalFrame'
         className='bg-white pt-[10px] px-[10px] rounded-xl w-[480px] h-2/3 flex flex-col z-20'
       >
-        {loadedLoginLogo && loadedGameController ? (
+        {loadedAll ? (
           <div>
             <div id='XbuttonFrame' className='flex flex-row justify-end'>
               <button onClick={onClose}>
@@ -112,7 +107,10 @@ export default function LoginModal({
             <div className='h-full my-4 flex flex-col justify-between px-12'>
               <div className=' w-full h-24 flex flex-row justify-center items-center px-[10px] '>
                 <div className=' w-[90px] h-[90px] '>
-                  <img src={GameController} alt='컨트롤 아이콘' />
+                  <img
+                    src={loadedImages['GameController']}
+                    alt='컨트롤 아이콘'
+                  />
                 </div>
                 <div className='w-[px]'></div>
 
@@ -122,7 +120,7 @@ export default function LoginModal({
                 </div>
               </div>
               <div className=' w-full h-fit'>
-                <img src={LoginLogo} alt='로그인 로고' />
+                <img src={loadedImages['LoginLogo']} alt='로그인 로고' />
               </div>
               <div className=' w-full h-fit flex justify-center items-center mt-[15px]'>
                 <KakaoLogin
