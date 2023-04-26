@@ -2,6 +2,8 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import TestFor3D from '../components/TestFor3D';
 import TestFor3DEdit from '../components/TestFor3DEdit';
+import TestSunghoon from '../components/TestSunghoon';
+import WordyGame from '../components/WordyGame';
 import LoaderPyramid from '../components/LoaderPyramid';
 
 export default function Monopoly() {
@@ -12,7 +14,7 @@ export default function Monopoly() {
   return (
     <div className='w-screen h-screen'>
       {loaded ? (
-        <TestFor3DEdit />
+        <WordyGame />
       ) : (
         <LoaderPyramid text='3D 급하게 조립 중...' />
       )}
