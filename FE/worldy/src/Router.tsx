@@ -17,6 +17,7 @@ import GameInfo from './routes/GameInfo';
 import IntroPage from './routes/IntroPage';
 import MainPageAfterLogin from './routes/MainPageAfterLogin';
 import Monopoly from './routes/Monopoly';
+import Navbar from './components/Nvabar';
 import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
 import Updates from './routes/Updates';
