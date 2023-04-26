@@ -19,6 +19,7 @@ import thumb4 from '../assets/images/thumb4.png';
 import thumb5 from '../assets/images/thumb5.png';
 import LoaderLinear from '../components/LoaderLinear';
 import { useNavigate } from 'react-router';
+import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 
 type ImageListType = {
   headerImage: string;
@@ -34,59 +35,33 @@ type ImageListType = {
 };
 
 export default function MainPageAfterLogin() {
-  const [c1Bg, setC1Bg] = useState<HTMLImageElement>(new Image());
-  const [loadC1Bg, seetLoadC1Bg] = useState<boolean>(false);
-  useEffect(() => {
-    c1Bg.src = Carousel1;
-    c1Bg.onload = () => {
-      setTimeout(() => {
-        seetLoadC1Bg(true);
-      });
-    };
-  }, [c1Bg]);
+  const myImageList = {
+    Carousel1Icon: Carousel1Icon,
+    Carousel2Icon: Carousel2Icon,
+    Carousel3Icon: Carousel3Icon,
+    Carousel4Icon: Carousel4Icon,
+    Carousel5Icon: Carousel5Icon,
+    Carousel1: Carousel1,
+    Carousel2: Carousel2,
+    Carousel3: Carousel3,
+    Carousel5: Carousel5,
+    thumb1: thumb1,
+    thumb2: thumb2,
+    thumb3: thumb3,
+    thumb4: thumb4,
+    thumb5: thumb5,
+  };
 
-  const [c2Bg, setC2Bg] = useState<HTMLImageElement>(new Image());
-  const [loadC2Bg, seetLoadC2Bg] = useState<boolean>(false);
-  useEffect(() => {
-    c2Bg.src = Carousel2;
-    c2Bg.onload = () => {
-      setTimeout(() => {
-        seetLoadC2Bg(true);
-      });
-    };
-  }, [c2Bg]);
-
-  const [c3Bg, setC3Bg] = useState<HTMLImageElement>(new Image());
-  const [loadC3Bg, seetLoadC3Bg] = useState<boolean>(false);
-  useEffect(() => {
-    c3Bg.src = Carousel3;
-    c3Bg.onload = () => {
-      setTimeout(() => {
-        seetLoadC3Bg(true);
-      });
-    };
-  }, [c3Bg]);
-
-  const [c5Bg, setC5Bg] = useState<HTMLImageElement>(new Image());
-  const [loadC5Bg, seetLoadC5Bg] = useState<boolean>(false);
-  useEffect(() => {
-    c5Bg.src = Carousel5;
-    c5Bg.onload = () => {
-      setTimeout(() => {
-        seetLoadC5Bg(true);
-      });
-    };
-  }, [c5Bg]);
-
+  const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
   const [loadedAll, setLoadedAll] = useState<boolean>(false);
+
   useEffect(() => {
-    if (loadC1Bg && loadC2Bg && loadC3Bg && loadC5Bg) {
+    if (isLoaded) {
       setTimeout(() => {
         setLoadedAll(true);
-      }, 2000);
+      }, 1000);
     }
-  }, [loadC1Bg, loadC2Bg, loadC3Bg, loadC5Bg]);
-  console.log(loadC1Bg, loadC2Bg, loadC3Bg, loadC5Bg);
+  }, [isLoaded]);
 
   const [imageList, setImageList] = useState<ImageListType[]>([
     {
