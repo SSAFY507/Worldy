@@ -98,7 +98,7 @@ export default function CarouselComponent({
         showArrows={true}
         infiniteLoop={true}
         interval={5000}
-        autoPlay={false}
+        autoPlay={true}
         swipeable={true}
         transitionTime={1500}
         stopOnHover={true}

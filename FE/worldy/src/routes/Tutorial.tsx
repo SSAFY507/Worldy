@@ -45,7 +45,7 @@ export default function Tutorial() {
     if (isLoaded) {
       setTimeout(() => {
         setLoadedAll(true);
-        console.log('웨잇');
+        console.log(loadedImages);
       }, 300);
     }
   }, [isLoaded]);

@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useState } from 'react';
 
 import {
   BrowserRouter,
@@ -9,7 +9,6 @@ import {
 } from 'react-router-dom';
 import pathBI from './assets/images/MainPageBackground.png';
 
-import LoaderPyramid from './components/LoaderPyramid';
 import LoginModal from './components/LoginModal';
 import Navbar from './components/Nvabar';
 import Explore from './routes/Explore';
@@ -17,11 +16,9 @@ import GameInfo from './routes/GameInfo';
 import IntroPage from './routes/IntroPage';
 import MainPageAfterLogin from './routes/MainPageAfterLogin';
 import Monopoly from './routes/Monopoly';
-import Navbar from './components/Nvabar';
 import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
 import Updates from './routes/Updates';
-import useLoadImagesHook from './_hooks/useLoadImagesHook';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
