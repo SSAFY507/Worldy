@@ -624,12 +624,16 @@ export default function WordyGame() {
   let [cnt, setCnt ] = useState(0);
   let [dice1, setDice1] = useState(0);
   let [dice2, setDice2] = useState(0);
+  let [double, setDouble] = useState(false);
 
 
   //주사위 굴리는 함수
   const getDice = () => {
     let dice1 = Math.floor(Math.random() * 6 + 1);
     let dice2 = Math.floor(Math.random() * 6 + 1);
+    if(dice1 === dice2) {
+      setDouble(true);
+    }
     setDice1(dice1);
     setDice2(dice2);
 
@@ -753,6 +757,7 @@ export default function WordyGame() {
             <div> 주사위1 : {dice1}</div>
             <div> 주사위2 : {dice2}</div>
             <div> 총합 : {dice1 + dice2}</div>
+            <div> double : {double? '더블!' : '더블 아님'}</div>
           </div>
 
           <div 
