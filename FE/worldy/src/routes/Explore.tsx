@@ -2,42 +2,69 @@ import * as THREE from "three";
 
 import { useEffect, useRef } from "react";
 
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import worldmap from "../assets/lowpoly/World Map.glb"
+import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
+import bg from "../assets/images/WorldBackgrorund.jpg"
+import worldmap from "../assets/lowpoly/WorldMap.glb"
 
 const Explore = () => {
+
   const divContainer = useRef<HTMLDivElement>(null);
   const renderer = useRef<THREE.WebGLRenderer | null>(null);
   const scene = useRef<THREE.Scene | null>(null);
   const camera = useRef<THREE.PerspectiveCamera | null>(null);
   const controls = useRef<OrbitControls |null>(null);
 
-  /** 카메라 커스텀 함수 */
-  const SetupCamera = () => {
-    const width = divContainer.current?.clientWidth || 0;
-    const height = divContainer.current?.clientHeight || 0;
-    const cam = new THREE.PerspectiveCamera(50, width / height, 0.1, 30000);
-    // cam.position.z = 1;
-    cam.position.set(0, 11000, 11000);      // 카메라의 위치는 7, 7, 0
-    cam.rotation.set(0, 0, 50);
-    cam.lookAt(150, 100, 100);          // 카메라가 바라보는 곳이 0, 0, 0
-    
-    camera.current = cam;
+  const outlinePassRef = useRef<OutlinePass | null>(null);
+  const composerRef = useRef<EffectComposer | null>(null);
+  const effectFXAARef = useRef<ShaderPass | null>(null);
 
-    scene.current?.add(cam)
-  };
+  /** 강조할 객체 추적 */
+  const OnPointerMove = (event:PointerEvent) => {
+    if (event.isPrimary === false) return;
+    const mouse = new THREE.Vector2
+    mouse.set((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1);
 
-  /** 조명 커스텀 함수 */
-  const SetupLight = () => {
-    const color = 0xffffff;
-    const intensity = 4;
-    const light = new THREE.DirectionalLight(color, intensity);
-    light.position.set(-1, 2, 4);
-    // scene.current?.add(light);
-    // 카메라에 조명을 달았음
-    camera.current?.add(light)
-  };
+    const raycaster = new THREE.Raycaster
+    raycaster.setFromCamera(mouse, camera.current!)
+
+    const interescts = raycaster.intersectObject(scene.current!, true);
+    if (interescts!.length > 0) {
+      // 지정된 객체 중에 첫번째 선택
+      const selectedObject = interescts![0].object;
+      // 더 강한 효과
+      outlinePassRef.current!.edgeStrength = 20;  
+      outlinePassRef.current!.selectedObjects = [ selectedObject ];
+    } else {
+      outlinePassRef.current!.selectedObjects = [];
+    }
+  }
+
+  /** 객체 강조 후처리 */
+  const SetupPostProcess = () => {
+    const composer = new EffectComposer(renderer.current!);
+
+    const renderPass = new RenderPass(scene.current!, camera.current!);
+    composer.addPass(renderPass);
+
+    const outlinePass = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), scene.current!, camera.current!);
+    composer.addPass(outlinePass);
+
+    const effetFXAA = new ShaderPass(FXAAShader);
+    effetFXAA.uniforms["resolution"].value.set(1/window.innerWidth, 1/window.innerHeight);
+    composer.addPass(effetFXAA);
+
+    outlinePassRef.current = outlinePass;
+    composerRef.current = composer;
+    effectFXAARef.current = effetFXAA;
+
+  }
+
 
   /** 카메라 적정 위치 구하는 함수 */
   const ZoomFit = (object3D:any, camera:THREE.PerspectiveCamera) => {
@@ -80,6 +107,34 @@ const Explore = () => {
     camera.lookAt(centerBox.x, centerBox.y, centerBox.z);
   }
 
+   /** 배경함수 */
+   const Background = () => {
+
+     //2. 이미지를 배경으로 (방법 여러개지만, 여기서는 Texture 이용)
+     const loader = new THREE.TextureLoader();
+
+     loader.load(bg, texture => {
+        scene.current!.background = texture;
+        
+        // SetupModel이 없는 상태에서 background를 받으려니 문제 생김!
+        // => Backround를 호출할 때, 모델을 호출해주자
+        SetupModel();
+     })
+  } 
+
+  /** 카메라 커스텀 함수 */
+  const SetupCamera = () => {
+    // const width = divContainer.current?.clientWidth || 0;
+    // const height = divContainer.current?.clientHeight || 0;
+    const cam = new THREE.PerspectiveCamera(37, window.innerWidth / window.innerHeight, 0.1, 25);
+    cam.position.set(0, 10, 10);      // 카메라의 위치는 7, 7, 0
+    cam.rotation.set(0, 0, 0);
+    cam.lookAt(0, 0, 0);          // 카메라가 바라보는 곳이 0, 0, 0
+    
+    camera.current = cam;
+
+    scene.current?.add(cam)
+  };
 
   /** 모델 커스텀 함수 */
   const SetupModel = () => {
@@ -95,10 +150,134 @@ const Explore = () => {
         // }
       }
     )
+
+    // northAmerica
+    const NorthAmericaGeometry = new THREE.PlaneGeometry(5, 5);
+    const NorthAmericaMaterial = new THREE.MeshBasicMaterial({
+      color: "#2c3e50",
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.1,
+    });
+
+    const northAmerica = new THREE.Mesh(NorthAmericaGeometry, NorthAmericaMaterial);
+    northAmerica.position.set(-8, 0.5, -3)
+
+    northAmerica.rotation.x = THREE.MathUtils.degToRad(-90);
+    
+    scene.current?.add(northAmerica);
+    
+    //southAmerica
+    const SouthAmericaGeometry = new THREE.PlaneGeometry(3, 5);
+    const SouthAmericaMaterial = new THREE.MeshBasicMaterial({
+      color: "#2c3e50",
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.1,
+    });
+
+    const southAmerica = new THREE.Mesh(SouthAmericaGeometry, SouthAmericaMaterial);
+    southAmerica.position.set(-6, 0.5, 2)
+    southAmerica.rotation.x = THREE.MathUtils.degToRad(-90);
+    
+    scene.current?.add(southAmerica);
+
+    //Africa
+    const AfricaGeometry = new THREE.PlaneGeometry(4, 3.5);
+    const AfricaMaterial = new THREE.MeshBasicMaterial({
+      color: "#2c3e50",
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.1,
+    });
+
+    const africa = new THREE.Mesh(AfricaGeometry, AfricaMaterial);
+    africa.position.set(-2, 0.5, 0.5)
+    africa.rotation.set(THREE.MathUtils.degToRad(-90), THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(-20));
+    
+    scene.current?.add(africa);
+
+    //Europe
+    const EuropeGeometry = new THREE.PlaneGeometry(3.5, 3.5);
+    const EuropeMaterial = new THREE.MeshBasicMaterial({
+      color: "#2c3e50",
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.1,
+    });
+
+    const europe = new THREE.Mesh(EuropeGeometry, EuropeMaterial);
+    europe.position.set(-1, 0.5, -3)
+    europe.rotation.set(THREE.MathUtils.degToRad(-90), THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(-20));
+    
+    scene.current?.add(europe);
+
+    //Asia
+    const AsiaGeometry = new THREE.PlaneGeometry(5, 3);
+    const AsiaMaterial = new THREE.MeshBasicMaterial({
+      color: "#2c3e50",
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.1,
+    });
+
+    const asia = new THREE.Mesh(AsiaGeometry, AsiaMaterial);
+    asia.position.set(2.5, 0.5, -2.5)
+    asia.rotation.set(THREE.MathUtils.degToRad(-90), THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(70));
+    
+    scene.current?.add(asia);
+
+    //Oceania
+    const OceaniaGeometry = new THREE.PlaneGeometry(3, 4);
+    const OceaniaMaterial = new THREE.MeshBasicMaterial({
+      color: "#2c3e50",
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.1,
+    });
+
+    const oceania = new THREE.Mesh(OceaniaGeometry, OceaniaMaterial);
+    oceania.position.set(4, 0.5, 2)
+    oceania.rotation.set(THREE.MathUtils.degToRad(-90), THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(70));
+    
+    scene.current?.add(oceania);
+  };
+
+  /** 조명 커스텀 함수 */
+  const SetupLight = () => {
+    const color = 0xffffff;
+    const intensity = 2;
+    const light = new THREE.DirectionalLight(color, intensity);
+    // light.position.set(-1, 2, 4);
+
+    light.position.set(0, 5, 0);
+    light.target.position.set(0, 0, 0);
+    scene.current?.add(light.target);    // 조명의 위치와 조명이 가리키는 방향을 알려줌
+
+    // scene.current?.add(light);
+    // 카메라에 조명을 달았음
+    camera.current?.add(light)
+  };
+
+  /** 마우스 그래그로 회전시킴 */
+  const SetupControls = () => {
+    if (camera.current) {
+      controls.current = new OrbitControls(camera.current, divContainer.current!); // OrbitControls를 초기화합니다.
+      controls.current.target.set(0, 0, 0)    // 카메라 회전점
+      controls.current.enableDamping = true;        // 부드럽게 돌아가
+      controls.current.minPolarAngle = THREE.MathUtils.degToRad(0);   // 0도 부터
+      controls.current.maxPolarAngle = THREE.MathUtils.degToRad(60);  // 60도 까지 회전 가능
+    }
+  }
+
+  const Update = (time: number) => {
+    time *= 0.01;
+    // cube.current!.rotation.x = time;
+    // cube.current!.rotation.y = time;
   };
 
   /** 렌더링 될 때마다 사이즈 초기화 */
-  const resize = () => {
+  const Resize = () => {
     const width = divContainer.current?.clientWidth || 0;
     const height = divContainer.current?.clientHeight || 0;
 
@@ -106,52 +285,51 @@ const Explore = () => {
       camera.current.aspect = width / height;
       camera.current.updateProjectionMatrix();
     }
+    renderer.current?.setPixelRatio(window.devicePixelRatio);
     renderer.current?.setSize(width, height);
+
+    composerRef.current?.setSize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
+
+    effectFXAARef.current?.uniforms["resolution"].value.set(1/(window.innerWidth*window.devicePixelRatio), 1/(window.innerHeight*window.devicePixelRatio))
   };
 
-  const render = (time: number) => {
+  const Render = (time: number) => {
     renderer.current?.render(scene.current!, camera.current!);
-    update(time);
-    requestAnimationFrame(render);
-  };
-
-  /** 마우스 그래그로 회전시킴 */
-  const SetupControls = () => {
-    if (camera.current) {
-      controls.current = new OrbitControls(camera.current, divContainer.current!); // OrbitControls를 초기화합니다.
-      controls.current.enableDamping = true;
-    }
-  }
-
-  const update = (time: number) => {
-    time *= 0.01;
-    // cube.current!.rotation.x = time;
-    // cube.current!.rotation.y = time;
+    Update(time);
+    composerRef.current?.render();
+    requestAnimationFrame(Render);
   };
 
   useEffect(() => {
     if (divContainer.current) {
+
       const ren = new THREE.WebGLRenderer({ antialias: true });
       ren.setPixelRatio(window.devicePixelRatio);
+
+      ren.shadowMap.enabled = true;
+      ren.domElement.style.touchAction = "none";
       divContainer.current.appendChild(ren.domElement);
+
+      
       renderer.current = ren;
 
       const scn = new THREE.Scene();
       scene.current = scn;
 
+      window.addEventListener("resize", Resize);
+      divContainer.current.addEventListener("pointermove", OnPointerMove, false);
+
       SetupCamera();
+      SetupControls();
       SetupLight();
       SetupModel();
-      SetupControls();
+      Background();
+      SetupPostProcess();
+      
+      window.onresize = Resize;
+      Resize();
 
-      // scene.current.background = new THREE.Color("#0000");
-      // let light =new THREE.DirectionalLight(0xffff00, 10);
-      // scene.current.add(light)
-
-      window.onresize = resize;
-      resize();
-
-      requestAnimationFrame(render);
+      requestAnimationFrame(Render);
     }
   }, []);
 
