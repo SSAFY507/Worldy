@@ -14,7 +14,9 @@ export default function Monopoly() {
       {loaded ? (
         <TestFor3DEdit />
       ) : (
-        <LoaderPyramid text='3D 급하게 조립 중...' />
+        <div className='w-full h-full bg-white'>
+          <LoaderPyramid text='3D 급하게 조립 중...' />
+        </div>
       )}
     </div>
   );
