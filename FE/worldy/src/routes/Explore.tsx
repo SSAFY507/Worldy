@@ -12,8 +12,6 @@ import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import bg from "../assets/images/WorldBackgrorund.jpg"
 import worldmap from "../assets/lowpoly/WorldMap.glb"
 
-// import { GUI } from "three/examples/jsm/libs/lil-gui.module.min.js"
-
 const Explore = () => {
 
   const divContainer = useRef<HTMLDivElement>(null);
@@ -22,8 +20,6 @@ const Explore = () => {
   const camera = useRef<THREE.PerspectiveCamera | null>(null);
   const controls = useRef<OrbitControls |null>(null);
 
-  // const mouseRef = useRef<THREE.Vector2 | null>(null);
-  // const raycaster = useRef<THREE.Raycaster | null>(null);
   const outlinePassRef = useRef<OutlinePass | null>(null);
   const composerRef = useRef<EffectComposer | null>(null);
   const effectFXAARef = useRef<ShaderPass | null>(null);
@@ -32,23 +28,19 @@ const Explore = () => {
   const OnPointerMove = (event:PointerEvent) => {
     if (event.isPrimary === false) return;
     const mouse = new THREE.Vector2
-    // console.log(event)
-    // console.log((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1)
     mouse.set((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1);
-    // alert(mouse)
-    // mouseRef.current = mouse
-    // CheckIntersection();
 
     const raycaster = new THREE.Raycaster
-    // console.log(mouse, camera.current)
     raycaster.setFromCamera(mouse, camera.current!)
 
     const interescts = raycaster.intersectObject(scene.current!, true);
     if (interescts!.length > 0) {
       const selectedObject = interescts![0].object;
+      // 더 강한 효과를 원한다면 아래 값을 높여보세요.
+      outlinePassRef.current!.edgeStrength = 20;  
       outlinePassRef.current!.selectedObjects = [ selectedObject ];
     } else {
-      // outlinePassRef.current!.selectedObjects = [];
+      outlinePassRef.current!.selectedObjects = [];
     }
   }
 
@@ -72,50 +64,6 @@ const Explore = () => {
 
   }
 
-  // /** */
-  // const SetupGUI = () => {
-  //   const params = {
-  //     edgeStrength: 3.0,
-  //     edgeGlow: 0.0,
-  //     edgeThickness: 1.0,
-  //     pulsePeriod: 0,
-  //     rotate: false,
-  //     usePatternTexture: false,
-  //     visibleEdgeColor: "#ffffff",
-  //     hiddenEdgeColor: "#190a05"
-  //   };
-  //   const gui = new GUI({ width:300 });
-
-  //   gui.add(params, "edgeStrength", 0.01, 10).onChange((value:any) => {
-  //       outlinePassRef.current!.edgeStrength = Number(value);
-  //   });
-
-  //   gui.add(params, "edgeGlow", 0.0, 1).onChange((value:any) => {
-  //       outlinePassRef.current!.edgeGlow = Number(value);
-  //   });
-
-  //   gui.add(params, "edgeThickness", 1, 4).onChange((value:any) => {
-  //       outlinePassRef.current!.edgeThickness = Number(value);
-  //   });
-
-  //   gui.add(params, "pulsePeriod", 0.0, 5).onChange((value:any) => {
-  //       outlinePassRef.current!.pulsePeriod = Number(value);
-  //   });
-
-  //   gui.add(params, "rotate");
-
-  //   gui.add(params, "usePatternTexture").onChange((value:any) => {
-  //       outlinePassRef.current!.usePatternTexture = value;
-  //   })
-
-  //   gui.addColor(params, "visibleEdgeColor").onChange((value:any) => {
-  //       outlinePassRef.current!.visibleEdgeColor.set(value);
-  //   });
-
-  //   gui.addColor(params, "hiddenEdgeColor").onChange((value:any) => {
-  //       outlinePassRef.current!.hiddenEdgeColor.set(value);
-  //   });
-  // }
 
   /** 카메라 적정 위치 구하는 함수 */
   const ZoomFit = (object3D:any, camera:THREE.PerspectiveCamera) => {
@@ -165,11 +113,11 @@ const Explore = () => {
      const loader = new THREE.TextureLoader();
 
      loader.load(bg, texture => {
-         scene.current!.background = texture;
-         
-         // SetupModel이 없는 상태에서 background를 받으려니 문제 생김!
-         // => Backround를 호출할 때, 모델을 호출해주자
-         SetupModel();
+        scene.current!.background = texture;
+        
+        // SetupModel이 없는 상태에서 background를 받으려니 문제 생김!
+        // => Backround를 호출할 때, 모델을 호출해주자
+        SetupModel();
      })
   } 
 
@@ -178,9 +126,6 @@ const Explore = () => {
     // const width = divContainer.current?.clientWidth || 0;
     // const height = divContainer.current?.clientHeight || 0;
     const cam = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 25);
-    // cam.position.z = 1;
-    // cam.position.set(1000, 10000, 10000);      // 카메라의 위치는 7, 7, 0
-    // cam.position.set(0, 13000, 10000);      // 카메라의 위치는 7, 7, 0
     cam.position.set(0, 10, 10);      // 카메라의 위치는 7, 7, 0
     cam.rotation.set(0, 0, 0);
     cam.lookAt(0, 0, 0);          // 카메라가 바라보는 곳이 0, 0, 0
@@ -210,7 +155,7 @@ const Explore = () => {
     const target = new THREE.Object3D();  // Mesh 대신에 Object3D이므로 화면상에 보이지는 않음
     targetPivot.add(target);
     targetPivot.name = "targetPivot";
-    target.position.set(3, 0.5, 0);
+    target.position.set(0, 15, 15);
     scene.current?.add(targetPivot);
   };
 
