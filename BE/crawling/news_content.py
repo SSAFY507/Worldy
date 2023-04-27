@@ -9,9 +9,12 @@ import news_quiz
 # 이 라이브러리를 사용하여 JavaScript가 포함된 웹 페이지를 다운로드하고,
 # BeautifulSoup을 사용하여 HTML에서 정보를 추출할 수 있습니다.
 
-nations = {"한국":1, "미국":2, "중국":3, "일본":4, "사우디아라비아":5, "인도":6, "싱가포르":7, "태국":8, "필리핀":9, "캐나다":10, "멕시코":11, "아르헨티나":12,
-            "브라질":13, "페루":14, "칠레":15, "호주":16, "이집트":17, "남아공":18, "리비아":19, "가나":20, "모르코":21, "소말리아":22, "영국":23, "프랑스":24,
-            "독일":25, "스위스":26, "이탈리아":27, "스페인":28, "헝가리":29, "터키":30}
+# nations = ["한국", "미국", "중국", "일본", "사우디아라비아", "인도", "싱가포르", "태국", "필리핀", "캐나다", "멕시코", "아르헨티나", "브라질",
+#            "페루", "칠레", "호주", "이집트", "남아공", "리비아", "가나", "모르코", "소말리아", "영국", "프랑스", "독일", "스위스", "이탈리아",
+#            "스페인", "헝가리", "터키"]
+
+# 한국 중국 일본 인도 이탈리아 영국 프랑스 이집트 미국
+nations = ["한국", "미국", "중국", "일본", "인도", "이집트", "영국", "프랑스", "이탈리아", "스페인"]
 
 driver = webdriver.Edge('./msedgedriver.exe')
 
@@ -31,29 +34,45 @@ def find_new_content(nation):
 
     element = driver.find_element(By.CLASS_NAME, 'cts_atclst')
     element_url = element.find_elements(By.TAG_NAME, 'li')
+    text_url_list = []
+
+    for eu in element_url:
+        text_url_list.append(eu.text)
+
     # data = element.text
     # element = driver.find_elements('.cts_atclst ul li a strong')
 
-    driver.find_element(By.LINK_TEXT, element_url[2].text).click()
+    for i in range(len(text_url_list)):
+        driver.implicitly_wait(3)
+        if i >= 3:
+            break
 
-    content_element = driver.find_element(By.CLASS_NAME, 'scroller01')
-    content_elements = content_element.find_elements(By.TAG_NAME, 'p')
+        driver.find_element(By.LINK_TEXT, text_url_list[i]).click()
 
-    content = ""
-    size = len(content_elements)
-    for i in range(size-2):
-        if i == 0:
-            continue
-        content = content+content_elements[i].text
-    
+        content_element = driver.find_element(By.CLASS_NAME, 'scroller01')
+        content_elements = content_element.find_elements(By.TAG_NAME, 'p')
+        print(len(content_elements))
+
+        content = ""
+        size = len(content_elements)
+        if size > 7:
+            for i in range(size-2):
+                if i == 0:
+                    continue
+                content = content+content_elements[i].text
+        
+        if size > 7:
+            print()
+            print(content)
+            print()
+
+            quiz = news_quiz.chatgpt_quiz(content)
+            print(quiz)
+        
+        driver.back()
+        
+
     driver.quit()
-    
-    print()
-    print(content)
-    print()
-
-    quiz = news_quiz.chatgpt_quiz(content)
-    print(quiz)
 
     # for i in element_url:
     #     print(i)
@@ -64,4 +83,4 @@ def find_new_content(nation):
     #     driver.back()
 
 
-find_new_content("아르헨티나")
+find_new_content("미국")
