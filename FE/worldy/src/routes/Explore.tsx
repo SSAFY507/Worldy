@@ -10,7 +10,7 @@ import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import bg from "../assets/images/WorldBackgrorund.jpg"
-import worldmap from "../assets/lowpoly/World Map.glb"
+import worldmap from "../assets/lowpoly/WorldMap.glb"
 
 // import { GUI } from "three/examples/jsm/libs/lil-gui.module.min.js"
 
@@ -22,8 +22,8 @@ const Explore = () => {
   const camera = useRef<THREE.PerspectiveCamera | null>(null);
   const controls = useRef<OrbitControls |null>(null);
 
-  const mouse = useRef<THREE.Vector2>(null);
-  const raycaster = useRef<THREE.Raycaster | null>(null);
+  // const mouseRef = useRef<THREE.Vector2 | null>(null);
+  // const raycaster = useRef<THREE.Raycaster | null>(null);
   const outlinePassRef = useRef<OutlinePass | null>(null);
   const composerRef = useRef<EffectComposer | null>(null);
   const effectFXAARef = useRef<ShaderPass | null>(null);
@@ -31,25 +31,24 @@ const Explore = () => {
   /** 객체 이동 */
   const OnPointerMove = (event:PointerEvent) => {
     if (event.isPrimary === false) return;
-
-    console.log(event)
-    console.log(mouse.current!.x)
-    // mouse.current!.x = (event.clientX / window.innerWidth) * 2 - 1;
-    // mouse.current!.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
+    const mouse = new THREE.Vector2
+    // console.log(event)
+    // console.log((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1)
+    mouse.set((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1);
+    // alert(mouse)
+    // mouseRef.current = mouse
     // CheckIntersection();
-  }
 
-  /** 카메라 따라가기 */
-  const CheckIntersection = () => {
-    raycaster.current!.setFromCamera(mouse.current!, camera.current!)
+    const raycaster = new THREE.Raycaster
+    // console.log(mouse, camera.current)
+    raycaster.setFromCamera(mouse, camera.current!)
 
-    const interescts = raycaster.current?.intersectObject(scene.current!, true);
+    const interescts = raycaster.intersectObject(scene.current!, true);
     if (interescts!.length > 0) {
       const selectedObject = interescts![0].object;
       outlinePassRef.current!.selectedObjects = [ selectedObject ];
     } else {
-      outlinePassRef.current!.selectedObjects = [];
+      // outlinePassRef.current!.selectedObjects = [];
     }
   }
 
@@ -178,10 +177,11 @@ const Explore = () => {
   const SetupCamera = () => {
     // const width = divContainer.current?.clientWidth || 0;
     // const height = divContainer.current?.clientHeight || 0;
-    const cam = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 30000);
+    const cam = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 25);
     // cam.position.z = 1;
     // cam.position.set(1000, 10000, 10000);      // 카메라의 위치는 7, 7, 0
-    cam.position.set(0, 13000, 10000);      // 카메라의 위치는 7, 7, 0
+    // cam.position.set(0, 13000, 10000);      // 카메라의 위치는 7, 7, 0
+    cam.position.set(0, 10, 10);      // 카메라의 위치는 7, 7, 0
     cam.rotation.set(0, 0, 0);
     cam.lookAt(0, 0, 0);          // 카메라가 바라보는 곳이 0, 0, 0
     
@@ -217,7 +217,7 @@ const Explore = () => {
   /** 조명 커스텀 함수 */
   const SetupLight = () => {
     const color = 0xffffff;
-    const intensity = 3;
+    const intensity = 2;
     const light = new THREE.DirectionalLight(color, intensity);
     // light.position.set(-1, 2, 4);
 
@@ -234,7 +234,7 @@ const Explore = () => {
   const SetupControls = () => {
     if (camera.current) {
       controls.current = new OrbitControls(camera.current, divContainer.current!); // OrbitControls를 초기화합니다.
-      controls.current.target.set(0, 5000, 4000)    // 카메라 회전점
+      controls.current.target.set(0, 0, 0)    // 카메라 회전점
       controls.current.enableDamping = true;        // 부드럽게 돌아가
       controls.current.minPolarAngle = THREE.MathUtils.degToRad(0);   // 0도 부터
       controls.current.maxPolarAngle = THREE.MathUtils.degToRad(60);  // 60도 까지 회전 가능
@@ -256,12 +256,18 @@ const Explore = () => {
       camera.current.aspect = width / height;
       camera.current.updateProjectionMatrix();
     }
+    renderer.current?.setPixelRatio(window.devicePixelRatio);
     renderer.current?.setSize(width, height);
+
+    composerRef.current?.setSize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
+
+    effectFXAARef.current?.uniforms["resolution"].value.set(1/(window.innerWidth*window.devicePixelRatio), 1/(window.innerHeight*window.devicePixelRatio))
   };
 
   const Render = (time: number) => {
     renderer.current?.render(scene.current!, camera.current!);
     Update(time);
+    composerRef.current?.render();
     requestAnimationFrame(Render);
   };
 
@@ -285,7 +291,6 @@ const Explore = () => {
       divContainer.current.addEventListener("pointermove", OnPointerMove, false);
 
       SetupCamera();
-      // SetupGUI();
       SetupControls();
       SetupLight();
       SetupModel();
