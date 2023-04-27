@@ -12,30 +12,32 @@ import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import bg from "../assets/images/WorldBackgrorund.jpg"
 import worldmap from "../assets/lowpoly/World Map.glb"
 
+// import { GUI } from "three/examples/jsm/libs/lil-gui.module.min.js"
+
 const Explore = () => {
+
   const divContainer = useRef<HTMLDivElement>(null);
   const renderer = useRef<THREE.WebGLRenderer | null>(null);
   const scene = useRef<THREE.Scene | null>(null);
   const camera = useRef<THREE.PerspectiveCamera | null>(null);
   const controls = useRef<OrbitControls |null>(null);
 
-  const mouse = useRef<THREE.Vector2 | null>(null);
+  const mouse = useRef<THREE.Vector2>(null);
   const raycaster = useRef<THREE.Raycaster | null>(null);
   const outlinePassRef = useRef<OutlinePass | null>(null);
   const composerRef = useRef<EffectComposer | null>(null);
   const effectFXAARef = useRef<ShaderPass | null>(null);
 
   /** 객체 이동 */
-  const OnPointerMove = (event:any) => {
+  const OnPointerMove = (event:PointerEvent) => {
     if (event.isPrimary === false) return;
 
-    if (mouse.current) {
-      mouse.current.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    console.log(event)
+    console.log(mouse.current!.x)
+    // mouse.current!.x = (event.clientX / window.innerWidth) * 2 - 1;
+    // mouse.current!.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-    }
-
-    CheckIntersection();
+    // CheckIntersection();
   }
 
   /** 카메라 따라가기 */
@@ -47,7 +49,7 @@ const Explore = () => {
       const selectedObject = interescts![0].object;
       outlinePassRef.current!.selectedObjects = [ selectedObject ];
     } else {
-      //outlinePass.current!.selectedObjects = [];
+      outlinePassRef.current!.selectedObjects = [];
     }
   }
 
@@ -70,6 +72,51 @@ const Explore = () => {
     effectFXAARef.current = effetFXAA;
 
   }
+
+  // /** */
+  // const SetupGUI = () => {
+  //   const params = {
+  //     edgeStrength: 3.0,
+  //     edgeGlow: 0.0,
+  //     edgeThickness: 1.0,
+  //     pulsePeriod: 0,
+  //     rotate: false,
+  //     usePatternTexture: false,
+  //     visibleEdgeColor: "#ffffff",
+  //     hiddenEdgeColor: "#190a05"
+  //   };
+  //   const gui = new GUI({ width:300 });
+
+  //   gui.add(params, "edgeStrength", 0.01, 10).onChange((value:any) => {
+  //       outlinePassRef.current!.edgeStrength = Number(value);
+  //   });
+
+  //   gui.add(params, "edgeGlow", 0.0, 1).onChange((value:any) => {
+  //       outlinePassRef.current!.edgeGlow = Number(value);
+  //   });
+
+  //   gui.add(params, "edgeThickness", 1, 4).onChange((value:any) => {
+  //       outlinePassRef.current!.edgeThickness = Number(value);
+  //   });
+
+  //   gui.add(params, "pulsePeriod", 0.0, 5).onChange((value:any) => {
+  //       outlinePassRef.current!.pulsePeriod = Number(value);
+  //   });
+
+  //   gui.add(params, "rotate");
+
+  //   gui.add(params, "usePatternTexture").onChange((value:any) => {
+  //       outlinePassRef.current!.usePatternTexture = value;
+  //   })
+
+  //   gui.addColor(params, "visibleEdgeColor").onChange((value:any) => {
+  //       outlinePassRef.current!.visibleEdgeColor.set(value);
+  //   });
+
+  //   gui.addColor(params, "hiddenEdgeColor").onChange((value:any) => {
+  //       outlinePassRef.current!.hiddenEdgeColor.set(value);
+  //   });
+  // }
 
   /** 카메라 적정 위치 구하는 함수 */
   const ZoomFit = (object3D:any, camera:THREE.PerspectiveCamera) => {
@@ -210,8 +257,6 @@ const Explore = () => {
       camera.current.updateProjectionMatrix();
     }
     renderer.current?.setSize(width, height);
-    composerRef.current?.setSize(width*window.devicePixelRatio, height*window.devicePixelRatio);
-    // effectFXAARef.uniforms["resolution"].value.set(1/(window.innerWidth*window.devicePixelRatio), 1/(window.innerHeight*window.devicePixelRatio));
   };
 
   const Render = (time: number) => {
@@ -222,23 +267,31 @@ const Explore = () => {
 
   useEffect(() => {
     if (divContainer.current) {
+
       const ren = new THREE.WebGLRenderer({ antialias: true });
       ren.setPixelRatio(window.devicePixelRatio);
+
       ren.shadowMap.enabled = true;
-      // ren.domElement.addEventListener("pointermove", OnPointerMove.bind(this))
+      ren.domElement.style.touchAction = "none";
       divContainer.current.appendChild(ren.domElement);
+
+      
       renderer.current = ren;
 
       const scn = new THREE.Scene();
       scene.current = scn;
 
+      window.addEventListener("resize", Resize);
+      divContainer.current.addEventListener("pointermove", OnPointerMove, false);
+
       SetupCamera();
+      // SetupGUI();
+      SetupControls();
       SetupLight();
       SetupModel();
-      SetupControls();
       Background();
       SetupPostProcess();
-
+      
       window.onresize = Resize;
       Resize();
 
