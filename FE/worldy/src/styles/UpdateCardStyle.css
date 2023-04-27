@@ -1,7 +1,8 @@
 .card {
   position: relative;
+  border: 3px solid rgb(182, 179, 179);
   color: #2e2d31;
-  background: #131313;
+  background: #191919;
   overflow: hidden;
   border-radius: 20px;
 }
@@ -27,7 +28,7 @@
   background: #f2f2f2;
   border-top-left-radius: 20px;
   /* edit here to change the height of the content box */
-  transform: translateY(10%);
+  transform: translateY(130%);
   transition: transform 0.25s;
 }
 

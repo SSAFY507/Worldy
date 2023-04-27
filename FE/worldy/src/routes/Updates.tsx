@@ -79,13 +79,13 @@ export default function Updates() {
   const updateLogCard = (input: updateLogType) => {
     return (
       <article className='card w-[300px] h-[400px]'>
-        <div className='temporary_text outline outline-white w-full h-fit py-[5px]'>
+        <div className='temporary_text  outline-white w-full h-fit py-[5px]'>
           <img className='w-full h-full' src={input.img} alt='img' />
         </div>
-        <div className='card_content'>
-          <span className='card_title'>{input.title}</span>
-          <span className='card_subtitle'>{input.date}</span>
-          <p className='card_description'>{input.content}</p>
+        <div className='card_content flex flex-col'>
+          <span className='card_title h-fit'>{input.title}</span>
+          <span className='card_subtitle h-fit'>{input.date}</span>
+          <p className='card_description h-[200px]'>{input.content}</p>
         </div>
       </article>
     );
