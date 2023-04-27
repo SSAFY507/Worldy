@@ -29,7 +29,7 @@ type Game = {
   location : number,
   balance : number,
   desert : number,
-  state : number,
+  state : boolean,
   dice1 : number,
   dice2 : number,
   dice : number,
@@ -551,7 +551,7 @@ export default function WordyGame() {
       location : 0,
       balance : 500,
       desert : 0,
-      state : 0,
+      state : true,
       dice1 : 0,
       dice2 : 0,
       dice : 0,
@@ -570,7 +570,7 @@ export default function WordyGame() {
       location : 0,
       balance : 500,
       desert : 0,
-      state : 1,
+      state : false,
       dice1 : 0,
       dice2 : 0,
       dice : 0,
@@ -589,7 +589,7 @@ export default function WordyGame() {
       location : 0,
       balance : 500,
       desert : 0,
-      state : 2,
+      state : false,
       dice1 : 0,
       dice2 : 0,
       dice : 0,
@@ -608,7 +608,7 @@ export default function WordyGame() {
       location : 0,
       balance : 500,
       desert : 0,
-      state : 3,
+      state : false,
       dice1 : 0,
       dice2 : 0,
       dice : 0,
@@ -624,32 +624,129 @@ export default function WordyGame() {
   let [cnt, setCnt ] = useState(0);
   let [dice1, setDice1] = useState(0);
   let [dice2, setDice2] = useState(0);
+  let [dice, setDice] = useState(0);
   let [double, setDouble] = useState(false);
+  let [turn, setTurn] = useState(1);
 
+  // 플레이어 1회 턴 함수
 
-  //주사위 굴리는 함수
-  const getDice = () => {
+  const playerTurn = async(turn: number) => {
+    await getDice();
+    
+    if(turn === 1) {
+
+      // 변경된 값 세팅
+      setP1((prevState) => {
+        alert('dice : ' + dice + 'lst : ' + lst )
+        return {
+          ...prevState,
+          game : {
+            location : setLocation(p1.game.location, dice),
+            balance : 500,
+            desert : 0,
+            state : false,
+            dice1 : dice1,
+            dice2 : dice2,
+            dice : dice,
+            double : double,
+            own : [],
+            lap : 0,
+            ranking : 0,
+          },
+        }
+      })
+    } else if(turn === 2) {
+
+      // 변경된 값 세팅
+      setP2((prevState) => {
+        return {
+          ...prevState,
+          game : {
+            location : setLocation(p2.game.location, dice1+dice2),
+            balance : 500,
+            desert : 0,
+            state : false,
+            dice1 : dice1,
+            dice2 : dice2,
+            dice : dice1+dice2,
+            double : double,
+            own : [],
+            lap : 0,
+            ranking : 0,
+          },
+        }
+      })
+    } else if(turn === 3) {
+
+      // 변경된 값 세팅
+      setP3((prevState) => {
+        return {
+          ...prevState,
+          game : {
+            location : setLocation(p3.game.location, dice1+dice2),
+            balance : 500,
+            desert : 0,
+            state : false,
+            dice1 : dice1,
+            dice2 : dice2,
+            dice : dice1+dice2,
+            double : double,
+            own : [],
+            lap : 0,
+            ranking : 0,
+          },
+        }
+      })
+    } else if(turn === 4) {
+
+      // 변경된 값 세팅
+      setP4((prevState) => {
+        return {
+          ...prevState,
+          game : {
+            location : setLocation(p4.game.location, dice1+dice2),
+            balance : 500,
+            desert : 0,
+            state : false,
+            dice1 : dice1,
+            dice2 : dice2,
+            dice : dice1+dice2,
+            double : double,
+            own : [],
+            lap : 0,
+            ranking : 0,
+          },
+        }
+      })
+    }
+
+    // 더블아니면 turn 증가
+    if(!double) {
+      setTurn((turn+1)%4)
+    } 
+  }
+
+  // 주사위 굴리는 함수
+  const getDice = async () => {
     let dice1 = Math.floor(Math.random() * 6 + 1);
     let dice2 = Math.floor(Math.random() * 6 + 1);
+    let dice = dice1 + dice2
     if(dice1 === dice2) {
       setDouble(true);
+    } else {
+      setDouble(false);
     }
-    setDice1(dice1);
-    setDice2(dice2);
-
+    await setDice1(dice1);
+    await setDice2(dice2);
+    await setDice(dice);
   };
 
-  const setPlayer = (cnt:number) => {
-    if(cnt%4 === 0) {
-      alert('p1 세팅')
-    } else if(cnt%4 === 1) {
-      alert('p2 세팅')
-    } else if(cnt%4 === 2) {
-      alert('p3 세팅')
-    } else if(cnt%4 === 3) {
-      alert('p4 세팅')
-    }
+  // 위치 변경 함수
+  const setLocation = (location: number , dice: number) => {
+    return (location + dice)%40
   }
+
+
 
   
 
@@ -739,32 +836,31 @@ export default function WordyGame() {
                           <div>현재위치 : [{i.game.location}] {worldMap[i.game.location].name}</div>
                           <div>소유국가 : [{i.game.own}]</div>
                           <div>주사위1 : {i.game.dice1}</div>
-                          <div>주사위2 : {i.game.dice1}</div>
+                          <div>주사위2 : {i.game.dice2}</div>
                           <div>주사위합 : {i.game.dice1 + p1.game.dice2}</div>
                           <div>더블 : {i.game.double? '더블!' : '더블아님'}</div>
                           <div>순위 : {i.game.ranking}</div>
                           <div>몇바퀴 : {i.game.lap} 바퀴 </div>
-                          <div>턴 : {i.game.state == 0? '플레이어 턴' : i.game.state}</div>
+                          <div>턴 : {i.game.state? '플레이어 턴' : '차례 아님'}</div>
                         </div>
                       </>
                     })
                   }
           </div>
           <div className='flex flex-col bg-blue-200 w-[800px] justify-center items-center'>
-            <div>진행상황</div>
-            <div>{cnt}회차</div>
-            <div> ===주사위 결과===</div>
+            <div> ==== 플레이어{turn} 턴 진행결과 ==== </div>
+            <div>({cnt}회차)</div>
             <div> 주사위1 : {dice1}</div>
             <div> 주사위2 : {dice2}</div>
             <div> 총합 : {dice1 + dice2}</div>
             <div> double : {double? '더블!' : '더블 아님'}</div>
+            
           </div>
 
           <div 
             onClick={() => {
-              getDice();
-              setPlayer(cnt);
-              setCnt(cnt+1);
+              playerTurn(turn);
+             
             }}
             className='w-[200px] h-[60px] bg-yellow-300 flex justify-center items-center mt-[40px] hover:cursor-pointer'>주사위 굴리기</div>
         </div>
