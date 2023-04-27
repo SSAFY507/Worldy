@@ -22,3 +22,13 @@
 .CSSTransition-Tutorial-Popup-exit-active {
   opacity: 0;
 }
+
+.CSSTransition-IntroPage-GreyPopup-enter {
+  opacity: 0;
+  transform: translateY(-20%);
+}
+.CSSTransition-IntroPage-GreyPopup-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 1s ease-out;
+}
