@@ -62,6 +62,13 @@ const AppLayout = () => {
     closeLoginModal();
   };
 
+  const handleNavigate = (path: string, login: boolean) => {
+    if (path === '/') {
+      setLogin(login);
+    }
+    navigate(path);
+  };
+
   return (
     <div
       className='w-screen h-screen flex flex-col bg-slate-50'
@@ -101,7 +108,12 @@ const AppLayout = () => {
           <Route path='/explore' element={<Explore />} />
           <Route path='/monopoly' element={<Monopoly />} />
           <Route path='/support' element={<Support />} />
-          <Route path='/tutorial' element={<Tutorial />} />
+          <Route
+            path='/tutorial'
+            element={
+              <Tutorial onClickEndTutorial={() => handleNavigate('/', true)} />
+            }
+          />
         </Routes>
       </div>
     </div>
