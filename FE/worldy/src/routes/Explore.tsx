@@ -24,7 +24,7 @@ const Explore = () => {
   const composerRef = useRef<EffectComposer | null>(null);
   const effectFXAARef = useRef<ShaderPass | null>(null);
 
-  /** 객체 이동 */
+  /** 강조할 객체 추적 */
   const OnPointerMove = (event:PointerEvent) => {
     if (event.isPrimary === false) return;
     const mouse = new THREE.Vector2
@@ -35,8 +35,9 @@ const Explore = () => {
 
     const interescts = raycaster.intersectObject(scene.current!, true);
     if (interescts!.length > 0) {
+      // 지정된 객체 중에 첫번째 선택
       const selectedObject = interescts![0].object;
-      // 더 강한 효과를 원한다면 아래 값을 높여보세요.
+      // 더 강한 효과
       outlinePassRef.current!.edgeStrength = 20;  
       outlinePassRef.current!.selectedObjects = [ selectedObject ];
     } else {
@@ -44,7 +45,7 @@ const Explore = () => {
     }
   }
 
-  /**  */
+  /** 객체 강조 후처리 */
   const SetupPostProcess = () => {
     const composer = new EffectComposer(renderer.current!);
 
@@ -125,7 +126,7 @@ const Explore = () => {
   const SetupCamera = () => {
     // const width = divContainer.current?.clientWidth || 0;
     // const height = divContainer.current?.clientHeight || 0;
-    const cam = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 25);
+    const cam = new THREE.PerspectiveCamera(37, window.innerWidth / window.innerHeight, 0.1, 25);
     cam.position.set(0, 10, 10);      // 카메라의 위치는 7, 7, 0
     cam.rotation.set(0, 0, 0);
     cam.lookAt(0, 0, 0);          // 카메라가 바라보는 곳이 0, 0, 0
@@ -150,13 +151,96 @@ const Explore = () => {
       }
     )
 
-    // 대륙을 클릭하기 위한 객체 생성        
-    const targetPivot = new THREE.Object3D();
-    const target = new THREE.Object3D();  // Mesh 대신에 Object3D이므로 화면상에 보이지는 않음
-    targetPivot.add(target);
-    targetPivot.name = "targetPivot";
-    target.position.set(0, 15, 15);
-    scene.current?.add(targetPivot);
+    // northAmerica
+    const NorthAmericaGeometry = new THREE.PlaneGeometry(5, 5);
+    const NorthAmericaMaterial = new THREE.MeshBasicMaterial({
+      color: "#2c3e50",
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.1,
+    });
+
+    const northAmerica = new THREE.Mesh(NorthAmericaGeometry, NorthAmericaMaterial);
+    northAmerica.position.set(-8, 0.5, -3)
+
+    northAmerica.rotation.x = THREE.MathUtils.degToRad(-90);
+    
+    scene.current?.add(northAmerica);
+    
+    //southAmerica
+    const SouthAmericaGeometry = new THREE.PlaneGeometry(3, 5);
+    const SouthAmericaMaterial = new THREE.MeshBasicMaterial({
+      color: "#2c3e50",
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.1,
+    });
+
+    const southAmerica = new THREE.Mesh(SouthAmericaGeometry, SouthAmericaMaterial);
+    southAmerica.position.set(-6, 0.5, 2)
+    southAmerica.rotation.x = THREE.MathUtils.degToRad(-90);
+    
+    scene.current?.add(southAmerica);
+
+    //Africa
+    const AfricaGeometry = new THREE.PlaneGeometry(4, 3.5);
+    const AfricaMaterial = new THREE.MeshBasicMaterial({
+      color: "#2c3e50",
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.1,
+    });
+
+    const africa = new THREE.Mesh(AfricaGeometry, AfricaMaterial);
+    africa.position.set(-2, 0.5, 0.5)
+    africa.rotation.set(THREE.MathUtils.degToRad(-90), THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(-20));
+    
+    scene.current?.add(africa);
+
+    //Europe
+    const EuropeGeometry = new THREE.PlaneGeometry(3.5, 3.5);
+    const EuropeMaterial = new THREE.MeshBasicMaterial({
+      color: "#2c3e50",
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.1,
+    });
+
+    const europe = new THREE.Mesh(EuropeGeometry, EuropeMaterial);
+    europe.position.set(-1, 0.5, -3)
+    europe.rotation.set(THREE.MathUtils.degToRad(-90), THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(-20));
+    
+    scene.current?.add(europe);
+
+    //Asia
+    const AsiaGeometry = new THREE.PlaneGeometry(5, 3);
+    const AsiaMaterial = new THREE.MeshBasicMaterial({
+      color: "#2c3e50",
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.1,
+    });
+
+    const asia = new THREE.Mesh(AsiaGeometry, AsiaMaterial);
+    asia.position.set(2.5, 0.5, -2.5)
+    asia.rotation.set(THREE.MathUtils.degToRad(-90), THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(70));
+    
+    scene.current?.add(asia);
+
+    //Oceania
+    const OceaniaGeometry = new THREE.PlaneGeometry(3, 4);
+    const OceaniaMaterial = new THREE.MeshBasicMaterial({
+      color: "#2c3e50",
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.1,
+    });
+
+    const oceania = new THREE.Mesh(OceaniaGeometry, OceaniaMaterial);
+    oceania.position.set(4, 0.5, 2)
+    oceania.rotation.set(THREE.MathUtils.degToRad(-90), THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(70));
+    
+    scene.current?.add(oceania);
   };
 
   /** 조명 커스텀 함수 */
