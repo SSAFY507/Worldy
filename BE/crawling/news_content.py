@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 import datetime
 import news_quiz
 import pymysql
+import config
 from time import sleep
 
 # QUIZ SQL
@@ -18,10 +19,10 @@ def find_new_content(nation, nation_id):
     driver = webdriver.Edge('./msedgedriver.exe')
 
     # DB 접속 정보
-    conn = pymysql.connect(host='localhost',
-                       user='root',
-                       password='a710&soez&mtc',
-                       db='test_world',
+    conn = pymysql.connect(host=config.MYSQL_URL,
+                       user=config.MYSQL_USER,
+                       password=config.MYSQL_PASSWORD,
+                       db=config.MYSQL_DB,
                        charset='utf8')
     
     now = datetime.datetime.now()

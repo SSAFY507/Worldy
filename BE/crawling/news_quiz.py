@@ -1,8 +1,9 @@
 import openai
 import re
+import config
 
 # 발급받은 API 키 설정
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = config.OPEN_AI_API_KEY
 
 # openai API 키 인증
 openai.api_key = OPENAI_API_KEY

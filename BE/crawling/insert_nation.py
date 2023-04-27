@@ -1,10 +1,11 @@
 import pymysql
+import config
 
-conn = pymysql.connect(host='localhost',
-                       user='root',
-                       password='a710&soez&mtc',
-                       db='test_world',
-                       charset='utf8')
+conn = pymysql.connect(host=config.MYSQL_URL,
+                    user=config.MYSQL_USER,
+                    password=config.MYSQL_PASSWORD,
+                    db=config.MYSQL_DB,
+                    charset='utf8')
 
 nations = {"한국" : 1, "중국" : 2, "일본" : 3, "인도" : 4, "영국" : 5, "프랑스" : 6, "이탈리아" : 7, "스페인" : 8, "미국" : 9, "이집트" : 10}
 

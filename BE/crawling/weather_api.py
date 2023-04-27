@@ -1,6 +1,7 @@
 from pyowm import OWM
+import config
 
-API_key = 'e3e3fac54ada85280f858e626598f203'
+API_key = config.OWM_API_KEY
 owm = OWM(API_key)
 mgr = owm.weather_manager()
 
@@ -10,60 +11,19 @@ nations = {"한국" : ['Seoul', '서울'], "중국" : ['Beijing', '베이징'], 
         "영국" : ['London', '런던'], "프랑스" : ['Paris', '파리'], "이탈리아" : ['Roma', '로마'], "스페인" : ['Madrid', '마드리드'],
         "미국" : ['Washington D.C.', '워싱턴 D.C.'], "이집트" : ['Cairo', '카이로']}
 
+weather_list = {"Clear": "맑음", "Clouds": "구름", "Haze": "흐림", "Wind": "바람", "Rain": "비", "Snow": "눈", "mist": "안개",
+                "Thunderstorm": "뇌우", "Drizzle": "이슬비", "Smoke": "스모그", "Dust": "안개", "Fog": "안개", "Sand": "안개", "Ash": "안개",
+                "Squall": "스콜", "Tornado": "토네이도"}
+
 def crawling_weather(nation, nation_id):
     print(nations[nation][1])
     obs = mgr.weather_at_place(nations[nation][0])
 
     wt = obs.weather.status
-    if wt == "Clear":
-        print("맑음")
-        wt = "맑음"
-    elif wt == "Clouds":
-        print("구름")
-        wt = "구름"
-    elif wt == "Haze":
-        print("흐림")
-        wt = "흐림"
-    elif wt == "Wind":
-        print("바람")
-        wt = "바람"
-    elif wt == "Rain":
-        print("비")
-        wt = "비"
-    elif wt == "Snow":
-        print("눈")
-        wt = "눈"
-    elif wt == "mist":
-        print("안개")
-        wt = "안개"
-    elif wt == "Thunderstorm":
-        print("뇌우")
-        wt = "뇌우"
-    elif wt == "Drizzle":
-        print("이슬비")
-        wt = "이슬비"
-    elif wt == "Smoke":
-        print("스모그")
-        wt = "스모그"
-    elif wt == "Dust":
-        print("안개")
-        wt = "안개"
-    elif wt == "Fog":
-        print("안개")
-        wt = "안개"
-    elif wt == "Sand":
-        print("안개")
-        wt = "안개"
-    elif wt == "Ash":
-        print("안개")
-        wt = "안개"
-    elif wt == "Squall":
-        print("스콜")
-        wt = "스콜"
-    elif wt == "Tornado":
-        print("토네이도")
-        wt = "토네이도"
+    print(weather_list[wt])
 
     print(int(obs.weather.temp['temp']-273))
 
     print("---------------------------------")
+
+# crawling_weather("한국", 1)
