@@ -9,6 +9,10 @@ import pathJJ from '../assets/images/JoshJumping.png';
 import pathTQT from '../assets/images/TutorialQuizText.png';
 import LoaderPyramid from '../components/LoaderPyramid';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
+import { CSSTransition } from 'react-transition-group';
+
+import WrAnswer from '../assets/images/WrongAnswer.png';
+import CrAnswer from '../assets/images/CorrectAnswer.png';
 
 type TutorialItemType = {
   imgsrc: string;
@@ -36,6 +40,8 @@ export default function Tutorial() {
     JoshPanic: pathJP,
     JoshJumping: pathJJ,
     TutorialQuizText: pathTQT,
+    WrongAnswer: WrAnswer,
+    CorrectAnswer: CrAnswer,
   };
 
   const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
@@ -88,6 +94,8 @@ export default function Tutorial() {
   //닉네임이 미중복 확인 됐으니 다음으로 넘어가기(submit)
   const handleSubmitNickName = () => {
     console.log('넘어가기', targetIndex);
+    setPopupText(false);
+    setPopupItem(false);
     setTargetIndex(1);
   };
 
@@ -95,7 +103,7 @@ export default function Tutorial() {
     <div className='w-full  outline-blue-500 py-[10px] flex- flex-col justify-start items-center'>
       <div className='w-full h-fit outline-blue-200 flex flex-row justify-between items-center'>
         <input
-          className='h-[60px] w-[90%] rounded-[10px] bg-[rgba(255,255,255,0.3)] text-white p-[10px] text-[25px] font-PtdRegular'
+          className='h-[60px] w-[90%] rounded-[10px] bg-[rgba(255,255,255,0.3)] text-white pl-[20px] p-[10px] text-[25px] font-PtdRegular'
           type='text'
           value={nickName}
           placeholder='닉네임을 입력해주세요 (3~10자)'
@@ -167,6 +175,8 @@ export default function Tutorial() {
   const submitInterest = (index: number) => {
     const tempInterest = interestsItems[index];
     setSelectedInterest(interestsItems[index]);
+    setPopupText(false);
+    setPopupItem(false);
     if (tempInterest === '없음') setTargetIndex(3);
     else setTargetIndex(2);
   };
@@ -205,7 +215,11 @@ export default function Tutorial() {
       <button
         className='w-full h-[80px] bg-[rgba(255,255,255,0.15)] rounded-[5px] text-left text-white pl-[20px] font-PtdLight text-[30px]'
         style={hoveredIndex === -3 ? hoveredStyle : {}}
-        onClick={() => setTargetIndex(4)}
+        onClick={() => {
+          setPopupText(false);
+          setPopupItem(false);
+          setTargetIndex(4);
+        }}
         onMouseEnter={() => setHoveredIndex(-3)}
         onMouseLeave={() => setHoveredIndex(-1)}
       >
@@ -214,7 +228,11 @@ export default function Tutorial() {
       <button
         className='w-full h-[80px] bg-[rgba(255,255,255,0.15)] rounded-[5px] text-left text-white pl-[20px] font-PtdLight text-[30px]'
         style={hoveredIndex === -4 ? hoveredStyle : {}}
-        onClick={() => setTargetIndex(3)}
+        onClick={() => {
+          setPopupText(false);
+          setPopupItem(false);
+          setTargetIndex(3);
+        }}
         onMouseEnter={() => setHoveredIndex(-4)}
         onMouseLeave={() => setHoveredIndex(-1)}
       >
@@ -228,7 +246,11 @@ export default function Tutorial() {
       <button
         className='w-full h-[80px] bg-[rgba(255,255,255,0.15)] rounded-[5px] text-left text-white pl-[20px] font-PtdLight text-[30px]'
         style={hoveredIndex === -7 ? hoveredStyle : {}}
-        onClick={() => setTargetIndex(4)}
+        onClick={() => {
+          setPopupText(false);
+          setPopupItem(false);
+          setTargetIndex(4);
+        }}
         onMouseEnter={() => setHoveredIndex(-7)}
         onMouseLeave={() => setHoveredIndex(-1)}
       >
@@ -262,14 +284,40 @@ export default function Tutorial() {
       answer: '메소포타미아',
       selections: ['메소포타미아', '이집트', '중국', '인도문명'],
     },
-    {
-      difficulty: '헉',
-      category: '역사',
-      quizText: '역사 문제 4?',
-      answer: '메소포타미아',
-      selections: ['메소포타미아', '이집트', '중국', '인도문명'],
-    },
   ];
+
+  const [selectAnswer, setSelectAnswer] = useState<string>('');
+  const checkAnswer = (answer: string) => {
+    return setQuizResult(selectAnswer === answer);
+  };
+
+  const [quizResult, setQuizResult] = useState<boolean | null>(null);
+  const [quizResultImage, setQuizResultImage] = useState<string>('');
+  useEffect(() => {
+    if (quizResult !== null) {
+      setPopupCorrectIcon(true);
+      setTimeout(() => {
+        setPopupCorrectIcon(false);
+        setQuizResult(null);
+        setQuizResultImage('');
+        setSelectAnswer('');
+        if (quizTargetIndex === 2) {
+          setDoneTutorial(true);
+        } else {
+          setQuizTargetIndex((prev) => prev + 1);
+        }
+      }, 2000);
+      if (quizResult) {
+        setQuizResultImage(loadedImages.CorrectAnswer);
+      } else if (!quizResult) {
+        setQuizResultImage(loadedImages.WrongAnswer);
+      }
+    }
+  }, [quizResult]);
+
+  const [popupCorrectIcon, setPopupCorrectIcon] = useState<boolean>(false);
+
+  const [doneTutorial, setDoneTutorial] = useState<boolean>(false);
 
   const showQuiz = (
     <div className=' outline-white absolute w-[600px] h-[720px] left-1/3 bottom-[100px] flex flex-col justify-stretch items-center '>
@@ -300,24 +348,58 @@ export default function Tutorial() {
             {quizList[quizTargetIndex].quizText}
           </div>
           <div className=' outline-blue-200 flex-1 w-full flex flex-wrap justify-between content-between'>
-            {quizList[quizTargetIndex].selections.map((item, key) => (
-              <div
-                key={key}
+            {quizList[quizTargetIndex].selections.map((item, index) => (
+              <button
+                key={index}
                 className='h-[47%] w-[47%] rounded-[15px] bg-[#ededed] flex justify-center items-center text-[24px] font-PtdMedium'
+                onClick={() => setSelectAnswer(item)}
+                style={
+                  selectAnswer === item
+                    ? {
+                        backgroundColor: '#FF6962',
+                        color: 'white',
+                      }
+                    : {}
+                }
               >
                 {item}
-              </div>
+              </button>
             ))}
           </div>
           <div className=' outline-blue-200 h-[80px] w-full mt-[20px]'>
-            <button className='rounded-[10px] bg-[#d9d9d9] w-full h-full text-[30px] font-medium text-white'>
+            <button
+              className='rounded-[10px] bg-[#d9d9d9] w-full h-full text-[30px] font-medium text-white'
+              style={selectAnswer !== '' ? { backgroundColor: '#FF6962' } : {}}
+              onClick={() => checkAnswer(quizList[quizTargetIndex].answer)}
+            >
               제출하기
             </button>
+            {quizResult === null ? (
+              <></>
+            ) : (
+              <div className='w-full h-full'>
+                <CSSTransition
+                  in={popupCorrectIcon}
+                  timeout={1000}
+                  classNames='CSSTransition-Tutorial-Popup'
+                  unmountOnExit
+                >
+                  <div className='w-full h-full first-letter:w-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 grid justify-center items-center '>
+                    <img
+                      src={quizResultImage}
+                      alt='quizResult'
+                      className='opacity-80'
+                    />
+                  </div>
+                </CSSTransition>
+              </div>
+            )}
           </div>
         </div>
       </div>
     </div>
   );
+
   /////////////////////////////////////////////////
 
   const TutorialItemList: TutorialItemType[] = [
@@ -351,8 +433,42 @@ export default function Tutorial() {
     },
   ];
 
-  const [targetIndex, setTargetIndex] = useState<number>(0);
+  const [targetIndex, setTargetIndex] = useState<number>(4);
 
+  const [popupName, setPopupName] = useState<boolean>(false);
+  const [popupText, setPopupText] = useState<boolean>(false);
+  const [popupItem, setPopupItem] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (loadedAll) {
+      setTimeout(() => {
+        setPopupName(true);
+        setPopupText(true);
+      }, 500);
+      setTimeout(() => {
+        setPopupItem(true);
+      }, 1500);
+    }
+  }, [loadedAll]);
+
+  useEffect(() => {
+    if (targetIndex !== 0) {
+      setPopupText(false);
+      setPopupItem(false);
+      if (targetIndex === 4) {
+        setTimeout(() => {
+          setPopupItem(true);
+        }, 200);
+      } else {
+        setTimeout(() => {
+          setPopupText(true);
+        }, 500);
+        setTimeout(() => {
+          setPopupItem(true);
+        }, 1500);
+      }
+    }
+  }, [targetIndex]);
   return (
     <>
       {loadedAll ? (
@@ -375,18 +491,41 @@ export default function Tutorial() {
               <div className='h-full w-3/4 py-10 pl-20 pr-10'>
                 <div className='w-3/5 h-full flex flex-col justify-between items-start'>
                   <div className='outline-white h-[30px] w-full font-PtdLight text-[#f9c53a] text-[20px] flex justify-start items-center'>
-                    {targetIndex !== 4 ? name : null}
+                    <CSSTransition
+                      in={popupName}
+                      timeout={3000}
+                      classNames='CSSTransition-Tutorial-Popup'
+                      unmountOnExit
+                    >
+                      <div>{targetIndex !== 4 ? name : null}</div>
+                    </CSSTransition>
                   </div>
                   <div className='h-fit w-full my-[10px] text-white text-[30px] font-PtdExtraLight leading-[45px] py-[5px]'>
-                    {TutorialItemList[targetIndex].contentText}
-                    <div className='border-b-[1.5px] border-b-white border-solid w-fit font-PtdLight'>
-                      {TutorialItemList[targetIndex].contentCoreText}
-                    </div>
+                    <CSSTransition
+                      in={popupText}
+                      timeout={1000}
+                      classNames='CSSTransition-Tutorial-Popup'
+                      unmountOnExit
+                    >
+                      <div>
+                        {TutorialItemList[targetIndex].contentText}
+                        <div className='border-b-[1.5px] border-b-white border-solid w-fit font-PtdLight'>
+                          {TutorialItemList[targetIndex].contentCoreText}
+                        </div>
+                      </div>
+                    </CSSTransition>
                   </div>
-                  <div className=' outline-white flex-1 max-h-full w-full flex flex-col justify-end items-center'>
-                    <div className='w-full h-fit  outline-red-400'>
-                      {TutorialItemList[targetIndex].contentItem}
-                    </div>
+                  <div className='outline-white flex-1 max-h-full w-full flex flex-col justify-end items-center'>
+                    <CSSTransition
+                      in={popupItem}
+                      timeout={1000}
+                      classNames='CSSTransition-Tutorial-Popup'
+                      unmountOnExit
+                    >
+                      <div className='w-full h-fit  outline-red-400'>
+                        {TutorialItemList[targetIndex].contentItem}
+                      </div>
+                    </CSSTransition>
                   </div>
                 </div>
               </div>
