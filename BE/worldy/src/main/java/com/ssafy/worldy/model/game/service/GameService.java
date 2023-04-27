@@ -5,8 +5,11 @@ import com.ssafy.worldy.exception.CustomExceptionList;
 import com.ssafy.worldy.model.adventure.entity.Nation;
 import com.ssafy.worldy.model.adventure.repo.NationRepo;
 import com.ssafy.worldy.model.game.dto.GameResultDto;
+import com.ssafy.worldy.model.game.dto.MatchingRequestDto;
 import com.ssafy.worldy.model.game.entity.GameResult;
 import com.ssafy.worldy.model.game.repo.GameResultRepo;
+import com.ssafy.worldy.model.user.entity.User;
+import com.ssafy.worldy.model.user.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +20,7 @@ public class GameService {
 
     private final GameResultRepo gameResultRepo;
     private final NationRepo nationRepo;
+    private final UserRepo userRepo;
 
     @Transactional
     public void gameResult(GameResultDto gameResultDto) {

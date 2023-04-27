@@ -4,6 +4,8 @@ import com.ssafy.worldy.jwt.TokenProvider;
 import com.ssafy.worldy.exception.CustomException;
 import com.ssafy.worldy.exception.CustomExceptionList;
 import com.ssafy.worldy.model.game.repo.GameRoomRepo;
+import com.ssafy.worldy.model.game.service.GameMatchingProducer;
+import com.ssafy.worldy.model.game.service.GameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
@@ -15,6 +17,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+
+import java.util.Optional;
 
 /**
  * interceptor 역할
@@ -29,7 +33,7 @@ public class StompHandler implements ChannelInterceptor {
 
     private final GameRoomRepo gameRoomRepo;
     private final TokenProvider tokenProvider;
-    private final MessageChannel clientOutboundChannel;
+    private final GameMatchingProducer gameMatchingProducer;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -37,7 +41,7 @@ public class StompHandler implements ChannelInterceptor {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
         log.info(accessor.toString());
 
-        if(accessor.getCommand() == StompCommand.CONNECT) { // 소켓 최초 연결시 jwt 검증
+        if(accessor.getCommand() == StompCommand.CONNECT) { // 소켓 최초 연결시 jwt 검증 & 게임방에 플레이어 수 확인
 
             //Header의 BearerToken 추출
             String bearerToken = String.valueOf(accessor.getFirstNativeHeader("Authorization"));
@@ -65,21 +69,35 @@ public class StompHandler implements ChannelInterceptor {
 
             // roomId 추출
             String roomId = String.valueOf(accessor.getNativeHeader("RoomId"));
-            roomId = roomId.substring(1,roomId.length()-1);
-            log.info("roomId : " + roomId);
 
-            log.info(String.valueOf(gameRoomRepo.playerCnt(roomId)));
-            if(gameRoomRepo.playerCnt(roomId)>=4) {
-                log.info("입장 불가");
+            if(!roomId.equals("null")) {
+                roomId = roomId.substring(1,roomId.length()-1);
+                log.info("roomId : " + roomId);
 
-                throw new CustomException(CustomExceptionList.ENTER_GAME_ERROR);
-            } else {
+                log.info(String.valueOf(gameRoomRepo.playerCnt(roomId)));
+                if(gameRoomRepo.playerCnt(roomId)>=4) {
+                    log.info("입장 불가");
 
-                log.info("입장");
-                gameRoomRepo.enterGameRoom(kakaoId,roomId); // 게임방에 플레이어 cnt 증가
+                    throw new CustomException(CustomExceptionList.ENTER_GAME_ERROR);
+                } else {
 
+                    log.info("입장");
+                    gameRoomRepo.enterGameRoom(kakaoId,roomId); // 게임방에 플레이어 cnt 증가
+
+                }
             }
+        }
+        else if (accessor.getCommand() == StompCommand.SUBSCRIBE) { // 구독 요청 시
 
+            // roomId 추출
+            String roomId = getRoomId(Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId"));
+
+            String[] splitRoomId = roomId.split("-");
+
+            // 매칭 요청의 경우 매칭 서버로 전송
+            if(splitRoomId.length==2) {
+                gameMatchingProducer.sendMatchingServer(roomId);
+            }
         }
 //        else if (accessor.getCommand() == StompCommand.SUBSCRIBE) { // 구독 요청 시 인원수 확인
 //

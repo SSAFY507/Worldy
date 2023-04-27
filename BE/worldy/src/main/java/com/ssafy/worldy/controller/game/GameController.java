@@ -2,6 +2,7 @@ package com.ssafy.worldy.controller.game;
 
 import com.ssafy.worldy.model.game.dto.GameResultDto;
 import com.ssafy.worldy.model.game.dto.GameRoom;
+import com.ssafy.worldy.model.game.dto.MatchingWaitingRoom;
 import com.ssafy.worldy.model.game.repo.GameRoomRepo;
 import com.ssafy.worldy.model.game.service.GameService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -52,5 +54,18 @@ public class GameController {
         gameService.gameResult(gameResultDto);
 
         return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+    }
+
+    /**
+     * [게임 매칭 요청 - 소켓 연결]
+     **/
+    @GetMapping("/matching")
+    public ResponseEntity<MatchingWaitingRoom> gameMatching() {
+       
+        String kakaoId = SecurityContextHolder.getContext().getAuthentication().getName();
+        
+        // kakaoId로 매칭 서버와 소켓할 방 생성
+        MatchingWaitingRoom matchingWaitingRoom = MatchingWaitingRoom.builder().roomId("waiting-"+kakaoId).build();
+        return new ResponseEntity<>(matchingWaitingRoom, HttpStatus.OK);
     }
 }
