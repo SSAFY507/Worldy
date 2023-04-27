@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import {
   BrowserRouter,
   Route,
@@ -5,22 +7,18 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import pathBI from './assets/images/MainPageBackground.png';
 
-import BackgroundImage from './assets/images/MainPageBackground.png';
+import LoginModal from './components/LoginModal';
+import Navbar from './components/Nvabar';
 import Explore from './routes/Explore';
 import GameInfo from './routes/GameInfo';
 import IntroPage from './routes/IntroPage';
-import LoaderPyramid from './components/LoaderPyramid';
-import LoginModal from './components/LoginModal';
-import LoginModalBackground from './components/LoginModalBackground';
 import MainPageAfterLogin from './routes/MainPageAfterLogin';
 import Monopoly from './routes/Monopoly';
-import Navbar from './components/Nvabar';
 import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
 import Updates from './routes/Updates';
-import WorldAdventure from './routes/WorldAdventure';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -38,22 +36,6 @@ const AppLayout = () => {
   const closeLoginModal = () => {
     setShowLoginModal(false);
   };
-
-  const [loadedBackgroundImage, setLoadedBackgroundImage] =
-    useState<boolean>(false);
-
-  const [imageBackgroundImage, setImageBackgroundImage] =
-    useState<HTMLImageElement>(new Image());
-
-  useEffect(() => {
-    imageBackgroundImage.src = BackgroundImage;
-    // setLoadedBackgroundImage(true);
-    imageBackgroundImage.onload = () => {
-      setTimeout(() => {
-        setLoadedBackgroundImage(true);
-      }, 1000);
-    };
-  }, [BackgroundImage]);
 
   const [login, setLogin] = useState<boolean>(false);
 
@@ -81,57 +63,48 @@ const AppLayout = () => {
   };
 
   return (
-    <>
-      {loadedBackgroundImage ? (
-        <div
-          className='w-screen h-screen flex flex-col bg-slate-50'
-          style={{
-            backgroundImage: login ? undefined : `url(${BackgroundImage})`,
-            backgroundSize: '100%',
-          }}
-        >
-          <div className='z-10'>
-            {location.pathname !== '/explore' &&
-              location.pathname !== '/monopoly' && (
-                <Navbar
-                  onLoginClick={handleLoginModal}
-                  onLoginAdmin={handleLoginAdmin}
-                />
-              )}
-            {showLoginModal && (
-              <LoginModal
-                onClose={closeLoginModal}
-                onClickKakaoLogin={handleFirstLogin}
-              />
-            )}
-            {/* Routes : 여러 컴퍼넌트 중 URL과 일치하는 '첫번째' Route 컴퍼넌트만 렌더링 */}
-          </div>
-          <div className='flex-1 h-full'>
-            <Routes>
-              {login ? (
-                <Route path='/' element={<MainPageAfterLogin />} />
-              ) : (
-                <Route
-                  path='/'
-                  element={<IntroPage onLoginClick={handleLoginModal} />}
-                />
-              )}
-              <Route path='/gameinfo' element={<GameInfo />} />
-              <Route path='/updates' element={<Updates />} />
-              <Route path='/explore' element={<Explore />} />
-              <Route path='/monopoly' element={<Monopoly />} />
-              <Route path='/support' element={<Support />} />
-              <Route path='/adventure' element={<WorldAdventure />} />
-              <Route path='/tutorial' element={<Tutorial />} />
-            </Routes>
-          </div>
-        </div>
-      ) : (
-        <div className='h-screen w-screen'>
-          <LoaderPyramid text='탐험가 모실 준비 중...' />
-        </div>
-      )}
-    </>
+    <div
+      className='w-screen h-screen flex flex-col bg-slate-50'
+      style={{
+        backgroundImage: login ? undefined : `url(${pathBI})`,
+        backgroundSize: '100%',
+      }}
+    >
+      <div className='z-10'>
+        {location.pathname !== '/explore' &&
+          location.pathname !== '/monopoly' && (
+            <Navbar
+              onLoginClick={handleLoginModal}
+              onLoginAdmin={handleLoginAdmin}
+            />
+          )}
+        {showLoginModal && (
+          <LoginModal
+            onClose={closeLoginModal}
+            onClickKakaoLogin={handleFirstLogin}
+          />
+        )}
+        {/* Routes : 여러 컴퍼넌트 중 URL과 일치하는 '첫번째' Route 컴퍼넌트만 렌더링 */}
+      </div>
+      <div className='flex-1 h-full'>
+        <Routes>
+          {login ? (
+            <Route path='/' element={<MainPageAfterLogin />} />
+          ) : (
+            <Route
+              path='/'
+              element={<IntroPage onLoginClick={handleLoginModal} />}
+            />
+          )}
+          <Route path='/gameinfo' element={<GameInfo />} />
+          <Route path='/updates' element={<Updates />} />
+          <Route path='/explore' element={<Explore />} />
+          <Route path='/monopoly' element={<Monopoly />} />
+          <Route path='/support' element={<Support />} />
+          <Route path='/tutorial' element={<Tutorial />} />
+        </Routes>
+      </div>
+    </div>
   );
 };
 
