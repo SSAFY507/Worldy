@@ -1,14 +1,12 @@
 import pymysql
 
-conn = pymysql.connect(host='host',
+conn = pymysql.connect(host='localhost',
                        user='root',
-                       password='password',
-                       db='db',
+                       password='a710&soez&mtc',
+                       db='test_world',
                        charset='utf8')
 
-nations = {"한국":1, "미국":2, "중국":3, "일본":4, "사우디아라비아":5, "인도":6, "싱가포르":7, "태국":8, "필리핀":9, "캐나다":10, "멕시코":11, "아르헨티나":12,
-            "브라질":13, "페루":14, "칠레":15, "호주":16, "이집트":17, "남아공":18, "리비아":19, "가나":20, "모르코":21, "소말리아":22, "영국":23, "프랑스":24,
-            "독일":25, "스위스":26, "이탈리아":27, "스페인":28, "헝가리":29, "터키":30}
+nations = {"한국" : 1, "중국" : 2, "일본" : 3, "인도" : 4, "영국" : 5, "프랑스" : 6, "이탈리아" : 7, "스페인" : 8, "미국" : 9, "이집트" : 10}
 
 INSERT_NATION = "insert into nation (nation_id, nation_name) values (%s, %s)"
 
