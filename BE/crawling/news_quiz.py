@@ -23,22 +23,28 @@ JONGSUNG_LIST = [' ', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', '�
 BASE_CODE, CHOSUNG, JUNGSUNG = 44032, 588, 28
 
 # 퀴즈 만들기
-def make_quiz_and_answer(origin):
+def make_quiz_and_answer(origin, nation_id):
     answer = origin[1]
     temp = "_" * len(answer)
     quiz = origin[0].replace(answer, temp)
 
-    hint = list()
+    hint_list = list()
     for a in answer:
         if re.match('.*[ㄱ-ㅎㅏ-ㅣ가-힣]+.*', a) is not None:
                 char_code = ord(a) - BASE_CODE
                 char1 = int(char_code / CHOSUNG)
-                hint.append(CHOSUNG_LIST[char1])
+                hint_list.append(CHOSUNG_LIST[char1])
 
+    hint = ""
+    for h in hint_list:
+        hint = hint+str(h)
+        
+    print(hint)
+    
     return {"quiz" : quiz, "answer" : answer, "hint" : hint}
 
 # ChatGPT API
-def chatgpt_quiz(text):
+def chatgpt_quiz(text, nation_id):
 
     # 1. ChatGPT에게 기사 내용 요약 요청
     messages = [
@@ -67,4 +73,4 @@ def chatgpt_quiz(text):
     word = response['choices'][0]['message']['content']
 
     origin = [summary, word]
-    return make_quiz_and_answer(origin)
+    return make_quiz_and_answer(origin, nation_id)

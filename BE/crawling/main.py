@@ -1,6 +1,8 @@
 from typing import Union
 from fastapi import FastAPI
 import news_naver
+import news_content
+import weather_api
 import sched
 from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -10,26 +12,44 @@ sched = BackgroundScheduler(timezone='Asia/Seoul')
 
 app = FastAPI()
 
-nations = ["한국", "미국", "중국", "일본", "사우디아라비아", "인도", "싱가포르", "태국", "필리핀", "캐나다", "멕시코", "아르헨티나", "브라질",
-           "페루", "칠레", "호주", "이집트", "남아공", "리비아", "가나", "모르코", "소말리아", "영국", "프랑스", "독일", "스위스", "이탈리아",
-           "스페인", "헝가리", "터키"]
+nations = {"한국" : 1, "중국" : 2, "일본" : 3, "인도" : 4, "영국" : 5, "프랑스" : 6, "이탈리아" : 7, "스페인" : 8, "미국" : 9, "이집트" : 10}
 
 
 
 #----------------------- news crawling -----------------------
 
 
-@sched.scheduled_job('cron', hour='9', minute='0', id='test_2')
+@sched.scheduled_job('cron', hour='8', minute='0', id='news_crawling')
 def crawling_naver():
-    for nation in nations:
+    for nation in nations.keys():
         news_naver.find_news(nation)
+
+
+#----------------------- news quiz -----------------------
+
+
+@sched.scheduled_job('cron', hour='9', minute='0', id='news_quiz')
+def news_quiz():
+    for nation in nations.keys():
+        news_content.find_new_content(nation, nations[nation])
+
+
+#----------------------- weather crawling -----------------------
+
+
+@sched.scheduled_job('cron', hour='7', minute='0', id='wweather_crawling')
+def weather_crawling():
+    for nation in nations.keys():
+        weather_api.crawling_weather(nation, nations[nation])
+
+
+#----------------------- sched start -----------------------
+
 
 def start_image_scheduler():
     sched.start()
 
 start_image_scheduler()
-
-
 
 
 #----------------------- FAST API -----------------------
