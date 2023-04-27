@@ -7,6 +7,8 @@ import pathBI from '../assets/images/MainPageBackground.png';
 import pathLC from '../assets/images/LogoColored.png';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 import LoaderPyramid from '../components/LoaderPyramid';
+import { CSSTransition } from 'react-transition-group';
+import '../styles/CSSTransitionStyles.css';
 
 function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
   const tempClick = () => {
@@ -48,6 +50,17 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
       }, 500);
     }
   }, [isLoaded]);
+
+  const [popupFirst, setPopupFirst] = useState<boolean>(false);
+  const [popupSecond, setPopupSecond] = useState<boolean>(false);
+  const [popupThird, setPopupThird] = useState<boolean>(false);
+
+  useEffect(() => {
+    setTimeout(() => setPopupFirst(true), 1500);
+    setTimeout(() => setPopupSecond(true), 2500);
+    setTimeout(() => setPopupThird(true), 3500);
+    console.log('헉');
+  }, []);
 
   return (
     <>
@@ -93,26 +106,49 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
           )}
           <div className='h-2/5 w-1/2 flex flex-col justify-center items-center mb-28'>
             <div className='w-full h-1/3 flex flex-row justify-center items-center'>
-              <img
+              <CSSTransition
+                in={popupFirst}
+                timeout={1200}
                 className='h-full w-fit'
-                src={loadedImages['LogoColored']}
-                alt='WORLDY GAME'
-              />
+                classNames='CSSTransition-IntroPage-Popup'
+                unmountOnExit
+              >
+                <img
+                  className='h-full w-fit'
+                  src={loadedImages['LogoColored']}
+                  alt='WORLDY GAME'
+                />
+              </CSSTransition>
             </div>
             <div className='w-full h-fit py-5 flex flex-row justify-center items-center text-7xl'>
-              <span className='font-PtdBold text-white'>
-                모여라, 세계를 탐험하라!
-              </span>
+              <CSSTransition
+                in={popupSecond}
+                timeout={1200}
+                className='font-PtdBold text-white'
+                classNames='CSSTransition-IntroPage-Popup'
+                unmountOnExit
+              >
+                <span className='font-PtdBold text-white'>
+                  모여라, 세계를 탐험하라!
+                </span>
+              </CSSTransition>
             </div>
             <div className='w-full flex-1 flex flex-row justify-center items-start pt-7'>
-              <BUTTON_RED
-                text='무료 플레이하기'
-                rounded={true}
-                fontSize={20}
-                width={200}
-                height={50}
-                onClick={tempClick}
-              />
+              <CSSTransition
+                in={popupThird}
+                timeout={1200}
+                classNames='CSSTransition-IntroPage-Popup'
+                unmountOnExit
+              >
+                <BUTTON_RED
+                  text='무료 플레이하기'
+                  rounded={true}
+                  fontSize={20}
+                  width={200}
+                  height={50}
+                  onClick={tempClick}
+                />
+              </CSSTransition>
             </div>
           </div>
         </div>
