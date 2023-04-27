@@ -7,6 +7,7 @@ import pathJS from '../assets/images/JoshSitting.png';
 import pathJP from '../assets/images/JoshPanic.png';
 import pathJJ from '../assets/images/JoshJumping.png';
 import pathTQT from '../assets/images/TutorialQuizText.png';
+import pathJR from '../assets/images/JoshReady.png';
 import LoaderPyramid from '../components/LoaderPyramid';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 import { CSSTransition } from 'react-transition-group';
@@ -30,7 +31,11 @@ type quizItemType = {
   selections: string[];
 };
 
-export default function Tutorial() {
+export default function Tutorial({
+  onClickEndTutorial,
+}: {
+  onClickEndTutorial: () => void;
+}) {
   ///////////////////////////////
   const myImageList = {
     TutorialBackground: pathTB,
@@ -39,6 +44,7 @@ export default function Tutorial() {
     JoshSitting: pathJS,
     JoshPanic: pathJP,
     JoshJumping: pathJJ,
+    JoshReady: pathJR,
     TutorialQuizText: pathTQT,
     WrongAnswer: WrAnswer,
     CorrectAnswer: CrAnswer,
@@ -302,7 +308,7 @@ export default function Tutorial() {
         setQuizResultImage('');
         setSelectAnswer('');
         if (quizTargetIndex === 2) {
-          setDoneTutorial(true);
+          setTargetIndex(5);
         } else {
           setQuizTargetIndex((prev) => prev + 1);
         }
@@ -316,8 +322,6 @@ export default function Tutorial() {
   }, [quizResult]);
 
   const [popupCorrectIcon, setPopupCorrectIcon] = useState<boolean>(false);
-
-  const [doneTutorial, setDoneTutorial] = useState<boolean>(false);
 
   const showQuiz = (
     <div className=' outline-white absolute w-[600px] h-[720px] left-1/3 bottom-[100px] flex flex-col justify-stretch items-center '>
@@ -402,6 +406,22 @@ export default function Tutorial() {
 
   /////////////////////////////////////////////////
 
+  const readyToGo = (
+    <div className=' outline-white h-[180px] flex flex-col justify-between items-center'>
+      <button
+        className='w-full h-[80px] bg-[rgba(255,255,255,0.15)] rounded-[5px] text-left text-white pl-[20px] font-PtdLight text-[30px]'
+        style={hoveredIndex === -9 ? hoveredStyle : {}}
+        onClick={onClickEndTutorial}
+        onMouseEnter={() => setHoveredIndex(-9)}
+        onMouseLeave={() => setHoveredIndex(-1)}
+      >
+        WORLDY 세상으로 출발!
+      </button>
+    </div>
+  );
+
+  /////////////////////////////////////////////////
+
   const TutorialItemList: TutorialItemType[] = [
     {
       imgsrc: loadedImages['JoshHoldingBook'],
@@ -418,22 +438,28 @@ export default function Tutorial() {
     },
     {
       imgsrc: loadedImages['JoshJumping'],
-      contentText: `오! ${selectedInterest}에 대해 관심이 많구나! 그렇다면 내가 ${selectedInterest} 퀴즈를 하나 내보도록 하지! 실력이 얼마나 되는지 한 번 확인해 볼까?`,
+      contentText: `오! ${selectedInterest}에 대해 관심이 많구나! 그렇다면 내가 ${selectedInterest} 퀴즈를 내보도록 하지! 실력이 얼마나 되는지 한 번 확인해 볼까?`,
       contentItem: takeQuiz,
     },
     {
       imgsrc: loadedImages['JoshPanic'],
       contentText:
-        '이런, 아직은 자신있는 분야가 없구나? 그렇다면 내가 랜덤한 분야의 퀴즈를 하나 내볼게, 한 번 맞춰볼래? 너무 어렵진 않을 거야!',
+        '이런, 아직은 자신있는 분야가 없구나? 그렇다면 내가 랜덤한 분야의 퀴즈를 내볼게, 한 번 맞춰볼래? 너무 어렵진 않을 거야!',
       contentItem: mustTakeQuiz,
     },
     {
       imgsrc: loadedImages['JoshSitting'],
       contentItem: showQuiz,
     },
+    {
+      imgsrc: loadedImages['JoshReady'],
+      contentText:
+        '좋아! 잘 했어. 방금 푼 퀴즈들은 앞으로 우리가  만나게 될 WORLDY 세상의 맛보기일 뿐이야. 이제 준비가 된 것 같은데, 어때? 바로 출발할까?',
+      contentItem: readyToGo,
+    },
   ];
 
-  const [targetIndex, setTargetIndex] = useState<number>(4);
+  const [targetIndex, setTargetIndex] = useState<number>(0);
 
   const [popupName, setPopupName] = useState<boolean>(false);
   const [popupText, setPopupText] = useState<boolean>(false);
@@ -484,12 +510,12 @@ export default function Tutorial() {
               <img
                 className='h-[90%]'
                 src={TutorialItemList[targetIndex].imgsrc}
-                alt='조쉬조쉬조쉬'
+                alt='조쉬조 쉬조쉬'
               />
             </div>
             <div className='z-10 absolute top-1/2 bg-[rgba(0,0,0,0.8)] w-full h-1/2 flex justify-end'>
               <div className='h-full w-3/4 py-10 pl-20 pr-10'>
-                <div className='w-3/5 h-full flex flex-col justify-between items-start'>
+                <div className='w-3/5 h-fit flex flex-col justify-between items-start'>
                   <div className='outline-white h-[30px] w-full font-PtdLight text-[#f9c53a] text-[20px] flex justify-start items-center'>
                     <CSSTransition
                       in={popupName}
@@ -522,7 +548,7 @@ export default function Tutorial() {
                       classNames='CSSTransition-Tutorial-Popup'
                       unmountOnExit
                     >
-                      <div className='w-full h-fit  outline-red-400'>
+                      <div className='w-full h-full  outline-red-400'>
                         {TutorialItemList[targetIndex].contentItem}
                       </div>
                     </CSSTransition>
