@@ -3,6 +3,7 @@ from fastapi import FastAPI
 import news_naver
 import news_content
 import weather_api
+import exchange_rate
 import sched
 from apscheduler.schedulers.background import BackgroundScheduler
 
@@ -37,7 +38,8 @@ def news_quiz():
 #----------------------- weather crawling -----------------------
 
 
-@sched.scheduled_job('cron', hour='7', minute='0', id='wweather_crawling')
+# @sched.scheduled_job('cron', hour='2, 6, 10, 14, 18, 22', minute='0', id='weather_crawling')
+@sched.scheduled_job('cron', hour='13', minute='30', id='weather_crawling')
 def weather_crawling():
     for nation in nations.keys():
         weather_api.crawling_weather(nation, nations[nation])
@@ -59,9 +61,10 @@ start_image_scheduler()
 def read_root():
     return {"Hello": "World"}
 
+@app.get("/crawling/exchange_rate")
+def crawling_exchange_rate():
+    return exchange_rate.find_exchange_rate(nations.keys())
 
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {"item_id": item_id, "q": q}
-
-
+# @app.get("/items/{item_id}")
+# def read_item(item_id: int, q: Union[str, None] = None):
+#     return {"item_id": item_id, "q": q}

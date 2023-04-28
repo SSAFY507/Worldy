@@ -12,6 +12,9 @@ openai.api_key = OPENAI_API_KEY
 model = "gpt-3.5-turbo"
 query = "아래 내용을 한글로 요약해줘 \n"
 
+# 퀴즈 질문
+STATIC_QUESTION = "아래는 Chat GPT를 통해 뉴스 기사를 요약한 내용입니다. 해당 __에 들어갈 말은 무엇일까요? \n\n"
+
 # 퀴즈를 위한 자음 리스트
 CHOSUNG_LIST = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ']
 
@@ -42,7 +45,7 @@ def make_quiz_and_answer(origin, nation_id):
         
     print(hint)
     
-    return {"quiz" : quiz, "answer" : answer, "hint" : hint}
+    return {"quiz" : STATIC_QUESTION + quiz, "answer" : answer, "hint" : hint}
 
 # ChatGPT API
 def chatgpt_quiz(text, nation_id):

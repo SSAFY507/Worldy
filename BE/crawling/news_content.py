@@ -78,8 +78,9 @@ def find_new_content(nation, nation_id):
             try:
                 quiz = news_quiz.chatgpt_quiz(content, nation_id)
                 print(quiz)
-
-                cur.execute(INSERT_QUIZ, (str(nation_id), "gpt", "aff", "3", quiz["quiz"], quiz["answer"], quiz["hint"], "1"))
+                
+                news_link = "\n\n\n 출처 : " + driver.current_url
+                cur.execute(INSERT_QUIZ, (str(nation_id), "gpt", "aff", "3", quiz["quiz"] + news_link, quiz["answer"], quiz["hint"], "1"))
 
                 conn.commit() 
             except Exception as e:
