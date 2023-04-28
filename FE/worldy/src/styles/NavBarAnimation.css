@@ -14,7 +14,7 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background-color: rgb(78, 60, 145);
+  background-color: rgb(94, 94, 94);
   transform: scaleX(0);
   transition: transform 0.25s;
 }
