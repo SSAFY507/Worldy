@@ -41,10 +41,8 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
 	// RabbitMQ
-//	implementation 'org.springframework.boot:spring-boot-starter-amqp'
-//	testImplementation 'org.springframework.amqp:spring-rabbit-test'
-	implementation 'io.github.fuquanming:fqm-mq-rabbit:1.0.5'
-	implementation 'jp.spring-boot-reference:functional-template:1.1'
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
+
 }
 
 tasks.named('test') {

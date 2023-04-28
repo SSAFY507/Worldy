@@ -5,7 +5,6 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -47,7 +46,6 @@ public class RabbitmqConfig {
 
     @Bean
     Binding binding(DirectExchange directExchange, Queue queue) {
-        log.info(BindingBuilder.bind(queue).to(directExchange).with("worldy.key").toString());
         return BindingBuilder.bind(queue).to(directExchange).with("worldy.key");
     }
 
@@ -55,6 +53,7 @@ public class RabbitmqConfig {
     RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(messageConverter);
+        log.info("보낸다");
         return rabbitTemplate;
     }
 
@@ -73,11 +72,4 @@ public class RabbitmqConfig {
         return new Jackson2JsonMessageConverter();
     }
 
-    @Bean
-    SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory(ConnectionFactory connectionFactory) {
-        final SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
-        factory.setMessageConverter(messageConverter());
-        return factory;
-    }
 }

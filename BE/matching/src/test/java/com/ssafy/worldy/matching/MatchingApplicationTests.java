@@ -1,4 +1,4 @@
-package com.ssafy.worldy.matching.matching;
+package com.ssafy.worldy.matching;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

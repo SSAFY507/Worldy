@@ -5,7 +5,6 @@ import com.ssafy.worldy.exception.CustomExceptionList;
 import com.ssafy.worldy.model.game.dto.MatchingRequestDto;
 import com.ssafy.worldy.model.user.entity.User;
 import com.ssafy.worldy.model.user.repo.UserRepo;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -31,13 +30,13 @@ public class GameMatchingProducer {
 
         User user = userRepo.findByKakaoId(splitRoomId[1]).orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
 
-        SimpleDateFormat startWaitingTime = new SimpleDateFormat("HH:mm:ss");
+        SimpleDateFormat startWaitingTime = new SimpleDateFormat("yyyy:HH:mm:ss");
         Date now = new Date();
 
         MatchingRequestDto matchingRequestDto = MatchingRequestDto.builder()
                 .kakaoId(user.getKakaoId()).roomId(roomId).mmr(user.getMmr()).level(user.getLevel()).startWaitingTime(startWaitingTime.format(now)).build();
 
         log.info("send message : " + matchingRequestDto.toString());
-        rabbitTemplate.convertAndSend("worldy.matching.queue", "worldy.key", matchingRequestDto);
+        rabbitTemplate.convertAndSend("worldy.matching.exchange", "worldy.key", matchingRequestDto);
     }
 }

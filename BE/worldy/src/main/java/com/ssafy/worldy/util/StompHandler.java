@@ -5,7 +5,6 @@ import com.ssafy.worldy.exception.CustomException;
 import com.ssafy.worldy.exception.CustomExceptionList;
 import com.ssafy.worldy.model.game.repo.GameRoomRepo;
 import com.ssafy.worldy.model.game.service.GameMatchingProducer;
-import com.ssafy.worldy.model.game.service.GameService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
