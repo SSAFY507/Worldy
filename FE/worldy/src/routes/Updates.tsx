@@ -90,7 +90,7 @@ export default function Updates() {
         <div className='outline-red-600 h-[70%] overflow-hidden'>
           <img src={inputData.img} alt='업데이트 섬네일' />
         </div>
-        <div className='h-[30%]  flex flex-col justify-stretch items-start py-[5px] px-[15px]'>
+        <div className='h-[30%]  flex flex-col justify-stretch items-start p-[5px]'>
           <div className='h-[20px] flex justify-center items-center text-[15px] text-cyan-400 font-PtdSemiBOld'>
             밸런스 업데이트
           </div>
