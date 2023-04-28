@@ -31,23 +31,31 @@ export default function GameInfo() {
       <div className='w-[90%] h-[90%] outline outline-gray-300 flex overflow-hidden rounded-tl-[30px] rounded-br-[30px] max-h-[800px]'>
         <div
           className={`flex h-[100%] w-[100%] LRPage ${
-            !leftBigger ? 'bg-gray-500' : 'bg-gray-200'
+            !leftBigger ? 'bg-gray-600' : 'bg-gray-200'
           } flex flex-row justify-start p-[30px] overflow-hidden`}
           style={{
             width: leftW,
             overflowY: leftBigger ? 'scroll' : 'hidden',
-            transition: 'width 1.5s ease-in-out, background 1.5s ease-out',
+            opacity: leftBigger ? 1 : 0.7,
+            transition:
+              'width 1.5s ease-in-out, background 1.5s ease-out, opacity 1.5s ease-out',
           }}
         >
           <div className='outline outline-red-400 min-w-[1400px] max-w-[1400px] min-h-full h-fit mb-[50px]'>
-            <div className='outline outline-black h-[500px] w-[300px]'>
-              gdgdgd
+            <div className='outline outline-black h-[300px] w-[300px] m-[30px]'>
+              스크롤 가능
             </div>
-            <div className='outline outline-black h-[500px] w-[30px]'>
-              gdgdgd
+            <div className='outline outline-black h-[300px] w-[300px] m-[30px]'>
+              스크롤 가능
             </div>
-            <div className='outline outline-black h-[500px] w-[30px]'>
-              gdgdgd
+            <div className='outline outline-black h-[300px] w-[300px] m-[30px]'>
+              스크롤 가능
+            </div>
+            <div className='outline outline-black h-[300px] w-[300px] m-[30px]'>
+              스크롤 가능
+            </div>
+            <div className='outline outline-black h-[300px] w-[300px] m-[30px]'>
+              스크롤 가능
             </div>
           </div>
         </div>
@@ -80,12 +88,14 @@ export default function GameInfo() {
         </div>
         <div
           className={`h-[100%] LRPage ${
-            leftBigger ? 'bg-gray-500' : 'bg-gray-200'
+            leftBigger ? 'bg-gray-600' : 'bg-gray-200'
           } flex flex-row justify-end p-[30px]`}
           style={{
             width: rightW,
             overflowY: !leftBigger ? 'scroll' : 'hidden',
-            transition: 'width 1.5s ease-in-out , background 1.5s ease-out',
+            opacity: !leftBigger ? 1 : 0.7,
+            transition:
+              'width 1.5s ease-in-out , background 1.5s ease-out, opacity 1.5s ease-out',
           }}
         >
           오른쪽 페이지
