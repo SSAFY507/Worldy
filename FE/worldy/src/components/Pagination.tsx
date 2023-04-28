@@ -47,8 +47,8 @@ export default function Pagination(input: PaginationInputType) {
           fill='none'
           strokeWidth='2'
           viewBox='0 0 24 24'
-          stroke-linecap='round'
-          stroke-linejoin='round'
+          strokeLinecap='round'
+          strokeLinejoin='round'
           height='3em'
           width='3em'
           xmlns='http://www.w3.org/2000/svg'
@@ -63,9 +63,9 @@ export default function Pagination(input: PaginationInputType) {
             key={page}
             className={`cursor-pointer ${
               input.currentPage === page
-                ? 'font-PtdBold bg-[#2f2359] outline-gray-400 outline'
-                : 'font-PtdRegular bg-[#5741a4]'
-            } w-[30px] text-white rounded-[30px]  h-[30px] flex justify-center items-center mx-[10px]`}
+                ? 'font-PtdBold  outline-gray-400 '
+                : 'font-PtdRegular '
+            } w-[30px] text-black rounded-[50px]  h-[30px] flex justify-center items-center mx-[10px]`}
             onClick={() => input.onPageChange(page)}
           >
             {page}
@@ -80,10 +80,10 @@ export default function Pagination(input: PaginationInputType) {
           <svg
             stroke='currentColor'
             fill='none'
-            stroke-width='2'
+            strokeWidth='2'
             viewBox='0 0 24 24'
-            stroke-linecap='round'
-            stroke-linejoin='round'
+            strokeLinecap='round'
+            strokeLinejoin='round'
             height='3em'
             width='3em'
             xmlns='http://www.w3.org/2000/svg'

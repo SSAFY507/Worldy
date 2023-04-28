@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import pathC3Icon from '../assets/images/thumb3.png';
+import testUpdateThumbnail from '../assets/images/testUpdateThumbnail.png';
 import moment from 'moment';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 import '../styles/UpdateCardStyle.css';
 import Pagination from '../components/Pagination';
+import LoaderPyramid from '../components/LoaderPyramid';
 
 type updateLogType = {
   id: number;
@@ -18,7 +19,7 @@ export default function Updates() {
   const nowTime = moment();
 
   const myImageList = {
-    tempImage: pathC3Icon,
+    tempImage: testUpdateThumbnail,
   };
 
   const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
@@ -28,7 +29,7 @@ export default function Updates() {
     if (isLoaded) {
       setTimeout(() => {
         setLoadedAll(true);
-      }, 500);
+      }, 1000);
     }
   }, [isLoaded]);
 
@@ -59,7 +60,7 @@ export default function Updates() {
         content: `${index}예시 콘텐츠 텍스트 값`,
       })
     );
-    setTotalPages(12); //예시로 전체 피이지 수 12 설정
+    setTotalPages(23); //예시로 전체 피이지 수 12 설정
     setPosts(data); //
   };
 
@@ -107,36 +108,46 @@ export default function Updates() {
   };
 
   return (
-    <div className='w-full h-full max-h-full max-w-full bg-white flex justify-center items-center flex-col'>
-      <div className='outline-black w-[80%] h-[95%] p-[10px] flex justify-between items-center flex-col'>
-        <div
-          className=' outline-red-500 w-full h-[100px] flex justify-start items-center 
-          bg-gradient-to-r from-[rgba(33,25,62,1)] to-[rgba(66,50,123,1)]
-        '
-        >
-          <span className='font-PtdSemiBOld text-[50px] ml-[40px] text-white w-fit'>
-            업데이트
-          </span>
-          {/* <span className='font-PtdSemiBOld text-[40px] ml-[10px] text-white w-fit text-center'>
+    <>
+      {loadedAll ? (
+        <div className='w-full h-full max-h-full max-w-full bg-white flex justify-center items-center flex-col'>
+          <div className=' outline-black w-[80%] h-[95%] p-[10px] flex justify-between items-center flex-col'>
+            <div
+              className='  outline-red-500 w-full h-[100px] flex justify-start items-center 
+            bg-gradient-to-r from-[rgba(33,25,62,1)] to-[rgba(66,50,123,1)]
+            '
+            >
+              <div className='w-[1%] h-full bg-white'></div>
+              <span className='font-PtdSemiBOld text-[50px] ml-[40px] text-white w-fit'>
+                업데이트
+              </span>
+              {/* <span className='font-PtdSemiBOld text-[40px] ml-[10px] text-white w-fit text-center'>
             {nowTime.format('YYYY-MM-DD')} ({nowTime.format('ddd')})
           </span> */}
-          <div className='flex-1 h-full flex justify-end items-start'>
-            <div className='outline-white w-[50px] h-[50px] border border-solid border-b-0 border-r-0 border-t-[50px] border-l-[50px] border-t-white border-l-[rgba(33,25,62,1)]'></div>
+              <div className='flex-1 h-full flex justify-end items-start'>
+                <div className='outline-white w-[50px] h-[50px] border border-solid border-b-0 border-r-0 border-t-[50px] border-l-[50px] border-t-white border-l-[rgba(33,25,62,1)]'></div>
+              </div>
+              <div className='w-[1%] h-full bg-white'></div>
+            </div>
+            <div className=' outline-black w-full max-h-full flex-1 mt-[20px] flex flex-col justify-between'>
+              <div className=' outline-red-500 flex flex-wrap  justify-start items-center h-[90%] py-[10px]'>
+                {posts.map((post) => updateCard(post))}
+              </div>
+              <div className=' outline-green-300 w-full flex  justify-center items-center h-[8%]'>
+                <Pagination //페이지들 버튼
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={handlePageChange}
+                />
+              </div>
+            </div>
           </div>
         </div>
-        <div className=' outline-black w-full max-h-full flex-1 mt-[20px] flex flex-col justify-between'>
-          <div className=' outline-red-500 flex flex-wrap  justify-start items-center h-[90%] py-[10px] '>
-            {posts.map((post) => updateCard(post))}
-          </div>
-          <div className=' outline-green-300 w-full flex  justify-center items-center h-[8%]'>
-            <Pagination //페이지들 버튼
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
-          </div>
+      ) : (
+        <div className='bg-white w-full h-full'>
+          <LoaderPyramid text='Loading...' />
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }
