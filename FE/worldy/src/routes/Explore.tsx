@@ -62,7 +62,7 @@ const Explore = () => {
         outlinePassRef.current!.edgeStrength = 20;  
         outlinePassRef.current!.selectedObjects = [ selectedObject ];
       } else {
-        outlinePassRef.current!.selectedObjects = [];
+        // outlinePassRef.current!.selectedObjects = [];
       }
     }
   }
