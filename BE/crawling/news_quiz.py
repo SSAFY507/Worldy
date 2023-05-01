@@ -27,7 +27,7 @@ JONGSUNG_LIST = [' ', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', '�
 BASE_CODE, CHOSUNG, JUNGSUNG = 44032, 588, 28
 
 # 퀴즈 만들기
-def make_quiz_and_answer(origin, nation_id):
+def make_quiz_and_answer(origin):
     answer = origin[1]
     temp = "_" * len(answer)
     quiz = origin[0].replace(answer, temp)
@@ -48,7 +48,7 @@ def make_quiz_and_answer(origin, nation_id):
     return {"quiz" : STATIC_QUESTION + quiz, "answer" : answer, "hint" : hint}
 
 # ChatGPT API
-def chatgpt_quiz(text, nation_id):
+def chatgpt_quiz(text):
 
     # 1. ChatGPT에게 기사 내용 요약 요청
     messages = [
@@ -77,4 +77,4 @@ def chatgpt_quiz(text, nation_id):
     word = response['choices'][0]['message']['content']
 
     origin = [summary, word]
-    return make_quiz_and_answer(origin, nation_id)
+    return make_quiz_and_answer(origin)

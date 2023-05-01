@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import config
 
-nations = {"한국" : 1, "중국" : 2, "일본" : 3, "인도" : 4, "영국" : 5, "프랑스" : 6, "이탈리아" : 7, "스페인" : 8, "미국" : 9, "이집트" : 10}
+nations = {"대한민국" : 9, "중국" : 7, "일본" : 8, "인도" : 4, "영국" : 19, "프랑스" : 18, "이탈리아" : 14, "스페인" : 12, "미국" : 39, "이집트" : 27}
 
 UPDATE_NEWS = "update news set nation_id = %s, news_title = %s, news_summary = %s, news_img = %s, news_url = %s where news_id = %s"
 

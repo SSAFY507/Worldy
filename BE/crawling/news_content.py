@@ -15,8 +15,15 @@ DELETE_QUIZ = "delete from quiz where nation_id = %s and publisher_type = 'gpt'"
 
 def find_new_content(nation, nation_id):
 
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument("--headless")
+
+    # linux 환경에서 필요한 option
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+
     # 드라이버 설정, EC2는 Chrome으로
-    driver = webdriver.Edge('./msedgedriver.exe')
+    driver = webdriver.Chrome('/chromedriver/chromedriver', chrome_options=chrome_options)
 
     # DB 접속 정보
     conn = pymysql.connect(host=config.MYSQL_URL,
@@ -76,7 +83,7 @@ def find_new_content(nation, nation_id):
             print()
 
             try:
-                quiz = news_quiz.chatgpt_quiz(content, nation_id)
+                quiz = news_quiz.chatgpt_quiz(content)
                 print(quiz)
                 
                 news_link = "\n\n\n 출처 : " + driver.current_url

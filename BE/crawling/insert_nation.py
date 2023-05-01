@@ -7,7 +7,7 @@ conn = pymysql.connect(host=config.MYSQL_URL,
                     db=config.MYSQL_DB,
                     charset='utf8')
 
-nations = {"한국" : 1, "중국" : 2, "일본" : 3, "인도" : 4, "영국" : 5, "프랑스" : 6, "이탈리아" : 7, "스페인" : 8, "미국" : 9, "이집트" : 10}
+nations = {"대한민국" : 9, "중국" : 7, "일본" : 8, "인도" : 4, "영국" : 19, "프랑스" : 18, "이탈리아" : 14, "스페인" : 12, "미국" : 39, "이집트" : 27}
 
 INSERT_NATION = "insert into nation (nation_id, nation_name) values (%s, %s)"
 
