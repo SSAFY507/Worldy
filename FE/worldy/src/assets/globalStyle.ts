@@ -1,5 +1,5 @@
-import { createGlobalStyle } from "styled-components";
-import reset from "styled-reset";
+import { createGlobalStyle } from 'styled-components';
+import reset from 'styled-reset';
 
 // react icons 스타일
 const iconStyle = {
@@ -80,6 +80,13 @@ const GlobalStyle = createGlobalStyle`
     /* empty space */
     --side-space: 200px;
     --content-space: 950px;
+  }
+  *::-webkit-scrollbar {
+    display: none;
+  }
+  * {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
   *, *::before, *::after {
     box-sizing: border-box;
