@@ -9,16 +9,16 @@ import { useState, useEffect } from 'react';
 
 type Price = {
   land: number,
-  villa?: number,
-  hotel?: number,
-  landmark?: number,
+  villa: number,
+  hotel: number,
+  landmark: number,
 }
 
 
 type Spot = {
   location: number,
   name: string,
-  price?: Price,
+  price: Price,
   type: string,
   landmark?: string,
   contents: string,
@@ -60,6 +60,12 @@ export default function WordyGame() {
     {
       location: 0,
       name: '시작',
+      price: {
+        land: 0,
+        villa: 0,
+        hotel: 0,
+        landmark: 0,
+      },
       type: 'start',
       contents: '시작점 입니다. 월급을 받으세요. + 300,000',
       owner: 0,
@@ -99,6 +105,12 @@ export default function WordyGame() {
     {
       location: 3,
       name: '보물상자',
+      price: {
+        land: 0,
+        villa: 0,
+        hotel: 0,
+        landmark: 0,
+      },
       type: 'item',
       contents: '보물상자를 발견했습니다.',
       owner: 0,
@@ -196,6 +208,12 @@ export default function WordyGame() {
     {
       location: 10,
       name: '무인도',
+      price: {
+        land: 0,
+        villa: 0,
+        hotel: 0,
+        landmark: 0,
+      },
       type: 'desert',
       contents: '무인도에 불시착했습니다. 3턴 쉬세요.',
       owner: 0,
@@ -232,6 +250,12 @@ export default function WordyGame() {
     {
       location: 13,
       name: '보물상자',
+      price: {
+        land: 0,
+        villa: 0,
+        hotel: 0,
+        landmark: 0,
+      },
       type: 'item',
       contents: '보물상자를 발견했습니다.',
       owner: 0,
@@ -329,6 +353,12 @@ export default function WordyGame() {
     {
       location: 20,
       name: '정거장',
+      price: {
+        land: 0,
+        villa: 0,
+        hotel: 0,
+        landmark: 0,
+      },
       type: 'port',
       contents: '특가 항공권 당첨! 원하는 곳으로 이동합니다.',
       owner: 0,
@@ -365,6 +395,12 @@ export default function WordyGame() {
     {
       location: 23,
       name: '보물상자',
+      price: {
+        land: 0,
+        villa: 0,
+        hotel: 0,
+        landmark: 0,
+      },
       type: 'item',
       contents: '보물상자를 발견했습니다.',
       owner: 0,
@@ -462,6 +498,12 @@ export default function WordyGame() {
     {
       location: 30,
       name: '올림픽',
+      price: {
+        land: 0,
+        villa: 0,
+        hotel: 0,
+        landmark: 0,
+      },
       type: 'olympic',
       contents: '하나된 세계 올림픽으로!',
       owner: 0,
@@ -499,6 +541,12 @@ export default function WordyGame() {
     {
       location: 33,
       name: '보물상자',
+      price: {
+        land: 0,
+        villa: 0,
+        hotel: 0,
+        landmark: 0,
+      },
       type: 'item',
       contents: '보물상자를 발견했습니다.',
       owner: 0,
@@ -551,6 +599,12 @@ export default function WordyGame() {
     {
       location: 37,
       name: '국세청',
+      price: {
+        land: 0,
+        villa: 0,
+        hotel: 0,
+        landmark: 0,
+      },
       type: 'tax',
       contents: '탈세는 위법입니다. 가진 재산의 10%를 세금으로 납부하세요',
       owner: 0,
@@ -672,6 +726,7 @@ export default function WordyGame() {
   let [dice, setDice] = useState(0);
   let [double, setDouble] = useState(false);
   let [turn, setTurn] = useState(0);
+  let [option, setOption] = useState(0);
 
   // 플레이어 1회 턴 함수
 
@@ -836,7 +891,7 @@ export default function WordyGame() {
         }
 
       } else {  // 주인이 없을 때
-        console.log(spot.name + '의 가격은' + spot.price?.land + '만원 입니다. 구입하시겠습니까?');
+        console.log(spot.name + '의 가격은' + spot.price.land + '만원 입니다. 구입하시겠습니까?');
       }
     } else if (spot.type === 'item') {  // 보물상자일 때
       console.log('보물상자를 열어보세요!');
@@ -862,73 +917,120 @@ export default function WordyGame() {
 
 
   // 나라 구매하기
-  const buy = (p: number, nation: number): void => {
-    if (p === 1) {
+  const buy = (p: Player, nation: number, option: number): void => {
+
+    // 도시를 소유하고 있을때만 랜드마크 건설 가능하도록
+
+
+
+    const spot = worldMap[nation]
+    let balance = p.game.balance;
+
+
+    if (option === 1) {
+      if (balance - spot.price.land > 0) {
+        console.log('땅 구입')
+        balance -= spot.price.land;
+      } else {
+        console.log('금액이 모자랍니다.')
+        return
+      }
+    } else if (option === 2) {
+      if (balance - (spot.price.land + spot.price.villa) > 0) {
+        console.log('별장 건설')
+        balance -= (spot.price.land + spot.price.villa);
+
+      } else {
+        console.log('금액이 모자랍니다.')
+        return
+      }
+    } else if (option === 3) {
+      if (balance - (spot.price.land + spot.price.hotel) > 0) {
+        console.log('호텔 건설')
+        balance -= (spot.price.land + spot.price.hotel);
+
+      } else {
+        console.log('금액이 모자랍니다.')
+        return
+      }
+    } else if (option === 4) {
+      if (worldMap[nation].owner === p.pNum) {
+        if (p.game.balance - spot.price.landmark > 0) {
+          console.log('랜드마크 건설!!!')
+          balance -= spot.price.landmark;
+
+        } else {
+          console.log('금액이 모자랍니다.')
+        }
+      } else {
+        console.log('랜드마크는 다음번 방문했을 때 건설 가능합니다.')
+        return
+      }
+    }
+
+    if (p.pNum === 1) {
       setP1((prevState) => ({
         ...prevState,
         game: {
           ...prevState.game,
           own: [...prevState.game.own, nation],
-
+          balance: balance,
         }
       }))
 
 
-    } else if (p === 2) {
+    } else if (p.pNum === 2) {
       setP2((prevState) => ({
         ...prevState,
         game: {
           ...prevState.game,
           own: [...prevState.game.own, nation],
-
+          balance: balance,
         }
       }))
-      setWorldMap((prevState) =>
-        prevState.map((item, key) =>
-          key === nation ? { ...item, owner: p } : item
-        )
-      );
-    } else if (p === 3) {
+    } else if (p.pNum === 3) {
       setP3((prevState) => ({
         ...prevState,
         game: {
           ...prevState.game,
           own: [...prevState.game.own, nation],
-
+          balance: balance,
         }
       }))
-    } else if (p === 4) {
+    } else if (p.pNum === 4) {
       setP4((prevState) => ({
         ...prevState,
         game: {
           ...prevState.game,
           own: [...prevState.game.own, nation],
-
+          balance: balance,
         }
       }))
     }
     // 월드맵에 소유주 추가하기
     setWorldMap((prevState) =>
       prevState.map((item, key) =>
-        key === nation ? { ...item, owner: p } : item
+        key === nation ? { ...item, owner: p.pNum } : item
       )
     );
 
   }
 
-  const [color, setColor] = useState<number>(0);
-  const [inputColor, setInputColor] = useState<string>('white');
-  useEffect(() => {
-    if (color === 1) {
-      setInputColor('red')
-    } else if (color === 2) {
-      setInputColor('green')
-    } else if (color === 3) {
-      setInputColor('green')
-    } else if (color === 4) {
-      setInputColor('green')
-    }
-  }, [color])
+
+  // 색상 바꾸기 예제
+  // const [color, setColor] = useState<number>(0);
+  // const [inputColor, setInputColor] = useState<string>('white');
+  // useEffect(() => {
+  //   if (color === 1) {
+  //     setInputColor('red')
+  //   } else if (color === 2) {
+  //     setInputColor('green')
+  //   } else if (color === 3) {
+  //     setInputColor('green')
+  //   } else if (color === 4) {
+  //     setInputColor('green')
+  //   }
+  // }, [color])
 
 
 
@@ -947,31 +1049,42 @@ export default function WordyGame() {
                       <div>[{index}]{i.name}</div>
                       <div>{i.price ? i.price.land + '만원' : '특수지역'}</div>
                       <div className={`w-[90px] h-[56px] mt-[4px]  flex flex-col justify-center items-center ${i.owner === 1 ? 'bg-red-100' : 'bg-white'} ${i.owner === 2 ? 'bg-green-100' : 'bg-white'} ${i.owner === 3 ? 'bg-blue-100' : 'bg-white'} ${i.owner === 4 ? 'bg-yellow-100' : 'bg-white'}`}>
-                        {i.owner === p1.pNum ? <div className='bg-red-200 relative w-[60px] h-[40px] top-[-10px]'></div> : null}
-                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500'></div><div className='ml-[4px] text-[14px]'>{p1.name}</div></div> : null}
-                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500'></div><div className='ml-[4px] text-[14px]'>{p2.name}</div></div> : null}
-                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500'></div><div className='ml-[4px] text-[14px]'>{p3.name}</div></div> : null}
-                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500'></div><div className='ml-[4px] text-[14px]'>{p4.name}</div></div> : null}
+                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p1.name}</div></div> : null}
+                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
+                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
+                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
+                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                       </div>
                     </div> : null}
                     {i.location >= 0 && i.location < 10 && i.type === 'item' ? <div className='w-[90px] h-[90px] bg-purple-400 outline outline-1 flex flex-col items-center justify-start'>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
-                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500'></div><div className='ml-[4px] text-[14px]'>{p1.name}</div></div> : null}
-                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500'></div><div className='ml-[4px] text-[14px]'>{p2.name}</div></div> : null}
-                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500'></div><div className='ml-[4px] text-[14px]'>{p3.name}</div></div> : null}
-                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500'></div><div className='ml-[4px] text-[14px]'>{p4.name}</div></div> : null}
+                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p1.name}</div></div> : null}
+                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
+                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
+                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
+                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                       </div>
                     </div> : null}
                     {i.location >= 0 && i.location < 10 && (i.type !== 'item' && i.type !== 'nation') ? <div className='w-[90px] h-[90px] bg-gray-100 outline outline-1 flex flex-col items-center justify-start'>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
-                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500'></div><div className='ml-[4px] text-[14px]'>{p1.name}</div></div> : null}
-                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500'></div><div className='ml-[4px] text-[14px]'>{p2.name}</div></div> : null}
-                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500'></div><div className='ml-[4px] text-[14px]'>{p3.name}</div></div> : null}
-                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500'></div><div className='ml-[4px] text-[14px]'>{p4.name}</div></div> : null}
+                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p1.name}</div></div> : null}
+                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
+                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
+                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
+                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                       </div>
                     </div> : null}
                   </div>
@@ -984,30 +1097,42 @@ export default function WordyGame() {
                       <div>[{index}]{i.name}</div>
                       <div>{i.price ? i.price.land + '만원' : '특수지역'}</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
-                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500'></div><div className='ml-[4px] text-[14px]'>{p1.name}</div></div> : null}
-                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500'></div><div className='ml-[4px] text-[14px]'>{p2.name}</div></div> : null}
-                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500'></div><div className='ml-[4px] text-[14px]'>{p3.name}</div></div> : null}
-                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500'></div><div className='ml-[4px] text-[14px]'>{p4.name}</div></div> : null}
+                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p1.name}</div></div> : null}
+                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
+                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
+                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
+                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                       </div>
                     </div> : null}
                     {i.location >= 10 && i.location < 20 && i.type === 'item' ? <div className='w-[90px] h-[90px] bg-purple-400 outline outline-1 flex flex-col items-center justify-start'>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
-                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500'></div><div className='ml-[4px] text-[14px]'>{p1.name}</div></div> : null}
-                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500'></div><div className='ml-[4px] text-[14px]'>{p2.name}</div></div> : null}
-                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500'></div><div className='ml-[4px] text-[14px]'>{p3.name}</div></div> : null}
-                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500'></div><div className='ml-[4px] text-[14px]'>{p4.name}</div></div> : null}
+                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p1.name}</div></div> : null}
+                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
+                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
+                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
+                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                       </div>
                     </div> : null}
                     {i.location >= 10 && i.location < 20 && (i.type !== 'item' && i.type !== 'nation') ? <div className='w-[90px] h-[90px] bg-gray-100 outline outline-1 flex flex-col items-center justify-start'>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
-                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500'></div><div className='ml-[4px] text-[14px]'>{p1.name}</div></div> : null}
-                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500'></div><div className='ml-[4px] text-[14px]'>{p2.name}</div></div> : null}
-                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500'></div><div className='ml-[4px] text-[14px]'>{p3.name}</div></div> : null}
-                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500'></div><div className='ml-[4px] text-[14px]'>{p4.name}</div></div> : null}
+                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p1.name}</div></div> : null}
+                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
+                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
+                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
+                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                       </div>
                     </div> : null}
                   </div>
@@ -1020,30 +1145,42 @@ export default function WordyGame() {
                       <div>[{index}]{i.name}</div>
                       <div>{i.price ? i.price.land + '만원' : '특수지역'}</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
-                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500'></div><div className='ml-[4px] text-[14px]'>{p1.name}</div></div> : null}
-                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500'></div><div className='ml-[4px] text-[14px]'>{p2.name}</div></div> : null}
-                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500'></div><div className='ml-[4px] text-[14px]'>{p3.name}</div></div> : null}
-                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500'></div><div className='ml-[4px] text-[14px]'>{p4.name}</div></div> : null}
+                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p1.name}</div></div> : null}
+                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
+                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
+                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
+                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                       </div>
                     </div> : null}
                     {i.location >= 20 && i.location < 30 && i.type === 'item' ? <div className='w-[90px] h-[90px] bg-purple-400 outline outline-1 flex flex-col items-center justify-start'>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
-                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500'></div><div className='ml-[4px] text-[14px]'>{p1.name}</div></div> : null}
-                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500'></div><div className='ml-[4px] text-[14px]'>{p2.name}</div></div> : null}
-                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500'></div><div className='ml-[4px] text-[14px]'>{p3.name}</div></div> : null}
-                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500'></div><div className='ml-[4px] text-[14px]'>{p4.name}</div></div> : null}
+                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p1.name}</div></div> : null}
+                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
+                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
+                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
+                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                       </div>
                     </div> : null}
                     {i.location >= 20 && i.location < 30 && (i.type !== 'item' && i.type !== 'nation') ? <div className='w-[90px] h-[90px] bg-gray-100 outline outline-1 flex flex-col items-center justify-start'>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
-                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500'></div><div className='ml-[4px] text-[14px]'>{p1.name}</div></div> : null}
-                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500'></div><div className='ml-[4px] text-[14px]'>{p2.name}</div></div> : null}
-                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500'></div><div className='ml-[4px] text-[14px]'>{p3.name}</div></div> : null}
-                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500'></div><div className='ml-[4px] text-[14px]'>{p4.name}</div></div> : null}
+                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p1.name}</div></div> : null}
+                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
+                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
+                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
+                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                       </div>
                     </div> : null}
                   </div>
@@ -1056,30 +1193,42 @@ export default function WordyGame() {
                       <div>[{index}]{i.name}</div>
                       <div>{i.price ? i.price.land + '만원' : '특수지역'}</div>
                       <div className={`w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center`}>
-                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500'></div><div className='ml-[4px] text-[14px]'>{p1.name}</div></div> : null}
-                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500'></div><div className='ml-[4px] text-[14px]'>{p2.name}</div></div> : null}
-                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500'></div><div className='ml-[4px] text-[14px]'>{p3.name}</div></div> : null}
-                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500'></div><div className='ml-[4px] text-[14px]'>{p4.name}</div></div> : null}
+                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p1.name}</div></div> : null}
+                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
+                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500v'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
+                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
+                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                       </div>
                     </div> : null}
                     {i.location >= 30 && i.location < 40 && i.type === 'item' ? <div className='w-[90px] h-[90px] bg-purple-400 outline outline-1 flex flex-col items-center justify-start'>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
-                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500'></div><div className='ml-[4px] text-[14px]'>{p1.name}</div></div> : null}
-                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500'></div><div className='ml-[4px] text-[14px]'>{p2.name}</div></div> : null}
-                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500'></div><div className='ml-[4px] text-[14px]'>{p3.name}</div></div> : null}
-                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500'></div><div className='ml-[4px] text-[14px]'>{p4.name}</div></div> : null}
+                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p1.name}</div></div> : null}
+                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
+                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
+                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
+                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                       </div>
                     </div> : null}
                     {i.location >= 30 && i.location < 40 && (i.type !== 'item' && i.type !== 'nation') ? <div className='w-[90px] h-[90px] bg-gray-100 outline outline-1 flex flex-col items-center justify-start'>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
-                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500'></div><div className='ml-[4px] text-[14px]'>{p1.name}</div></div> : null}
-                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500'></div><div className='ml-[4px] text-[14px]'>{p2.name}</div></div> : null}
-                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500'></div><div className='ml-[4px] text-[14px]'>{p3.name}</div></div> : null}
-                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500'></div><div className='ml-[4px] text-[14px]'>{p4.name}</div></div> : null}
+                        {i.location === p1.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-red-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p1.name}</div></div> : null}
+                        {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
+                        {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
+                        {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
+                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                       </div>
                     </div> : null}
                   </div>
@@ -1135,28 +1284,56 @@ export default function WordyGame() {
                     {worldMap[i.game.location].type === 'nation' && !worldMap[i.game.location].owner &&
                       <div>
                         <div className='flex rounded-[4px] w-[380px] h-[100px] outline bg-gray-50'>
-                          <div className='flex flex-col justify-center items-center w-[95px] h-full hover:bg-blue-100'>
+                          <div className='flex flex-col justify-center items-center w-[95px] h-full hover:bg-blue-100 hover:cursor-pointer'
+                            onClick={() => {
+                              setOption(1)
+                              console.log('구매하기 실행');
+                              console.log('선택 옵션 : ' + 1);
+                              buy(i, i.game.location, 1);
+                            }}
+                          >
                             <div className=''>
                               <span className='text-[22px]'>{worldMap[i.game.location].price?.land}</span>
                               <span className='text-[12px]'>만원</span>
                             </div>
                             <div className='mt-[10px]'>가격</div>
                           </div>
-                          <div className='flex flex-col justify-center items-center w-[95px] h-full hover:bg-blue-100'>
+                          <div className='flex flex-col justify-center items-center w-[95px] h-full hover:bg-blue-100 hover:cursor-pointer'
+                            onClick={() => {
+                              setOption(2)
+                              console.log('구매하기 실행');
+                              console.log('선택 옵션 : ' + 2);
+                              buy(i, i.game.location, 2);
+                            }}
+                          >
                             <div>
                               <span className='text-[22px]'>{worldMap[i.game.location].price?.villa}</span>
                               <span className='text-[12px]'>만원</span>
                             </div>
                             <div className='mt-[10px]'>별장</div>
                           </div>
-                          <div className='flex flex-col justify-center items-center w-[95px]  h-full hover:bg-blue-100'>
+                          <div className='flex flex-col justify-center items-center w-[95px]  h-full hover:bg-blue-100 hover:cursor-pointer'
+                            onClick={() => {
+                              setOption(3)
+                              console.log('구매하기 실행');
+                              console.log('선택 옵션 : ' + 3);
+                              buy(i, i.game.location, 3);
+                            }}
+                          >
                             <div>
                               <span className='text-[22px]'>{worldMap[i.game.location].price?.hotel}</span>
                               <span className='text-[12px]'>만원</span>
                             </div>
                             <div className='mt-[10px]'>호텔</div>
                           </div>
-                          <div className='flex flex-col justify-center items-center w-[95px]  h-full hover:bg-blue-100'>
+                          <div className='flex flex-col justify-center items-center w-[95px]  h-full hover:bg-blue-100 hover:cursor-pointer'
+                            onClick={() => {
+                              setOption(4)
+                              console.log('구매하기 실행');
+                              console.log('선택 옵션 : ' + 4);
+                              buy(i, i.game.location, 4);
+                            }}
+                          >
                             <div>
                               <span className='text-[22px]'>{worldMap[i.game.location].price?.landmark}</span>
                               <span className='text-[12px]'>만원</span>
@@ -1171,7 +1348,8 @@ export default function WordyGame() {
                           <div className='rounded-[4px] bg-blue-300 w-[180px] h-[30px] flex justify-center items-center hover:cursor-pointer'
                             onClick={() => {
                               console.log('구매하기 실행');
-                              buy(i.pNum, i.game.location);
+                              console.log('선택 옵션 : ' + option);
+                              buy(i, i.game.location, option);
                             }}
                           >예</div>
                           <div className='rounded-[4px] bg-red-300 w-[180px] h-[30px] flex justify-center items-center hover:cursor-pointer'
@@ -1198,7 +1376,7 @@ export default function WordyGame() {
           }}
             className='rounded-[6px] w-[400px] h-[70px] bg-blue-500 text-[24px] text-white flex justify-center items-center relative top-[-104px] hover:cursor-pointer hover:bg-blue-600'>주사위 굴리기</div>
         </div>
-      </div>
+      </div >
     </>
   )
 }
