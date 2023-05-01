@@ -9,10 +9,10 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
-import bg from "../assets/images/WorldBackgrorund.jpg"
-import worldmap from "../assets/lowpoly/WorldMap.glb"
-import { gsap } from 'gsap';
 import { Vector3 } from "@react-three/fiber";
+import bg from "../assets/images/WorldBackgrorund.jpg"
+import { gsap } from 'gsap';
+import worldmap from "../assets/lowpoly/WorldMap.glb"
 
 const Explore = () => {
 
@@ -34,7 +34,7 @@ const Explore = () => {
   /** 마우스 추적 */
   const SetupPicking = () => {
     const raycaster = new THREE.Raycaster();
-    // divContainer.current?.addEventListener("pointermove", OnPointerMove);
+    divContainer.current?.addEventListener("pointermove", OnPointerMove);
     divContainer.current?.addEventListener("dblclick", OnDblClick);
     raycasterRef.current = raycaster;
   }
@@ -64,7 +64,7 @@ const Explore = () => {
       const targets = raycasterRef.current?.intersectObject(continent);
       if(targets!.length > 0) {
         // 더블클릭된 차 확대 
-        ZoomFit(continent, 30, 0.3)
+        ZoomFit(continent, 45, 0.2)
         return;
       }
     }
@@ -88,33 +88,33 @@ const Explore = () => {
 
       // 객체를 감싸고 있는 box
       const box = new THREE.Box3().setFromObject(object3d);
-    // 객체의 정육각형 box의 대각선 길이
-    const sizeBox = box.getSize(new THREE.Vector3()).length();
-    // box의 중앙점
-    const centerBox = box.getCenter(new THREE.Vector3());
+      // 객체의 정육각형 box의 대각선 길이
+      const sizeBox = box.getSize(new THREE.Vector3()).length();
+      // box의 중앙점
+      const centerBox = box.getCenter(new THREE.Vector3());
 
-    // 처음에 설정된 벡터
-    const direction = new THREE.Vector3(0, 1, 0);
-    // 처음에 설정된 벡터 (0, 1, 0)을 (1, 0 ,0)방향으로 viewAngle만큼 회전한 객체
-    direction.applyAxisAngle(new THREE.Vector3(1, 0, 0),
-      THREE.MathUtils.degToRad(viewAngle));
+      // 처음에 설정된 벡터
+      const direction = new THREE.Vector3(0, 1, 0);
+      // 처음에 설정된 벡터 (0, 1, 0)을 (1, 0 ,0)방향으로 viewAngle만큼 회전한 객체
+      direction.applyAxisAngle(new THREE.Vector3(1, 0, 0),
+        THREE.MathUtils.degToRad(viewAngle));
 
-    // sizebox의 절반
-    const halfSizeModel = sizeBox * viewdistance;
-    // 카메라 fov의 절반
-    const halfFov = THREE.MathUtils.degToRad(camera.current!.fov * 0.3);
-    // 모델을 확대했을 때, 거리값
-    const distance = halfSizeModel / Math.tan(halfFov);
-    // 카메라의 새로운 위치 
-    // 단위 벡터 * distance 로 방향벡터를 얻고
-    // 위치 벡터인 centerBox를 추가하여 
-    // 정확한 위치를 얻어냄 
-    const newPosition = new THREE.Vector3().copy(
-      direction.multiplyScalar(distance).add(centerBox)
-      );
+      // sizebox의 절반
+      const halfSizeModel = sizeBox * viewdistance;
+      // 카메라 fov의 절반
+      const halfFov = THREE.MathUtils.degToRad(camera.current!.fov * 0.3);
+      // 모델을 확대했을 때, 거리값
+      const distance = halfSizeModel / Math.tan(halfFov);
+      // 카메라의 새로운 위치 
+      // 단위 벡터 * distance 로 방향벡터를 얻고
+      // 위치 벡터인 centerBox를 추가하여 
+      // 정확한 위치를 얻어냄 
+      const newPosition = new THREE.Vector3().copy(
+        direction.multiplyScalar(distance).add(centerBox)
+        );
 
-    newPositionRef.current = newPosition;
-    centerBoxRef.current = centerBox;
+      newPositionRef.current = newPosition;
+      centerBoxRef.current = centerBox;
     }
       
     const newPosition = newPositionRef.current;
@@ -123,7 +123,7 @@ const Explore = () => {
     // camera.current?.position.copy(newPosition);
     // 동적으로 변경
     gsap.to(camera.current!.position, {
-      duration: 0.5,
+      duration: 1,
       x: newPosition.x, y: newPosition.y, z: newPosition.z
     })
 
@@ -171,12 +171,12 @@ const Explore = () => {
         // 지정된 객체 중에 첫번째 선택
         const selectedObject = interescts![0].object;
         // 더 강한 효과
-        outlinePassRef.current!.edgeStrength = 20;  
+        outlinePassRef.current!.edgeStrength = 15;  
         outlinePassRef.current!.selectedObjects = [ selectedObject ];
-      } else {
-        // outlinePassRef.current!.selectedObjects = [];
-      }
+        return;
+      } 
     }
+    outlinePassRef.current!.selectedObjects = [];
   }
 
   /** 객체 강조 후처리 */
@@ -232,7 +232,7 @@ const Explore = () => {
   const CreateObject = (w:number, h:number, x:number, y:number, z:number, name:string, angleX:number, angleY:number, angleZ:number) => {
     const createGeometry = new THREE.PlaneGeometry(w, h);
     const createMaterial = new THREE.MeshBasicMaterial({
-      color: "#2c3e50",
+      color: "#ffffff",
       side: THREE.DoubleSide,
       transparent: true,
       opacity: 0,
@@ -310,8 +310,12 @@ const Explore = () => {
       controls.current = new OrbitControls(camera.current, divContainer.current!); // OrbitControls를 초기화합니다.
       controls.current.target.set(0, 0, 0)    // 카메라 회전점
       controls.current.enableDamping = true;        // 부드럽게 돌아가
+      // 위아래 카메라 제한
       controls.current.minPolarAngle = THREE.MathUtils.degToRad(0);   // 0도 부터
       controls.current.maxPolarAngle = THREE.MathUtils.degToRad(60);  // 60도 까지 회전 가능
+      // 좌우 카메라 제한
+      controls.current.minAzimuthAngle = THREE.MathUtils.degToRad(-15); // -15도 부터
+      controls.current.maxAzimuthAngle = THREE.MathUtils.degToRad(15);  // 15도 까지
     }
   }
 
