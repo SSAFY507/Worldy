@@ -33,8 +33,8 @@ public class MatchingRequestDto implements Serializable, Comparable<MatchingRequ
 
     @Override
     public int compareTo(MatchingRequestDto o) {
-        LocalDate date1 = LocalDate.parse(this.startWaitingTime, DateTimeFormatter.ofPattern("yyyy:HH:mm:ss"));
-        LocalDate date2 = LocalDate.parse(o.startWaitingTime, DateTimeFormatter.ofPattern("yyyy:HH:mm:ss"));
+        LocalDate date1 = LocalDate.parse(this.startWaitingTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        LocalDate date2 = LocalDate.parse(o.startWaitingTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         return date1.compareTo(date2);
     }
 }

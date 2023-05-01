@@ -15,8 +15,9 @@ public class GameMatchingConsumer {
     private final QueueList queueList;
 
     @RabbitListener(queues = "worldy.matching.queue")
-    public void consume(MatchingRequestDto matchingRequestDto) {
-        log.info(matchingRequestDto.toString());
+    public void matchingConsume(MatchingRequestDto matchingRequestDto) {
+        log.info("match : " +matchingRequestDto.toString());
+
         if(matchingRequestDto.getMmr()>=0 && matchingRequestDto.getMmr()<500) {
             queueList.getBRONZE2().add(matchingRequestDto);
         } else if(matchingRequestDto.getMmr()>=500 && matchingRequestDto.getMmr()<1000) {
@@ -34,5 +35,13 @@ public class GameMatchingConsumer {
         } else if(matchingRequestDto.getMmr()>=3500 && matchingRequestDto.getMmr()<=4000) {
             queueList.getPLATINUM1().add(matchingRequestDto);
         }
+    }
+
+    @RabbitListener(queues = "worldy.cancel.queue")
+    public void cancelMatchingConsume(MatchingRequestDto matchingRequestDto) {
+        log.info("cancel : " + matchingRequestDto.toString());
+
+        // 매칭 과정 중 취소한 유저 관리
+        queueList.getCANCEL().put(matchingRequestDto.getKakaoId(), matchingRequestDto);
     }
 }

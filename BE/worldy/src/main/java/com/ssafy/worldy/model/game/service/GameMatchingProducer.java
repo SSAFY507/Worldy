@@ -30,7 +30,7 @@ public class GameMatchingProducer {
 
         User user = userRepo.findByKakaoId(splitRoomId[1]).orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
 
-        SimpleDateFormat startWaitingTime = new SimpleDateFormat("yyyy:HH:mm:ss");
+        SimpleDateFormat startWaitingTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date now = new Date();
 
         MatchingRequestDto matchingRequestDto = MatchingRequestDto.builder()

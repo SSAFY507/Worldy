@@ -4,10 +4,7 @@ import com.ssafy.worldy.matching.model.dto.MatchingRequestDto;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 
 @Component
 @Getter
@@ -51,5 +48,5 @@ public class QueueList {
     final PriorityQueue<MatchingRequestDto> BRONZE_SILVER_GOLD = new PriorityQueue<>(); //16
     final PriorityQueue<MatchingRequestDto> SILVER_GOLD_PLATINUM  = new PriorityQueue<>(); // 17
     final PriorityQueue<MatchingRequestDto> ALL = new PriorityQueue<>();
-    final PriorityQueue<MatchingRequestDto> CANCEL = new PriorityQueue<>();
+    final Map<String,MatchingRequestDto> CANCEL = new HashMap();
 }
