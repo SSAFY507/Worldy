@@ -52,10 +52,9 @@ export default function Support() {
   const subjectList: SupportItemType[][] = [
     [
       {
-        content:
-          '질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1',
+        content: '회원 가입은 어떻게 하는 건가요?',
         date: '2023-04-30',
-        response: '답변 1',
+        response: '카카오톡 가입하시면 됩니다',
       },
       { content: '질문 1-2', date: '2023-04-29', response: '답변 2' },
       { content: '질문 1-2', date: '2023-04-29', response: '답변 2' },
@@ -83,13 +82,26 @@ export default function Support() {
 
   const ItemBox = (item: SupportItemType, index: number) => {
     return (
-      <>
+      <div
+        className={`${
+          resState !== index
+            ? ''
+            : ' outline outline-[1px] outline-[rgb(175,175,175)]'
+        }`}
+      >
         <button
-          className=' w-full h-fit flex flex-row justify-between items-center px-[15px] py-[10px] bg-[rgba(164,164,164,0.29)]'
+          className={`w-full h-fit flex flex-row justify-between items-center px-[15px] py-[10px] 
+          ${
+            resState !== index
+              ? 'bg-[rgba(164,164,164,0.29)]'
+              : 'bg-[rgba(209,209,209,0.29)]'
+          }
+          `}
           onClick={() => openResponse(index)}
         >
           <div className=' w-[95%] h-fit min-h-[60px] flex flex-col justify-between items-start '>
             <div className='flex flex-row my-[5px] justify-start items-center text-white text-[20px] p-[10px] min-h-1/2 w-full h-fit leading-6 text-start'>
+              <span className='text-[26px]'>Q. &nbsp;</span>
               {item.content}
             </div>
             <div className='min-h-1/2 w-1/5 my-[5px]  flex flex-row justify-start items-center text-gray-400 text-[16px] font-PtdLight'>
@@ -107,21 +119,42 @@ export default function Support() {
               <div className='px-[10px]'>{item.date}</div>
             </div>
           </div>
-          <div className=' w-[3%] h-[50px]'></div>
+          <div
+            className={`w-[3%] h-[50px] flex justify-center items-center transition-transform 2s ease-in-out
+          ${resState === index ? 'rotate-90' : 'rotate-[270deg]'}
+          `}
+          >
+            <svg
+              stroke=''
+              fill='rgba(164,164,164,0.8)'
+              strokeWidth='0'
+              viewBox='0 0 16 16'
+              height='1.5em'
+              width='1.5em'
+              xmlns='http://www.w3.org/2000/svg'
+            >
+              <path
+                fill-rule='evenodd'
+                d='M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z'
+                clip-rule='evenodd'
+              ></path>
+            </svg>
+          </div>
         </button>
         <div
-          className={`${
+          className={` ${
             resState !== index
               ? 'w-0 h-0 opacity-0'
-              : 'w-full h-fit opacity-100  mt-[5px]  flex flex-col justify-between items-center px-[15px] py-[10px] bg-[rgba(94,85,70,0.31)]'
+              : 'w-full h-fit opacity-100 mt-[0px]  flex flex-col justify-between items-center px-[15px] py-[10px] bg-[rgba(110,110,110,0.31)]'
           }
           `}
         >
           <div className='flex flex-row my-[5px] justify-start items-center text-white text-[20px] p-[10px] min-h-1/2 w-full h-fit leading-6 text-start transit'>
+            <span className='text-[26px]'>A. &nbsp;</span>{' '}
             {resState === index ? item.response : null}
           </div>
           <div className='w-full h-[50px] flex flex-row justify-end items-center'>
-            <span className='text-white mx-[10px] text-[15px] flex flex-row justify-center items-center font-PtdLight'>
+            <span className='text-white mx-[20px] text-[15px] flex flex-row justify-center items-center font-PtdLight'>
               추가적으로 궁금한 게 있으신가요?
             </span>
             <button className=' rounded-full w-[80px] h-[70%] outline outline-[rgba(255,255,255,0.6)] outline-1 text-white font-PtdRegular text-[15px] bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.3)]'>
@@ -129,7 +162,7 @@ export default function Support() {
             </button>
           </div>
         </div>
-      </>
+      </div>
     );
   };
 
@@ -139,50 +172,47 @@ export default function Support() {
         <div className='w-full h-[300px]   flex flex-col justify-start items-center'>
           <div className='w-[100%] h-full   flex justify-start flex-col items-center px-[10px]'>
             <div className='my-[10px]  w-[100%] h-[17%] flex flex-row justify-end items-center px-[100px]'>
-              <div className='  w-[30%] h-full px-[30px] flex flex-row justify-between items-center'>
+              <div className='  w-[15%] h-full mr-[180px] flex flex-row justify-between items-center'>
                 <button className=' rounded-full w-[120px] h-[90%] outline outline-[rgba(255,255,255,0.6)] outline-1 text-white font-PtdRegular text-[15px] bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.3)]'>
                   문의하기
                 </button>
                 <button className='rounded-full w-[120px] h-[90%] outline outline-[rgba(255,255,255,0.6)] outline-1 text-white font-PtdRegular text-[15px] bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.3)]'>
                   신고하기
                 </button>
-                <button className='rounded-full w-[120px] h-[90%] outline outline-[rgba(255,255,255,0.6)] outline-1 text-white font-PtdRegular text-[15px] bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.3)]'>
-                  문의/신고 내역
-                </button>
               </div>
             </div>
             <div className='my-[10px]  w-[50%] h-[25%] grid justify-center items-center text-[40px] font-PtdExtraBold text-white'>
-              WORLDY SOFT 고객 지원
+              고객 지원
             </div>
-            <div className='my-[10px]  outline-red-500 w-[45%] h-[25%] flex flex-row justify-stretch items-center'>
-              <button className='w-[60px] h-[60px] bg-white grid justify-center items-center'>
+            <div className='my-[10px]  outline-red-500 w-[35%] h-[25%] flex flex-row justify-stretch items-center'>
+              <button className='w-[60px] h-[60px] bg-white grid justify-center items-center rounded-l-[4px]'>
                 <svg
                   stroke='currentColor'
-                  strokeWidth='0'
-                  viewBox='0 0 24 24'
-                  height='2em'
-                  width='2em'
+                  fill='currentColor'
+                  stroke-width='0'
+                  viewBox='0 0 1024 1024'
+                  height='1.5em'
+                  width='1.5em'
                   xmlns='http://www.w3.org/2000/svg'
                 >
-                  <path d='M10,18c1.846,0,3.543-0.635,4.897-1.688l4.396,4.396l1.414-1.414l-4.396-4.396C17.365,13.543,18,11.846,18,10 c0-4.411-3.589-8-8-8s-8,3.589-8,8S5.589,18,10,18z M10,4c3.309,0,6,2.691,6,6s-2.691,6-6,6s-6-2.691-6-6S6.691,4,10,4z'></path>
-                  <path d='M11.412,8.586C11.791,8.966,12,9.468,12,10h2c0-1.065-0.416-2.069-1.174-2.828c-1.514-1.512-4.139-1.512-5.652,0 l1.412,1.416C9.346,7.83,10.656,7.832,11.412,8.586z'></path>
+                  <path d='M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0 0 11.6 0l43.6-43.5a8.2 8.2 0 0 0 0-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z'></path>
                 </svg>
               </button>
               <input
-                className='bg-white h-[60px] w-full px-[10px] text-[25px]'
+                className='bg-white h-[60px] w-full px-[0px] text-[20px] rounded-r-[4px]'
                 type='text'
                 value={searchText}
                 onChange={(e) => {
                   setSearchText(e.target.value);
                 }}
-                placeholder='WORLDY SOFT 내 검색'
+                placeholder='검색'
                 onKeyDown={handleKeyPress}
               />
             </div>
           </div>
         </div>
         <div className='h-[80px] w-full  outline-yellow-400 flex justify-center items-stretch  border-b-[1px] border-0 border-b-[rgba(164,163,163,0.5)] border-solid'>
-          <div className='w-[90%] h-full flex justify-start'>
+          <div className='w-[70%] h-full flex justify-start'>
             <button
               className={`flex flex-row justify-between items-center w-[220px] h-full  outline-red-500 text-[22px] ${
                 subjectIndex === 0
@@ -261,9 +291,9 @@ export default function Support() {
             </button>
           </div>
         </div>
-        <div className='hide-scrollbar w-[90%] h-fit max-h-full  pt-[20px] flex flex-col justify-start items-center overflow-scroll'>
+        <div className='hide-scrollbar w-[70%] h-fit max-h-full  pt-[20px] px-[1px] flex flex-col justify-start items-center overflow-scroll'>
           {subjectList[subjectIndex].map((item, index) => (
-            <div key={index} className=' outline-white my-[10px] w-full h-fit'>
+            <div key={index} className=' outline-white my-[10px] w-full h-fit '>
               {ItemBox(item, index)}
             </div>
           ))}
