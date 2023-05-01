@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
@@ -10,9 +10,16 @@ import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import { Vector3 } from "@react-three/fiber";
+import africa from "../assets/lowpoly/africa.glb";
+import asia from "../assets/lowpoly/asia.glb";
+import basemap from "../assets/lowpoly/base.glb";
 import bg from "../assets/images/WorldBackgrorund.jpg"
+import europe from "../assets/lowpoly/europe.glb";
 import { gsap } from 'gsap';
-import worldmap from "../assets/lowpoly/WorldMap.glb"
+import northAmerica from "../assets/lowpoly/northAmerica.glb";
+import oceania from "../assets/lowpoly/oceania.glb";
+import southAmerica from "../assets/lowpoly/southAmerica.glb";
+import worldmap from "../assets/lowpoly/WorldMap.glb";
 
 const Explore = () => {
 
@@ -23,6 +30,7 @@ const Explore = () => {
   const controls = useRef<OrbitControls |null>(null);
 
   const raycasterRef = useRef<THREE.Raycaster | null>(null);
+  const selectedObjectRef = useRef<THREE.Object3D | null>(null);
 
   const outlinePassRef = useRef<OutlinePass | null>(null);
   const composerRef = useRef<EffectComposer | null>(null);
@@ -30,6 +38,8 @@ const Explore = () => {
   
   const newPositionRef = useRef<Vector3 | null>(null);
   const centerBoxRef = useRef<Vector3 | null>(null);
+
+  let tmp = "";
 
   /** 마우스 추적 */
   const SetupPicking = () => {
@@ -63,20 +73,23 @@ const Explore = () => {
 
       const targets = raycasterRef.current?.intersectObject(continent);
       if(targets!.length > 0) {
-        // 더블클릭된 차 확대 
+        // 더블 클릭된 대륙 확대 
         ZoomFit(continent, 45, 0.2)
+        selectedObjectRef.current!.userData.flag = true
         return;
       }
     }
 
-    const worldmap = scene.current?.getObjectByName("worldmap");
-    // // 무대 확대 코드
-    ZoomFit(worldmap!, 70, 0.06)
+    const basemap = scene.current?.getObjectByName("basemap");
+    // 기본 상태로 돌아오기
+    ZoomFit(basemap!, 70, 0.06)
+    selectedObjectRef.current!.userData.flag = false
   }
 
   /** 확대 실행 학수 */
   const ZoomFit = (object3d:THREE.Object3D, viewAngle:number, viewdistance:number) => {
-    if (viewdistance < 0.1){
+    if (viewdistance < 0.1){ // 기본 상태
+
       const newPosition = new THREE.Vector3();
       newPosition.set(0, 10, 10);
       const centerBox = new THREE.Vector3();
@@ -84,7 +97,9 @@ const Explore = () => {
 
       newPositionRef.current = newPosition;
       centerBoxRef.current = centerBox;
-    } else {
+
+    } else {  // 대륙 확대
+
 
       // 객체를 감싸고 있는 box
       const box = new THREE.Box3().setFromObject(object3d);
@@ -165,20 +180,34 @@ const Explore = () => {
 
     for(let i=0; i<continents.length; i++) {
       const continent = continents[i];
-      const interescts = raycasterRef.current?.intersectObject(continent);
+      const intersects = raycasterRef.current?.intersectObject(continent);
 
-      if (interescts!.length > 0) {
+      if (intersects!.length > 0) {
+        
         // 지정된 객체 중에 첫번째 선택
-        const selectedObject = interescts![0].object;
+        const selectedObject = intersects![0].object as THREE.Mesh;
+        // console.log(selectedObjectRef.current.name)
+        if (tmp && tmp !== selectedObject.name) {
+          selectedObjectRef.current!.position.y = -0.28;
+        } 
+        tmp = selectedObject.name
+        // 선택된 객체의 y를 기준으로 0.1만큼 위로 올라오는 효과
+        selectedObject.position.y = 0.05;
+        
         // 더 강한 효과
         outlinePassRef.current!.edgeStrength = 15;  
         outlinePassRef.current!.selectedObjects = [ selectedObject ];
+        selectedObjectRef.current = selectedObject;
         return;
-      } 
+      }
     }
+    if (selectedObjectRef.current && selectedObjectRef.current!.userData.flag  === false ) {
+      selectedObjectRef.current!.position.y = -0.28;
+    }
+  
     outlinePassRef.current!.selectedObjects = [];
   }
-
+  
   /** 객체 강조 후처리 */
   const SetupPostProcess = () => {
     const composer = new EffectComposer(renderer.current!);
@@ -210,7 +239,7 @@ const Explore = () => {
         
         // SetupModel이 없는 상태에서 background를 받으려니 문제 생김!
         // => Backround를 호출할 때, 모델을 호출해주자
-        SetupModel();
+        // SetupModel();
      })
   } 
 
@@ -251,41 +280,73 @@ const Explore = () => {
   /** 모델 커스텀 함수 */
   const SetupModel = () => {
     const gltfLoader = new GLTFLoader();
+    const items = [
+      {url: africa},
+      {url: asia},
+      {url: europe},
+      {url: northAmerica},
+      {url: oceania},
+      {url: southAmerica},
+    ]
+    items.forEach((item, index) => {
+      gltfLoader.load(item.url, (glb) => {
+        const obj3d = glb.scene;
+        obj3d.position.y = 0
+        // const box = new THREE.Box3().setFromObject(obj3d);
+        // const sizeBox = box.max.z - box.min.z;
+        // const scale = 1 / sizeBox;
+        // const tx = (index / (items.length-1)) - 0.5;
+        // obj3d.scale.set(scale, scale, scale);
+        // obj3d.position.set(tx, -box.min.y*scale, 0);
+        obj3d.name = "continent"
+        scene.current?.add(obj3d);
+      })
+    })
     gltfLoader.load(
-      worldmap,
+      basemap,
       (glb) => {
         const root = glb.scene;
         scene.current?.add(root)
-        root.name = "worldmap"
+        root.name = "basemap"
         // if (camera.current) {
-        //   ZoomFit(root, camera.current)
-        // }
-      }
-    )
-
-    // northAmerica
-    const northAmerica = CreateObject(5, 5, -8, 0.5, -3, "continent", -90, 0, 0)
-    scene.current?.add(northAmerica);
+          //   ZoomFit(root, camera.current)
+          // }
+        }
+      ) 
+    gltfLoader.load(
+      europe,
+      (glb) => {
+        const root = glb.scene;
+        scene.current?.add(root)
+        root.name = "europe"
+        // if (camera.current) {
+          //   ZoomFit(root, camera.current)
+          // }
+        }
+      ) 
+    // // northAmerica
+    // const northAmerica = CreateObject(5, 5, -8, 0.5, -3, "continent", -90, 0, 0)
+    // scene.current?.add(northAmerica);
     
-    //southAmerica
-    const southAmerica = CreateObject(3, 5, -6, 0.5, 2, "continent", -90, 0 ,0)
-    scene.current?.add(southAmerica);
+    // //southAmerica
+    // const southAmerica = CreateObject(3, 5, -6, 0.5, 2, "continent", -90, 0 ,0)
+    // scene.current?.add(southAmerica);
 
-    //Africa
-    const africa = CreateObject(4, 3.5, -2, 0.5, 0.5, "continent", -90, 0 ,-20)
-    scene.current?.add(africa);
+    // //Africa
+    // const africa = CreateObject(4, 3.5, -2, 0.5, 0.5, "continent", -90, 0 ,-20)
+    // scene.current?.add(africa);
 
-    //Europe
-    const europe = CreateObject(3.5, 3.5, -1, 0.5, -3, "continent", -90, 0 ,-20)
-    scene.current?.add(europe);
+    // //Europe
+    // const europe = CreateObject(3.5, 3.5, -1, 0.5, -3, "continent", -90, 0 ,-20)
+    // scene.current?.add(europe);
 
-    //Asia
-    const asia = CreateObject(5, 3, 2.5, 0.5, -2.5, "continent", -90, 0 ,70)
-    scene.current?.add(asia);
+    // //Asia
+    // const asia = CreateObject(5, 3, 2.5, 0.5, -2.5, "continent", -90, 0 ,70)
+    // scene.current?.add(asia);
 
-    //Oceania
-    const oceania = CreateObject(3, 4, 4, 0.5, 2, "continent", -90, 0 ,70)
-    scene.current?.add(oceania);
+    // //Oceania
+    // const oceania = CreateObject(3, 4, 4, 0.5, 2, "continent", -90, 0 ,70)
+    // scene.current?.add(oceania);
   };
 
   /** 조명 커스텀 함수 */
