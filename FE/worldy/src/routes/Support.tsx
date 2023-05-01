@@ -52,10 +52,9 @@ export default function Support() {
   const subjectList: SupportItemType[][] = [
     [
       {
-        content:
-          '질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 11-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1질문 1-1',
+        content: '회원 가입은 어떻게 하는 건가요?',
         date: '2023-04-30',
-        response: '답변 1',
+        response: '카카오톡 가입하시면 됩니다',
       },
       { content: '질문 1-2', date: '2023-04-29', response: '답변 2' },
       { content: '질문 1-2', date: '2023-04-29', response: '답변 2' },
@@ -83,13 +82,26 @@ export default function Support() {
 
   const ItemBox = (item: SupportItemType, index: number) => {
     return (
-      <>
+      <div
+        className={`${
+          resState !== index
+            ? ''
+            : ' outline outline-[1px] outline-[rgb(175,175,175)]'
+        }`}
+      >
         <button
-          className='w-full h-fit flex flex-row justify-between items-center px-[15px] py-[10px] bg-[rgba(164,164,164,0.29)]'
+          className={`w-full h-fit flex flex-row justify-between items-center px-[15px] py-[10px] 
+          ${
+            resState !== index
+              ? 'bg-[rgba(164,164,164,0.29)]'
+              : 'bg-[rgba(209,209,209,0.29)]'
+          }
+          `}
           onClick={() => openResponse(index)}
         >
           <div className=' w-[95%] h-fit min-h-[60px] flex flex-col justify-between items-start '>
             <div className='flex flex-row my-[5px] justify-start items-center text-white text-[20px] p-[10px] min-h-1/2 w-full h-fit leading-6 text-start'>
+              <span className='text-[26px]'>Q. &nbsp;</span>
               {item.content}
             </div>
             <div className='min-h-1/2 w-1/5 my-[5px]  flex flex-row justify-start items-center text-gray-400 text-[16px] font-PtdLight'>
@@ -109,7 +121,7 @@ export default function Support() {
           </div>
           <div
             className={`w-[3%] h-[50px] flex justify-center items-center transition-transform 2s ease-in-out
-          ${resState !== index ? 'rotate-90' : 'rotate-[270deg]'}
+          ${resState === index ? 'rotate-90' : 'rotate-[270deg]'}
           `}
           >
             <svg
@@ -133,11 +145,12 @@ export default function Support() {
           className={` ${
             resState !== index
               ? 'w-0 h-0 opacity-0'
-              : 'w-full h-fit opacity-100 mt-[0px]  flex flex-col justify-between items-center px-[15px] py-[10px] bg-[rgba(94,85,70,0.31)]'
+              : 'w-full h-fit opacity-100 mt-[0px]  flex flex-col justify-between items-center px-[15px] py-[10px] bg-[rgba(110,110,110,0.31)]'
           }
           `}
         >
           <div className='flex flex-row my-[5px] justify-start items-center text-white text-[20px] p-[10px] min-h-1/2 w-full h-fit leading-6 text-start transit'>
+            <span className='text-[26px]'>A. &nbsp;</span>{' '}
             {resState === index ? item.response : null}
           </div>
           <div className='w-full h-[50px] flex flex-row justify-end items-center'>
@@ -149,7 +162,7 @@ export default function Support() {
             </button>
           </div>
         </div>
-      </>
+      </div>
     );
   };
 
@@ -159,23 +172,20 @@ export default function Support() {
         <div className='w-full h-[300px]   flex flex-col justify-start items-center'>
           <div className='w-[100%] h-full   flex justify-start flex-col items-center px-[10px]'>
             <div className='my-[10px]  w-[100%] h-[17%] flex flex-row justify-end items-center px-[100px]'>
-              <div className='  w-[30%] h-full px-[50px] flex flex-row justify-between items-center'>
+              <div className='  w-[15%] h-full mr-[180px] flex flex-row justify-between items-center'>
                 <button className=' rounded-full w-[120px] h-[90%] outline outline-[rgba(255,255,255,0.6)] outline-1 text-white font-PtdRegular text-[15px] bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.3)]'>
                   문의하기
                 </button>
                 <button className='rounded-full w-[120px] h-[90%] outline outline-[rgba(255,255,255,0.6)] outline-1 text-white font-PtdRegular text-[15px] bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.3)]'>
                   신고하기
                 </button>
-                <button className='rounded-full w-[120px] h-[90%] outline outline-[rgba(255,255,255,0.6)] outline-1 text-white font-PtdRegular text-[15px] bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.3)]'>
-                  문의/신고 내역
-                </button>
               </div>
             </div>
             <div className='my-[10px]  w-[50%] h-[25%] grid justify-center items-center text-[40px] font-PtdExtraBold text-white'>
-              WORLDY SOFT 고객 지원
+              고객 지원
             </div>
-            <div className='my-[10px]  outline-red-500 w-[45%] h-[25%] flex flex-row justify-stretch items-center'>
-              <button className='w-[60px] h-[60px] bg-white grid justify-center items-center '>
+            <div className='my-[10px]  outline-red-500 w-[35%] h-[25%] flex flex-row justify-stretch items-center'>
+              <button className='w-[60px] h-[60px] bg-white grid justify-center items-center rounded-l-[4px]'>
                 <svg
                   stroke='currentColor'
                   fill='currentColor'
@@ -189,20 +199,20 @@ export default function Support() {
                 </svg>
               </button>
               <input
-                className='bg-white h-[60px] w-full px-[10px] text-[20px] '
+                className='bg-white h-[60px] w-full px-[0px] text-[20px] rounded-r-[4px]'
                 type='text'
                 value={searchText}
                 onChange={(e) => {
                   setSearchText(e.target.value);
                 }}
-                placeholder='WORLDY SOFT 내 검색'
+                placeholder='검색'
                 onKeyDown={handleKeyPress}
               />
             </div>
           </div>
         </div>
         <div className='h-[80px] w-full  outline-yellow-400 flex justify-center items-stretch  border-b-[1px] border-0 border-b-[rgba(164,163,163,0.5)] border-solid'>
-          <div className='w-[80%] h-full flex justify-start'>
+          <div className='w-[70%] h-full flex justify-start'>
             <button
               className={`flex flex-row justify-between items-center w-[220px] h-full  outline-red-500 text-[22px] ${
                 subjectIndex === 0
@@ -281,9 +291,9 @@ export default function Support() {
             </button>
           </div>
         </div>
-        <div className='hide-scrollbar w-[80%] h-fit max-h-full  pt-[20px] flex flex-col justify-start items-center overflow-scroll'>
+        <div className='hide-scrollbar w-[70%] h-fit max-h-full  pt-[20px] px-[1px] flex flex-col justify-start items-center overflow-scroll'>
           {subjectList[subjectIndex].map((item, index) => (
-            <div key={index} className=' outline-white my-[10px] w-full h-fit'>
+            <div key={index} className=' outline-white my-[10px] w-full h-fit '>
               {ItemBox(item, index)}
             </div>
           ))}
