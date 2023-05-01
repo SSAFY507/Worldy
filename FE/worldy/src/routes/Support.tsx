@@ -85,7 +85,7 @@ export default function Support() {
     return (
       <>
         <button
-          className=' w-full h-fit flex flex-row justify-between items-center px-[15px] py-[10px] bg-[rgba(164,164,164,0.29)]'
+          className='w-full h-fit flex flex-row justify-between items-center px-[15px] py-[10px] bg-[rgba(164,164,164,0.29)]'
           onClick={() => openResponse(index)}
         >
           <div className=' w-[95%] h-fit min-h-[60px] flex flex-col justify-between items-start '>
@@ -107,13 +107,33 @@ export default function Support() {
               <div className='px-[10px]'>{item.date}</div>
             </div>
           </div>
-          <div className=' w-[3%] h-[50px]'></div>
+          <div
+            className={`w-[3%] h-[50px] flex justify-center items-center transition-transform 2s ease-in-out
+          ${resState !== index ? 'rotate-90' : 'rotate-[270deg]'}
+          `}
+          >
+            <svg
+              stroke=''
+              fill='rgba(164,164,164,0.8)'
+              strokeWidth='0'
+              viewBox='0 0 16 16'
+              height='1.5em'
+              width='1.5em'
+              xmlns='http://www.w3.org/2000/svg'
+            >
+              <path
+                fill-rule='evenodd'
+                d='M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z'
+                clip-rule='evenodd'
+              ></path>
+            </svg>
+          </div>
         </button>
         <div
-          className={`${
+          className={` ${
             resState !== index
               ? 'w-0 h-0 opacity-0'
-              : 'w-full h-fit opacity-100  mt-[5px]  flex flex-col justify-between items-center px-[15px] py-[10px] bg-[rgba(94,85,70,0.31)]'
+              : 'w-full h-fit opacity-100 mt-[0px]  flex flex-col justify-between items-center px-[15px] py-[10px] bg-[rgba(94,85,70,0.31)]'
           }
           `}
         >
@@ -121,7 +141,7 @@ export default function Support() {
             {resState === index ? item.response : null}
           </div>
           <div className='w-full h-[50px] flex flex-row justify-end items-center'>
-            <span className='text-white mx-[10px] text-[15px] flex flex-row justify-center items-center font-PtdLight'>
+            <span className='text-white mx-[20px] text-[15px] flex flex-row justify-center items-center font-PtdLight'>
               추가적으로 궁금한 게 있으신가요?
             </span>
             <button className=' rounded-full w-[80px] h-[70%] outline outline-[rgba(255,255,255,0.6)] outline-1 text-white font-PtdRegular text-[15px] bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.3)]'>
@@ -139,7 +159,7 @@ export default function Support() {
         <div className='w-full h-[300px]   flex flex-col justify-start items-center'>
           <div className='w-[100%] h-full   flex justify-start flex-col items-center px-[10px]'>
             <div className='my-[10px]  w-[100%] h-[17%] flex flex-row justify-end items-center px-[100px]'>
-              <div className='  w-[30%] h-full px-[30px] flex flex-row justify-between items-center'>
+              <div className='  w-[30%] h-full px-[50px] flex flex-row justify-between items-center'>
                 <button className=' rounded-full w-[120px] h-[90%] outline outline-[rgba(255,255,255,0.6)] outline-1 text-white font-PtdRegular text-[15px] bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.3)]'>
                   문의하기
                 </button>
@@ -155,21 +175,21 @@ export default function Support() {
               WORLDY SOFT 고객 지원
             </div>
             <div className='my-[10px]  outline-red-500 w-[45%] h-[25%] flex flex-row justify-stretch items-center'>
-              <button className='w-[60px] h-[60px] bg-white grid justify-center items-center'>
+              <button className='w-[60px] h-[60px] bg-white grid justify-center items-center '>
                 <svg
                   stroke='currentColor'
-                  strokeWidth='0'
-                  viewBox='0 0 24 24'
-                  height='2em'
-                  width='2em'
+                  fill='currentColor'
+                  stroke-width='0'
+                  viewBox='0 0 1024 1024'
+                  height='1.5em'
+                  width='1.5em'
                   xmlns='http://www.w3.org/2000/svg'
                 >
-                  <path d='M10,18c1.846,0,3.543-0.635,4.897-1.688l4.396,4.396l1.414-1.414l-4.396-4.396C17.365,13.543,18,11.846,18,10 c0-4.411-3.589-8-8-8s-8,3.589-8,8S5.589,18,10,18z M10,4c3.309,0,6,2.691,6,6s-2.691,6-6,6s-6-2.691-6-6S6.691,4,10,4z'></path>
-                  <path d='M11.412,8.586C11.791,8.966,12,9.468,12,10h2c0-1.065-0.416-2.069-1.174-2.828c-1.514-1.512-4.139-1.512-5.652,0 l1.412,1.416C9.346,7.83,10.656,7.832,11.412,8.586z'></path>
+                  <path d='M909.6 854.5L649.9 594.8C690.2 542.7 712 479 712 412c0-80.2-31.3-155.4-87.9-212.1-56.6-56.7-132-87.9-212.1-87.9s-155.5 31.3-212.1 87.9C143.2 256.5 112 331.8 112 412c0 80.1 31.3 155.5 87.9 212.1C256.5 680.8 331.8 712 412 712c67 0 130.6-21.8 182.7-62l259.7 259.6a8.2 8.2 0 0 0 11.6 0l43.6-43.5a8.2 8.2 0 0 0 0-11.6zM570.4 570.4C528 612.7 471.8 636 412 636s-116-23.3-158.4-65.6C211.3 528 188 471.8 188 412s23.3-116.1 65.6-158.4C296 211.3 352.2 188 412 188s116.1 23.2 158.4 65.6S636 352.2 636 412s-23.3 116.1-65.6 158.4z'></path>
                 </svg>
               </button>
               <input
-                className='bg-white h-[60px] w-full px-[10px] text-[25px]'
+                className='bg-white h-[60px] w-full px-[10px] text-[20px] '
                 type='text'
                 value={searchText}
                 onChange={(e) => {
@@ -182,7 +202,7 @@ export default function Support() {
           </div>
         </div>
         <div className='h-[80px] w-full  outline-yellow-400 flex justify-center items-stretch  border-b-[1px] border-0 border-b-[rgba(164,163,163,0.5)] border-solid'>
-          <div className='w-[90%] h-full flex justify-start'>
+          <div className='w-[80%] h-full flex justify-start'>
             <button
               className={`flex flex-row justify-between items-center w-[220px] h-full  outline-red-500 text-[22px] ${
                 subjectIndex === 0
@@ -261,7 +281,7 @@ export default function Support() {
             </button>
           </div>
         </div>
-        <div className='hide-scrollbar w-[90%] h-fit max-h-full  pt-[20px] flex flex-col justify-start items-center overflow-scroll'>
+        <div className='hide-scrollbar w-[80%] h-fit max-h-full  pt-[20px] flex flex-col justify-start items-center overflow-scroll'>
           {subjectList[subjectIndex].map((item, index) => (
             <div key={index} className=' outline-white my-[10px] w-full h-fit'>
               {ItemBox(item, index)}
