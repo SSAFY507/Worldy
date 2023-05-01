@@ -20,6 +20,8 @@ import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
 import Updates from './routes/Updates';
 
+import './styles/RouterStyle.css';
+
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
   const location = useLocation(); //현재 브라우저의 URL 위치 반환
@@ -71,7 +73,7 @@ const AppLayout = () => {
 
   return (
     <div
-      className='w-screen h-screen flex flex-col bg-slate-50'
+      className='hide-scrollbar w-screen h-screen flex flex-col bg-white'
       style={{
         backgroundImage: login ? undefined : `url(${pathBI})`,
         backgroundSize: '100%',
@@ -93,7 +95,7 @@ const AppLayout = () => {
         )}
         {/* Routes : 여러 컴퍼넌트 중 URL과 일치하는 '첫번째' Route 컴퍼넌트만 렌더링 */}
       </div>
-      <div className='flex-1 h-full'>
+      <div className='flex-1 h-full max-h-full'>
         <Routes>
           {login ? (
             <Route path='/' element={<MainPageAfterLogin />} />

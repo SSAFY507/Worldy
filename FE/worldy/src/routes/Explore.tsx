@@ -11,6 +11,8 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import bg from "../assets/images/WorldBackgrorund.jpg"
 import worldmap from "../assets/lowpoly/WorldMap.glb"
+import { gsap } from 'gsap';
+import { Vector3 } from "@react-three/fiber";
 
 const Explore = () => {
 
@@ -20,28 +22,160 @@ const Explore = () => {
   const camera = useRef<THREE.PerspectiveCamera | null>(null);
   const controls = useRef<OrbitControls |null>(null);
 
+  const raycasterRef = useRef<THREE.Raycaster | null>(null);
+
   const outlinePassRef = useRef<OutlinePass | null>(null);
   const composerRef = useRef<EffectComposer | null>(null);
   const effectFXAARef = useRef<ShaderPass | null>(null);
+  
+  const newPositionRef = useRef<Vector3 | null>(null);
+  const centerBoxRef = useRef<Vector3 | null>(null);
+
+  /** 마우스 추적 */
+  const SetupPicking = () => {
+    const raycaster = new THREE.Raycaster();
+    // divContainer.current?.addEventListener("pointermove", OnPointerMove);
+    divContainer.current?.addEventListener("dblclick", OnDblClick);
+    raycasterRef.current = raycaster;
+  }
+
+  /** 마우스 더블 클릭  */
+  const OnDblClick = (event:any) => {
+    if (event.isPrimary === false) return;
+
+    // 현재 마우스의 위치 찾기
+    const mouse = new THREE.Vector2
+    mouse.set((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1);
+
+    raycasterRef.current?.setFromCamera(mouse, camera.current!)
+
+    // 객체 이름이 continent인 객체만 고르기
+    const continents:THREE.Object3D[] = [];
+    scene.current?.traverse((obj3d) => {
+      if (obj3d.name === "continent") {
+        continents.push(obj3d);
+      }
+    })
+
+    // 더블 클릭된 곳과 해당 객체의 충돌점을 찾아서 객체를 정확히 추적
+    for(let i=0; i<continents.length; i++) {
+      const continent = continents[i];
+
+      const targets = raycasterRef.current?.intersectObject(continent);
+      if(targets!.length > 0) {
+        // 더블클릭된 차 확대 
+        ZoomFit(continent, 30, 0.3)
+        return;
+      }
+    }
+
+    const worldmap = scene.current?.getObjectByName("worldmap");
+    // // 무대 확대 코드
+    ZoomFit(worldmap!, 70, 0.06)
+  }
+
+  /** 확대 실행 학수 */
+  const ZoomFit = (object3d:THREE.Object3D, viewAngle:number, viewdistance:number) => {
+    if (viewdistance < 0.1){
+      const newPosition = new THREE.Vector3();
+      newPosition.set(0, 10, 10);
+      const centerBox = new THREE.Vector3();
+      centerBox.set(0, 0, 0);
+
+      newPositionRef.current = newPosition;
+      centerBoxRef.current = centerBox;
+    } else {
+
+      // 객체를 감싸고 있는 box
+      const box = new THREE.Box3().setFromObject(object3d);
+    // 객체의 정육각형 box의 대각선 길이
+    const sizeBox = box.getSize(new THREE.Vector3()).length();
+    // box의 중앙점
+    const centerBox = box.getCenter(new THREE.Vector3());
+
+    // 처음에 설정된 벡터
+    const direction = new THREE.Vector3(0, 1, 0);
+    // 처음에 설정된 벡터 (0, 1, 0)을 (1, 0 ,0)방향으로 viewAngle만큼 회전한 객체
+    direction.applyAxisAngle(new THREE.Vector3(1, 0, 0),
+      THREE.MathUtils.degToRad(viewAngle));
+
+    // sizebox의 절반
+    const halfSizeModel = sizeBox * viewdistance;
+    // 카메라 fov의 절반
+    const halfFov = THREE.MathUtils.degToRad(camera.current!.fov * 0.3);
+    // 모델을 확대했을 때, 거리값
+    const distance = halfSizeModel / Math.tan(halfFov);
+    // 카메라의 새로운 위치 
+    // 단위 벡터 * distance 로 방향벡터를 얻고
+    // 위치 벡터인 centerBox를 추가하여 
+    // 정확한 위치를 얻어냄 
+    const newPosition = new THREE.Vector3().copy(
+      direction.multiplyScalar(distance).add(centerBox)
+      );
+
+    newPositionRef.current = newPosition;
+    centerBoxRef.current = centerBox;
+    }
+      
+    const newPosition = newPositionRef.current;
+    const centerBox = centerBoxRef.current;
+
+    // camera.current?.position.copy(newPosition);
+    // 동적으로 변경
+    gsap.to(camera.current!.position, {
+      duration: 0.5,
+      x: newPosition.x, y: newPosition.y, z: newPosition.z
+    })
+
+    // controls.current?.target.copy(centerBox);
+    gsap.to(controls.current!.target, {
+      duration: 0.5,
+      x: centerBox.x,
+      y: centerBox.y,
+      z: centerBox.z,
+      // 매 프레임마다 카메라의 위치 추적
+      onUpdate: () => {
+        camera.current!.lookAt(
+          controls.current!.target.x,
+          controls.current!.target.y,
+          controls.current!.target.z,
+        )
+      }
+    })
+    
+  }
 
   /** 강조할 객체 추적 */
   const OnPointerMove = (event:PointerEvent) => {
     if (event.isPrimary === false) return;
+
+    // 현재 마우스의 위치 찾기
     const mouse = new THREE.Vector2
     mouse.set((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1);
 
-    const raycaster = new THREE.Raycaster
-    raycaster.setFromCamera(mouse, camera.current!)
+    raycasterRef.current?.setFromCamera(mouse, camera.current!)
 
-    const interescts = raycaster.intersectObject(scene.current!, true);
-    if (interescts!.length > 0) {
-      // 지정된 객체 중에 첫번째 선택
-      const selectedObject = interescts![0].object;
-      // 더 강한 효과
-      outlinePassRef.current!.edgeStrength = 20;  
-      outlinePassRef.current!.selectedObjects = [ selectedObject ];
-    } else {
-      outlinePassRef.current!.selectedObjects = [];
+    // 객체 이름이 continent인 객체만 고르기
+    const continents:THREE.Object3D[] = [];
+    scene.current?.traverse((obj3d) => {
+      if (obj3d.name === "continent") {
+        continents.push(obj3d);
+      }
+    })
+
+    for(let i=0; i<continents.length; i++) {
+      const continent = continents[i];
+      const interescts = raycasterRef.current?.intersectObject(continent);
+
+      if (interescts!.length > 0) {
+        // 지정된 객체 중에 첫번째 선택
+        const selectedObject = interescts![0].object;
+        // 더 강한 효과
+        outlinePassRef.current!.edgeStrength = 20;  
+        outlinePassRef.current!.selectedObjects = [ selectedObject ];
+      } else {
+        // outlinePassRef.current!.selectedObjects = [];
+      }
     }
   }
 
@@ -63,48 +197,6 @@ const Explore = () => {
     composerRef.current = composer;
     effectFXAARef.current = effetFXAA;
 
-  }
-
-
-  /** 카메라 적정 위치 구하는 함수 */
-  const ZoomFit = (object3D:any, camera:THREE.PerspectiveCamera) => {
-    // 모델 경계 박스
-    const box = new THREE.Box3().setFromObject(object3D);
-
-    // 모델 경계 박스 대각 길이
-    const sizeBox = box.getSize(new THREE.Vector3()).length();
-
-    // 모델의 경계 박스 중심 위치
-    const centerBox = box.getCenter(new THREE.Vector3());
-
-    // 모델 크기의 절반값
-    const halfSizeModel = sizeBox * 0.5;
-
-    // 카메라의 fov의 절반값
-    const halfFov = THREE.MathUtils.degToRad(camera.fov * 0.5);
-
-    // 모델을 화면에 꽉 채우기 위한 적당한 거리
-    const distance = halfSizeModel / Math.tan(halfFov);
-
-    // 모델 중심에서 카메라 위치로 향하는 방향 단위 벡터 계산
-    const direction = (new THREE.Vector3()).subVectors(
-      camera.position,
-      centerBox
-    ).normalize();
-
-    // "단위 방향 벡터" 방향으로 모델 중심 위치에서 distance 거리에 대한 위치
-    const position = direction.multiplyScalar(distance).add(centerBox);
-    camera.position.copy(position);
-
-    // 모델의 크기에 맞게 카메라의 near, far 값을 대략적으로 조정
-    camera.near = sizeBox / 100;
-    camera.far = sizeBox * 100;
-
-    // 카메라 기본 속성 변경에 따른 투영행렬 업데이트
-    camera.updateProjectionMatrix();
-
-    // 카메라가 모델의 중심을 바라 보도록 함
-    camera.lookAt(centerBox.x, centerBox.y, centerBox.z);
   }
 
    /** 배경함수 */
@@ -136,6 +228,26 @@ const Explore = () => {
     scene.current?.add(cam)
   };
 
+  /** 객체 생성 함수 */
+  const CreateObject = (w:number, h:number, x:number, y:number, z:number, name:string, angleX:number, angleY:number, angleZ:number) => {
+    const createGeometry = new THREE.PlaneGeometry(w, h);
+    const createMaterial = new THREE.MeshBasicMaterial({
+      color: "#2c3e50",
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0,
+    });
+
+    const createMesh = new THREE.Mesh(createGeometry, createMaterial)
+
+    createMesh.position.set(x, y, z)
+    createMesh.name = name
+
+    createMesh.rotation.set(THREE.MathUtils.degToRad(angleX), THREE.MathUtils.degToRad(angleY), THREE.MathUtils.degToRad(angleZ));
+    
+    return createMesh;
+  }
+
   /** 모델 커스텀 함수 */
   const SetupModel = () => {
     const gltfLoader = new GLTFLoader();
@@ -144,7 +256,7 @@ const Explore = () => {
       (glb) => {
         const root = glb.scene;
         scene.current?.add(root)
-
+        root.name = "worldmap"
         // if (camera.current) {
         //   ZoomFit(root, camera.current)
         // }
@@ -152,94 +264,27 @@ const Explore = () => {
     )
 
     // northAmerica
-    const NorthAmericaGeometry = new THREE.PlaneGeometry(5, 5);
-    const NorthAmericaMaterial = new THREE.MeshBasicMaterial({
-      color: "#2c3e50",
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.1,
-    });
-
-    const northAmerica = new THREE.Mesh(NorthAmericaGeometry, NorthAmericaMaterial);
-    northAmerica.position.set(-8, 0.5, -3)
-
-    northAmerica.rotation.x = THREE.MathUtils.degToRad(-90);
-    
+    const northAmerica = CreateObject(5, 5, -8, 0.5, -3, "continent", -90, 0, 0)
     scene.current?.add(northAmerica);
     
     //southAmerica
-    const SouthAmericaGeometry = new THREE.PlaneGeometry(3, 5);
-    const SouthAmericaMaterial = new THREE.MeshBasicMaterial({
-      color: "#2c3e50",
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.1,
-    });
-
-    const southAmerica = new THREE.Mesh(SouthAmericaGeometry, SouthAmericaMaterial);
-    southAmerica.position.set(-6, 0.5, 2)
-    southAmerica.rotation.x = THREE.MathUtils.degToRad(-90);
-    
+    const southAmerica = CreateObject(3, 5, -6, 0.5, 2, "continent", -90, 0 ,0)
     scene.current?.add(southAmerica);
 
     //Africa
-    const AfricaGeometry = new THREE.PlaneGeometry(4, 3.5);
-    const AfricaMaterial = new THREE.MeshBasicMaterial({
-      color: "#2c3e50",
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.1,
-    });
-
-    const africa = new THREE.Mesh(AfricaGeometry, AfricaMaterial);
-    africa.position.set(-2, 0.5, 0.5)
-    africa.rotation.set(THREE.MathUtils.degToRad(-90), THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(-20));
-    
+    const africa = CreateObject(4, 3.5, -2, 0.5, 0.5, "continent", -90, 0 ,-20)
     scene.current?.add(africa);
 
     //Europe
-    const EuropeGeometry = new THREE.PlaneGeometry(3.5, 3.5);
-    const EuropeMaterial = new THREE.MeshBasicMaterial({
-      color: "#2c3e50",
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.1,
-    });
-
-    const europe = new THREE.Mesh(EuropeGeometry, EuropeMaterial);
-    europe.position.set(-1, 0.5, -3)
-    europe.rotation.set(THREE.MathUtils.degToRad(-90), THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(-20));
-    
+    const europe = CreateObject(3.5, 3.5, -1, 0.5, -3, "continent", -90, 0 ,-20)
     scene.current?.add(europe);
 
     //Asia
-    const AsiaGeometry = new THREE.PlaneGeometry(5, 3);
-    const AsiaMaterial = new THREE.MeshBasicMaterial({
-      color: "#2c3e50",
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.1,
-    });
-
-    const asia = new THREE.Mesh(AsiaGeometry, AsiaMaterial);
-    asia.position.set(2.5, 0.5, -2.5)
-    asia.rotation.set(THREE.MathUtils.degToRad(-90), THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(70));
-    
+    const asia = CreateObject(5, 3, 2.5, 0.5, -2.5, "continent", -90, 0 ,70)
     scene.current?.add(asia);
 
     //Oceania
-    const OceaniaGeometry = new THREE.PlaneGeometry(3, 4);
-    const OceaniaMaterial = new THREE.MeshBasicMaterial({
-      color: "#2c3e50",
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.1,
-    });
-
-    const oceania = new THREE.Mesh(OceaniaGeometry, OceaniaMaterial);
-    oceania.position.set(4, 0.5, 2)
-    oceania.rotation.set(THREE.MathUtils.degToRad(-90), THREE.MathUtils.degToRad(0), THREE.MathUtils.degToRad(70));
-    
+    const oceania = CreateObject(3, 4, 4, 0.5, 2, "continent", -90, 0 ,70)
     scene.current?.add(oceania);
   };
 
@@ -274,6 +319,7 @@ const Explore = () => {
     time *= 0.01;
     // cube.current!.rotation.x = time;
     // cube.current!.rotation.y = time;
+    controls.current?.update()
   };
 
   /** 렌더링 될 때마다 사이즈 초기화 */
@@ -317,7 +363,8 @@ const Explore = () => {
       scene.current = scn;
 
       window.addEventListener("resize", Resize);
-      divContainer.current.addEventListener("pointermove", OnPointerMove, false);
+      // divContainer.current.addEventListener("pointermove", OnPointerMove, false);
+      SetupPicking();
 
       SetupCamera();
       SetupControls();
