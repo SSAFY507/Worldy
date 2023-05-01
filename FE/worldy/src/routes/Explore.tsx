@@ -167,7 +167,6 @@ const Explore = () => {
     // 현재 마우스의 위치 찾기
     const mouse = new THREE.Vector2
     mouse.set((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1);
-
     raycasterRef.current?.setFromCamera(mouse, camera.current!)
 
     // 객체 이름이 continent인 객체만 고르기
@@ -183,26 +182,62 @@ const Explore = () => {
       const intersects = raycasterRef.current?.intersectObject(continent);
 
       if (intersects!.length > 0) {
-        
         // 지정된 객체 중에 첫번째 선택
         const selectedObject = intersects![0].object as THREE.Mesh;
-        // console.log(selectedObjectRef.current.name)
+        console.log(selectedObjectRef.current?.scale)
+        // 객체의 현재 y 속성값
         if (tmp && tmp !== selectedObject.name) {
-          selectedObjectRef.current!.position.y = -0.28;
+          // y 속성값을 0.05로 1초 동안 변경하는 애니메이션
+          gsap.to(selectedObjectRef.current!.position, {
+            duration: 1,
+            y: -0.28,
+            ease: "power4.out" // 선택사항: 애니메이션 효과를 조절할 수 있습니다.
+          });
+          gsap.to(selectedObjectRef.current!.scale, {
+            duration: 1,
+            x: 0.00072,
+            y: 0.00072,
+            z: 0.00072,
+            ease: "power4.out" // 선택사항: 애니메이션 효과를 조절할 수 있습니다.
+          });
         } 
+
         tmp = selectedObject.name
-        // 선택된 객체의 y를 기준으로 0.1만큼 위로 올라오는 효과
-        selectedObject.position.y = 0.05;
-        
+
+        // y 속성값을 0.05로 1초 동안 변경하는 애니메이션
+        gsap.to(selectedObject.position, {
+          duration: 1,
+          y: -0.15,
+          ease: "power4.out" // 선택사항: 애니메이션 효과를 조절할 수 있습니다.
+        });
+        gsap.to(selectedObject!.scale, {
+          duration: 1,
+          x: 0.00077,
+          y: 0.00077,
+          z: 0.00077,
+          ease: "power4.out" // 선택사항: 애니메이션 효과를 조절할 수 있습니다.
+        });
         // 더 강한 효과
-        outlinePassRef.current!.edgeStrength = 15;  
+        outlinePassRef.current!.edgeStrength = 25;  
         outlinePassRef.current!.selectedObjects = [ selectedObject ];
         selectedObjectRef.current = selectedObject;
         return;
       }
     }
     if (selectedObjectRef.current && selectedObjectRef.current!.userData.flag  === false ) {
-      selectedObjectRef.current!.position.y = -0.28;
+        // y 속성값을 0.05로 1초 동안 변경하는 애니메이션
+        gsap.to(selectedObjectRef.current.position, {
+          duration: 1,
+          y: -0.28,
+          ease: "power4.out" // 선택사항: 애니메이션 효과를 조절할 수 있습니다.
+        });
+        gsap.to(selectedObjectRef.current!.scale, {
+          duration: 1,
+          x: 0.00072,
+          y: 0.00072,
+          z: 0.00072,
+          ease: "power4.out" // 선택사항: 애니메이션 효과를 조절할 수 있습니다.
+        });
     }
   
     outlinePassRef.current!.selectedObjects = [];
@@ -291,7 +326,7 @@ const Explore = () => {
     items.forEach((item, index) => {
       gltfLoader.load(item.url, (glb) => {
         const obj3d = glb.scene;
-        obj3d.position.y = 0
+        obj3d.position.y = 0.3
         // const box = new THREE.Box3().setFromObject(obj3d);
         // const sizeBox = box.max.z - box.min.z;
         // const scale = 1 / sizeBox;
@@ -313,17 +348,6 @@ const Explore = () => {
           // }
         }
       ) 
-    gltfLoader.load(
-      europe,
-      (glb) => {
-        const root = glb.scene;
-        scene.current?.add(root)
-        root.name = "europe"
-        // if (camera.current) {
-          //   ZoomFit(root, camera.current)
-          // }
-        }
-      ) 
     // // northAmerica
     // const northAmerica = CreateObject(5, 5, -8, 0.5, -3, "continent", -90, 0, 0)
     // scene.current?.add(northAmerica);
@@ -336,9 +360,9 @@ const Explore = () => {
     // const africa = CreateObject(4, 3.5, -2, 0.5, 0.5, "continent", -90, 0 ,-20)
     // scene.current?.add(africa);
 
-    // //Europe
-    // const europe = CreateObject(3.5, 3.5, -1, 0.5, -3, "continent", -90, 0 ,-20)
-    // scene.current?.add(europe);
+    //Europe
+    const tmpEurope = CreateObject(1.6, 4, -0.5, 0, -4, "flat", -90, 0, -50)
+    scene.current?.add(tmpEurope);
 
     // //Asia
     // const asia = CreateObject(5, 3, 2.5, 0.5, -2.5, "continent", -90, 0 ,70)
