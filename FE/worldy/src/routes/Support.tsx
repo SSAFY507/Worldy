@@ -5,6 +5,7 @@ import pathSMB from '../assets/images/SupportMonopolyBackground.png';
 
 import '../styles/SupportStyles.css';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
+import SupportModal from '../components/SupportModal';
 
 type SupportItemType = {
   content: string;
@@ -83,11 +84,11 @@ export default function Support() {
   const ItemBox = (item: SupportItemType, index: number) => {
     return (
       <div
-        className={`${
-          resState !== index
-            ? ''
-            : ' outline outline-[1px] outline-[rgb(175,175,175)]'
-        }`}
+      // className={`${
+      //   resState !== index
+      //     ? ''
+      //     : ' outline outline-[1px] outline-[rgb(175,175,175)]'
+      // }`}
       >
         <button
           className={`w-full h-fit flex flex-row justify-between items-center px-[15px] py-[10px] 
@@ -157,7 +158,10 @@ export default function Support() {
             <span className='text-white mx-[20px] text-[15px] flex flex-row justify-center items-center font-PtdLight'>
               추가적으로 궁금한 게 있으신가요?
             </span>
-            <button className=' rounded-full w-[80px] h-[70%] outline outline-[rgba(255,255,255,0.6)] outline-1 text-white font-PtdRegular text-[15px] bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.3)]'>
+            <button
+              onClick={() => handleSupportModal(true)}
+              className=' rounded-full w-[80px] h-[70%] outline outline-[rgba(255,255,255,0.6)] outline-1 text-white font-PtdRegular text-[15px] bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.3)]'
+            >
               문의하기
             </button>
           </div>
@@ -166,17 +170,36 @@ export default function Support() {
     );
   };
 
+  const [modalOn, setModalOn] = useState<boolean>(true);
+  const [modalType, setModalType] = useState<boolean>(false);
+  const handleSupportModal = (type: boolean) => {
+    setModalOn(!modalOn);
+    setModalType(type);
+  };
+
   return (
     <div className='hide-scrollbar min-w-full h-fit min-h-full bg-gray-800 flex justify-center items-start pt-[20px] absolute top-20 left-0 overflow-hidden'>
+      {modalOn && (
+        <SupportModal
+          type={modalType}
+          handleCloseModal={() => setModalOn(false)}
+        />
+      )}
       <div className='w-full h-fit flex flex-col justify-stretch items-center'>
         <div className='w-full h-[300px]   flex flex-col justify-start items-center'>
           <div className='w-[100%] h-full   flex justify-start flex-col items-center px-[10px]'>
             <div className='my-[10px]  w-[100%] h-[17%] flex flex-row justify-end items-center px-[100px]'>
               <div className='  w-[15%] h-full mr-[180px] flex flex-row justify-between items-center'>
-                <button className=' rounded-full w-[120px] h-[90%] outline outline-[rgba(255,255,255,0.6)] outline-1 text-white font-PtdRegular text-[15px] bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.3)]'>
+                <button
+                  onClick={() => handleSupportModal(true)}
+                  className=' rounded-full w-[120px] h-[90%] outline outline-[rgba(255,255,255,0.6)] outline-1 text-white font-PtdRegular text-[15px] bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.3)]'
+                >
                   문의하기
                 </button>
-                <button className='rounded-full w-[120px] h-[90%] outline outline-[rgba(255,255,255,0.6)] outline-1 text-white font-PtdRegular text-[15px] bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.3)]'>
+                <button
+                  onClick={() => handleSupportModal(false)}
+                  className='rounded-full w-[120px] h-[90%] outline outline-[rgba(255,255,255,0.6)] outline-1 text-white font-PtdRegular text-[15px] bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(255,255,255,0.3)]'
+                >
                   신고하기
                 </button>
               </div>
