@@ -1,6 +1,8 @@
 import { sign } from 'crypto';
 import React from 'react';
 import { useState, useEffect } from 'react';
+import Dice from './Dice';
+import './dice.css'
 
 
 
@@ -55,6 +57,37 @@ type Player = {
 
 
 export default function WordyGame() {
+
+
+  const dicesElement1 = document.querySelectorAll(".dice");
+  const dicesElement2 = document.querySelectorAll(".dice2");
+  const rollButton = document.querySelector("#rollButton");
+
+
+  function rollDice(dice1: number, dice2: number) {
+
+
+    dicesElement1.forEach(function (dice) {
+      dice.classList.remove("active");
+      animateDice(dice1, dice);
+    });
+
+    dicesElement2.forEach(function (dice) {
+      dice.classList.remove("active");
+      animateDice(dice2, dice);
+    });
+  }
+
+  function animateDice(randomNumber: number, dice: any) {
+    if (dice.id === `dice-${randomNumber}`) {
+      const dots = Array.from(dice.children);
+      console.log(dots)
+
+      setTimeout(function () {
+        dice.classList.add("active");
+      });
+    }
+  }
 
   const [worldMap, setWorldMap] = useState<Spot[]>([
     {
@@ -726,7 +759,8 @@ export default function WordyGame() {
   let [dice, setDice] = useState(0);
   let [double, setDouble] = useState(false);
   let [turn, setTurn] = useState(0);
-  let [option, setOption] = useState(0);
+  let [option, setOption] = useState(1);
+  let [totalPrice, setTotalPrice] = useState(0);
 
   // 플레이어 1회 턴 함수
 
@@ -743,6 +777,7 @@ export default function WordyGame() {
     let double = false;
     let dice1 = Math.floor(Math.random() * 6 + 1);
     let dice2 = Math.floor(Math.random() * 6 + 1);
+    rollDice(dice1, dice2);
     let dice = dice1 + dice2
 
     setDice1(dice1);
@@ -925,6 +960,7 @@ export default function WordyGame() {
 
     const spot = worldMap[nation]
     let balance = p.game.balance;
+
 
 
     if (option === 1) {
@@ -1238,7 +1274,7 @@ export default function WordyGame() {
           </div>
         </div>
         <div className='w-[800px] h-[900px] mt-[60px] flex flex-col items-center p-[20px] relative top-[-820px]'>
-          <div className='flex p-[20px]'>
+          <div className='flex p-[20px] relative top-[60px]'>
             {
               lst.map((i, index) => {
                 return <div key={index}>
@@ -1246,12 +1282,10 @@ export default function WordyGame() {
                     <div className={`w-full h-[30px]  flex justify-center items-center text-[20px] mb-[10px] ${i.game.state ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>Player{i.pId}({i.name})</div>
                     <div>보유자산 : {i.game.balance}만원</div>
                     <div>현재위치 : [{i.game.location}] {worldMap[i.game.location].name}</div>
-                    <div>소유국가 : [{i.game.own + ''}]
-                    </div>
+                    <div>소유국가 : [{i.game.own + ''}]</div>
                     <div>주사위1 : {i.game.dice1}</div>
                     <div>주사위2 : {i.game.dice2}</div>
                     <div>주사위합 : {i.game.dice}</div>
-                    <div>더블 : {i.game.double ? '더블!' : '더블아님'}</div>
                     <div>순위 : {i.game.ranking}</div>
                     <div>몇바퀴 : {i.game.lap} 바퀴 </div>
                     <div>무인도 카운트 : {i.game.desert}</div>
@@ -1260,16 +1294,96 @@ export default function WordyGame() {
               })
             }
           </div>
-          <div className='flex flex-col bg-blue-200 w-[400px] h-[120px] justify-center items-center relative top-[-370px]'>
-            <div className='text-[24px]'>플레이어{turn}턴</div>
-            <div> 주사위1 : {dice1}</div>
-            <div> 주사위2 : {dice2}</div>
-            <div> 총합 : {dice}</div>
-            <div> double : {double ? '더블!' : '더블 아님'}</div>
+          <div className='flex bg-white w-[320px] h-[140px] justify-center items-center relative top-[-370px] rounded-[6px]'>
+
+            <main className="container">
+              <div className="dice-container">
+
+                <div className="dice dice-one active" id="dice-1">
+                  <span className="dot"></span>
+                </div>
+
+                <div className="dice dice-two" id="dice-2">
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                </div>
+
+                <div className="dice dice-three" id="dice-3">
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                </div>
+
+                <div className="dice dice-four" id="dice-4">
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                </div>
+                <div className="dice dice-five" id="dice-5">
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                </div>
+                <div className="dice dice-six" id="dice-6">
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                </div>
+              </div>
+
+              <div className="dice-container">
+                <div className="dice2 dice-one active" id="dice-1">
+                  <span className="dot"></span>
+                </div>
+                <div className="dice2 dice-two" id="dice-2">
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                </div>
+                <div className="dice2 dice-three" id="dice-3">
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                </div>
+
+                <div className="dice2 dice-four" id="dice-4">
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                </div>
+                <div className="dice2 dice-five" id="dice-5">
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                </div>
+                <div className="dice2 dice-six" id="dice-6">
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                  <span className="dot"></span>
+                </div>
+              </div>
+
+            </main>
           </div>
+          <button className="roll-button z-[100]" id="rollButton"
+            onClick={() => {
+              playerTurn(turn);
+            }}
+          >주사위 굴리기</button>
 
           {/* 콘솔창  */}
-          <div className='w-[400px] h-[320px] bg-white flex flex-col items-center relative top-[-120px] rounded-[6px]'>
+          <div className='w-[400px] h-[370px] bg-white flex flex-col items-center relative top-[-150px] rounded-[6px]'>
             {lst.map((i, index) => {
               return <div key={index}>
                 {i.game.state &&
@@ -1284,12 +1398,10 @@ export default function WordyGame() {
                     {worldMap[i.game.location].type === 'nation' && !worldMap[i.game.location].owner &&
                       <div>
                         <div className='flex rounded-[4px] w-[380px] h-[100px] outline bg-gray-50'>
-                          <div className='flex flex-col justify-center items-center w-[95px] h-full hover:bg-blue-100 hover:cursor-pointer'
+                          <div className={`flex flex-col justify-center items-center w-[95px] h-full hover:bg-blue-100 hover:cursor-pointer ${option === 1 ? 'bg-blue-200' : ''}`}
                             onClick={() => {
-                              setOption(1)
-                              console.log('구매하기 실행');
-                              console.log('선택 옵션 : ' + 1);
-                              buy(i, i.game.location, 1);
+                              setOption(1);
+                              setTotalPrice(worldMap[i.game.location].price.land);
                             }}
                           >
                             <div className=''>
@@ -1298,12 +1410,10 @@ export default function WordyGame() {
                             </div>
                             <div className='mt-[10px]'>가격</div>
                           </div>
-                          <div className='flex flex-col justify-center items-center w-[95px] h-full hover:bg-blue-100 hover:cursor-pointer'
+                          <div className={`flex flex-col justify-center items-center w-[95px] h-full hover:bg-blue-100 hover:cursor-pointer ${option === 2 ? 'bg-blue-200' : ''}`}
                             onClick={() => {
                               setOption(2)
-                              console.log('구매하기 실행');
-                              console.log('선택 옵션 : ' + 2);
-                              buy(i, i.game.location, 2);
+                              setTotalPrice(worldMap[i.game.location].price.land + worldMap[i.game.location].price.villa);
                             }}
                           >
                             <div>
@@ -1312,12 +1422,10 @@ export default function WordyGame() {
                             </div>
                             <div className='mt-[10px]'>별장</div>
                           </div>
-                          <div className='flex flex-col justify-center items-center w-[95px]  h-full hover:bg-blue-100 hover:cursor-pointer'
+                          <div className={`flex flex-col justify-center items-center w-[95px] h-full hover:bg-blue-100 hover:cursor-pointer ${option === 3 ? 'bg-blue-200' : ''}`}
                             onClick={() => {
                               setOption(3)
-                              console.log('구매하기 실행');
-                              console.log('선택 옵션 : ' + 3);
-                              buy(i, i.game.location, 3);
+                              setTotalPrice(worldMap[i.game.location].price.land + worldMap[i.game.location].price.hotel);
                             }}
                           >
                             <div>
@@ -1326,12 +1434,10 @@ export default function WordyGame() {
                             </div>
                             <div className='mt-[10px]'>호텔</div>
                           </div>
-                          <div className='flex flex-col justify-center items-center w-[95px]  h-full hover:bg-blue-100 hover:cursor-pointer'
+                          <div className={`flex flex-col justify-center items-center w-[95px] h-full hover:bg-blue-100 hover:cursor-pointer ${option === 4 ? 'bg-blue-200' : ''}`}
                             onClick={() => {
                               setOption(4)
-                              console.log('구매하기 실행');
-                              console.log('선택 옵션 : ' + 4);
-                              buy(i, i.game.location, 4);
+                              setTotalPrice(worldMap[i.game.location].price.landmark);
                             }}
                           >
                             <div>
@@ -1340,6 +1446,9 @@ export default function WordyGame() {
                             </div>
                             <div className='mt-[10px]'>랜드마크</div>
                           </div>
+                        </div>
+                        <div className='mt-[10px] text-[20px] flex flex-col justify-center items-center'>
+                          총 가격 : {totalPrice} 만원
                         </div>
                         <div className='mt-[16px] flex flex-col justify-center items-center'>
                           구매하시겠습니까??
@@ -1351,13 +1460,13 @@ export default function WordyGame() {
                               console.log('선택 옵션 : ' + option);
                               buy(i, i.game.location, option);
                             }}
-                          >예</div>
+                          >구매하기</div>
                           <div className='rounded-[4px] bg-red-300 w-[180px] h-[30px] flex justify-center items-center hover:cursor-pointer'
                             onClick={() => {
                               console.log('구입 안함');
                               playerTurn(turn)
                             }}
-                          >아니오</div>
+                          >건너뛰기</div>
                         </div>
                       </div>
                     }
@@ -1369,12 +1478,6 @@ export default function WordyGame() {
               </div>
             })}
           </div>
-
-          <div onClick={() => {
-            playerTurn(turn);
-
-          }}
-            className='rounded-[6px] w-[400px] h-[70px] bg-blue-500 text-[24px] text-white flex justify-center items-center relative top-[-104px] hover:cursor-pointer hover:bg-blue-600'>주사위 굴리기</div>
         </div>
       </div >
     </>

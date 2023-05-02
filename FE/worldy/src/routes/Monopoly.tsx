@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import TestFor3D from '../components/TestFor3D';
 import TestFor3DEdit from '../components/TestFor3DEdit';
 import TestSunghoon from '../components/TestSunghoon';
-import WordyGame from '../components/WordyGame';
+import WordyGame from '../components/worldygame/WordyGame';
 import LoaderPyramid from '../components/LoaderPyramid';
 
 export default function Monopoly() {
