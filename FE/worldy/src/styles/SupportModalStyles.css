@@ -1,0 +1,79 @@
+.custom-select {
+  appearance: none; /* 기본 셀렉트 스타일 제거 */
+  -webkit-appearance: none; /* Chrome 및 Safari용 */
+  -moz-appearance: none; /* Firefox용 */
+  background-size: 16px;
+  padding-right: 24px; /* 오른쪽 패딩 추가하여 화살표 영역을 비움 */
+}
+
+/*  */
+
+/* Variation of work by @mrhyddenn for Radios */
+
+.check-custom {
+  cursor: pointer;
+  position: relative;
+  margin: auto;
+  width: 18px;
+  height: 18px;
+  -webkit-tap-highlight-color: transparent;
+  transform: translate3d(0, 0, 0);
+}
+
+.check-custom:before {
+  content: '';
+  position: absolute;
+  top: -15px;
+  left: -15px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(34, 50, 84, 0.03);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.check-custom svg {
+  position: relative;
+  z-index: 1;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke: #c8ccd4;
+  stroke-width: 1.5;
+  transform: translate3d(0, 0, 0);
+  transition: all 0.2s ease;
+}
+
+.check-custom svg path {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 0;
+}
+
+.check-custom svg polyline {
+  stroke-dasharray: 22;
+  stroke-dashoffset: 66;
+}
+
+.check-custom:hover:before {
+  opacity: 1;
+}
+
+.check-custom:hover svg {
+  stroke: var(--accent-color, #a3e583);
+}
+
+#cbx2:checked + .check-custom svg {
+  stroke: var(--accent-color, #a3e583);
+}
+
+#cbx2:checked + .check-custom svg path {
+  stroke-dashoffset: 60;
+  transition: all 0.3s linear;
+}
+
+#cbx2:checked + .check-custom svg polyline {
+  stroke-dashoffset: 42;
+  transition: all 0.2s linear;
+  transition-delay: 0.15s;
+}
