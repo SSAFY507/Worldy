@@ -2,9 +2,11 @@ package com.ssafy.worldy.controller.game;
 
 import com.ssafy.worldy.model.game.dto.GameResultDto;
 import com.ssafy.worldy.model.game.dto.GameRoom;
+import com.ssafy.worldy.model.game.dto.MatchingResultDto;
 import com.ssafy.worldy.model.game.dto.MatchingWaitingRoom;
 import com.ssafy.worldy.model.game.repo.GameRoomRepo;
 import com.ssafy.worldy.model.game.service.GameService;
+import com.ssafy.worldy.model.game.service.RedisPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,7 @@ public class GameController {
 
     private final GameRoomRepo gameRoomRepo;
     private final GameService gameService;
+    private final RedisPublisher redisPublisher;
     private static final String SUCCESS = "success";
 
     /**
@@ -66,5 +69,13 @@ public class GameController {
         // kakaoId로 매칭 서버와 소켓할 방 생성
         MatchingWaitingRoom matchingWaitingRoom = MatchingWaitingRoom.builder().roomId("waiting-"+kakaoId).build();
         return new ResponseEntity<>(matchingWaitingRoom, HttpStatus.OK);
+    }
+
+    @PostMapping("/matching/result")
+    public ResponseEntity<MatchingResultDto> gameMatching(@RequestBody MatchingResultDto matchingResultDto) {
+        log.info("send socket");
+        redisPublisher.publish(matchingResultDto);
+
+        return new ResponseEntity<>(matchingResultDto, HttpStatus.OK);
     }
 }

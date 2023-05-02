@@ -2,31 +2,34 @@ package com.ssafy.worldy.matching.algorithm;
 
 import com.ssafy.worldy.matching.model.dto.MatchingRequestDto;
 import com.ssafy.worldy.matching.model.queue.QueueList;
+import com.ssafy.worldy.matching.model.service.GameMatchingSend;
+import com.ssafy.worldy.matching.model.service.RedisPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
 
 @RequiredArgsConstructor
 @Slf4j
 @Component
 public class Match {
     private final QueueList queueList;
-    private static boolean matched;
-    private static int gameMatchingQueueIdx;
-    private static Map<String,Boolean> matchingUser; // 이미 매칭된 유저 관리
+    private final GameMatchingSend gameMatchingSend;
+    //private static Map<String,Boolean> matchingUser =  new HashMap<>(); // 이미 매칭된 유저 관리
+    private final RedisPublisher redisPublisher;
 
     @Scheduled(fixedDelay = 10000, initialDelay = 1000) // 1초 후 10초마다 동작
     public void matching(){
         log.info("analyze game matching");
 
-        matchingUser = new HashMap<>();
         // thirdQueueUsers = new HashMap<>();
 
         for (PriorityQueue<MatchingRequestDto> queue : queueList.getQueueList()) {
@@ -37,13 +40,16 @@ public class Match {
 
             match: while (queue.size() >= 4) {// 대기큐에 4명이 이상이 있을 경우
 
+                log.info("4명넘음");
+
                 List<MatchingRequestDto> matchingResult = new ArrayList<>();
                 for (int i = 0; i < 4; i++) {
                     MatchingRequestDto user = queue.poll();
 
                     // 이미 매칭된 유저를 포함할 경우 현재 매칭 과정 취소 후 해당 유저를 대기큐에서 제거
-                    if (matchingUser.containsKey(user.getKakaoId()+user.getStartWaitingTime())) {
+                    if (queueList.getMATCH().containsKey(user.getKakaoId()+user.getStartWaitingTime())) {
                         queue.addAll(matchingResult);
+                        log.info("중복 제거");
                         continue match; // 대기큐 재탐색
                     }
 
@@ -52,11 +58,15 @@ public class Match {
 
                         MatchingRequestDto cancelUser = queueList.getCANCEL().get(user.getKakaoId());
 
-                        LocalDate cancelTime = LocalDate.parse(cancelUser.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                        LocalDate userStartWaitingTime = LocalDate.parse(user.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                        LocalDateTime cancelTime = LocalDateTime.parse(cancelUser.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                        LocalDateTime userStartWaitingTime = LocalDateTime.parse(user.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-                        if(userStartWaitingTime.compareTo(cancelTime)<=0) {// (2022-08-11)와 (2022-08-31) 비교 결과: -20 즉, 음수 반환 시 cancelTime이 userStartWaitingTime보다 이후
+                        Duration diff = Duration.between(cancelTime.toLocalTime(), userStartWaitingTime.toLocalTime());
+
+                        if(diff.getSeconds()<=0) {// (2022-08-11)와 (2022-08-31) 비교 결과: -20 즉, 음수 반환 시 cancelTime이 userStartWaitingTime보다 이후
                             queue.addAll(matchingResult);
+                            log.info("취소 제거" + cancelTime + " " +userStartWaitingTime );
+                            log.info(matchingResult.toString());
                             continue match; // 다음 큐 탐색
                         }
                     }
@@ -67,37 +77,57 @@ public class Match {
                 log.info("queue game start!");
 
                 for (MatchingRequestDto matchingRequestDto : matchingResult) {
-                    matchingUser.put(matchingRequestDto.getKakaoId()+matchingRequestDto.getStartWaitingTime(), true); // 매칭된 유저 정보 넣기
+                    queueList.getMATCH().put(matchingRequestDto.getKakaoId()+matchingRequestDto.getStartWaitingTime(), matchingRequestDto); // 매칭된 유저 정보 넣기
                     log.info(matchingRequestDto.toString());
-
+                    //redisPublisher.publish(matchingResult);
                 }
+                gameMatchingSend.sendGameMatchingResult(matchingResult);
             }
         }
 
-        // 모든 대기큐에서 매칭된 유저와 5분 이상 대기한 유저 지우기
+        // 모든 대기큐에서 매칭된 유저와 5분 이상 대기한 유저와 매칭 취소 유저 지우기
         for (PriorityQueue<MatchingRequestDto> queue : queueList.getQueueList()) {
             int size = queue.size();
-            for(int idx=0;idx<size;idx++) {
+            delete : for(int idx=0;idx<size;idx++) {
                 MatchingRequestDto user = queue.poll();
+//
+//                // 1. 중간에 나간 유저 대기큐에서 삭제
+                for( Map.Entry<String, MatchingRequestDto> entry : queueList.getCANCEL().entrySet() ){
+                    String key = entry.getKey();
 
+                    MatchingRequestDto cancelUser = entry.getValue();
+                    LocalDateTime cancelTime = LocalDateTime.parse(cancelUser.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")); // 취소한 유저의 시간 정보
+                    LocalDateTime userStartWaitingTime = LocalDateTime.parse(user.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")); // 대기한 유저의 대기 시작 시간 정보
+
+                    Duration diff = Duration.between(cancelTime.toLocalTime(), userStartWaitingTime.toLocalTime());
+
+                    // 대기한 유저가 취소한 유저라면 큐에서 삭제(다시 넣지 X )
+                    // cancelTime.toLocalTime()이 이후면 음수 출력됨
+                    if(diff.getSeconds()<=0) {
+                        continue delete;
+                    }
+                }
+
+                // 2. 대기 시간 최대 5분이 지난 유저는 대기큐에서 삭제
                 LocalDateTime now = LocalDateTime.now();
                 LocalDateTime startWaitingTime = LocalDateTime.parse(user.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
                 Duration diff = Duration.between(now.toLocalTime(), startWaitingTime.toLocalTime());
 
                 // 310000 : 5분 10초
-                // 대기 시간 최대 5분이 지난 유저는 대기큐에서 삭제
                 if(diff.getSeconds()>=310000) continue;
 
-                // 매칭된 유저를 대기큐에서 삭제
-                for( Map.Entry<String, Boolean> entry : matchingUser.entrySet() ){
-                    String key = entry.getKey();
-                    if(!key.equals(user.getKakaoId()+user.getStartWaitingTime())) {
-                        queue.add(user);
+                // 3. 매칭된 유저를 대기큐에서 삭제
+                if (queueList.getMATCH().entrySet().size()>0) {
+                    for( Map.Entry<String, MatchingRequestDto> entry : queueList.getMATCH().entrySet() ){
+                        String key = entry.getKey();
+                        if(!key.equals(user.getKakaoId()+user.getStartWaitingTime())) {
+                            queue.add(user);
+                        }
                     }
+                } else {
+                    queue.add(user);
                 }
-
-                // 중간에 나간 유저 대기큐에서 삭제
             }
         }
 
@@ -186,10 +216,28 @@ public class Match {
     }
 
     //
-    @Scheduled(fixedDelay = 60000, initialDelay = 1000) // 1초 후 60초마다 동작
+    @Scheduled(fixedDelay = 310000, initialDelay = 1000) // 1초 후 60초마다 동작
     public void removeCancelUser() {
 
         for( Map.Entry<String, MatchingRequestDto> entry : queueList.getCANCEL().entrySet() ){
+            MatchingRequestDto matchingRequestDto = entry.getValue();
+
+            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime startWaitingTime = LocalDateTime.parse(matchingRequestDto.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+            Duration diff = Duration.between(now.toLocalTime(), startWaitingTime.toLocalTime());
+
+            // 70초 지난 대기 취소 요청은 삭제
+            if(diff.getSeconds()>=70000) {
+                queueList.getCANCEL().remove(matchingRequestDto.getKakaoId()+matchingRequestDto.getStartWaitingTime());
+            }
+        }
+    }
+
+    @Scheduled(fixedDelay = 310000, initialDelay = 1000) // 1초 후 60초마다 동작
+    public void removeMatchUser() {
+
+        for( Map.Entry<String, MatchingRequestDto> entry : queueList.getMATCH().entrySet() ){
             MatchingRequestDto matchingRequestDto = entry.getValue();
 
             LocalDateTime now = LocalDateTime.now();

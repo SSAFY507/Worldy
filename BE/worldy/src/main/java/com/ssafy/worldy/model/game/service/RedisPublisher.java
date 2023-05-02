@@ -1,6 +1,7 @@
 package com.ssafy.worldy.model.game.service;
 
 import com.ssafy.worldy.model.game.dto.Emoticon;
+import com.ssafy.worldy.model.game.dto.MatchingResultDto;
 import com.ssafy.worldy.model.game.dto.Player;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,5 +35,12 @@ public class RedisPublisher {
         log.info("Player : " + player.toString());
 
         redisTemplate.convertAndSend(topic.getTopic(), player);
+    }
+
+    public void publish (MatchingResultDto matchingResultDto) {
+
+        log.info("Topic : " + topic.getTopic());
+
+        redisTemplate.convertAndSend(topic.getTopic(), matchingResultDto);
     }
 }

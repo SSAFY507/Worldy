@@ -39,4 +39,20 @@ public class GameMatchingProducer {
         log.info("send message : " + matchingRequestDto.toString());
         rabbitTemplate.convertAndSend("worldy.matching.exchange", "worldy.key", matchingRequestDto);
     }
+
+    public void sendCancelMatchingServer(String roomId) {
+
+        String[] splitRoomId = roomId.split("-");
+
+        User user = userRepo.findByKakaoId(splitRoomId[1]).orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
+
+        SimpleDateFormat startWaitingTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date now = new Date();
+
+        MatchingRequestDto matchingRequestDto = MatchingRequestDto.builder()
+                .kakaoId(user.getKakaoId()).roomId(roomId).mmr(user.getMmr()).level(user.getLevel()).startWaitingTime(startWaitingTime.format(now)).build();
+
+        log.info("send message : " + matchingRequestDto.toString());
+        rabbitTemplate.convertAndSend("worldy.matching.exchange", "worldy.cancle.key", matchingRequestDto);
+    }
 }

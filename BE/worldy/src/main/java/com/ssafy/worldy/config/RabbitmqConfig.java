@@ -73,7 +73,6 @@ public class RabbitmqConfig {
     RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(messageConverter);
-        log.info("보낸다");
         return rabbitTemplate;
     }
 

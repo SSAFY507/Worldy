@@ -92,11 +92,19 @@ public class StompHandler implements ChannelInterceptor {
             String roomId = getRoomId(Optional.ofNullable((String) message.getHeaders().get("simpDestination")).orElse("InvalidRoomId"));
 
             String[] splitRoomId = roomId.split("-");
+            log.info(roomId);
 
             // 매칭 요청의 경우 매칭 서버로 전송
             if(splitRoomId.length==2) {
+                //세션에 대한 정보 추가
+                accessor.getSessionAttributes().put("socketType", "matching");
+                accessor.getSessionAttributes().put("roomId", roomId);
                 gameMatchingProducer.sendMatchingServer(roomId);
+            } else {
+                accessor.getSessionAttributes().put("socketType", "game");
             }
+
+            log.info(accessor.getSessionAttributes().get("socketType").toString());
         }
 //        else if (accessor.getCommand() == StompCommand.SUBSCRIBE) { // 구독 요청 시 인원수 확인
 //

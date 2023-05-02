@@ -49,4 +49,6 @@ public class QueueList {
     final PriorityQueue<MatchingRequestDto> SILVER_GOLD_PLATINUM  = new PriorityQueue<>(); // 17
     final PriorityQueue<MatchingRequestDto> ALL = new PriorityQueue<>();
     final Map<String,MatchingRequestDto> CANCEL = new HashMap();
+    final Map<String,MatchingRequestDto> MATCH = new HashMap();
+
 }

@@ -3,6 +3,7 @@ package com.ssafy.worldy.model.game.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.worldy.model.game.dto.Emoticon;
+import com.ssafy.worldy.model.game.dto.MatchingResultDto;
 import com.ssafy.worldy.model.game.dto.Player;
 import com.ssafy.worldy.exception.CustomException;
 import com.ssafy.worldy.exception.CustomExceptionList;
@@ -41,6 +42,18 @@ public class RedisSubscriber {
                 // subscriber에게 메시지 전송
                 log.info("Redis Subscribe Message : " + player.toString());
                 template.convertAndSend("/sub/" + player.getRoomId(), player);
+            } else {
+
+                // subscriber에게 메시지 전송
+                log.info("Redis Subscribe Message : ");
+
+                MatchingResultDto matchingResultDto = objectMapper.readValue(publishMessage, MatchingResultDto.class);
+
+                template.convertAndSend("/sub/" + matchingResultDto.getUser1().getRoomId(),matchingResultDto);
+                template.convertAndSend("/sub/" + matchingResultDto.getUser2().getRoomId(),matchingResultDto);
+                template.convertAndSend("/sub/" + matchingResultDto.getUser3().getRoomId(),matchingResultDto);
+                template.convertAndSend("/sub/" + matchingResultDto.getUser4().getRoomId(),matchingResultDto);
+
             }
         } catch (JsonProcessingException e) {
             log.error(e.getMessage());

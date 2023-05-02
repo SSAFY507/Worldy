@@ -12,6 +12,7 @@ import java.io.Serializable;
 @ToString
 @Data
 @SuperBuilder
+@NoArgsConstructor
 public class MatchingRequestDto implements Serializable {
 
     private static final long serialVersionUID = 6529685098267757690L;
