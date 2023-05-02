@@ -39,7 +39,7 @@ public class Quiz {
     @Column(name = "image", nullable = true)
     private String image; // 퀴즈 이미지
 
-    @Column(name = "content", nullable = false)
+    @Column(name = "content", nullable = false, length = 1000)
     private String content; // 퀴즈 내용
 
     @Column(name = "answer", nullable = false)
@@ -51,7 +51,7 @@ public class Quiz {
     @Column(name = "hint_type", nullable = true)
     private boolean hint_type; // 힌트 타입 - 초성 1 아니면 0
 
-    @Column(name = "commentary", nullable = false)
+    @Column(name = "commentary", nullable = false, length = 1000)
     private String commentary; // 해설
 
     @Column(name = "report", nullable = false)

@@ -8,7 +8,7 @@ import config
 from time import sleep
 
 # QUIZ SQL
-INSERT_QUIZ = "insert into quiz (nation_id, publisher_type, category, level, content, answer, hint, hint_type) values (%s, %s, %s, %s, %s, %s, %s, %s)"
+INSERT_QUIZ = "insert into quiz (nation_id, publisher_type, quiz_type, category, level, content, answer, hint, hint_type, commentary, report) values (%s, %s, %s, %s, %s, %s, %s, %s, 1, %s, 0)"
 
 DELETE_QUIZ = "delete from quiz where nation_id = %s and publisher_type = 'gpt'"
 
@@ -87,7 +87,7 @@ def find_new_content(nation, nation_id):
                 print(quiz)
                 
                 news_link = "\n\n\n 출처 : " + driver.current_url
-                cur.execute(INSERT_QUIZ, (str(nation_id), "gpt", "aff", "3", quiz["quiz"] + news_link, quiz["answer"], quiz["hint"], "1"))
+                cur.execute(INSERT_QUIZ, (str(nation_id), "gpt", "blank", "aff", "3", quiz["quiz"], quiz["answer"], quiz["hint"], news_link))
 
                 conn.commit() 
             except Exception as e:
