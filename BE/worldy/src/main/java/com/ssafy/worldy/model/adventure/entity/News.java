@@ -15,6 +15,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "news")
 public class News {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "news_id", nullable = false)

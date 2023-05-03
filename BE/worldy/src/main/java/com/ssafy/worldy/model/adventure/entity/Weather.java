@@ -15,6 +15,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name = "weather")
 public class Weather {
+
     @Id
     @Column(name = "weather_id", nullable = false)
     private Long weatherId;
@@ -32,7 +33,6 @@ public class Weather {
 
     public WeatherDto toDto(){
         return WeatherDto.builder()
-                .weatherId(this.weatherId)
                 .weatherName(this.weatherName)
                 .temp(this.temp)
                 .build();

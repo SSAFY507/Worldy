@@ -5,12 +5,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @SuperBuilder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExchangeRateDto {
+public class InfoDto {
 
     private String nationName;
+
     private String exchangeRate;
+
+    private List<NewsDto> newsDtoList;
+
+    private String weatherName;
+
+    private float temp;
 }
