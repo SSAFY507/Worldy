@@ -26,6 +26,14 @@ type Spot = {
   contents: string,
   continent?: string,
   owner: number,
+  option: number,
+  toll: number,
+  build: {
+    land: boolean,
+    villa: boolean,
+    hotel: boolean,
+    landmark: boolean,
+  },
 }
 
 
@@ -58,6 +66,7 @@ type Player = {
 
 export default function WordyGame() {
 
+  const [tmp, setTmp] = useState<number>();
 
   const dicesElement1 = document.querySelectorAll(".dice");
   const dicesElement2 = document.querySelectorAll(".dice2");
@@ -81,14 +90,12 @@ export default function WordyGame() {
   function animateDice(randomNumber: number, dice: any) {
     if (dice.id === `dice-${randomNumber}`) {
       const dots = Array.from(dice.children);
-      console.log(dots)
 
       setTimeout(function () {
         dice.classList.add("active");
       });
     }
   }
-
   const [worldMap, setWorldMap] = useState<Spot[]>([
     {
       location: 0,
@@ -102,6 +109,14 @@ export default function WordyGame() {
       type: 'start',
       contents: '시작점 입니다. 월급을 받으세요. + 300,000',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 1,
@@ -117,6 +132,14 @@ export default function WordyGame() {
       contents: '태국의 수도는 방콕. 어쩌구 저쩌구',
       continent: '아시아',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
 
     },
     {
@@ -133,6 +156,14 @@ export default function WordyGame() {
       contents: '싱가포르의 수도는 싱가폴\ 도시 국가이다.',
       continent: '아시아',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
 
     },
     {
@@ -147,6 +178,14 @@ export default function WordyGame() {
       type: 'item',
       contents: '보물상자를 발견했습니다.',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 4,
@@ -162,6 +201,14 @@ export default function WordyGame() {
       contents: '인도의 수도는 뉴델리. 세상에서 가장 많은 인구를 보유하고있다.',
       continent: '아시아',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 5,
@@ -177,6 +224,14 @@ export default function WordyGame() {
       contents: '여기는 특수지역입니다.',
       continent: '아시아',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 6,
@@ -192,6 +247,14 @@ export default function WordyGame() {
       contents: '사우디 아라비아는 석유가 많이 난다. 저쩌구',
       continent: '아시아',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 7,
@@ -207,6 +270,14 @@ export default function WordyGame() {
       contents: '중국의 수도는 베이징. 어쩌구 저쩌구',
       continent: '아시아',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 8,
@@ -222,6 +293,14 @@ export default function WordyGame() {
       contents: '일본의 수도는 후지산. 어쩌구 저쩌구',
       continent: '아시아',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 9,
@@ -237,6 +316,14 @@ export default function WordyGame() {
       contents: '한국의 수도는 서울. BTS, 봉준호, 손흥민, Jay Park',
       continent: '아시아',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 10,
@@ -250,6 +337,14 @@ export default function WordyGame() {
       type: 'desert',
       contents: '무인도에 불시착했습니다. 3턴 쉬세요.',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 11,
@@ -264,6 +359,14 @@ export default function WordyGame() {
       landmark: '헝가리 모스크',
       contents: '헝가리 수도는 부다페스트. 큰 도시',
       continent: '유럽', owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 12,
@@ -279,6 +382,14 @@ export default function WordyGame() {
       contents: '스페인는 열정의 나라,어쩌구 저쩌구',
       continent: '유럽',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 13,
@@ -292,6 +403,14 @@ export default function WordyGame() {
       type: 'item',
       contents: '보물상자를 발견했습니다.',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 14,
@@ -307,6 +426,14 @@ export default function WordyGame() {
       contents: '이탈리아의 수도는 로마. 로마에 가면 로마의 법을 따르라',
       continent: '유럽',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 15,
@@ -322,6 +449,14 @@ export default function WordyGame() {
       contents: '미정',
       continent: '유럽',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 16,
@@ -337,6 +472,14 @@ export default function WordyGame() {
       contents: '스위스의 수도는 베른. 스위스는 중립국',
       continent: '유럽',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 17,
@@ -352,6 +495,14 @@ export default function WordyGame() {
       contents: '독일의 수도는 베를린. 벤츠의 나라',
       continent: '유럽',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 18,
@@ -367,6 +518,14 @@ export default function WordyGame() {
       contents: '프랑스의 수도는 파리. 낭만의 도시',
       continent: '유럽',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 19,
@@ -382,6 +541,14 @@ export default function WordyGame() {
       contents: '영국의 수도는 런던. 태양이 지지 않는 나라',
       continent: '유럽',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 20,
@@ -395,6 +562,14 @@ export default function WordyGame() {
       type: 'port',
       contents: '특가 항공권 당첨! 원하는 곳으로 이동합니다.',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 21,
@@ -409,6 +584,14 @@ export default function WordyGame() {
       landmark: '가나 초콜릿',
       contents: '가나는 초콜릿이 유명하다.',
       continent: '아프리카', owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 22,
@@ -424,6 +607,14 @@ export default function WordyGame() {
       contents: '소말리아 수도는 리비아. 해적을 조심하라',
       continent: '아프리카',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 23,
@@ -437,6 +628,14 @@ export default function WordyGame() {
       type: 'item',
       contents: '보물상자를 발견했습니다.',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 24,
@@ -452,6 +651,14 @@ export default function WordyGame() {
       contents: '모르코의 수도는 모르코. 좋은 나라입니다',
       continent: '아프리카&오세아니아',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 25,
@@ -467,6 +674,14 @@ export default function WordyGame() {
       contents: '특수지역입니다.',
       continent: '아프리카&오세아니아',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 26,
@@ -482,6 +697,14 @@ export default function WordyGame() {
       contents: '남어공의 수도는 키예프. 어쩔티비',
       continent: '아프리카&오세아니아',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 27,
@@ -497,6 +720,14 @@ export default function WordyGame() {
       contents: '이집트의 수도는 카이로. 이집트는 문명의 시작',
       continent: '아프리카&오세아니아',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 28,
@@ -512,6 +743,14 @@ export default function WordyGame() {
       contents: '호주의 수도는 어디일까요',
       continent: '아프리카&오세아니아',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 29,
@@ -527,6 +766,14 @@ export default function WordyGame() {
       contents: '뉴질랜드의 수도는 키위. 로마에 가면 로마의 법을 따르라',
       continent: '아프리카&오세아니아',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 30,
@@ -540,6 +787,14 @@ export default function WordyGame() {
       type: 'olympic',
       contents: '하나된 세계 올림픽으로!',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 31,
@@ -555,6 +810,14 @@ export default function WordyGame() {
       contents: '세상에서 가장 긴 나라 칠레',
       continent: '아메리카',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 32,
@@ -570,6 +833,14 @@ export default function WordyGame() {
       contents: '잉카 문명의 고대 제국 페루',
       continent: '아메리카',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 33,
@@ -583,6 +854,14 @@ export default function WordyGame() {
       type: 'item',
       contents: '보물상자를 발견했습니다.',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 34,
@@ -598,6 +877,14 @@ export default function WordyGame() {
       contents: '삼바의 나라 브라질',
       continent: '아메리카',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 35,
@@ -613,6 +900,14 @@ export default function WordyGame() {
       contents: '특수지역입니다.',
       continent: '아메리카',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 36,
@@ -628,6 +923,14 @@ export default function WordyGame() {
       contents: '멕시코의 수도는 멕시코시티. 로마에 가면 로마의 법을 따르라',
       continent: '유럽',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 37,
@@ -641,6 +944,14 @@ export default function WordyGame() {
       type: 'tax',
       contents: '탈세는 위법입니다. 가진 재산의 10%를 세금으로 납부하세요',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 38,
@@ -656,6 +967,14 @@ export default function WordyGame() {
       contents: '캐나다의 수도는 오타와',
       continent: '아메리카',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
     {
       location: 39,
@@ -672,6 +991,14 @@ export default function WordyGame() {
       contents: '미국의 수도는 워싱턴D.C 자유의 나라',
       continent: '아메리카',
       owner: 0,
+      option: 0,
+      toll: 0,
+      build: {
+        land: false,
+        villa: false,
+        hotel: false,
+        landmark: false,
+      },
     },
   ])
 
@@ -753,19 +1080,23 @@ export default function WordyGame() {
 
   let lst = [p1, p2, p3, p4]
 
-  let [cnt, setCnt] = useState(0);
-  let [dice1, setDice1] = useState(0);
-  let [dice2, setDice2] = useState(0);
-  let [dice, setDice] = useState(0);
-  let [double, setDouble] = useState(false);
-  let [turn, setTurn] = useState(0);
-  let [option, setOption] = useState(1);
-  let [totalPrice, setTotalPrice] = useState(0);
+  const [cnt, setCnt] = useState(0);
+  const [dice1, setDice1] = useState(0);
+  const [dice2, setDice2] = useState(0);
+  const [dice, setDice] = useState(0);
+  const [double, setDouble] = useState(false);
+  const [turn, setTurn] = useState(0);
+  const [option, setOption] = useState(1);
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [buyMode, setBuyMode] = useState(true);
+  const [message, setMessage] = useState('');
+  const [toll, setToll] = useState(0);
 
   // 플레이어 1회 턴 함수
 
   const playerTurn = async (turn: number) => {
 
+    setBuyMode(true);
     p1.game.state = false;
     p2.game.state = false;
     p3.game.state = false;
@@ -920,13 +1251,53 @@ export default function WordyGame() {
     if (spot.type === 'nation') { // 도착지 종류가 나라일 때
       if (spot.owner) {  // 주인이 있을때
         if (spot.owner === p.pNum) {
-          console.log(p.name + '님 본인의 땅입니다. 추가 건물을 지으시겠습니까?')
         } else {
-          console.log('플레이어' + spot.owner + '소유지 입니다. 통행료를 지불하세요.');
+          setBuyMode(false);
+          setMessage('플레이어' + spot.owner + '소유지 입니다. 통행료' + spot.toll + '만원을 지불하세요.');
+          if (p.pNum === 1) {
+            setP1((prevState) => ({
+              ...prevState,
+              game: {
+                ...prevState.game,
+                balance: p1.game.balance - spot.toll,
+              }
+            }))
+            if (spot.owner === 2) {
+
+            } else if (spot.owner === 3) {
+
+            } else if (spot.owner === 4) {
+
+            }
+          } else if (p.pNum === 2) {
+            if (spot.owner === 1) {
+
+            } else if (spot.owner === 3) {
+
+            } else if (spot.owner === 4) {
+
+            }
+          } else if (p.pNum === 3) {
+            if (spot.owner === 1) {
+
+            } else if (spot.owner === 2) {
+
+            } else if (spot.owner === 4) {
+
+            }
+          } else if (p.pNum === 4) {
+            if (spot.owner === 1) {
+
+            } else if (spot.owner === 2) {
+
+            } else if (spot.owner === 3) {
+
+            }
+          }
         }
 
       } else {  // 주인이 없을 때
-        console.log(spot.name + '의 가격은' + spot.price.land + '만원 입니다. 구입하시겠습니까?');
+        console.log(spot.name + '를 구입하시겠습니까?');
       }
     } else if (spot.type === 'item') {  // 보물상자일 때
       console.log('보물상자를 열어보세요!');
@@ -951,8 +1322,74 @@ export default function WordyGame() {
   }
 
 
+  // 통행료 계산 함수
+  const tollCalculate = (spot: Spot) => {
+
+    console.log('build: ')
+    console.log(spot.location)
+    console.log(spot.name)
+    console.log(spot.build)
+
+    const build = spot.build;
+    let result: number = 0;
+    if (!build.villa && !build.hotel && !build.landmark) {
+      console.log('땅만');
+      // 땅만 있을 때
+      result = (spot.price.land) / 2;
+      console.log(result);
+      console.log('만원');
+    } else if (build.villa && !build.hotel && !build.landmark) {
+      // 빌라 1
+      console.log('빌라 1');
+      result = (spot.price.land + spot.price.villa) / 2;
+    } else if (build.villa && build.hotel && !build.landmark) {
+      // 빌라 1 ,호텔 1
+      console.log('빌라 1 ,호텔 1');
+      result = (spot.price.land + spot.price.villa + spot.price.hotel) / 2;
+    } else if (build.villa && build.hotel && build.landmark) {
+      // 빌라 1, 호텔 1, 랜드마크 1
+      console.log('빌라 1 ,호텔 1, 랜드마크 1');
+      result = (spot.price.land + spot.price.villa + spot.price.hotel + spot.price.landmark);
+    } else if (!build.villa && build.hotel && !build.landmark) {
+      // 호텔 1
+      console.log('호텔 1');
+      result = (spot.price.land + spot.price.hotel) / 2;
+    } else if (!build.villa && !build.hotel && build.landmark) {
+      // 랜드마크 1
+      console.log('랜드마크 1');
+      result = (spot.price.land + spot.price.landmark);
+    } else if (build.villa && !build.hotel && build.landmark) {
+      // 빌라 1, 랜드마크 1
+      console.log('빌라 1, 랜드마크 1');
+      result = (spot.price.land + spot.price.villa + spot.price.landmark);
+    } else if (build.villa && !build.hotel && build.landmark) {
+      // 호텔 1
+      console.log('호텔 1');
+      result = (spot.price.land + spot.price.hotel) / 2;
+    } else if (!build.villa && build.hotel && build.landmark) {
+      // 호텔 1, 랜드마크 1
+      console.log('호텔 1, 랜드마크 1');
+      result = (spot.price.land + spot.price.hotel + spot.price.landmark);
+    }
+    console.log('result check >>> ')
+    console.log(result);
+
+    setWorldMap((prevState) =>
+      prevState.map((item, key) =>
+        key === spot.location ? {
+          ...item,
+          toll: result,
+        } : item
+      )
+    );
+
+
+  }
+
+
+
   // 나라 구매하기
-  const buy = (p: Player, nation: number, option: number): void => {
+  async function buy(p: Player, nation: number, option: number) {
 
     // 도시를 소유하고 있을때만 랜드마크 건설 가능하도록
 
@@ -965,44 +1402,97 @@ export default function WordyGame() {
 
     if (option === 1) {
       if (balance - spot.price.land > 0) {
-        console.log('땅 구입')
+
         balance -= spot.price.land;
+        setWorldMap((prevState) =>
+          prevState.map((item, key) =>
+            key === nation ? {
+              ...item,
+              build: {
+                land: true,
+                villa: item.build.villa,
+                hotel: item.build.hotel,
+                landmark: item.build.landmark,
+              }
+            } : item
+          )
+        );
       } else {
-        console.log('금액이 모자랍니다.')
+        alert('금액이 모자랍니다.')
         return
       }
     } else if (option === 2) {
       if (balance - (spot.price.land + spot.price.villa) > 0) {
-        console.log('별장 건설')
+
         balance -= (spot.price.land + spot.price.villa);
+        setWorldMap((prevState) =>
+          prevState.map((item, key) =>
+            key === nation ? {
+              ...item,
+              build: {
+                land: item.build.land,
+                villa: true,
+                hotel: item.build.hotel,
+                landmark: item.build.landmark,
+              },
+            } : item
+          )
+        );
 
       } else {
-        console.log('금액이 모자랍니다.')
+        alert('금액이 모자랍니다.')
         return
       }
     } else if (option === 3) {
       if (balance - (spot.price.land + spot.price.hotel) > 0) {
-        console.log('호텔 건설')
+
         balance -= (spot.price.land + spot.price.hotel);
+        setWorldMap((prevState) =>
+          prevState.map((item, key) =>
+            key === nation ? {
+              ...item,
+              build: {
+                land: item.build.land,
+                villa: item.build.villa,
+                hotel: true,
+                landmark: item.build.landmark,
+              }
+            } : item
+          )
+        );
 
       } else {
-        console.log('금액이 모자랍니다.')
+        alert('금액이 모자랍니다.')
         return
       }
     } else if (option === 4) {
       if (worldMap[nation].owner === p.pNum) {
         if (p.game.balance - spot.price.landmark > 0) {
-          console.log('랜드마크 건설!!!')
+
           balance -= spot.price.landmark;
+          setWorldMap((prevState) =>
+            prevState.map((item, key) =>
+              key === nation ? {
+                ...item,
+                build: {
+                  land: item.build.land,
+                  villa: item.build.villa,
+                  hotel: item.build.hotel,
+                  landmark: true,
+                }
+              } : item
+            )
+          );
 
         } else {
-          console.log('금액이 모자랍니다.')
+          alert('금액이 모자랍니다.')
         }
       } else {
-        console.log('랜드마크는 다음번 방문했을 때 건설 가능합니다.')
+        alert('랜드마크는 다음번 방문했을 때 건설 가능합니다.')
         return
       }
     }
+
 
     if (p.pNum === 1) {
       setP1((prevState) => ({
@@ -1043,16 +1533,43 @@ export default function WordyGame() {
         }
       }))
     }
-    // 월드맵에 소유주 추가하기
+    // 월드맵에 소유주/ 건설된 옵션 추가하기
+
+
+
     setWorldMap((prevState) =>
       prevState.map((item, key) =>
-        key === nation ? { ...item, owner: p.pNum } : item
+        key === nation ? {
+          ...item,
+          owner: p.pNum,
+          option: option,
+        } : item
       )
     );
 
+
+    setBuyMode(false);
+    if (option === 1) {
+      setMessage(p.name + '님 구매 완료');
+    } else if (option === 2) {
+      setMessage(p.name + '님 구매 및 별장 건설');
+    } else if (option === 3) {
+      setMessage(p.name + '님 구매 및 호텔 건설');
+    } else if (option === 4) {
+      setMessage(p.name + '님 랜드마크 건설');
+    }
+    setTmp(spot.location)
+
+    // await tollCalculate(spot);
+    setOption(1);
+
   }
 
-
+  useEffect(() => {
+    if (tmp) {
+      tollCalculate(worldMap[tmp])
+    }
+  }, [tmp])
   // 색상 바꾸기 예제
   // const [color, setColor] = useState<number>(0);
   // const [inputColor, setInputColor] = useState<string>('white');
@@ -1093,6 +1610,9 @@ export default function WordyGame() {
                         {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
+                        {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
+                        {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
                     {i.location >= 0 && i.location < 10 && i.type === 'item' ? <div className='w-[90px] h-[90px] bg-purple-400 outline outline-1 flex flex-col items-center justify-start'>
@@ -1107,6 +1627,9 @@ export default function WordyGame() {
                         {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
+                        {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
+                        {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
                     {i.location >= 0 && i.location < 10 && (i.type !== 'item' && i.type !== 'nation') ? <div className='w-[90px] h-[90px] bg-gray-100 outline outline-1 flex flex-col items-center justify-start'>
@@ -1121,6 +1644,9 @@ export default function WordyGame() {
                         {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
+                        {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
+                        {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
                   </div>
@@ -1141,6 +1667,9 @@ export default function WordyGame() {
                         {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
+                        {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
+                        {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
                     {i.location >= 10 && i.location < 20 && i.type === 'item' ? <div className='w-[90px] h-[90px] bg-purple-400 outline outline-1 flex flex-col items-center justify-start'>
@@ -1155,6 +1684,9 @@ export default function WordyGame() {
                         {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
+                        {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
+                        {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
                     {i.location >= 10 && i.location < 20 && (i.type !== 'item' && i.type !== 'nation') ? <div className='w-[90px] h-[90px] bg-gray-100 outline outline-1 flex flex-col items-center justify-start'>
@@ -1169,6 +1701,9 @@ export default function WordyGame() {
                         {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
+                        {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
+                        {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
                   </div>
@@ -1189,6 +1724,9 @@ export default function WordyGame() {
                         {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
+                        {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
+                        {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
                     {i.location >= 20 && i.location < 30 && i.type === 'item' ? <div className='w-[90px] h-[90px] bg-purple-400 outline outline-1 flex flex-col items-center justify-start'>
@@ -1203,6 +1741,9 @@ export default function WordyGame() {
                         {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
+                        {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
+                        {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
                     {i.location >= 20 && i.location < 30 && (i.type !== 'item' && i.type !== 'nation') ? <div className='w-[90px] h-[90px] bg-gray-100 outline outline-1 flex flex-col items-center justify-start'>
@@ -1217,6 +1758,9 @@ export default function WordyGame() {
                         {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
+                        {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
+                        {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
                   </div>
@@ -1237,6 +1781,9 @@ export default function WordyGame() {
                         {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
+                        {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
+                        {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
                     {i.location >= 30 && i.location < 40 && i.type === 'item' ? <div className='w-[90px] h-[90px] bg-purple-400 outline outline-1 flex flex-col items-center justify-start'>
@@ -1251,6 +1798,9 @@ export default function WordyGame() {
                         {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
+                        {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
+                        {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
                     {i.location >= 30 && i.location < 40 && (i.type !== 'item' && i.type !== 'nation') ? <div className='w-[90px] h-[90px] bg-gray-100 outline outline-1 flex flex-col items-center justify-start'>
@@ -1265,6 +1815,9 @@ export default function WordyGame() {
                         {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
+                        {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
+                        {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
                   </div>
@@ -1283,9 +1836,7 @@ export default function WordyGame() {
                     <div>보유자산 : {i.game.balance}만원</div>
                     <div>현재위치 : [{i.game.location}] {worldMap[i.game.location].name}</div>
                     <div>소유국가 : [{i.game.own + ''}]</div>
-                    <div>주사위1 : {i.game.dice1}</div>
-                    <div>주사위2 : {i.game.dice2}</div>
-                    <div>주사위합 : {i.game.dice}</div>
+                    <div>주사위 : [{i.game.dice1}, {i.game.dice2}]</div>
                     <div>순위 : {i.game.ranking}</div>
                     <div>몇바퀴 : {i.game.lap} 바퀴 </div>
                     <div>무인도 카운트 : {i.game.desert}</div>
@@ -1395,7 +1946,7 @@ export default function WordyGame() {
                       <div className='text-[12px]'>[{worldMap[i.game.location].owner ? `플레이어 ${worldMap[i.game.location].owner} 소유` : '구입 가능'}]</div>
                     </div>
                     <div className='text-[18px] mt-[10px] mb-[10px] h-[60px]'>{worldMap[i.game.location].contents}</div>
-                    {worldMap[i.game.location].type === 'nation' && !worldMap[i.game.location].owner &&
+                    {worldMap[i.game.location].type === 'nation' && (!worldMap[i.game.location].owner || worldMap[i.game.location].owner === turn) && (buyMode) &&
                       <div>
                         <div className='flex rounded-[4px] w-[380px] h-[100px] outline bg-gray-50'>
                           <div className={`flex flex-col justify-center items-center w-[95px] h-full hover:bg-blue-100 hover:cursor-pointer ${option === 1 ? 'bg-blue-200' : ''}`}
@@ -1434,7 +1985,7 @@ export default function WordyGame() {
                             </div>
                             <div className='mt-[10px]'>호텔</div>
                           </div>
-                          <div className={`flex flex-col justify-center items-center w-[95px] h-full hover:bg-blue-100 hover:cursor-pointer ${option === 4 ? 'bg-blue-200' : ''}`}
+                          <div className={`flex flex-col justify-center items-center w-[95px] h-full hover:bg-blue-100 hover:cursor-pointer ${(worldMap[i.game.location].option === 1 || worldMap[i.game.location].option === 2 || worldMap[i.game.location].option === 3) && option === 4 ? 'bg-blue-200' : ''}`}
                             onClick={() => {
                               setOption(4)
                               setTotalPrice(worldMap[i.game.location].price.landmark);
@@ -1456,8 +2007,7 @@ export default function WordyGame() {
                         <div className='flex justify-around items-center mt-[10px]'>
                           <div className='rounded-[4px] bg-blue-300 w-[180px] h-[30px] flex justify-center items-center hover:cursor-pointer'
                             onClick={() => {
-                              console.log('구매하기 실행');
-                              console.log('선택 옵션 : ' + option);
+
                               buy(i, i.game.location, option);
                             }}
                           >구매하기</div>
@@ -1470,6 +2020,10 @@ export default function WordyGame() {
                         </div>
                       </div>
                     }
+
+                    {!buyMode && <div className='w-[320px] h-[100px] bg-red-500 flex flex-col justify-center items-center'>
+                      <div className='text-[24px] text-white '>{message}</div>
+                    </div>}
 
 
 
