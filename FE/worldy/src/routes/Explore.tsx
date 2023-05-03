@@ -14,7 +14,7 @@ import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js"
 import { Vector3 } from "@react-three/fiber";
 import africa from "../assets/lowpoly/africa.glb";
 import asia from "../assets/lowpoly/asia.glb";
-import basemap from "../assets/lowpoly/base.glb";
+import basemap from "../assets/lowpoly/basemap.glb";
 import bg from "../assets/images/WorldBackgrorund.jpg"
 import europe from "../assets/lowpoly/europe.glb";
 import fontJSON from "../assets/fonts/NanumMyeongjo_Regular.json";
