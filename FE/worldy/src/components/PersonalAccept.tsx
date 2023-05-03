@@ -5,7 +5,7 @@ import '../styles/PersonalAcceptStyles.css';
 
 export default function PersonalAccept({ closePA }: { closePA: () => void }) {
   return (
-    <div className='z-50 absolute top-0 left-0 flex flex-col justify-start items-center w-full h-full bg-[rgba(255,255,255,0.5)] py-[5em]'>
+    <div className='z-50 absolute top-0 left-0 flex flex-col justify-start items-center w-full h-full py-[5em]'>
       <div className=' absolute w-[auto] h-auto bg-white flex flex-col justify-stretch items-center shadow-2xl rounded-md'>
         <h1 className='font-PtdBold text-[35px] text-center mt-[1.5em] mb-[.5em]'>
           개인정보처리방침
@@ -185,12 +185,12 @@ export default function PersonalAccept({ closePA }: { closePA: () => void }) {
             <br />
             <br />
             <br />
-            <p>동의를 거부할 경우 문의를 접수할 수 없습니다.</p>
-            <br />
             <p>
               * 그 외의 사항 및 자동 수집 정보와 관련된 사항은
               개인정보처리방침을 따릅니다.
             </p>
+            <br />
+            <br />
           </div>
         </div>
         <div className='h-[4em]  outline-red-500 w-full flex justify-center items-center pb-[1em]'>

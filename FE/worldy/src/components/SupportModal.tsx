@@ -59,7 +59,7 @@ export default function SupportModal({
         <textarea
           value={contentText}
           onChange={handleContentText}
-          className={`bg-[rgb(240,240,240)] flex-1 outline-[0.1em] outline outline-gray-300 p-[1em] align-top w-full rounded-sm`}
+          className={`bg-[rgb(240,240,240)] flex-1 outline-[0.1em] outline outline-gray-300 p-[1em] align-top w-full rounded-sm text-[1.4em] leading-[1.5em]`}
           disabled={!ableWrite}
           rows={10} // 높이를 조절합니다 (행의 수를 설정하세요)
           cols={50} // 너비를 조절합니다 (열의 수를 설정하세요)
@@ -76,7 +76,7 @@ export default function SupportModal({
           }`}
           maxLength={500}
         />
-        <div className=' h-[1.5em] w-full font-PtdMedium px-[0.2em] text-white flex justify-end items-center'>
+        <div className=' h-[1.5em] w-full font-PtdMedium px-[0.2em] text-white flex justify-end items-center text-[1.2em]'>
           {contentText.length}/500
         </div>
       </>
@@ -88,11 +88,6 @@ export default function SupportModal({
 
   const handleCheckPersonalAccept = () => {
     setCheckPersonalAccept(!checkPersonalAccept);
-  };
-
-  const [showPersonalAccept, setShowPersonalAccept] = useState<boolean>(false);
-  const handleShowPersonalAccept = () => {
-    setShowPersonalAccept(!showPersonalAccept);
   };
 
   const [reportOpponentID, setReportOpponentID] = useState<string>('');
@@ -117,13 +112,8 @@ export default function SupportModal({
 
   return (
     <div className='z-30 absolute top-0 left-0 w-full h-full bg-[rgba(255,255,255,0.3)] flex flex-col justify-start items-center py-[5em]'>
-      {showPersonalAccept && (
-        <PersonalAccept closePA={() => setShowPersonalAccept(false)} />
-      )}
       <div
-        className={`bg-gray-700 flex flex-col justify-between items-center px-[5em]  py-[3em]  outline-[0.1em] outline-white rounded-2xl ${
-          showPersonalAccept ? 'blur-sm' : ''
-        } shadow-2xl`}
+        className={`bg-gray-700 flex flex-col justify-between items-center px-[5em]  py-[3em]  outline-[0.1em] outline-white rounded-2xl shadow-2xl`}
         style={{
           width: `${modalSize * 3}em`,
           minHeight: `${modalSize * 2.8}em`,
@@ -136,7 +126,7 @@ export default function SupportModal({
               작성 유형
             </span>
             <select
-              className='pl-[.8em] flex-1 outline-[0.1em] outline outline-gray-400 custom-select bg-[rgb(240,240,240)] rounded-sm'
+              className='pl-[.8em] flex-1 outline-[0.1em] outline outline-gray-400 custom-select bg-[rgb(240,240,240)] rounded-sm text-[1.4em] font-PtdMedium'
               value={contentType}
               onChange={handleContentType}
             >
@@ -148,16 +138,16 @@ export default function SupportModal({
               </option>
             </select>
           </div>
-          <div className='w-[45%] h-[4em]  outline-green-400 flex flex-col justify-between'>
+          <div className='w-[45%] h-[4em]  outline-green-400 flex flex-col justify-between '>
             {contentType === 0 ? (
               <>
-                <span className='font-PtdSemiBOld h-[1.5em] mb-[0.5em]  outline-green-200 text-[1.2em] grid items-center text-white'>
+                <span className='h-[1.5em] mb-[0.5em]  outline-green-200 text-[1.2em] font-PtdMedium grid items-center text-white'>
                   문의 유형
                 </span>
                 <select
                   value={askType}
                   onChange={handleAskType}
-                  className=' flex-1 outline-[0.1em] outline outline-gray-400  pl-[0.8em] custom-select bg-[rgb(240,240,240)] rounded-sm'
+                  className=' flex-1 outline-[0.1em] outline outline-gray-400  pl-[0.8em] custom-select bg-[rgb(240,240,240)] rounded-sm text-[1.4em] font-PtdMedium'
                 >
                   {askTypeList.map((item, index) => (
                     <option
@@ -180,7 +170,7 @@ export default function SupportModal({
                   type='text'
                   value={reportOpponentID}
                   onChange={handleReportOpponentID}
-                  className=' flex-1 outline-[0.1em] outline outline-gray-400  pl-[0.8em] custom-select bg-[rgb(240,240,240)] rounded-sm'
+                  className=' flex-1 outline-[0.1em] outline outline-gray-400  pl-[0.8em] custom-select bg-[rgb(240,240,240)] rounded-sm text-[1.4em] font-PtdMedium'
                   placeholder='신고 대상의 닉네임을 입력해주세요...'
                 />
               </>
@@ -190,37 +180,15 @@ export default function SupportModal({
         <div className='outline-red-400 w-full flex-1 mt-[1em]'>
           <div className='w-full h-full flex flex-col justify-between items-center'>
             <div className='w-full flex-1  outline-green-500 flex flex-col justify-between'>
-              <span className='font-PtdSemiBOld  h-[1.5em] mb-[0.5em] outline-green-200 text-[1.2em] grid items-center text-white'>
+              <span className='font-PtdSemiBOld  h-[1.5em] mb-[0.5em] outline-green-200 text-[1.2em] grid items-center text-white '>
                 문의 내용
               </span>
-              <div className='flex-1 flex flex-col justify-stretch items-center pb-[1.5em]'>
+              <div className='flex-1 flex flex-col justify-stretch items-center pb-[1.5em] '>
                 {textArea()}
               </div>
             </div>
           </div>
         </div>
-        {/* <div className='outline-white h-[1.5em] w-full mb-[1em] flex flex-row justify-start items-center'>
-          <button
-            className='hover:underline hover:underline-white hover:text-white text-[rgb(200,200,200)]'
-            onClick={handleShowPersonalAccept}
-          >
-            <span className='mr-[0.5em]'>[개인 정보 처리 방침] 동의</span>
-          </button>
-          <div className='container-custm'>
-            <input
-              type='checkbox'
-              id='cbx2'
-              style={{ display: 'none' }}
-              onChange={handleCheckPersonalAccept}
-            />
-            <label htmlFor='cbx2' className='check-custom'>
-              <svg width='18px' height='18px' viewBox='0 0 18 18'>
-                <path d='M 1 9 L 1 9 c 0 -5 3 -8 8 -8 L 9 1 C 14 1 17 5 17 9 L 17 9 c 0 4 -4 8 -8 8 L 9 17 C 5 17 1 14 1 9 L 1 9 Z'></path>
-                <polyline points='1 9 7 14 15 4'></polyline>
-              </svg>
-            </label>
-          </div>
-        </div> */}
         <div className='w-full h-[3em] pt-[.5em]  flex flex-row justify-between items-center'>
           <button
             onClick={() => handleCloseModal()}
