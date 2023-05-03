@@ -170,7 +170,7 @@ export default function Support() {
     );
   };
 
-  const [modalOn, setModalOn] = useState<boolean>(true);
+  const [modalOn, setModalOn] = useState<boolean>(false);
   const [modalType, setModalType] = useState<boolean>(false);
   const handleSupportModal = (type: boolean) => {
     setModalOn(!modalOn);
@@ -185,7 +185,11 @@ export default function Support() {
           handleCloseModal={() => setModalOn(false)}
         />
       )}
-      <div className='w-full h-fit flex flex-col justify-stretch items-center'>
+      <div
+        className={`${
+          modalOn ? 'blur-sm' : ''
+        } w-full h-fit flex flex-col justify-stretch items-center`}
+      >
         <div className='w-full h-[300px]   flex flex-col justify-start items-center'>
           <div className='w-[100%] h-full   flex justify-start flex-col items-center px-[10px]'>
             <div className='my-[10px]  w-[100%] h-[17%] flex flex-row justify-end items-center px-[100px]'>

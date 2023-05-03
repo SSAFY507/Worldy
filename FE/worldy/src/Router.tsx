@@ -19,6 +19,7 @@ import Monopoly from './routes/Monopoly';
 import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
 import Updates from './routes/Updates';
+import MyPage from './routes/MyPage';
 
 import './styles/RouterStyle.css';
 
@@ -110,6 +111,7 @@ const AppLayout = () => {
           <Route path='/explore' element={<Explore />} />
           <Route path='/monopoly' element={<Monopoly />} />
           <Route path='/support' element={<Support />} />
+          <Route path='/mypage' element={<MyPage />} />
           <Route
             path='/tutorial'
             element={

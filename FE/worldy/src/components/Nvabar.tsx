@@ -8,6 +8,11 @@ import ReactDOM from 'react-dom';
 import BUTTON_RED from './Button_Red';
 import '../styles/NavBarAnimation.css';
 
+type NavListType = {
+  name: string;
+  path: string;
+};
+
 export default function Navbar({
   onLoginClick,
   onLoginAdmin,
@@ -15,13 +20,14 @@ export default function Navbar({
   onLoginClick: () => void;
   onLoginAdmin: () => void;
 }) {
-  const navList = [];
-  navList.push(['홈', '/']);
-  navList.push(['게임 정보', '/gameinfo']);
-  navList.push(['업데이트', '/updates']);
-  navList.push(['세계 탐험', '/explore']);
-  navList.push(['모노폴리', '/monopoly']);
-  navList.push(['고객 지원', '/support']);
+  const navList: NavListType[] = [
+    { name: '홈', path: '/' },
+    { name: '게임 정보', path: '/gameinfo' },
+    { name: '업데이트', path: '/upadtes' },
+    { name: '세계 탐험', path: '/explore' },
+    { name: '모노폴리', path: '/monopoly' },
+    { name: '고객 지원', path: '/support' },
+  ];
 
   const handleLoginModalClick = (e: any) => {
     e.preventDefault();
@@ -34,11 +40,36 @@ export default function Navbar({
     setTempLoginColor((prev) => !prev);
   };
 
+  const [loginState, setLoginState] = useState<boolean>(false);
+  const handleLoginState = () => {
+    setLoginState(!loginState);
+  };
+
+  const afterLoginButtonIcon: JSX.Element = (
+    <>
+      <svg
+        stroke='currentColor'
+        fill='currentColor'
+        strokeWidth='0'
+        viewBox='0 0 16 16'
+        height='1em'
+        width='1em'
+        xmlns='http://www.w3.org/2000/svg'
+      >
+        <path
+          fill-rule='evenodd'
+          d='M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 100-6 3 3 0 000 6z'
+          clip-rule='evenodd'
+        ></path>
+      </svg>
+    </>
+  );
+
   return (
     <>
       <nav>
         <div className='w-screen h-20 bg-neutral-950 flex flex-row items-center justify-between px-6'>
-          <div className='w-1/6 h-full flex flex-row justify-start items-center'>
+          <div className='w-1/5 h-full flex flex-row justify-start items-center'>
             <div className='w-fit h-fit' id='StarButton'>
               {[...Array(6)].map((_, i) => (
                 <div className={`star-${i + 1}`} key={i}>
@@ -80,40 +111,58 @@ export default function Navbar({
             <ul className='flex flex-row items-center justify-center h-full'>
               {navList.map((item, index) => (
                 <li key={index} className='mx-10'>
-                  <a href={item[1]}>
+                  <a href={item.path}>
                     <div
                       id='NavBarButtons-Animation'
                       className=' w-20 text-lg h-10 flex flex-row items-center justify-center text-center text-white font-PtdRegular '
                     >
-                      {item[0]}
+                      {item.name}
                     </div>
                   </a>
                 </li>
               ))}
             </ul>
           </div>
-          <div className='w-1/6 h-full flex flex-row items-center justify-between'>
-            <div className='w-1/2 flex flex-row justify-start'>
-              <button className='w-1/3'>
+          <div className='w-1/5 h-full flex flex-row items-center justify-between'>
+            <div className='w-1/2 h-full flex flex-row justify-start items-center outline outline-white'>
+              <button
+                className='w-[2.5em] h-[2.5em] mx-[.5em] outline grid place-items-center outline-red-300'
+                onClick={handleLoginState}
+              >
                 <ImSearch color='white' />
               </button>
-              <button className='w-1/3' onClick={adminLogin}>
+              <button
+                className='w-[2.5em] h-[2.5em] mx-[.5em] outline grid place-items-center outline-red-300'
+                onClick={adminLogin}
+              >
                 <AiOutlineGlobal
                   size='20'
                   color={tempLoginColor ? 'green' : 'white'}
                 />
               </button>
             </div>
-            <div className=' w-1/2 h-ful flex flex-row justify-start items-center'>
-              <BUTTON_RED
-                fontSize={16}
-                width={80}
-                height={35}
-                rounded={true}
-                onClick={handleLoginModalClick}
-                text='로그인'
-                fontFamily={'font-PtdRegular'}
-              />
+            <div className=' w-1/2 h-full flex flex-row justify-center items-center'>
+              {loginState ? (
+                <BUTTON_RED
+                  fontSize={16}
+                  width={50}
+                  height={50}
+                  rounded={true}
+                  onClick={handleLoginModalClick}
+                  text={afterLoginButtonIcon}
+                  fontFamily={'font-PtdRegular'}
+                />
+              ) : (
+                <BUTTON_RED
+                  fontSize={16}
+                  width={80}
+                  height={35}
+                  rounded={true}
+                  onClick={handleLoginModalClick}
+                  text='로그인'
+                  fontFamily={'font-PtdRegular'}
+                />
+              )}
             </div>
           </div>
         </div>
