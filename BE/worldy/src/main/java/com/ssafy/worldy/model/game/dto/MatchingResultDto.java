@@ -13,4 +13,5 @@ public class MatchingResultDto {
     private MatchingRequestDto user2;
     private MatchingRequestDto user3;
     private MatchingRequestDto user4;
+    private GameRoom gameRoom;
 }

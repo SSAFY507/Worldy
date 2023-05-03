@@ -11,4 +11,7 @@ import java.util.List;
 public interface QuizRepo extends JpaRepository<Quiz, Long> {
     @Query(value = "select * from quiz where nation_id = ?1", nativeQuery = true)
     List<Quiz> findAllNewsQuizByNationId(Long nationId);
+
+    @Query(value = "select * from quiz where nation_id = ?1 order by RAND() limit 1;", nativeQuery = true)
+    Quiz findRandQuizByNationId(Long nationId);
 }

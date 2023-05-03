@@ -1,5 +1,6 @@
 package com.ssafy.worldy.model.quiz.entity;
 
+import com.ssafy.worldy.model.quiz.dto.MultiAnswerDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,5 +28,11 @@ public class MultiAnswer {
     private String answer;
 
     @Column(name = "num", nullable = false)
-    private int num;
+    private String num;
+
+    public MultiAnswerDto toMultiAnswerDto(){
+        return MultiAnswerDto.builder()
+                .answer(this.answer)
+                .num(this.num).build();
+    }
 }

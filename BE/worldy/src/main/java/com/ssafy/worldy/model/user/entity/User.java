@@ -47,6 +47,7 @@ public class User {
 
     @Column(name = "exp")
     private int exp; // 경험치
+
     @Column(name = "level")
     private int level; // 경험치 기반 레벨
 
@@ -64,6 +65,8 @@ public class User {
     public void updateToken(String refreshToken){
         this.refreshToken = refreshToken;
     }
+
+    // mmr 업데이트
     public void updateMmr(int mmr) {
         if(mmr<0) this.mmr = 0;
         else if (mmr>4000) this.mmr = 4000;

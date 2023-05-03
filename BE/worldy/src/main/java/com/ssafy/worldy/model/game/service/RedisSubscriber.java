@@ -3,6 +3,7 @@ package com.ssafy.worldy.model.game.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.worldy.model.game.dto.Emoticon;
+import com.ssafy.worldy.model.game.dto.GameQuiz;
 import com.ssafy.worldy.model.game.dto.MatchingResultDto;
 import com.ssafy.worldy.model.game.dto.Player;
 import com.ssafy.worldy.exception.CustomException;
@@ -42,6 +43,12 @@ public class RedisSubscriber {
                 // subscriber에게 메시지 전송
                 log.info("Redis Subscribe Message : " + player.toString());
                 template.convertAndSend("/sub/" + player.getRoomId(), player);
+            } else if (publishMessage.contains("quiz")) {
+                GameQuiz gameQuiz = objectMapper.readValue(publishMessage, GameQuiz.class);
+
+                // subscriber에게 메시지 전송
+                log.info("Redis Subscribe Message : " + gameQuiz.toString());
+                template.convertAndSend("/sub/" + gameQuiz.getRoomId(), gameQuiz);
             } else {
 
                 // subscriber에게 메시지 전송

@@ -2,6 +2,7 @@ package com.ssafy.worldy.model.quiz.entity;
 
 import com.ssafy.worldy.model.adventure.entity.Nation;
 import com.ssafy.worldy.model.quiz.dto.NewsQuizDto;
+import com.ssafy.worldy.model.quiz.dto.QuizDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -61,6 +62,21 @@ public class Quiz {
     public NewsQuizDto toNewsQuizDto(){
         return NewsQuizDto.builder()
                 .quizId(this.quizId)
+                .publisherType(this.publisherType)
+                .quizType(this.quizType)
+                .category(this.category)
+                .level(this.level)
+                .image(this.image)
+                .content(this.content)
+                .answer(this.answer)
+                .hint(this.hint)
+                .hint_type(this.hint_type)
+                .commentary(this.commentary)
+                .build();
+    }
+
+    public QuizDto toQuizDto(){
+        return QuizDto.builder()
                 .publisherType(this.publisherType)
                 .quizType(this.quizType)
                 .category(this.category)

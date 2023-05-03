@@ -1,6 +1,7 @@
 package com.ssafy.worldy.model.game.service;
 
 import com.ssafy.worldy.model.game.dto.Emoticon;
+import com.ssafy.worldy.model.game.dto.GameQuiz;
 import com.ssafy.worldy.model.game.dto.MatchingResultDto;
 import com.ssafy.worldy.model.game.dto.Player;
 import lombok.RequiredArgsConstructor;
@@ -37,10 +38,24 @@ public class RedisPublisher {
         redisTemplate.convertAndSend(topic.getTopic(), player);
     }
 
+    /**
+     * 게임 매칭 데이터 전송
+     **/
     public void publish (MatchingResultDto matchingResultDto) {
 
         log.info("Topic : " + topic.getTopic());
 
         redisTemplate.convertAndSend(topic.getTopic(), matchingResultDto);
+    }
+
+    /**
+     * 게임 퀴즈 데이터 전송
+     **/
+    public void publish(GameQuiz gameQuizDto) {
+
+        log.info("Topic : " + topic.getTopic());
+        log.info("Quiz : " + gameQuizDto.toString());
+
+        redisTemplate.convertAndSend(topic.getTopic(), gameQuizDto);
     }
 }

@@ -71,9 +71,15 @@ public class GameController {
         return new ResponseEntity<>(matchingWaitingRoom, HttpStatus.OK);
     }
 
+    /**
+     * [게임 매칭 결과 전송 - 소켓 전송]
+     **/
     @PostMapping("/matching/result")
     public ResponseEntity<MatchingResultDto> gameMatching(@RequestBody MatchingResultDto matchingResultDto) {
         log.info("send socket");
+        GameRoom gameRoom = gameRoomRepo.createGameRoom();
+
+        matchingResultDto.setGameRoom(gameRoom);
         redisPublisher.publish(matchingResultDto);
 
         return new ResponseEntity<>(matchingResultDto, HttpStatus.OK);
