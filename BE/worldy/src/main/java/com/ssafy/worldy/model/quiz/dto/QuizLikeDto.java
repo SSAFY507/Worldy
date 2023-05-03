@@ -1,5 +1,6 @@
 package com.ssafy.worldy.model.quiz.dto;
 
+import com.ssafy.worldy.model.adventure.dto.NationDto;
 import com.ssafy.worldy.model.user.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;

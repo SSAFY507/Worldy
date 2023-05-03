@@ -1,4 +1,4 @@
-package com.ssafy.worldy.model.quiz.dto;
+package com.ssafy.worldy.model.adventure.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
