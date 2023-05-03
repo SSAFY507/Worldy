@@ -8,6 +8,7 @@ import KakaoLogin from './KakaoLogin';
 import axios from 'axios';
 import { access } from 'fs';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
+import PersonalAccept from './PersonalAccept';
 
 type PointerOutProps = {
   onClose: () => void;
@@ -76,11 +77,19 @@ export default function LoginModal({
     setShowErrorModal(false);
   };
 
+  const [showPersonalAccept, setShowPersonalAccept] = useState<boolean>(false);
+  const handleShowPersonalAccept = () => {
+    setShowPersonalAccept(!showPersonalAccept);
+  };
+
   return (
     <div
       // onClick={onClose}
       className='fixed top-4 left-0 w-full h-full bg-behindModalBackground z-10 flex flex-row justify-center items-center'
     >
+      {showPersonalAccept && (
+        <PersonalAccept closePA={() => setShowPersonalAccept(false)} />
+      )}
       <div
         id='LoginWholeModalFrame'
         className='bg-white pt-[10px] px-[10px] rounded-xl w-[480px] h-2/3 flex flex-col z-20'
@@ -139,9 +148,12 @@ export default function LoginModal({
                     {/* <a href='/'>계정 생성</a> */}
                   </div>
                 </div>
-                <div className='underline underline-offset-2 decoration-2'>
-                  <a href='/'>서비스 이용약관</a>
-                </div>
+                <button
+                  onClick={handleShowPersonalAccept}
+                  className='underline underline-offset-2 decoration-2 text-[19px] mt-[2px]'
+                >
+                  개인 정보 처리방침
+                </button>
               </div>
             </div>
           </div>
