@@ -45,7 +45,9 @@ export default function MyPage() {
         >
           {input.icon}
         </span>
-        <span className={`text-[1.2em] text-white font-PtdMedium pl-[.8em]`}>
+        <span
+          className={`text-[1.2em] text-white font-PtdMedium pl-[.8em] hover:bg-white`}
+        >
           {input.title}
         </span>
       </a>
