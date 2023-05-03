@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 
 type Button_Red_Type = {
-  text: string;
+  text: React.ReactNode;
   rounded: boolean;
   width?: number;
   height?: number;
