@@ -9,9 +9,9 @@ import lombok.*;
 @NoArgsConstructor
 public class KakaoLoginDto {
 
-    TokenDto tokenDto;
+    TokenDto tokenDto; // access, refresh 토큰
 
-    private String kakaoId;
+    private String kakaoId; // 카카오 아이디
 
-    private String profileImg;
+    private String profileImg; // 프로필 이미지
 }

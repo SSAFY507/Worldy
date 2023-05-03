@@ -3,6 +3,8 @@ package com.ssafy.worldy.model.user.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.worldy.exception.CustomException;
+import com.ssafy.worldy.exception.CustomExceptionList;
 import com.ssafy.worldy.jwt.TokenProvider;
 import com.ssafy.worldy.model.user.dto.KakaoLoginDto;
 import com.ssafy.worldy.model.user.dto.TokenDto;
@@ -43,7 +45,8 @@ public class KakaoUserService {
     public KakaoLoginDto kakaoLogin(String code) throws JsonProcessingException {
 
         // 1. 인가코드로 access 토큰 요청
-        String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback");
+        String accessToken = getAccessToken(code, "https://k8a507.p.ssafy.io/user/kakao/callback");
+        // String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback");
 
         // 2. 없는 회원의 경우 회원가입
         User user = registKakaoUser(accessToken);
@@ -186,7 +189,7 @@ public class KakaoUserService {
 
         Optional<User> user = userRepo.findByKakaoId(kakaoId);
         if(user.isEmpty()) {
-            throw new RuntimeException("해당하는 회원 없음");
+            throw new CustomException(CustomExceptionList.MEMBER_NOT_FOUND);
         }
 
         user.get().setRefreshToken(null);

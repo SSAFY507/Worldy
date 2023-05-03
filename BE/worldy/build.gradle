@@ -48,3 +48,8 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+// plain archive 파일 사용하지 않기 위함
+jar {
+	enabled = false
+}

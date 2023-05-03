@@ -1,5 +1,7 @@
 package com.ssafy.worldy.jwt;
 
+import com.ssafy.worldy.exception.CustomException;
+import com.ssafy.worldy.exception.CustomExceptionList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -39,7 +41,7 @@ public class JwtFilter extends GenericFilterBean {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             logger.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
         } else {
-            logger.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
+            throw new CustomException(CustomExceptionList.TOKEN_VALID_FAILED);
         }
 
         filterChain.doFilter(servletRequest, servletResponse);
