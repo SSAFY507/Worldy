@@ -49,7 +49,7 @@ public class Match {
                     // 이미 매칭된 유저를 포함할 경우 현재 매칭 과정 취소 후 해당 유저를 대기큐에서 제거
                     if (queueList.getMATCH().containsKey(user.getKakaoId()+user.getStartWaitingTime())) {
                         queue.addAll(matchingResult);
-                        log.info("중복 제거");
+                        log.info("매칭 중 중복 제거");
                         continue match; // 대기큐 재탐색
                     }
 
@@ -58,14 +58,12 @@ public class Match {
 
                         MatchingRequestDto cancelUser = queueList.getCANCEL().get(user.getKakaoId());
 
-                        LocalDateTime cancelTime = LocalDateTime.parse(cancelUser.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-                        LocalDateTime userStartWaitingTime = LocalDateTime.parse(user.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                        LocalDateTime cancelTime = LocalDateTime.parse(cancelUser.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SS"));
+                        LocalDateTime userStartWaitingTime = LocalDateTime.parse(user.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SS"));
 
-                        Duration diff = Duration.between(cancelTime.toLocalTime(), userStartWaitingTime.toLocalTime());
-
-                        if(diff.getSeconds()<=0) {// (2022-08-11)와 (2022-08-31) 비교 결과: -20 즉, 음수 반환 시 cancelTime이 userStartWaitingTime보다 이후
+                        if(userStartWaitingTime.isBefore(cancelTime)) {// (2022-08-11)와 (2022-08-31) 비교 결과: -20 즉, 음수 반환 시 cancelTime이 userStartWaitingTime보다 이후
                             queue.addAll(matchingResult);
-                            log.info("취소 제거" + cancelTime + " " +userStartWaitingTime );
+                            log.info("매칭 중 취소한 유저 제거" + cancelTime + " " +userStartWaitingTime );
                             log.info(matchingResult.toString());
                             continue match; // 다음 큐 탐색
                         }
@@ -92,42 +90,38 @@ public class Match {
                 MatchingRequestDto user = queue.poll();
 //
 //                // 1. 중간에 나간 유저 대기큐에서 삭제
-                for( Map.Entry<String, MatchingRequestDto> entry : queueList.getCANCEL().entrySet() ){
-                    String key = entry.getKey();
+                if (queueList.getCANCEL().containsKey(user.getKakaoId())) {
 
-                    MatchingRequestDto cancelUser = entry.getValue();
-                    LocalDateTime cancelTime = LocalDateTime.parse(cancelUser.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")); // 취소한 유저의 시간 정보
-                    LocalDateTime userStartWaitingTime = LocalDateTime.parse(user.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")); // 대기한 유저의 대기 시작 시간 정보
+                    MatchingRequestDto cancelUser = queueList.getCANCEL().get(user.getKakaoId());
 
-                    Duration diff = Duration.between(cancelTime.toLocalTime(), userStartWaitingTime.toLocalTime());
+                    LocalDateTime cancelTime = LocalDateTime.parse(cancelUser.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SS"));
+                    LocalDateTime userStartWaitingTime = LocalDateTime.parse(user.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SS"));
 
                     // 대기한 유저가 취소한 유저라면 큐에서 삭제(다시 넣지 X )
-                    // cancelTime.toLocalTime()이 이후면 음수 출력됨
-                    if(diff.getSeconds()<=0) {
+                    if(userStartWaitingTime.isBefore(cancelTime)) {// (2022-08-11)와 (2022-08-31) 비교 결과: -20 즉, 음수 반환 시 cancelTime이 userStartWaitingTime보다 이후
+                        log.info("매칭 종료 후 취소한 유저 제거 취소 시간 "+ cancelTime + "매칭 시간 " +  userStartWaitingTime);
                         continue delete;
                     }
                 }
 
                 // 2. 대기 시간 최대 5분이 지난 유저는 대기큐에서 삭제
                 LocalDateTime now = LocalDateTime.now();
-                LocalDateTime startWaitingTime = LocalDateTime.parse(user.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                LocalDateTime startWaitingTime = LocalDateTime.parse(user.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SS"));
 
-                Duration diff = Duration.between(now.toLocalTime(), startWaitingTime.toLocalTime());
+                Duration diff = Duration.between(startWaitingTime.toLocalTime(),now.toLocalTime());
+                log.info("diff "+diff.getSeconds());
 
-                // 310000 : 5분 10초
-                if(diff.getSeconds()>=310000) continue;
+                // 310 : 5분 10초
+                if(diff.getSeconds()>=310) continue delete;
 
                 // 3. 매칭된 유저를 대기큐에서 삭제
-                if (queueList.getMATCH().entrySet().size()>0) {
-                    for( Map.Entry<String, MatchingRequestDto> entry : queueList.getMATCH().entrySet() ){
-                        String key = entry.getKey();
-                        if(!key.equals(user.getKakaoId()+user.getStartWaitingTime())) {
-                            queue.add(user);
-                        }
-                    }
-                } else {
-                    queue.add(user);
+                if (queueList.getMATCH().containsKey(user.getKakaoId()+user.getStartWaitingTime())) {
+                    log.info("매칭된 유저 삭제 대기큐 " + user.getKakaoId()+user.getStartWaitingTime());
+                    continue delete;
                 }
+
+                // 3가지 조건에 걸리지 않으면 다시 대기큐 삽입
+                queue.add(user);
             }
         }
 
@@ -216,37 +210,38 @@ public class Match {
     }
 
     //
-    @Scheduled(fixedDelay = 310000, initialDelay = 1000) // 1초 후 60초마다 동작
+    @Scheduled(fixedDelay = 310000, initialDelay = 1000) // 5분 10초마다 동작
     public void removeCancelUser() {
 
         for( Map.Entry<String, MatchingRequestDto> entry : queueList.getCANCEL().entrySet() ){
             MatchingRequestDto matchingRequestDto = entry.getValue();
 
             LocalDateTime now = LocalDateTime.now();
-            LocalDateTime startWaitingTime = LocalDateTime.parse(matchingRequestDto.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+            LocalDateTime startWaitingTime = LocalDateTime.parse(matchingRequestDto.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SS"));
 
-            Duration diff = Duration.between(now.toLocalTime(), startWaitingTime.toLocalTime());
+            Duration diff = Duration.between(startWaitingTime.toLocalTime(),now.toLocalTime());
 
-            // 70초 지난 대기 취소 요청은 삭제
-            if(diff.getSeconds()>=70000) {
+            // 5분 10초 지난 대기 취소 요청은 삭제
+            if(diff.getSeconds()>=310) {
                 queueList.getCANCEL().remove(matchingRequestDto.getKakaoId()+matchingRequestDto.getStartWaitingTime());
             }
         }
     }
 
-    @Scheduled(fixedDelay = 310000, initialDelay = 1000) // 1초 후 60초마다 동작
+    @Scheduled(fixedDelay = 310000, initialDelay = 1000) // 5분 10초마다 동작
     public void removeMatchUser() {
 
         for( Map.Entry<String, MatchingRequestDto> entry : queueList.getMATCH().entrySet() ){
             MatchingRequestDto matchingRequestDto = entry.getValue();
 
             LocalDateTime now = LocalDateTime.now();
-            LocalDateTime startWaitingTime = LocalDateTime.parse(matchingRequestDto.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-            Duration diff = Duration.between(now.toLocalTime(), startWaitingTime.toLocalTime());
+            LocalDateTime startWaitingTime = LocalDateTime.parse(matchingRequestDto.getStartWaitingTime(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SS"));
 
-            // 70초 지난 대기 취소 요청은 삭제
-            if(diff.getSeconds()>=70000) {
+            Duration diff = Duration.between(startWaitingTime.toLocalTime(),now.toLocalTime());
+
+            // 5분 10초 지난 매치된 유저 요청은 삭제
+            if(diff.getSeconds()>=310) {
                 queueList.getCANCEL().remove(matchingRequestDto.getKakaoId()+matchingRequestDto.getStartWaitingTime());
             }
         }

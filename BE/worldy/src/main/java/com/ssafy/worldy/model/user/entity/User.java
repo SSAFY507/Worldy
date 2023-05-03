@@ -64,4 +64,9 @@ public class User {
     public void updateToken(String refreshToken){
         this.refreshToken = refreshToken;
     }
+    public void updateMmr(int mmr) {
+        if(mmr<0) this.mmr = 0;
+        else if (mmr>4000) this.mmr = 4000;
+        else this.mmr = mmr;
+    }
 }

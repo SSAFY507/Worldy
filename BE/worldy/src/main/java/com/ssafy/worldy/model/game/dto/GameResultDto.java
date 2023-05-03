@@ -9,9 +9,10 @@ import java.util.List;
 @Getter
 @Setter
 public class GameResultDto {
-    List<Long> first; // 1등이 보유한 나라들
-    List<Long> second; // 1등이 보유한 나라들
-    List<Long> third; // 1등이 보유한 나라들
-    List<Long> fourth; // 1등이 보유한 나라들
+
+    UseInfoDto first; // 1등이 보유한 나라들
+    UseInfoDto second; // 1등이 보유한 나라들
+    UseInfoDto third; // 1등이 보유한 나라들
+    UseInfoDto fourth; // 1등이 보유한 나라들
 
 }

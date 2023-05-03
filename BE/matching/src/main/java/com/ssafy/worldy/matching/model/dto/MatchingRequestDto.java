@@ -34,8 +34,8 @@ public class MatchingRequestDto implements Serializable, Comparable<MatchingRequ
         //LocalDate date1 = LocalDate.parse(this.startWaitingTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         //LocalDate date2 = LocalDate.parse(o.startWaitingTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-        LocalDateTime time1 = LocalDateTime.parse(this.startWaitingTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")); // 취소한 유저의 시간 정보
-        LocalDateTime time2 = LocalDateTime.parse(o.startWaitingTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")); // 대기한 유저의 대기 시작 시간 정보
+        LocalDateTime time1 = LocalDateTime.parse(this.startWaitingTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SS")); // 취소한 유저의 시간 정보
+        LocalDateTime time2 = LocalDateTime.parse(o.startWaitingTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SS")); // 대기한 유저의 대기 시작 시간 정보
 
         Duration diff = Duration.between(time1, time2);
 

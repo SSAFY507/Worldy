@@ -11,6 +11,8 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @Service
@@ -30,11 +32,11 @@ public class GameMatchingProducer {
 
         User user = userRepo.findByKakaoId(splitRoomId[1]).orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
 
-        SimpleDateFormat startWaitingTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date now = new Date();
+        LocalDateTime startWaitingTime = LocalDateTime.now();
+        String startWaitingTimeST = startWaitingTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SS"));
 
         MatchingRequestDto matchingRequestDto = MatchingRequestDto.builder()
-                .kakaoId(user.getKakaoId()).roomId(roomId).mmr(user.getMmr()).level(user.getLevel()).startWaitingTime(startWaitingTime.format(now)).build();
+                .kakaoId(user.getKakaoId()).roomId(roomId).mmr(user.getMmr()).level(user.getLevel()).startWaitingTime(startWaitingTimeST).build();
 
         log.info("send message : " + matchingRequestDto.toString());
         rabbitTemplate.convertAndSend("worldy.matching.exchange", "worldy.key", matchingRequestDto);
@@ -46,11 +48,11 @@ public class GameMatchingProducer {
 
         User user = userRepo.findByKakaoId(splitRoomId[1]).orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
 
-        SimpleDateFormat startWaitingTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date now = new Date();
+        LocalDateTime startWaitingTime = LocalDateTime.now();
+        String startWaitingTimeST = startWaitingTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SS"));
 
         MatchingRequestDto matchingRequestDto = MatchingRequestDto.builder()
-                .kakaoId(user.getKakaoId()).roomId(roomId).mmr(user.getMmr()).level(user.getLevel()).startWaitingTime(startWaitingTime.format(now)).build();
+                .kakaoId(user.getKakaoId()).roomId(roomId).mmr(user.getMmr()).level(user.getLevel()).startWaitingTime(startWaitingTimeST).build();
 
         log.info("send message : " + matchingRequestDto.toString());
         rabbitTemplate.convertAndSend("worldy.matching.exchange", "worldy.cancle.key", matchingRequestDto);
