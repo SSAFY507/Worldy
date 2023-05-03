@@ -18,8 +18,8 @@ public class Nation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "nation_id", nullable = false)
-    private Long nationId;
+    private Long nationId; // auto_increment PK
 
     @Column(name = "nation_name", nullable = false)
-    private String nationName;
+    private String nationName; // 국가명
 }

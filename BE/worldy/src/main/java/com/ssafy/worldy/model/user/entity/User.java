@@ -42,6 +42,18 @@ public class User {
     @Column(name = "refresh_token")
     private String refreshToken; // refresh 토큰
 
+    @Column(name = "tier")
+    private int tier; // mmr 기반 티어
+
+    @Column(name = "exp")
+    private int exp; // 경험치
+
+    @Column(name = "level")
+    private int level; // 경험치 기반 레벨
+
+    @Column(name = "mmr")
+    private int mmr; // Elo 기반 Matchmaking Rating (게임 매칭 시 기준 점수)
+
     @ManyToMany
     @JoinTable(
             name = "user_authority",
@@ -52,5 +64,12 @@ public class User {
     // refresh 토큰 업데이트
     public void updateToken(String refreshToken){
         this.refreshToken = refreshToken;
+    }
+
+    // mmr 업데이트
+    public void updateMmr(int mmr) {
+        if(mmr<0) this.mmr = 0;
+        else if (mmr>4000) this.mmr = 4000;
+        else this.mmr = mmr;
     }
 }

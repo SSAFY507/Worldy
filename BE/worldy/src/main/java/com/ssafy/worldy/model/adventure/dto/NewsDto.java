@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NewsDto {
+
     private Long newsId;
 
     private String nationName;

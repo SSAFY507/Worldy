@@ -14,6 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "multi_answer")
 public class MultiAnswer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "multi_answer_id", nullable = false)

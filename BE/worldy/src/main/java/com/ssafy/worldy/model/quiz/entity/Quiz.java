@@ -16,6 +16,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "quiz")
 public class Quiz {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "quiz_id", nullable = false)
