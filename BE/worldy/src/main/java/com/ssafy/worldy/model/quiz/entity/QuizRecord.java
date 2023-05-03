@@ -1,5 +1,6 @@
 package com.ssafy.worldy.model.quiz.entity;
 
+import com.ssafy.worldy.model.quiz.dto.QuizRecordDto;
 import com.ssafy.worldy.model.user.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,4 +33,14 @@ public class QuizRecord {
     private boolean success; // 풀이 성공 여부
 
     private String userAnswer; // 회원이 입력(선택)한 답안
+
+    // Entity -> DTO 변환을 위함
+    public QuizRecordDto toDto() {
+        return QuizRecordDto.builder()
+                .quizRecordId(this.quizRecordId)
+                .userDto(this.user.toDto())
+                .quizDto(this.quiz.toDto())
+                .success(this.success)
+                .userAnswer(this.userAnswer).build();
+    }
 }

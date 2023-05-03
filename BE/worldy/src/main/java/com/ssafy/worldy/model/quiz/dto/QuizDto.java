@@ -36,7 +36,7 @@ public class QuizDto {
 
     private String commentary; // 해설
 
-    private String report; // 신고 수
+    private int report; // 신고 수
 
     private List<MultiAnswerDto> multiAnswerList; // 객관실 경우 객관식 보기 리스트
 }

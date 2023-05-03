@@ -1,5 +1,6 @@
 package com.ssafy.worldy.model.adventure.entity;
 
+import com.ssafy.worldy.model.adventure.dto.NationDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,4 +23,11 @@ public class Nation {
 
     @Column(name = "nation_name", nullable = false)
     private String nationName; // 국가명
+
+    // Entity -> DTO 변환을 위함
+    public NationDto toDto() {
+        return NationDto.builder()
+                .nationId(this.nationId)
+                .nationName(this.nationName).build();
+    }
 }
