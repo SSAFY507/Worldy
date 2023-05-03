@@ -46,14 +46,14 @@ export default function Navbar({
   };
 
   const afterLoginButtonIcon: JSX.Element = (
-    <>
+    <div className='grid place-content-center w-full h-full'>
       <svg
         stroke='currentColor'
         fill='currentColor'
         strokeWidth='0'
         viewBox='0 0 16 16'
-        height='1em'
-        width='1em'
+        height='1.8em'
+        width='1.8em'
         xmlns='http://www.w3.org/2000/svg'
       >
         <path
@@ -62,14 +62,14 @@ export default function Navbar({
           clip-rule='evenodd'
         ></path>
       </svg>
-    </>
+    </div>
   );
 
   return (
     <>
       <nav>
         <div className='w-screen h-20 bg-neutral-950 flex flex-row items-center justify-between px-6'>
-          <div className='w-1/5 h-full flex flex-row justify-start items-center'>
+          <div className='w-1/6 h-full flex flex-row justify-start items-center'>
             <div className='w-fit h-fit' id='StarButton'>
               {[...Array(6)].map((_, i) => (
                 <div className={`star-${i + 1}`} key={i}>
@@ -123,16 +123,16 @@ export default function Navbar({
               ))}
             </ul>
           </div>
-          <div className='w-1/5 h-full flex flex-row items-center justify-between'>
-            <div className='w-1/2 h-full flex flex-row justify-start items-center outline outline-white'>
+          <div className='w-1/6 h-full flex flex-row items-center justify-between'>
+            <div className='w-1/2 h-full flex flex-row justify-end items-center  outline-white'>
               <button
-                className='w-[2.5em] h-[2.5em] mx-[.5em] outline grid place-items-center outline-red-300'
+                className='w-[2.5em] h-[2.5em] mx-[.5em]  grid place-items-center outline-red-300'
                 onClick={handleLoginState}
               >
                 <ImSearch color='white' />
               </button>
               <button
-                className='w-[2.5em] h-[2.5em] mx-[.5em] outline grid place-items-center outline-red-300'
+                className='w-[2.5em] h-[2.5em] mx-[.5em]  grid place-items-center outline-red-300'
                 onClick={adminLogin}
               >
                 <AiOutlineGlobal
