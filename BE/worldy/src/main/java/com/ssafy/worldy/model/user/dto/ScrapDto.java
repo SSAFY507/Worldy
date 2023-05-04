@@ -55,7 +55,7 @@ public class ScrapDto {
         this.content = quizLikeDto.getQuizDto().getContent();
         this.answer = quizLikeDto.getQuizDto().getAnswer();
         this.hint = quizLikeDto.getQuizDto().getHint();
-        this.hintType = quizLikeDto.getQuizDto().isHint_type();
+        this.hintType = quizLikeDto.getQuizDto().isHintType();
         this.commentary = quizLikeDto.getQuizDto().getCommentary();
 
         // 추후 다시 set 해야 하는 컬럼들

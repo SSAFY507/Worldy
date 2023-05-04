@@ -52,7 +52,7 @@ public class Quiz {
     private String hint; // 힌트
 
     @Column(name = "hint_type", nullable = true)
-    private boolean hint_type; // 힌트 타입 - 초성 1 아니면 0
+    private boolean hintType; // 힌트 타입 - 초성 1 아니면 0
 
     @Column(name = "commentary", nullable = false, length = 1000)
     private String commentary; // 해설
@@ -71,7 +71,7 @@ public class Quiz {
                 .content(this.content)
                 .answer(this.answer)
                 .hint(this.hint)
-                .hint_type(this.hint_type)
+                .hint_type(this.hintType)
                 .commentary(this.commentary)
                 .build();
     }
@@ -89,7 +89,7 @@ public class Quiz {
                 .content(this.content)
                 .answer(this.answer)
                 .hint(this.hint)
-                .hint_type(this.hint_type)
+                .hintType(this.hintType)
                 .commentary(this.commentary)
                 .report(this.report).build();
     }
