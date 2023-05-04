@@ -1,6 +1,7 @@
 package com.ssafy.worldy.model.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.worldy.model.user.dto.UserDto;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -71,5 +72,22 @@ public class User {
         if(mmr<0) this.mmr = 0;
         else if (mmr>4000) this.mmr = 4000;
         else this.mmr = mmr;
+    }
+
+    // Entity -> DTO 변환을 위함
+    public UserDto toDto() {
+        return UserDto.builder()
+                .userId(this.userId)
+                .password(this.password)
+                .kakaoId(this.kakaoId)
+                .profileImg(this.profileImg)
+                .sex(this.sex)
+                .age(this.age)
+                .activated(this.activated)
+                .refreshToken(this.refreshToken)
+                .tier(this.tier)
+                .exp(this.exp)
+                .level(this.level)
+                .mmr(this.mmr).build();
     }
 }

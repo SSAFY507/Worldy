@@ -1,18 +1,18 @@
 package com.ssafy.worldy.model.quiz.dto;
 
 import com.ssafy.worldy.model.adventure.entity.Nation;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
-@Builder
-@Setter
-@ToString
-@Getter
+@Data
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public class QuizDto {
+
+    private Long quizId; // 아이디 (auto_increment)
 
     private Nation nation; // 출제자 - gpt, worldy, user
 
@@ -35,6 +35,8 @@ public class QuizDto {
     private boolean hint_type; // 힌트 타입 - 초성 1 아니면 0
 
     private String commentary; // 해설
+
+    private int report; // 신고 수
 
     private List<MultiAnswerDto> multiAnswerList; // 객관실 경우 객관식 보기 리스트
 }

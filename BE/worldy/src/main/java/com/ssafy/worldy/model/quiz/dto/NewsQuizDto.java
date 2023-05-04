@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NewsQuizDto {
+
     private Long quizId;
 
     private String publisherType; // 출제자 - gpt, worldy, user

@@ -17,6 +17,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "quiz")
 public class Quiz {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "quiz_id", nullable = false)
@@ -75,8 +76,11 @@ public class Quiz {
                 .build();
     }
 
-    public QuizDto toQuizDto(){
+    // Entity -> DTO 변환을 위함 (multiAnswerList는 비어있는 Dto가 생성됨)
+    public QuizDto toDto() {
         return QuizDto.builder()
+                .quizId(this.quizId)
+                .nation(this.nation)
                 .publisherType(this.publisherType)
                 .quizType(this.quizType)
                 .category(this.category)
@@ -86,7 +90,6 @@ public class Quiz {
                 .answer(this.answer)
                 .hint(this.hint)
                 .hint_type(this.hint_type)
-                .commentary(this.commentary)
-                .build();
+                .report(this.report).build();
     }
 }

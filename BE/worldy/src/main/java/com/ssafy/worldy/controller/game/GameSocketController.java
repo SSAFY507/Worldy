@@ -80,7 +80,7 @@ public class GameSocketController {
         }
 
         // 퀴즈 DTO 생성
-        QuizDto quizDto = quiz.toQuizDto();
+        QuizDto quizDto = quiz.toDto();
         quizDto.setMultiAnswerList(multiAnswerList);
 
         GameQuiz gameQuizDto = GameQuiz.builder()
