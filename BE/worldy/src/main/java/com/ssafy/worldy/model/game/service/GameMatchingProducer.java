@@ -36,7 +36,7 @@ public class GameMatchingProducer {
         String startWaitingTimeST = startWaitingTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SS"));
 
         MatchingRequestDto matchingRequestDto = MatchingRequestDto.builder()
-                .kakaoId(user.getKakaoId()).roomId(roomId).mmr(user.getMmr()).level(user.getLevel()).startWaitingTime(startWaitingTimeST).build();
+                .kakaoId(user.getKakaoId()).roomId(roomId).mmr(user.getMmr()).level(user.getLevel()).startWaitingTime(startWaitingTimeST).nickName(user.getNickName()).profileImg(user.getProfileImg()).build();
 
         log.info("send message : " + matchingRequestDto.toString());
         rabbitTemplate.convertAndSend("worldy.matching.exchange", "worldy.key", matchingRequestDto);
@@ -52,7 +52,7 @@ public class GameMatchingProducer {
         String startWaitingTimeST = startWaitingTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SS"));
 
         MatchingRequestDto matchingRequestDto = MatchingRequestDto.builder()
-                .kakaoId(user.getKakaoId()).roomId(roomId).mmr(user.getMmr()).level(user.getLevel()).startWaitingTime(startWaitingTimeST).build();
+                .kakaoId(user.getKakaoId()).roomId(roomId).mmr(user.getMmr()).level(user.getLevel()).startWaitingTime(startWaitingTimeST).nickName(user.getNickName()).profileImg(user.getProfileImg()).build();
 
         log.info("send message : " + matchingRequestDto.toString());
         rabbitTemplate.convertAndSend("worldy.matching.exchange", "worldy.cancle.key", matchingRequestDto);

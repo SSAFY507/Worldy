@@ -16,7 +16,8 @@ public enum CustomExceptionList {
     SERIALIZER_ERROR(HttpStatus.NOT_FOUND, "E006", "직렬화 및 역직렬화 과정에서 에러 발생"),
     ENTER_GAME_ERROR(HttpStatus.BAD_REQUEST, "E007", "입장 불가"),
     NATION_NOT_FOUND(HttpStatus.NOT_FOUND, "E008", "존재하지 않는 나라입니다."),
-    NOT_ACTIVATED(HttpStatus.NOT_ACCEPTABLE, "E009", "활성화되지 않은 회원입니다.");
+    NOT_ACTIVATED(HttpStatus.NOT_ACCEPTABLE, "E009", "활성화되지 않은 회원입니다."),
+    QUIZ_RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, "E010", "풀이 기록이 없는 퀴즈입니다.");
 
     private final HttpStatus status;
     private final String code;

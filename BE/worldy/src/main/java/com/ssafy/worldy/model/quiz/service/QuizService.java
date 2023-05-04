@@ -51,7 +51,7 @@ public class QuizService {
 
         Quiz quiz = quizRepo.findById(quizLikeInsertDto.getQuizId()).get();
         User user = userRepo.findById(quizLikeInsertDto.getUserId()).get();
-        QuizRecord quizRecord = quizRecordRepo.findByUserIdAndQuizId(user.getUserId(), quiz.getQuizId());
+        QuizRecord quizRecord = quizRecordRepo.findByQuizIdAndUserId(quiz.getQuizId(), user.getUserId()).get();
         Nation nation = nationRepo.findById(quizLikeInsertDto.getNationId()).get();
 
         quizLikeRepo.save(quizLikeInsertDto.toEntity(quiz,user,quizRecord,nation));

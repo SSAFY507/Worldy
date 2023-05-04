@@ -3,7 +3,6 @@ package com.ssafy.worldy.matching.algorithm;
 import com.ssafy.worldy.matching.model.dto.MatchingRequestDto;
 import com.ssafy.worldy.matching.model.queue.QueueList;
 import com.ssafy.worldy.matching.model.service.GameMatchingSend;
-import com.ssafy.worldy.matching.model.service.RedisPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,14 +22,10 @@ import java.util.PriorityQueue;
 public class Match {
     private final QueueList queueList;
     private final GameMatchingSend gameMatchingSend;
-    //private static Map<String,Boolean> matchingUser =  new HashMap<>(); // 이미 매칭된 유저 관리
-    private final RedisPublisher redisPublisher;
 
     @Scheduled(fixedDelay = 10000, initialDelay = 1000) // 1초 후 10초마다 동작
     public void matching(){
         log.info("analyze game matching");
-
-        // thirdQueueUsers = new HashMap<>();
 
         for (PriorityQueue<MatchingRequestDto> queue : queueList.getQueueList()) {
             log.info(queue.toString());
@@ -39,8 +34,6 @@ public class Match {
         for (PriorityQueue<MatchingRequestDto> queue : queueList.getQueueList()) {
 
             match: while (queue.size() >= 4) {// 대기큐에 4명이 이상이 있을 경우
-
-                log.info("4명넘음");
 
                 List<MatchingRequestDto> matchingResult = new ArrayList<>();
                 for (int i = 0; i < 4; i++) {
@@ -88,7 +81,7 @@ public class Match {
             int size = queue.size();
             delete : for(int idx=0;idx<size;idx++) {
                 MatchingRequestDto user = queue.poll();
-//
+
 //                // 1. 중간에 나간 유저 대기큐에서 삭제
                 if (queueList.getCANCEL().containsKey(user.getKakaoId())) {
 

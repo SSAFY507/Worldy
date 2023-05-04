@@ -4,7 +4,9 @@ import com.ssafy.worldy.exception.CustomException;
 import com.ssafy.worldy.exception.CustomExceptionList;
 import com.ssafy.worldy.model.adventure.entity.Nation;
 import com.ssafy.worldy.model.adventure.repo.NationRepo;
+import com.ssafy.worldy.model.game.dto.GameRankingDto;
 import com.ssafy.worldy.model.game.dto.GameResultDto;
+import com.ssafy.worldy.model.game.dto.RankUserDto;
 import com.ssafy.worldy.model.game.entity.GameResult;
 import com.ssafy.worldy.model.game.repo.GameResultRepo;
 import com.ssafy.worldy.model.user.entity.User;
@@ -13,6 +15,9 @@ import com.ssafy.worldy.util.MultiElo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -93,5 +98,25 @@ public class GameService {
                 gameResultRepo.updateFourth(nationId);
             }
         }
+    }
+
+    @Transactional
+    public GameRankingDto getRanking(String kakaoId) {
+
+        User user = userRepo.findByKakaoId(kakaoId).orElseThrow(()->new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
+        int ranking = userRepo.findByMyRank(kakaoId);
+
+        RankUserDto myRank = RankUserDto.builder().rank(ranking).user(user.toDto()).build();
+
+        List<User> rankTop10User = userRepo.findByRankTop10User();
+
+        List<RankUserDto> rankUserDtos = new ArrayList<>();
+        for (int i=0;i<rankTop10User.size();i++) {
+            RankUserDto rankUserDto = RankUserDto.builder().rank(i+1).user(rankTop10User.get(i).toDto()).build();
+            rankUserDtos.add(rankUserDto);
+        }
+
+
+        return GameRankingDto.builder().myRank(myRank).rankTop10User(rankUserDtos).build();
     }
 }

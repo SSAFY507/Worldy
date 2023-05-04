@@ -90,6 +90,7 @@ public class Quiz {
                 .answer(this.answer)
                 .hint(this.hint)
                 .hintType(this.hintType)
+                .commentary(this.commentary)
                 .report(this.report).build();
     }
 }

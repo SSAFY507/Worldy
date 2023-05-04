@@ -1,7 +1,6 @@
 package com.ssafy.worldy.model.user.dto;
 
 import com.ssafy.worldy.model.quiz.dto.QuizLikeDto;
-import com.ssafy.worldy.model.quiz.entity.QuizLike;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -58,8 +57,10 @@ public class ScrapDto {
         this.hint = quizLikeDto.getQuizDto().getHint();
         this.hintType = quizLikeDto.getQuizDto().isHintType();
         this.commentary = quizLikeDto.getQuizDto().getCommentary();
-        this.userAnswer = quizLikeDto.getQuizRecordDto().getUserAnswer();
 
+        // 추후 다시 set 해야 하는 컬럼들
+        this.userAnswer = null;
+        this.success = false;
         this.multiFirst = null;
         this.multiSecond = null;
         this.multiThird = null;
