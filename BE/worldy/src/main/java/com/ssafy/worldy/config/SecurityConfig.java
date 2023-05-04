@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/error",
                         "/api/error",
                         "/api/user/kakao/login",
-                        "/stomp/game/**",
+                        "/api/stomp/game/**",
                         "/api/game/result",
                         "/api/game/matching/result"
                 );
