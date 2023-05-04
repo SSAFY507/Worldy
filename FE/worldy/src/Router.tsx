@@ -74,7 +74,7 @@ const AppLayout = () => {
 
   return (
     <div
-      className='hide-scrollbar w-screen h-screen flex flex-col bg-white'
+      className='hide-scrollbar w-screen h-screen flex flex-col bg-white overflow-hidden'
       style={{
         backgroundImage: login ? undefined : `url(${pathBI})`,
         backgroundSize: '100%',
