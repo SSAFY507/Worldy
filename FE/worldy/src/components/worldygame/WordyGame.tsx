@@ -3,6 +3,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import Dice from './Dice';
 import './dice.css'
+import { match } from 'assert';
 
 
 
@@ -45,17 +46,26 @@ type Game = {
   dice1: number,
   dice2: number,
   dice: number,
-  double: boolean,
+  isDouble: boolean,
   own: number[]
   lap: number,
   ranking: number,
 }
 
 type Player = {
-  pId: string,
-  pNum: number,
+  playerId: string,
+  roomId: string,
+  playerNum: number,
   name: string,
   game: Game,
+  type: string,
+
+}
+
+type Item = {
+  id: number,
+  title: string,
+  content: string,
 }
 
 
@@ -68,34 +78,273 @@ export default function WordyGame() {
 
   const [tmp, setTmp] = useState<number>();
 
-  const dicesElement1 = document.querySelectorAll(".dice");
-  const dicesElement2 = document.querySelectorAll(".dice2");
   const rollButton = document.querySelector("#rollButton");
 
 
-  function rollDice(dice1: number, dice2: number) {
 
+  function rollDice(dice1: number, dice2: number): void {
+
+    const dicesElement1 = document.querySelectorAll(".dice");
+    const dicesElement2 = document.querySelectorAll(".dice2");
 
     dicesElement1.forEach(function (dice) {
       dice.classList.remove("active");
       animateDice(dice1, dice);
+
     });
 
     dicesElement2.forEach(function (dice) {
       dice.classList.remove("active");
       animateDice(dice2, dice);
     });
+
+
   }
 
   function animateDice(randomNumber: number, dice: any) {
     if (dice.id === `dice-${randomNumber}`) {
-      const dots = Array.from(dice.children);
 
       setTimeout(function () {
         dice.classList.add("active");
       });
     }
+
   }
+
+  function reLoaction(n: number, l: number, t?: string): void {
+    const tmpLocation = l;
+    if (t) {
+      console.log('무인도')
+      if (n === 1) {
+        setP1((prevState) => ({
+          ...prevState,
+          game: {
+            ...prevState.game,
+            location: 2,
+            desert: 3,
+          }
+        }))
+      }
+      else if (n === 2) {
+        setP2((prevState) => ({
+          ...prevState,
+          game: {
+            ...prevState.game,
+            location: tmpLocation,
+            desert: 3,
+          }
+        }))
+      }
+      else if (n === 3) {
+        setP3((prevState) => ({
+          ...prevState,
+          game: {
+            ...prevState.game,
+            location: tmpLocation,
+            desert: 3,
+          }
+        }))
+      }
+      else if (n === 4) {
+        setP4((prevState) => ({
+          ...prevState,
+          game: {
+            ...prevState.game,
+            location: tmpLocation,
+            desert: 3,
+          }
+        }))
+      }
+    } else {  // 무인도가 아닌 지역 이동하기
+      console.log('무인도 아닌 지역 이동 함수')
+      console.log('플레이어 : ' + n + "     이동할 좌표 : " + tmpLocation)
+      if (n === 1) {
+        setP1((prevState) => ({
+          ...prevState,
+          game: {
+            ...prevState.game,
+            location: tmpLocation,
+          }
+        }))
+      }
+      else if (n === 2) {
+        setP2((prevState) => ({
+          ...prevState,
+          game: {
+            ...prevState.game,
+            location: tmpLocation,
+          }
+        }))
+      }
+      else if (n === 3) {
+        setP3((prevState) => ({
+          ...prevState,
+          game: {
+            ...prevState.game,
+            location: tmpLocation,
+          }
+        }))
+      }
+      else if (n === 4) {
+        setP4((prevState) => ({
+          ...prevState,
+          game: {
+            ...prevState.game,
+            location: tmpLocation,
+          }
+        }))
+      }
+    }
+
+  }
+
+
+  const getItem = (p: Player) => {
+    console.log('getItem 실행')
+    let n = Math.floor(Math.random() * 17);
+    n = 2
+    const i = item[n];
+    const pNum = p.playerNum;
+
+    setMessage1(i.title)
+    setMessage2(i.content)
+
+    if (n === 0) {
+      // 주사위 한 번 더 던지기
+      setTurn(turn);
+    } else if (n === 1) {
+      // 무인도 이동
+      reLoaction(pNum, 10, '무인도');
+    } else if (n === 2) {
+      // 원하는 곳으로 이동
+      setMode('자유이동');
+    } else if (n === 3) {
+      // 2턴 쉬기
+    } else if (n === 4) {
+      // 뒤로 2칸
+    } else if (n === 5) {
+      // 앞으로 3칸
+    } else if (n === 6) {
+      // 100만원 획득
+    } else if (n === 7) {
+      // 국세청으로 이동
+    } else if (n === 8) {
+      // 200만원 획득
+    } else if (n === 9) {
+      // 올림픽으로 이동
+    } else if (n === 10) {
+      // 한국으로 이동
+    } else if (n === 11) {
+      // 미국으로 이동
+    } else if (n === 12) {
+      // 이집트로 이동
+    } else if (n === 13) {
+      // 이탈리아로 이동
+    } else if (n === 14) {
+      // - 100만원
+    } else if (n === 15) {
+      // 통행 면제권 발급
+    } else if (n === 16) {
+      // 뒤로 3칸 이동
+    }
+    return i
+  }
+
+  // 아이템(보물상자)
+  const [item, setItem] = useState<Item[]>([
+    {
+      id: 0,
+      title: '운수 좋은 날',
+      content: '주사위를 한 번 더 던지세요!',
+    },
+    {
+      id: 1,
+      title: '무인도 불시착',
+      content: '비행기가 고장나서 무인도에 갇혔습니다. 무인도로 가세요.',
+    },
+    {
+      id: 2,
+      title: '자유여행권',
+      content: '한번에 이동하고 싶은 곳을 클릭하세요.',
+    },
+    {
+      id: 3,
+      title: '코로나19 확진',
+      content: '코로나에 걸렸습니다. 2턴 간 자가격리에 들어갑니다.',
+    },
+    {
+      id: 4,
+      title: '호텔에 짐을 놓고 왔습니다.',
+      content: '뒤로 2 칸 이동하세요.',
+    },
+    {
+      id: 5,
+      title: '졸음',
+      content: '졸다가 3역을 지나쳤습니다. 앞으로 3 칸 이동',
+    },
+    {
+      id: 6,
+      title: '복권 당첨',
+      content: '100만원을 받으세요!',
+    },
+    {
+      id: 7,
+      title: '세무조사',
+      content: '국세청에서 세무 조사를 시작합니다. 국세청으로 이동하세요.',
+    },
+    {
+      id: 8,
+      title: '주식 투자',
+      content: '투자한 주식이 대박났습니다. 200만원을 받으세요.',
+    },
+    {
+      id: 9,
+      title: '올림픽 티켓 수령',
+      content: '올림픽을 관람하러갑니다.',
+    },
+    {
+      id: 10,
+      title: 'BTS 콘서트',
+      content: '콘서트를 보러 대한민국으로 이동합니다.',
+    },
+    {
+      id: 11,
+      title: '미국 여행',
+      content: '미국으로 이동하세요',
+    },
+    {
+      id: 12,
+      title: '피라미드 대탐험',
+      content: '새로운 피라미드가 발견됐습니다. 이집트로 이동하세요.',
+    },
+    {
+      id: 13,
+      title: '로마의 휴일',
+      content: '휴가를 받았습니다. 이탈리아로 이동하세요.',
+    },
+    {
+      id: 14,
+      title: '과속 벌금',
+      content: '과속은 위험합니다. 벌금 -100만원',
+    },
+    {
+      id: 15,
+      title: '통행 면제권',
+      content: '1회 다른 플레이어의 나라에 무료로 머무를 수 있습니다.',
+    },
+    {
+      id: 16,
+      title: '뒤로 걷기 캠페인',
+      content: '뒤로 3칸 이동하세요.',
+    },
+
+
+
+  ])
+
+
+
+  // 월드맵(지도)
   const [worldMap, setWorldMap] = useState<Spot[]>([
     {
       location: 0,
@@ -212,16 +461,16 @@ export default function WordyGame() {
     },
     {
       location: 5,
-      name: '특수지역',
+      name: '홍콩',
       price: {
         land: 100,
         villa: 0,
         hotel: 0,
         landmark: 0,
       },
-      type: 'item',
+      type: 'city',
       landmark: '랜드마크없음',
-      contents: '여기는 특수지역입니다.',
+      contents: '자유무역도시 홍콩',
       continent: '아시아',
       owner: 0,
       option: 0,
@@ -437,16 +686,16 @@ export default function WordyGame() {
     },
     {
       location: 15,
-      name: '특수지역',
+      name: '지중해',
       price: {
         land: 100,
         villa: 0,
         hotel: 0,
         landmark: 0,
       },
-      type: 'item',
-      landmark: '랜드마크 없음',
-      contents: '미정',
+      type: 'city',
+      landmark: '크레타섬',
+      contents: '그리스 로마 문화의 시작 지중해',
       continent: '유럽',
       owner: 0,
       option: 0,
@@ -662,16 +911,16 @@ export default function WordyGame() {
     },
     {
       location: 25,
-      name: '특수지역',
+      name: '사하라',
       price: {
         land: 100,
         villa: 0,
         hotel: 0,
         landmark: 0,
       },
-      type: 'item',
-      landmark: '랜드마크없음',
-      contents: '특수지역입니다.',
+      type: 'city',
+      landmark: '오아시스',
+      contents: '뜨거운 모래의 사막, 사하라',
       continent: '아프리카&오세아니아',
       owner: 0,
       option: 0,
@@ -888,7 +1137,7 @@ export default function WordyGame() {
     },
     {
       location: 35,
-      name: '특수지역',
+      name: '파나마',
       price: {
         land: 100,
         villa: 0,
@@ -897,7 +1146,7 @@ export default function WordyGame() {
       },
       type: 'item',
       landmark: '파나마운하',
-      contents: '특수지역입니다.',
+      contents: '아메리카 대륙의 좁은 해협, 파나마',
       continent: '아메리카',
       owner: 0,
       option: 0,
@@ -1003,8 +1252,10 @@ export default function WordyGame() {
   ])
 
   const [p1, setP1] = useState<Player>({
-    pId: '1',
-    pNum: 1,
+    roomId: '',
+    type: 'player',
+    playerId: '',
+    playerNum: 1,
     name: '성훈',
     game: {
       location: 0,
@@ -1014,7 +1265,7 @@ export default function WordyGame() {
       dice1: 0,
       dice2: 0,
       dice: 0,
-      double: false,
+      isDouble: false,
       own: [],
       lap: 0,
       ranking: 0,
@@ -1022,8 +1273,10 @@ export default function WordyGame() {
   })
 
   const [p2, setP2] = useState<Player>({
-    pId: '2',
-    pNum: 2,
+    roomId: '',
+    type: 'player',
+    playerId: '',
+    playerNum: 2,
     name: '한빈',
     game: {
       location: 0,
@@ -1033,7 +1286,7 @@ export default function WordyGame() {
       dice1: 0,
       dice2: 0,
       dice: 0,
-      double: false,
+      isDouble: false,
       own: [],
       lap: 0,
       ranking: 0,
@@ -1041,8 +1294,10 @@ export default function WordyGame() {
   })
 
   const [p3, setP3] = useState<Player>({
-    pId: '3',
-    pNum: 3,
+    roomId: '',
+    type: 'player',
+    playerId: '',
+    playerNum: 3,
     name: '정훈',
     game: {
       location: 0,
@@ -1052,7 +1307,7 @@ export default function WordyGame() {
       dice1: 0,
       dice2: 0,
       dice: 0,
-      double: false,
+      isDouble: false,
       own: [],
       lap: 0,
       ranking: 0,
@@ -1060,8 +1315,10 @@ export default function WordyGame() {
   })
 
   const [p4, setP4] = useState<Player>({
-    pId: '4',
-    pNum: 4,
+    roomId: '',
+    type: 'player',
+    playerId: '',
+    playerNum: 4,
     name: '원규',
     game: {
       location: 0,
@@ -1071,7 +1328,7 @@ export default function WordyGame() {
       dice1: 0,
       dice2: 0,
       dice: 0,
-      double: false,
+      isDouble: false,
       own: [],
       lap: 0,
       ranking: 0,
@@ -1088,15 +1345,19 @@ export default function WordyGame() {
   const [turn, setTurn] = useState(0);
   const [option, setOption] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [buyMode, setBuyMode] = useState(true);
-  const [message, setMessage] = useState('');
-  const [toll, setToll] = useState(0);
+  const [buyMode, setBuyMode] = useState(0);
+  const [mode, setMode] = useState('')
+  const [message1, setMessage1] = useState('');
+  const [message2, setMessage2] = useState('');
+  const [currentLocation, setCurrentLocation] = useState(0);
 
   // 플레이어 1회 턴 함수
 
-  const playerTurn = async (turn: number) => {
+  const playerTurn = (turn: number) => {
 
-    setBuyMode(true);
+
+    // 콘솔창 및 플레이어 상태 초기화
+    setBuyMode(0);
     p1.game.state = false;
     p2.game.state = false;
     p3.game.state = false;
@@ -1105,23 +1366,26 @@ export default function WordyGame() {
 
 
 
-    let double = false;
+    // 랜덤 주사위 2개 
+    let double = false;   // 더블 false로 초기화
     let dice1 = Math.floor(Math.random() * 6 + 1);
     let dice2 = Math.floor(Math.random() * 6 + 1);
-    rollDice(dice1, dice2);
-    let dice = dice1 + dice2
 
+    rollDice(dice1, dice2);   // 주사위 굴리는 함수
+    let dice = dice1 + dice2    // 주사위 합
+
+    // 주사위 값 전역변수에 초기화
     setDice1(dice1);
     setDice2(dice2);
     setDice(dice)
+
+    // 더블 검증
     if (dice1 === dice2) {
       double = true
     } else {
       double = false;
     }
     setDouble(double);
-
-    // 무인도 검증
 
     if (turn === 0) {
 
@@ -1137,7 +1401,7 @@ export default function WordyGame() {
             dice1: dice1,
             dice2: dice2,
             dice: dice,
-            double: double,
+            isDouble: double,
             own: p1.game.own,
             lap: p1.game.lap,
             ranking: 0,
@@ -1158,7 +1422,7 @@ export default function WordyGame() {
             dice1: dice1,
             dice2: dice2,
             dice: dice,
-            double: double,
+            isDouble: double,
             own: p2.game.own,
             lap: p2.game.lap,
             ranking: 0,
@@ -1179,7 +1443,7 @@ export default function WordyGame() {
             dice1: dice1,
             dice2: dice2,
             dice: dice,
-            double: double,
+            isDouble: double,
             own: p3.game.own,
             lap: p3.game.lap,
             ranking: 0,
@@ -1200,7 +1464,7 @@ export default function WordyGame() {
             dice1: dice1,
             dice2: dice2,
             dice: dice,
-            double: double,
+            isDouble: double,
             own: p4.game.own,
             lap: p4.game.lap,
             ranking: 0,
@@ -1227,15 +1491,18 @@ export default function WordyGame() {
         p.game.balance += 50;
         console.log(p.name + '한 바퀴 완주! 월급 + 50만원');
         result = (result % 40)  // 한바퀴 돌면(40칸 이상 이면 초기화)
+
       }
+
 
       if (result === 10) {   // 무인도 좌표값(10)이면,
         console.log(p.name + '무인도 불시착! 3턴 쉬세요.');
         p.game.desert = 3;
       }
 
+
     } else {
-      if (p.game.double) {
+      if (p.game.isDouble) {
         console.log(p.name + '더블로 무인도 탈출 성공!');
         p.game.desert = 0;
 
@@ -1245,53 +1512,148 @@ export default function WordyGame() {
       }
       result = p.game.location;
     }
-
+    setCurrentLocation(result);
     let spot = worldMap[result]
+    setTotalPrice(worldMap[result].price.land);
 
     if (spot.type === 'nation') { // 도착지 종류가 나라일 때
       if (spot.owner) {  // 주인이 있을때
-        if (spot.owner === p.pNum) {
+        if (spot.owner === p.playerNum) {
         } else {
-          setBuyMode(false);
-          setMessage('플레이어' + spot.owner + '소유지 입니다. 통행료' + spot.toll + '만원을 지불하세요.');
-          if (p.pNum === 1) {
+          setBuyMode(1);
+          setMessage1('플레이어' + spot.owner + '소유지 입니다.');
+          setMessage2('통행료 ' + spot.toll + '만원을 지불');
+          if (p.playerNum === 1) {
             setP1((prevState) => ({
               ...prevState,
               game: {
                 ...prevState.game,
-                balance: p1.game.balance - spot.toll,
+                balance: prevState.game.balance - spot.toll,
               }
             }))
             if (spot.owner === 2) {
-
+              setP2((prevState) => ({
+                ...prevState,
+                game: {
+                  ...prevState.game,
+                  balance: prevState.game.balance + spot.toll,
+                }
+              }))
             } else if (spot.owner === 3) {
-
+              setP3((prevState) => ({
+                ...prevState,
+                game: {
+                  ...prevState.game,
+                  balance: prevState.game.balance + spot.toll,
+                }
+              }))
             } else if (spot.owner === 4) {
-
+              setP4((prevState) => ({
+                ...prevState,
+                game: {
+                  ...prevState.game,
+                  balance: prevState.game.balance + spot.toll,
+                }
+              }))
             }
-          } else if (p.pNum === 2) {
+          } else if (p.playerNum === 2) {
+            setP2((prevState) => ({
+              ...prevState,
+              game: {
+                ...prevState.game,
+                balance: prevState.game.balance - spot.toll,
+              }
+            }))
             if (spot.owner === 1) {
-
+              setP1((prevState) => ({
+                ...prevState,
+                game: {
+                  ...prevState.game,
+                  balance: prevState.game.balance + spot.toll,
+                }
+              }))
             } else if (spot.owner === 3) {
-
+              setP3((prevState) => ({
+                ...prevState,
+                game: {
+                  ...prevState.game,
+                  balance: prevState.game.balance + spot.toll,
+                }
+              }))
             } else if (spot.owner === 4) {
-
+              setP4((prevState) => ({
+                ...prevState,
+                game: {
+                  ...prevState.game,
+                  balance: prevState.game.balance + spot.toll,
+                }
+              }))
             }
-          } else if (p.pNum === 3) {
+          } else if (p.playerNum === 3) {
+            setP3((prevState) => ({
+              ...prevState,
+              game: {
+                ...prevState.game,
+                balance: prevState.game.balance - spot.toll,
+              }
+            }))
             if (spot.owner === 1) {
-
+              setP1((prevState) => ({
+                ...prevState,
+                game: {
+                  ...prevState.game,
+                  balance: prevState.game.balance + spot.toll,
+                }
+              }))
             } else if (spot.owner === 2) {
-
+              setP2((prevState) => ({
+                ...prevState,
+                game: {
+                  ...prevState.game,
+                  balance: prevState.game.balance + spot.toll,
+                }
+              }))
             } else if (spot.owner === 4) {
-
+              setP4((prevState) => ({
+                ...prevState,
+                game: {
+                  ...prevState.game,
+                  balance: prevState.game.balance + spot.toll,
+                }
+              }))
             }
-          } else if (p.pNum === 4) {
+          } else if (p.playerNum === 4) {
+            setP4((prevState) => ({
+              ...prevState,
+              game: {
+                ...prevState.game,
+                balance: prevState.game.balance - spot.toll,
+              }
+            }))
             if (spot.owner === 1) {
-
+              setP1((prevState) => ({
+                ...prevState,
+                game: {
+                  ...prevState.game,
+                  balance: prevState.game.balance + spot.toll,
+                }
+              }))
             } else if (spot.owner === 2) {
-
+              setP2((prevState) => ({
+                ...prevState,
+                game: {
+                  ...prevState.game,
+                  balance: prevState.game.balance + spot.toll,
+                }
+              }))
             } else if (spot.owner === 3) {
-
+              setP3((prevState) => ({
+                ...prevState,
+                game: {
+                  ...prevState.game,
+                  balance: prevState.game.balance + spot.toll,
+                }
+              }))
             }
           }
         }
@@ -1300,7 +1662,10 @@ export default function WordyGame() {
         console.log(spot.name + '를 구입하시겠습니까?');
       }
     } else if (spot.type === 'item') {  // 보물상자일 때
-      console.log('보물상자를 열어보세요!');
+      getItem(p);
+      setBuyMode(2);
+      setMessage1('보물상자를 열어보세요');
+
     } else if (spot.type === 'start') {
       console.log('시작점에 도착했습니다. 월급이 두배 + 50만원');
     } else if (spot.type === 'desert') {
@@ -1312,8 +1677,6 @@ export default function WordyGame() {
     } else if (spot.type === 'olympic') {
       console.log('올림픽 개최!!!');
     }
-
-
 
 
     return result
@@ -1466,7 +1829,7 @@ export default function WordyGame() {
         return
       }
     } else if (option === 4) {
-      if (worldMap[nation].owner === p.pNum) {
+      if (worldMap[nation].owner === p.playerNum) {
         if (p.game.balance - spot.price.landmark > 0) {
 
           balance -= spot.price.landmark;
@@ -1494,7 +1857,7 @@ export default function WordyGame() {
     }
 
 
-    if (p.pNum === 1) {
+    if (p.playerNum === 1) {
       setP1((prevState) => ({
         ...prevState,
         game: {
@@ -1505,7 +1868,7 @@ export default function WordyGame() {
       }))
 
 
-    } else if (p.pNum === 2) {
+    } else if (p.playerNum === 2) {
       setP2((prevState) => ({
         ...prevState,
         game: {
@@ -1514,7 +1877,7 @@ export default function WordyGame() {
           balance: balance,
         }
       }))
-    } else if (p.pNum === 3) {
+    } else if (p.playerNum === 3) {
       setP3((prevState) => ({
         ...prevState,
         game: {
@@ -1523,7 +1886,7 @@ export default function WordyGame() {
           balance: balance,
         }
       }))
-    } else if (p.pNum === 4) {
+    } else if (p.playerNum === 4) {
       setP4((prevState) => ({
         ...prevState,
         game: {
@@ -1541,22 +1904,22 @@ export default function WordyGame() {
       prevState.map((item, key) =>
         key === nation ? {
           ...item,
-          owner: p.pNum,
+          owner: p.playerNum,
           option: option,
         } : item
       )
     );
 
 
-    setBuyMode(false);
+    setBuyMode(1);
     if (option === 1) {
-      setMessage(p.name + '님 구매 완료');
+      setMessage1(p.name + '님 구매 완료');
     } else if (option === 2) {
-      setMessage(p.name + '님 구매 및 별장 건설');
+      setMessage1(p.name + '님 구매 및 별장 건설');
     } else if (option === 3) {
-      setMessage(p.name + '님 구매 및 호텔 건설');
+      setMessage1(p.name + '님 구매 및 호텔 건설');
     } else if (option === 4) {
-      setMessage(p.name + '님 랜드마크 건설');
+      setMessage1(p.name + '님 랜드마크 건설');
     }
     setTmp(spot.location)
 
@@ -1570,6 +1933,18 @@ export default function WordyGame() {
       tollCalculate(worldMap[tmp])
     }
   }, [tmp])
+
+
+
+
+  function moveLocation(e: number): void {
+    console.log(e);
+    setCurrentLocation(e);
+    reLoaction(turn, e);
+
+  }
+
+
   // 색상 바꾸기 예제
   // const [color, setColor] = useState<number>(0);
   // const [inputColor, setInputColor] = useState<string>('white');
@@ -1598,7 +1973,12 @@ export default function WordyGame() {
               <div className='flex relative'>
                 {worldMap.map((i, index) => {
                   return <div key={index}>
-                    {i.location >= 0 && i.location < 10 && i.type === 'nation' ? <div className='w-[90px] h-[90px] bg-red-300 outline outline-1 flex flex-col items-center justify-start'>
+                    {i.location >= 0 && i.location < 10 && i.type === 'nation' ? <div data-location={i.location}
+                      onClick={(e) => {
+                        moveLocation(Number(e.currentTarget.dataset.location))
+                      }
+                      }
+                      className={`w-[90px] h-[90px] bg-red-300  flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline outline-offset-1 outline-red-500' : 'outline outline-1'}`}>
                       <div>[{index}]{i.name}</div>
                       <div>{i.price ? i.price.land + '만원' : '특수지역'}</div>
                       <div className={`w-[90px] h-[56px] mt-[4px]  flex flex-col justify-center items-center ${i.owner === 1 ? 'bg-red-100' : 'bg-white'} ${i.owner === 2 ? 'bg-green-100' : 'bg-white'} ${i.owner === 3 ? 'bg-blue-100' : 'bg-white'} ${i.owner === 4 ? 'bg-yellow-100' : 'bg-white'}`}>
@@ -1606,16 +1986,16 @@ export default function WordyGame() {
                         {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
                         {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
                         {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
-                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p1.playerNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.playerNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.playerNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.playerNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
                         {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
                         {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
-                    {i.location >= 0 && i.location < 10 && i.type === 'item' ? <div className='w-[90px] h-[90px] bg-purple-400 outline outline-1 flex flex-col items-center justify-start'>
+                    {i.location >= 0 && i.location < 10 && i.type === 'item' ? <div className={`w-[90px] h-[90px] bg-gray-400  flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline outline-offset-1 outline-red-500' : 'outline outline-1'}`}>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
@@ -1623,16 +2003,21 @@ export default function WordyGame() {
                         {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
                         {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
                         {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
-                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p1.playerNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.playerNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.playerNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.playerNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
                         {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
                         {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
-                    {i.location >= 0 && i.location < 10 && (i.type !== 'item' && i.type !== 'nation') ? <div className='w-[90px] h-[90px] bg-gray-100 outline outline-1 flex flex-col items-center justify-start'>
+                    {i.location >= 0 && i.location < 10 && (i.type !== 'item' && i.type !== 'nation') ? <div data-location={i.location}
+                      onClick={(e) => {
+                        moveLocation(Number(e.currentTarget.dataset.location))
+                      }
+                      }
+                      className={`w-[90px] h-[90px] bg-gray-100  flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline outline-offset-1 outline-red-500' : 'outline outline-1'}`}>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
@@ -1640,10 +2025,10 @@ export default function WordyGame() {
                         {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
                         {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
                         {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
-                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p1.playerNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.playerNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.playerNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.playerNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
                         {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
                         {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
@@ -1655,7 +2040,12 @@ export default function WordyGame() {
               <div className='flex-col relative top-[-90px] left-[900px]'>
                 {worldMap.map((i, index) => {
                   return <div key={index}>
-                    {i.location >= 10 && i.location < 20 && i.type === 'nation' ? <div className='w-[90px] h-[90px] bg-green-300 outline outline-1 flex flex-col items-center justify-start'>
+                    {i.location >= 10 && i.location < 20 && i.type === 'nation' ? <div data-location={i.location}
+                      onClick={(e) => {
+                        moveLocation(Number(e.currentTarget.dataset.location))
+                      }
+                      }
+                      className={`w-[90px] h-[90px] bg-green-300  flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline outline-offset-1 outline-red-500' : 'outline outline-1'}`}>
                       <div>[{index}]{i.name}</div>
                       <div>{i.price ? i.price.land + '만원' : '특수지역'}</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
@@ -1663,16 +2053,21 @@ export default function WordyGame() {
                         {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
                         {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
                         {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
-                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p1.playerNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.playerNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.playerNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.playerNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
                         {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
                         {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
-                    {i.location >= 10 && i.location < 20 && i.type === 'item' ? <div className='w-[90px] h-[90px] bg-purple-400 outline outline-1 flex flex-col items-center justify-start'>
+                    {i.location >= 10 && i.location < 20 && i.type === 'item' ? <div data-location={i.location}
+                      onClick={(e) => {
+                        moveLocation(Number(e.currentTarget.dataset.location))
+                      }
+                      }
+                      className={`w-[90px] h-[90px] bg-gray-400  flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline outline-offset-1 outline-red-500' : 'outline outline-1'}`}>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
@@ -1680,16 +2075,21 @@ export default function WordyGame() {
                         {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
                         {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
                         {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
-                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p1.playerNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.playerNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.playerNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.playerNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
                         {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
                         {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
-                    {i.location >= 10 && i.location < 20 && (i.type !== 'item' && i.type !== 'nation') ? <div className='w-[90px] h-[90px] bg-gray-100 outline outline-1 flex flex-col items-center justify-start'>
+                    {i.location >= 10 && i.location < 20 && (i.type !== 'item' && i.type !== 'nation') ? <div data-location={i.location}
+                      onClick={(e) => {
+                        moveLocation(Number(e.currentTarget.dataset.location))
+                      }
+                      }
+                      className={`w-[90px] h-[90px] bg-gray-100  flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline outline-offset-1 outline-red-500' : 'outline outline-1'}`}>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
@@ -1697,10 +2097,10 @@ export default function WordyGame() {
                         {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
                         {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
                         {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
-                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p1.playerNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.playerNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.playerNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.playerNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
                         {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
                         {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
@@ -1712,7 +2112,12 @@ export default function WordyGame() {
               <div className='flex flex-row-reverse relative top-[-90px]'>
                 {worldMap.map((i, index) => {
                   return <div key={index}>
-                    {i.location >= 20 && i.location < 30 && i.type === 'nation' ? <div className='w-[90px] h-[90px] bg-yellow-300 outline outline-1 flex flex-col items-center justify-start'>
+                    {i.location >= 20 && i.location < 30 && i.type === 'nation' ? <div data-location={i.location}
+                      onClick={(e) => {
+                        moveLocation(Number(e.currentTarget.dataset.location))
+                      }
+                      }
+                      className={`w-[90px] h-[90px] bg-yellow-300  flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline outline-offset-1 outline-red-500' : 'outline outline-1'}`}>
                       <div>[{index}]{i.name}</div>
                       <div>{i.price ? i.price.land + '만원' : '특수지역'}</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
@@ -1720,16 +2125,21 @@ export default function WordyGame() {
                         {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
                         {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
                         {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
-                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p1.playerNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.playerNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.playerNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.playerNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
                         {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
                         {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
-                    {i.location >= 20 && i.location < 30 && i.type === 'item' ? <div className='w-[90px] h-[90px] bg-purple-400 outline outline-1 flex flex-col items-center justify-start'>
+                    {i.location >= 20 && i.location < 30 && i.type === 'item' ? <div data-location={i.location}
+                      onClick={(e) => {
+                        moveLocation(Number(e.currentTarget.dataset.location))
+                      }
+                      }
+                      className='w-[90px] h-[90px] bg-purple-400 outline outline-1 flex flex-col items-center justify-start'>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
@@ -1737,16 +2147,21 @@ export default function WordyGame() {
                         {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
                         {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
                         {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
-                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p1.playerNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.playerNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.playerNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.playerNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
                         {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
                         {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
-                    {i.location >= 20 && i.location < 30 && (i.type !== 'item' && i.type !== 'nation') ? <div className='w-[90px] h-[90px] bg-gray-100 outline outline-1 flex flex-col items-center justify-start'>
+                    {i.location >= 20 && i.location < 30 && (i.type !== 'item' && i.type !== 'nation') ? <div data-location={i.location}
+                      onClick={(e) => {
+                        moveLocation(Number(e.currentTarget.dataset.location))
+                      }
+                      }
+                      className='w-[90px] h-[90px] bg-gray-100 outline outline-1 flex flex-col items-center justify-start'>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
@@ -1754,10 +2169,10 @@ export default function WordyGame() {
                         {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
                         {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
                         {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
-                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p1.playerNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.playerNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.playerNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.playerNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
                         {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
                         {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
@@ -1769,7 +2184,12 @@ export default function WordyGame() {
               <div className='flex flex-col-reverse relative top-[-990px]'>
                 {worldMap.map((i, index) => {
                   return <div key={index}>
-                    {i.location >= 30 && i.location < 40 && i.type === 'nation' ? <div className='w-[90px] h-[90px] bg-purple-300 outline outline-1 flex flex-col items-center justify-start'>
+                    {i.location >= 30 && i.location < 40 && i.type === 'nation' ? <div data-location={i.location}
+                      onClick={(e) => {
+                        moveLocation(Number(e.currentTarget.dataset.location))
+                      }
+                      }
+                      className='w-[90px] h-[90px] bg-purple-300 outline outline-1 flex flex-col items-center justify-start'>
                       <div>[{index}]{i.name}</div>
                       <div>{i.price ? i.price.land + '만원' : '특수지역'}</div>
                       <div className={`w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center`}>
@@ -1777,16 +2197,21 @@ export default function WordyGame() {
                         {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
                         {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500v'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
                         {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
-                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p1.playerNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.playerNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.playerNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.playerNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
                         {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
                         {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
-                    {i.location >= 30 && i.location < 40 && i.type === 'item' ? <div className='w-[90px] h-[90px] bg-purple-400 outline outline-1 flex flex-col items-center justify-start'>
+                    {i.location >= 30 && i.location < 40 && i.type === 'item' ? <div data-location={i.location}
+                      onClick={(e) => {
+                        moveLocation(Number(e.currentTarget.dataset.location))
+                      }
+                      }
+                      className={`w-[90px] h-[90px] bg-gray-400  flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline outline-offset-1 outline-red-500' : 'outline outline-1'}`}>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
@@ -1794,16 +2219,21 @@ export default function WordyGame() {
                         {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
                         {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
                         {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
-                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p1.playerNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.playerNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.playerNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.playerNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
                         {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
                         {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
-                    {i.location >= 30 && i.location < 40 && (i.type !== 'item' && i.type !== 'nation') ? <div className='w-[90px] h-[90px] bg-gray-100 outline outline-1 flex flex-col items-center justify-start'>
+                    {i.location >= 30 && i.location < 40 && (i.type !== 'item' && i.type !== 'nation') ? <div data-location={i.location}
+                      onClick={(e) => {
+                        moveLocation(Number(e.currentTarget.dataset.location))
+                      }
+                      }
+                      className={`w-[90px] h-[90px] bg-gray-300  flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline outline-offset-1 outline-red-500' : 'outline outline-1'}`}>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
@@ -1811,10 +2241,10 @@ export default function WordyGame() {
                         {i.location === p2.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-green-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p2.name}</div></div> : null}
                         {i.location === p3.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-blue-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p3.name}</div></div> : null}
                         {i.location === p4.game.location ? <div className='flex items-center pl-[10px]'><div className='rounded-[10px] w-[10px] h-[10px] bg-yellow-500 z-[2]'></div><div className='ml-[4px] text-[14px] z-[2]'>{p4.name}</div></div> : null}
-                        {i.owner === p1.pNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p2.pNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p3.pNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
-                        {i.owner === p4.pNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p1.playerNum ? <div className='bg-red-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p2.playerNum ? <div className='bg-green-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p3.playerNum ? <div className='bg-blue-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
+                        {i.owner === p4.playerNum ? <div className='bg-yellow-100 absolute w-[84px] h-[48px] z-[1]'></div> : null}
                         {i.build.villa ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-yellow-400 flex justify-center items-center text-white rounded-[2px]'>V</div> : null}
                         {i.build.hotel ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-blue-400 flex justify-center items-center text-white rounded-[2px]'>H</div> : null}
                         {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
@@ -1832,7 +2262,7 @@ export default function WordyGame() {
               lst.map((i, index) => {
                 return <div key={index}>
                   <div className={`w-[200px] h-[200px] text-[12px] flex flex-col justify-between items-between p-[10px]  ${i.game.state ? 'bg-blue-300' : 'bg-gray-100'}`}>
-                    <div className={`w-full h-[30px]  flex justify-center items-center text-[20px] mb-[10px] ${i.game.state ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>Player{i.pId}({i.name})</div>
+                    <div className={`w-full h-[30px]  flex justify-center items-center text-[20px] mb-[10px] ${i.game.state ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>Player{i.playerId}({i.name})</div>
                     <div>보유자산 : {i.game.balance}만원</div>
                     <div>현재위치 : [{i.game.location}] {worldMap[i.game.location].name}</div>
                     <div>소유국가 : [{i.game.own + ''}]</div>
@@ -1946,7 +2376,7 @@ export default function WordyGame() {
                       <div className='text-[12px]'>[{worldMap[i.game.location].owner ? `플레이어 ${worldMap[i.game.location].owner} 소유` : '구입 가능'}]</div>
                     </div>
                     <div className='text-[18px] mt-[10px] mb-[10px] h-[60px]'>{worldMap[i.game.location].contents}</div>
-                    {worldMap[i.game.location].type === 'nation' && (!worldMap[i.game.location].owner || worldMap[i.game.location].owner === turn) && (buyMode) &&
+                    {worldMap[i.game.location].type === 'nation' && (!worldMap[i.game.location].owner || worldMap[i.game.location].owner === turn) && (buyMode === 0) &&
                       <div>
                         <div className='flex rounded-[4px] w-[380px] h-[100px] outline bg-gray-50'>
                           <div className={`flex flex-col justify-center items-center w-[95px] h-full hover:bg-blue-100 hover:cursor-pointer ${option === 1 ? 'bg-blue-200' : ''}`}
@@ -2020,11 +2450,21 @@ export default function WordyGame() {
                         </div>
                       </div>
                     }
-
-                    {!buyMode && <div className='w-[320px] h-[100px] bg-red-500 flex flex-col justify-center items-center'>
-                      <div className='text-[24px] text-white '>{message}</div>
+                    {/* // 남의 땅일 때 */}
+                    {buyMode === 1 && <div className='w-[340px] h-[200px] bg-red-300 flex flex-col justify-center items-center rounded-[6px]'>
+                      <div className='text-[24px] text-white '>{message1}</div>
+                      <div className='text-[24px] text-white mt-[10px]'>{message2}</div>
                     </div>}
 
+                    {/* // 보물상자일 때 */}
+                    {buyMode === 2 && <div className='w-[340px] h-[200px] bg-yellow-400 flex flex-col justify-center items-center rounded-[6px]'>
+                      <div className='text-[22px] text-white '>{message1}</div>
+                      <div className='text-[18px] text-white mt-[10px] p-[14px]'>{message2}</div>
+                      {mode === '자유이동' &&
+                        <div>
+                          <div className='w-[320px] h-[60px] text-[24px] bg-[#ff4d45] text-white flex justify-center items-center mt-[20px] rounded-[4px] hover:cursor-pointer hover:bg-[#d1352e]'>이동하기</div>
+                        </div>}
+                    </div>}
 
 
                   </div>

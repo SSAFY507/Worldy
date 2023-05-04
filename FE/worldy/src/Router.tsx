@@ -21,6 +21,7 @@ import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
 import Updates from './routes/Updates';
 import WorldAdventure from './routes/WorldAdventure';
+import Socket from './routes/Socket';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -123,6 +124,7 @@ const AppLayout = () => {
               <Route path='/support' element={<Support />} />
               <Route path='/adventure' element={<WorldAdventure />} />
               <Route path='/tutorial' element={<Tutorial />} />
+              <Route path='/socket' element={<Socket />} />
             </Routes>
           </div>
         </div>
