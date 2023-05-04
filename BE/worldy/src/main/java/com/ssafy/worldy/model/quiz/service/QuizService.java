@@ -2,10 +2,7 @@ package com.ssafy.worldy.model.quiz.service;
 
 import com.ssafy.worldy.model.adventure.entity.Nation;
 import com.ssafy.worldy.model.adventure.repo.NationRepo;
-import com.ssafy.worldy.model.quiz.dto.NewsQuizDto;
-import com.ssafy.worldy.model.quiz.dto.QuizDto;
-import com.ssafy.worldy.model.quiz.dto.QuizInsertDto;
-import com.ssafy.worldy.model.quiz.dto.QuizLikeInsertDto;
+import com.ssafy.worldy.model.quiz.dto.*;
 import com.ssafy.worldy.model.quiz.entity.Quiz;
 import com.ssafy.worldy.model.quiz.entity.QuizRecord;
 import com.ssafy.worldy.model.quiz.repo.QuizLikeRepo;
@@ -55,5 +52,13 @@ public class QuizService {
         Nation nation = nationRepo.findById(quizLikeInsertDto.getNationId()).get();
 
         quizLikeRepo.save(quizLikeInsertDto.toEntity(quiz,user,quizRecord,nation));
+    }
+
+    public void insertQuizRecord(QuizRecordInsertDto quizRecordInsertDto){
+
+        Quiz quiz = quizRepo.findById(quizRecordInsertDto.getQuizId()).get();
+        User user = userRepo.findById(quizRecordInsertDto.getUserId()).get();
+
+        quizRecordRepo.save(quizRecordInsertDto.toEntity(user, quiz));
     }
 }

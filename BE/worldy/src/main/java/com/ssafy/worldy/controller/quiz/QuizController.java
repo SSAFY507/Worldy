@@ -1,9 +1,6 @@
 package com.ssafy.worldy.controller.quiz;
 
-import com.ssafy.worldy.model.quiz.dto.NewsQuizDto;
-import com.ssafy.worldy.model.quiz.dto.QuizDto;
-import com.ssafy.worldy.model.quiz.dto.QuizInsertDto;
-import com.ssafy.worldy.model.quiz.dto.QuizLikeInsertDto;
+import com.ssafy.worldy.model.quiz.dto.*;
 import com.ssafy.worldy.model.quiz.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -56,6 +53,17 @@ public class QuizController {
     public ResponseEntity<String> insertQuizLike(@RequestBody QuizLikeInsertDto quizLikeInsertDto){
 
         quizService.insertQuizLike(quizLikeInsertDto);
+        return new ResponseEntity<>("success", HttpStatus.OK);
+    }
+
+    /***
+     * [ 퀴즈 결과 ]
+     * - 유저가 푼 퀴즈의 결과 저장
+     ***/
+    @PostMapping("/record")
+    public ResponseEntity<String> insertQuizRecord(@RequestBody QuizRecordInsertDto quizRecordInsertDto){
+
+        quizService.insertQuizRecord(quizRecordInsertDto);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 }
