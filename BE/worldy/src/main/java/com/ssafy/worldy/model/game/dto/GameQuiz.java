@@ -12,7 +12,6 @@ public class GameQuiz {
 
     private String type;
     private String kakaoId; // 퀴즈 맞추는 사람
-
     private String roomId;
     private QuizDto quizDto;
 }

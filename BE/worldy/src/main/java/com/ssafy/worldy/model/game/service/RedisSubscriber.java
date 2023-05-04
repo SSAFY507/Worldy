@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.worldy.model.game.dto.Emoticon;
 import com.ssafy.worldy.model.game.dto.GameQuiz;
-import com.ssafy.worldy.model.game.dto.MatchingResultDto;
+import com.ssafy.worldy.model.game.dto.MatchingResult;
 import com.ssafy.worldy.model.game.dto.Player;
 import com.ssafy.worldy.exception.CustomException;
 import com.ssafy.worldy.exception.CustomExceptionList;
@@ -54,7 +54,7 @@ public class RedisSubscriber {
                 // subscriber에게 메시지 전송
                 log.info("Redis Subscribe Message : ");
 
-                MatchingResultDto matchingResultDto = objectMapper.readValue(publishMessage, MatchingResultDto.class);
+                MatchingResult matchingResultDto = objectMapper.readValue(publishMessage, MatchingResult.class);
 
                 template.convertAndSend("/sub/" + matchingResultDto.getUser1().getRoomId(),matchingResultDto);
                 template.convertAndSend("/sub/" + matchingResultDto.getUser2().getRoomId(),matchingResultDto);
