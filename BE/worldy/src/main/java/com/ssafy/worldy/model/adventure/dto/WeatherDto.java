@@ -10,7 +10,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WeatherDto {
-    private Long weatherId;
+
     private String weatherName;
+
     private float temp;
 }
