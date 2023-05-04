@@ -9,6 +9,7 @@ import java.util.List;
 
 @Repository
 public interface QuizRepo extends JpaRepository<Quiz, Long> {
+
     @Query(value = "select * from quiz where nation_id = ?1", nativeQuery = true)
     List<Quiz> findAllNewsQuizByNationId(Long nationId);
 }

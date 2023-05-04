@@ -9,17 +9,9 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NewsDto {
+public class NationDto {
 
-    private Long newsId;
+    private Long nationId; // 아이디 (auto_increment)
 
-    private String nationName;
-
-    private String newsTitle;
-
-    private String newsSummary;
-
-    private String newsImg;
-
-    private String newsUrl;
+    private String nationName; // 국가명
 }

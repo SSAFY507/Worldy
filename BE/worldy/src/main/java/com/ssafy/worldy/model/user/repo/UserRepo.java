@@ -15,6 +15,6 @@ public interface UserRepo extends JpaRepository<User, Long> {
     @EntityGraph(attributePaths = "authorities")
     Optional<User> findOneWithAuthoritiesByKakaoId(String kakaoId);
 
-    // kakaoIf로 회원 조회
+    // kakaoId로 회원 조회
     Optional<User> findByKakaoId(String kakaoId);
 }
