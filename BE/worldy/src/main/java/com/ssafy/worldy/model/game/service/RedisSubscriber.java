@@ -60,7 +60,6 @@ public class RedisSubscriber {
                 template.convertAndSend("/sub/" + matchingResultDto.getUser2().getRoomId(),matchingResultDto);
                 template.convertAndSend("/sub/" + matchingResultDto.getUser3().getRoomId(),matchingResultDto);
                 template.convertAndSend("/sub/" + matchingResultDto.getUser4().getRoomId(),matchingResultDto);
-
             }
         } catch (JsonProcessingException e) {
             log.error(e.getMessage());
