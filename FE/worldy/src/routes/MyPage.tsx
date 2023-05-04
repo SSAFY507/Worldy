@@ -6,7 +6,7 @@ import { BiLogOut } from 'react-icons/bi';
 import { IoIosLogOut, IoLogoGameControllerB } from 'react-icons/io';
 import { FiArrowUpRight } from 'react-icons/fi';
 import { RiQuestionAnswerFill, RiSave3Fill } from 'react-icons/ri';
-import { MdAccessTimeFilled } from 'react-icons/md';
+import { MdAccessTimeFilled, MdKeyboardDoubleArrowRight } from 'react-icons/md';
 import moment from 'moment';
 
 type MyPageMenuType = {
@@ -119,7 +119,7 @@ export default function MyPage() {
     return (
       <div className=' w-[95%] min-h-[300px] h-fit flex flex-row justify-stretch items-start bg-[rgb(39,32,32)]'>
         <div
-          className=' w-2/5 min-h-[300px] h-full p-[3em] flex flex-col justify-start items-start
+          className=' w-2/5 min-h-[300px] h-full p-[50px] flex flex-col justify-start items-start
         '
         >
           <span className='text-white font-PtdBold text-[40px] mb-[.5em]'>
@@ -129,7 +129,7 @@ export default function MyPage() {
             {input.contentInfo}
           </span>
         </div>
-        <div className=' w-3/5 min-h-[300px] p-[3em] bg-[rgb(49,47,45)]'>
+        <div className=' w-3/5 min-h-[300px] p-[50px] bg-[rgb(49,47,45)]'>
           {input.content}
         </div>
       </div>
@@ -153,6 +153,83 @@ export default function MyPage() {
       </div>
     );
   };
+
+  const quizScrabContentComponent = () => {
+    return (
+      <div className='outline outline-white w-full  h-fit flex flex-col justify-start items-center'>
+        <div className='w-full h-1/3 mb-[20px]'>
+          <button
+            className='w-full h-[80px] bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.15)] flex justify-center items-center rounded-lg p-[10px]'
+            onClick={() => handleQuizPopDownKeyState(0)}
+          >
+            <span className='text-white text-[30px] font-PtdSemiBOld'>
+              전체
+            </span>
+          </button>
+        </div>
+        <div className='w-full h-1/3 flex flex-row justify-between items-center mb-[20px]'>
+          <button
+            className='w-[30%] h-[80px] bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.15)] flex justify-center items-center rounded-lg p-[10px]'
+            onClick={() => handleQuizPopDownKeyState(1)}
+          >
+            <span className='text-white text-[25px] font-PtdSemiBOld'>
+              나라별
+            </span>
+          </button>
+          <button
+            className='w-[30%] h-[80px] bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.15)] flex justify-center items-center rounded-lg p-[10px]'
+            onClick={() => handleQuizPopDownKeyState(2)}
+          >
+            <span className='text-white text-[25px] font-PtdSemiBOld'>
+              난이도별
+            </span>
+          </button>
+
+          <button
+            className='w-[30%] h-[80px] bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.15)] flex justify-center items-center rounded-lg p-[10px]'
+            onClick={() => handleQuizPopDownKeyState(3)}
+          >
+            <span className='text-white text-[25px] font-PtdSemiBOld'>
+              카테고리별
+            </span>
+          </button>
+        </div>
+        <button
+          className='w-full h-[30px] outline outline-white flex justify-center items-center text-white'
+          onClick={() => handleQuizPopDownKeyState(0)}
+        >
+          <div>
+            <MdKeyboardDoubleArrowRight
+              size={30}
+              className={`
+              transition-all duration-1000
+              ${quizPopDownBoxState ? 'rotate-[90deg]' : '-rotate-[90deg]'}`}
+            />
+          </div>
+        </button>
+        <div
+          className={`outline-red-600 w-full transition-all duration-1000 ${
+            quizPopDownBoxState ? 'h-[400px]  py-[15px]' : 'h-0'
+          } px-[10px]`}
+        >
+          <div className='w-full h-full outline outline-white overflow-y-scroll'></div>
+        </div>
+      </div>
+    );
+  };
+
+  const [quizPopDownKeyState, setQuizPopDownKeyState] = useState<number>(-1);
+
+  const handleQuizPopDownKeyState = (input: number) => {
+    setQuizPopDownKeyState(quizPopDownKeyState === input ? -1 : input);
+  };
+
+  const [quizPopDownBoxState, setQuizPopDownBoxState] = useState<boolean>(true);
+
+  useEffect(() => {
+    setQuizPopDownBoxState(quizPopDownKeyState === -1 ? false : true);
+    scrollToContent(quizScrabRef);
+  }, [quizPopDownKeyState]);
 
   const contentBoxComponent = ({
     title,
@@ -194,11 +271,11 @@ export default function MyPage() {
           </div>
         </div>
         <div
-          className='flex-1 h-full  overflow-y-scroll pb-[30em]'
+          className='flex-1 h-full pt-[60px]  overflow-y-scroll pb-[30em]'
           ref={containerRef}
         >
           <div
-            className=' w-full h-fit my-[20px] pt-[5em] text-white'
+            className=' w-full h-fit pt-[20px] text-white'
             ref={accountInfoRef}
           >
             {MyPageContentComponent({
@@ -208,30 +285,30 @@ export default function MyPage() {
               content: accountInfoContentComponent(),
             })}
           </div>
-          <div className=' w-full h-fit my-[20px]' ref={quizScrabRef}>
+          <div className=' w-full h-fit pt-[20px]' ref={quizScrabRef}>
             {MyPageContentComponent({
               title: '퀴즈 스크랩',
               contentInfo:
-                '지난 여행에서 만난 다양한 퀴즈 중, 플레이어가 따로 저장해둔 퀴즈들을 모아 볼 수 있습니다.',
-              content: undefined,
+                '지난 세계 탐험 여행에서 만난 다양한 퀴즈 중, 플레이어가 따로 저장해둔 퀴즈들을 모아 볼 수 있습니다.',
+              content: quizScrabContentComponent(),
             })}
           </div>
-          <div className=' w-full h-fit my-[20px]' ref={gameLogRef}>
+          <div className=' w-full h-fit pt-[20px]' ref={gameLogRef}>
             {MyPageContentComponent({
               title: '전적',
               contentInfo:
-                '플레이어가 겪어온 모든 모노폴리 경험에 대해 적어놨습니다. 이제껏 어떤 여행을 겪어오셨는지 한 번 볼까요?',
+                '플레이어가 겪어온 모든 모노폴리 게임 전적에 대해 적어놨습니다. 이제껏 어떤 여행을 겪어오셨는지 한 번 볼까요?',
               content: undefined,
             })}
           </div>
-          <div className=' w-full h-fit my-[20px]' ref={QARef}>
+          <div className=' w-full h-fit pt-[20px]' ref={QARef}>
             {MyPageContentComponent({
               title: 'Q&A',
               contentInfo: null,
               content: undefined,
             })}
           </div>
-          <div className=' w-full h-fit my-[20px]' ref={loginRecordRef}>
+          <div className=' w-full h-fit pt-[20px]' ref={loginRecordRef}>
             {MyPageContentComponent({
               title: '로그인 기록',
               contentInfo:
@@ -239,7 +316,7 @@ export default function MyPage() {
               content: undefined,
             })}
           </div>
-          <div className=' w-full h-fit my-[20px]' ref={logoutRef}>
+          <div className=' w-full h-fit pt-[20px]' ref={logoutRef}>
             {MyPageContentComponent({
               title: '로그아웃',
               contentInfo: null,

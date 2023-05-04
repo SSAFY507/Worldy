@@ -72,7 +72,7 @@ export default function SupportModal({
           placeholder={`${
             ableWrite
               ? '문의 내용을 입력해주세요. (10~500자 내외)'
-              : '2번 항목을 채워주세요.'
+              : '위의 항목을 모두 채워주세요.'
           }`}
           maxLength={500}
         />
