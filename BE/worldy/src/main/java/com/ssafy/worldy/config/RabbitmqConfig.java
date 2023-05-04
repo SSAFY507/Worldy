@@ -5,6 +5,7 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -65,7 +66,7 @@ public class RabbitmqConfig {
 
     @Bean
     Binding binding2(DirectExchange directExchange) {
-        return BindingBuilder.bind(queue2()).to(directExchange).with("worldy.cancle.key");
+        return BindingBuilder.bind(queue2()).to(directExchange).with("worldy.cancel.key");
     }
 
 
@@ -91,4 +92,15 @@ public class RabbitmqConfig {
         return new Jackson2JsonMessageConverter();
     }
 
+    /***
+     * Consumer
+     ***/
+
+    @Bean
+    SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory(ConnectionFactory connectionFactory) {
+        final SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+        factory.setConnectionFactory(connectionFactory);
+        factory.setMessageConverter(messageConverter());
+        return factory;
+    }
 }
