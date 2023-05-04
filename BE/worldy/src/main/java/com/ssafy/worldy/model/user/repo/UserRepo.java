@@ -3,8 +3,10 @@ package com.ssafy.worldy.model.user.repo;
 import com.ssafy.worldy.model.user.entity.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -15,6 +17,12 @@ public interface UserRepo extends JpaRepository<User, Long> {
     @EntityGraph(attributePaths = "authorities")
     Optional<User> findOneWithAuthoritiesByKakaoId(String kakaoId);
 
-    // kakaoIf로 회원 조회
+    // kakaoId로 회원 조회
     Optional<User> findByKakaoId(String kakaoId);
+
+    @Query(value = "select * from user order by mmr desc, level desc, exp desc limit 10",nativeQuery = true)
+    List<User> findByRankTop10User();
+
+    @Query(value = "select ranking from (select kakao_id, rank() over (order by  mmr desc, level desc, exp desc) as ranking from user) as a  where kakao_id = ?1",nativeQuery = true)
+    int findByMyRank(String kakaoId);
 }
