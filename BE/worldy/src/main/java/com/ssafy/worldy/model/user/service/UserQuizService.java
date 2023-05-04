@@ -1,7 +1,5 @@
 package com.ssafy.worldy.model.user.service;
 
-import com.ssafy.worldy.exception.CustomException;
-import com.ssafy.worldy.exception.CustomExceptionList;
 import com.ssafy.worldy.model.quiz.dto.MultiAnswerDto;
 import com.ssafy.worldy.model.quiz.dto.QuizLikeDto;
 import com.ssafy.worldy.model.quiz.entity.MultiAnswer;
@@ -9,13 +7,11 @@ import com.ssafy.worldy.model.quiz.entity.QuizLike;
 import com.ssafy.worldy.model.quiz.repo.MultiAnswerRepo;
 import com.ssafy.worldy.model.quiz.repo.QuizLikeRepo;
 import com.ssafy.worldy.model.user.dto.ScrapDto;
-import com.ssafy.worldy.model.user.entity.User;
 import com.ssafy.worldy.model.user.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,14 +26,13 @@ public class UserQuizService {
     @Autowired
     UserRepo userRepo;
 
+    @Autowired
+    KakaoUserService kakaoUserService;
+
     // 해당 유저의 찜 목록 조회
     public List<ScrapDto> getMyQuizLike(String kakaoId) {
 
-        Optional<User> user = userRepo.findByKakaoId(kakaoId);
-        if(user.isEmpty()) {
-            throw new CustomException(CustomExceptionList.MEMBER_NOT_FOUND);
-        }
-        Long userId = user.get().getUserId();
+        Long userId = kakaoUserService.getUserId(kakaoId);
 
         List<QuizLike> quizLikeList = quizLikeRepo.findByUserId(userId);
         List<QuizLikeDto> quizLikeDtoList = quizLikeList.stream().map(QuizLikeDto::new).collect(Collectors.toList());
