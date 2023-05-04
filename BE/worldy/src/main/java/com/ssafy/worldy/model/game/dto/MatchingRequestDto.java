@@ -18,6 +18,8 @@ public class MatchingRequestDto implements Serializable {
     private static final long serialVersionUID = 6529685098267757690L;
     private String kakaoId;
     private String roomId;
+    private String nickName;
+    private String profileImg;
     private int mmr;
     private int level;
     private String startWaitingTime;

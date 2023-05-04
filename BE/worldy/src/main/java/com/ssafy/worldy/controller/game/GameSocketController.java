@@ -36,7 +36,7 @@ public class GameSocketController {
     @MessageMapping("/game/emoticon")
     public void emoticon(Emoticon emoticon) {
 
-        log.info("WebSocket Writer Nickname : " + emoticon.getKakaoId());
+        log.info("WebSocket Writer kakaoId : " + emoticon.getKakaoId());
         log.info("WebSocket Writer Emoticon : " + emoticon.toString());
 
         redisPublisher.publish(emoticon);
@@ -48,8 +48,8 @@ public class GameSocketController {
     @MessageMapping("/game/player")
     public void player(Player player) {
 
-        log.info("WebSocket Writer Nickname : " + player.getKakaoId());
-        log.info("WebSocket Writer Emoticon : " + player.toString());
+        log.info("WebSocket Writer kakaoId : " + player.getPlayerId());
+        log.info("WebSocket Writer Player : " + player.toString());
 
         redisPublisher.publish(player);
     }
