@@ -36,6 +36,8 @@ public class UserDto {
 
     private int mmr; // Elo 기반 Matchmaking Rating
 
+    private String nickName; // 닉네임
+
     // DTO -> Entity 변환을 위함
     public User toEntity() {
         return User.builder()
@@ -50,6 +52,7 @@ public class UserDto {
                 .tier(this.tier)
                 .exp(this.exp)
                 .level(this.level)
-                .mmr(this.mmr).build();
+                .mmr(this.mmr)
+                .nickName(this.nickName).build();
     }
 }

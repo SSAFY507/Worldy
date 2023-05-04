@@ -1,7 +1,6 @@
 package com.ssafy.worldy.model.user.dto;
 
 import com.ssafy.worldy.model.quiz.dto.QuizLikeDto;
-import com.ssafy.worldy.model.quiz.entity.QuizLike;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
