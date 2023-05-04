@@ -2,12 +2,16 @@ import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import pathBG from '../assets/images/MyPageBackground.png';
 import { BsFillPersonLinesFill, BsBookmarksFill } from 'react-icons/bs';
-import { BiLogOut } from 'react-icons/bi';
+import { BiLogOut, BiBrain } from 'react-icons/bi';
 import { IoIosLogOut, IoLogoGameControllerB } from 'react-icons/io';
+import { AiOutlineBulb } from 'react-icons/ai';
 import { FiArrowUpRight } from 'react-icons/fi';
 import { RiQuestionAnswerFill, RiSave3Fill } from 'react-icons/ri';
 import { MdAccessTimeFilled, MdKeyboardDoubleArrowRight } from 'react-icons/md';
+import { TbWorld, TbCategory2 } from 'react-icons/tb';
 import moment from 'moment';
+
+import '../styles/MyPageStyles.css';
 
 type MyPageMenuType = {
   icon: React.ReactNode;
@@ -15,16 +19,36 @@ type MyPageMenuType = {
   move: boolean;
   onMove: () => void;
 };
+
 type MyPageContentType = {
   title: string;
   contentInfo: string | null;
   content?: JSX.Element;
 };
 
+type ScrappedQuizType = {
+  quizId: number; //퀴즈 id
+  nationName: string; //국가명
+  level: number; //퀴즈 수준
+  quizType: string; //퀴즈 유형
+  category: string; //카테고리
+  image: string; //이미지
+  content: string; //문제
+  answer: string; //정답
+  multiFirst: string | null; //1번
+  multiSecond: string | null; //2번
+  multiThird: string | null; //3번
+  multiFourth: string | null; //4번
+  hint: boolean; //힌트
+  commentary: string; //힌트 유형
+  userAnswer: string | null; //유저가 적은 정답(맞았으면 null)
+  success: boolean; //맞춘 문제인가
+};
+
 export default function MyPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const accountInfoRef = useRef<HTMLDivElement>(null);
-  const quizScrabRef = useRef<HTMLDivElement>(null);
+  const quizScrapRef = useRef<HTMLDivElement>(null);
   const gameLogRef = useRef<HTMLDivElement>(null);
   const QARef = useRef<HTMLDivElement>(null);
   const loginRecordRef = useRef<HTMLDivElement>(null);
@@ -48,7 +72,7 @@ export default function MyPage() {
     {
       icon: <BsBookmarksFill />,
       title: '퀴즈 스크랩',
-      onMove: () => scrollToContent(quizScrabRef),
+      onMove: () => scrollToContent(quizScrapRef),
       move: false,
     },
     {
@@ -154,65 +178,239 @@ export default function MyPage() {
     );
   };
 
-  const quizScrabContentComponent = () => {
+  const [scrappedQuizTypeSelect, setScrappedQuizTypeSelet] =
+    useState<number>(-1);
+  const handleScrappedQuizTypeSelect = (input: number) => {
+    setScrappedQuizTypeSelet(input === scrappedQuizTypeSelect ? -1 : input);
+  };
+  const clickQuizType = (input: number) => {
+    handleQuizPopDownKeyState(input);
+    handleScrappedQuizTypeSelect(input === 4 ? 1 : input);
+  };
+
+  const quizScrapContentComponent = () => {
     return (
-      <div className='outline outline-white w-full  h-fit flex flex-col justify-start items-center'>
+      <div className=' outline-white w-full  h-fit flex flex-col justify-start items-center'>
         <div className='w-full h-1/3 mb-[20px]'>
           <button
-            className='w-full h-[80px] bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.15)] flex justify-center items-center rounded-lg p-[10px]'
-            onClick={() => handleQuizPopDownKeyState(0)}
+            className={`w-full h-[50px]  flex justify-center items-center rounded-lg p-[10px]
+            ${
+              scrappedQuizTypeSelect === 0
+                ? 'bg-[rgba(255,255,255,0.2)]'
+                : 'bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.2)] '
+            }
+            `}
+            onClick={() => clickQuizType(0)}
           >
-            <span className='text-white text-[30px] font-PtdSemiBOld'>
+            <span className='text-white text-[20px] font-PtdSemiBOld'>
               전체
             </span>
           </button>
         </div>
         <div className='w-full h-1/3 flex flex-row justify-between items-center mb-[20px]'>
           <button
-            className='w-[30%] h-[80px] bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.15)] flex justify-center items-center rounded-lg p-[10px]'
-            onClick={() => handleQuizPopDownKeyState(1)}
+            className={`w-[30%] h-[50px]  flex justify-center items-center rounded-lg p-[10px]
+            ${
+              scrappedQuizTypeSelect === 1
+                ? 'bg-[rgba(255,255,255,0.2)]'
+                : 'bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.2)] '
+            }
+            `}
+            onClick={() => clickQuizType(1)}
           >
-            <span className='text-white text-[25px] font-PtdSemiBOld'>
+            <span className='text-white text-[18px] font-PtdSemiBOld'>
               나라별
             </span>
           </button>
           <button
-            className='w-[30%] h-[80px] bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.15)] flex justify-center items-center rounded-lg p-[10px]'
-            onClick={() => handleQuizPopDownKeyState(2)}
+            className={`w-[30%] h-[50px]  flex justify-center items-center rounded-lg p-[10px]
+            ${
+              scrappedQuizTypeSelect === 2
+                ? 'bg-[rgba(255,255,255,0.2)]'
+                : 'bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.2)] '
+            }
+            `}
+            onClick={() => clickQuizType(2)}
           >
-            <span className='text-white text-[25px] font-PtdSemiBOld'>
+            <span className='text-white text-[18px] font-PtdSemiBOld'>
               난이도별
             </span>
           </button>
 
           <button
-            className='w-[30%] h-[80px] bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.15)] flex justify-center items-center rounded-lg p-[10px]'
-            onClick={() => handleQuizPopDownKeyState(3)}
+            className={`w-[30%] h-[50px] flex justify-center items-center rounded-lg p-[10px]
+            ${
+              scrappedQuizTypeSelect === 3
+                ? 'bg-[rgba(255,255,255,0.2)]'
+                : 'bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.2)] '
+            }
+            `}
+            onClick={() => clickQuizType(3)}
           >
-            <span className='text-white text-[25px] font-PtdSemiBOld'>
+            <span className='text-white text-[18px] font-PtdSemiBOld'>
               카테고리별
             </span>
           </button>
         </div>
+        <div
+          className={`outline-red-600 w-full  transition-all duration-1000 flex flex-row justify-stretch items-stretch rounded-t-xl ${
+            quizPopDownBoxState
+              ? 'h-[400px] py-[15px] bg-[rgba(0,0,0,0.5)] opcaity-100 pt-[30px] '
+              : 'h-0 opacity-0'
+          } px-[10px] pb-[0px]`}
+        >
+          <div className='w-[140px] h-full  outline-blue-300 overflow-y-scroll  px-[15px]'>
+            {quizSelectMenuList[
+              quizPopDownKeyState === -1 ? 0 : quizPopDownKeyState
+            ].map((item, key) => quizMenuBar({ input: item, key: key }))}
+          </div>
+          <div className='flex-1 h-full  outline-white overflow-y-scroll flex flex-col justify-start items-start px-[10px]'>
+            {tempScrappedQuizList.map((item, key) =>
+              quizPreviewBox({ input: item, key: key })
+            )}
+          </div>
+        </div>
         <button
-          className='w-full h-[30px] outline outline-white flex justify-center items-center text-white'
-          onClick={() => handleQuizPopDownKeyState(0)}
+          className={`w-full h-[50px]  outline-white flex justify-center items-center text-white transition-all duration-1000 rounded-b-xl py-[20px]
+          ${quizPopDownBoxState ? 'bg-[rgba(0,0,0,0.5)]' : ''}`}
+          onClick={() => clickQuizType(4)}
         >
           <div>
             <MdKeyboardDoubleArrowRight
               size={30}
               className={`
               transition-all duration-1000
-              ${quizPopDownBoxState ? 'rotate-[90deg]' : '-rotate-[90deg]'}`}
+              ${!quizPopDownBoxState ? 'rotate-[90deg]' : '-rotate-[90deg]'}`}
             />
           </div>
         </button>
+      </div>
+    );
+  };
+
+  const quizSelectMenuList: string[][] = [
+    ['전체'],
+    [
+      '전체',
+      '가나',
+      '남아공',
+      '뉴질랜드',
+      '대한민국',
+      '독일',
+      '멕시코',
+      '모르코',
+      '미국',
+      '브라질',
+      '사우디',
+      '사하라',
+      '소말리아',
+      '스위스',
+      '스페인',
+      '싱가포르',
+      '영국',
+      '이집트',
+      '이탈리아',
+      '인도',
+      '일본',
+      '중국',
+      '지중해',
+      '칠레',
+      '캐나다',
+      '태국',
+      '페루',
+      '프랑스',
+      '헝가리',
+      '호주',
+      '홍콩',
+    ],
+    ['전체', '상', '중', '하'],
+    ['전체', '문화/역사', '시사', '기타'],
+  ];
+
+  const quizMenuBar = ({ input, key }: { input: string; key: number }) => {
+    return (
+      <button
+        className={`w-full h-[47px]  grid place-content-center my-[2px] border-solid border-0 border-b-[0px]  hover:bg-[rgba(220,220,220,0.2)] hover:text-white font-PtdRegular rounded-md
+        ${
+          quizMenuSelected === key
+            ? 'bg-[rgba(220,220,220,0.3)] text-white hover:bg-[rgba(220,220,220,0.3)]'
+            : 'text-[rgba(220,220,220,0.5)] hover:bg-[rgba(220,220,220,0.2)]'
+        }
+        `}
+        key={key}
+        onClick={() => setQuizMenuSelected(key)}
+      >
+        <span className={`${key === 0 ? 'text-[22px]' : 'text-[16px]'} `}>
+          {input}
+        </span>
+      </button>
+    );
+  };
+
+  const [quizMenuSelected, setQuizMenuSelected] = useState<number>(0);
+
+  /* from-[#958e8e] 
+          via-[#76b8b2]
+          to-[#00ffbf99] */
+  const quizPreviewBox = ({
+    input,
+    key,
+  }: {
+    input: ScrappedQuizType;
+    key: number;
+  }) => {
+    const diff: string =
+      input.level === 1 ? '하' : input.level === 2 ? '중' : '상';
+    const categ: string =
+      input.category === 'cul'
+        ? '문화'
+        : input.category === 'aff'
+        ? '시사'
+        : '기타';
+    return (
+      <div className='w-full h-fit mb-[15px]' key={key}>
         <div
-          className={`outline-red-600 w-full transition-all duration-1000 ${
-            quizPopDownBoxState ? 'h-[400px]  py-[15px]' : 'h-0'
-          } px-[10px]`}
+          className={`rounded-xl w-full h-[150px] bg-gradient-to-br from-[#a89e9e]  via-[#76b8b2] to-[#00eaff99] opacity-80 hover:opacity-100
+          flex flex-row justify-stretch items-center p-[10px]
+          `}
         >
-          <div className='w-full h-full outline outline-white overflow-y-scroll'></div>
+          <div className='w-2/3 h-full  outline-red-300 flex flex-col justify-between items-stretch'>
+            <div className='w-full h-[65%]  outline-red-500 flex flex-col justify-start items-start'>
+              <span className='w-full truncate-multiline font-PtdRegular text-white text-[16px] leading-[20px] p-[10px] h-[70px]  pr-[15px] overflow-hidden '>
+                {input.content}
+              </span>
+            </div>
+            <div className='w-full h-[40px]  outline-yellow-500 pr-[15px] grid place-content-center '>
+              <div
+                className={`w-[180px] h-[30px] ${
+                  input.success ? 'bg-[#26aaa5]' : 'bg-[#4f4f4f]'
+                } rounded-xl`}
+              >
+                <button
+                  className={`${
+                    input.success ? 'button-success' : 'button-failed'
+                  }
+                w-full h-full`}
+                >
+                  {input.success ? 'Success' : 'Failed...'}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className='w-1/3 h-full  outline-blue-300 flex flex-col justify-between p-[10px] px-[15px] items-center text-white text-[16px] font-PtdSemiBOld bg-[rgba(100,100,100,0.45)] rounded-md'>
+            <div className='w-full h-1/3 outline-red-300 flex flex-row justify-between items-center '>
+              <span>{input.nationName}</span>
+              <TbWorld size={20} />
+            </div>
+            <div className='w-full h-1/3  outline-red-300 flex flex-row justify-between items-center'>
+              <span>{diff}</span>
+              <AiOutlineBulb size={20} />
+            </div>
+            <div className='w-full h-1/3  outline-red-300 flex flex-row justify-between items-center'>
+              <span>{categ}</span>
+              <TbCategory2 size={20} />
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -220,16 +418,100 @@ export default function MyPage() {
 
   const [quizPopDownKeyState, setQuizPopDownKeyState] = useState<number>(-1);
 
+  useEffect(() => {
+    setQuizMenuSelected(0);
+  }, [quizPopDownKeyState]);
+
   const handleQuizPopDownKeyState = (input: number) => {
-    setQuizPopDownKeyState(quizPopDownKeyState === input ? -1 : input);
+    if (input === 4) {
+      quizPopDownBoxState
+        ? setQuizPopDownKeyState(-1)
+        : setQuizPopDownKeyState(1);
+    } else setQuizPopDownKeyState(quizPopDownKeyState === input ? -1 : input);
   };
 
   const [quizPopDownBoxState, setQuizPopDownBoxState] = useState<boolean>(true);
 
   useEffect(() => {
     setQuizPopDownBoxState(quizPopDownKeyState === -1 ? false : true);
-    scrollToContent(quizScrabRef);
+    scrollToContent(quizScrapRef);
   }, [quizPopDownKeyState]);
+
+  const tempScrappedQuizList: ScrappedQuizType[] = [
+    {
+      quizId: 0,
+      nationName: '대한민국',
+      level: 1,
+      quizType: 'OX',
+      category: 'cul',
+      image: '',
+      content: '대한민국에서 쓰이는 언어는 한극어이다.',
+      answer: 'X',
+      multiFirst: null, //1번
+      multiSecond: null, //2번
+      multiThird: null, //3번
+      multiFourth: null, //4번
+      hint: false, //힌트
+      commentary: '힌트 무슨 유형인가', //힌트 유형
+      userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
+      success: true, //맞춘 문제인가
+    },
+    {
+      quizId: 0,
+      nationName: '중국',
+      level: 2,
+      quizType: 'multi',
+      category: 'cul',
+      image: '',
+      content:
+        '중국의 역사는 매우 오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요..',
+      answer: '하나라',
+      multiFirst: '진나라', //1번
+      multiSecond: '명나라', //2번
+      multiThird: '하나라', //3번
+      multiFourth: '성나라', //4번
+      hint: false, //힌트
+      commentary: '힌트 무슨 유형인가', //힌트 유형
+      userAnswer: '1', //유저가 적은 정답(맞았으면 null)
+      success: false, //맞춘 문제인가
+    },
+    {
+      quizId: 0,
+      nationName: '대한민국',
+      level: 1,
+      quizType: 'OX',
+      category: 'cul',
+      image: '',
+      content: '대한민국에서 쓰이는 언어는 한극어이다.',
+      answer: 'X',
+      multiFirst: null, //1번
+      multiSecond: null, //2번
+      multiThird: null, //3번
+      multiFourth: null, //4번
+      hint: false, //힌트
+      commentary: '힌트 무슨 유형인가', //힌트 유형
+      userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
+      success: false, //맞춘 문제인가
+    },
+    {
+      quizId: 0,
+      nationName: '대한민국',
+      level: 1,
+      quizType: 'OX',
+      category: 'cul',
+      image: '',
+      content: '대한민국에서 쓰이는 언어는 한극어이다.',
+      answer: 'X',
+      multiFirst: null, //1번
+      multiSecond: null, //2번
+      multiThird: null, //3번
+      multiFourth: null, //4번
+      hint: false, //힌트
+      commentary: '힌트 무슨 유형인가', //힌트 유형
+      userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
+      success: false, //맞춘 문제인가
+    },
+  ];
 
   const contentBoxComponent = ({
     title,
@@ -285,12 +567,12 @@ export default function MyPage() {
               content: accountInfoContentComponent(),
             })}
           </div>
-          <div className=' w-full h-fit pt-[20px]' ref={quizScrabRef}>
+          <div className=' w-full h-fit pt-[20px]' ref={quizScrapRef}>
             {MyPageContentComponent({
               title: '퀴즈 스크랩',
               contentInfo:
                 '지난 세계 탐험 여행에서 만난 다양한 퀴즈 중, 플레이어가 따로 저장해둔 퀴즈들을 모아 볼 수 있습니다.',
-              content: quizScrabContentComponent(),
+              content: quizScrapContentComponent(),
             })}
           </div>
           <div className=' w-full h-fit pt-[20px]' ref={gameLogRef}>

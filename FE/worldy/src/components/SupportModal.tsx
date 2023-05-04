@@ -59,7 +59,7 @@ export default function SupportModal({
         <textarea
           value={contentText}
           onChange={handleContentText}
-          className={`bg-[rgb(240,240,240)] flex-1 outline-[0.1em] outline outline-gray-300 p-[1em] align-top w-full rounded-sm text-[1.4em] leading-[1.5em]`}
+          className={`flex-1 outline-[0.1em] outline-gray-300 p-[1em] align-top w-full rounded-sm text-[1.4em] leading-[1.5em] bg-[rgb(40,45,54)] text-white`}
           disabled={!ableWrite}
           rows={10} // 높이를 조절합니다 (행의 수를 설정하세요)
           cols={50} // 너비를 조절합니다 (열의 수를 설정하세요)
@@ -76,7 +76,7 @@ export default function SupportModal({
           }`}
           maxLength={500}
         />
-        <div className=' h-[1.5em] w-full font-PtdMedium px-[0.2em] text-white flex justify-end items-center text-[1.2em]'>
+        <div className=' h-[1.5em] w-full font-PtdMedium px-[0.2em] text-gray-400 flex justify-end items-center text-[1.2em]'>
           {contentText.length}/500
         </div>
       </>
@@ -122,11 +122,11 @@ export default function SupportModal({
       >
         <div className='h-[4em] w-full flex flex-row justify-between items-center mb-[1em]'>
           <div className='w-[45%] h-[4em]  outline-green-400 flex flex-col justify-between'>
-            <span className='font-PtdSemiBOld h-[1.5em] mb-[0.5em]  outline-green-200 text-[1.2em] grid items-center text-white'>
+            <span className='font-PtdSemiBOld h-[1em] mb-[0.5em]  outline-green-200 text-[1.2em] grid items-center text-gray-400'>
               작성 유형
             </span>
             <select
-              className='pl-[.8em] flex-1 outline-[0.1em] outline outline-gray-400 custom-select bg-[rgb(240,240,240)] rounded-sm text-[1.4em] font-PtdMedium'
+              className='pl-[.8em] flex-1 outline-[0.1em] rounded-md outline-gray-400 custom-select bg-[rgb(40,45,54)] text-gray-200 text-[20px] font-PtdMedium'
               value={contentType}
               onChange={handleContentType}
             >
@@ -141,20 +141,20 @@ export default function SupportModal({
           <div className='w-[45%] h-[4em]  outline-green-400 flex flex-col justify-between '>
             {contentType === 0 ? (
               <>
-                <span className='h-[1.5em] mb-[0.5em]  outline-green-200 text-[1.2em] font-PtdMedium grid items-center text-white'>
+                <span className='h-[1em] mb-[0.5em]  outline-green-200 text-[1.2em] font-PtdMedium grid items-center text-gray-400'>
                   문의 유형
                 </span>
                 <select
                   value={askType}
                   onChange={handleAskType}
-                  className=' flex-1 outline-[0.1em] outline outline-gray-400  pl-[0.8em] custom-select bg-[rgb(240,240,240)] rounded-sm text-[1.4em] font-PtdMedium'
+                  className=' flex-1 outline-[0.1em] outline-gray-400  pl-[0.8em] custom-select bg-[rgb(40,45,54)] text-gray-200 rounded-md text-[20px] font-PtdMedium'
                 >
                   {askTypeList.map((item, index) => (
                     <option
                       key={index}
                       defaultValue={askType}
                       value={item.value}
-                      className='text-black  h-[2.3em]'
+                      className=' h-[2.3em] text-white'
                     >
                       {item.name}
                     </option>
@@ -163,15 +163,15 @@ export default function SupportModal({
               </>
             ) : (
               <>
-                <span className='font-PtdSemiBOld h-[1.5em] mb-[0.5em]  outline-green-200 text-[1.2em] grid items-center text-white'>
-                  신고 대상(닉네임)
+                <span className='font-PtdSemiBOld h-[1em] mb-[0.5em]  outline-green-200 text-[1.2em] grid items-center text-gray-400'>
+                  신고 대상
                 </span>
                 <input
                   type='text'
                   value={reportOpponentID}
                   onChange={handleReportOpponentID}
-                  className=' flex-1 outline-[0.1em] outline outline-gray-400  pl-[0.8em] custom-select bg-[rgb(240,240,240)] rounded-sm text-[1.4em] font-PtdMedium'
-                  placeholder='신고 대상의 닉네임을 입력해주세요...'
+                  className=' flex-1 outline-[0.1em]  outline-gray-400  pl-[0.8em] custom-select rounded-md bg-[rgb(40,45,54)] text-white  text-[20px] font-PtdMedium'
+                  placeholder='닉네임'
                 />
               </>
             )}
@@ -180,7 +180,7 @@ export default function SupportModal({
         <div className='outline-red-400 w-full flex-1 mt-[1em]'>
           <div className='w-full h-full flex flex-col justify-between items-center'>
             <div className='w-full flex-1  outline-green-500 flex flex-col justify-between'>
-              <span className='font-PtdSemiBOld  h-[1.5em] mb-[0.5em] outline-green-200 text-[1.2em] grid items-center text-white '>
+              <span className='font-PtdSemiBOld  h-[1.5em] mb-[0.5em] outline-green-200 text-[1.2em] grid items-center text-gray-400 '>
                 문의 내용
               </span>
               <div className='flex-1 flex flex-col justify-stretch items-center pb-[1.5em] '>
@@ -192,10 +192,10 @@ export default function SupportModal({
         <div className='w-full h-[3em] pt-[.5em]  flex flex-row justify-between items-center'>
           <button
             onClick={() => handleCloseModal()}
-            className={`rounded-[4px] w-[47%] h-[4em]  outline-[rgba(255,255,255,0.6)] outline-1  font-PtdRegular text-[15px]  ${
+            className={`rounded-[4px] w-[47%] h-[60px]  outline-[rgba(255,255,255,0.6)] outline-1  font-PtdRegular ${
               submittable
                 ? 'hover:bg-[rgb(255,18,5)] bg-buttonRed outline-[rgba(255,255,255,0.6)] text-white'
-                : 'bg-[rgba(125,125,125,0.2)] outline-[rgba(121,121,121,0.6)] text-gray-400'
+                : 'bg-[rgba(125,125,125,0.2)] outline-[rgba(121,121,121,0.6)] text-gray-400 text-[18px]'
             }`}
             disabled={!submittable}
           >
@@ -203,7 +203,7 @@ export default function SupportModal({
           </button>
           <button
             onClick={() => handleCloseModal()}
-            className=' rounded-[4px] w-[47%] h-[4em]  outline-[rgba(255,255,255,0.6)] outline-1 text-white font-PtdRegular text-[15px] bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(206,206,206,0.2)]'
+            className=' rounded-[4px] w-[47%] h-[60px]  outline-[rgba(255,255,255,0.6)] outline-1 text-white font-PtdRegular text-[18px] bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(206,206,206,0.2)]'
           >
             취소
           </button>
