@@ -48,7 +48,7 @@ public class GameSocketController {
     @MessageMapping("/game/player")
     public void player(Player player) {
 
-        log.info("WebSocket Writer Nickname : " + player.getKakaoId());
+        log.info("WebSocket Writer Nickname : " + player.getPId());
         log.info("WebSocket Writer Emoticon : " + player.toString());
 
         redisPublisher.publish(player);

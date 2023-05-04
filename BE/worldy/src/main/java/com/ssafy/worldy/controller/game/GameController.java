@@ -88,6 +88,10 @@ public class GameController {
     @GetMapping("/ranking")
     public ResponseEntity<GameRankingDto> getRanking() {
 
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        String kakaoId = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        GameRankingDto gameRankingDto = gameService.getRanking(kakaoId);
+
+        return new ResponseEntity<>(gameRankingDto, HttpStatus.OK);
     }
 }
