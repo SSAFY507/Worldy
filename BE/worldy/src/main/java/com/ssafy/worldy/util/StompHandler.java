@@ -43,47 +43,47 @@ public class StompHandler implements ChannelInterceptor {
 
         if(accessor.getCommand() == StompCommand.CONNECT) { // 소켓 최초 연결시 jwt 검증 & 게임방에 플레이어 수 확인
 
-            //Header의 BearerToken 추출
-            String bearerToken = String.valueOf(accessor.getFirstNativeHeader("Authorization"));
-            String jwt = null;
-            log.info("bearerToken : "+bearerToken);
-            log.info("token : "+ (String) message.getHeaders().toString());
-
-            //  Header의 BearerToken에서 jwt 추출
-            if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-                jwt  = bearerToken.substring(7);
-            }
-
-            // jwt 검증
-            if(tokenProvider.validateToken(jwt)) {
-                Authentication authentication = tokenProvider.getAuthentication(jwt);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                log.debug("Security Context에 '{}' 인증 정보를 저장했습니다", authentication.getName());
-
-            } else {
-                throw new CustomException(CustomExceptionList.TOKEN_VALID_FAILED);
-            }
-
-            // kakaoId 추출
-            String kakaoId = SecurityContextHolder.getContext().getAuthentication().getName();
-
-            // roomId 추출
-            String roomId = String.valueOf(accessor.getNativeHeader("RoomId"));
-
-            if(!roomId.equals("null")) {
-                roomId = roomId.substring(1,roomId.length()-1);
-                log.info("roomId : " + roomId);
-
-                log.info(String.valueOf(gameRoomRepo.playerCnt(roomId)));
-                if(gameRoomRepo.playerCnt(roomId)>=4) {
-                    log.info("입장 불가");
-                    throw new CustomException(CustomExceptionList.ENTER_GAME_ERROR);
-                } else {
-
-                    log.info("입장");
-                    gameRoomRepo.enterGameRoom(kakaoId,roomId); // 게임방에 플레이어 cnt 증가
-                }
-            }
+//            //Header의 BearerToken 추출
+//            String bearerToken = String.valueOf(accessor.getFirstNativeHeader("Authorization"));
+//            String jwt = null;
+//            log.info("bearerToken : "+bearerToken);
+//            log.info("token : "+ (String) message.getHeaders().toString());
+//
+//            //  Header의 BearerToken에서 jwt 추출
+//            if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+//                jwt  = bearerToken.substring(7);
+//            }
+//
+//            // jwt 검증
+//            if(tokenProvider.validateToken(jwt)) {
+//                Authentication authentication = tokenProvider.getAuthentication(jwt);
+//                SecurityContextHolder.getContext().setAuthentication(authentication);
+//                log.debug("Security Context에 '{}' 인증 정보를 저장했습니다", authentication.getName());
+//
+//            } else {
+//                throw new CustomException(CustomExceptionList.TOKEN_VALID_FAILED);
+//            }
+//
+//            // kakaoId 추출
+//            String kakaoId = SecurityContextHolder.getContext().getAuthentication().getName();
+//
+//            // roomId 추출
+//            String roomId = String.valueOf(accessor.getNativeHeader("RoomId"));
+//
+//            if(!roomId.equals("null")) {
+//                roomId = roomId.substring(1,roomId.length()-1);
+//                log.info("roomId : " + roomId);
+//
+//                log.info(String.valueOf(gameRoomRepo.playerCnt(roomId)));
+//                if(gameRoomRepo.playerCnt(roomId)>=4) {
+//                    log.info("입장 불가");
+//                    throw new CustomException(CustomExceptionList.ENTER_GAME_ERROR);
+//                } else {
+//
+//                    log.info("입장");
+//                    gameRoomRepo.enterGameRoom(kakaoId,roomId); // 게임방에 플레이어 cnt 증가
+//                }
+//            }
         }
         else if (accessor.getCommand() == StompCommand.SUBSCRIBE) { // 구독 요청 시
 
@@ -105,6 +105,19 @@ public class StompHandler implements ChannelInterceptor {
 
             log.info(accessor.getSessionAttributes().get("socketType").toString());
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
 //        else if (accessor.getCommand() == StompCommand.SUBSCRIBE) { // 구독 요청 시 인원수 확인
 //
 //            // roomId 추출
