@@ -2,6 +2,7 @@ package com.ssafy.worldy.model.quiz.entity;
 
 import com.ssafy.worldy.model.adventure.entity.Nation;
 import com.ssafy.worldy.model.quiz.dto.NewsQuizDto;
+import com.ssafy.worldy.model.quiz.dto.QuizDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Table(name = "quiz")
 public class Quiz {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "quiz_id", nullable = false)
@@ -72,5 +74,22 @@ public class Quiz {
                 .hint_type(this.hint_type)
                 .commentary(this.commentary)
                 .build();
+    }
+
+    // Entity -> DTO 변환을 위함 (multiAnswerList는 비어있는 Dto가 생성됨)
+    public QuizDto toDto() {
+        return QuizDto.builder()
+                .quizId(this.quizId)
+                .nation(this.nation)
+                .publisherType(this.publisherType)
+                .quizType(this.quizType)
+                .category(this.category)
+                .level(this.level)
+                .image(this.image)
+                .content(this.content)
+                .answer(this.answer)
+                .hint(this.hint)
+                .hint_type(this.hint_type)
+                .report(this.report).build();
     }
 }
