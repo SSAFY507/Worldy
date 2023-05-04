@@ -1,15 +1,9 @@
 package com.ssafy.worldy.model.quiz.dto;
 
-import com.ssafy.worldy.model.adventure.entity.Nation;
-import com.ssafy.worldy.model.quiz.entity.Quiz;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Data
 @SuperBuilder
