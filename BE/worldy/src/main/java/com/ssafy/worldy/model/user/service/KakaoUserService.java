@@ -8,6 +8,7 @@ import com.ssafy.worldy.exception.CustomExceptionList;
 import com.ssafy.worldy.jwt.TokenProvider;
 import com.ssafy.worldy.model.user.dto.KakaoLoginDto;
 import com.ssafy.worldy.model.user.dto.TokenDto;
+import com.ssafy.worldy.model.user.dto.UserDto;
 import com.ssafy.worldy.model.user.entity.Authority;
 import com.ssafy.worldy.model.user.entity.User;
 import com.ssafy.worldy.model.user.repo.UserRepo;
@@ -45,8 +46,8 @@ public class KakaoUserService {
     public KakaoLoginDto kakaoLogin(String code) throws JsonProcessingException {
 
         // 1. 인가코드로 access 토큰 요청
-        String accessToken = getAccessToken(code, "https://k8a507.p.ssafy.io/user/kakao/callback");
-        // String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback");
+        // String accessToken = getAccessToken(code, "https://k8a507.p.ssafy.io/user/kakao/callback");
+        String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback");
 
         // 2. 없는 회원의 경우 회원가입
         User user = registKakaoUser(accessToken);
@@ -149,6 +150,9 @@ public class KakaoUserService {
                     .age(age)
                     .sex(gender)
                     .activated(true)
+                    .exp(0)
+                    .level(0)
+                    .mmr(1000)
                     .authorities(Collections.singleton(authority)).build();
         }
 
@@ -187,12 +191,29 @@ public class KakaoUserService {
     @Transactional
     public void logout(String kakaoId) {
 
+        UserDto userDto = getUserDto(kakaoId);
+
+        userDto.setRefreshToken(null);
+        userRepo.save(userDto.toEntity());
+    }
+
+    // kakaoId로 UserDto 조회
+    public UserDto getUserDto(String kakaoId) {
+
         Optional<User> user = userRepo.findByKakaoId(kakaoId);
         if(user.isEmpty()) {
             throw new CustomException(CustomExceptionList.MEMBER_NOT_FOUND);
         }
+        return user.get().toDto();
+    }
 
-        user.get().setRefreshToken(null);
-        userRepo.save(user.get());
+    // kakaoId로 userId 조회
+    public Long getUserId(String kakaoId) {
+
+        Optional<User> user = userRepo.findByKakaoId(kakaoId);
+        if(user.isEmpty()) {
+            throw new CustomException(CustomExceptionList.MEMBER_NOT_FOUND);
+        }
+        return user.get().toDto().getUserId();
     }
 }
