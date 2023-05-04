@@ -2,7 +2,9 @@ package com.ssafy.worldy.model.quiz.dto;
 
 import com.ssafy.worldy.model.adventure.entity.Nation;
 import com.ssafy.worldy.model.quiz.entity.Quiz;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
@@ -11,13 +13,11 @@ import java.util.List;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuizDto {
+public class QuizInsertDto {
 
     private Long quizId; // 아이디 (auto_increment)
 
-    private Nation nation; // 출제자 - gpt, worldy, user
-
-    private String publisherType; // 출제자 - gpt, worldy, user
+    private String nationName; // 출제자 - gpt, worldy, user
 
     private String quizType; // 퀴즈 타입 - 빈칸, 객관식, 주관식
 
@@ -37,7 +37,23 @@ public class QuizDto {
 
     private String commentary; // 해설
 
-    private int report; // 신고 수
-
     private List<MultiAnswerDto> multiAnswerList; // 객관실 경우 객관식 보기 리스트
+
+    public Quiz toEntity(Nation nation){
+        return Quiz.builder()
+                .quizId(this.quizId)
+                .nation(nation)
+                .publisherType("user")
+                .quizType(this.quizType)
+                .answer(this.answer)
+                .category(this.category)
+                .commentary(this.commentary)
+                .content(this.content)
+                .hint(this.hint)
+                .hintType(this.hintType)
+                .image(this.image)
+                .level(this.level)
+                .report(0)
+                .build();
+    }
 }
