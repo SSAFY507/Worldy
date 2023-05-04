@@ -8,6 +8,7 @@ import com.ssafy.worldy.exception.CustomExceptionList;
 import com.ssafy.worldy.jwt.TokenProvider;
 import com.ssafy.worldy.model.user.dto.KakaoLoginDto;
 import com.ssafy.worldy.model.user.dto.TokenDto;
+import com.ssafy.worldy.model.user.dto.UserDto;
 import com.ssafy.worldy.model.user.entity.Authority;
 import com.ssafy.worldy.model.user.entity.User;
 import com.ssafy.worldy.model.user.repo.UserRepo;
@@ -187,12 +188,29 @@ public class KakaoUserService {
     @Transactional
     public void logout(String kakaoId) {
 
+        UserDto userDto = getUserDto(kakaoId);
+
+        userDto.setRefreshToken(null);
+        userRepo.save(userDto.toEntity());
+    }
+
+    // kakaoId로 UserDto 조회
+    public UserDto getUserDto(String kakaoId) {
+
         Optional<User> user = userRepo.findByKakaoId(kakaoId);
         if(user.isEmpty()) {
             throw new CustomException(CustomExceptionList.MEMBER_NOT_FOUND);
         }
+        return user.get().toDto();
+    }
 
-        user.get().setRefreshToken(null);
-        userRepo.save(user.get());
+    // kakaoId로 userId 조회
+    public Long getUserId(String kakaoId) {
+
+        Optional<User> user = userRepo.findByKakaoId(kakaoId);
+        if(user.isEmpty()) {
+            throw new CustomException(CustomExceptionList.MEMBER_NOT_FOUND);
+        }
+        return user.get().toDto().getUserId();
     }
 }
