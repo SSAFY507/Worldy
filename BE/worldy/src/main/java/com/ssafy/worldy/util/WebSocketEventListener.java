@@ -41,6 +41,5 @@ public class WebSocketEventListener {
             log.info(socketType+roomId);
             gameMatchingProducer.sendCancelMatchingServer(roomId);
         }
-        //messagingTemplate.convertAndSend("/sub/chat/room/" + chatMessage.getRoomId(), chatMessage);
     }
 }

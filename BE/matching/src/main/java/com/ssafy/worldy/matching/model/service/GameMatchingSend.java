@@ -8,7 +8,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,7 +17,6 @@ import java.util.List;
 @Slf4j
 @Component
 public class GameMatchingSend {
-    private final SimpMessageSendingOperations template;
 
     // final String url = "https://k8a507.p.ssafy.io/api/game/matching/result";
     final String url = "http://localhost:9090/api/game/matching/result";

@@ -150,6 +150,9 @@ public class KakaoUserService {
                     .age(age)
                     .sex(gender)
                     .activated(true)
+                    .exp(0)
+                    .level(0)
+                    .mmr(1000)
                     .authorities(Collections.singleton(authority)).build();
         }
 

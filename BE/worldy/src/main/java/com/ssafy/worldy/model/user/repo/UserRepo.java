@@ -20,6 +20,9 @@ public interface UserRepo extends JpaRepository<User, Long> {
     // kakaoId로 회원 조회
     Optional<User> findByKakaoId(String kakaoId);
 
-    @Query(value = "select *, rank() over (order by mmr desc) as ranking from user where kakaoId = ?1 union select *, (order by mmr) as ranking from user order by mmr desc limit 10",nativeQuery = true)
-    List<User> findByTop10(Long kakaoId);
+    @Query(value = "select * from user order by mmr desc, level desc, exp desc limit 10",nativeQuery = true)
+    List<User> findByRankTop10User();
+
+    @Query(value = "select ranking from (select kakao_id, rank() over (order by  mmr desc, level desc, exp desc) as ranking from user) as a  where kakao_id = ?1",nativeQuery = true)
+    int findByMyRank(String kakaoId);
 }

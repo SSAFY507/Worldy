@@ -12,6 +12,7 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.stomp.StompCommand;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -76,13 +77,11 @@ public class StompHandler implements ChannelInterceptor {
                 log.info(String.valueOf(gameRoomRepo.playerCnt(roomId)));
                 if(gameRoomRepo.playerCnt(roomId)>=4) {
                     log.info("입장 불가");
-
                     throw new CustomException(CustomExceptionList.ENTER_GAME_ERROR);
                 } else {
 
                     log.info("입장");
                     gameRoomRepo.enterGameRoom(kakaoId,roomId); // 게임방에 플레이어 cnt 증가
-
                 }
             }
         }
