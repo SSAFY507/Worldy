@@ -8,9 +8,8 @@ import lombok.ToString;
 @ToString
 public class ExceptionResponse {
 
-    private final String code; // 에러 코드
-
-    private final String message; // 에러 메시지
+    private final String code;
+    private final String message;
 
     @Builder
     public ExceptionResponse(String code, String message) {
