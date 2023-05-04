@@ -19,6 +19,7 @@ import Monopoly from './routes/Monopoly';
 import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
 import Updates from './routes/Updates';
+import MyPage from './routes/MyPage';
 
 import './styles/RouterStyle.css';
 
@@ -73,7 +74,7 @@ const AppLayout = () => {
 
   return (
     <div
-      className='hide-scrollbar w-screen h-screen flex flex-col bg-white'
+      className='hide-scrollbar w-screen h-screen flex flex-col bg-white overflow-hidden'
       style={{
         backgroundImage: login ? undefined : `url(${pathBI})`,
         backgroundSize: '100%',
@@ -110,6 +111,7 @@ const AppLayout = () => {
           <Route path='/explore' element={<Explore />} />
           <Route path='/monopoly' element={<Monopoly />} />
           <Route path='/support' element={<Support />} />
+          <Route path='/mypage' element={<MyPage />} />
           <Route
             path='/tutorial'
             element={

@@ -1,0 +1,14 @@
+.on-scrollbar::-webkit-scrollbar {
+  display: block;
+  border-radius: 5px;
+  width: 10px;
+}
+
+.on-scrollbar {
+  -ms-overflow-style: scrollbar;
+  scrollbar-width: 2px;
+}
+.on-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.307);
+  border-radius: 100px;
+}
