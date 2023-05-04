@@ -43,7 +43,7 @@ public class GameSocketController {
     }
 
     /**
-     * [/pub/game/data로 들어오는 메시징을 처리]
+     * [/pub/game/player 들어오는 메시징을 처리]
      **/
     @MessageMapping("/game/player")
     public void player(Player player) {
