@@ -66,8 +66,9 @@ public class UserController {
 
     /***
      * [ 스크랩한 퀴즈 전체 조회 ]
+     * -
      */
-    @GetMapping("/get_my_quiz")
+    @GetMapping("/scrap/all")
     public ResponseEntity<List<ScrapDto>> getMyQuiz() {
         String kakaoId = SecurityContextHolder.getContext().getAuthentication().getName();
         return new ResponseEntity<>(userQuizService.getMyQuizLike(kakaoId), HttpStatus.OK);
