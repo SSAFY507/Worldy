@@ -12,6 +12,7 @@ import { TbWorld, TbCategory2 } from 'react-icons/tb';
 import moment from 'moment';
 
 import '../styles/MyPageStyles.css';
+import QuizModal from '../components/QuizModal';
 
 type MyPageMenuType = {
   icon: React.ReactNode;
@@ -26,7 +27,7 @@ type MyPageContentType = {
   content?: JSX.Element;
 };
 
-type ScrappedQuizType = {
+export type ScrappedQuizType = {
   quizId: number; //퀴즈 id
   nationName: string; //국가명
   level: number; //퀴즈 수준
@@ -390,7 +391,7 @@ export default function MyPage() {
                   className={`${
                     input.success ? 'button-success' : 'button-failed'
                   }
-                w-full h-full`}
+                w-full h-full `}
                 >
                   {input.success ? 'Success' : 'Failed...'}
                 </button>
@@ -434,7 +435,7 @@ export default function MyPage() {
 
   useEffect(() => {
     setQuizPopDownBoxState(quizPopDownKeyState === -1 ? false : true);
-    scrollToContent(quizScrapRef);
+    if (quizPopDownKeyState !== -1) scrollToContent(quizScrapRef);
   }, [quizPopDownKeyState]);
 
   const tempScrappedQuizList: ScrappedQuizType[] = [
@@ -445,7 +446,8 @@ export default function MyPage() {
       quizType: 'OX',
       category: 'cul',
       image: '',
-      content: '대한민국에서 쓰이는 언어는 한극어이다.',
+      content:
+        '대한민국에서 쓰이는 언어는 한극어이다대한민국에서 쓰이는 언어는.',
       answer: 'X',
       multiFirst: null, //1번
       multiSecond: null, //2번
@@ -532,12 +534,19 @@ export default function MyPage() {
     );
   };
 
+  const [quizModalState, setQuizModalState] = useState<boolean>(true);
+
   return (
     <div
       className='w-full h-full flex flex-row justify-center items-center overflow-y-clip'
       style={{ backgroundImage: `url(${pathBG})`, backgroundSize: '100%' }}
     >
-      <div className='w-[80%] h-full  flex flex-row justify-stretch items-center'>
+      {quizModalState && <QuizModal data={tempScrappedQuizList[0]} />}
+      <div
+        className={`w-[80%] h-full  flex flex-row justify-stretch items-center ${
+          quizModalState ? 'blur-sm' : ''
+        }`}
+      >
         <div className='w-[25%] h-full pt-[5em]'>
           <div className='w-[90%] h-fit  flex flex-col items-start'>
             <div className='flex flex-row justify-start pl-[15px]'>
