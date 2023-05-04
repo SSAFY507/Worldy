@@ -7,7 +7,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @SuperBuilder
 @NoArgsConstructor
-public class MatchingResultDto {
+public class MatchingResult {
 
     private MatchingRequestDto user1;
     private MatchingRequestDto user2;

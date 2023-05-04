@@ -2,7 +2,7 @@ package com.ssafy.worldy.model.game.service;
 
 import com.ssafy.worldy.model.game.dto.Emoticon;
 import com.ssafy.worldy.model.game.dto.GameQuiz;
-import com.ssafy.worldy.model.game.dto.MatchingResultDto;
+import com.ssafy.worldy.model.game.dto.MatchingResult;
 import com.ssafy.worldy.model.game.dto.Player;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +41,7 @@ public class RedisPublisher {
     /**
      * 게임 매칭 데이터 전송
      **/
-    public void publish (MatchingResultDto matchingResultDto) {
+    public void publish (MatchingResult matchingResultDto) {
 
         log.info("Topic : " + topic.getTopic());
 

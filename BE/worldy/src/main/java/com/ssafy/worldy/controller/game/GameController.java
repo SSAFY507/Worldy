@@ -1,9 +1,6 @@
 package com.ssafy.worldy.controller.game;
 
-import com.ssafy.worldy.model.game.dto.GameResultDto;
-import com.ssafy.worldy.model.game.dto.GameRoom;
-import com.ssafy.worldy.model.game.dto.MatchingResultDto;
-import com.ssafy.worldy.model.game.dto.MatchingWaitingRoom;
+import com.ssafy.worldy.model.game.dto.*;
 import com.ssafy.worldy.model.game.repo.GameRoomRepo;
 import com.ssafy.worldy.model.game.service.GameService;
 import com.ssafy.worldy.model.game.service.RedisPublisher;
@@ -75,7 +72,7 @@ public class GameController {
      * [게임 매칭 결과 전송 - 소켓 전송]
      **/
     @PostMapping("/matching/result")
-    public ResponseEntity<MatchingResultDto> gameMatching(@RequestBody MatchingResultDto matchingResultDto) {
+    public ResponseEntity<MatchingResult> gameMatching(@RequestBody MatchingResult matchingResultDto) {
         log.info("send socket");
         GameRoom gameRoom = gameRoomRepo.createGameRoom();
 
@@ -83,5 +80,14 @@ public class GameController {
         redisPublisher.publish(matchingResultDto);
 
         return new ResponseEntity<>(matchingResultDto, HttpStatus.OK);
+    }
+
+    /**
+     * [게임 랭킹 조회]
+     **/
+    @GetMapping("/ranking")
+    public ResponseEntity<GameRankingDto> getRanking() {
+
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }
