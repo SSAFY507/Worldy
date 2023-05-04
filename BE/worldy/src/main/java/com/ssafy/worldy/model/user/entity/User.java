@@ -55,6 +55,9 @@ public class User {
     @Column(name = "mmr")
     private int mmr; // Elo 기반 Matchmaking Rating (게임 매칭 시 기준 점수)
 
+    @Column(name = "nick_name")
+    private String nickName; // 닉네임
+
     @ManyToMany
     @JoinTable(
             name = "user_authority",
@@ -88,6 +91,7 @@ public class User {
                 .tier(this.tier)
                 .exp(this.exp)
                 .level(this.level)
-                .mmr(this.mmr).build();
+                .mmr(this.mmr)
+                .nickName(this.nickName).build();
     }
 }
