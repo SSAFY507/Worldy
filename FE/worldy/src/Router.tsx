@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import './styles/RouterStyle.css';
 
 import {
   BrowserRouter,
@@ -7,21 +7,21 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom';
-import pathBI from './assets/images/MainPageBackground.png';
 
-import LoginModal from './components/LoginModal';
-import Navbar from './components/Nvabar';
+import Country from './routes/Country';
 import Explore from './routes/Explore';
 import GameInfo from './routes/GameInfo';
 import IntroPage from './routes/IntroPage';
+import LoginModal from './components/LoginModal';
 import MainPageAfterLogin from './routes/MainPageAfterLogin';
 import Monopoly from './routes/Monopoly';
+import MyPage from './routes/MyPage';
+import Navbar from './components/Nvabar';
 import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
 import Updates from './routes/Updates';
-import MyPage from './routes/MyPage';
-
-import './styles/RouterStyle.css';
+import pathBI from './assets/images/MainPageBackground.png';
+import { useState } from 'react';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -108,7 +108,9 @@ const AppLayout = () => {
           )}
           <Route path='/gameinfo' element={<GameInfo />} />
           <Route path='/updates' element={<Updates />} />
-          <Route path='/explore' element={<Explore />} />
+          <Route path='/explore' element={<Explore />}>
+            <Route path=':country' element={<Country />} />
+          </Route>
           <Route path='/monopoly' element={<Monopoly />} />
           <Route path='/support' element={<Support />} />
           <Route path='/mypage' element={<MyPage />} />

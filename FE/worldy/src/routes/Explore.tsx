@@ -6,6 +6,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { NavLink } from "react-router-dom";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
@@ -14,7 +15,7 @@ import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js"
 import { Vector3 } from "@react-three/fiber";
 import africa from "../assets/lowpoly/africa.glb";
 import asia from "../assets/lowpoly/asia.glb";
-import basemap from "../assets/lowpoly/base.glb";
+import basemap from "../assets/lowpoly/basemap.glb";
 import bg from "../assets/images/WorldBackgrorund.jpg"
 import europe from "../assets/lowpoly/europe.glb";
 import fontJSON from "../assets/fonts/NanumMyeongjo_Regular.json";
@@ -22,6 +23,11 @@ import { gsap } from 'gsap';
 import northAmerica from "../assets/lowpoly/northAmerica.glb";
 import oceania from "../assets/lowpoly/oceania.glb";
 import southAmerica from "../assets/lowpoly/southAmerica.glb";
+import { useNavigate } from "react-router";
+
+interface Country {
+  [key: string]: string;
+}
 
 const Explore = () => {
 
@@ -33,6 +39,7 @@ const Explore = () => {
 
   const raycasterRef = useRef<THREE.Raycaster | null>(null);
   const selectedObjectRef = useRef<THREE.Object3D | null>(null);
+  const selectedCountryRef = useRef<THREE.Object3D | null>(null);
 
   const outlinePassRef = useRef<OutlinePass | null>(null);
   const composerRef = useRef<EffectComposer | null>(null);
@@ -42,8 +49,23 @@ const Explore = () => {
   const centerBoxRef = useRef<Vector3 | null>(null);
 
   const continentSet = new Set(["africa", "asia", "europe", "northAmerica", "oceania",  "southAmerica"])
-
-  let tmp = "";
+  const countryName: Country = {
+    asia_Korea: "대한민국",
+    asia_China: "중국",
+    asia_india: "인도",
+    asia_Japen: "일본",
+    africa_Egypt: "이집트",
+    europe_France: "프랑스",
+    europe_Italia: "이탈리아",
+    europe_Spain: "스페인",
+    europe_UK: "영국",
+    northAmerica_America: "미국",
+  }
+  let selectedName = "";
+  let selectedName2:string = "";
+  let clickTimeout:any = null;
+  
+  const navigate = useNavigate();
 
   /** 동적 애니메이션 함수 */
   const SetAnimation = (option:any, x:number, y:number, z:number, duration:number) => {
@@ -64,15 +86,25 @@ const Explore = () => {
 
     raycasterRef.current?.setFromCamera(mouse, camera.current!)
 
+
+    // // 화면에 광선을 표시
+    // const arrowHelper = new THREE.ArrowHelper(
+    //   raycasterRef.current!.ray.direction,
+    //   camera.current!.position,
+    //   100,
+    //   Math.random() * 0xffffff
+    // );
+    // scene.current!.add(arrowHelper);
+    
+
     // 객체 이름이 continent인 객체만 고르기
     const continents:THREE.Object3D[] = [];
-    scene.current?.traverse((obj3d) => {
+    scene.current?.children.forEach((obj3d) => {
       if (continentSet.has(obj3d.name)) {
         continents.push(obj3d);
       }
     })
-
-    return continents;
+    return continents
   }
 
   /** 마우스 추적 */
@@ -83,10 +115,33 @@ const Explore = () => {
     raycasterRef.current = raycaster;
   }
 
+  /** 마우스 한번 클릭 */
+  const OnClick = (event:any) => {
+    const name = countryName[selectedName2];
+
+    if (!clickTimeout && selectedObjectRef.current!.userData.flag) {
+      clickTimeout = setTimeout(() => {
+        if (name) {
+          alert(`${name}으(로) 이동합니다.`)
+          navigate(`/expore/${name}`)
+        } else {
+          alert(`오픈 예정입니다!😉`)
+        }
+        // 클릭 이벤트 처리
+        console.log("click");
+        clickTimeout = null;
+      }, 250);
+    }
+  }
+
   /** 마우스 더블 클릭  */
   const OnDblClick = (event:any) => {
     if (event.isPrimary === false) return;
-    
+
+    // 클릭 이벤트 처리를 막음
+    clearTimeout(clickTimeout);
+    clickTimeout = null;
+
     // 마우스 위치 추적하고 대륙 객체 저장
     const continents:THREE.Object3D[] = FindObject(event)
 
@@ -94,9 +149,9 @@ const Explore = () => {
     for(let i=0; i<continents.length; i++) {
       const continent = continents[i];
 
+      // 줌 아웃 상태에서 대륙이 마우스 위에 있으면 줌인
       const targets = raycasterRef.current?.intersectObject(continent);
-      if(targets!.length > 0) {
-        // 더블 클릭된 대륙 확대 
+      if(targets!.length > 0 && selectedObjectRef.current?.userData.flag === false) {
         ZoomFit(continent, 45, 0.2)
         selectedObjectRef.current!.userData.flag = true
         return;
@@ -170,57 +225,93 @@ const Explore = () => {
     
   }
 
-  /** 강조할 객체 추적 */
+  /** 강조할 대륙 객체 추적 */
   const OnPointerMove = (event:PointerEvent) => {
     if (event.isPrimary === false) return;
 
     // 마우스 위치 추적하고 대륙 객체 저장
-    const continents:THREE.Object3D[] = FindObject(event)
+    const continents:THREE.Object3D[] = FindObject(event)!
+    let selectedObject: THREE.Object3D;
 
-    // 대륙에 해당하는 객체들 중 마우스 커서에 가장 가까운 객체 고르기 
-    for(let i=0; i<continents.length; i++) {
-      const continent = continents[i];
-      const intersects = raycasterRef.current?.intersectObject(continent);
+    const intersects: any[] = raycasterRef.current!.intersectObjects(continents)
 
-      if (intersects!.length > 0) {
-        // 지정된 객체 중에 첫번째 선택
-        const selectedObject = intersects![0].object as THREE.Mesh;
-        // console.log(selectedObjectRef.current?.scale)
-        // 객체의 현재 y 속성값
-        if (tmp && tmp !== selectedObject.name) {
-          // y 속성값을 0.05로 1초 동안 변경하는 애니메이션
-          SetAnimation(selectedObjectRef.current!.position, selectedObjectRef.current!.position.x, -0.28, selectedObjectRef.current!.position.z, 1)
-          SetAnimation(selectedObjectRef.current!.scale, 0.00072, 0.00072, 0.00072, 1);
+    // 이 대륙안에 위에서 충돌한 객체가 들어 있고 줌 아웃 상태이면 호버 효과를 줘
+    if (intersects.length && (!selectedObjectRef.current || selectedObjectRef.current?.userData.flag === false)) {
+      continents.forEach((obj3d) => {
+        const result1 = intersects[0].object.name.substr(0, obj3d.name.length);
+        if (result1 === obj3d.name){
+          selectedObject = obj3d;
+          selectedObject.userData.flag = false;
+        }
+      });
 
-          
-          // scene.current?.traverse((obj3d) => {
-          //   if (obj3d.name === continent.name + "text") {
-          //     obj3d.visible = true;
-          //   }
-          // })
-          // console.log(continent.name)
-        } 
+      // 이전 호버효과 초기화 
+      if (selectedName && selectedName !== selectedObject!.name) {
+        SetAnimation(selectedObjectRef.current!.position, selectedObjectRef.current!.position.x, 0.3, selectedObjectRef.current!.position.z, 1)
+        SetAnimation(selectedObjectRef.current!.scale, 1, 1, 1, 1)
+      }
 
-        tmp = selectedObject.name
+      selectedName = selectedObject!.name
 
-        // y 속성값을 0.05로 1초 동안 변경하는 애니메이션
-        SetAnimation(selectedObject.position, selectedObject.position.x, -0.15, selectedObject.position.z, 1)
-        SetAnimation(selectedObject!.scale, 0.00077, 0.00077, 0.00077, 1)
+      // 해당하는 대륙 호버 효과 
+      SetAnimation(selectedObject!.position, selectedObject!.position.x, 0.5, selectedObject!.position.z, 1)
+      SetAnimation(selectedObject!.scale, 1.05, 1.05, 1.05, 1)
+      
+      // 해당하는 대륙 강조 효과 
+      outlinePassRef.current!.edgeStrength = 25;  
+      outlinePassRef.current!.selectedObjects = [ selectedObject! ];
+      selectedObjectRef.current = selectedObject!;
+      return;
+    }
+    
+    // 마우스가 대륙에 있지 않으면 호버 초기화
+    else if (selectedObjectRef.current) {
+      // 줌 아웃 상태
+      if ( selectedObjectRef.current.userData.flag  === false ) {
+        SetAnimation(selectedObjectRef.current.position, selectedObjectRef.current.position.x, 0.3, selectedObjectRef.current.position.z, 1)
+        SetAnimation(selectedObjectRef.current.scale, 1, 1, 1, 1)
+        if (selectedCountryRef.current) {
+          SetAnimation(selectedCountryRef.current.position, selectedCountryRef.current.position.x, -0.28, selectedCountryRef.current.position.z, 1)
+          SetAnimation(selectedCountryRef.current!.scale, 0.00071871024556458, 0.00071871024556458, 0.00071871024556458, 1)
+        }
 
-        // 더 강한 효과
-        outlinePassRef.current!.edgeStrength = 25;  
-        outlinePassRef.current!.selectedObjects = [ selectedObject ];
-        selectedObjectRef.current = selectedObject;
-        return;
+      } else { // 줌인 상태
+        const countries = selectedObjectRef.current!
+        let selectedCountry: THREE.Object3D;
+
+        const intersect: any = raycasterRef.current!.intersectObject(countries)
+        if (intersect.length) {
+          countries.children.forEach((country) =>{
+            if (country.name === intersect[0].object.name) {
+              selectedCountry = country
+            }
+          });
+
+          // 이전 호버효과 초기화 
+          if (selectedName2 && selectedName2 !== selectedCountry!.name) {
+            SetAnimation(selectedCountryRef.current!.position, selectedCountryRef.current!.position.x, -0.28, selectedCountryRef.current!.position.z, 1)
+            SetAnimation(selectedCountryRef.current!.scale, 0.00071871024556458, 0.00071871024556458, 0.00071871024556458, 1)
+          }
+          selectedName2 = selectedCountry!.name
+
+          // 해당하는 대륙 호버 효과 
+          SetAnimation(selectedCountry!.position, selectedCountry!.position.x, -0.2, selectedCountry!.position.z, 1)
+          SetAnimation(selectedCountry!.scale, 0.00074, 0.00075, 0.00074, 1)
+          // 해당하는 대륙 강조 효과 
+          outlinePassRef.current!.edgeStrength = 40;  
+          // outlinePassRef.current!.visibleEdgeColor = new THREE.Color(0x000000); 
+          outlinePassRef.current!.selectedObjects = [ selectedCountry! ];
+          selectedCountryRef.current = selectedCountry!;
+
+          divContainer.current?.addEventListener("click", OnClick);
+
+          return;
+        }
+
       }
     }
-    if (selectedObjectRef.current && selectedObjectRef.current!.userData.flag  === false ) {
-        // y 속성값을 0.05로 1초 동안 변경하는 애니메이션
-        SetAnimation(selectedObjectRef.current.position, selectedObjectRef.current.position.x, -0.28, selectedObjectRef.current.position.z, 1)
-        SetAnimation(selectedObjectRef.current.scale, 0.00072, 0.00072, 0.00072, 1)
-    }
-  
     outlinePassRef.current!.selectedObjects = [];
+    
   }
   
   /** 객체 강조 후처리 */
@@ -344,29 +435,48 @@ const Explore = () => {
       {url: southAmerica, name: "southAmerica", textObject: CreateTextGeometry("남아메리카", -5.7, 0.8, 1, "southAmericatext", -90, 0 ,0)},
     ]
 
+    // 대륙에 해당하는 그룹을 순회
     items.forEach((item, index) => {
       gltfLoader.load(item.url, (glb) => {
         const obj3d = glb.scene;
         obj3d.position.y = 0.3
         obj3d.name = item.name
-
+        let tmpArray = obj3d
+        if (tmpArray.children) {
+          // 해당 나라를 돌아
+          tmpArray.children.forEach((element) => {
+            // element.name = item.name
+            if (element.children) {
+              element.children.forEach((element2) => {
+                element2.name = element.name
+              })
+            }
+          })
+          
+        }
+        // position = (0, 0.3, 0)
+        // console.log(obj3d.position)
+        // scale = (1, 1, 1)
+        // console.log(obj3d.scale)
         scene.current?.add(obj3d);
-        scene.current?.add(item.textObject);
-        console.log(scene.current?.children)
+        // scene.current?.add(item.textObject);
+        // console.log(scene.current?.children)
       })
     })
     gltfLoader.load(
       basemap,
       (glb) => {
         const root = glb.scene;
+        // x:0, y:0, z:0
+        root.position.set(0, 0.3, 0);
         scene.current?.add(root)
         root.name = "basemap"
         }
       ) 
 
-    //tmpEurope
-    const tmpEurope = CreateObject(1.6, 4, -0.5, 0, -4, "flat", -90, 0, -50)
-    scene.current?.add(tmpEurope);
+    // //tmpEurope
+    // const tmpEurope = CreateObject(1.6, 4, -0.5, 0, -4, "flat", -90, 0, -50)
+    // scene.current?.add(tmpEurope);
 
     // // northAmerica
     // const northAmericaText = CreateTextGeometry("북아메리카", -7.5, 0.7, -3, "text", -90, 0, 0)
