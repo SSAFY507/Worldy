@@ -65,85 +65,63 @@ const Explore = () => {
     raycasterRef.current?.setFromCamera(mouse, camera.current!)
 
 
-    // 화면에 광선을 표시
-    const arrowHelper = new THREE.ArrowHelper(
-      raycasterRef.current!.ray.direction,
-      camera.current!.position,
-      100,
-      Math.random() * 0xffffff
-    );
-    scene.current!.add(arrowHelper);
+    // // 화면에 광선을 표시
+    // const arrowHelper = new THREE.ArrowHelper(
+    //   raycasterRef.current!.ray.direction,
+    //   camera.current!.position,
+    //   100,
+    //   Math.random() * 0xffffff
+    // );
+    // scene.current!.add(arrowHelper);
     
 
-
-
-    
     // 객체 이름이 continent인 객체만 고르기
     const continents:THREE.Object3D[] = [];
     scene.current?.children.forEach((obj3d) => {
-      // console.log(obj3d)
-      // 대륙의 이름을 가지고 있는 그룹들만 골라
       if (continentSet.has(obj3d.name)) {
-        // console.log(obj3d.children)
-        // console.log(intersects)
-        // 해당 포인터에 충돌하는 객체 찾기
         continents.push(obj3d);
       }
     })
-    const intersects: any[] = raycasterRef.current!.intersectObjects(continents)
-
-    // console.log(continents)
-    // 이 대륙안에 위에서 충돌한 객체가 들어 있으면 출력해  
-    // console.log(intersects)
-    if (intersects.length) {
-      continents.forEach((obj3d) => {
-        // console.log(intersects)
-        if (intersects[0].object.name === obj3d.name)
-          console.log(obj3d.name)
-          return obj3d
-      });
-    }
-    // console.log(intersects)
-    // return continents;
+    return continents
   }
 
   /** 마우스 추적 */
   const SetupPicking = () => {
     const raycaster = new THREE.Raycaster();
     divContainer.current?.addEventListener("pointermove", OnPointerMove);
-    // divContainer.current?.addEventListener("dblclick", OnDblClick);
+    divContainer.current?.addEventListener("dblclick", OnDblClick);
     // divContainer.current?.addEventListener("mousemove", OnMouseMove);
     raycasterRef.current = raycaster;
   }
 
 
   /** 마우스 더블 클릭  */
-  // const OnDblClick = (event:any) => {
-  //   if (event.isPrimary === false) return;
+  const OnDblClick = (event:any) => {
+    if (event.isPrimary === false) return;
     
-  //   // 마우스 위치 추적하고 대륙 객체 저장
-  //   const continents:THREE.Object3D[] = FindObject(event)
+    // 마우스 위치 추적하고 대륙 객체 저장
+    const continents:THREE.Object3D[] = FindObject(event)
 
-  //   // 더블 클릭된 곳과 해당 객체의 충돌점을 찾아서 객체를 정확히 추적
-  //   for(let i=0; i<continents.length; i++) {
-  //     const continent = continents[i];
+    // 더블 클릭된 곳과 해당 객체의 충돌점을 찾아서 객체를 정확히 추적
+    for(let i=0; i<continents.length; i++) {
+      const continent = continents[i];
 
-  //     const targets = raycasterRef.current?.intersectObject(continent);
-  //     if(targets!.length > 0) {
-  //       // 더블 클릭된 대륙 확대 
-  //       ZoomFit(continent, 45, 0.2)
-  //       // selectedObjectRef.current!.userData.flag = true
-  //       return;
-  //     }
-  //   }
+      const targets = raycasterRef.current?.intersectObject(continent);
+      if(targets!.length > 0) {
+        // 더블 클릭된 대륙 확대 
+        ZoomFit(continent, 45, 0.2)
+        selectedObjectRef.current!.userData.flag = true
+        return;
+      }
+    }
 
-  //   const basemap = scene.current?.getObjectByName("basemap");
-  //   // 기본 상태로 돌아오기
-  //   ZoomFit(basemap!, 70, 0.06)
-  //   if (selectedObjectRef.current) {
-  //     // selectedObjectRef.current!.userData.flag = false
-  //   }
-  // }
+    const basemap = scene.current?.getObjectByName("basemap");
+    // 기본 상태로 돌아오기
+    ZoomFit(basemap!, 70, 0.06)
+    if (selectedObjectRef.current) {
+      selectedObjectRef.current!.userData.flag = false
+    }
+  }
 
   /** 확대 실행 학수 */
   const ZoomFit = (object3d:THREE.Object3D, viewAngle:number, viewdistance:number) => {
@@ -209,9 +187,40 @@ const Explore = () => {
     if (event.isPrimary === false) return;
 
     // 마우스 위치 추적하고 대륙 객체 저장
-    const continents:THREE.Object3D = FindObject(event)!
+    const continents:THREE.Object3D[] = FindObject(event)!
+    let selectedObject: THREE.Object3D;
+
+    const intersects: any[] = raycasterRef.current!.intersectObjects(continents)
+    // 이 대륙안에 위에서 충돌한 객체가 들어 있으면 출력해  
+    // console.log(intersects)
+    if (intersects.length) {
+      continents.forEach((obj3d) => {
+        if (intersects[0].object.name === obj3d.name){
+          selectedObject = obj3d;
+        }
+      });
+      if (tmp && tmp !== selectedObject!.name) {
+        // y 속성값을 0.05로 1초 동안 변경하는 애니메이션
+        SetAnimation(selectedObjectRef.current!.position, selectedObjectRef.current!.position.x, 0.3, selectedObjectRef.current!.position.z, 1)
+        SetAnimation(selectedObjectRef.current!.scale, 1, 1, 1, 1)
+      }
+
+      tmp = selectedObject!.name
+
+      // y 속성값을 0.05로 1초 동안 변경하는 애니메이션
+      SetAnimation(selectedObject!.position, selectedObject!.position.x, 0.5, selectedObject!.position.z, 1)
+      SetAnimation(selectedObject!.scale, 1.05, 1.05, 1.05, 1)
+
+      // 더 강한 효과
+      outlinePassRef.current!.edgeStrength = 25;  
+      outlinePassRef.current!.selectedObjects = [ selectedObject! ];
+      selectedObjectRef.current = selectedObject!;
+      return;
+    }
+  
+
     
-    // console.log(continents)
+
     
     // // 대륙에 해당하는 객체들 중 마우스 커서에 가장 가까운 객체 고르기 
     // for(let i=0; i<continents.length; i++) {
@@ -222,10 +231,10 @@ const Explore = () => {
     //     const selectedObject = intersects![0].object as THREE.Mesh;
     //     // console.log(selectedObjectRef.current?.scale)
     //     // 객체의 현재 y 속성값
-    //     if (tmp && tmp !== selectedObject.name) {
-    //       // y 속성값을 0.05로 1초 동안 변경하는 애니메이션
-    //       SetAnimation(selectedObjectRef.current!.position, selectedObjectRef.current!.position.x, -0.28, selectedObjectRef.current!.position.z, 1)
-    //       SetAnimation(selectedObjectRef.current!.scale, 0.00072, 0.00072, 0.00072, 1);
+        // if (tmp && tmp !== selectedObject.name) {
+        //   // y 속성값을 0.05로 1초 동안 변경하는 애니메이션
+        //   SetAnimation(selectedObjectRef.current!.position, selectedObjectRef.current!.position.x, -0.28, selectedObjectRef.current!.position.z, 1)
+        //   SetAnimation(selectedObjectRef.current!.scale, 0.00072, 0.00072, 0.00072, 1);
 
           
     //       // scene.current?.traverse((obj3d) => {
@@ -249,13 +258,13 @@ const Explore = () => {
     //     return;
     //   }
     // }
-    // if (selectedObjectRef.current && selectedObjectRef.current!.userData.flag  === false ) {
-    //     // y 속성값을 0.05로 1초 동안 변경하는 애니메이션
-    //     SetAnimation(selectedObjectRef.current.position, selectedObjectRef.current.position.x, -0.28, selectedObjectRef.current.position.z, 1)
-    //     SetAnimation(selectedObjectRef.current.scale, 0.00072, 0.00072, 0.00072, 1)
-    // }
+    if (selectedObjectRef.current && selectedObjectRef.current!.userData.flag  === false ) {
+        // y 속성값을 0.05로 1초 동안 변경하는 애니메이션
+        SetAnimation(selectedObjectRef.current.position, selectedObjectRef.current.position.x, 0.3, selectedObjectRef.current.position.z, 1)
+        SetAnimation(selectedObjectRef.current.scale, 1, 1, 1, 1)
+    }
   
-    // outlinePassRef.current!.selectedObjects = [];
+    outlinePassRef.current!.selectedObjects = [];
   }
   
   /** 객체 강조 후처리 */
@@ -396,7 +405,10 @@ const Explore = () => {
           })
           
         }
-        console.log(obj3d)
+        // position = (0, 0.3, 0)
+        // console.log(obj3d.position)
+        // scale = (1, 1, 1)
+        // console.log(obj3d.scale)
         scene.current?.add(obj3d);
         // scene.current?.add(item.textObject);
         // console.log(scene.current?.children)
@@ -406,14 +418,16 @@ const Explore = () => {
       basemap,
       (glb) => {
         const root = glb.scene;
+        // x:0, y:0, z:0
+        root.position.set(0, 0.3, 0);
         scene.current?.add(root)
         root.name = "basemap"
         }
       ) 
 
-    //tmpEurope
-    const tmpEurope = CreateObject(1.6, 4, -0.5, 0, -4, "flat", -90, 0, -50)
-    scene.current?.add(tmpEurope);
+    // //tmpEurope
+    // const tmpEurope = CreateObject(1.6, 4, -0.5, 0, -4, "flat", -90, 0, -50)
+    // scene.current?.add(tmpEurope);
 
     // // northAmerica
     // const northAmericaText = CreateTextGeometry("북아메리카", -7.5, 0.7, -3, "text", -90, 0, 0)
