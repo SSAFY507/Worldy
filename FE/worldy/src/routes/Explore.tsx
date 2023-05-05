@@ -6,6 +6,7 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { NavLink } from "react-router-dom";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
@@ -22,6 +23,11 @@ import { gsap } from 'gsap';
 import northAmerica from "../assets/lowpoly/northAmerica.glb";
 import oceania from "../assets/lowpoly/oceania.glb";
 import southAmerica from "../assets/lowpoly/southAmerica.glb";
+import { useNavigate } from "react-router";
+
+interface Country {
+  [key: string]: string;
+}
 
 const Explore = () => {
 
@@ -43,9 +49,23 @@ const Explore = () => {
   const centerBoxRef = useRef<Vector3 | null>(null);
 
   const continentSet = new Set(["africa", "asia", "europe", "northAmerica", "oceania",  "southAmerica"])
-
+  const countryName: Country = {
+    asia_Korea: "대한민국",
+    asia_China: "중국",
+    asia_india: "인도",
+    asia_Japen: "일본",
+    africa_Egypt: "이집트",
+    europe_France: "프랑스",
+    europe_Italia: "이탈리아",
+    europe_Spain: "스페인",
+    europe_UK: "영국",
+    northAmerica_America: "미국",
+  }
   let selectedName = "";
-  let selectedName2 = "";
+  let selectedName2:string = "";
+  let clickTimeout:any = null;
+  
+  const navigate = useNavigate();
 
   /** 동적 애니메이션 함수 */
   const SetAnimation = (option:any, x:number, y:number, z:number, duration:number) => {
@@ -92,14 +112,36 @@ const Explore = () => {
     const raycaster = new THREE.Raycaster();
     divContainer.current?.addEventListener("pointermove", OnPointerMove);
     divContainer.current?.addEventListener("dblclick", OnDblClick);
-    // divContainer.current?.addEventListener("mousemove", OnMouseMove);
     raycasterRef.current = raycaster;
+  }
+
+  /** 마우스 한번 클릭 */
+  const OnClick = (event:any) => {
+    const name = countryName[selectedName2];
+
+    if (!clickTimeout && selectedObjectRef.current!.userData.flag) {
+      clickTimeout = setTimeout(() => {
+        if (name) {
+          alert(`${name}으(로) 이동합니다.`)
+          navigate(`/expore/${name}`)
+        } else {
+          alert(`오픈 예정입니다!😉`)
+        }
+        // 클릭 이벤트 처리
+        console.log("click");
+        clickTimeout = null;
+      }, 250);
+    }
   }
 
   /** 마우스 더블 클릭  */
   const OnDblClick = (event:any) => {
     if (event.isPrimary === false) return;
-    
+
+    // 클릭 이벤트 처리를 막음
+    clearTimeout(clickTimeout);
+    clickTimeout = null;
+
     // 마우스 위치 추적하고 대륙 객체 저장
     const continents:THREE.Object3D[] = FindObject(event)
 
@@ -237,7 +279,6 @@ const Explore = () => {
         const countries = selectedObjectRef.current!
         let selectedCountry: THREE.Object3D;
 
-        console.log(countries)
         const intersect: any = raycasterRef.current!.intersectObject(countries)
         if (intersect.length) {
           countries.children.forEach((country) =>{
@@ -246,7 +287,6 @@ const Explore = () => {
             }
           });
 
-          console.log(selectedCountryRef.current!)
           // 이전 호버효과 초기화 
           if (selectedName2 && selectedName2 !== selectedCountry!.name) {
             SetAnimation(selectedCountryRef.current!.position, selectedCountryRef.current!.position.x, -0.28, selectedCountryRef.current!.position.z, 1)
@@ -262,6 +302,9 @@ const Explore = () => {
           // outlinePassRef.current!.visibleEdgeColor = new THREE.Color(0x000000); 
           outlinePassRef.current!.selectedObjects = [ selectedCountry! ];
           selectedCountryRef.current = selectedCountry!;
+
+          divContainer.current?.addEventListener("click", OnClick);
+
           return;
         }
 
