@@ -44,7 +44,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/favicon.ico",
                         "/error",
                         "/api/error",
-                        "/api/user/kakao/login"
+                        "/api/user/kakao/login",
+                        "/api/stomp/game/**",
+                        "/api/game/result",
+                        "/api/game/matching/result"
                 );
     }
 

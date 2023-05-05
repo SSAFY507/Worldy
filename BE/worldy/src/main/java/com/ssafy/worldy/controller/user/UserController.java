@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.worldy.jwt.JwtFilter;
 import com.ssafy.worldy.jwt.TokenProvider;
 import com.ssafy.worldy.model.user.dto.KakaoLoginDto;
+import com.ssafy.worldy.model.user.dto.ScrapDto;
 import com.ssafy.worldy.model.user.service.KakaoUserService;
+import com.ssafy.worldy.model.user.service.UserQuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
@@ -21,6 +25,9 @@ public class UserController {
     private KakaoUserService kakaoUserService;
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+
+    @Autowired
+    private UserQuizService userQuizService;
 
     public UserController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
         this.tokenProvider = tokenProvider;
@@ -55,5 +62,15 @@ public class UserController {
         kakaoUserService.logout(kakaoId);
 
         return new ResponseEntity<>("[kakaoId : " + kakaoId + "] logout success", HttpStatus.OK);
+    }
+
+    /***
+     * [ 스크랩한 퀴즈 전체 조회 ]
+     * -
+     */
+    @GetMapping("/scrap/all")
+    public ResponseEntity<List<ScrapDto>> getMyQuiz() {
+        String kakaoId = SecurityContextHolder.getContext().getAuthentication().getName();
+        return new ResponseEntity<>(userQuizService.getMyQuizLike(kakaoId), HttpStatus.OK);
     }
 }
