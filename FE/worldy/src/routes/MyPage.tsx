@@ -388,6 +388,7 @@ export default function MyPage() {
                 } rounded-xl`}
               >
                 <button
+                  onClick={() => setQuizModalState(true)}
                   className={`${
                     input.success ? 'button-success' : 'button-failed'
                   }
@@ -466,9 +467,9 @@ export default function MyPage() {
       category: 'cul',
       image: '',
       content:
-        '중국의 역사는 매우 오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요..',
+        '중국의 역사는 매우 오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요..',
       answer: '하나라',
-      multiFirst: '진나라', //1번
+      multiFirst: '진나라진나라진나라진나라진나라진나라진나라진나라', //1번
       multiSecond: '명나라', //2번
       multiThird: '하나라', //3번
       multiFourth: '성나라', //4번
@@ -481,11 +482,11 @@ export default function MyPage() {
       quizId: 0,
       nationName: '대한민국',
       level: 1,
-      quizType: 'OX',
+      quizType: 'short',
       category: 'cul',
       image: '',
-      content: '대한민국에서 쓰이는 언어는 한극어이다.',
-      answer: 'X',
+      content: '웅냥냥웅냥냥.',
+      answer: '웅냥냥웅냥냥',
       multiFirst: null, //1번
       multiSecond: null, //2번
       multiThird: null, //3번
@@ -541,7 +542,12 @@ export default function MyPage() {
       className='w-full h-full flex flex-row justify-center items-center overflow-y-clip'
       style={{ backgroundImage: `url(${pathBG})`, backgroundSize: '100%' }}
     >
-      {quizModalState && <QuizModal data={tempScrappedQuizList[0]} />}
+      {quizModalState && (
+        <QuizModal
+          input={tempScrappedQuizList[2]}
+          closeModal={() => setQuizModalState(false)}
+        />
+      )}
       <div
         className={`w-[80%] h-full  flex flex-row justify-stretch items-center ${
           quizModalState ? 'blur-sm' : ''
