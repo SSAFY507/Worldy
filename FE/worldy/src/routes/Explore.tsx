@@ -45,6 +45,7 @@ const Explore = () => {
   const continentSet = new Set(["africa", "asia", "europe", "northAmerica", "oceania",  "southAmerica"])
 
   let selectedName = "";
+  let selectedName2 = "";
 
   /** 동적 애니메이션 함수 */
   const SetAnimation = (option:any, x:number, y:number, z:number, duration:number) => {
@@ -223,10 +224,16 @@ const Explore = () => {
     
     // 마우스가 대륙에 있지 않으면 호버 초기화
     else if (selectedObjectRef.current) {
+      // 줌 아웃 상태
       if ( selectedObjectRef.current.userData.flag  === false ) {
         SetAnimation(selectedObjectRef.current.position, selectedObjectRef.current.position.x, 0.3, selectedObjectRef.current.position.z, 1)
         SetAnimation(selectedObjectRef.current.scale, 1, 1, 1, 1)
-      } else {
+        if (selectedCountryRef.current) {
+          SetAnimation(selectedCountryRef.current.position, selectedCountryRef.current.position.x, -0.28, selectedCountryRef.current.position.z, 1)
+          SetAnimation(selectedCountryRef.current!.scale, 0.00071871024556458, 0.00071871024556458, 0.00071871024556458, 1)
+        }
+
+      } else { // 줌인 상태
         const countries = selectedObjectRef.current!
         let selectedCountry: THREE.Object3D;
 
@@ -239,11 +246,20 @@ const Explore = () => {
             }
           });
 
+          console.log(selectedCountryRef.current!)
+          // 이전 호버효과 초기화 
+          if (selectedName2 && selectedName2 !== selectedCountry!.name) {
+            SetAnimation(selectedCountryRef.current!.position, selectedCountryRef.current!.position.x, -0.28, selectedCountryRef.current!.position.z, 1)
+            SetAnimation(selectedCountryRef.current!.scale, 0.00071871024556458, 0.00071871024556458, 0.00071871024556458, 1)
+          }
+          selectedName2 = selectedCountry!.name
+
           // 해당하는 대륙 호버 효과 
-          // SetAnimation(selectedCountry!.position, selectedCountry!.position.x, 0.03, selectedCountry!.position.z, 1)
-          // SetAnimation(selectedCountry!.scale, 1.05, 1.05, 1.05, 1)
+          SetAnimation(selectedCountry!.position, selectedCountry!.position.x, -0.2, selectedCountry!.position.z, 1)
+          SetAnimation(selectedCountry!.scale, 0.00074, 0.00075, 0.00074, 1)
           // 해당하는 대륙 강조 효과 
           outlinePassRef.current!.edgeStrength = 40;  
+          // outlinePassRef.current!.visibleEdgeColor = new THREE.Color(0x000000); 
           outlinePassRef.current!.selectedObjects = [ selectedCountry! ];
           selectedCountryRef.current = selectedCountry!;
           return;
