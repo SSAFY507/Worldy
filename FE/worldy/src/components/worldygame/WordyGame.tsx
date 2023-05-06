@@ -1,9 +1,6 @@
-import { sign } from 'crypto';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import Dice from './Dice';
 import './dice.css'
-import { match } from 'assert';
 
 
 
@@ -111,7 +108,7 @@ export default function WordyGame() {
 
   }
 
-  function reLoaction(n: number, l: number, t?: string): void {
+  function reLocation(n: number, l: number, t?: string): void {
     const tmpLocation = l;
     if (t) {
       console.log('무인도')
@@ -156,7 +153,6 @@ export default function WordyGame() {
         }))
       }
     } else {  // 무인도가 아닌 지역 이동하기
-      console.log('무인도 아닌 지역 이동 함수')
       console.log('플레이어 : ' + n + "     이동할 좌표 : " + tmpLocation)
       if (n === 1) {
         setP1((prevState) => ({
@@ -185,7 +181,7 @@ export default function WordyGame() {
           }
         }))
       }
-      else if (n === 4) {
+      else if (n === 0) {
         setP4((prevState) => ({
           ...prevState,
           game: {
@@ -214,7 +210,7 @@ export default function WordyGame() {
       setTurn(turn);
     } else if (n === 1) {
       // 무인도 이동
-      reLoaction(pNum, 10, '무인도');
+      reLocation(pNum, 10, '무인도');
     } else if (n === 2) {
       // 원하는 곳으로 이동
       setMode('자유이동');
@@ -1350,6 +1346,8 @@ export default function WordyGame() {
   const [message1, setMessage1] = useState('');
   const [message2, setMessage2] = useState('');
   const [currentLocation, setCurrentLocation] = useState(0);
+  const [turnOver, setTurnOver] = useState(false);
+  const [start, setStart] = useState(false);
 
   // 플레이어 1회 턴 함수
 
@@ -1357,6 +1355,7 @@ export default function WordyGame() {
 
 
     // 콘솔창 및 플레이어 상태 초기화
+    setTurnOver(false);
     setBuyMode(0);
     p1.game.state = false;
     p2.game.state = false;
@@ -1394,17 +1393,13 @@ export default function WordyGame() {
         return {
           ...prevState,
           game: {
+            ...prevState.game,
             location: setLocation(p1, dice),
-            balance: p1.game.balance,
-            desert: p1.game.desert,
             state: true,
             dice1: dice1,
             dice2: dice2,
             dice: dice,
             isDouble: double,
-            own: p1.game.own,
-            lap: p1.game.lap,
-            ranking: 0,
           },
         }
       })
@@ -1415,17 +1410,13 @@ export default function WordyGame() {
         return {
           ...prevState,
           game: {
-            location: setLocation(p2, dice1 + dice2),
-            balance: p2.game.balance,
-            desert: p2.game.desert,
+            ...prevState.game,
+            location: setLocation(p1, dice),
             state: true,
             dice1: dice1,
             dice2: dice2,
             dice: dice,
             isDouble: double,
-            own: p2.game.own,
-            lap: p2.game.lap,
-            ranking: 0,
           },
         }
       })
@@ -1436,17 +1427,13 @@ export default function WordyGame() {
         return {
           ...prevState,
           game: {
-            location: setLocation(p3, dice1 + dice2),
-            balance: p3.game.balance,
-            desert: p3.game.desert,
+            ...prevState.game,
+            location: setLocation(p1, dice),
             state: true,
             dice1: dice1,
             dice2: dice2,
             dice: dice,
             isDouble: double,
-            own: p3.game.own,
-            lap: p3.game.lap,
-            ranking: 0,
           },
         }
       })
@@ -1457,26 +1444,20 @@ export default function WordyGame() {
         return {
           ...prevState,
           game: {
-            location: setLocation(p4, dice1 + dice2),
-            balance: p4.game.balance,
-            desert: p4.game.desert,
+            ...prevState.game,
+            location: setLocation(p1, dice),
             state: true,
             dice1: dice1,
             dice2: dice2,
             dice: dice,
             isDouble: double,
-            own: p4.game.own,
-            lap: p4.game.lap,
-            ranking: 0,
           },
         }
       })
     }
 
     // 더블아니면 turn 증가
-    if (!double) {
-      setTurn((turn + 1) % 4)
-    }
+    
   }
 
 
@@ -1511,7 +1492,9 @@ export default function WordyGame() {
         p.game.desert--;
       }
       result = p.game.location;
+      setTurnOver(true)
     }
+
     setCurrentLocation(result);
     let spot = worldMap[result]
     setTotalPrice(worldMap[result].price.land);
@@ -1657,6 +1640,7 @@ export default function WordyGame() {
             }
           }
         }
+        setTurnOver(true) 
 
       } else {  // 주인이 없을 때
         console.log(spot.name + '를 구입하시겠습니까?');
@@ -1668,14 +1652,21 @@ export default function WordyGame() {
 
     } else if (spot.type === 'start') {
       console.log('시작점에 도착했습니다. 월급이 두배 + 50만원');
+      setTurnOver(true);
     } else if (spot.type === 'desert') {
       console.log('무인도 도착!!!!');
+      setTurnOver(true);
     } else if (spot.type === 'tax') {
       console.log('납세는 의무입니다. 재산의 10%를 납부하세요.');
+      setTurnOver(true);
     } else if (spot.type === 'port') {
       console.log('여행상품 당첨!! 티웨이 항공과 함께 원하는 곳으로 이동해보세요.');
+      setTurnOver(true);
     } else if (spot.type === 'olympic') {
       console.log('올림픽 개최!!!');
+      setTurnOver(true);
+    } else if (spot.type === 'city') {
+      setTurnOver(true);
     }
 
 
@@ -1934,14 +1925,18 @@ export default function WordyGame() {
     }
   }, [tmp])
 
+  useEffect(() => {
+    if (!double && turnOver) {
+      setTurn((turn + 1) % 4)
+    }
+  }, [turnOver])
+
 
 
 
   function moveLocation(e: number): void {
     console.log(e);
     setCurrentLocation(e);
-    reLoaction(turn, e);
-
   }
 
 
@@ -1975,10 +1970,11 @@ export default function WordyGame() {
                   return <div key={index}>
                     {i.location >= 0 && i.location < 10 && i.type === 'nation' ? <div data-location={i.location}
                       onClick={(e) => {
+                        console.log('현재 턴:' + (turn+1))
                         moveLocation(Number(e.currentTarget.dataset.location))
                       }
                       }
-                      className={`w-[90px] h-[90px] bg-red-300  flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline outline-offset-1 outline-red-500' : 'outline outline-1'}`}>
+                      className={`w-[90px] h-[90px] bg-red-300  flex flex-col items-center justify-start outline outline-1 ${i.location === currentLocation ? 'outline-2 outline-red-500' : ''}`}>
                       <div>[{index}]{i.name}</div>
                       <div>{i.price ? i.price.land + '만원' : '특수지역'}</div>
                       <div className={`w-[90px] h-[56px] mt-[4px]  flex flex-col justify-center items-center ${i.owner === 1 ? 'bg-red-100' : 'bg-white'} ${i.owner === 2 ? 'bg-green-100' : 'bg-white'} ${i.owner === 3 ? 'bg-blue-100' : 'bg-white'} ${i.owner === 4 ? 'bg-yellow-100' : 'bg-white'}`}>
@@ -1995,7 +1991,13 @@ export default function WordyGame() {
                         {i.build.landmark ? <div className='z-[11] text-[8px] mt-[4px] w-[20px] h-[18px] bg-red-400 flex justify-center items-center text-white rounded-[2px]'>L</div> : null}
                       </div>
                     </div> : null}
-                    {i.location >= 0 && i.location < 10 && i.type === 'item' ? <div className={`w-[90px] h-[90px] bg-gray-400  flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline outline-offset-1 outline-red-500' : 'outline outline-1'}`}>
+                    {i.location >= 0 && i.location < 10 && i.type === 'item' ? <div data-location={i.location}
+                      onClick={(e) => {
+                        console.log('현재 턴:' + (turn+1))
+                        moveLocation(Number(e.currentTarget.dataset.location))
+                      }
+                      }
+                    className={`w-[90px] h-[90px] bg-gray-400  flex flex-col items-center justify-start outline outline-1 ${i.location === currentLocation ? 'outline-2 outline-red-500' : ''}`}>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
@@ -2014,10 +2016,11 @@ export default function WordyGame() {
                     </div> : null}
                     {i.location >= 0 && i.location < 10 && (i.type !== 'item' && i.type !== 'nation') ? <div data-location={i.location}
                       onClick={(e) => {
+                        console.log('현재 턴:' + (turn+1))
                         moveLocation(Number(e.currentTarget.dataset.location))
                       }
                       }
-                      className={`w-[90px] h-[90px] bg-gray-100  flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline outline-offset-1 outline-red-500' : 'outline outline-1'}`}>
+                      className={`w-[90px] h-[90px] bg-gray-300  flex flex-col items-center justify-start outline outline-1 ${i.location === currentLocation ? 'outline-2 outline-red-500' : ''}`}>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
@@ -2039,13 +2042,13 @@ export default function WordyGame() {
               </div>
               <div className='flex-col relative top-[-90px] left-[900px]'>
                 {worldMap.map((i, index) => {
-                  return <div key={index}>
+                  return <div key={index} className='flex z-[400]'>
                     {i.location >= 10 && i.location < 20 && i.type === 'nation' ? <div data-location={i.location}
-                      onClick={(e) => {
-                        moveLocation(Number(e.currentTarget.dataset.location))
-                      }
-                      }
-                      className={`w-[90px] h-[90px] bg-green-300  flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline outline-offset-1 outline-red-500' : 'outline outline-1'}`}>
+                    onClick={(e)=> {
+                      console.log('현재 턴:' + (turn+1))
+                      moveLocation(Number(e.currentTarget.dataset.location))
+                    }}
+                      className={`w-[90px] h-[90px] bg-green-300 flex flex-col items-center justify-start outline outline-1 ${i.location === currentLocation ? 'outline-2 outline-red-500' : ''}`}>
                       <div>[{index}]{i.name}</div>
                       <div>{i.price ? i.price.land + '만원' : '특수지역'}</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
@@ -2064,10 +2067,11 @@ export default function WordyGame() {
                     </div> : null}
                     {i.location >= 10 && i.location < 20 && i.type === 'item' ? <div data-location={i.location}
                       onClick={(e) => {
+                        console.log('현재 턴:' + (turn+1))
                         moveLocation(Number(e.currentTarget.dataset.location))
                       }
                       }
-                      className={`w-[90px] h-[90px] bg-gray-400  flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline outline-offset-1 outline-red-500' : 'outline outline-1'}`}>
+                      className={`w-[90px] h-[90px] bg-gray-400  flex flex-col items-center justify-start outline outline-1 ${i.location === currentLocation ? 'outline-2 outline-red-500' : ''}`}>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
@@ -2086,10 +2090,11 @@ export default function WordyGame() {
                     </div> : null}
                     {i.location >= 10 && i.location < 20 && (i.type !== 'item' && i.type !== 'nation') ? <div data-location={i.location}
                       onClick={(e) => {
+                        console.log('현재 턴:' + (turn+1))
                         moveLocation(Number(e.currentTarget.dataset.location))
                       }
                       }
-                      className={`w-[90px] h-[90px] bg-gray-100  flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline outline-offset-1 outline-red-500' : 'outline outline-1'}`}>
+                      className={`w-[90px] h-[90px] bg-gray-100  flex flex-col items-center justify-start outline outline-1 ${i.location === currentLocation ? 'outline-2 outline-red-500' : ''}`}>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
@@ -2114,10 +2119,11 @@ export default function WordyGame() {
                   return <div key={index}>
                     {i.location >= 20 && i.location < 30 && i.type === 'nation' ? <div data-location={i.location}
                       onClick={(e) => {
+                        console.log('현재 턴:' + (turn+1))
                         moveLocation(Number(e.currentTarget.dataset.location))
                       }
                       }
-                      className={`w-[90px] h-[90px] bg-yellow-300  flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline outline-offset-1 outline-red-500' : 'outline outline-1'}`}>
+                      className={`w-[90px] h-[90px] bg-yellow-300  flex flex-col items-center justify-start outline outline-1 ${i.location === currentLocation ? 'outline-2 outline-red-500' : ''}`}>
                       <div>[{index}]{i.name}</div>
                       <div>{i.price ? i.price.land + '만원' : '특수지역'}</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
@@ -2136,10 +2142,11 @@ export default function WordyGame() {
                     </div> : null}
                     {i.location >= 20 && i.location < 30 && i.type === 'item' ? <div data-location={i.location}
                       onClick={(e) => {
+                        console.log('현재 턴:' + (turn+1))
                         moveLocation(Number(e.currentTarget.dataset.location))
                       }
                       }
-                      className='w-[90px] h-[90px] bg-purple-400 outline outline-1 flex flex-col items-center justify-start'>
+                      className={`w-[90px] h-[90px] bg-purple-400 outline outline-1 flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline-2 outline-red-500' : ''}`}>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
@@ -2158,10 +2165,11 @@ export default function WordyGame() {
                     </div> : null}
                     {i.location >= 20 && i.location < 30 && (i.type !== 'item' && i.type !== 'nation') ? <div data-location={i.location}
                       onClick={(e) => {
+                        console.log('현재 턴:' + (turn+1))
                         moveLocation(Number(e.currentTarget.dataset.location))
                       }
                       }
-                      className='w-[90px] h-[90px] bg-gray-100 outline outline-1 flex flex-col items-center justify-start'>
+                      className={`w-[90px] h-[90px] bg-gray-100 outline outline-1 flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline-2 outline-red-500' : ''}`}>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
@@ -2181,15 +2189,16 @@ export default function WordyGame() {
                   </div>
                 })}
               </div>
-              <div className='flex flex-col-reverse relative top-[-990px]'>
+              <div className='flex flex-col-reverse relative top-[-990px] w-[90px]'>
                 {worldMap.map((i, index) => {
-                  return <div key={index}>
+                  return <div key={index}  className='flex w-[90px]'>
                     {i.location >= 30 && i.location < 40 && i.type === 'nation' ? <div data-location={i.location}
                       onClick={(e) => {
+                        console.log('현재 턴:' + (turn+1))
                         moveLocation(Number(e.currentTarget.dataset.location))
                       }
                       }
-                      className='w-[90px] h-[90px] bg-purple-300 outline outline-1 flex flex-col items-center justify-start'>
+                      className={`w-[90px] h-[90px] bg-purple-300 outline outline-1 flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline-2 outline-red-500' : ''}`}>
                       <div>[{index}]{i.name}</div>
                       <div>{i.price ? i.price.land + '만원' : '특수지역'}</div>
                       <div className={`w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center`}>
@@ -2208,6 +2217,7 @@ export default function WordyGame() {
                     </div> : null}
                     {i.location >= 30 && i.location < 40 && i.type === 'item' ? <div data-location={i.location}
                       onClick={(e) => {
+                        console.log('현재 턴:' + (turn+1))
                         moveLocation(Number(e.currentTarget.dataset.location))
                       }
                       }
@@ -2230,7 +2240,9 @@ export default function WordyGame() {
                     </div> : null}
                     {i.location >= 30 && i.location < 40 && (i.type !== 'item' && i.type !== 'nation') ? <div data-location={i.location}
                       onClick={(e) => {
+                        console.log('현재 턴:' + (turn+1))
                         moveLocation(Number(e.currentTarget.dataset.location))
+                        
                       }
                       }
                       className={`w-[90px] h-[90px] bg-gray-300  flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline outline-offset-1 outline-red-500' : 'outline outline-1'}`}>
@@ -2256,8 +2268,8 @@ export default function WordyGame() {
             </div>
           </div>
         </div>
-        <div className='w-[800px] h-[900px] mt-[60px] flex flex-col items-center p-[20px] relative top-[-820px]'>
-          <div className='flex p-[20px] relative top-[60px]'>
+        <div className='w-[600px] h-[800px] flex flex-col items-center relative top-[-880px]'>
+          <div className='flex p-[20px] relative top-[190px]'>
             {
               lst.map((i, index) => {
                 return <div key={index}>
@@ -2275,7 +2287,7 @@ export default function WordyGame() {
               })
             }
           </div>
-          <div className='flex bg-white w-[320px] h-[140px] justify-center items-center relative top-[-370px] rounded-[6px]'>
+          <div className='flex bg-white w-[320px] h-[140px] justify-center items-center relative top-[-230px] rounded-[6px]'>
 
             <main className="container">
               <div className="dice-container">
@@ -2357,14 +2369,14 @@ export default function WordyGame() {
 
             </main>
           </div>
-          <button className="roll-button z-[100]" id="rollButton"
+          <button className={`roll-button z-[100] ${turnOver? '': 'pointer-events-none'}`} id="rollButton"
             onClick={() => {
               playerTurn(turn);
             }}
           >주사위 굴리기</button>
 
           {/* 콘솔창  */}
-          <div className='w-[400px] h-[370px] bg-white flex flex-col items-center relative top-[-150px] rounded-[6px]'>
+          <div className='w-[400px] h-[380px] bg-white flex flex-col items-center relative top-[-10px] rounded-[6px]'>
             {lst.map((i, index) => {
               return <div key={index}>
                 {i.game.state &&
@@ -2431,20 +2443,18 @@ export default function WordyGame() {
                         <div className='mt-[10px] text-[20px] flex flex-col justify-center items-center'>
                           총 가격 : {totalPrice} 만원
                         </div>
-                        <div className='mt-[16px] flex flex-col justify-center items-center'>
-                          구매하시겠습니까??
-                        </div>
-                        <div className='flex justify-around items-center mt-[10px]'>
-                          <div className='rounded-[4px] bg-blue-300 w-[180px] h-[30px] flex justify-center items-center hover:cursor-pointer'
+                        <div className='flex justify-around items-center mt-[30px]'>
+                          <div className='rounded-[4px] text-white bg-blue-400 w-[180px] h-[50px] flex justify-center items-center hover:cursor-pointer'
                             onClick={() => {
-
                               buy(i, i.game.location, option);
+                              setTurnOver(true);
                             }}
                           >구매하기</div>
-                          <div className='rounded-[4px] bg-red-300 w-[180px] h-[30px] flex justify-center items-center hover:cursor-pointer'
+                          <div className='rounded-[4px] text-white bg-red-400 w-[180px] h-[50px] flex justify-center items-center hover:cursor-pointer'
                             onClick={() => {
-                              console.log('구입 안함');
-                              playerTurn(turn)
+                              setBuyMode(1);
+                              setMessage1('player ' + (turn+1) +' 턴 종료')
+                              setTurnOver(true);
                             }}
                           >건너뛰기</div>
                         </div>
@@ -2462,8 +2472,29 @@ export default function WordyGame() {
                       <div className='text-[18px] text-white mt-[10px] p-[14px]'>{message2}</div>
                       {mode === '자유이동' &&
                         <div>
-                          <div className='w-[320px] h-[60px] text-[24px] bg-[#ff4d45] text-white flex justify-center items-center mt-[20px] rounded-[4px] hover:cursor-pointer hover:bg-[#d1352e]'>이동하기</div>
-                        </div>}
+                          <div className='w-[320px] h-[60px] text-[24px] bg-[#ff4d45] text-white flex justify-center items-center mt-[20px] rounded-[4px] hover:cursor-pointer hover:bg-[#d1352e]'
+                            onClick={()=> {
+                              let n:number = turn+1;
+                              console.log('플레이어 >>>' + n)
+                              console.log('이동할 좌표 >>>' + currentLocation)
+                              reLocation(n, currentLocation);
+                              setMessage1('이동 완료');
+                              setMessage2('')
+                              setBuyMode(0);
+                              // setMode('자유이동완료');
+                              setTurnOver(true);
+                            }}
+                          >이동하기</div>
+                        </div>
+                      }
+                      {mode === '자유이동완료' &&
+                        <div>
+                          <div className='w-[320px] h-[60px] text-[24px] bg-green-400 text-white flex justify-center items-center mt-[20px] rounded-[4px]'
+                           
+                          >{worldMap[currentLocation].name}으로 이동 완료</div>
+                        </div>
+                      }
+
                     </div>}
 
 
@@ -2472,6 +2503,12 @@ export default function WordyGame() {
               </div>
             })}
           </div>
+        </div>
+        <div className={`z-[500] w-[300px] h-[100px] bg-red-500 relative top-[-1400px] flex justify-center items-center ${start? '': 'hidden' }`}>
+          <div className='text-white text-[30px]' onClick={()=>{
+            console.log('클릭')
+            setStart(true);
+          }}>GAME START!</div>
         </div>
       </div >
     </>

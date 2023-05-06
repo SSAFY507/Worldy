@@ -43,9 +43,9 @@ button:hover {
 .roll-button {
   font-size: 24px;
   width: 320px;
-  height: 60px;
+  height: 50px;
   position: relative;
-  top: -370px;
+  top: -230px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -59,9 +59,9 @@ button:hover {
 /* DICES */
 .dice-container {
   width: 100px;
-  height: 150px;
+  height: 100px;
   margin: 20px;
-  margin-top: 64px;
+  margin-top: 20px;
 }
 
 .dice {
