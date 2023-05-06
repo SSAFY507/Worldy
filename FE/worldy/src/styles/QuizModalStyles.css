@@ -1,0 +1,20 @@
+.on-scrollbar-quizmodal::-webkit-scrollbar {
+  display: block;
+  border-radius: 5px;
+  width: 10px;
+}
+
+.on-scrollbar-quizmodal {
+  -ms-overflow-style: scrollbar;
+  scrollbar-width: 2px;
+}
+.on-scrollbar-quizmodal::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.307);
+  border-radius: 100px;
+}
+
+.multi-prevs button {
+  border-radius: 20px;
+}
+
+/* ////////////////////////////// */
