@@ -388,7 +388,7 @@ export default function MyPage() {
                 } rounded-xl`}
               >
                 <button
-                  onClick={() => setQuizModalState(true)}
+                  onClick={() => handleQuizModal(key)}
                   className={`${
                     input.success ? 'button-success' : 'button-failed'
                   }
@@ -454,8 +454,9 @@ export default function MyPage() {
       multiSecond: null, //2번
       multiThird: null, //3번
       multiFourth: null, //4번
-      hint: false, //힌트
-      commentary: '힌트 무슨 유형인가', //힌트 유형
+      hint: true, //힌트
+      commentary:
+        '긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트', //힌트 유형
       userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
       success: true, //맞춘 문제인가
     },
@@ -473,7 +474,7 @@ export default function MyPage() {
       multiSecond: '명나라', //2번
       multiThird: '하나라', //3번
       multiFourth: '성나라', //4번
-      hint: false, //힌트
+      hint: true, //힌트
       commentary: '힌트 무슨 유형인가', //힌트 유형
       userAnswer: '1', //유저가 적은 정답(맞았으면 null)
       success: false, //맞춘 문제인가
@@ -482,17 +483,17 @@ export default function MyPage() {
       quizId: 0,
       nationName: '대한민국',
       level: 1,
-      quizType: 'short',
+      quizType: 'blank',
       category: 'cul',
       image: '',
-      content: '웅냥냥웅냥냥.',
-      answer: '웅냥냥웅냥냥',
+      content: '세종대왕.',
+      answer: '세종대왕',
       multiFirst: null, //1번
       multiSecond: null, //2번
       multiThird: null, //3번
       multiFourth: null, //4번
-      hint: false, //힌트
-      commentary: '힌트 무슨 유형인가', //힌트 유형
+      hint: true, //힌트
+      commentary: 'ㅅㅈㄷㅇ', //힌트 유형
       userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
       success: false, //맞춘 문제인가
     },
@@ -535,7 +536,15 @@ export default function MyPage() {
     );
   };
 
-  const [quizModalState, setQuizModalState] = useState<boolean>(true);
+  const [quizModalState, setQuizModalState] = useState<boolean>(false);
+  const [selectedQuizId, setSelectedQuizId] = useState<number>(0);
+
+  const handleQuizModal = (select: number) => {
+    setSelectedQuizId(select);
+    setTimeout(() => {
+      setQuizModalState(true);
+    }, 100);
+  };
 
   return (
     <div
@@ -544,7 +553,7 @@ export default function MyPage() {
     >
       {quizModalState && (
         <QuizModal
-          input={tempScrappedQuizList[2]}
+          input={tempScrappedQuizList[selectedQuizId]}
           closeModal={() => setQuizModalState(false)}
         />
       )}
