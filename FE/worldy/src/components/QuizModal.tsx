@@ -7,6 +7,7 @@ import {
   AiOutlineExclamationCircle,
 } from 'react-icons/ai';
 import QuizBlueText from '../assets/images/QuizBlueText.png';
+import ResultBlueText from '../assets/images/ResultBlueText.png';
 import { JsxElement } from 'typescript';
 
 import '../styles/QuizModalStyles.css';
@@ -524,9 +525,9 @@ export default function QuizModal({
           <div className='w-full h-[55px] bg-[#eaeaea] rounded-t-xl outline-red-300 flex flex-col jutsify-stretch items-center'>
             <div className='w-full h-[20px] outline-yellow-500 flex flex-row justify-center items-end'>
               <img
-                src={QuizBlueText}
-                alt='QuizblueText'
-                className='w-fit h-[60px]'
+                src={ResultBlueText}
+                alt='ResultBlueText'
+                className='w-fit h-[52px]'
               />
             </div>
             <div className='w-full h-fit flex flex-row justify-end items-center'>
