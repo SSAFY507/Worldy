@@ -21,12 +21,15 @@ public class HelpController {
     /***
      * [ 문의 글 작성 ]
      * - 문의 글 저장
-     * - 글 작성 시간 저장
+     * - 글 작성 시간 자동 저장
+     * - ElasticSearch 에 데이터 추가
      ***/
     @PostMapping("/write")
     public ResponseEntity<String> writeHelp(@RequestBody HelpCreateDto helpCreateDto) {
 
         String kakaoId = SecurityContextHolder.getContext().getAuthentication().getName();
-        return new ResponseEntity<>(helpService.createHelp(helpCreateDto, kakaoId), HttpStatus.OK);
+        helpService.createHelp(helpCreateDto, kakaoId);
+
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 }

@@ -5,8 +5,13 @@ import com.ssafy.worldy.model.help.dto.HelpDto;
 import com.ssafy.worldy.model.help.repo.HelpRepo;
 import com.ssafy.worldy.model.user.dto.UserDto;
 import com.ssafy.worldy.model.user.service.KakaoUserService;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Collections;
 
 @Service
 public class HelpService {
@@ -18,12 +23,38 @@ public class HelpService {
     HelpRepo helpRepo;
 
     // 문의 글 작성
-    public String createHelp(HelpCreateDto helpCreateDto, String kakaoId) {
+    public void createHelp(HelpCreateDto helpCreateDto, String kakaoId) {
 
         UserDto userDto = kakaoUserService.getUserDto(kakaoId);
         HelpDto helpDto = new HelpDto(helpCreateDto, userDto);
 
         helpRepo.save(helpDto.toEntity());
-        return "success";
+        inputElasticSearch(helpDto.getHelpId(), helpDto.getContent(), helpDto.getCategory(), userDto.getUserId());
+    }
+
+    // 작성한 내용을 ElasticSearch DB 의 help index 에 document 로 저장
+    public void inputElasticSearch(Long helpId, String content, String category, Long userId) {
+
+        String url = "http://localhost:9200/help/_doc/" + helpId;
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        // create headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        // create param
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("help_id", helpId);
+        jsonObject.put("content", content);
+        jsonObject.put("category", category);
+
+        HttpEntity<String> entity = new HttpEntity<>(jsonObject.toString(), headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
+
+        System.out.println(response.getBody());
+        System.out.println(response.getStatusCodeValue());
     }
 }
