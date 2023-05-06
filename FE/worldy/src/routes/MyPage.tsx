@@ -12,6 +12,7 @@ import { TbWorld, TbCategory2 } from 'react-icons/tb';
 import moment from 'moment';
 
 import '../styles/MyPageStyles.css';
+import QuizModal from '../components/QuizModal';
 
 type MyPageMenuType = {
   icon: React.ReactNode;
@@ -26,7 +27,7 @@ type MyPageContentType = {
   content?: JSX.Element;
 };
 
-type ScrappedQuizType = {
+export type ScrappedQuizType = {
   quizId: number; //퀴즈 id
   nationName: string; //국가명
   level: number; //퀴즈 수준
@@ -387,10 +388,11 @@ export default function MyPage() {
                 } rounded-xl`}
               >
                 <button
+                  onClick={() => handleQuizModal(key)}
                   className={`${
                     input.success ? 'button-success' : 'button-failed'
                   }
-                w-full h-full`}
+                w-full h-full `}
                 >
                   {input.success ? 'Success' : 'Failed...'}
                 </button>
@@ -434,7 +436,7 @@ export default function MyPage() {
 
   useEffect(() => {
     setQuizPopDownBoxState(quizPopDownKeyState === -1 ? false : true);
-    scrollToContent(quizScrapRef);
+    if (quizPopDownKeyState !== -1) scrollToContent(quizScrapRef);
   }, [quizPopDownKeyState]);
 
   const tempScrappedQuizList: ScrappedQuizType[] = [
@@ -445,14 +447,16 @@ export default function MyPage() {
       quizType: 'OX',
       category: 'cul',
       image: '',
-      content: '대한민국에서 쓰이는 언어는 한극어이다.',
+      content:
+        '대한민국에서 쓰이는 언어는 한극어이다대한민국에서 쓰이는 언어는.',
       answer: 'X',
       multiFirst: null, //1번
       multiSecond: null, //2번
       multiThird: null, //3번
       multiFourth: null, //4번
-      hint: false, //힌트
-      commentary: '힌트 무슨 유형인가', //힌트 유형
+      hint: true, //힌트
+      commentary:
+        '긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트', //힌트 유형
       userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
       success: true, //맞춘 문제인가
     },
@@ -464,13 +468,13 @@ export default function MyPage() {
       category: 'cul',
       image: '',
       content:
-        '중국의 역사는 매우 오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요..',
+        '중국의 역사는 매우 오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요..',
       answer: '하나라',
-      multiFirst: '진나라', //1번
+      multiFirst: '진나라진나라진나라진나라진나라진나라진나라진나라', //1번
       multiSecond: '명나라', //2번
       multiThird: '하나라', //3번
       multiFourth: '성나라', //4번
-      hint: false, //힌트
+      hint: true, //힌트
       commentary: '힌트 무슨 유형인가', //힌트 유형
       userAnswer: '1', //유저가 적은 정답(맞았으면 null)
       success: false, //맞춘 문제인가
@@ -479,17 +483,17 @@ export default function MyPage() {
       quizId: 0,
       nationName: '대한민국',
       level: 1,
-      quizType: 'OX',
+      quizType: 'blank',
       category: 'cul',
       image: '',
-      content: '대한민국에서 쓰이는 언어는 한극어이다.',
-      answer: 'X',
+      content: '세종대왕.',
+      answer: '세종대왕',
       multiFirst: null, //1번
       multiSecond: null, //2번
       multiThird: null, //3번
       multiFourth: null, //4번
-      hint: false, //힌트
-      commentary: '힌트 무슨 유형인가', //힌트 유형
+      hint: true, //힌트
+      commentary: 'ㅅㅈㄷㅇ', //힌트 유형
       userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
       success: false, //맞춘 문제인가
     },
@@ -532,12 +536,32 @@ export default function MyPage() {
     );
   };
 
+  const [quizModalState, setQuizModalState] = useState<boolean>(false);
+  const [selectedQuizId, setSelectedQuizId] = useState<number>(0);
+
+  const handleQuizModal = (select: number) => {
+    setSelectedQuizId(select);
+    setTimeout(() => {
+      setQuizModalState(true);
+    }, 100);
+  };
+
   return (
     <div
       className='w-full h-full flex flex-row justify-center items-center overflow-y-clip'
       style={{ backgroundImage: `url(${pathBG})`, backgroundSize: '100%' }}
     >
-      <div className='w-[80%] h-full  flex flex-row justify-stretch items-center'>
+      {quizModalState && (
+        <QuizModal
+          input={tempScrappedQuizList[selectedQuizId]}
+          closeModal={() => setQuizModalState(false)}
+        />
+      )}
+      <div
+        className={`w-[80%] h-full  flex flex-row justify-stretch items-center ${
+          quizModalState ? 'blur-sm' : ''
+        }`}
+      >
         <div className='w-[25%] h-full pt-[5em]'>
           <div className='w-[90%] h-fit  flex flex-col items-start'>
             <div className='flex flex-row justify-start pl-[15px]'>
