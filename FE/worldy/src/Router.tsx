@@ -108,9 +108,8 @@ const AppLayout = () => {
           )}
           <Route path='/gameinfo' element={<GameInfo />} />
           <Route path='/updates' element={<Updates />} />
-          <Route path='/explore' element={<Explore />}>
-            <Route path=':country' element={<Country />} />
-          </Route>
+          <Route path='/explore' element={<Explore />} />
+          <Route path='/explore/:country' element={<Country />} />
           <Route path='/monopoly' element={<Monopoly />} />
           <Route path='/support' element={<Support />} />
           <Route path='/mypage' element={<MyPage />} />
