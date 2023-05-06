@@ -1,11 +1,18 @@
 import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
-import { AiOutlineBulb, AiOutlineCloseCircle } from 'react-icons/ai';
+import {
+  AiOutlineBulb,
+  AiOutlineClose,
+  AiOutlineCloseCircle,
+  AiOutlineExclamationCircle,
+} from 'react-icons/ai';
 import QuizBlueText from '../assets/images/QuizBlueText.png';
+import ResultBlueText from '../assets/images/ResultBlueText.png';
 import { JsxElement } from 'typescript';
 
 import '../styles/QuizModalStyles.css';
 import { TbCategory2, TbWorld } from 'react-icons/tb';
+import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 
 type ScrappedQuizType = {
   quizId: number; //퀴즈 id
@@ -24,6 +31,7 @@ type ScrappedQuizType = {
   commentary: string; //힌트 유형
   userAnswer: string | null; //유저가 적은 정답(맞았으면 null)
   success: boolean; //맞춘 문제인가
+  explanation?: string;
 };
 
 export default function QuizModal({
@@ -35,7 +43,7 @@ export default function QuizModal({
 }) {
   const size: number = 200;
 
-  const textSize: number = 300 / (input.content.length / 20);
+  const textSize: number = 200 / (input.content.length / 20);
   //몇줄?
 
   const [submitAnswer, setSubmitAnswer] = useState<string>('');
@@ -145,32 +153,72 @@ export default function QuizModal({
     }
   }, []);
 
+  const [clickedO, setClickedO] = useState<boolean | null>(null);
+
+  const handleClickedO = (input: boolean) => {
+    if (clickedO === input) setClickedO(null);
+    else setClickedO(input);
+  };
+
+  useEffect(() => {
+    if (clickedO === true) {
+      setSubmitAnswer('O');
+    } else if (clickedO === false) {
+      setSubmitAnswer('X');
+    } else {
+      setSubmitAnswer('');
+    }
+  }, [clickedO]);
+
   const contentOX = (): JSX.Element => {
     return (
       <>
-        {hintState && (
-          <div className='absolute top-0 left-0 z-50 w-full h-full bg-[rgba(180,180,180,0.8)] p-[20px]'>
-            <span className='text-gray-700 font-PtdMedium text-[25px] overflow-y-scroll leading-[30px]'>
-              {input.commentary}
-            </span>
-          </div>
-        )}
         <div
-          className={`w-full h-full flex flex-row justify-between items-center p-[30px] ${
-            hintState ? 'blur-sm' : ''
-          }`}
+          className={`w-full h-full flex flex-col justify-center items-center p-[30px] text-black transition-all duration-3000 ease-in`}
         >
-          <button className='outline outline-black w-[220px] h-2/3 hover:text-white hover:bg-[#6ad0ff] text-gray-100 bg-gray-400 rounded-3xl flex flex-row justify-center items-center'>
-            <span className='text-[100px] font-PtdBold'>O</span>
-          </button>
-          <button className='outline outline-black w-[220px] h-2/3 hover:text-white hover:bg-[#ff6a6a] text-gray-100 bg-gray-400 rounded-3xl flex flex-row justify-center items-center'>
-            <span className='text-[100px] font-PtdBold'>X</span>
-          </button>
+          {hintState ? (
+            <>
+              <div className='w-[200px] h-[50px] flex flex-row justify-center items-center mb-[10px]'>
+                <AiOutlineExclamationCircle size={35} color={'#96B9BB'} />
+                <span className='ml-[15px] text-[25px] text-[#ACACAC]'>
+                  힌트
+                </span>
+              </div>
+              <div className='w-full h-[150px] px-[50px] text-center'>
+                <span className='text-gray-700 font-PtdSemiBOld text-[25px] leading-[32px]'>
+                  {input.commentary}
+                </span>
+              </div>
+            </>
+          ) : (
+            <div className='outline-black flex flex-row justify-between items-center'>
+              <button
+                className={`${
+                  clickedO === true ? 'clickedOXBlue' : ''
+                } beforeOXBlue w-[200px] h-[120px] mr-[20px] rounded-md shadow-md bg-[#F2F2F2] flex flex-row justify-center items-center`}
+                onClick={() => handleClickedO(true)}
+              >
+                <span className='text-[24px] font-PtdMedium'>O</span>
+              </button>
+              <button
+                className={`${
+                  clickedO === false ? 'clickedOXRed' : ''
+                } beforeOXRed w-[200px] h-[120px] ml-[20px]  rounded-md shadow-md bg-[#F2F2F2] flex flex-row justify-center items-center`}
+                onClick={() => handleClickedO(false)}
+              >
+                <span className='text-[24px] font-PtdMedium'>X</span>
+              </button>
+            </div>
+          )}
         </div>
       </>
     );
   };
   const contentMulti = (): JSX.Element => {
+    const firstA = input.multiFirst ? input.multiFirst : '';
+    const secondA = input.multiSecond ? input.multiSecond : '';
+    const thirdA = input.multiThird ? input.multiThird : '';
+    const fourthA = input.multiFourth ? input.multiFourth : '';
     return (
       <>
         {hintState && (
@@ -186,10 +234,11 @@ export default function QuizModal({
           }`}
         >
           <button
-            className='w-[250px] h-2/5 outline outline-gray-300 flex flex-row justify-center items-center p-[10px]
+            className='w-[250px] h-2/5  outline-gray-300 flex flex-row justify-center items-center p-[10px]
           text-gray-100 bg-gray-400
         hover:bg-[rgba(200,200,200,1)] 
         '
+            onClick={() => setSubmitAnswer(firstA)}
           >
             <span
               className='w-full h-full flex flex-row justify-center items-center'
@@ -203,14 +252,15 @@ export default function QuizModal({
                 }px`,
               }}
             >
-              {input.multiFirst}
+              {firstA}
             </span>
           </button>
           <button
-            className='w-[250px] h-2/5 outline outline-gray-300 flex flex-row justify-center items-center p-[10px]
+            className='w-[250px] h-2/5  outline-gray-300 flex flex-row justify-center items-center p-[10px]
           text-gray-100 bg-gray-400
         hover:bg-[rgba(200,200,200,1)] 
         '
+            onClick={() => setSubmitAnswer(secondA)}
           >
             <span
               className='w-full h-full flex flex-row justify-center items-center'
@@ -224,14 +274,15 @@ export default function QuizModal({
                 }px`,
               }}
             >
-              {input.multiSecond}
+              {secondA}
             </span>
           </button>
           <button
-            className='w-[250px] h-2/5 outline outline-gray-300 flex flex-row justify-center items-center p-[10px]
+            className='w-[250px] h-2/5  outline-gray-300 flex flex-row justify-center items-center p-[10px]
           text-gray-100 bg-gray-400
         hover:bg-[rgba(200,200,200,1)] 
         '
+            onClick={() => setSubmitAnswer(thirdA)}
           >
             <span
               className='w-full h-full flex flex-row justify-center items-center'
@@ -245,14 +296,15 @@ export default function QuizModal({
                 }px`,
               }}
             >
-              {input.multiThird}
+              {thirdA}
             </span>
           </button>
           <button
-            className='w-[250px] h-2/5 outline outline-gray-300 flex flex-row justify-center items-center p-[10px]
+            className='w-[250px] h-2/5  outline-gray-300 flex flex-row justify-center items-center p-[10px]
           text-gray-100 bg-gray-400
         hover:bg-[rgba(200,200,200,1)] 
         '
+            onClick={() => setSubmitAnswer(fourthA)}
           >
             <span
               className='w-full h-full flex flex-row justify-center items-center'
@@ -266,7 +318,7 @@ export default function QuizModal({
                 }px`,
               }}
             >
-              {input.multiFourth}
+              {fourthA}
             </span>
           </button>
         </div>
@@ -276,7 +328,7 @@ export default function QuizModal({
   const contentBlank = (): JSX.Element => {
     return (
       <div className='relative w-full h-full flex flex-col justify-center items-center'>
-        <div className='w-[500px] h-[150px] outline outline-green-300 flex flex-row justify-between items-center'>
+        <div className='w-[500px] h-[150px]  outline-green-300 flex flex-row justify-between items-center'>
           {blankBoxComponent()}
         </div>
       </div>
@@ -298,18 +350,49 @@ export default function QuizModal({
 
   const quizHintContent = (): JSX.Element => {
     return (
-      <button
-        className={`w-[100px] h-4/5 bg-slate-500 rounded-xl text-white ${
-          input.hint ? 'hover:bg-slate-400' : ''
-        }`}
-        onClick={handleHint}
-      >
-        {input.hint ? 'Hint' : 'Hint 없음'}
-      </button>
+      <div className='flex flex-row justify-center items-center'>
+        {input.hint ? (
+          <>
+            <label className='uiverse-switch'>
+              <input type='checkbox' onClick={handleHint} />
+              <span className='uiverse-slider'></span>
+            </label>
+            <span className='ml-[10px] text-[#ACACAC]'>힌트 보기</span>
+          </>
+        ) : (
+          <>
+            <span className='ml-[10px] text-[#ACACAC]'>
+              힌트가 없는 문제입니다.
+            </span>
+          </>
+        )}
+      </div>
     );
   };
+
+  const [scrapped, setScrapped] = useState<boolean>(true);
+
+  const scrapThisQuiz = () => {
+    setScrapped(!scrapped);
+  };
+
+  const quizScrap = (): JSX.Element => {
+    return (
+      <div className='flex flex-row justify-center items-center'>
+        <button onClick={scrapThisQuiz}>
+          {scrapped ? (
+            <BsBookmarkFill size={24} color={'#ACACAC'} />
+          ) : (
+            <BsBookmark size={24} color={'#ACACAC'} />
+          )}
+        </button>
+        <span className='ml-[10px] text-[#ACACAC]'>스크랩</span>
+      </div>
+    );
+  };
+
   const quizInfoContent = (): JSX.Element => {
-    const level = input.level === 1 ? '상' : input.level === 2 ? '중' : '하';
+    // const level = input.level === 1 ? '상' : input.level === 2 ? '중' : '하';
     const category =
       input.category === 'aff'
         ? '시사'
@@ -317,55 +400,97 @@ export default function QuizModal({
         ? '문화/역사'
         : '기타';
     return (
-      <div className='w-fit h-full flex flex-row justify-end items-center bg-yellow-200 font-PtdMedium'>
-        <span className='w-fit h-[60%] px-[10px] flex flex-row justify-center items-center border-0 border-r-[2px] border-r-gray-400 border-dashed'>
-          <TbWorld size={20} className='mr-[10px] ' /> {input.nationName}
+      <div className='w-fit h-full flex flex-row justify-end items-center text-[#ACACAC] font-PtdMedium'>
+        <span className='w-fit h-[40%] px-[10px] flex flex-row justify-center items-center border-0 border-r-[2px] border-[#ACACAC] border-solid'>
+          {input.nationName}
         </span>
-        <span className='w-fit h-[60%] px-[10px] flex flex-row justify-center items-center border-0 border-r-[2px] border-r-gray-400 border-dashed'>
-          <AiOutlineBulb size={20} className='mr-[10px]' /> LV.{level}
+        <span className='w-fit h-[40%] px-[10px] flex flex-row justify-center items-center border-0 border-r-[2px] border-[#ACACAC] border-solid'>
+          LV. {input.level}
         </span>
-        <span className='w-fit h-[60%] px-[10px] flex flex-row justify-center items-center'>
-          <TbCategory2 size={20} className='mr-[10px]' /> {category}
+        <span className='w-fit h-[40%] px-[10px] flex flex-row justify-center items-center'>
+          {category}
         </span>
       </div>
     );
+  };
+
+  const [flipped, setFlipped] = useState<boolean>(false);
+  const [correctState, setCorrectState] = useState<boolean | null>(null);
+  const submitAndFlip = () => {
+    setFlipped(true);
+    setCorrectState(submitAnswer === input.answer);
   };
 
   const submitButton = (): JSX.Element => {
     return (
-      <button className='w-[300px] h-[60px] outline outline-white rounded-xl font-PtdMedium bg-[rgba(200,200,200,1)] text-[30px]'>
+      <button
+        className={`w-[500px] h-[60px] rounded-md font-PtdLight text-[25px] ${
+          submitAnswer ? 'bg-white text-black' : 'bg-[#D4D4D4] text-[#9F9F9F]'
+        }`}
+        disabled={!submitAnswer}
+        onClick={submitAndFlip}
+      >
         제출하기
       </button>
     );
   };
+  const closeButton = (): JSX.Element => {
+    return (
+      <button
+        className='w-[500px] h-[60px] rounded-md font-PtdLight text-[25px] bg-white text-black'
+        onClick={closeModal}
+      >
+        확인
+      </button>
+    );
+  };
 
-  return (
-    <div
-      className={`mt-[30px] z-50 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 outline-white
-      flex flex-col justify-between items-center
-     `}
-      style={{ width: `${size * 3}px`, height: `${size * 4}px` }}
-    >
-      <div className='z-10 w-full h-[50px] bg-none flex flex-col justify-start items-center overflow-visible'>
-        <div className='w-[280px] h-fit'>
-          <img src={QuizBlueText} alt='QUIZ Blue' />
+  const explanationContent = (): JSX.Element => {
+    return (
+      <div
+        className='w-full h-full outline-black
+        px-[60px] py-[30px] flex flex-col justify-start items-center
+      '
+      >
+        <span className='w-full h-[35px] font-PtdBold text-[30px] mb-[15px] text-[#6a6a6a] text-start'>
+          해설
+        </span>
+        <div className='w-full h-fit flex flex-col justify-start items-center text-center overflow-y-scroll on-scrollbar-quizmodal'>
+          <span className='text-[20px] leading-[26px] font-PtdRegular text-start text-[#767676]'>
+            {input.explanation}
+          </span>
         </div>
       </div>
-      <div className='w-full h-[50px] bg-[rgba(200,200,200,1)] rounded-t-2xl outline-red-300 flex flex-row jutsify-stretch items-center'>
-        <div className='w-[50px] h-full   outline-yellow-500'></div>
-        <div className='flex-1 h-full'></div>
-        <div className='w-[50px] h-full  outline-yellow-500 grid place-content-center text-gray-800'>
-          <AiOutlineCloseCircle
-            size={40}
-            onClick={() => closeModal()}
-            className='cursor-pointer'
-          />
+    );
+  };
+
+  const fromtContainer = (): JSX.Element => {
+    return (
+      <div className='frontcontainer'>
+        <div className='h-[70px] w-full flex flex-col-reverse justify-start items-center rounded-t-xl bg-[#61C7BB]  outline-red-500'>
+          <div className='w-full h-[55px] bg-[#F5F5F5] rounded-t-xl outline-red-300 flex flex-col jutsify-stretch items-center'>
+            <div className='w-full h-[20px] outline-yellow-500 flex flex-row justify-center items-end'>
+              <img
+                src={QuizBlueText}
+                alt='QuizblueText'
+                className='w-fit h-[60px]'
+              />
+            </div>
+            <div className='w-full h-fit flex flex-row justify-end items-center'>
+              <div className='w-[50px] h-fit  outline-yellow-500 grid place-content-center text-gray-800'>
+                <AiOutlineClose
+                  size={30}
+                  color='gray'
+                  onClick={() => closeModal()}
+                  className='cursor-pointer'
+                />
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div className='w-full flex-1 bg-white outline outline-red-300 flex flex-col justify-stretch items-center'>
-        <div className='w-full h-[300px] outline outline-red-500 my-[10px] py-[15px] px-[30px] overflow-y-scroll on-scrollbar-quizmodal'>
+        <div className='w-full h-[200px] bg-[#F5F5F5]  outline-red-500 flex flex-row justify-center items-center pt-[10px] pb-[20px] px-[50px] overflow-y-scroll on-scrollbar-quizmodal'>
           <span
-            className='font-PtdMedium'
+            className='font-PtdSemiBOld text-center'
             style={{
               fontSize: `${
                 textSize > 30 ? 30 : textSize < 20 ? 20 : textSize
@@ -373,21 +498,127 @@ export default function QuizModal({
               lineHeight: `${textSize > 30 ? 39 : textSize + 9}px`,
             }}
           >
-            {input.content}
+            Q. {input.content}
           </span>
         </div>
-        <div className='relative w-full flex-1 outline outline-blue-500'>
+        <div className='w-full h-[10px] bg-[#E0E0E0]'></div>
+        <div className='relative bg-[#E0E0E0] w-full h-[300px]  outline-blue-500'>
           {quizContent()}
         </div>
+        <div className='w-full h-fit bg-[#E0E0E0]  outline-red-300 flex flex-col justify-stretch items-center rounded-b-xl overflow-hidden'>
+          <div className='w-full h-[40px]  outline-black flex flex-row justify-between items-center px-[50px]'>
+            {quizHintContent()}
+            {quizInfoContent()}
+          </div>
+          <div className='w-full h-fit bg-[#E0E0E0] flex flex-row justify-center items-center pt-[30px] pb-[50px]'>
+            {submitButton()}
+          </div>
+        </div>
       </div>
-      <div className='w-full h-[150px] bg-white outline outline-red-300 flex flex-col justify-stretch items-center'>
-        <div className='w-full h-[40px] outline outline-black flex flex-row justify-between items-center px-[20px]'>
-          {quizHintContent()}
-          {quizInfoContent()}
+    );
+  };
+
+  const backContainer = (): JSX.Element => {
+    return (
+      <div className='backcontainer'>
+        <div className='h-[70px] w-full flex flex-col-reverse justify-start items-center rounded-t-xl bg-[#61C7BB]  outline-red-500'>
+          <div className='w-full h-[55px] bg-[#eaeaea] rounded-t-xl outline-red-300 flex flex-col jutsify-stretch items-center'>
+            <div className='w-full h-[20px] outline-yellow-500 flex flex-row justify-center items-end'>
+              <img
+                src={ResultBlueText}
+                alt='ResultBlueText'
+                className='w-fit h-[52px]'
+              />
+            </div>
+            <div className='w-full h-fit flex flex-row justify-end items-center'>
+              <div className='w-[50px] h-fit  outline-yellow-500 grid place-content-center text-gray-800'>
+                <AiOutlineClose
+                  size={30}
+                  color='gray'
+                  onClick={() => closeModal()}
+                  className='cursor-pointer'
+                />
+              </div>
+            </div>
+          </div>
         </div>
-        <div className='w-full flex-1 bg-red-300 flex flex-row justify-center items-center'>
-          {submitButton()}
+        <div className='w-full h-[200px] bg-[#eaeaea]  outline-red-500 flex flex-col justify-start items-start pt-[5px] px-[50px]'>
+          <span
+            className={`w-full flex flex-row justify-start items-center text-[18px] font-PtdBold mb-[10px] ${
+              correctState ? 'text-[#009B3E]' : 'text-[#E81C1C]'
+            }`}
+          >
+            {correctState === true
+              ? '정답입니다'
+              : correctState === false
+              ? '오답입니다'
+              : 'null결과'}
+          </span>
+          <div className='w-full h-[70px] flex flex-row justify-start items-center outline-yellow-500 overflow-y-scroll on-scrollbar-quizmodal'>
+            <span
+              className='font-PtdSemiBOld text-center py-[15px] h-fit max-h-full'
+              style={{
+                fontSize: `${
+                  textSize > 18 ? 18 : textSize < 12 ? 12 : textSize
+                }px`,
+                lineHeight: `${textSize > 20 ? 25 : textSize + 5}px`,
+              }}
+            >
+              Q. {input.content}
+            </span>
+          </div>
+          <div
+            className={` w-full h-[50px] mt-[10px] rounded-[10px] overflow-hidden ${
+              correctState === true
+                ? 'bg-[#26aaa5]'
+                : correctState === false
+                ? 'bg-[#4f4f4f]'
+                : ''
+            }`}
+          >
+            <div
+              className={`${
+                correctState === true
+                  ? 'correctanswer text-[#80ffe6]'
+                  : correctState === false
+                  ? 'incorrectanswer'
+                  : ''
+              } w-full h-full grid place-content-center font-PtdBold text-[20px] `}
+            >
+              A. {input.answer}
+            </div>
+          </div>
+          <div className='w-full flex-1 outline-black flex flex-row justify-start items-center font-PtdRegular text-[#ACACAC]'>
+            <span>'닉네임 값 없다야'님이 입력한 답은 "{submitAnswer}"</span>
+          </div>
         </div>
+        <div className='relative bg-[#F5F5F5] w-full h-[300px]  outline-blue-500'>
+          {explanationContent()}
+        </div>
+        <div className='w-full h-fit bg-[#F5F5F5]  outline-red-300 flex flex-col justify-stretch items-center rounded-b-xl overflow-hidden'>
+          <div className='w-full h-[40px]  outline-black flex flex-row justify-between items-center px-[50px]'>
+            {quizScrap()}
+            {quizInfoContent()}
+          </div>
+          <div className='w-full h-fit bg-[#F5F5F5] flex flex-row justify-center items-center pt-[30px] pb-[50px]'>
+            {closeButton()}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div
+      className={` z-50 absolute top-[15%] left-1/2 -translate-x-1/2 -translate-y-1/2 outline-white
+      flex flex-col justify-start items-center
+      ${!flipped ? 'cardcontainer' : 'cardcontainer-flipped'}
+     `}
+      style={{ width: `${size * 3}px`, height: 'fit' }}
+    >
+      <div className='cardcontainer-inner w-full h-full'>
+        {fromtContainer()}
+        {backContainer()}
       </div>
     </div>
   );

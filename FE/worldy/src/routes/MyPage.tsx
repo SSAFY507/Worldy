@@ -44,6 +44,7 @@ export type ScrappedQuizType = {
   commentary: string; //힌트 유형
   userAnswer: string | null; //유저가 적은 정답(맞았으면 null)
   success: boolean; //맞춘 문제인가
+  explanation?: string;
 };
 
 export default function MyPage() {
@@ -447,18 +448,18 @@ export default function MyPage() {
       quizType: 'OX',
       category: 'cul',
       image: '',
-      content:
-        '대한민국에서 쓰이는 언어는 한극어이다대한민국에서 쓰이는 언어는.',
-      answer: 'X',
+      content: '일본의 모든 도시는 한국의 모든 도시와 표준시가 1시간 차이난다.',
+      answer: 'O',
       multiFirst: null, //1번
       multiSecond: null, //2번
       multiThird: null, //3번
       multiFourth: null, //4번
       hint: true, //힌트
-      commentary:
-        '긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트긴 힌트', //힌트 유형
+      commentary: '일본은 한국보다 실제 시간이 30분 빠릅니다',
       userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
       success: true, //맞춘 문제인가
+      explanation:
+        '한국의 중앙 자오선은 동경 127.5°이며 일본의 중앙 자오선은 동경 135°로 일본이 30분 더 빠릅니다. 그러나 일제의 잔재로, 실제로는 일본 표준 자오선인 동경 135°에 맞춰 표준시를 사용하고 있습니다. 반면 북한은 광복 70주년에 표준시를 다시 30분 늦췄고 한국은 북한과 30분의 시차를 가지는 상황입니다.',
     },
     {
       quizId: 0,
