@@ -66,10 +66,11 @@ public class UserController {
 
     /***
      * [ 스크랩한 퀴즈 전체 조회 ]
-     * -
+     * - 스크랩한 퀴즈 정보에 대하여 필요한 내용만 조합한 ScrapDto 조회
+     * - 퀴즈 정보 (QuizDto, MultiAnswerDto), 내가 입력한 퀴즈 답변에 대한 정보 (QuizRecordDto) 조합
      */
     @GetMapping("/scrap/all")
-    public ResponseEntity<List<ScrapDto>> getMyQuiz() {
+    public ResponseEntity<List<ScrapDto>> getAllScrap() {
         String kakaoId = SecurityContextHolder.getContext().getAuthentication().getName();
         return new ResponseEntity<>(userQuizService.getMyQuizLike(kakaoId), HttpStatus.OK);
     }
