@@ -47,7 +47,6 @@ public class UserQuizService {
         List<QuizLikeDto> quizLikeDtoList = quizLikeList.stream().map(QuizLikeDto::new).collect(Collectors.toList());
         List<ScrapDto> scrapDtoList = quizLikeDtoList.stream().map(ScrapDto::new).collect(Collectors.toList());
 
-
         for(ScrapDto scrapDto: scrapDtoList) {
             // 객관식 문항에 대해서 모든 선택지 가져오기
             if(scrapDto.getQuizType().equals("multi")) {
