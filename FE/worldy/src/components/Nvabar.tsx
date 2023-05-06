@@ -24,7 +24,7 @@ export default function Navbar({
   const navList: NavListType[] = [
     { name: '홈', path: '/' },
     { name: '게임 정보', path: '/gameinfo' },
-    { name: '업데이트', path: '/upadtes' },
+    { name: '업데이트', path: '/updates' },
     { name: '세계 탐험', path: '/explore' },
     { name: '모노폴리', path: '/monopoly' },
     { name: '고객 지원', path: '/support' },
