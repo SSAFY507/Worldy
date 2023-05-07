@@ -332,7 +332,7 @@ export default function QuizModal({
           <>
             <label className='uiverse-switch'>
               <input type='checkbox' onClick={handleHint} />
-              <span className='uiverse-slider'></span>
+              <span className='uiverse-slider '></span>
             </label>
             <span className='ml-[10px] text-[#ACACAC]'>힌트 보기</span>
           </>
