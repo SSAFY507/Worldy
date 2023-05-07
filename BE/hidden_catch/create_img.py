@@ -166,19 +166,8 @@ def get_next_quiz(NextImagePath):
     cv2.xphoto.inpaint(ref, imgMask, dst, 0)
 
     src, dst, ref , t = centering_image(src, dst, ref)
-    img = np.hstack([src,dst,ref])
+    # img = np.hstack([src,dst,ref])
 
-    return img, pts, t
+    cv2.imwrite("./hidden.jpg", dst)
 
-   
-
-answerPoints = []
-image, answerPoints, t = get_next_quiz("./1.png")
-pointsCenter = get_pts_center(answerPoints)
-
-print(answerPoints)
-print(pointsCenter)
-
-cv2.imshow("test", image)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+    return pts

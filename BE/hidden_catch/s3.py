@@ -5,6 +5,7 @@ from PIL import Image
 import pymysql
 import config
 import random
+import os
 
 
 # S3 설정
@@ -28,7 +29,7 @@ conn = pymysql.connect(host=config.MYSQL_URL,
 def get_img(nation_code):
     img_num = random.randrange(1,6)
     bucket = s3.Bucket(config.BUCKET_NAME)
-    object = bucket.Object("hidden_catch/" +nation_code+ "/" + img_num + ".jpg")
+    object = bucket.Object("hidden_catch/" + nation_code+ "/" + img_num + ".jpg")
     response = object.get()
     file_stream = response['Body']
     img = Image.open(file_stream)
@@ -38,12 +39,23 @@ def get_img(nation_code):
     return img_num
 
 
-# S3에 사진 저장하기
-def upload_img():
-    file_path = "./1.jpg"
+# S3에 사진 저장하기, 그 후 사진 삭제
+def upload_img(nation_code, img_num):
+    file_path = "./original.jpg"
     data = open(file_path, 'rb')
-    save_data = "hidden_catch/it/" + "1.jpg"
+    save_data = "hidden_catch/" + nation_code+ "/" + img_num + ".jpg"
 
     s3.Bucket(config.BUCKET_NAME).put_object(
             Key=save_data, Body=data, ContentType='image/jpg')
-    print(file_path, " : S3 저장완료")
+    print(file_path, " : S3 original 이미지 저장완료")
+
+    file_path = "./hidden.jpg"
+    data = open(file_path, 'rb')
+    save_data = "hidden_catch/" + nation_code+ "/different/" + img_num + ".jpg"
+
+    s3.Bucket(config.BUCKET_NAME).put_object(
+            Key=save_data, Body=data, ContentType='image/jpg')
+    print(file_path, " : S3 hidden 이미지 저장완료")
+
+    os.remove("./original.jpg")
+    os.remove("./hidden.jpg")

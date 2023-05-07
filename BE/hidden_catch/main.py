@@ -25,9 +25,11 @@ def read_root():
 def get_img(nation_id: str):
     img_num = s3.get_img(nations_code[nation_id])
 
-    image, answerPoints, t = create_img.get_next_quiz("./original.png")
+    # 틀린 그림 이미지 만들기 및 임시 저장
+    answerPoints= create_img.get_next_quiz("./original.png")
 
-    s3.upload_img(image)
+    # 틀린 그림 S3에 올리기 및 업데이트
+    s3.upload_img(nations_code[nation_id], img_num)
 
     original_url = "https://worldy-soft.s3.ap-northeast-2.amazonaws.com/hidden_catch/" + nations_code[nation_id] + "/" + img_num + ".jpg"
     diff_url = "https://worldy-soft.s3.ap-northeast-2.amazonaws.com/hidden_catch/" + nations_code[nation_id] + "/different/" + img_num + ".jpg"
