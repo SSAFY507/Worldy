@@ -155,14 +155,16 @@ export default function CarouselComponent({
                   </div>
                 </div>
                 <div className='mb-4 outline-red-800 w-full h-fit flex flex-row justify-start items-center'>
-                  <BUTTON_RED
-                    text={item.buttonText}
-                    fontSize={20}
-                    onClick={item.buttonClick}
-                    width={200}
-                    height={50}
-                    rounded={false}
-                  />
+                  {item.buttonText !== '' && (
+                    <BUTTON_RED
+                      text={item.buttonText}
+                      fontSize={20}
+                      onClick={item.buttonClick}
+                      width={200}
+                      height={50}
+                      rounded={false}
+                    />
+                  )}
                 </div>
               </div>
             </div>
