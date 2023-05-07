@@ -180,14 +180,6 @@
   display: none;
 }
 
-.uiverse-switch input[type='checkbox']:checked:active + .uiverse-slider::after {
-  transform: translateX(
-    calc(
-      var(--button-width) - var(--toggle-wider) - var(--button-toggle-offset)
-    )
-  );
-}
-
 /* //////////////////////////////// */
 
 .cardcontainer {
