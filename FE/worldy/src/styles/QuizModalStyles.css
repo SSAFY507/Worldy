@@ -285,3 +285,54 @@
   box-shadow: inset 0 0 10px rgba(163, 163, 163, 0.4),
     0 0 9px 3px rgba(166, 166, 166, 0.1);
 }
+
+/* /////////////////////////////// */
+.beforemulti {
+  font-size: 15px;
+  padding: 0.7em 2.7em;
+  letter-spacing: 0.06em;
+  position: relative;
+  font-family: inherit;
+  border-radius: 0.6em;
+  overflow: hidden;
+  transition: all 0.3s;
+  line-height: 1.4em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.beforemulti:before {
+  content: '';
+  position: absolute;
+  left: -50px;
+  width: 4em;
+  height: 100%;
+  top: 0;
+  transition: transform 0.4s ease-in-out;
+  background: linear-gradient(
+    to right,
+    transparent 1%,
+    rgba(255, 255, 255, 0.3) 40%,
+    rgba(255, 255, 255, 0.3) 60%,
+    transparent 100%
+  );
+}
+
+.clickedmulti {
+  background: linear-gradient(
+    to right,
+    rgba(27, 253, 238, 0.1) 1%,
+    transparent 40%,
+    transparent 60%,
+    rgba(27, 253, 238, 0.1) 100%
+  );
+  background-color: #58e5d5;
+  color: #dbf8f4;
+  box-shadow: inset 0 0 20px rgba(0, 237, 209, 0.6),
+    0 0 9px 3px rgba(0, 200, 209, 0.2);
+}
+
+.clickedmulti:before {
+  transform: translateX(250px);
+}
