@@ -2,10 +2,7 @@ package com.ssafy.worldy.model.game.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.worldy.model.game.dto.Emoticon;
-import com.ssafy.worldy.model.game.dto.GameQuiz;
-import com.ssafy.worldy.model.game.dto.MatchingResult;
-import com.ssafy.worldy.model.game.dto.Player;
+import com.ssafy.worldy.model.game.dto.*;
 import com.ssafy.worldy.exception.CustomException;
 import com.ssafy.worldy.exception.CustomExceptionList;
 import lombok.RequiredArgsConstructor;
@@ -32,24 +29,34 @@ public class RedisSubscriber {
             log.info("Publish Message : " + publishMessage);
 
             if (publishMessage.contains("emoticon")) {
+
                 Emoticon emoticon = objectMapper.readValue(publishMessage, Emoticon.class);
 
                 // subscriber에게 메시지 전송
                 log.info("Redis Subscribe Message : " + emoticon.toString());
                 template.convertAndSend("/sub/" + emoticon.getRoomId(), emoticon);
             } else if (publishMessage.contains("player")) {
-                Player player = objectMapper.readValue(publishMessage, Player.class);
+
+                Data data = objectMapper.readValue(publishMessage, Data.class);
 
                 // subscriber에게 메시지 전송
-                log.info("Redis Subscribe Message : " + player.toString());
-                template.convertAndSend("/sub/" + player.getRoomId(), player);
+                log.info("Redis Subscribe Message : " + data.toString());
+                template.convertAndSend("/sub/" + data.getRoomId(), data);
             } else if (publishMessage.contains("quiz")) {
+
                 GameQuiz gameQuiz = objectMapper.readValue(publishMessage, GameQuiz.class);
 
                 // subscriber에게 메시지 전송
                 log.info("Redis Subscribe Message : " + gameQuiz.toString());
                 template.convertAndSend("/sub/" + gameQuiz.getRoomId(), gameQuiz);
-            } else {
+            } else if (publishMessage.contains("cnt")) {
+
+                PlayerCnt playerCnt = objectMapper.readValue(publishMessage, PlayerCnt.class);
+
+                // subscriber에게 메시지 전송
+                log.info("Redis Subscribe Message : " + playerCnt.toString());
+                template.convertAndSend("/sub/" + playerCnt.getRoomId(), playerCnt);
+            }else {
 
                 // subscriber에게 메시지 전송
                 log.info("Redis Subscribe Message : ");
