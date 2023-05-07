@@ -39,7 +39,7 @@ public class HelpService {
 
         Long helpId = helpRepo.findLatestPK(userId);
         // String url = "http://localhost:9200/help/_doc/" + helpId;
-        String url = "https://k8a507.p.ssafy.io/es/_doc" + helpId;
+        String url = "https://k8a507.p.ssafy.io/es/help/_doc" + helpId;
 
         RestTemplate restTemplate = new RestTemplate();
 
