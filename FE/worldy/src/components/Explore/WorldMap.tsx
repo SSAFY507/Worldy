@@ -24,7 +24,7 @@ import oceania from "../../assets/lowpoly/oceania.glb";
 import southAmerica from "../../assets/lowpoly/southAmerica.glb";
 import { useNavigate } from "react-router";
 
-interface Country {
+export interface CountryType {
   [key: string]: string;
 }
 
@@ -44,11 +44,11 @@ const WorldMap = () => {
   const composerRef = useRef<EffectComposer | null>(null);
   const effectFXAARef = useRef<ShaderPass | null>(null);
   
-  const newPositionRef = useRef<Vector3 | null>(null);
-  const centerBoxRef = useRef<Vector3 | null>(null);
+  const newPositionRef = useRef<THREE.Vector3 | null>(null);
+  const centerBoxRef = useRef<THREE.Vector3 | null>(null);
 
   const continentSet = new Set(["africa", "asia", "europe", "northAmerica", "oceania",  "southAmerica"])
-  const countryName: Country = {
+  const countryObject: CountryType = {
     asia_Korea: "대한민국",
     asia_China: "중국",
     asia_india: "인도",
@@ -116,13 +116,13 @@ const WorldMap = () => {
 
   /** 마우스 한번 클릭 */
   const OnClick = (event:any) => {
-    const name = countryName[selectedName2];
+    const name = countryObject[selectedName2];
 
     if (!clickTimeout && selectedObjectRef.current!.userData.flag) {
       clickTimeout = setTimeout(() => {
         if (name) {
           alert(`${name}으(로) 이동합니다.`)
-          navigate(`/explore/${name}`)
+          navigate(`/explore/${selectedName2}`)
         } else {
           alert(`오픈 예정입니다!😉`)
         }
@@ -334,18 +334,18 @@ const WorldMap = () => {
   }
 
   /** 배경함수 */
-   const Background = () => {
+  const Background = () => {
 
-     //2. 이미지를 배경으로 (방법 여러개지만, 여기서는 Texture 이용)
-     const loader = new THREE.TextureLoader();
+    //2. 이미지를 배경으로 (방법 여러개지만, 여기서는 Texture 이용)
+    const loader = new THREE.TextureLoader();
 
-     loader.load(bg, texture => {
-        scene.current!.background = texture;
-        
-        // SetupModel이 없는 상태에서 background를 받으려니 문제 생김!
-        // => Backround를 호출할 때, 모델을 호출해주자
-        // SetupModel();
-     })
+    loader.load(bg, texture => {
+      scene.current!.background = texture;
+      
+      // SetupModel이 없는 상태에서 background를 받으려니 문제 생김!
+      // => Backround를 호출할 때, 모델을 호출해주자
+      // SetupModel();
+    })
   } 
 
   /** 카메라 커스텀 함수 */

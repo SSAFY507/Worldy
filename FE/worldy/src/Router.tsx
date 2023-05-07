@@ -72,6 +72,9 @@ const AppLayout = () => {
     navigate(path);
   };
 
+  const exploreUrl = location.pathname.substr(0, 8);
+  const monopolyUrl = location.pathname.substr(0, 9);
+
   return (
     <div
       className='hide-scrollbar w-screen h-screen flex flex-col bg-white overflow-hidden'
@@ -81,8 +84,8 @@ const AppLayout = () => {
       }}
     >
       <div className='z-10'>
-        {location.pathname !== '/explore' &&
-          location.pathname !== '/monopoly' && (
+        {exploreUrl !== '/explore' &&
+          monopolyUrl !== '/monopoly' && (
             <Navbar
               onLoginClick={handleLoginModal}
               onLoginAdmin={handleLoginAdmin}
