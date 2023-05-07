@@ -95,7 +95,6 @@ public class RabbitmqConfig {
     /***
      * Consumer
      ***/
-
     @Bean
     SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory(ConnectionFactory connectionFactory) {
         final SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();

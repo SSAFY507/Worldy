@@ -1,7 +1,7 @@
 package com.ssafy.worldy.controller.game;
 
 import com.ssafy.worldy.model.game.dto.*;
-import com.ssafy.worldy.model.game.repo.GameRoomRepo;
+import com.ssafy.worldy.model.game.redisrepo.GameRoomRepo;
 import com.ssafy.worldy.model.game.service.GameService;
 import com.ssafy.worldy.model.game.service.RedisPublisher;
 import lombok.RequiredArgsConstructor;

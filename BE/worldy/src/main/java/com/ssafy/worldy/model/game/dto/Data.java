@@ -9,10 +9,9 @@ import java.util.List;
 @ToString
 @Getter
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class Player {
+public class Data {
 
-    private String playerId;
-    private int playerNum;
-    private String name;
-    private Game game;
+    private String roomId;
+    private String type;
+    private List<Player> players;
 }
