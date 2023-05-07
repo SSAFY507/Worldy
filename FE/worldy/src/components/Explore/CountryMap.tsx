@@ -36,28 +36,15 @@ const CountryMap:React.FC<Props> = (countryName) => {
     loader.load(bg, texture => {
       scene.current!.background = texture;
       
-      // SetupModel이 없는 상태에서 background를 받으려니 문제 생김!
-      // => Backround를 호출할 때, 모델을 호출해주자
-      // SetupModel();
     })
   } 
 
-  
   /** 카메라 커스텀 함수 */
   const SetupCamera = () => {
-    // const width = divContainer.current?.clientWidth || 0;
-    // const height = divContainer.current?.clientHeight || 0;
-    // const cam = new THREE.PerspectiveCamera(75, width / height, 0.1, 100);
-    // cam.position.z = 6;
-    // camera.current = cam;
-    
-    // scene.current?.add(cam)
-    // const width = divContainer.current?.clientWidth || 0;
-    // const height = divContainer.current?.clientHeight || 0;
     const cam = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
-    cam.position.set(13, 10, 10);
+    cam.position.set(0, 10, 13);
     cam.rotation.set(0, 0, 0);
-    cam.lookAt(13, 0, 10);          // 카메라가 바라보는 곳이 0, 0, 0
+    cam.lookAt(0, 0, 0);          // 카메라가 바라보는 곳이 0, 0, 0
     
     camera.current = cam;
     
@@ -84,11 +71,13 @@ const CountryMap:React.FC<Props> = (countryName) => {
     // 모델의 경계 박스 중심 위치
     const centerBox = box.getCenter(new THREE.Vector3());
 
+    const ratio = scene.current?.children[1].userData.size;
+
     // 모델 크기의 절반값
-    const halfSizeModel = sizeBox * 0.5;
+    const halfSizeModel = sizeBox * ratio;
 
     // 카메라의 fov의 절반값
-    const halfFov = THREE.MathUtils.degToRad(camera.fov * 0.5);
+    const halfFov = THREE.MathUtils.degToRad(camera.fov * 0.7);
 
     // 모델을 화면에 꽉 채우기 위한 적당한 거리
     const distance = halfSizeModel / Math.tan(halfFov);
@@ -109,9 +98,10 @@ const CountryMap:React.FC<Props> = (countryName) => {
 
     // 카메라 기본 속성 변경에 따른 투영행렬 업데이트
     camera.updateProjectionMatrix();
-
+    const [a, b, c] = scene.current?.children[1].userData.position
     // 카메라가 모델의 중심을 바라 보도록 함
-    camera.lookAt(centerBox.x, centerBox.y, centerBox.z);
+    camera.lookAt(centerBox.x + a, centerBox.y + b, centerBox.z + c);
+    // camera.lookAt(centerBox.x, centerBox.y, centerBox.z);
   }
 
 
@@ -119,27 +109,32 @@ const CountryMap:React.FC<Props> = (countryName) => {
   const SetupModel = () => {
     const gltfLoader = new GLTFLoader();
     const items = [
-      {url: africa_Egypt, name: "africa_Egypt"},
-      {url: asia_China, name: "asia_China"},
-      {url: asia_India, name: "asia_india"},
-      {url: asia_Japen, name: "asia_Japen"},
-      {url: asia_Korea, name: "asia_Korea"},
-      {url: europe_France, name: "europe_France"},
-      {url: europe_Italia, name: "europe_Italia"},
-      {url: europe_Spain, name: "europe_Spain"},
-      {url: europe_UK, name: "europe_UK"},
-      {url: northAmerica_America, name: "northAmerica_America"},
+      {url: africa_Egypt, name: "africa_Egypt", angle:[5, 15, 15], position:[0.3,-0.5, 0], size:0.5},
+      {url: asia_China, name: "asia_China", angle:[0, 10,-5], position:[0,-1.5,0.5], size:0.45},
+      {url: asia_India, name: "asia_india", angle:[0, 0, 15], position:[1,-1.5,-1], size:0.5},
+      {url: asia_Japen, name: "asia_Japen", angle:[15, 10, 5], position:[-1,-0.5, 0.5], size:0.45},
+      {url: asia_Korea, name: "asia_Korea", angle:[0, 10, 10], position:[0, 0, 0.5], size:0.5},
+      {url: europe_France, name: "europe_France", angle:[10, 10, 5], position:[0,-1, 0], size:0.5},
+      {url: europe_Italia, name: "europe_Italia", angle:[10, 0, 10], position:[0,0,0], size:0.5},
+      {url: europe_Spain, name: "europe_Spain", angle:[0, 10, 15], position:[0,0,0], size:0.5},
+      {url: europe_UK, name: "europe_UK", angle:[0, 10, 15], position:[0,-0.5, 0], size:0.5},
+      {url: northAmerica_America, name: "northAmerica_America", angle:[10, 10, 10], position:[1,-2, 1], size:0.35},
     ]
     items.forEach((item, index) => {
       if (item.name === countryName.countryName) {
         gltfLoader.load(item.url, (glb) => {
           const obj3d:THREE.Group = glb.scene;
           obj3d.name = item.name
-          obj3d.position.set(13, 0, 10);
+          obj3d.position.set(8, 9, 16);
+          obj3d.rotation.set(
+            THREE.MathUtils.degToRad(item.angle[0]),
+            THREE.MathUtils.degToRad(item.angle[1]),
+            THREE.MathUtils.degToRad(item.angle[2])
+          )
+          obj3d.userData.position = item.position;
+          obj3d.userData.size = item.size;
           obj3d.scale.set(3, 3, 3);
-          console.log(obj3d);
           scene.current?.add(obj3d);
-          console.log(obj3d.name)
           if (camera.current) {
             ZoomFit(obj3d, camera.current)
           }
@@ -166,7 +161,15 @@ const CountryMap:React.FC<Props> = (countryName) => {
   const SetupControls = () => {
     if (camera.current) {
       controls.current = new OrbitControls(camera.current, divContainer.current!); // OrbitControls를 초기화합니다.
-      controls.current.enableDamping = true;
+      controls.current.target.set(0,0,0)    // 카메라 회전점
+      controls.current.enableDamping = true;        // 부드럽게 돌아가
+      // 위아래 카메라 제한
+      controls.current.minPolarAngle = THREE.MathUtils.degToRad(44.5);   // 0도 부터
+      controls.current.maxPolarAngle = THREE.MathUtils.degToRad(44.5);  // 30도 까지 회전 가능
+      // 좌우 카메라 제한
+      controls.current.minAzimuthAngle = THREE.MathUtils.degToRad(-5); // -5도 부터
+      controls.current.maxAzimuthAngle = THREE.MathUtils.degToRad(5);  // 5도 까지
+      console.log(camera.current!.fov)
     }
   }
 
@@ -178,8 +181,6 @@ const CountryMap:React.FC<Props> = (countryName) => {
 
   const update = (time: number) => {
     time *= 0.01;
-    // cube.current!.rotation.x = time;
-    // cube.current!.rotation.y = time;
   };
 
   useEffect(() => {
@@ -197,9 +198,6 @@ const CountryMap:React.FC<Props> = (countryName) => {
       SetupLight();
       SetupModel();
       // SetupControls();
-      // scene.current.background = new THREE.Color("#0000");
-      // let light =new THREE.DirectionalLight(0xffff00, 10);
-      // scene.current.add(light)
 
       window.onresize = resize;
       resize();
