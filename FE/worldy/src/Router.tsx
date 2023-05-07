@@ -8,7 +8,6 @@ import {
   useNavigate,
 } from 'react-router-dom';
 
-import Country from './routes/Country';
 import Explore from './routes/Explore';
 import GameInfo from './routes/GameInfo';
 import IntroPage from './routes/IntroPage';
@@ -22,6 +21,9 @@ import Tutorial from './routes/Tutorial';
 import Updates from './routes/Updates';
 import pathBI from './assets/images/MainPageBackground.png';
 import { useState } from 'react';
+import Game from './routes/Game';
+import Socket from './routes/Socket';
+import Country from './routes/Country';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -114,6 +116,9 @@ const AppLayout = () => {
           <Route path='/monopoly' element={<Monopoly />} />
           <Route path='/support' element={<Support />} />
           <Route path='/mypage' element={<MyPage />} />
+          <Route path='/game' element={<Game />} />
+          <Route path='/game/:id' element={<Game />} />
+          <Route path='/socket' element={<Socket />} />
           <Route
             path='/tutorial'
             element={
