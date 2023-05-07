@@ -48,19 +48,6 @@ export default function QuizModal({
 
   const [submitAnswer, setSubmitAnswer] = useState<string>('');
 
-  const multiFirstTextSize: number = input.multiFirst
-    ? 250 / input.multiFirst.length
-    : 0;
-  const multiSecondTextSize: number = input.multiSecond
-    ? 250 / input.multiSecond.length
-    : 0;
-  const multiThirdTextSize: number = input.multiThird
-    ? 250 / input.multiThird.length
-    : 0;
-  const multiFourthTextSize: number = input.multiFourth
-    ? 250 / input.multiFourth.length
-    : 0;
-
   const blankBoxSize: number = 400 / input.answer.length;
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const handleComposition = (
@@ -133,7 +120,11 @@ export default function QuizModal({
             height: `${blankBoxSize}px`,
             fontSize: `${blankBoxSize * (2 / 3)}px`,
           }}
-          className={`rounded-xl bg-slate-500 text-white text-center`}
+          className={`rounded-xl ${
+            blankInputAnswer[i] === ''
+              ? 'bg-[#cecece] outline outline-[#f1f1f1]'
+              : 'bg-[#66ded0] shadow-lg'
+          }  text-white text-center`}
           maxLength={1}
           ref={(element) => (inputRefs.current[i] = element)}
           onInput={handleInput}
@@ -153,22 +144,10 @@ export default function QuizModal({
     }
   }, []);
 
-  const [clickedO, setClickedO] = useState<boolean | null>(null);
-
-  const handleClickedO = (input: boolean) => {
-    if (clickedO === input) setClickedO(null);
-    else setClickedO(input);
+  const handleSubmitAnswer = (input: string) => {
+    if (submitAnswer === input) setSubmitAnswer('');
+    else setSubmitAnswer(input);
   };
-
-  useEffect(() => {
-    if (clickedO === true) {
-      setSubmitAnswer('O');
-    } else if (clickedO === false) {
-      setSubmitAnswer('X');
-    } else {
-      setSubmitAnswer('');
-    }
-  }, [clickedO]);
 
   const contentOX = (): JSX.Element => {
     return (
@@ -194,17 +173,17 @@ export default function QuizModal({
             <div className='outline-black flex flex-row justify-between items-center'>
               <button
                 className={`${
-                  clickedO === true ? 'clickedOXBlue' : ''
+                  submitAnswer === 'O' ? 'clickedOXBlue' : ''
                 } beforeOXBlue w-[200px] h-[120px] mr-[20px] rounded-md shadow-md bg-[#F2F2F2] flex flex-row justify-center items-center`}
-                onClick={() => handleClickedO(true)}
+                onClick={() => handleSubmitAnswer('O')}
               >
                 <span className='text-[24px] font-PtdMedium'>O</span>
               </button>
               <button
                 className={`${
-                  clickedO === false ? 'clickedOXRed' : ''
+                  submitAnswer === 'X' ? 'clickedOXRed' : ''
                 } beforeOXRed w-[200px] h-[120px] ml-[20px]  rounded-md shadow-md bg-[#F2F2F2] flex flex-row justify-center items-center`}
-                onClick={() => handleClickedO(false)}
+                onClick={() => handleSubmitAnswer('X')}
               >
                 <span className='text-[24px] font-PtdMedium'>X</span>
               </button>
@@ -214,120 +193,118 @@ export default function QuizModal({
       </>
     );
   };
+
   const contentMulti = (): JSX.Element => {
     const firstA = input.multiFirst ? input.multiFirst : '';
     const secondA = input.multiSecond ? input.multiSecond : '';
     const thirdA = input.multiThird ? input.multiThird : '';
     const fourthA = input.multiFourth ? input.multiFourth : '';
+
+    const firstASize = 200 / firstA.length;
+    const secondASize = 200 / secondA.length;
+    const thirdASize = 200 / thirdA.length;
+    const fourthASize = 200 / fourthA.length;
+
+    type prevInputType = {
+      multiAnswerText: string;
+      multiAnswerTextSize: number;
+    };
+
+    const prevInputList: prevInputType[] = [
+      {
+        multiAnswerText: input.multiFirst ? input.multiFirst : '',
+        multiAnswerTextSize: firstASize,
+      },
+      {
+        multiAnswerText: input.multiSecond ? input.multiSecond : '',
+        multiAnswerTextSize: secondASize,
+      },
+      {
+        multiAnswerText: input.multiThird ? input.multiThird : '',
+        multiAnswerTextSize: thirdASize,
+      },
+      {
+        multiAnswerText: input.multiFourth ? input.multiFourth : '',
+        multiAnswerTextSize: fourthASize,
+      },
+    ];
+
+    const multiPrevContent = ({
+      prevInput,
+      key,
+    }: {
+      prevInput: prevInputType;
+      key: number;
+    }): JSX.Element => {
+      return (
+        <div key={key}>
+          <button
+            className={`${
+              submitAnswer === prevInput.multiAnswerText ? 'clickedmulti' : ''
+            } beforemulti w-[200px] h-[80px] mx-[10px] rounded-md shadow-md bg-[#F2F2F2] flex flex-row justify-center items-center`}
+            onClick={() => handleSubmitAnswer(prevInput.multiAnswerText)}
+          >
+            <span
+              className='w-full h-full flex flex-row justify-center items-center'
+              style={{
+                fontSize: `${
+                  prevInput.multiAnswerTextSize > 30
+                    ? 30
+                    : prevInput.multiAnswerTextSize < 20
+                    ? 20
+                    : prevInput.multiAnswerTextSize
+                }px`,
+              }}
+            >
+              {prevInput.multiAnswerText}
+            </span>
+          </button>
+        </div>
+      );
+    };
+
     return (
       <>
-        {hintState && (
-          <div className='absolute top-0 left-0 z-50 w-full h-full bg-[rgba(180,180,180,0.8)] p-[20px]'>
-            <span className='text-gray-700 font-PtdMedium text-[25px] overflow-y-scroll leading-[30px]'>
-              {input.commentary}
-            </span>
-          </div>
-        )}
         <div
-          className={`multi-prevs w-full h-full px-[25px] py-[20px] flex-wrap flex flex-row justify-between items-center ${
-            hintState ? 'blur-[3px]' : ''
-          }`}
+          className={`w-full h-full flex flex-col justify-center items-center p-[30px] text-black transition-all duration-3000 ease-in`}
         >
-          <button
-            className='w-[250px] h-2/5  outline-gray-300 flex flex-row justify-center items-center p-[10px]
-          text-gray-100 bg-gray-400
-        hover:bg-[rgba(200,200,200,1)] 
-        '
-            onClick={() => setSubmitAnswer(firstA)}
-          >
-            <span
-              className='w-full h-full flex flex-row justify-center items-center'
-              style={{
-                fontSize: `${
-                  multiFirstTextSize > 30
-                    ? 30
-                    : multiFirstTextSize < 20
-                    ? 20
-                    : multiFirstTextSize
-                }px`,
-              }}
-            >
-              {firstA}
-            </span>
-          </button>
-          <button
-            className='w-[250px] h-2/5  outline-gray-300 flex flex-row justify-center items-center p-[10px]
-          text-gray-100 bg-gray-400
-        hover:bg-[rgba(200,200,200,1)] 
-        '
-            onClick={() => setSubmitAnswer(secondA)}
-          >
-            <span
-              className='w-full h-full flex flex-row justify-center items-center'
-              style={{
-                fontSize: `${
-                  multiSecondTextSize > 30
-                    ? 30
-                    : multiSecondTextSize < 20
-                    ? 20
-                    : multiSecondTextSize
-                }px`,
-              }}
-            >
-              {secondA}
-            </span>
-          </button>
-          <button
-            className='w-[250px] h-2/5  outline-gray-300 flex flex-row justify-center items-center p-[10px]
-          text-gray-100 bg-gray-400
-        hover:bg-[rgba(200,200,200,1)] 
-        '
-            onClick={() => setSubmitAnswer(thirdA)}
-          >
-            <span
-              className='w-full h-full flex flex-row justify-center items-center'
-              style={{
-                fontSize: `${
-                  multiThirdTextSize > 30
-                    ? 30
-                    : multiThirdTextSize < 20
-                    ? 20
-                    : multiThirdTextSize
-                }px`,
-              }}
-            >
-              {thirdA}
-            </span>
-          </button>
-          <button
-            className='w-[250px] h-2/5  outline-gray-300 flex flex-row justify-center items-center p-[10px]
-          text-gray-100 bg-gray-400
-        hover:bg-[rgba(200,200,200,1)] 
-        '
-            onClick={() => setSubmitAnswer(fourthA)}
-          >
-            <span
-              className='w-full h-full flex flex-row justify-center items-center'
-              style={{
-                fontSize: `${
-                  multiFourthTextSize > 30
-                    ? 30
-                    : multiFourthTextSize < 20
-                    ? 20
-                    : multiFourthTextSize
-                }px`,
-              }}
-            >
-              {fourthA}
-            </span>
-          </button>
+          {hintState ? (
+            <>
+              <div className='w-[200px] h-[50px] flex flex-row justify-center items-center mb-[10px]'>
+                <AiOutlineExclamationCircle size={35} color={'#96B9BB'} />
+                <span className='ml-[15px] text-[25px] text-[#ACACAC]'>
+                  힌트
+                </span>
+              </div>
+              <div className='w-full h-[150px] px-[50px] text-center'>
+                <span className='text-gray-700 font-PtdSemiBOld text-[25px] leading-[32px]'>
+                  {input.commentary}
+                </span>
+              </div>
+            </>
+          ) : (
+            <div className='outline-black w-full h-full flex flex-row justify-between items-center flex-wrap px-[30px]'>
+              {prevInputList.map((item, key) =>
+                multiPrevContent({ prevInput: item, key: key })
+              )}
+            </div>
+          )}
         </div>
       </>
     );
   };
+
   const contentBlank = (): JSX.Element => {
     return (
-      <div className='relative w-full h-full flex flex-col justify-center items-center'>
+      <div className='relative w-full h-full flex flex-col justify-start items-center'>
+        <div className='w-full h-[70px]  outline-black flex flex-row justify-center items-center'>
+          {hintState && (
+            <div className='w-[200px] h-[50px] flex flex-row justify-center items-center'>
+              <AiOutlineExclamationCircle size={35} color={'#96B9BB'} />
+              <span className='ml-[15px] text-[25px] text-[#ACACAC]'>힌트</span>
+            </div>
+          )}
+        </div>
         <div className='w-[500px] h-[150px]  outline-green-300 flex flex-row justify-between items-center'>
           {blankBoxComponent()}
         </div>
