@@ -804,7 +804,7 @@ export default function MyPage({ setRef }: { setRef: string }) {
             {MyPageContentComponent({
               title: '랭킹',
               contentInfo:
-                '모든 플레이어들 사이에서 당신의 랭킹을 확인할 수 있습니다.',
+                '모든 플레이어들 사이에서 당신의 순위와 랭크를 확인할 수 있습니다. 당신의 경쟁 상대는 누구인가요?',
               content: rankContent(),
             })}
           </div>

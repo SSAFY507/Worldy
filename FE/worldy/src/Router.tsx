@@ -72,6 +72,9 @@ const AppLayout = () => {
     navigate(path);
   };
 
+  const exploreUrl = location.pathname.substr(0, 8);
+  const monopolyUrl = location.pathname.substr(0, 9);
+
   const [myPageRef, setMyPageRef] = useState<string>('');
 
   return (
@@ -83,13 +86,12 @@ const AppLayout = () => {
       }}
     >
       <div className='z-10'>
-        {location.pathname !== '/explore' &&
-          location.pathname !== '/monopoly' && (
-            <Navbar
-              onLoginClick={handleLoginModal}
-              onLoginAdmin={handleLoginAdmin}
-            />
-          )}
+        {exploreUrl !== '/explore' && monopolyUrl !== '/monopoly' && (
+          <Navbar
+            onLoginClick={handleLoginModal}
+            onLoginAdmin={handleLoginAdmin}
+          />
+        )}
         {showLoginModal && (
           <LoginModal
             onClose={closeLoginModal}
