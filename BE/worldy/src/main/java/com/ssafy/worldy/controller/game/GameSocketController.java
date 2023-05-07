@@ -3,7 +3,7 @@ package com.ssafy.worldy.controller.game;
 import com.ssafy.worldy.model.game.dto.Data;
 import com.ssafy.worldy.model.game.dto.Emoticon;
 import com.ssafy.worldy.model.game.dto.GameQuiz;
-import com.ssafy.worldy.model.game.redisrepo.GameRoomRepo;
+import com.ssafy.worldy.model.game.repo.GameRoomRepo;
 import com.ssafy.worldy.model.game.service.RedisPublisher;
 import com.ssafy.worldy.model.quiz.dto.MultiAnswerDto;
 import com.ssafy.worldy.model.quiz.dto.QuizDto;

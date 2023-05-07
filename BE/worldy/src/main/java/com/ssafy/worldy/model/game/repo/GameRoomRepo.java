@@ -1,4 +1,4 @@
-package com.ssafy.worldy.model.game.redisrepo;
+package com.ssafy.worldy.model.game.repo;
 
 import com.ssafy.worldy.model.game.dto.GameRoom;
 import lombok.RequiredArgsConstructor;

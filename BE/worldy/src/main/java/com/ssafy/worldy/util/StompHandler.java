@@ -4,7 +4,7 @@ import com.ssafy.worldy.exception.CustomException;
 import com.ssafy.worldy.exception.CustomExceptionList;
 import com.ssafy.worldy.jwt.TokenProvider;
 import com.ssafy.worldy.model.game.dto.PlayerCnt;
-import com.ssafy.worldy.model.game.redisrepo.GameRoomRepo;
+import com.ssafy.worldy.model.game.repo.GameRoomRepo;
 import com.ssafy.worldy.model.game.service.GameMatchingProducer;
 import com.ssafy.worldy.model.game.service.RedisPublisher;
 import lombok.RequiredArgsConstructor;
