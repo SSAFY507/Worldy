@@ -11,6 +11,7 @@ import Carousel5Icon from '../assets/images/Carousel5Icon.png';
 import Carousel1 from '../assets/images/Carousel1.png';
 import Carousel2 from '../assets/images/Carousel2.png';
 import Carousel3 from '../assets/images/Carousel3.png';
+import Carousel4 from '../assets/images/Carousel4.png';
 import Carousel5 from '../assets/images/Carousel5.png';
 import thumb1 from '../assets/images/thumb1.png';
 import thumb2 from '../assets/images/thumb2.png';
@@ -34,7 +35,11 @@ type ImageListType = {
   // loaded: boolean;
 };
 
-export default function MainPageAfterLogin() {
+export default function MainPageAfterLogin({
+  changeMyPageRef,
+}: {
+  changeMyPageRef: (value: string) => void;
+}) {
   const myImageList = {
     Carousel1Icon: Carousel1Icon,
     Carousel2Icon: Carousel2Icon,
@@ -44,6 +49,7 @@ export default function MainPageAfterLogin() {
     Carousel1: Carousel1,
     Carousel2: Carousel2,
     Carousel3: Carousel3,
+    Carousel4: Carousel4,
     Carousel5: Carousel5,
     thumb1: thumb1,
     thumb2: thumb2,
@@ -63,6 +69,17 @@ export default function MainPageAfterLogin() {
     }
   }, [isLoaded]);
 
+  const navigate = useNavigate();
+
+  const moveToWDPL = () => {};
+
+  const moveToWDADV = () => {};
+
+  const moveToRank = () => {
+    changeMyPageRef('랭킹');
+    navigate('/mypage');
+  };
+
   const [imageList, setImageList] = useState<ImageListType[]>([
     {
       headerImage: Carousel1Icon,
@@ -74,6 +91,7 @@ export default function MainPageAfterLogin() {
       image: Carousel1,
       textBlack: true,
       thumb: thumb1,
+      buttonClick: () => moveToWDPL(),
       // loaded: loadC1Bg,
     },
     {
@@ -86,16 +104,16 @@ export default function MainPageAfterLogin() {
       image: Carousel2,
       textBlack: false,
       thumb: thumb2,
-
+      buttonClick: () => moveToWDADV(),
       // loaded: loadC2Bg,
     },
     {
       headerImage: Carousel3Icon,
-      headerText: '업데이트 1.7',
+      headerText: '업데이트 1.0.1',
       TitleText: '새로운 패치노트를 만나보세요',
       contentText:
-        '이번 패치노트에서는 밸런스를 위해 주사위 확률 변경, 아이템 강도 조정, 캐릭터 움직임 모션 변경, 초대하기 기능이 추가되었습니다. 여러분들의 피드백을 담아 사용성 좋은 게임으로 거듭나기 위해 노력하겠습니다.',
-      buttonText: '패치노트 확인',
+        '이번 패치노트에서는 밸런스를 위해 주사위 확률 변경, 아이템 강도 조정, 캐릭터 움직임 모션 변경이 추가되었습니다. 여러분들의 피드백을 담아 사용성 좋은 게임으로 거듭나기 위해 노력하겠습니다.',
+      buttonText: '',
       image: Carousel3,
       textBlack: true,
       thumb: thumb3,
@@ -107,12 +125,12 @@ export default function MainPageAfterLogin() {
       headerText: '명예의 전당',
       TitleText: '최고의 플레이어들, 랭킹',
       contentText:
-        "쥘 베른의 소설 ‘80일간의 세계일주'에서 영감을 받아, 메타버스 속 세상을 탐험해보세요. 세계 방방곡곡에 숨어 있는 기념품들을 모아보세요. 어느새 탐험가가 되어있는 자신을 발견할 수 있어요. 지금 바로 탐험 시작!",
+        '전국 모든 플레이어들과 함께하는 멋진 게임에서 랭킹 1위를 차지해보세요. 다양한 퀴즈들과 함께 즐길 수 있으며, 업데이트되는 랭킹에서 다른 게이머들과 경쟁할 수 있습니다. 지금 바로 참여하여 세계적인 명성을 떨치는 게이머가 되어보세요',
       buttonText: '랭킹 확인하기',
-      image: Carousel2,
+      image: Carousel4,
       textBlack: false,
       thumb: thumb4,
-
+      buttonClick: () => moveToRank(),
       // loaded: loadC2Bg,
     },
     {

@@ -1,17 +1,29 @@
 import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import pathBG from '../assets/images/MyPageBackground.png';
-import { BsFillPersonLinesFill, BsBookmarksFill } from 'react-icons/bs';
+import {
+  BsFillPersonLinesFill,
+  BsBookmarksFill,
+  BsFillCaretDownFill,
+  BsThreeDotsVertical,
+} from 'react-icons/bs';
 import { BiLogOut, BiBrain } from 'react-icons/bi';
 import { IoIosLogOut, IoLogoGameControllerB } from 'react-icons/io';
 import { AiOutlineBulb } from 'react-icons/ai';
 import { FiArrowUpRight } from 'react-icons/fi';
-import { RiQuestionAnswerFill, RiSave3Fill } from 'react-icons/ri';
+import { SiPowerapps } from 'react-icons/si';
+import {
+  RiQuestionAnswerFill,
+  RiSave3Fill,
+  RiVipCrownFill,
+} from 'react-icons/ri';
 import { MdAccessTimeFilled, MdKeyboardDoubleArrowRight } from 'react-icons/md';
 import { TbWorld, TbCategory2 } from 'react-icons/tb';
 import moment from 'moment';
 
 import '../styles/MyPageStyles.css';
+import '../styles/TailWind.css';
+
 import QuizModal from '../components/QuizModal';
 
 type MyPageMenuType = {
@@ -47,7 +59,7 @@ export type ScrappedQuizType = {
   explanation?: string;
 };
 
-export default function MyPage() {
+export default function MyPage({ setRef }: { setRef: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const accountInfoRef = useRef<HTMLDivElement>(null);
   const quizScrapRef = useRef<HTMLDivElement>(null);
@@ -64,6 +76,17 @@ export default function MyPage() {
     }
   };
 
+  useEffect(() => {
+    if (setRef !== '') {
+      for (let i = 0; i < MyPageMenuItems.length; i++) {
+        if (setRef === MyPageMenuItems[i].title) {
+          MyPageMenuItems[i].onMove();
+          return;
+        }
+      }
+    }
+  }, []);
+
   const MyPageMenuItems: MyPageMenuType[] = [
     {
       icon: <BsFillPersonLinesFill />,
@@ -79,7 +102,7 @@ export default function MyPage() {
     },
     {
       icon: <IoLogoGameControllerB size={26} />,
-      title: '전적',
+      title: '랭킹',
       onMove: () => scrollToContent(gameLogRef),
       move: false,
     },
@@ -547,6 +570,183 @@ export default function MyPage() {
     }, 100);
   };
 
+  ////////////////////////////////////////
+  type rankListType = {
+    topTen: string[];
+    myRank: number;
+  };
+
+  const inputList: rankListType = {
+    topTen: [
+      '설희',
+      '미희',
+      '원규',
+      '한빈',
+      '성훈',
+      '희설킴',
+      '희미팍',
+      '규원킴',
+      '빈한리',
+      '훈성리',
+    ],
+    myRank: 15,
+  };
+
+  const [rankList, setMyRankList] = useState<rankListType>(inputList);
+
+  const myName = '훈';
+
+  const [topTenViewState, setTopTenViewState] = useState<boolean>(false);
+
+  const handleTopTenView = () => {
+    setTopTenViewState(!topTenViewState);
+    scrollToContent(gameLogRef);
+  };
+
+  const rankContent = (): JSX.Element => {
+    // if (rankList.myRank <= 10) {
+    //   const tempList: rankListType = rankList;
+    //   tempList.topTen[rankList.myRank - 1] = myName;
+    //   setMyRankList(tempList);
+    // }
+
+    const myRank = rankList.myRank;
+    const rankInfo: string[] =
+      myRank < 30
+        ? ['#86FFF8', '다이아']
+        : myRank < 80
+        ? ['#C9B037', '골드']
+        : myRank < 150
+        ? ['#a4a4a4', '실버']
+        : ['#6a3805', '브론즈'];
+
+    return (
+      <div className='w-full h-fit  outline-yellow-300'>
+        <div className='w-full h-[100px] flex flex-row justify-between items-center  outline-blue-300 px-[20px]'>
+          <div className='w-fit h-2/3 px-[20px] bg-black rounded-xl grid place-content-center'>
+            <span className='text-white text-[25px]'>
+              나의 순위 : #.{rankList.myRank}
+            </span>
+          </div>
+          <div className='w-fit h-2/3 px-[20px] flex flex-row justify-center items-center bg-black rounded-xl'>
+            <span className='text-white flex flex-row justify-center items-center text-[25px] mr-[20px]'>
+              RANK :
+            </span>
+            <div className='w-fit h-2/3  outline-white bg-[rgba(62,62,62,0.7)]  rounded-xl flex flex-row justify-center items-center px-[10px]'>
+              <SiPowerapps
+                size={25}
+                color={rankInfo[0]}
+                className='mr-[10px]'
+              />
+              <span
+                className='text-[25px] font-PtdBold'
+                style={{ color: rankInfo[0] }}
+              >
+                {rankInfo[1]}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div
+          className={`w-full h-fit  outline-red-300 flex flex-col justify-start items-center ${
+            topTenViewState ? 'bg-[rgba(220,220,220,0.3)]' : ''
+          } transition-all duration-1000 ease-in-out`}
+        >
+          <button
+            className='w-full h-[60px] flex flex-row justify-center items-end text-white pb-[10px]'
+            onClick={() => handleTopTenView()}
+          >
+            <BsFillCaretDownFill
+              size={30}
+              className={`${
+                topTenViewState ? 'rotate-180' : 'rotate-0'
+              } transition-all duration-300 ease-in-out`}
+            />
+            <span className='flex flex-row text-[30px] mx-[15px]'>Top10</span>
+            <BsFillCaretDownFill
+              size={30}
+              className={`${
+                topTenViewState ? '-rotate-180' : '-rotate-360'
+              } transition-all duration-300 ease-in-out`}
+            />
+          </button>
+          <div
+            className={`w-full ${
+              topTenViewState
+                ? `${
+                    myRank > 10 ? 'h-[620px]' : 'h-[550px]'
+                  } opacity-100 my-[10px] `
+                : 'opacity-0 h-0 pt-[10px]'
+            } px-[10px] transition-all duration-1000  ease-in-out overflow-hidden flex flex-col justify-start items-center`}
+          >
+            {rankList.topTen.map((item, key) => (
+              <div
+                key={key}
+                className={`w-[270px] h-[43px] flex flex-row justify-start items-center mb-[7px] bg-[rgb(0,0,0)] hover:bg-[rgba(180,180,180,0.5)] px-[10px] ${
+                  key + 1 === myRank ? 'glowmyrank z-10' : ''
+                }`}
+              >
+                <div className='relative w-[50px] h-[50px]  grid place-content-center'>
+                  {key < 3 && (
+                    <RiVipCrownFill
+                      className={`${
+                        key === 0
+                          ? 'text-[#C9B037]'
+                          : key === 1
+                          ? 'text-[#a4a4a4]'
+                          : 'text-[#6A3805]'
+                      }
+                      shadow-lg
+                      `}
+                      size={35}
+                    />
+                  )}
+                  <span className='absolute top-0 left-0 w-[50px] h-[50px] grid place-content-center font-PtdExtraBold text-[20px] text-white'>
+                    {key + 1}
+                  </span>
+                </div>
+                <div className='w-[100px] flex-1 grid place-content-center '>
+                  <span className='font-PtdBold text-white text-[20px]'>
+                    {item}
+                  </span>
+                </div>
+                <div className='w-fit h-2/3 bg-[rgba(62,62,62,0.7)] rounded-xl flex flex-row justify-center items-center px-[10px]'>
+                  <SiPowerapps size={22} color={'#86FFF8'} />
+                </div>
+              </div>
+            ))}
+            <div className='w-full h-fit grid place-content-center'>
+              <BsThreeDotsVertical
+                size={30}
+                color={'black'}
+                className='my-[5px]'
+              />
+            </div>
+            {myRank > 10 && (
+              <div
+                className={`w-[270px] h-[43px] flex flex-row justify-start items-center mt-[10px] bg-[rgb(0,0,0)] hover:bg-[rgba(180,180,180,0.5)] px-[10px] glowmyrank z-10`}
+              >
+                <div className='relative w-[50px] h-[50px]  grid place-content-center'>
+                  <span className='absolute top-0 left-0 w-[50px] h-[50px] grid place-content-center font-PtdExtraBold text-[20px] text-white'>
+                    {myRank}
+                  </span>
+                </div>
+                <div className='w-[100px] flex-1 grid place-content-center '>
+                  <span className='font-PtdBold text-white text-[20px]'>
+                    {myName}
+                  </span>
+                </div>
+                <div className='w-fit h-2/3 bg-[rgba(62,62,62,0.7)] rounded-xl flex flex-row justify-center items-center px-[10px]'>
+                  <SiPowerapps size={22} color={rankInfo[0]} />
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div
       className='w-full h-full flex flex-row justify-center items-center overflow-y-clip'
@@ -602,10 +802,10 @@ export default function MyPage() {
           </div>
           <div className=' w-full h-fit pt-[20px]' ref={gameLogRef}>
             {MyPageContentComponent({
-              title: '전적',
+              title: '랭킹',
               contentInfo:
-                '플레이어가 겪어온 모든 모노폴리 게임 전적에 대해 적어놨습니다. 이제껏 어떤 여행을 겪어오셨는지 한 번 볼까요?',
-              content: undefined,
+                '모든 플레이어들 사이에서 당신의 순위와 랭크를 확인할 수 있습니다. 당신의 경쟁 상대는 누구인가요?',
+              content: rankContent(),
             })}
           </div>
           <div className=' w-full h-fit pt-[20px]' ref={QARef}>
