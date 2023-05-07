@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 
 
+# 이미지 크기 조정
 def normalize_size(src, dst, ref, width = 400, height = 600):
     
     w = src.shape[1]
@@ -21,6 +22,7 @@ def normalize_size(src, dst, ref, width = 400, height = 600):
     return src, dst, ref
 
 
+# 이미지를 단순화
 def get_morphological_edge(src):
     imgBlur = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY) 
     thresh = cv2.threshold(imgBlur, 128, 255, cv2.THRESH_BINARY)[1]
@@ -33,6 +35,7 @@ def get_morphological_edge(src):
     return edges
 
 
+# 윤곽선을 구분
 def get_contours(edge, imgContour):
     contours, hierarchy =cv2.findContours(edge, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
     min_area = 400
@@ -56,7 +59,7 @@ def get_contours(edge, imgContour):
         approxCandidate.append(approx)
     return ptsCandidate,approxCandidate
 
-
+# 마스크 부분을 만들어서 빈칸으로 활용
 def quiz(ptsCandidate, approxCandidate, num, imgMask, ref):
     pts = []
     approxs = []
@@ -98,6 +101,7 @@ def quiz(ptsCandidate, approxCandidate, num, imgMask, ref):
     return pts
 
 
+# 이미지 정렬 - 빼도 괜찮을 수 있음
 def centering_image(src, dst, ref, width = 400, height = 600):
     w = src.shape[1]
     h = src.shape[0]
@@ -127,27 +131,7 @@ def centering_image(src, dst, ref, width = 400, height = 600):
     return src_output, dst_output,  ref_output, t
 
 
-def get_pts_center(pts):
-    pts_c = []
-    for pts_i in pts:
-        pts_c.append( ((pts_i[0]+pts_i[2])//2, (pts_i[1]+pts_i[3])//2)  )
-
-    return pts_c
-
-
-def create_wx_bitmap(cv2_image):
-
-    height, width = cv2_image.shape[:2]
-
-    info = np.iinfo(cv2_image.dtype) 
-    data = cv2_image.astype(np.float64) / info.max 
-    data = 255 * data  
-    cv2_image = data.astype(np.uint8)
-
-    cv2_image_rgb = cv2.cvtColor(cv2_image, cv2.COLOR_BGR2RGB)
-    return Bitmap.FromBuffer(width, height, cv2_image_rgb)
-
-
+# 원본 이미지를 받아서, 틀린 그림 이미지를 만들어 넘겨준다
 def get_next_quiz(NextImagePath):
     src = cv2.imread(NextImagePath)         
     dst = src.copy() 
@@ -159,10 +143,11 @@ def get_next_quiz(NextImagePath):
     imgContour = src.copy()                
     imgMask = np.full(src.shape[:2], 255, np.uint8)  
 
-
+    # 이미지
     ptsCandidate, approxCandidate = get_contours(edges, imgContour)
     pts = quiz(ptsCandidate, approxCandidate, 10, imgMask, ref)
 
+    # 마스크 부분을 복원해주는 함수 - inpanint()
     cv2.xphoto.inpaint(ref, imgMask, dst, 0)
 
     src, dst, ref , t = centering_image(src, dst, ref)
@@ -170,4 +155,5 @@ def get_next_quiz(NextImagePath):
 
     cv2.imwrite("./hidden.jpg", dst)
 
+    # 넘겨주는 값은 바뀐 자리의 위치 정보
     return pts
