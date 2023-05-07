@@ -1,15 +1,10 @@
 package com.ssafy.worldy.model.game.repo;
 
 import com.ssafy.worldy.model.game.dto.GameRoom;
-import com.ssafy.worldy.model.game.dto.Player;
-import com.ssafy.worldy.model.game.service.RedisPublisher;
-import com.ssafy.worldy.model.game.service.RedisSubscriber;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
@@ -23,7 +18,6 @@ import java.util.Map;
  * 게임방 정보를 조회할 때는 Redis Hash에 저장된 데이터 사용
  * 게임방 입장 시에는 게임방 id로 Redis의 Topic을 조회하여 pub/sub 메시지 리스너와 연동
  **/
-
 @RequiredArgsConstructor
 @Repository
 public class GameRoomRepo {

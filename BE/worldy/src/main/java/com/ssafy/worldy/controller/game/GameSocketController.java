@@ -1,8 +1,8 @@
 package com.ssafy.worldy.controller.game;
 
+import com.ssafy.worldy.model.game.dto.Data;
 import com.ssafy.worldy.model.game.dto.Emoticon;
 import com.ssafy.worldy.model.game.dto.GameQuiz;
-import com.ssafy.worldy.model.game.dto.Player;
 import com.ssafy.worldy.model.game.repo.GameRoomRepo;
 import com.ssafy.worldy.model.game.service.RedisPublisher;
 import com.ssafy.worldy.model.quiz.dto.MultiAnswerDto;
@@ -46,12 +46,12 @@ public class GameSocketController {
      * [/pub/game/player 들어오는 메시징을 처리]
      **/
     @MessageMapping("/game/player")
-    public void player(Player player) {
+    public void player(Data data) {
 
-        log.info("WebSocket Writer kakaoId : " + player.getPlayerId());
-        log.info("WebSocket Writer Player : " + player.toString());
+        log.info("WebSocket Writer Data Type : " + data.getType());
+        log.info("WebSocket Writer Game Data : " + data.toString());
 
-        redisPublisher.publish(player);
+        redisPublisher.publish(data);
     }
 
     /**
