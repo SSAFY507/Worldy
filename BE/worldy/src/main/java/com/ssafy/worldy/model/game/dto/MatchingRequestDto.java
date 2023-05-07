@@ -10,9 +10,9 @@ import java.io.Serializable;
  * producer에서 보내는 MatchingRequestDto의 객체가 맞는지 확인하기 위해 serialVersionUID가 필요함
  **/
 @ToString
-@Data
 @SuperBuilder
 @NoArgsConstructor
+@Getter
 public class MatchingRequestDto implements Serializable {
 
     private static final long serialVersionUID = 6529685098267757690L;
