@@ -1,9 +1,6 @@
 package com.ssafy.worldy.model.game.service;
 
-import com.ssafy.worldy.model.game.dto.Emoticon;
-import com.ssafy.worldy.model.game.dto.GameQuiz;
-import com.ssafy.worldy.model.game.dto.MatchingResult;
-import com.ssafy.worldy.model.game.dto.Player;
+import com.ssafy.worldy.model.game.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -30,12 +27,12 @@ public class RedisPublisher {
     /**
      * 게임 데이터 전송
      **/
-    public void publish (Player player) {
+    public void publish (Data data) {
 
         log.info("Topic : " + topic.getTopic());
-        log.info("Player : " + player.toString());
+        log.info("Player : " + data.toString());
 
-        redisTemplate.convertAndSend(topic.getTopic(), player);
+        redisTemplate.convertAndSend(topic.getTopic(), data);
     }
 
     /**
@@ -57,5 +54,15 @@ public class RedisPublisher {
         log.info("Quiz : " + gameQuizDto.toString());
 
         redisTemplate.convertAndSend(topic.getTopic(), gameQuizDto);
+    }
+    /**
+     * 게임 인원수 데이터 전송
+     **/
+    public void publish(PlayerCnt playerCnt) {
+
+        log.info("Topic : " + topic.getTopic());
+        log.info("Quiz : " + playerCnt.toString());
+
+        redisTemplate.convertAndSend(topic.getTopic(), playerCnt);
     }
 }
