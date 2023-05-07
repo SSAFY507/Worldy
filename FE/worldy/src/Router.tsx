@@ -21,7 +21,7 @@ import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
 import Updates from './routes/Updates';
 import pathBI from './assets/images/MainPageBackground.png';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -72,6 +72,8 @@ const AppLayout = () => {
     navigate(path);
   };
 
+  const [myPageRef, setMyPageRef] = useState<string>('');
+
   return (
     <div
       className='hide-scrollbar w-screen h-screen flex flex-col bg-white overflow-hidden'
@@ -99,7 +101,14 @@ const AppLayout = () => {
       <div className='flex-1 h-full max-h-full'>
         <Routes>
           {login ? (
-            <Route path='/' element={<MainPageAfterLogin />} />
+            <Route
+              path='/'
+              element={
+                <MainPageAfterLogin
+                  changeMyPageRef={(input: string) => setMyPageRef(input)}
+                />
+              }
+            />
           ) : (
             <Route
               path='/'
@@ -113,7 +122,7 @@ const AppLayout = () => {
           </Route>
           <Route path='/monopoly' element={<Monopoly />} />
           <Route path='/support' element={<Support />} />
-          <Route path='/mypage' element={<MyPage />} />
+          <Route path='/mypage' element={<MyPage setRef={myPageRef} />} />
           <Route
             path='/tutorial'
             element={

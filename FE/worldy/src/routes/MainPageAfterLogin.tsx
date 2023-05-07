@@ -35,7 +35,11 @@ type ImageListType = {
   // loaded: boolean;
 };
 
-export default function MainPageAfterLogin() {
+export default function MainPageAfterLogin({
+  changeMyPageRef,
+}: {
+  changeMyPageRef: (value: string) => void;
+}) {
   const myImageList = {
     Carousel1Icon: Carousel1Icon,
     Carousel2Icon: Carousel2Icon,
@@ -65,6 +69,17 @@ export default function MainPageAfterLogin() {
     }
   }, [isLoaded]);
 
+  const navigate = useNavigate();
+
+  const moveToWDPL = () => {};
+
+  const moveToWDADV = () => {};
+
+  const moveToRank = () => {
+    changeMyPageRef('랭킹');
+    navigate('/mypage');
+  };
+
   const [imageList, setImageList] = useState<ImageListType[]>([
     {
       headerImage: Carousel1Icon,
@@ -76,6 +91,7 @@ export default function MainPageAfterLogin() {
       image: Carousel1,
       textBlack: true,
       thumb: thumb1,
+      buttonClick: () => moveToWDPL(),
       // loaded: loadC1Bg,
     },
     {
@@ -88,7 +104,7 @@ export default function MainPageAfterLogin() {
       image: Carousel2,
       textBlack: false,
       thumb: thumb2,
-
+      buttonClick: () => moveToWDADV(),
       // loaded: loadC2Bg,
     },
     {
@@ -114,7 +130,7 @@ export default function MainPageAfterLogin() {
       image: Carousel4,
       textBlack: false,
       thumb: thumb4,
-
+      buttonClick: () => moveToRank(),
       // loaded: loadC2Bg,
     },
     {
