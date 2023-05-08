@@ -25,4 +25,7 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     @Query(value = "select ranking from (select kakao_id, rank() over (order by  mmr desc, level desc, exp desc) as ranking from user) as a  where kakao_id = ?1",nativeQuery = true)
     int findByMyRank(String kakaoId);
+
+    @Query(value = "select count(*) from user", nativeQuery = true)
+    int userCnt();
 }

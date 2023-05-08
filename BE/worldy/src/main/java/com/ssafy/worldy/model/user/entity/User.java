@@ -1,6 +1,8 @@
 package com.ssafy.worldy.model.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.worldy.model.game.dto.MyRankDto;
+import com.ssafy.worldy.model.game.dto.TopRankDto;
 import com.ssafy.worldy.model.user.dto.UserDto;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -44,7 +46,7 @@ public class User {
     private String refreshToken; // refresh 토큰
 
     @Column(name = "tier")
-    private int tier; // mmr 기반 티어
+    private String tier; // mmr 기반 티어
 
     @Column(name = "exp")
     private int exp; // 경험치
@@ -75,6 +77,11 @@ public class User {
         if(mmr<0) this.mmr = 0;
         else if (mmr>4000) this.mmr = 4000;
         else this.mmr = mmr;
+
+        if(this.mmr>=0&&this.mmr<999) this.tier = "Bronze";
+        else if(this.mmr>=1000&&this.mmr<1999) this.tier = "Silver";
+        else if(this.mmr>=2000&&this.mmr<2999) this.tier = "Gold";
+        else if(this.mmr>=3000&&this.mmr<=4000) this.tier = "Platinum";
     }
 
     // exp 업데이트
@@ -102,5 +109,21 @@ public class User {
                 .level(this.level)
                 .mmr(this.mmr)
                 .nickName(this.nickName).build();
+    }
+
+    public MyRankDto myRankDto() {
+        return MyRankDto.builder()
+                .nickName(this.nickName)
+                .profileImg(this.profileImg)
+                .tier(this.tier)
+                .level(this.level) .build();
+    }
+
+    public TopRankDto topRankDto() {
+        return TopRankDto.builder()
+                .nickName(this.nickName)
+                .profileImg(this.profileImg)
+                .tier(this.tier)
+                .level(this.level) .build();
     }
 }
