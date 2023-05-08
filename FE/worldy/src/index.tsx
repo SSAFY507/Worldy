@@ -12,6 +12,16 @@ import { useEffect } from 'react';
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 
+
+// const KakaoAppKey: string = '19dbd953fa840cb821c17969d419e263';
+// window.Kakao.init(KakaoAppKey);
+// window.Kakao.isInitialized(); // init되면 true, 아니면 false를 반환한다
+
+
+
+
+
+
 root.render(
   <Provider store={store}>
     <GlobalStyle />

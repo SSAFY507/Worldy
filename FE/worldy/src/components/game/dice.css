@@ -25,7 +25,7 @@
 }
 
 /* buttons */
-.button {
+#shbutton {
   background-color: rgb(255, 77, 69);
   color: white;
   border: none;
@@ -34,7 +34,7 @@
   transition: background-color 0.2s ease;
 }
 
-.button:hover {
+#shbutton:hover {
   background-color: rgb(230, 60, 50);
   color: white;
 }

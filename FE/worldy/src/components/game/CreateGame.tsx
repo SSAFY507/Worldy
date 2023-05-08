@@ -6,8 +6,8 @@ import { Stomp } from '@stomp/stompjs';
 /// <reference path="./game/gameType.d.ts" />
 
 
-export default function CreateGame(props:any) {
-  
+export default function CreateGame(props: any) {
+
 
   const socket = new SockJS('https://k8a507.p.ssafy.io/api/stomp/game');
   const ws = Stomp.over(socket);
@@ -38,26 +38,26 @@ export default function CreateGame(props:any) {
   function randomMatch() {
     console.log('랜덤 매칭')
   }
-  
+
   function requestQuiz() {
 
     console.log('퀴즈 요청 >>>')
     const data = {
-      "emoticon" : "happy",
-      "roomId" : "2386a4ee-355f-4f1d-9b77-118b2cbf99f9",
-      "kakaoId" : "wordy",
-      "type" : 'emoticon', 
+      "emoticon": "happy",
+      "roomId": "2386a4ee-355f-4f1d-9b77-118b2cbf99f9",
+      "kakaoId": "wordy",
+      "type": 'emoticon',
     }
     // ws.send("/pub/game/quiz/{kakaoId}/{gameRoomId}/{nationId}", {}, JSON.stringify(data));
-    ws.send("/pub/game/quiz/sundaykidz/2386a4ee-355f-4f1d-9b77-118b2cbf99f9/2", {},JSON.stringify(data));
+    ws.send("/pub/game/quiz/sundaykidz/2386a4ee-355f-4f1d-9b77-118b2cbf99f9/2", {}, JSON.stringify(data));
   }
 
   function sendEmoticon() {
     const data = {
-      "emoticon" : "happy",
-      "roomId" : "2386a4ee-355f-4f1d-9b77-118b2cbf99f9",
-      "kakaoId" : "wordy",
-      "type" : 'emoticon', 
+      "emoticon": "happy",
+      "roomId": "2386a4ee-355f-4f1d-9b77-118b2cbf99f9",
+      "kakaoId": "wordy",
+      "type": 'emoticon',
     }
     console.log('이모티콘 전송 >>>')
     ws.send("/pub/game/emoticon", {}, JSON.stringify(data));
@@ -66,9 +66,9 @@ export default function CreateGame(props:any) {
   function sendMsg() {
     //websockt emit
     const data = {
-      "roomId" : "2386a4ee-355f-4f1d-9b77-118b2cbf99f9",
-      "type" : "player",
-      "players" : [
+      "roomId": "2386a4ee-355f-4f1d-9b77-118b2cbf99f9",
+      "type": "player",
+      "players": [
         {
           "playerId": "미희",
           "playerNum": 1,
@@ -147,19 +147,24 @@ export default function CreateGame(props:any) {
     ws.send("/pub/game/player", {}, JSON.stringify(data));
   }
 
+
+
   return (<>
     <div className='w-full h-full bg-white flex flex-col justify-center items-center'>
-    <h1>Create Game Mode</h1>
-    <button className='w-[200px] h-[70px] mt-[40px]' onClick={playFriends}>친구랑 같이하기</button>
-    <button className='w-[200px] h-[70px] mt-[40px]' onClick={randomMatch}>랜덤 매칭</button>
-      
-      
-      
-      
-      
-      
-      
-      
+      <h1>Create Game Mode</h1>
+      <button className='w-[200px] h-[70px] mt-[40px]' id='shbutton' onClick={playFriends}>친구랑 같이하기</button>
+      <button className='w-[200px] h-[70px] mt-[40px]' id='shbutton' onClick={randomMatch}>랜덤 매칭</button>
+      <button className='w-[200px] h-[70px] mt-[40px]' id='shbutton' onClick={() => {
+        // window.Kakao.Link.sendDefault();
+      }}>카카오 공유하기</button>
+
+
+
+
+
+
+
+
       {/* <div>소켓 테스트용</div>
       <div className='flex flex-col'>
         <button className='w-[120px] h-[50px] mt-[20px]' onClick={sendMsg}>소켓 데이터 전송</button>

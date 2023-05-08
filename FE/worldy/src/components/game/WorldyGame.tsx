@@ -1457,7 +1457,7 @@ export default function WorldyGame() {
     }
 
     // 더블아니면 turn 증가
-    
+
   }
 
 
@@ -1640,7 +1640,7 @@ export default function WorldyGame() {
             }
           }
         }
-        setTurnOver(true) 
+        setTurnOver(true)
 
       } else {  // 주인이 없을 때
         console.log(spot.name + '를 구입하시겠습니까?');
@@ -1970,7 +1970,7 @@ export default function WorldyGame() {
                   return <div key={index}>
                     {i.location >= 0 && i.location < 10 && i.type === 'nation' ? <div data-location={i.location}
                       onClick={(e) => {
-                        console.log('현재 턴:' + (turn+1))
+                        console.log('현재 턴:' + (turn + 1))
                         moveLocation(Number(e.currentTarget.dataset.location))
                       }
                       }
@@ -1993,11 +1993,11 @@ export default function WorldyGame() {
                     </div> : null}
                     {i.location >= 0 && i.location < 10 && i.type === 'item' ? <div data-location={i.location}
                       onClick={(e) => {
-                        console.log('현재 턴:' + (turn+1))
+                        console.log('현재 턴:' + (turn + 1))
                         moveLocation(Number(e.currentTarget.dataset.location))
                       }
                       }
-                    className={`w-[90px] h-[90px] bg-gray-400  flex flex-col items-center justify-start outline outline-1 ${i.location === currentLocation ? 'outline-2 outline-red-500' : ''}`}>
+                      className={`w-[90px] h-[90px] bg-gray-400  flex flex-col items-center justify-start outline outline-1 ${i.location === currentLocation ? 'outline-2 outline-red-500' : ''}`}>
                       <div>[{index}]{i.name}</div>
                       <div>(특수지역)</div>
                       <div className='w-[90px] h-[56px] mt-[4px] bg-white flex flex-col justify-center items-center'>
@@ -2016,7 +2016,7 @@ export default function WorldyGame() {
                     </div> : null}
                     {i.location >= 0 && i.location < 10 && (i.type !== 'item' && i.type !== 'nation') ? <div data-location={i.location}
                       onClick={(e) => {
-                        console.log('현재 턴:' + (turn+1))
+                        console.log('현재 턴:' + (turn + 1))
                         moveLocation(Number(e.currentTarget.dataset.location))
                       }
                       }
@@ -2044,10 +2044,10 @@ export default function WorldyGame() {
                 {worldMap.map((i, index) => {
                   return <div key={index} className='flex z-[400]'>
                     {i.location >= 10 && i.location < 20 && i.type === 'nation' ? <div data-location={i.location}
-                    onClick={(e)=> {
-                      console.log('현재 턴:' + (turn+1))
-                      moveLocation(Number(e.currentTarget.dataset.location))
-                    }}
+                      onClick={(e) => {
+                        console.log('현재 턴:' + (turn + 1))
+                        moveLocation(Number(e.currentTarget.dataset.location))
+                      }}
                       className={`w-[90px] h-[90px] bg-green-300 flex flex-col items-center justify-start outline outline-1 ${i.location === currentLocation ? 'outline-2 outline-red-500' : ''}`}>
                       <div>[{index}]{i.name}</div>
                       <div>{i.price ? i.price.land + '만원' : '특수지역'}</div>
@@ -2067,7 +2067,7 @@ export default function WorldyGame() {
                     </div> : null}
                     {i.location >= 10 && i.location < 20 && i.type === 'item' ? <div data-location={i.location}
                       onClick={(e) => {
-                        console.log('현재 턴:' + (turn+1))
+                        console.log('현재 턴:' + (turn + 1))
                         moveLocation(Number(e.currentTarget.dataset.location))
                       }
                       }
@@ -2090,7 +2090,7 @@ export default function WorldyGame() {
                     </div> : null}
                     {i.location >= 10 && i.location < 20 && (i.type !== 'item' && i.type !== 'nation') ? <div data-location={i.location}
                       onClick={(e) => {
-                        console.log('현재 턴:' + (turn+1))
+                        console.log('현재 턴:' + (turn + 1))
                         moveLocation(Number(e.currentTarget.dataset.location))
                       }
                       }
@@ -2119,7 +2119,7 @@ export default function WorldyGame() {
                   return <div key={index}>
                     {i.location >= 20 && i.location < 30 && i.type === 'nation' ? <div data-location={i.location}
                       onClick={(e) => {
-                        console.log('현재 턴:' + (turn+1))
+                        console.log('현재 턴:' + (turn + 1))
                         moveLocation(Number(e.currentTarget.dataset.location))
                       }
                       }
@@ -2142,7 +2142,7 @@ export default function WorldyGame() {
                     </div> : null}
                     {i.location >= 20 && i.location < 30 && i.type === 'item' ? <div data-location={i.location}
                       onClick={(e) => {
-                        console.log('현재 턴:' + (turn+1))
+                        console.log('현재 턴:' + (turn + 1))
                         moveLocation(Number(e.currentTarget.dataset.location))
                       }
                       }
@@ -2165,7 +2165,7 @@ export default function WorldyGame() {
                     </div> : null}
                     {i.location >= 20 && i.location < 30 && (i.type !== 'item' && i.type !== 'nation') ? <div data-location={i.location}
                       onClick={(e) => {
-                        console.log('현재 턴:' + (turn+1))
+                        console.log('현재 턴:' + (turn + 1))
                         moveLocation(Number(e.currentTarget.dataset.location))
                       }
                       }
@@ -2191,10 +2191,10 @@ export default function WorldyGame() {
               </div>
               <div className='flex flex-col-reverse relative top-[-990px] w-[90px]'>
                 {worldMap.map((i, index) => {
-                  return <div key={index}  className='flex w-[90px]'>
+                  return <div key={index} className='flex w-[90px]'>
                     {i.location >= 30 && i.location < 40 && i.type === 'nation' ? <div data-location={i.location}
                       onClick={(e) => {
-                        console.log('현재 턴:' + (turn+1))
+                        console.log('현재 턴:' + (turn + 1))
                         moveLocation(Number(e.currentTarget.dataset.location))
                       }
                       }
@@ -2217,7 +2217,7 @@ export default function WorldyGame() {
                     </div> : null}
                     {i.location >= 30 && i.location < 40 && i.type === 'item' ? <div data-location={i.location}
                       onClick={(e) => {
-                        console.log('현재 턴:' + (turn+1))
+                        console.log('현재 턴:' + (turn + 1))
                         moveLocation(Number(e.currentTarget.dataset.location))
                       }
                       }
@@ -2240,9 +2240,9 @@ export default function WorldyGame() {
                     </div> : null}
                     {i.location >= 30 && i.location < 40 && (i.type !== 'item' && i.type !== 'nation') ? <div data-location={i.location}
                       onClick={(e) => {
-                        console.log('현재 턴:' + (turn+1))
+                        console.log('현재 턴:' + (turn + 1))
                         moveLocation(Number(e.currentTarget.dataset.location))
-                        
+
                       }
                       }
                       className={`w-[90px] h-[90px] bg-gray-300  flex flex-col items-center justify-start ${i.location === currentLocation ? 'outline outline-offset-1 outline-red-500' : 'outline outline-1'}`}>
@@ -2369,7 +2369,7 @@ export default function WorldyGame() {
 
             </main>
           </div>
-          <button className={`roll-button z-[100] ${turnOver? '': 'pointer-events-none'}`} id="rollButton"
+          <button className={`shbutton roll-button z-[100] ${turnOver ? '' : 'pointer-events-none'}`} id="rollButton"
             onClick={() => {
               playerTurn(turn);
             }}
@@ -2453,7 +2453,7 @@ export default function WorldyGame() {
                           <div className='rounded-[4px] text-white bg-red-400 w-[180px] h-[50px] flex justify-center items-center hover:cursor-pointer'
                             onClick={() => {
                               setBuyMode(1);
-                              setMessage1('player ' + (turn+1) +' 턴 종료')
+                              setMessage1('player ' + (turn + 1) + ' 턴 종료')
                               setTurnOver(true);
                             }}
                           >건너뛰기</div>
@@ -2473,8 +2473,8 @@ export default function WorldyGame() {
                       {mode === '자유이동' &&
                         <div>
                           <div className='w-[320px] h-[60px] text-[24px] bg-[#ff4d45] text-white flex justify-center items-center mt-[20px] rounded-[4px] hover:cursor-pointer hover:bg-[#d1352e]'
-                            onClick={()=> {
-                              let n:number = turn+1;
+                            onClick={() => {
+                              let n: number = turn + 1;
                               console.log('플레이어 >>>' + n)
                               console.log('이동할 좌표 >>>' + currentLocation)
                               reLocation(n, currentLocation);
@@ -2490,7 +2490,7 @@ export default function WorldyGame() {
                       {mode === '자유이동완료' &&
                         <div>
                           <div className='w-[320px] h-[60px] text-[24px] bg-green-400 text-white flex justify-center items-center mt-[20px] rounded-[4px]'
-                           
+
                           >{worldMap[currentLocation].name}으로 이동 완료</div>
                         </div>
                       }
@@ -2504,8 +2504,8 @@ export default function WorldyGame() {
             })}
           </div>
         </div>
-        <div className={`z-[500] w-[300px] h-[100px] bg-red-500 relative top-[-1400px] flex justify-center items-center ${start? '': 'hidden' }`}>
-          <div className='text-white text-[30px]' onClick={()=>{
+        <div className={`z-[500] w-[300px] h-[100px] bg-red-500 relative top-[-1400px] flex justify-center items-center ${start ? '' : 'hidden'}`}>
+          <div className='text-white text-[30px]' onClick={() => {
             console.log('클릭')
             setStart(true);
           }}>GAME START!</div>

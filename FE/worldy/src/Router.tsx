@@ -77,7 +77,7 @@ const AppLayout = () => {
 
   const exploreUrl = location.pathname.substr(0, 8);
   const monopolyUrl = location.pathname.substr(0, 9);
-
+  const gameUrl = location.pathname.substr(0, 5);
   const [myPageRef, setMyPageRef] = useState<string>('');
 
   const [qnaModal, setQnaModal] = useState<number>(0);
@@ -94,8 +94,13 @@ const AppLayout = () => {
         backgroundSize: '100%',
       }}
     >
+<<<<<<< HEAD
       <div className='z-50'>
         {exploreUrl !== '/explore' && monopolyUrl !== '/monopoly' && (
+=======
+      <div className='z-10'>
+        {exploreUrl !== '/explore' && monopolyUrl !== '/monopoly' && gameUrl !== '/game' && (
+>>>>>>> 747aa692b0baa16ac4e18cc32f7227e74b2d74ba
           <Navbar
             onLoginClick={handleLoginModal}
             onLoginAdmin={handleLoginAdmin}
