@@ -13,7 +13,11 @@ type SupportItemType = {
   response: string;
 };
 
-export default function Support() {
+export default function Support({
+  qnaModalNumber,
+}: {
+  qnaModalNumber: number;
+}) {
   const myImageList = {
     SupportExploreBackground: pathSEB,
     SupportMonopolyBackground: pathSMB,
@@ -176,6 +180,16 @@ export default function Support() {
     setModalOn(!modalOn);
     setModalType(type);
   };
+
+  useEffect(() => {
+    if (qnaModalNumber === 1) {
+      setModalOn(true);
+      setModalType(true);
+    } else if (qnaModalNumber === 2) {
+      setModalOn(true);
+      setModalType(false);
+    }
+  }, []);
 
   return (
     <div className='hide-scrollbar min-w-full h-fit min-h-full bg-gray-800 flex justify-center items-start pt-[20px] absolute top-20 left-0 overflow-hidden'>
