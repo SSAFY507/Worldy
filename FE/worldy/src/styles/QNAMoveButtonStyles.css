@@ -19,12 +19,12 @@
 .QNAbuttoncard {
   width: 150px;
   height: 60px;
-  background: lightgrey;
+  /* background: lightgrey; */
   transition: 0.4s ease-in-out, 0.2s background-color ease-in-out,
     0.2s background-image ease-in-out;
-  background: rgba(255, 255, 255, 0);
+  /* background: rgba(255, 255, 255, 0); */
   backdrop-filter: blur(5px);
-  border: 1px solid transparent;
+  /* border: 1px solid transparent; */
   -webkit-backdrop-filter: blur(5px);
   display: flex;
   align-items: center;
@@ -37,7 +37,7 @@
 .QNAbuttoncard .instagram {
   opacity: 0;
   transition: 0.2s ease-in-out;
-  fill: #cc39a4;
+  /* fill: #cc39a4; */
 }
 
 .QNAbuttoncard:nth-child(2) {
@@ -71,10 +71,10 @@
 
 .main:hover .QNAbuttoncard {
   margin: 0.2em;
-  border-radius: 10px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.2);
+  /* border-radius: 10px; */
+  /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
+  /* border: 1px solid rgba(255, 255, 255, 0.3); */
+  /* background: rgba(255, 255, 255, 0.2); */
 }
 
 .main:hover .QNAbuttontext {
@@ -82,6 +82,12 @@
   z-index: -3;
 }
 
+.main:hover .QNAbuttoncard {
+  color: rgba(220, 220, 220, 0.5);
+}
+.main:hover .QNAbuttoncard:hover {
+  color: white;
+}
 .main:hover .instagram {
   opacity: 1;
 }
@@ -94,9 +100,17 @@
   opacity: 1;
 }
 
+.qnatempborder {
+  opacity: 0;
+  transition: 0.2s ease-in-out;
+}
+
+.main:hover .qnatempborder {
+  opacity: 1;
+}
 .QNAbuttoncard:nth-child(1):hover {
-  background-color: #38d0d0;
-  color: white;
+  background-color: none;
+  color: rgba(220, 220, 220, 0.5);
 }
 
 .QNAbuttoncard:nth-child(1):hover .instagram {
@@ -104,8 +118,8 @@
 }
 
 .QNAbuttoncard:nth-child(2):hover {
-  background-color: #2a394e;
-  color: white;
+  background-color: none;
+  color: rgba(220, 220, 220, 0.5);
 }
 
 .QNAbuttoncard:nth-child(2):hover .twitter {
@@ -113,8 +127,8 @@
 }
 
 .QNAbuttoncard:nth-child(3):hover {
-  background-color: #ff6767;
-  color: white;
+  background-color: none;
+  color: rgba(220, 220, 220, 0.5);
 }
 
 .QNAbuttoncard:nth-child(3):hover .dribble {

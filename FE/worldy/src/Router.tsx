@@ -95,12 +95,14 @@ const AppLayout = () => {
       }}
     >
       <div className='z-10'>
-        {exploreUrl !== '/explore' && monopolyUrl !== '/monopoly' && gameUrl !== '/game' && (
-          <Navbar
-            onLoginClick={handleLoginModal}
-            onLoginAdmin={handleLoginAdmin}
-          />
-        )}
+        {exploreUrl !== '/explore' &&
+          monopolyUrl !== '/monopoly' &&
+          gameUrl !== '/game' && (
+            <Navbar
+              onLoginClick={handleLoginModal}
+              onLoginAdmin={handleLoginAdmin}
+            />
+          )}
         {showLoginModal && (
           <LoginModal
             onClose={closeLoginModal}
@@ -150,7 +152,7 @@ const AppLayout = () => {
               <Tutorial onClickEndTutorial={() => handleNavigate('/', true)} />
             }
           />
-          <Route path='/payment' element={<Payment />} />
+          {/* <Route path='/payment' element={<Payment />} /> */}
         </Routes>
       </div>
     </div>

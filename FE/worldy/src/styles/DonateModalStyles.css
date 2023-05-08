@@ -1,7 +1,6 @@
 .card-id567 {
-  width: 200px;
-  height: 190px;
-  background: rgb(255, 255, 255);
+  width: 240px;
+  height: 240px;
   border-radius: 1rem;
   padding: 1rem;
   position: relative;
@@ -9,7 +8,10 @@
   justify-content: center;
   align-items: center;
   transition: 300ms ease;
-  animation: 8s thumb-thumb infinite;
+}
+
+.card-id567:hover {
+  animation: 5s thumb-thumb infinite;
 }
 
 .card-id567 svg path {
@@ -25,6 +27,8 @@
 .blurry-splash {
   position: absolute;
   inset: 0;
+  top: 10px;
+  left: 0;
   width: 60px;
   margin: 0 auto;
   height: 60px;
