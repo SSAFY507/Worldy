@@ -1,0 +1,152 @@
+.main_back {
+  border-radius: 10px;
+  transform: rotate(90deg);
+  width: 11em;
+  height: 11em;
+  background: linear-gradient(270deg, #03a9f4, #cc39a4, #ffb5d2);
+  z-index: -2;
+  box-shadow: inset 0px 0px 180px 5px #ffffff;
+}
+
+.main {
+  display: flex;
+  flex-wrap: wrap;
+  width: 480px;
+  align-items: center;
+  justify-content: center;
+}
+
+.QNAbuttoncard {
+  width: 150px;
+  height: 60px;
+  /* background: lightgrey; */
+  transition: 0.4s ease-in-out, 0.2s background-color ease-in-out,
+    0.2s background-image ease-in-out;
+  /* background: rgba(255, 255, 255, 0); */
+  backdrop-filter: blur(5px);
+  /* border: 1px solid transparent; */
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.QNAbuttoncard:before {
+  opacity: 0;
+}
+
+.QNAbuttoncard .instagram {
+  opacity: 0;
+  transition: 0.2s ease-in-out;
+  /* fill: #cc39a4; */
+}
+
+.QNAbuttoncard:nth-child(2) {
+  border-radius: 0px;
+}
+
+.QNAbuttoncard:nth-child(2) .twitter {
+  opacity: 0;
+  transition: 0.2s ease-in-out;
+  fill: #03a9f4;
+}
+
+.QNAbuttoncard:nth-child(3) {
+  border-top-left-radius: 0px;
+}
+
+.QNAbuttoncard:nth-child(3) .dribble {
+  opacity: 0;
+  transition: 0.2s ease-in-out;
+  fill: #ffb5d2;
+}
+
+.main:hover {
+  width: 480px;
+  cursor: pointer;
+}
+
+.main:hover .main_back {
+  opacity: 0;
+}
+
+.main:hover .QNAbuttoncard {
+  margin: 0.2em;
+  /* border-radius: 10px; */
+  /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); */
+  /* border: 1px solid rgba(255, 255, 255, 0.3); */
+  /* background: rgba(255, 255, 255, 0.2); */
+}
+
+.main:hover .QNAbuttontext {
+  opacity: 0;
+  z-index: -3;
+}
+
+.main:hover .QNAbuttoncard {
+  color: rgba(220, 220, 220, 0.5);
+}
+.main:hover .QNAbuttoncard:hover {
+  color: white;
+}
+.main:hover .instagram {
+  opacity: 1;
+}
+
+.main:hover .twitter {
+  opacity: 1;
+}
+
+.main:hover .dribble {
+  opacity: 1;
+}
+
+.qnatempborder {
+  opacity: 0;
+  transition: 0.2s ease-in-out;
+}
+
+.main:hover .qnatempborder {
+  opacity: 1;
+}
+.QNAbuttoncard:nth-child(1):hover {
+  background-color: none;
+  color: rgba(220, 220, 220, 0.5);
+}
+
+.QNAbuttoncard:nth-child(1):hover .instagram {
+  fill: white;
+}
+
+.QNAbuttoncard:nth-child(2):hover {
+  background-color: none;
+  color: rgba(220, 220, 220, 0.5);
+}
+
+.QNAbuttoncard:nth-child(2):hover .twitter {
+  fill: white;
+}
+
+.QNAbuttoncard:nth-child(3):hover {
+  background-color: none;
+  color: rgba(220, 220, 220, 0.5);
+}
+
+.QNAbuttoncard:nth-child(3):hover .dribble {
+  fill: white;
+}
+
+@keyframes backgroundIMG {
+  100% {
+    background-image: linear-gradient(#bf66ff, #6248ff, #00ddeb);
+  }
+}
+
+.QNAbuttontext {
+  font-size: 0.7em;
+  transition: 0.4s ease-in-out;
+  color: black;
+  text-align: center;
+  font-weight: bold;
+  letter-spacing: 0.33em;
+  z-index: 3;
+}
