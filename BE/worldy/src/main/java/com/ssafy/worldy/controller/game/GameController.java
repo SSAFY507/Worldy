@@ -45,7 +45,7 @@ public class GameController {
     }
 
     /**
-     * [게임 정보 저장 & mmr 갱신]
+     * [게임 정보 저장 & mmr & exp 갱신]
      **/
     @PostMapping("/result")
     public ResponseEntity<String> gameResult(@RequestBody GameResultDto gameResultDto) {
