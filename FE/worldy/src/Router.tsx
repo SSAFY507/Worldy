@@ -24,7 +24,6 @@ import pathBI from './assets/images/MainPageBackground.png';
 import { useState, useRef } from 'react';
 import Game from './routes/Game';
 import Socket from './routes/Socket';
-import Payment from './routes/Payment';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
