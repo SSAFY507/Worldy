@@ -28,7 +28,7 @@ public class UserDto {
 
     private String refreshToken; // refresh 토큰
 
-    private int tier; // mmr 기반 티어
+    private String tier; // mmr 기반 티어
 
     private int exp; // 경험치
 

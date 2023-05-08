@@ -152,6 +152,7 @@ public class KakaoUserService {
                     .activated(true)
                     .exp(0)
                     .level(1)
+                    .tier("Silver")
                     .mmr(1000)
                     .authorities(Collections.singleton(authority)).build();
         }
