@@ -6,13 +6,15 @@ import com.ssafy.worldy.model.adventure.entity.Nation;
 import com.ssafy.worldy.model.adventure.repo.NationRepo;
 import com.ssafy.worldy.model.game.dto.GameRankingDto;
 import com.ssafy.worldy.model.game.dto.GameResultDto;
-import com.ssafy.worldy.model.game.dto.RankUserDto;
+import com.ssafy.worldy.model.game.dto.MyRankDto;
+import com.ssafy.worldy.model.game.dto.TopRankDto;
 import com.ssafy.worldy.model.game.entity.GameResult;
 import com.ssafy.worldy.model.game.repo.GameResultRepo;
 import com.ssafy.worldy.model.user.entity.User;
 import com.ssafy.worldy.model.user.repo.UserRepo;
 import com.ssafy.worldy.util.MultiElo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class GameService {
 
     private final GameResultRepo gameResultRepo;
@@ -63,6 +66,12 @@ public class GameService {
         user2.updateMmr((int) Math.round(newMMR[1]));
         user3.updateMmr((int) Math.round(newMMR[2]));
         user4.updateMmr((int) Math.round(newMMR[3]));
+
+        // exp 갱신
+        user1.updateExp(40);
+        user2.updateExp(30);
+        user3.updateExp(25);
+        user4.updateExp(20);
     }
 
     public void saveResult(Long nationId, int rank) {
@@ -105,17 +114,23 @@ public class GameService {
 
         User user = userRepo.findByKakaoId(kakaoId).orElseThrow(()->new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
         int ranking = userRepo.findByMyRank(kakaoId);
+        int userCnt = userRepo.userCnt();
 
-        RankUserDto myRank = RankUserDto.builder().rank(ranking).user(user.toDto()).build();
+        MyRankDto myRank = user.myRankDto();
+        myRank.setRank(ranking);
+
+        myRank.setPercent((int)Math.round(((double)ranking/(double)userCnt)*100));
+
+        if(myRank.getPercent()<=0) myRank.setPercent(1);
 
         List<User> rankTop10User = userRepo.findByRankTop10User();
 
-        List<RankUserDto> rankUserDtos = new ArrayList<>();
+        List<TopRankDto> rankUserDtos = new ArrayList<>();
         for (int i=0;i<rankTop10User.size();i++) {
-            RankUserDto rankUserDto = RankUserDto.builder().rank(i+1).user(rankTop10User.get(i).toDto()).build();
+            TopRankDto rankUserDto = rankTop10User.get(i).topRankDto();
+            rankUserDto.setRank(i+1);
             rankUserDtos.add(rankUserDto);
         }
-
 
         return GameRankingDto.builder().myRank(myRank).rankTop10User(rankUserDtos).build();
     }
