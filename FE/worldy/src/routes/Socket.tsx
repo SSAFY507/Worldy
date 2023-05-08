@@ -1,11 +1,9 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import TestFor3D from '../components/TestFor3D';
-import TestFor3DEdit from '../components/TestFor3DEdit';
 import LoaderPyramid from '../components/LoaderPyramid';
-import WorldyGame from '../components/game/WorldyGame';
+import SocketTest from '../components/game/SocketTest';
 
-export default function Monopoly() {
+export default function Socket() {
   const [loaded, setLoaded] = useState<boolean>(false);
   setTimeout(() => {
     setLoaded(true);
@@ -13,7 +11,7 @@ export default function Monopoly() {
   return (
     <div className='w-screen h-screen'>
       {loaded ? (
-        <WorldyGame />
+        <SocketTest />
       ) : (
         <div className='w-full h-full bg-white'>
           <LoaderPyramid text='3D 급하게 조립 중...' />
