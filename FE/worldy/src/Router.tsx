@@ -128,7 +128,7 @@ const AppLayout = () => {
               element={<IntroPage onLoginClick={handleLoginModal} />}
             />
           )}
-          <Route path='/gameinfo' element={<GameInfo />} />
+          <Route path='/info' element={<GameInfo />} />
           <Route path='/updates' element={<Updates />} />
           <Route path='/explore' element={<Explore />} />
           <Route path='/explore/:country' element={<Country />} />
