@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 import '../styles/DonateModalStyles.css';
 import { useNavigate } from 'react-router';
-import Payment from '../routes/Payment';
+// import Payment from '../routes/Payment';
 
 export default function DoateModal() {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ export default function DoateModal() {
       <div className='prompt-id567  outline-blue-300 flex flex-col justify-start items-center'>
         <div className='my-[20px]'>
           <div className='token-container w-[100px] mx-[5px] outline-red-500'>
-            <Payment />
+            {/* <Payment /> */}
           </div>
         </div>
 
