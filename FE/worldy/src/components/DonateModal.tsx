@@ -2,8 +2,15 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 
 import '../styles/DonateModalStyles.css';
+import { useNavigate } from 'react-router';
 
 export default function DoateModal() {
+  const navigate = useNavigate();
+
+  const moveToPayment = () => {
+    navigate('/payment');
+  };
+
   return (
     <div className='card-id567 shadow-2xl shadow-gray-400'>
       <svg
@@ -18,34 +25,39 @@ export default function DoateModal() {
       </svg>
 
       <div className='prompt-id567  outline-blue-300 flex flex-col justify-start items-center'>
-        <div className='token-container  outline-red-500 mt-[5px]'>
-          <svg
-            width='50'
-            height='50'
-            viewBox='0 0 20 20'
-            fill='none'
-            xmlns='http://www.w3.org/2000/svg'
-          >
-            <path
-              d='M10 20C4.477 20 0 15.523 0 10C0 4.477 4.477 0 10 0C15.523 0 20 4.477 20 10C20 15.523 15.523 20 10 20ZM10 18C12.1217 18 14.1566 17.1571 15.6569 15.6569C17.1571 14.1566 18 12.1217 18 10C18 7.87827 17.1571 5.84344 15.6569 4.34315C14.1566 2.84285 12.1217 2 10 2C7.87827 2 5.84344 2.84285 4.34315 4.34315C2.84285 5.84344 2 7.87827 2 10C2 12.1217 2.84285 14.1566 4.34315 15.6569C5.84344 17.1571 7.87827 18 10 18V18ZM10 5.05L14.95 10L10 14.95L5.05 10L10 5.05V5.05ZM10 7.879L7.879 10L10 12.121L12.121 10L10 7.879V7.879Z'
-              fill='url(#paint0_linear_713_51)'
-            ></path>
-            <defs>
-              <linearGradient
-                id='paint0_linear_713_51'
-                x1='0'
-                y1='0'
-                x2='16.4204'
-                y2='22.6007'
-                gradientUnits='userSpaceOnUse'
-              >
-                <stop stopColor='#AF40FF'></stop>
-                <stop offset='0.5' stop-color='#5B42F3'></stop>
-                <stop offset='1' stop-color='#00DDEB'></stop>
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
+        <button
+          className='w-fit h-fit outline-red-500 rounded-full'
+          onClick={moveToPayment}
+        >
+          <div className='token-container  m-[5px]'>
+            <svg
+              width='50'
+              height='50'
+              viewBox='0 0 20 20'
+              fill='none'
+              xmlns='http://www.w3.org/2000/svg'
+            >
+              <path
+                d='M10 20C4.477 20 0 15.523 0 10C0 4.477 4.477 0 10 0C15.523 0 20 4.477 20 10C20 15.523 15.523 20 10 20ZM10 18C12.1217 18 14.1566 17.1571 15.6569 15.6569C17.1571 14.1566 18 12.1217 18 10C18 7.87827 17.1571 5.84344 15.6569 4.34315C14.1566 2.84285 12.1217 2 10 2C7.87827 2 5.84344 2.84285 4.34315 4.34315C2.84285 5.84344 2 7.87827 2 10C2 12.1217 2.84285 14.1566 4.34315 15.6569C5.84344 17.1571 7.87827 18 10 18V18ZM10 5.05L14.95 10L10 14.95L5.05 10L10 5.05V5.05ZM10 7.879L7.879 10L10 12.121L12.121 10L10 7.879V7.879Z'
+                fill='url(#paint0_linear_713_51)'
+              ></path>
+              <defs>
+                <linearGradient
+                  id='paint0_linear_713_51'
+                  x1='0'
+                  y1='0'
+                  x2='16.4204'
+                  y2='22.6007'
+                  gradientUnits='userSpaceOnUse'
+                >
+                  <stop stopColor='#AF40FF'></stop>
+                  <stop offset='0.5' stop-color='#5B42F3'></stop>
+                  <stop offset='1' stop-color='#00DDEB'></stop>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+        </button>
         <div className='blurry-splash'></div>
         <p className='my-[10px] font-PtdRegular leading-[20px]'>
           그들을 위해
@@ -53,7 +65,7 @@ export default function DoateModal() {
           기부하시겠습니까?
           <br />
         </p>
-        <span className='bold-567 font-PtdMedium'>마우스를 올려주세요</span>
+        <span className='bold-567 font-PtdMedium'>문양을 클릭해주세요</span>
       </div>
     </div>
   );

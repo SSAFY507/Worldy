@@ -61,7 +61,8 @@ export default function CarouselComponent({
     console.log('donateState', donateState);
   };
 
-  const handleDonateStateRemain = () => {
+  const handleDonateStateRemain = (event: React.MouseEvent) => {
+    event.stopPropagation();
     console.log('안쪽 ㅋ르릭');
   };
 

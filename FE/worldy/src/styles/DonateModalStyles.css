@@ -56,12 +56,12 @@
 }
 
 .card-id567:hover {
-  cursor: none;
+  cursor: default;
 }
 
 .card-id567:hover .prompt-id567 {
   transition: 300ms ease;
-  opacity: 0;
+  /* opacity: 0; */
 }
 
 .token-container {
@@ -76,7 +76,7 @@
 }
 
 .card-id567:hover svg path {
-  opacity: 1;
+  /* opacity: 1; */
 }
 
 @keyframes spinny-token-yayyy {
