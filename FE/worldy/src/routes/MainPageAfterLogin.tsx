@@ -143,16 +143,14 @@ export default function MainPageAfterLogin({
       image: Carousel5,
       textBlack: false,
       thumb: thumb5,
-
       // loaded: loadC5Bg,
     },
   ]);
   return (
-    <div className='h-full flex flex-col justify-center items-stretch'>
-      <div className='h-full outline outline-black flex flex-row items-center justify-center'>
+    <div className='w-full h-full relative flex flex-col justify-center items-stretch'>
+      <div className='h-full outline-black flex flex-row items-center justify-center z-30'>
         <CarouselComponent images={imageList} loaded={loadedAll} />
       </div>
-      <div className='flex-1 outline-black'></div>
     </div>
   );
 }

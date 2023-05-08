@@ -194,7 +194,7 @@ export default function Navbar({
                 <ImSearch color='white' />
               </button>
               <button
-                className='w-[2.5em] h-[2.5em] ml-[1.5em]   grid place-items-center outline-red-300'
+                className='w-[2.5em] h-[2.5em] ml-[1.5em]  grid place-items-center outline-red-300'
                 onClick={adminLogin}
               >
                 <AiOutlineGlobal
