@@ -8,6 +8,7 @@ import {
   useNavigate,
 } from 'react-router-dom';
 
+import Country from './routes/Country';
 import Explore from './routes/Explore';
 import GameInfo from './routes/GameInfo';
 import IntroPage from './routes/IntroPage';
@@ -20,10 +21,9 @@ import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
 import Updates from './routes/Updates';
 import pathBI from './assets/images/MainPageBackground.png';
+import { useState, useRef } from 'react';
 import Game from './routes/Game';
 import Socket from './routes/Socket';
-import Country from './routes/Country';
-import { useState, useRef } from 'react';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -79,6 +79,12 @@ const AppLayout = () => {
   const gameUrl = location.pathname.substr(0, 5);
   const [myPageRef, setMyPageRef] = useState<string>('');
 
+  const [qnaModal, setQnaModal] = useState<number>(0);
+
+  const handleQnaModal = (input: number) => {
+    setQnaModal(input);
+  };
+
   return (
     <div
       className='hide-scrollbar w-screen h-screen flex flex-col bg-white overflow-hidden'
@@ -124,20 +130,28 @@ const AppLayout = () => {
           <Route path='/explore' element={<Explore />} />
           <Route path='/explore/:country' element={<Country />} />
           <Route path='/monopoly' element={<Monopoly />} />
-          <Route path='/support' element={<Support />} />
+          <Route
+            path='/support'
+            element={<Support qnaModalNumber={qnaModal} />}
+          />
+          <Route
+            path='/mypage'
+            element={
+              <MyPage setRef={myPageRef} handleQnaModal={handleQnaModal} />
+            }
+          />
           <Route path='/game' element={<Game />} />
           <Route path='/game/:id' element={<Game />} />
           <Route path='/socket' element={<Socket />} />
-          <Route path='/mypage' element={<MyPage setRef={myPageRef} />} />
           <Route
             path='/tutorial'
             element={
               <Tutorial onClickEndTutorial={() => handleNavigate('/', true)} />
             }
           />
-        </Routes >
-      </div >
-    </div >
+        </Routes>
+      </div>
+    </div>
   );
 };
 
