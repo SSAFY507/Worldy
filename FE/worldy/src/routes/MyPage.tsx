@@ -60,7 +60,13 @@ export type ScrappedQuizType = {
   explanation?: string;
 };
 
-export default function MyPage({ setRef }: { setRef: string }) {
+export default function MyPage({
+  setRef,
+  handleQnaModal,
+}: {
+  setRef: string;
+  handleQnaModal: (input: number) => void;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const accountInfoRef = useRef<HTMLDivElement>(null);
   const quizScrapRef = useRef<HTMLDivElement>(null);
@@ -113,12 +119,12 @@ export default function MyPage({ setRef }: { setRef: string }) {
       onMove: () => scrollToContent(QARef),
       move: true,
     },
-    {
-      icon: <MdAccessTimeFilled />,
-      title: '로그인 기록',
-      onMove: () => scrollToContent(loginRecordRef),
-      move: false,
-    },
+    // {
+    //   icon: <MdAccessTimeFilled />,
+    //   title: '로그인 기록',
+    //   onMove: () => scrollToContent(loginRecordRef),
+    //   move: false,
+    // },
     {
       icon: <IoIosLogOut />,
       title: '로그아웃',
@@ -734,8 +740,8 @@ export default function MyPage({ setRef }: { setRef: string }) {
 
   const qnaLinkContent = (): JSX.Element => {
     return (
-      <div>
-        <QNAMoveButton />
+      <div className='w-full grid place-content-center'>
+        <QNAMoveButton handleQnaModal={handleQnaModal} />
       </div>
     );
   };
@@ -808,14 +814,14 @@ export default function MyPage({ setRef }: { setRef: string }) {
               content: qnaLinkContent(),
             })}
           </div>
-          <div className=' w-full h-fit pt-[20px]' ref={loginRecordRef}>
+          {/* <div className=' w-full h-fit pt-[20px]' ref={loginRecordRef}>
             {MyPageContentComponent({
               title: '로그인 기록',
               contentInfo:
                 '지금까지 WORLDY SOFT에 접속한 기록입니다. 로그인 기록을 확인하여 외부 로그인에 대한 위험을 방지할 수 있습니다.',
               content: undefined,
             })}
-          </div>
+          </div> */}
           <div className=' w-full h-fit pt-[20px]' ref={logoutRef}>
             {MyPageContentComponent({
               title: '로그아웃',
