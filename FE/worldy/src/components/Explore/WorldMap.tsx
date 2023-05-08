@@ -117,12 +117,13 @@ const WorldMap = () => {
   /** 마우스 한번 클릭 */
   const OnClick = (event:any) => {
     const name = countryObject[selectedName2];
+    const moveCountry = selectedName2;
 
     if (!clickTimeout && selectedObjectRef.current!.userData.flag) {
       clickTimeout = setTimeout(() => {
         if (name) {
           alert(`${name}으(로) 이동합니다.`)
-          navigate(`/explore/${selectedName2}`)
+          navigate(`/explore/${moveCountry}`)
         } else {
           alert(`오픈 예정입니다!😉`)
         }

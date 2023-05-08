@@ -1,0 +1,110 @@
+.card-id567 {
+  width: 240px;
+  height: 240px;
+  border-radius: 1rem;
+  padding: 1rem;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 300ms ease;
+}
+
+.card-id567:hover {
+  animation: 5s thumb-thumb infinite;
+}
+
+.card-id567 svg path {
+  transition: 300ms ease;
+  stroke: rgb(20, 20, 20);
+  opacity: 0;
+}
+
+.bold-567 {
+  font-weight: bold;
+}
+
+.blurry-splash {
+  position: absolute;
+  inset: 0;
+  top: 10px;
+  left: 0;
+  width: 60px;
+  margin: 0 auto;
+  height: 60px;
+  border-radius: 1rem;
+  z-index: -1;
+  opacity: 70%;
+  filter: blur(15px);
+  background: linear-gradient(
+    120deg,
+    rgb(119, 0, 255),
+    rgb(22, 94, 250),
+    rgb(44, 226, 250)
+  );
+}
+
+.prompt-id567 {
+  position: absolute;
+  color: rgb(29, 29, 29);
+  text-align: center;
+}
+
+.really-small-text {
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  font-size: 8px;
+  margin-top: 28px;
+  opacity: 0.5;
+}
+
+.card-id567:hover {
+  cursor: default;
+}
+
+.card-id567:hover .prompt-id567 {
+  transition: 300ms ease;
+  /* opacity: 0; */
+}
+
+.token-container {
+  width: fit-content;
+  animation: 2s spinny-token-yayyy infinite;
+  margin-bottom: 10px;
+}
+
+.prompt-id567 svg path {
+  stroke: none;
+  opacity: 1;
+}
+
+.card-id567:hover svg path {
+  /* opacity: 1; */
+}
+
+@keyframes spinny-token-yayyy {
+  0% {
+    transform: perspective(200px) rotateY(0deg);
+  }
+
+  100% {
+    transform: perspective(200px) rotateY(360deg);
+  }
+}
+
+@keyframes thumb-thumb {
+  0%,
+  10%,
+  100% {
+    transform: scale(100%);
+  }
+
+  5% {
+    transform: scale(103%);
+  }
+
+  7% {
+    transform: scale(97%);
+  }
+}

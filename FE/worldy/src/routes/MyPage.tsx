@@ -25,6 +25,7 @@ import '../styles/MyPageStyles.css';
 import '../styles/TailWind.css';
 
 import QuizModal from '../components/QuizModal';
+import QNAMoveButton from '../components/QNAMoveButton';
 
 type MyPageMenuType = {
   icon: React.ReactNode;
@@ -59,7 +60,13 @@ export type ScrappedQuizType = {
   explanation?: string;
 };
 
-export default function MyPage({ setRef }: { setRef: string }) {
+export default function MyPage({
+  setRef,
+  handleQnaModal,
+}: {
+  setRef: string;
+  handleQnaModal: (input: number) => void;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const accountInfoRef = useRef<HTMLDivElement>(null);
   const quizScrapRef = useRef<HTMLDivElement>(null);
@@ -112,12 +119,12 @@ export default function MyPage({ setRef }: { setRef: string }) {
       onMove: () => scrollToContent(QARef),
       move: true,
     },
-    {
-      icon: <MdAccessTimeFilled />,
-      title: '로그인 기록',
-      onMove: () => scrollToContent(loginRecordRef),
-      move: false,
-    },
+    // {
+    //   icon: <MdAccessTimeFilled />,
+    //   title: '로그인 기록',
+    //   onMove: () => scrollToContent(loginRecordRef),
+    //   move: false,
+    // },
     {
       icon: <IoIosLogOut />,
       title: '로그아웃',
@@ -166,9 +173,9 @@ export default function MyPage({ setRef }: { setRef: string }) {
 
   const MyPageContentComponent = (input: MyPageContentType) => {
     return (
-      <div className=' w-[95%] min-h-[300px] h-fit flex flex-row justify-stretch items-start bg-[rgb(39,32,32)]'>
+      <div className=' w-[95%] min-h-[100px] h-fit outline outline-white flex flex-row justify-stretch items-start bg-[rgb(39,32,32)]'>
         <div
-          className=' w-2/5 min-h-[300px] h-full p-[50px] flex flex-col justify-start items-start
+          className=' w-2/5  h-full p-[50px] flex flex-col justify-start items-start
         '
         >
           <span className='text-white font-PtdBold text-[40px] mb-[.5em]'>
@@ -178,7 +185,7 @@ export default function MyPage({ setRef }: { setRef: string }) {
             {input.contentInfo}
           </span>
         </div>
-        <div className=' w-3/5 min-h-[300px] p-[50px] bg-[rgb(49,47,45)]'>
+        <div className=' w-3/5 h-fit p-[50px] bg-[rgb(49,47,45)]'>
           {input.content}
         </div>
       </div>
@@ -589,19 +596,12 @@ export default function MyPage({ setRef }: { setRef: string }) {
       '빈한리',
       '훈성리',
     ],
-    myRank: 15,
+    myRank: 92,
   };
 
   const [rankList, setMyRankList] = useState<rankListType>(inputList);
 
   const myName = '훈';
-
-  const [topTenViewState, setTopTenViewState] = useState<boolean>(false);
-
-  const handleTopTenView = () => {
-    setTopTenViewState(!topTenViewState);
-    scrollToContent(gameLogRef);
-  };
 
   const rankContent = (): JSX.Element => {
     // if (rankList.myRank <= 10) {
@@ -622,7 +622,7 @@ export default function MyPage({ setRef }: { setRef: string }) {
 
     return (
       <div className='w-full h-fit  outline-yellow-300'>
-        <div className='w-full h-[100px] flex flex-row justify-between items-center  outline-blue-300 px-[20px]'>
+        {/* <div className='w-full h-[100px] flex flex-row justify-between items-center  outline-blue-300 px-[20px]'>
           <div className='w-fit h-2/3 px-[20px] bg-black rounded-xl grid place-content-center'>
             <span className='text-white text-[25px]'>
               나의 순위 : #.{rankList.myRank}
@@ -646,97 +646,98 @@ export default function MyPage({ setRef }: { setRef: string }) {
               </span>
             </div>
           </div>
-        </div>
+        </div> */}
         <div
-          className={`w-full h-fit  outline-red-300 flex flex-col justify-start items-center ${
-            topTenViewState ? 'bg-[rgba(220,220,220,0.3)]' : ''
-          } transition-all duration-1000 ease-in-out`}
+          className={`w-full h-fit  outline-red-300 flex flex-col justify-start items-start transition-all duration-1000 ease-in-out`}
         >
-          <button
-            className='w-full h-[60px] flex flex-row justify-center items-end text-white pb-[10px]'
-            onClick={() => handleTopTenView()}
-          >
-            <BsFillCaretDownFill
-              size={30}
-              className={`${
-                topTenViewState ? 'rotate-180' : 'rotate-0'
-              } transition-all duration-300 ease-in-out`}
-            />
-            <span className='flex flex-row text-[30px] mx-[15px]'>Top10</span>
-            <BsFillCaretDownFill
-              size={30}
-              className={`${
-                topTenViewState ? '-rotate-180' : '-rotate-360'
-              } transition-all duration-300 ease-in-out`}
-            />
-          </button>
-          <div
-            className={`w-full ${
-              topTenViewState
-                ? `${
-                    myRank > 10 ? 'h-[620px]' : 'h-[550px]'
-                  } opacity-100 my-[10px] `
-                : 'opacity-0 h-0 pt-[10px]'
-            } px-[10px] transition-all duration-1000  ease-in-out overflow-hidden flex flex-col justify-start items-center`}
-          >
+          <div className='text-[#6A6A6A] font-PtdRegular text-[22px] mx-[15px] '>
+            <span>{myName}</span><span></span>
+            님의 랭킹 정보
+          </div>
+          <div className='text-[#CBCBCB] font-PtdRegular text-[22px] mx-[15px] mt-[5px]'>
+            <span>전체 플레이어 중 상위 </span>
+            <span className='text-emerald-300'>{myRank}위, 15% 이내입니다.</span>
+          </div>
+          <div className='w-full h-[50px] flex flex-row justify-start items-start  text-white'>
+          </div>
+          <div className={`w-full h-fit outline-white opacity-100 transition-all duration-1000  ease-in-out overflow-hidden flex flex-col justify-start items-center`}>
+
+            <div className='w-[450px] h-[50px] flex flex-row justify-start items-center text-[20px] text-[#6A6A6A] font-PtdLight'>
+                  <span className='w-fit'>no.</span>
+                  <span className='w-fit ml-[20px]'>nickname</span>
+                  <span className='w-fit ml-[200px]'>level</span>
+                  <span className='place-content-right ml-[50px]'>tier</span>
+            </div>
+
             {rankList.topTen.map((item, key) => (
               <div
                 key={key}
-                className={`w-[270px] h-[43px] flex flex-row justify-start items-center mb-[7px] bg-[rgb(0,0,0)] hover:bg-[rgba(180,180,180,0.5)] px-[10px] ${
-                  key + 1 === myRank ? 'glowmyrank z-10' : ''
+                className={`rangking relative flex flex-row justify-start items-center mb-[7px] bg-[rgba(0,0,0,0)] hover:bg-[rgba(180,180,180,0.3)] px-[10px] rounded-md ${
+                  key + 1 === myRank ? 'glowmyrank z-10  w-[550px] h-[50px] my-[15px] ' : 'w-[490px] h-[45px]'
                 }`}
               >
                 <div className='relative w-[50px] h-[50px]  grid place-content-center'>
-                  {key < 3 && (
-                    <RiVipCrownFill
-                      className={`${
-                        key === 0
-                          ? 'text-[#C9B037]'
-                          : key === 1
-                          ? 'text-[#a4a4a4]'
-                          : 'text-[#6A3805]'
-                      }
-                      shadow-lg
-                      `}
-                      size={35}
-                    />
-                  )}
-                  <span className='absolute top-0 left-0 w-[50px] h-[50px] grid place-content-center font-PtdExtraBold text-[20px] text-white'>
+                  <span className='absolute top-0 left-0 w-[50px] h-[50px] grid place-content-center font-PtdLight text-[20px] text-gray-300'>
                     {key + 1}
                   </span>
                 </div>
-                <div className='w-[100px] flex-1 grid place-content-center '>
-                  <span className='font-PtdBold text-white text-[20px]'>
+                <div className='w-fit h-fit flex flex-row justify-center items-center'>
+                  <span className='font-PtdLight text-white text-[20px] ml-[30px]'>
                     {item}
                   </span>
                 </div>
-                <div className='w-fit h-2/3 bg-[rgba(62,62,62,0.7)] rounded-xl flex flex-row justify-center items-center px-[10px]'>
+                <div className="w-[50px] flex-1 flex-row flex justify-start items-center pl-[20px]">
+                    <RiVipCrownFill
+                    className={`${
+                        key === 0
+                        ? 'text-[#D1C68F]'
+                        : key === 1
+                          ? 'text-[#a4a4a4]'
+                          : key===2?'text-[#837D63]' : 'hidden'
+                        }
+                        ${key }
+                        shadow-lg
+                        w-[18px] h-[18px]
+                        `}
+                    />
+                </div>
+                <div className='w-[100px] flex-2 grid place-ontent-right pl-[20px]'>
+                  <span className='font-PtdLight text-white text-[20px] text-[#B2B2B2]'>
+                    lv.1
+                  </span>
+                </div>
+                <div className='w-fit h-2/3 bg-[rgba(62,62,62,0.7)] rounded-[100px] flex flex-row justify-center items-center px-[10px]'>
                   <SiPowerapps size={22} color={'#86FFF8'} />
                 </div>
               </div>
             ))}
             <div className='w-full h-fit grid place-content-center'>
               <BsThreeDotsVertical
-                size={30}
-                color={'black'}
-                className='my-[5px]'
+                size={20}
+                color={'rgba(255,255,255,0.3)'}
+                className='my-[10px]'
               />
             </div>
             {myRank > 10 && (
               <div
-                className={`w-[270px] h-[43px] flex flex-row justify-start items-center mt-[10px] bg-[rgb(0,0,0)] hover:bg-[rgba(180,180,180,0.5)] px-[10px] glowmyrank z-10`}
+                className={`rangking w-[550px] h-[50px] flex flex-row justify-start items-center mt-[10px] mb-[25px] rounded-md bg-[rgba(0,0,0,0.1)] hover:bg-[rgba(180,180,180,0.5)] px-[10px] glowmyrank z-10`}
               >
                 <div className='relative w-[50px] h-[50px]  grid place-content-center'>
-                  <span className='absolute top-0 left-0 w-[50px] h-[50px] grid place-content-center font-PtdExtraBold text-[20px] text-white'>
+                  <span className='absolute top-0 left-0 w-[50px] h-[50px] grid place-content-center font-PtdLight text-[20px] text-gray-300'>
                     {myRank}
                   </span>
                 </div>
-                <div className='w-[100px] flex-1 grid place-content-center '>
-                  <span className='font-PtdBold text-white text-[20px]'>
+                <div className='w-fit h-fit flex flex-row flex-1 justify-center items-center -ml-[200px]'>
+                  <span className='font-PtdLight text-white text-[20px]'>
                     {myName}
                   </span>
                 </div>
-                <div className='w-fit h-2/3 bg-[rgba(62,62,62,0.7)] rounded-xl flex flex-row justify-center items-center px-[10px]'>
+                <div className='w-[100px] flex-2 grid place-ontent-right'>
+                  <span className='font-PtdLight text-white text-[20px] text-[#B2B2B2]'>
+                    lv.1
+                  </span>
+                </div>
+                <div className='w-fit h-2/3 bg-[rgba(62,62,62,0.7)] rounded-[100px] flex flex-row justify-center items-center px-[10px]'>
                   <SiPowerapps size={22} color={rankInfo[0]} />
                 </div>
               </div>
@@ -745,6 +746,18 @@ export default function MyPage({ setRef }: { setRef: string }) {
         </div>
       </div>
     );
+  };
+
+  const qnaLinkContent = (): JSX.Element => {
+    return (
+      <div className='w-full grid place-content-center'>
+        <QNAMoveButton handleQnaModal={handleQnaModal} />
+      </div>
+    );
+  };
+
+  const logoutContent = (): JSX.Element => {
+    return <div className='w-full h-[100px]'></div>;
   };
 
   return (
@@ -812,22 +825,22 @@ export default function MyPage({ setRef }: { setRef: string }) {
             {MyPageContentComponent({
               title: 'Q&A',
               contentInfo: null,
-              content: undefined,
+              content: qnaLinkContent(),
             })}
           </div>
-          <div className=' w-full h-fit pt-[20px]' ref={loginRecordRef}>
+          {/* <div className=' w-full h-fit pt-[20px]' ref={loginRecordRef}>
             {MyPageContentComponent({
               title: '로그인 기록',
               contentInfo:
                 '지금까지 WORLDY SOFT에 접속한 기록입니다. 로그인 기록을 확인하여 외부 로그인에 대한 위험을 방지할 수 있습니다.',
               content: undefined,
             })}
-          </div>
+          </div> */}
           <div className=' w-full h-fit pt-[20px]' ref={logoutRef}>
             {MyPageContentComponent({
               title: '로그아웃',
               contentInfo: null,
-              content: undefined,
+              content: logoutContent(),
             })}
           </div>
         </div>
