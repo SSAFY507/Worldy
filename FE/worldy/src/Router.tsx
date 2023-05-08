@@ -20,10 +20,10 @@ import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
 import Updates from './routes/Updates';
 import pathBI from './assets/images/MainPageBackground.png';
-import { useState } from 'react';
 import Game from './routes/Game';
 import Socket from './routes/Socket';
 import Country from './routes/Country';
+import { useState, useRef } from 'react';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -74,6 +74,11 @@ const AppLayout = () => {
     navigate(path);
   };
 
+  const exploreUrl = location.pathname.substr(0, 8);
+  const monopolyUrl = location.pathname.substr(0, 9);
+
+  const [myPageRef, setMyPageRef] = useState<string>('');
+
   return (
     <div
       className='hide-scrollbar w-screen h-screen flex flex-col bg-white overflow-hidden'
@@ -83,13 +88,12 @@ const AppLayout = () => {
       }}
     >
       <div className='z-10'>
-        {location.pathname !== '/explore' &&
-          location.pathname !== '/monopoly' && (
-            <Navbar
-              onLoginClick={handleLoginModal}
-              onLoginAdmin={handleLoginAdmin}
-            />
-          )}
+        {exploreUrl !== '/explore' && monopolyUrl !== '/monopoly' && (
+          <Navbar
+            onLoginClick={handleLoginModal}
+            onLoginAdmin={handleLoginAdmin}
+          />
+        )}
         {showLoginModal && (
           <LoginModal
             onClose={closeLoginModal}
@@ -101,7 +105,14 @@ const AppLayout = () => {
       <div className='flex-1 h-full max-h-full'>
         <Routes>
           {login ? (
-            <Route path='/' element={<MainPageAfterLogin />} />
+            <Route
+              path='/'
+              element={
+                <MainPageAfterLogin
+                  changeMyPageRef={(input: string) => setMyPageRef(input)}
+                />
+              }
+            />
           ) : (
             <Route
               path='/'
@@ -110,24 +121,23 @@ const AppLayout = () => {
           )}
           <Route path='/gameinfo' element={<GameInfo />} />
           <Route path='/updates' element={<Updates />} />
-          <Route path='/explore' element={<Explore />}>
-            <Route path=':country' element={<Country />} />
-          </Route>
+          <Route path='/explore' element={<Explore />} />
+          <Route path='/explore/:country' element={<Country />} />
           <Route path='/monopoly' element={<Monopoly />} />
           <Route path='/support' element={<Support />} />
-          <Route path='/mypage' element={<MyPage />} />
           <Route path='/game' element={<Game />} />
           <Route path='/game/:id' element={<Game />} />
           <Route path='/socket' element={<Socket />} />
+          <Route path='/mypage' element={<MyPage setRef={myPageRef} />} />
           <Route
             path='/tutorial'
             element={
               <Tutorial onClickEndTutorial={() => handleNavigate('/', true)} />
             }
           />
-        </Routes>
-      </div>
-    </div>
+        </Routes >
+      </div >
+    </div >
   );
 };
 
