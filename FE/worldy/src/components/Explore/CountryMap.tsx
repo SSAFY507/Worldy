@@ -14,7 +14,11 @@ import europe_France from "../../assets/lowpoly/europe_France.glb"
 import europe_Italia from "../../assets/lowpoly/europe_Italia.glb"
 import europe_Spain from "../../assets/lowpoly/europe_Spain.glb"
 import europe_UK from "../../assets/lowpoly/europe_UK.glb"
-import northAmerica_America from "../../assets/lowpoly/northAmerica_America.glb"
+import northAmerica_America from "../../assets/lowpoly/country.glb";
+
+// import northAmerica_America from "../../assets/lowpoly/northAmerica_America.glb"
+
+
 
 interface Props {
   countryName: string;
@@ -41,13 +45,12 @@ const CountryMap:React.FC<Props> = (countryName) => {
 
   /** 카메라 커스텀 함수 */
   const SetupCamera = () => {
-    const cam = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
-    cam.position.set(0, 10, 13);
-    cam.rotation.set(0, 0, 0);
+    const cam = new THREE.PerspectiveCamera(37, window.innerWidth / window.innerHeight, 0.1, 100);
+    cam.position.set(0, 5, 5);
+    cam.rotation.set(0, 10, 0);
     cam.lookAt(0, 0, 0);          // 카메라가 바라보는 곳이 0, 0, 0
     
     camera.current = cam;
-    
     scene.current?.add(cam)
   };
 
@@ -62,47 +65,47 @@ const CountryMap:React.FC<Props> = (countryName) => {
     camera.current?.add(light)
   };
 
-  /** 카메라 적정 위치 구하는 함수 */
-  const ZoomFit = (object3D:any, camera:THREE.PerspectiveCamera) => {
-    // 모델 경계 박스
-    const box = new THREE.Box3().setFromObject(object3D);
-    // 모델 경계 박스 대각 길이
-    const sizeBox = box.getSize(new THREE.Vector3()).length();
-    // 모델의 경계 박스 중심 위치
-    const centerBox = box.getCenter(new THREE.Vector3());
+  // /** 카메라 적정 위치 구하는 함수 */
+  // const ZoomFit = (object3D:any, camera:THREE.PerspectiveCamera) => {
+  //   // 모델 경계 박스
+  //   const box = new THREE.Box3().setFromObject(object3D);
+  //   // 모델 경계 박스 대각 길이
+  //   const sizeBox = box.getSize(new THREE.Vector3()).length();
+  //   // 모델의 경계 박스 중심 위치
+  //   const centerBox = box.getCenter(new THREE.Vector3());
 
-    const ratio = scene.current?.children[1].userData.size;
+  //   const ratio = scene.current?.children[1].userData.size;
 
-    // 모델 크기의 절반값
-    const halfSizeModel = sizeBox * ratio;
+  //   // 모델 크기의 절반값
+  //   const halfSizeModel = sizeBox * ratio;
 
-    // 카메라의 fov의 절반값
-    const halfFov = THREE.MathUtils.degToRad(camera.fov * 0.7);
+  //   // 카메라의 fov의 절반값
+  //   const halfFov = THREE.MathUtils.degToRad(camera.fov * 0.6);
 
-    // 모델을 화면에 꽉 채우기 위한 적당한 거리
-    const distance = halfSizeModel / Math.tan(halfFov);
+  //   // 모델을 화면에 꽉 채우기 위한 적당한 거리
+  //   const distance = halfSizeModel / Math.tan(halfFov);
 
-    // 모델 중심에서 카메라 위치로 향하는 방향 단위 벡터 계산
-    const direction = (new THREE.Vector3()).subVectors(
-      camera.position,
-      centerBox
-    ).normalize();
+  //   // 모델 중심에서 카메라 위치로 향하는 방향 단위 벡터 계산
+  //   const direction = (new THREE.Vector3()).subVectors(
+  //     camera.position,
+  //     centerBox
+  //   ).normalize();
 
-    // "단위 방향 벡터" 방향으로 모델 중심 위치에서 distance 거리에 대한 위치
-    const position = direction.multiplyScalar(distance).add(centerBox);
-    camera.position.copy(position);
+  //   // "단위 방향 벡터" 방향으로 모델 중심 위치에서 distance 거리에 대한 위치
+  //   const position = direction.multiplyScalar(distance).add(centerBox);
+  //   camera.position.copy(position);
 
-    // 모델의 크기에 맞게 카메라의 near, far 값을 대략적으로 조정
-    camera.near = sizeBox / 100;
-    camera.far = sizeBox * 100;
+  //   // 모델의 크기에 맞게 카메라의 near, far 값을 대략적으로 조정
+  //   camera.near = sizeBox / 100;
+  //   camera.far = sizeBox * 100;
 
-    // 카메라 기본 속성 변경에 따른 투영행렬 업데이트
-    camera.updateProjectionMatrix();
-    const [a, b, c] = scene.current?.children[1].userData.position
-    // 카메라가 모델의 중심을 바라 보도록 함
-    camera.lookAt(centerBox.x + a, centerBox.y + b, centerBox.z + c);
-    // camera.lookAt(centerBox.x, centerBox.y, centerBox.z);
-  }
+  //   // 카메라 기본 속성 변경에 따른 투영행렬 업데이트
+  //   camera.updateProjectionMatrix();
+  //   const [a, b, c] = scene.current?.children[1].userData.position
+  //   // 카메라가 모델의 중심을 바라 보도록 함
+  //   camera.lookAt(centerBox.x + a, centerBox.y + b, centerBox.z + c);
+  //   // camera.lookAt(centerBox.x, centerBox.y, centerBox.z);
+  // }
 
 
   /** 모델 커스텀 함수 */
@@ -118,14 +121,16 @@ const CountryMap:React.FC<Props> = (countryName) => {
       {url: europe_Italia, name: "europe_Italia", angle:[10, 0, 10], position:[0,0,0], size:0.5},
       {url: europe_Spain, name: "europe_Spain", angle:[0, 10, 15], position:[0,0,0], size:0.5},
       {url: europe_UK, name: "europe_UK", angle:[0, 10, 15], position:[0,-0.5, 0], size:0.5},
-      {url: northAmerica_America, name: "northAmerica_America", angle:[10, 10, 10], position:[1,-2, 1], size:0.35},
+      // {url: northAmerica_America, name: "northAmerica_America", angle:[10, 10, 10], position:[1,-2, 1], size:0.35},
+      {url: northAmerica_America, name: "northAmerica_America", angle:[-10, 45.7,-5], position:[0, 0, 0], size: 0.5},
     ]
     items.forEach((item, index) => {
       if (item.name === countryName.countryName) {
         gltfLoader.load(item.url, (glb) => {
           const obj3d:THREE.Group = glb.scene;
           obj3d.name = item.name
-          obj3d.position.set(8, 9, 16);
+
+          obj3d.position.set(12, 1, 0);
           obj3d.rotation.set(
             THREE.MathUtils.degToRad(item.angle[0]),
             THREE.MathUtils.degToRad(item.angle[1]),
@@ -134,10 +139,16 @@ const CountryMap:React.FC<Props> = (countryName) => {
           obj3d.userData.position = item.position;
           obj3d.userData.size = item.size;
           obj3d.scale.set(3, 3, 3);
+
+          // const helper = new THREE.AxesHelper
+          // const shelper = new THREE.GridHelper
+          // scene.current?.add(helper)
+          // scene.current?.add(shelper)
+
           scene.current?.add(obj3d);
-          if (camera.current) {
-            ZoomFit(obj3d, camera.current)
-          }
+          // if (camera.current) {
+          //   ZoomFit(obj3d, camera.current)
+          // }
         })
       }
     })
@@ -164,12 +175,12 @@ const CountryMap:React.FC<Props> = (countryName) => {
       controls.current.target.set(0,0,0)    // 카메라 회전점
       controls.current.enableDamping = true;        // 부드럽게 돌아가
       // 위아래 카메라 제한
-      controls.current.minPolarAngle = THREE.MathUtils.degToRad(44.5);   // 0도 부터
-      controls.current.maxPolarAngle = THREE.MathUtils.degToRad(44.5);  // 30도 까지 회전 가능
-      // 좌우 카메라 제한
-      controls.current.minAzimuthAngle = THREE.MathUtils.degToRad(-5); // -5도 부터
-      controls.current.maxAzimuthAngle = THREE.MathUtils.degToRad(5);  // 5도 까지
-      console.log(camera.current!.fov)
+      // controls.current.minPolarAngle = THREE.MathUtils.degToRad(0);   // 0도 부터
+      // controls.current.maxPolarAngle = THREE.MathUtils.degToRad(60);  // 30도 까지 회전 가능
+      // // 좌우 카메라 제한
+      // controls.current.minAzimuthAngle = THREE.MathUtils.degToRad(-15); // -5도 부터
+      // controls.current.maxAzimuthAngle = THREE.MathUtils.degToRad(15);  // 5도 까지
+      // console.log(camera.current!.fov)
     }
   }
 
@@ -197,7 +208,7 @@ const CountryMap:React.FC<Props> = (countryName) => {
       SetupCamera();
       SetupLight();
       SetupModel();
-      // SetupControls();
+      SetupControls();
 
       window.onresize = resize;
       resize();
