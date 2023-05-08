@@ -65,11 +65,11 @@ export default function Room(props: any) {
   const pList = [p1, p2, p3];
 
   return (<>
-    <div className='w-full h-full bg-[#FFFDF4] flex justify-center items-center'>
+    <div className='w-full h-full bg-[#FFFDF4]  flex justify-center items-center'>
       {/* 왼쪽영역 */}
-      <div className='w-[20%] h-full flex flex-col justify-center items-center'>
-        <div className='mt-[30px] mb-[30px] h-[40px] text-[20px]'>턴 : { }</div>
-        <div className='w-[320px] h-[840px] mb-[50px] outline outline-1 flex flex-col justify-around items-center'>
+      <div className='w-[20%] h-full flex flex-col justify-center items-end '>
+        <div className='mt-[30px] mb-[30px] mr-[100px] h-[40px] text-[20px]'>턴 : { }</div>
+        <div className='w-[320px] h-[900px] mb-[50px] flex flex-col justify-around items-end'>
           {pList.map((i, index) => {
             return <div key={index}>
               <div className='w-[300px] h-[260px] bg-[#F4F2EC] rounded-[8px] flex flex-col justify-center items-center'>
@@ -105,8 +105,8 @@ export default function Room(props: any) {
 
 
       {/* 가운데 영역 */}
-      <div className='w-[60%] h-full bg-white flex justify-center items-center'>
-        <div className='w-[1030px] h-[1030px] bg-[#F4F2EC] rounded-[20px] mb-[50px] flex justify-center items-center relative left-[180px]'>
+      <div className='w-[60%] h-full flex justify-center items-center'>
+        <div className='w-[1010px] h-[1010px] bg-[#F4F2EC] rounded-[20px] mb-[50px] flex justify-center items-center relative left-[180px] top-[24px]'>
           <div className='w-[990px] h-[990px] bg-green-100 rounded-[14px] flex justify-center items-center'>
 
             {/* 0~ 10 */}
@@ -256,18 +256,29 @@ export default function Room(props: any) {
             </div>
           </div>
         </div>
-        <div className='w-[700px] h-[780px] flex flex-col justify-start items-center relative top-[-20px] left-[-490px]'>
-          <div className='w-[340px] h-[280px] rounded-[8px] bg-white mt-[20px] shadow-lg relative'>
+        <div className='w-[440px] h-[780px] flex flex-col justify-start items-center relative left-[-510px]'>
+          <div className='w-[400px] h-[290px] rounded-[8px] bg-white shadow-lg relative'>
             {/* 주사위 영역 */}
             <Dice></Dice>
-            <div className='shbutton w-[340px] h-[60px] rounded-[4px] bg-red-500 flex justify-center items-center text-white text-[20px]'
+            <div id='shbutton' className='w-[400px] h-[70px] rounded-[4px] bg-red-500 flex justify-center items-center text-white text-[24px]'
               onClick={() => {
                 rollDice();
               }}
             >주사위 던지기</div>
 
             {/* 콘솔창 영역 */}
-            <div className='w-[340px] h-[300px] bg-white rounded-[8px] mt-[140px] shadow-lg relative'></div>
+            <div className='w-[400px] h-[340px] bg-white rounded-[8px] mt-[140px] shadow-lg relative flex flex-col justify-center items-center'>
+              <div className='w-[340px] h-[300px] bg-red-300 flex flex-col items-center'>
+                <div className='w-full h-[100px] bg-green-400 flex flex-col items-center'>
+                  <div className='w-full h-[30px] bg-blue-300 flex justify-center items-center'>[13] [nation]</div>
+                  <div className='w-full h-[60px] bg-yellow-400 flex justify-center items-center'>
+                    <img className='w-[46px] h-[28px] bg-gray-600 absolute left-[60px]' src='/assets/images/thumb2.png' alt='국기'></img>
+                    <div className='text-[28px] font-PtdExtraBold'>대한민국</div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -281,9 +292,9 @@ export default function Room(props: any) {
 
 
       {/* 오른쪽 영역 */}
-      <div className='w-[20%] h-full flex flex-col justify-center items-center'>
+      <div className='w-[20%] h-full flex flex-col justify-center items-start'>
         <div className='mt-[30px] mb-[30px] h-[40px] text-[20px]'>lap : { }</div>
-        <div className='w-[320px] h-[840px] mb-[50px] outline outline-1 flex flex-col justify-around items-center'>
+        <div className='w-[320px] h-[900px] mb-[50px] flex flex-col justify-around items-start'>
           <div className='w-[300px] h-[260px] bg-[#F4F2EC] rounded-[8px] flex flex-col justify-center items-center'>
             <div className='w-[250px] h-[210px] bg-[#F4F2EC]'>
               <div className='flex justify-between'>
