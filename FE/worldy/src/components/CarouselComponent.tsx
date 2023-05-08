@@ -70,10 +70,10 @@ export default function CarouselComponent({
     <div className={`relative w-screen h-full ${loaded ? '' : 'hide-things'}`}>
       {donateState && (
         <div
-          className='absolute w-screen h-full bg-[rgba(0,0,0,0.5)] grid place-content-center top-0 left-0 z-30'
+          className='absolute w-screen h-full bg-[rgba(0,0,0,0.5)] grid place-content-center top-0 left-0 z-20'
           onClick={handleDonateState}
         >
-          <div className='z-50 ' onClick={handleDonateStateRemain}>
+          <div className='z-30' onClick={handleDonateStateRemain}>
             <DoateModal />
           </div>
         </div>

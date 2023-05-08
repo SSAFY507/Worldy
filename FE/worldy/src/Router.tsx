@@ -94,7 +94,7 @@ const AppLayout = () => {
         backgroundSize: '100%',
       }}
     >
-      <div className='z-10'>
+      <div className='z-50'>
         {exploreUrl !== '/explore' && monopolyUrl !== '/monopoly' && (
           <Navbar
             onLoginClick={handleLoginModal}
