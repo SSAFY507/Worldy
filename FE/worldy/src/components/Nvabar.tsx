@@ -157,7 +157,7 @@ export default function Navbar({
   return (
     <>
       <nav>
-        <div className='w-screen h-20 bg-neutral-950 flex flex-row items-center justify-between px-6'>
+        <div className='w-screen h-20 bg-neutral-950 flex flex-row items-center justify-between px-6 z-50'>
           <div className='w-1/6 h-full flex flex-row justify-start items-center'>
             <div className='w-fit h-fit' id='StarButton'>
               <a href='/'>
