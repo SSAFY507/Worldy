@@ -52,7 +52,7 @@
 
 .clear-button {
   width: 50px;
-  justify-self: end;
+  justify-self: flex-end;
 }
 
 /* DICES */

@@ -32,7 +32,7 @@
     rgba(0, 0, 0, 0) 100%
   );
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   padding-left: 10px;
 }
@@ -46,7 +46,7 @@
     rgba(0, 0, 0, 0) 100%
   );
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
   padding-right: 10px;
 }
