@@ -77,6 +77,12 @@ const AppLayout = () => {
 
   const [myPageRef, setMyPageRef] = useState<string>('');
 
+  const [qnaModal, setQnaModal] = useState<number>(0);
+
+  const handleQnaModal = (input: number) => {
+    setQnaModal(input);
+  };
+
   return (
     <div
       className='hide-scrollbar w-screen h-screen flex flex-col bg-white overflow-hidden'
@@ -122,8 +128,16 @@ const AppLayout = () => {
           <Route path='/explore' element={<Explore />} />
           <Route path='/explore/:country' element={<Country />} />
           <Route path='/monopoly' element={<Monopoly />} />
-          <Route path='/support' element={<Support />} />
-          <Route path='/mypage' element={<MyPage setRef={myPageRef} />} />
+          <Route
+            path='/support'
+            element={<Support qnaModalNumber={qnaModal} />}
+          />
+          <Route
+            path='/mypage'
+            element={
+              <MyPage setRef={myPageRef} handleQnaModal={handleQnaModal} />
+            }
+          />
           <Route
             path='/tutorial'
             element={
