@@ -26,7 +26,7 @@ export default function Navbar({
     { name: '게임 정보', path: '/gameinfo' },
     // { name: '업데이트', path: '/updates' },
     { name: '세계 탐험', path: '/explore' },
-    { name: '모노폴리', path: '/game' },
+    { name: '모노폴리', path: '/create' },
     { name: '고객 지원', path: '/support' },
   ];
 
@@ -99,8 +99,8 @@ export default function Navbar({
       </button>
       <div
         className={`w-[13em] h-fit bg-[rgba(0,0,0,0.6)] overflow-hidden flex flex-col justify-stretch items-center absolute outline outline-[.05em] outline-[rgba(255,255,255,0.2)] rounded-xl -bottom-[2em] right-0  transition-all duration-300 ease-out ${clickStateAfterLoginIcon
-            ? 'z-0 opacity-100 transform translate-y-[100%]'
-            : '-z-20 opacity-0 transform translate-y-0'
+          ? 'z-0 opacity-100 transform translate-y-[100%]'
+          : '-z-20 opacity-0 transform translate-y-0'
           }`}
       >
         <div className='w-full h-[4em] flex flex-row justify-stretch items-center border-b-[.05em] border-solid border-0 border-[rgba(255,255,255,0.2)] '>
@@ -118,8 +118,8 @@ export default function Navbar({
         <div className='w-full h-fit flex flex-col justify-center text-[rgba(220,220,220,0.8)] font-PtdRegular'>
           <a
             className={`w-full h-[2.8em] text-center flex justify-center items-center border-b-[.05em] border-solid border-0 border-[rgba(255,255,255,0.2)] ${hoverModalContent === 1
-                ? 'bg-[rgba(255,255,255,0.1)] text-white'
-                : ''
+              ? 'bg-[rgba(255,255,255,0.1)] text-white'
+              : ''
               }`}
             href='/mypage'
             onMouseEnter={() => hoverModalMyPage(1)}
@@ -129,8 +129,8 @@ export default function Navbar({
           </a>
           <a
             className={`w-full h-[2.8em] text-center  flex justify-center items-center border-b-[.05em] border-solid border-0 border-[rgba(255,255,255,0.2)] ${hoverModalContent === 2
-                ? 'bg-[rgba(255,255,255,0.1)] text-white'
-                : ''
+              ? 'bg-[rgba(255,255,255,0.1)] text-white'
+              : ''
               }`}
             href='/support'
             onMouseEnter={() => hoverModalMyPage(2)}
@@ -140,8 +140,8 @@ export default function Navbar({
           </a>
           <a
             className={`w-full h-[2.8em] text-center  flex justify-center items-center ${hoverModalContent === 3
-                ? 'bg-[rgba(255,255,255,0.1)] text-white'
-                : ''
+              ? 'bg-[rgba(255,255,255,0.1)] text-white'
+              : ''
               }`}
             href='/support'
             onMouseEnter={() => hoverModalMyPage(3)}

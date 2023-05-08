@@ -267,15 +267,19 @@ export default function Room(props: any) {
             >주사위 던지기</div>
 
             {/* 콘솔창 영역 */}
-            <div className='w-[400px] h-[340px] bg-white rounded-[8px] mt-[140px] shadow-lg relative flex flex-col justify-center items-center'>
-              <div className='w-[340px] h-[300px] bg-red-300 flex flex-col items-center'>
-                <div className='w-full h-[100px] bg-green-400 flex flex-col items-center'>
-                  <div className='w-full h-[30px] bg-blue-300 flex justify-center items-center'>[13] [nation]</div>
-                  <div className='w-full h-[60px] bg-yellow-400 flex justify-center items-center'>
-                    <img className='w-[46px] h-[28px] bg-gray-600 absolute left-[60px]' src='/assets/images/thumb2.png' alt='국기'></img>
-                    <div className='text-[28px] font-PtdExtraBold'>대한민국</div>
-
+            <div className='w-[400px] h-[340px] bg-white rounded-[8px] mt-[120px] shadow-lg relative flex flex-col justify-center items-center'>
+              <div className='w-[340px] h-[300px] flex flex-col items-center'>
+                <div className='w-full h-[100px] flex flex-col items-center'>
+                  <div className='w-full h-[30px] flex justify-center items-center'>[13] [nation]</div>
+                  <div className='w-full h-[60px] flex justify-center items-center'>
+                    <img className='w-[38px] h-[28px] rounded-[2px] absolute left-[60px]' src='/game/f38.png' alt='국기'></img>
+                    <div className='text-[32px] font-PtdExtraBold'>캐나다</div>
+                    <div className='w-[62px] h-[28px] text-[12px] rounded-[4px] absolute right-[30px] bg-green-500 flex justify-center items-center text-white'>구입가능</div>
                   </div>
+                </div>
+                {/* 콘솔창 아랫부분 */}
+                <div className='w-full h-[200px] bg-green-100 rounded-[10px] flex flex-col justify-start items-center'>
+
                 </div>
               </div>
             </div>

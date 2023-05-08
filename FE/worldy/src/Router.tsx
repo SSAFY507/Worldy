@@ -24,6 +24,8 @@ import Game from './routes/Game';
 import Socket from './routes/Socket';
 import Country from './routes/Country';
 import { useState, useRef } from 'react';
+import Create from './routes/Create';
+import Waiting from './routes/Waiting';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -125,6 +127,8 @@ const AppLayout = () => {
           <Route path='/explore/:country' element={<Country />} />
           <Route path='/monopoly' element={<Monopoly />} />
           <Route path='/support' element={<Support />} />
+          <Route path='/create' element={<Create />} />
+          <Route path='/waiting' element={<Waiting />} />
           <Route path='/game' element={<Game />} />
           <Route path='/game/:id' element={<Game />} />
           <Route path='/socket' element={<Socket />} />

@@ -1,12 +1,11 @@
-import * as React from 'react';
 import { useState, useEffect } from 'react';
-import TestFor3DEdit from '../components/TestFor3DEdit';
 import LoaderPyramid from '../components/LoaderPyramid';
-import Test from '../components/game/Test';
-import { useParams } from 'react-router';
-import Room from '../components/game/Room';
 
-export default function Game() {
+import { useParams } from 'react-router';
+
+import WaitingRoom from '../components/game/WaitingRoom';
+
+export default function Waiting() {
   const params = useParams();
   const gameId = params.id;
 
@@ -17,10 +16,10 @@ export default function Game() {
   return (
     <div className='w-screen h-screen'>
       {loaded ? (
-        <Test />
+        <WaitingRoom />
       ) : (
         <div className='w-full h-full bg-white'>
-          <LoaderPyramid text='3D 급하게 조립 중...' />
+          <LoaderPyramid text='대기방으로 이동중...' />
         </div>
       )}
     </div>
