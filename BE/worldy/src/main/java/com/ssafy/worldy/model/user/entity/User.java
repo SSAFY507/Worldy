@@ -77,6 +77,15 @@ public class User {
         else this.mmr = mmr;
     }
 
+    // exp 업데이트
+    public void updateExp(int exp) {
+        this.exp += exp;
+        if(this.exp>=100) {
+            this.level += 1;
+            this.exp -= 100;
+        }
+    }
+
     // Entity -> DTO 변환을 위함
     public UserDto toDto() {
         return UserDto.builder()
