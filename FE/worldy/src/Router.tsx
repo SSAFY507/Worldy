@@ -151,7 +151,6 @@ const AppLayout = () => {
               <Tutorial onClickEndTutorial={() => handleNavigate('/', true)} />
             }
           />
-          {/* <Route path='/payment' element={<Payment />} /> */}
         </Routes>
       </div>
     </div>

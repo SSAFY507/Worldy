@@ -2,16 +2,9 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 
 import '../styles/DonateModalStyles.css';
-import { useNavigate } from 'react-router';
-// import Payment from '../routes/Payment';
+import Payment from '../routes/Payment';
 
 export default function DoateModal() {
-  const navigate = useNavigate();
-
-  const moveToPayment = () => {
-    navigate('/payment');
-  };
-
   return (
     <div className='card-id567 shadow-2xl shadow-gray-400 bg-[rgba(255,255,255,0.75)]  outline-white outline-[2.5px]'>
       <svg
@@ -28,7 +21,7 @@ export default function DoateModal() {
       <div className='prompt-id567  outline-blue-300 flex flex-col justify-start items-center'>
         <div className='my-[20px]'>
           <div className='token-container w-[100px] mx-[5px] outline-red-500'>
-            {/* <Payment /> */}
+            <Payment />
           </div>
         </div>
 
