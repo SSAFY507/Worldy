@@ -173,9 +173,9 @@ export default function MyPage({
 
   const MyPageContentComponent = (input: MyPageContentType) => {
     return (
-      <div className=' w-[95%] min-h-[300px] h-fit flex flex-row justify-stretch items-start bg-[rgb(39,32,32)]'>
+      <div className=' w-[95%] min-h-[100px] h-fit outline outline-white flex flex-row justify-stretch items-start bg-[rgb(39,32,32)]'>
         <div
-          className=' w-2/5 min-h-[300px] h-full p-[50px] flex flex-col justify-start items-start
+          className=' w-2/5  h-full p-[50px] flex flex-col justify-start items-start
         '
         >
           <span className='text-white font-PtdBold text-[40px] mb-[.5em]'>
@@ -185,7 +185,7 @@ export default function MyPage({
             {input.contentInfo}
           </span>
         </div>
-        <div className=' w-3/5 min-h-[300px] p-[50px] bg-[rgb(49,47,45)]'>
+        <div className=' w-3/5 h-fit p-[50px] bg-[rgb(49,47,45)]'>
           {input.content}
         </div>
       </div>
@@ -756,6 +756,10 @@ export default function MyPage({
     );
   };
 
+  const logoutContent = (): JSX.Element => {
+    return <div className='w-full h-[100px]'></div>;
+  };
+
   return (
     <div
       className='w-full h-full flex flex-row justify-center items-center overflow-y-clip'
@@ -836,7 +840,7 @@ export default function MyPage({
             {MyPageContentComponent({
               title: '로그아웃',
               contentInfo: null,
-              content: undefined,
+              content: logoutContent(),
             })}
           </div>
         </div>

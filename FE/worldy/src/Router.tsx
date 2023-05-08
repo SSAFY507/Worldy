@@ -94,8 +94,13 @@ const AppLayout = () => {
         backgroundSize: '100%',
       }}
     >
+<<<<<<< HEAD
+      <div className='z-50'>
+        {exploreUrl !== '/explore' && monopolyUrl !== '/monopoly' && (
+=======
       <div className='z-10'>
         {exploreUrl !== '/explore' && monopolyUrl !== '/monopoly' && gameUrl !== '/game' && (
+>>>>>>> 747aa692b0baa16ac4e18cc32f7227e74b2d74ba
           <Navbar
             onLoginClick={handleLoginModal}
             onLoginAdmin={handleLoginAdmin}
@@ -150,7 +155,7 @@ const AppLayout = () => {
               <Tutorial onClickEndTutorial={() => handleNavigate('/', true)} />
             }
           />
-          <Route path='/payment' element={<Payment />} />
+          {/* <Route path='/payment' element={<Payment />} /> */}
         </Routes>
       </div>
     </div>
