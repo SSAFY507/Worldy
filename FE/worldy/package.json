@@ -12,7 +12,7 @@
     "@testing-library/user-event": "^14.4.3",
     "@types/gsap": "^3.0.0",
     "@types/jest": "^27.5.2",
-    "@types/node": "^17.0.45",
+    "@types/node": "^18.13.0",
     "@types/react": "^18.0.35",
     "@types/react-dom": "^18.0.11",
     "@types/react-router-dom": "^5.3.3",
