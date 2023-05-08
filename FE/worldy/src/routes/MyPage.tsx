@@ -173,7 +173,7 @@ export default function MyPage({
 
   const MyPageContentComponent = (input: MyPageContentType) => {
     return (
-      <div className=' w-[95%] min-h-[100px] h-fit outline outline-white flex flex-row justify-stretch items-start bg-[rgb(39,32,32)]'>
+      <div className=' w-[95%] min-h-[100px] h-fit outline-white flex flex-row justify-stretch items-start bg-[rgb(39,32,32)]'>
         <div
           className=' w-2/5  h-full p-[50px] flex flex-col justify-start items-start
         '
@@ -651,29 +651,34 @@ export default function MyPage({
           className={`w-full h-fit  outline-red-300 flex flex-col justify-start items-start transition-all duration-1000 ease-in-out`}
         >
           <div className='text-[#6A6A6A] font-PtdRegular text-[22px] mx-[15px] '>
-            <span>{myName}</span><span></span>
+            <span>{myName}</span>
+            <span></span>
             님의 랭킹 정보
           </div>
           <div className='text-[#CBCBCB] font-PtdRegular text-[22px] mx-[15px] mt-[5px]'>
             <span>전체 플레이어 중 상위 </span>
-            <span className='text-emerald-300'>{myRank}위, 15% 이내입니다.</span>
+            <span className='text-emerald-300'>
+              {myRank}위, 15% 이내입니다.
+            </span>
           </div>
-          <div className='w-full h-[50px] flex flex-row justify-start items-start  text-white'>
-          </div>
-          <div className={`w-full h-fit outline-white opacity-100 transition-all duration-1000  ease-in-out overflow-hidden flex flex-col justify-start items-center`}>
-
+          <div className='w-full h-[50px] flex flex-row justify-start items-start  text-white'></div>
+          <div
+            className={`w-full h-fit outline-white opacity-100 transition-all duration-1000  ease-in-out overflow-hidden flex flex-col justify-start items-center`}
+          >
             <div className='w-[450px] h-[50px] flex flex-row justify-start items-center text-[20px] text-[#6A6A6A] font-PtdLight'>
-                  <span className='w-fit'>no.</span>
-                  <span className='w-fit ml-[20px]'>nickname</span>
-                  <span className='w-fit ml-[200px]'>level</span>
-                  <span className='place-content-right ml-[50px]'>tier</span>
+              <span className='w-fit'>no.</span>
+              <span className='w-fit ml-[20px]'>nickname</span>
+              <span className='w-fit ml-[200px]'>level</span>
+              <span className='place-content-right ml-[50px]'>tier</span>
             </div>
 
             {rankList.topTen.map((item, key) => (
               <div
                 key={key}
                 className={`rangking relative flex flex-row justify-start items-center mb-[7px] bg-[rgba(0,0,0,0)] hover:bg-[rgba(180,180,180,0.3)] px-[10px] rounded-md ${
-                  key + 1 === myRank ? 'glowmyrank z-10  w-[550px] h-[50px] my-[15px] ' : 'w-[490px] h-[45px]'
+                  key + 1 === myRank
+                    ? 'glowmyrank z-10  w-[500px] h-[50px] my-[15px] '
+                    : 'w-[490px] h-[45px]'
                 }`}
               >
                 <div className='relative w-[50px] h-[50px]  grid place-content-center'>
@@ -686,20 +691,22 @@ export default function MyPage({
                     {item}
                   </span>
                 </div>
-                <div className="w-[50px] flex-1 flex-row flex justify-start items-center pl-[20px]">
-                    <RiVipCrownFill
+                <div className='w-[50px] flex-1 flex-row flex justify-start items-center pl-[20px]'>
+                  <RiVipCrownFill
                     className={`${
-                        key === 0
+                      key === 0
                         ? 'text-[#D1C68F]'
                         : key === 1
-                          ? 'text-[#a4a4a4]'
-                          : key===2?'text-[#837D63]' : 'hidden'
-                        }
-                        ${key }
+                        ? 'text-[#a4a4a4]'
+                        : key === 2
+                        ? 'text-[#837D63]'
+                        : 'hidden'
+                    }
+                        ${key}
                         shadow-lg
-                        w-[18px] h-[18px]
+                        w-[15px] h-[15px]
                         `}
-                    />
+                  />
                 </div>
                 <div className='w-[100px] flex-2 grid place-ontent-right pl-[20px]'>
                   <span className='font-PtdLight text-white text-[20px] text-[#B2B2B2]'>
@@ -720,7 +727,7 @@ export default function MyPage({
             </div>
             {myRank > 10 && (
               <div
-                className={`rangking w-[550px] h-[50px] flex flex-row justify-start items-center mt-[10px] mb-[25px] rounded-md bg-[rgba(0,0,0,0.1)] hover:bg-[rgba(180,180,180,0.5)] px-[10px] glowmyrank z-10`}
+                className={`rangking w-[500px] h-[50px] flex flex-row justify-start items-center mt-[10px] mb-[25px] rounded-md bg-[rgba(0,0,0,0.1)] hover:bg-[rgba(180,180,180,0.5)] px-[10px] glowmyrank z-10`}
               >
                 <div className='relative w-[50px] h-[50px]  grid place-content-center'>
                   <span className='absolute top-0 left-0 w-[50px] h-[50px] grid place-content-center font-PtdLight text-[20px] text-gray-300'>
