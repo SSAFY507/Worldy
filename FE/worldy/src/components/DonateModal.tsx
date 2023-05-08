@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 
 import '../styles/DonateModalStyles.css';
 import { useNavigate } from 'react-router';
+import Payment from '../routes/Payment';
 
 export default function DoateModal() {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export default function DoateModal() {
   };
 
   return (
-    <div className='card-id567 shadow-2xl shadow-gray-400'>
+    <div className='card-id567 shadow-2xl shadow-gray-400 bg-[rgba(255,255,255,0.75)]  outline-white outline-[2.5px]'>
       <svg
         shapeRendering='crispEdges'
         viewBox='0 -0.5 29 29'
@@ -25,12 +26,10 @@ export default function DoateModal() {
       </svg>
 
       <div className='prompt-id567  outline-blue-300 flex flex-col justify-start items-center'>
-        <button
-          className='w-fit h-fit outline-red-500 rounded-full'
-          onClick={moveToPayment}
-        >
-          <div className='token-container  m-[5px]'>
-            <svg
+        <div className='my-[20px]'>
+          <div className='token-container w-[100px] mx-[5px] outline-red-500'>
+            <Payment />
+            {/* <svg
               width='50'
               height='50'
               viewBox='0 0 20 20'
@@ -55,17 +54,20 @@ export default function DoateModal() {
                   <stop offset='1' stop-color='#00DDEB'></stop>
                 </linearGradient>
               </defs>
-            </svg>
+            </svg> */}
           </div>
-        </button>
-        <div className='blurry-splash'></div>
-        <p className='my-[10px] font-PtdRegular leading-[20px]'>
+          {/* <div className='blurry-splash'></div> */}
+        </div>
+
+        <p className='my-[10px] font-PtdRegular leading-[20px] text-gray-500'>
           그들을 위해
           <br />
           기부하시겠습니까?
           <br />
         </p>
-        <span className='bold-567 font-PtdMedium'>문양을 클릭해주세요</span>
+        <span className='bold-567 font-PtdMedium text-gray-500 '>
+          위 버튼을 클릭해주세요
+        </span>
       </div>
     </div>
   );

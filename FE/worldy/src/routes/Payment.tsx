@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+import kakaopay from '../assets/images/KakaoPayButton.png';
+
 interface AppState {
   next_redirect_pc_url: string;
   tid: string;
@@ -71,10 +73,9 @@ class Payment extends Component<{}, AppState> {
     const { next_redirect_pc_url } = this.state;
 
     return (
-      <div className='text-red-500'>
-        <h2>Pay page</h2>
-        <a href={next_redirect_pc_url}>{next_redirect_pc_url}</a>
-      </div>
+      <a href={next_redirect_pc_url}>
+        <img src={kakaopay} alt='카카오페이' />
+      </a>
     );
   }
 }
