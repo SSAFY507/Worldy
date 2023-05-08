@@ -63,6 +63,12 @@ public class GameService {
         user2.updateMmr((int) Math.round(newMMR[1]));
         user3.updateMmr((int) Math.round(newMMR[2]));
         user4.updateMmr((int) Math.round(newMMR[3]));
+
+        // exp 갱신
+        user1.updateExp(40);
+        user2.updateExp(30);
+        user3.updateExp(25);
+        user4.updateExp(20);
     }
 
     public void saveResult(Long nationId, int rank) {

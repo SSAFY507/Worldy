@@ -151,7 +151,7 @@ public class KakaoUserService {
                     .sex(gender)
                     .activated(true)
                     .exp(0)
-                    .level(0)
+                    .level(1)
                     .mmr(1000)
                     .authorities(Collections.singleton(authority)).build();
         }
