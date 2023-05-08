@@ -650,84 +650,94 @@ export default function MyPage({
         <div
           className={`w-full h-fit  outline-red-300 flex flex-col justify-start items-start transition-all duration-1000 ease-in-out`}
         >
-          <div className='text-white font-PtdRegular text-[22px] mx-[15px]'>
-            <span className='text-emerald-300'>{myName}</span>
-            님은 상위 <span className='text-red-300'>{myRank}</span>위 입니다.
+          <div className='text-[#6A6A6A] font-PtdRegular text-[22px] mx-[15px] '>
+            <span>{myName}</span><span></span>
+            님의 랭킹 정보
           </div>
-          <div className='w-full h-[60px] flex flex-row justify-start items-start  text-white mt-[5px] mb-[20px]'>
-            {/* <BsFillCaretDownFill
-              size={30}
-              className={` transition-all duration-300 ease-in-out`}
-            /> */}
-            <span className='flex flex-row text-[22px] mx-[15px] font-PtdSemiBOld'>
-              TOP 10 정보를 보여드립니다 :
-            </span>
-            {/* <BsFillCaretDownFill
-              size={30}
-              className={` transition-all duration-300 ease-in-out`}
-            /> */}
+          <div className='text-[#CBCBCB] font-PtdRegular text-[22px] mx-[15px] mt-[5px]'>
+            <span>전체 플레이어 중 상위 </span>
+            <span className='text-emerald-300'>{myRank}위, 15% 이내입니다.</span>
           </div>
-          <div
-            className={`w-full h-fit outline-white opacity-100  px-[10px] transition-all duration-1000  ease-in-out overflow-hidden flex flex-col justify-start items-center`}
-          >
+          <div className='w-full h-[50px] flex flex-row justify-start items-start  text-white'>
+          </div>
+          <div className={`w-full h-fit outline-white opacity-100 transition-all duration-1000  ease-in-out overflow-hidden flex flex-col justify-start items-center`}>
+
+            <div className='w-[450px] h-[50px] flex flex-row justify-start items-center text-[20px] text-[#6A6A6A] font-PtdLight'>
+                  <span className='w-fit'>no.</span>
+                  <span className='w-fit ml-[20px]'>nickname</span>
+                  <span className='w-fit ml-[200px]'>level</span>
+                  <span className='place-content-right ml-[50px]'>tier</span>
+            </div>
+
             {rankList.topTen.map((item, key) => (
               <div
                 key={key}
-                className={`w-[450px] h-[43px] flex flex-row justify-start items-center mb-[7px] bg-[rgb(0,0,0)] hover:bg-[rgba(180,180,180,0.5)] px-[10px] rounded-md ${
-                  key + 1 === myRank ? 'glowmyrank z-10' : ''
+                className={`rangking relative flex flex-row justify-start items-center mb-[7px] bg-[rgba(0,0,0,0)] hover:bg-[rgba(180,180,180,0.3)] px-[10px] rounded-md ${
+                  key + 1 === myRank ? 'glowmyrank z-10  w-[550px] h-[50px] my-[15px] ' : 'w-[490px] h-[45px]'
                 }`}
               >
                 <div className='relative w-[50px] h-[50px]  grid place-content-center'>
-                  {key < 3 && (
-                    <RiVipCrownFill
-                      className={`${
-                        key === 0
-                          ? 'text-[#C9B037]'
-                          : key === 1
-                          ? 'text-[#a4a4a4]'
-                          : 'text-[#6A3805]'
-                      }
-                      shadow-lg
-                      `}
-                      size={35}
-                    />
-                  )}
-                  <span className='absolute top-0 left-0 w-[50px] h-[50px] grid place-content-center font-PtdExtraBold text-[20px] text-gray-300'>
+                  <span className='absolute top-0 left-0 w-[50px] h-[50px] grid place-content-center font-PtdLight text-[20px] text-gray-300'>
                     {key + 1}
                   </span>
                 </div>
-                <div className='w-[100px] flex-1 grid place-content-center '>
-                  <span className='font-PtdBold text-white text-[20px]'>
+                <div className='w-fit h-fit flex flex-row justify-center items-center'>
+                  <span className='font-PtdLight text-white text-[20px] ml-[30px]'>
                     {item}
                   </span>
                 </div>
-                <div className='w-fit h-2/3 bg-[rgba(62,62,62,0.7)] rounded-xl flex flex-row justify-center items-center px-[10px]'>
+                <div className="w-[50px] flex-1 flex-row flex justify-start items-center pl-[20px]">
+                    <RiVipCrownFill
+                    className={`${
+                        key === 0
+                        ? 'text-[#D1C68F]'
+                        : key === 1
+                          ? 'text-[#a4a4a4]'
+                          : key===2?'text-[#837D63]' : 'hidden'
+                        }
+                        ${key }
+                        shadow-lg
+                        w-[18px] h-[18px]
+                        `}
+                    />
+                </div>
+                <div className='w-[100px] flex-2 grid place-ontent-right pl-[20px]'>
+                  <span className='font-PtdLight text-white text-[20px] text-[#B2B2B2]'>
+                    lv.1
+                  </span>
+                </div>
+                <div className='w-fit h-2/3 bg-[rgba(62,62,62,0.7)] rounded-[100px] flex flex-row justify-center items-center px-[10px]'>
                   <SiPowerapps size={22} color={'#86FFF8'} />
                 </div>
               </div>
             ))}
             <div className='w-full h-fit grid place-content-center'>
               <BsThreeDotsVertical
-                size={30}
-                color={'black'}
-                className='my-[5px]'
+                size={20}
+                color={'rgba(255,255,255,0.3)'}
+                className='my-[10px]'
               />
             </div>
             {myRank > 10 && (
               <div
-                className={`w-[450px] h-[43px] flex flex-row justify-start items-center mt-[10px] mb-[25px] rounded-md bg-[rgb(0,0,0)] hover:bg-[rgba(180,180,180,0.5)] px-[10px] glowmyrank z-10`}
+                className={`rangking w-[550px] h-[50px] flex flex-row justify-start items-center mt-[10px] mb-[25px] rounded-md bg-[rgba(0,0,0,0.1)] hover:bg-[rgba(180,180,180,0.5)] px-[10px] glowmyrank z-10`}
               >
                 <div className='relative w-[50px] h-[50px]  grid place-content-center'>
-                  <span className='absolute top-0 left-0 w-[50px] h-[50px] grid place-content-center font-ptd text-[20px] text-gray-300'>
+                  <span className='absolute top-0 left-0 w-[50px] h-[50px] grid place-content-center font-PtdLight text-[20px] text-gray-300'>
                     {myRank}
                   </span>
                 </div>
-                <div className='w-[100px] flex-1 grid place-content-center '>
-                  <span className='font-PtdBold text-white text-[20px]'>
+                <div className='w-fit h-fit flex flex-row flex-1 justify-center items-center -ml-[200px]'>
+                  <span className='font-PtdLight text-white text-[20px]'>
                     {myName}
                   </span>
                 </div>
-                <div className='w-fit h-2/3 bg-[rgba(62,62,62,0.7)] rounded-xl flex flex-row justify-center items-center px-[10px]'>
+                <div className='w-[100px] flex-2 grid place-ontent-right'>
+                  <span className='font-PtdLight text-white text-[20px] text-[#B2B2B2]'>
+                    lv.1
+                  </span>
+                </div>
+                <div className='w-fit h-2/3 bg-[rgba(62,62,62,0.7)] rounded-[100px] flex flex-row justify-center items-center px-[10px]'>
                   <SiPowerapps size={22} color={rankInfo[0]} />
                 </div>
               </div>
