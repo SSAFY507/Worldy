@@ -171,7 +171,7 @@ const WorldMap = () => {
     if (viewdistance < 0.1){ // 기본 상태
 
       const newPosition = new THREE.Vector3();
-      newPosition.set(0, 10, 10);
+      newPosition.set(0, 10 , 6);
       const centerBox = new THREE.Vector3();
       centerBox.set(0, 0, 0);
 
@@ -205,11 +205,11 @@ const WorldMap = () => {
     const centerBox = centerBoxRef.current;
     // 동적으로 변경
     gsap.to(camera.current!.position, {
-      duration: 1,
+      duration: 1.5,
       x: newPosition.x, y: newPosition.y, z: newPosition.z
     })
     gsap.to(controls.current!.target, {
-      duration: 0.5,
+      duration: 0.7,
       x: centerBox.x,
       y: centerBox.y,
       z: centerBox.z,
@@ -354,7 +354,7 @@ const WorldMap = () => {
     // const width = divContainer.current?.clientWidth || 0;
     // const height = divContainer.current?.clientHeight || 0;
     const cam = new THREE.PerspectiveCamera(37, window.innerWidth / window.innerHeight, 0.1, 25);
-    cam.position.set(0, 10, 10);      // 카메라의 위치는 7, 7, 0
+    cam.position.set(0, 10 , 6);      // 카메라의 위치는 7, 7, 0
     cam.rotation.set(0, 0, 0);
     cam.lookAt(0, 0, 0);          // 카메라가 바라보는 곳이 0, 0, 0
     
