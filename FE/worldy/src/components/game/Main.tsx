@@ -11,10 +11,19 @@ import { useLocation } from "react-router-dom";
 
 export default function Main() {
 
-
-  const location2 = useLocation();
-  const roomData = location2.state.value;
+  let roomData: any = null;
   const params = useParams();
+  const location2 = useLocation();
+
+  if (location2) {
+
+    if (location2.state) {
+      roomData = location2.state.value;
+    } else {
+      roomData = {}
+    }
+
+  }
 
 
 
