@@ -2,6 +2,13 @@ import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 
 import '../styles/GameInfoStyle.css';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { selectCounter } from '../_store/slices/counterSlice';
+import { loginState } from '../_store/slices/loginSlice';
+import { increment } from '../_store/slices/counterSlice';
+import { decrement } from '../_store/slices/counterSlice';
+import { login, logout } from '../_store/slices/loginSlice';
 
 export default function GameInfo() {
   const [leftW, setLeftW] = useState<string>('90%');
@@ -26,6 +33,9 @@ export default function GameInfo() {
 
   const [hoverButton, setHoverButton] = useState<boolean>(false);
 
+  const dispatch = useDispatch();
+  const loginSt = useSelector(loginState);
+
   return (
     <div className='h-full w-full bg-white flex justify-center items-center '>
       <div className='w-[90%] h-[90%] outline outline-gray-300 flex overflow-hidden rounded-tl-[30px] rounded-br-[30px] max-h-[800px]'>
@@ -42,6 +52,12 @@ export default function GameInfo() {
           }}
         >
           <div className='outline outline-red-400 min-w-[1400px] max-w-[1400px] min-h-full h-fit mb-[50px]'>
+            <button className='outline outline-red-800 bg-white text-black w-[300px] h-[300px]'>
+              <span>{loginSt ? '로그인' : '로그아웃'}</span>
+            </button>
+            <button className='outline outline-red-800 bg-white text-black w-[300px] h-[300px]'>
+              {loginSt}
+            </button>
             <div className='outline outline-black h-[300px] w-[300px] m-[30px]'>
               스크롤 가능
             </div>
