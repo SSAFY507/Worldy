@@ -12,6 +12,8 @@ import java.util.Optional;
 @Repository
 public interface UserRepo extends JpaRepository<User, Long> {
 
+    /*** [ 유저 ] ***/
+
     // kakaoId를 기준으로 user의 기본 정보 및 권한 정보를 가져오는 메소드
     // (EntityGraph는 Eager 조회로 authorities 정보를 같이 가져오게 함)
     @EntityGraph(attributePaths = "authorities")
@@ -19,6 +21,13 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
     // kakaoId로 회원 조회
     Optional<User> findByKakaoId(String kakaoId);
+
+    // nickName으로 회원 조회
+    @Query(value = "select * from user where nick_name = ?1", nativeQuery = true)
+    Optional<User> findByNickName(String nickName);
+
+
+    /*** [ 게임 ] ***/
 
     @Query(value = "select * from user order by mmr desc, level desc, exp desc limit 10",nativeQuery = true)
     List<User> findByRankTop10User();
