@@ -45,7 +45,7 @@ export const loginSlice = createSlice({
     },
     addToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
-      sessionStorage.setitem('token', action.payload);
+      sessionStorage.setItem('token', action.payload);
     },
   },
 });
