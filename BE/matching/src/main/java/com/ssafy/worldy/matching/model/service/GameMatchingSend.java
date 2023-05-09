@@ -4,6 +4,7 @@ import com.ssafy.worldy.matching.model.dto.MatchingRequestDto;
 import com.ssafy.worldy.matching.model.dto.MatchingResultDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -19,7 +20,8 @@ import java.util.List;
 public class GameMatchingSend {
 
     // final String url = "https://k8a507.p.ssafy.io/api/game/matching/result";
-    final String url = "http://localhost:9090/api/game/matching/result";
+    @Value("${spring.main.server.url}")
+    private String url;
 
     public void sendGameMatchingResult(List<MatchingRequestDto> matchingResult) {
 
