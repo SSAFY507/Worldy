@@ -171,7 +171,7 @@ const WorldMap = () => {
     if (viewdistance < 0.1){ // 기본 상태
 
       const newPosition = new THREE.Vector3();
-      newPosition.set(0, 10, 10);
+      newPosition.set(0, 10 , 6);
       const centerBox = new THREE.Vector3();
       centerBox.set(0, 0, 0);
 
@@ -205,11 +205,11 @@ const WorldMap = () => {
     const centerBox = centerBoxRef.current;
     // 동적으로 변경
     gsap.to(camera.current!.position, {
-      duration: 1,
+      duration: 1.5,
       x: newPosition.x, y: newPosition.y, z: newPosition.z
     })
     gsap.to(controls.current!.target, {
-      duration: 0.5,
+      duration: 0.7,
       x: centerBox.x,
       y: centerBox.y,
       z: centerBox.z,
@@ -354,7 +354,7 @@ const WorldMap = () => {
     // const width = divContainer.current?.clientWidth || 0;
     // const height = divContainer.current?.clientHeight || 0;
     const cam = new THREE.PerspectiveCamera(37, window.innerWidth / window.innerHeight, 0.1, 25);
-    cam.position.set(0, 10, 10);      // 카메라의 위치는 7, 7, 0
+    cam.position.set(0, 10 , 6);      // 카메라의 위치는 7, 7, 0
     cam.rotation.set(0, 0, 0);
     cam.lookAt(0, 0, 0);          // 카메라가 바라보는 곳이 0, 0, 0
     
@@ -454,7 +454,7 @@ const WorldMap = () => {
           })
           
         }
-        // position = (0, 0.3, 0)
+        obj3d.position.set(1, 0.3, 0)
         // console.log(obj3d.position)
         // scale = (1, 1, 1)
         // console.log(obj3d.scale)
@@ -468,7 +468,7 @@ const WorldMap = () => {
       (glb) => {
         const root = glb.scene;
         // x:0, y:0, z:0
-        root.position.set(0, 0.3, 0);
+        root.position.set(1, 0.3, 0);
         scene.current?.add(root)
         root.name = "basemap"
         }
@@ -506,7 +506,7 @@ const WorldMap = () => {
   /** 조명 커스텀 함수 */
   const SetupLight = () => {
     const color = 0xffffff;
-    const intensity = 2;
+    const intensity = 1.5;
     const light = new THREE.DirectionalLight(color, intensity);
     // light.position.set(-1, 2, 4);
 
@@ -526,11 +526,11 @@ const WorldMap = () => {
       controls.current.target.set(0, 0, 0)    // 카메라 회전점
       controls.current.enableDamping = true;        // 부드럽게 돌아가
       // 위아래 카메라 제한
-      controls.current.minPolarAngle = THREE.MathUtils.degToRad(0);   // 0도 부터
-      controls.current.maxPolarAngle = THREE.MathUtils.degToRad(60);  // 60도 까지 회전 가능
+      controls.current.minPolarAngle = THREE.MathUtils.degToRad(50);   // 0도 부터
+      controls.current.maxPolarAngle = THREE.MathUtils.degToRad(50);  // 60도 까지 회전 가능
       // 좌우 카메라 제한
-      controls.current.minAzimuthAngle = THREE.MathUtils.degToRad(-15); // -15도 부터
-      controls.current.maxAzimuthAngle = THREE.MathUtils.degToRad(15);  // 15도 까지
+      controls.current.minAzimuthAngle = THREE.MathUtils.degToRad(0); // -15도 부터
+      controls.current.maxAzimuthAngle = THREE.MathUtils.degToRad(0);  // 15도 까지
     }
   }
 

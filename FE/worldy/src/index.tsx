@@ -6,21 +6,28 @@ import { RouterProvider } from 'react-router';
 import { createRoot } from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import Router from './Router';
-import { store } from './_store/store';
+import store from './_store/store';
 import { useEffect } from 'react';
+import { login } from './_store/slices/loginSlice';
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
-
 
 // const KakaoAppKey: string = '19dbd953fa840cb821c17969d419e263';
 // window.Kakao.init(KakaoAppKey);
 // window.Kakao.isInitialized(); // init되면 true, 아니면 false를 반환한다
 
-
-
-
-
+const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+const nickname = sessionStorage.getItem('nickname');
+const profileImg = sessionStorage.getItem('profileImg');
+if (isLoggedIn === 'true' && nickname && profileImg) {
+  store.dispatch(
+    login({
+      nickname,
+      profileImg,
+    })
+  );
+}
 
 root.render(
   <Provider store={store}>
