@@ -38,7 +38,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/api/stomp/game") // ex) ws://localhost:9090/stomp/game
-                .setAllowedOrigins("http://localhost:3000").withSockJS(); // 클라이언트와의 연결은 SocketJS()하므로 설정
+                .setAllowedOriginPatterns("*").withSockJS(); // 클라이언트와의 연결은 SocketJS()하므로 설정
     }
 
     /**
