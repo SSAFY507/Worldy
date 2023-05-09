@@ -46,8 +46,8 @@ public class KakaoUserService {
     public KakaoLoginDto kakaoLogin(String code) throws JsonProcessingException {
 
         // 1. 인가코드로 access 토큰 요청
-         String accessToken = getAccessToken(code, "https://k8a507.p.ssafy.io/user/kakao/callback");
-//        String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback");
+        String accessToken = getAccessToken(code, "https://k8a507.p.ssafy.io/user/kakao/callback");
+//         String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback");
 
         // 2. 없는 회원의 경우 회원가입
         User user = registKakaoUser(accessToken);
@@ -151,7 +151,8 @@ public class KakaoUserService {
                     .sex(gender)
                     .activated(true)
                     .exp(0)
-                    .level(0)
+                    .level(1)
+                    .tier("Silver")
                     .mmr(1000)
                     .authorities(Collections.singleton(authority)).build();
         }

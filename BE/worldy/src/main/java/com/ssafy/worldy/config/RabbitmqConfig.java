@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.List;
-
 @Configuration
 @Slf4j
 public class RabbitmqConfig {
@@ -95,7 +93,6 @@ public class RabbitmqConfig {
     /***
      * Consumer
      ***/
-
     @Bean
     SimpleRabbitListenerContainerFactory simpleRabbitListenerContainerFactory(ConnectionFactory connectionFactory) {
         final SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
