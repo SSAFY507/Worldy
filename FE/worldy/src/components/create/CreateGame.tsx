@@ -9,7 +9,10 @@ export default function CreateGame(props: any) {
 
 
   const setMode = props.setMode;
+  const setRoomId = props.setRoomId;
+
   const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzU3Mzg5MTAxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4Mzc3NTAxMX0.FGXDtMPT4TZdwoUDUc98lZNlYI7d4MK2YYu63b7nvQiJdzY2zItjIgmOAsM5_Y4hKIPv2eU5o9gOwdbgyRc8uQ  '
+  
   return (<>
     <div className='w-full h-full bg-white flex flex-col justify-center items-center'>
       <h1>게임 만들기</h1>
@@ -24,10 +27,17 @@ export default function CreateGame(props: any) {
         })
       }}>랜덤 매칭</button>
       <button className='w-[200px] h-[70px] mt-[40px]' id='shbutton' onClick={() => {
-        console.log('친구 대기실 인터페이스 변경')
-        console.log('방 만들기 api 실행');
-        console.log('카카오톡 공유하기 실행');
-        console.log('/game/{roomId} 라우터 이동');
+
+        axios.get("https://k8a507.p.ssafy.io/api/game/with/friend", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        })
+        .then(response => {
+          // console.log(response.data.roomId);
+          setRoomId(response.data.roomId);
+        });
+
         setMode(2);
       }}>친구와 함께하기</button>
 
