@@ -12,6 +12,8 @@ import { IoIosLogOut, IoLogoGameControllerB } from 'react-icons/io';
 import { AiOutlineBulb } from 'react-icons/ai';
 import { FiArrowUpRight } from 'react-icons/fi';
 import { SiPowerapps } from 'react-icons/si';
+import { IoMdPower } from 'react-icons/io';
+
 import {
   RiQuestionAnswerFill,
   RiSave3Fill,
@@ -709,7 +711,7 @@ export default function MyPage({
                   />
                 </div>
                 <div className='w-[100px] flex-2 grid place-ontent-right pl-[20px]'>
-                  <span className='font-PtdLight text-white text-[20px] text-[#B2B2B2]'>
+                  <span className='font-PtdLight text-[20px] text-[#B2B2B2]'>
                     lv.1
                   </span>
                 </div>
@@ -740,7 +742,7 @@ export default function MyPage({
                   </span>
                 </div>
                 <div className='w-[100px] flex-2 grid place-ontent-right'>
-                  <span className='font-PtdLight text-white text-[20px] text-[#B2B2B2]'>
+                  <span className='font-PtdLight text-[20px] text-[#B2B2B2]'>
                     lv.1
                   </span>
                 </div>
@@ -763,8 +765,25 @@ export default function MyPage({
     );
   };
 
+  const [iconColor, setIconColor] = useState<string>('#E6E6E6');
+
   const logoutContent = (): JSX.Element => {
-    return <div className='w-full h-[100px]'></div>;
+    return (
+      <div
+        className='relative w-full h-[60px] outline-white grid place-content-center'
+        onMouseEnter={() => setIconColor('#FF4D45')}
+        onMouseLeave={() => setIconColor('#E6E6E6')}
+      >
+        <button className='logoutbtn'>
+          <span className='logouticon w-fit h-fit outline-white'>
+            <IoMdPower size={26} color={iconColor} />
+          </span>
+          <span className='logouttext  font-PtdSemiBOld'>
+            로그아웃 하시겠습니까?
+          </span>
+        </button>
+      </div>
+    );
   };
 
   return (
