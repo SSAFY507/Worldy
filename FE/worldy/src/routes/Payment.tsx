@@ -34,7 +34,7 @@ class Payment extends Component<{}, AppState> {
       quantity: 1,
       total_amount: 2200,
       tax_free_amount: 0,
-      approval_url: 'http://localhost:3000/',
+      approval_url: 'http://localhost:3000/mypage',
       fail_url: 'http://localhost:3000/',
       cancel_url: 'http://localhost:3000/',
     },

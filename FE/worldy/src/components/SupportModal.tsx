@@ -3,6 +3,9 @@ import { useState, useEffect } from 'react';
 
 import '../styles/SupportModalStyles.css';
 import PersonalAccept from './PersonalAccept';
+import CustomAxios from '../API/CustomAxios';
+import { loginToken } from '../_store/slices/loginSlice';
+import { useSelector } from 'react-redux';
 
 type askTypeListType = {
   value: number;
@@ -110,6 +113,35 @@ export default function SupportModal({
     } else setSubmittable(false);
   }, [contentText]);
 
+  const [result, setResult] = useState(null);
+  const token: string = useSelector(loginToken);
+
+  const fetchData = async () => {
+    try {
+      const requestBody = new Map([
+        ['category', askTypeList[askType].name],
+        ['content', contentText],
+      ]);
+
+      const response = await CustomAxios({
+        APIName: 'writeHelp',
+        APIType: 'post',
+        UrlQuery: 'https://k8a507.p.ssafy.io/api/help/write',
+        Body: requestBody,
+        Token: token,
+      });
+
+      setResult(response);
+      console.log('리퀘스트 바디', requestBody);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const submitHelp = () => {
+    fetchData();
+  };
+
   return (
     <div className='z-30 absolute top-0 left-0 w-full h-full bg-[rgba(255,255,255,0.3)] flex flex-col justify-start items-center py-[5em]'>
       <div
@@ -191,7 +223,7 @@ export default function SupportModal({
         </div>
         <div className='w-full h-[3em] pt-[.5em]  flex flex-row justify-between items-center'>
           <button
-            onClick={() => handleCloseModal()}
+            onClick={() => submitHelp()}
             className={`rounded-[4px] w-[47%] h-[60px]  outline-[rgba(255,255,255,0.6)] outline-1  font-PtdRegular ${
               submittable
                 ? 'hover:bg-[rgb(255,18,5)] bg-buttonRed outline-[rgba(255,255,255,0.6)] text-white'

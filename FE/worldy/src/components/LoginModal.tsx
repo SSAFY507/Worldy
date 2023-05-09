@@ -10,6 +10,10 @@ import { access } from 'fs';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 import PersonalAccept from './PersonalAccept';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { addToken, loginState } from '../_store/slices/loginSlice';
+import { login, logout } from '../_store/slices/loginSlice';
+
 type PointerOutProps = {
   onClose: () => void;
   onClickKakaoLogin: (firstLogin: boolean) => void;
@@ -44,10 +48,13 @@ export default function LoginModal({
 
   ////////////////////카카오 로그인 버튼 관련
 
+  const checkLoginState = useSelector(loginState);
+  const dispatch = useDispatch();
+
   const handleKakaoLoginSuccess = async (response: any) => {
     console.log('카카오 로그인 성공', response);
     const accessToken = response.access_token;
-
+    dispatch(addToken(accessToken));
     try {
       const userInfoResponse = await axios.get(
         'https://kapi.kakao.com/v2/user/me',
@@ -57,8 +64,11 @@ export default function LoginModal({
           },
         }
       );
-
       const userData = userInfoResponse.data;
+      console.log('사진 ', userData.properties.profile_image);
+      dispatch(
+        login({ nickname: '', profileImg: userData.properties.profile_image })
+      );
       console.log('유저 정보', userData);
       onClickKakaoLogin(firstLogin);
     } catch (error) {
@@ -142,15 +152,17 @@ export default function LoginModal({
               </div>
               <div className=' w-full h-20 flex flex-col items-center justify-between py-4 font-PtdMedium text-base'>
                 <div className='flex flex-row justify-center items-center'>
-                  <div className='mr-2'>아직 WORLDY 회원이 아니신가요?</div>
-                  <div className='text-blue-400 underline underline-offset-2 decoration-2'>
-                    <button onClick={clickKakaoLogin}>계정 생성</button>
-                    {/* <a href='/'>계정 생성</a> */}
+                  <div className=' '>
+                    저희 Wordly는 회원님의 정보를 다음과 같이 처리합니다.
                   </div>
+                  {/* <div className='text-blue-400 underline underline-offset-2 decoration-2'>
+                    <button onClick={clickKakaoLogin}>계정 생성</button>
+                    <a href='/'>계정 생성</a>
+                  </div> */}
                 </div>
                 <button
                   onClick={handleShowPersonalAccept}
-                  className='underline underline-offset-2 decoration-2 text-[19px] mt-[2px]'
+                  className='underline underline-offset-2 decoration-2 text-[19px] mt-[2px] text-blue-400'
                 >
                   개인 정보 처리방침
                 </button>

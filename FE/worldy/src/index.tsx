@@ -6,8 +6,9 @@ import { RouterProvider } from 'react-router';
 import { createRoot } from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import Router from './Router';
-import { store } from './_store/store';
+import store from './_store/store';
 import { useEffect } from 'react';
+import { login } from './_store/slices/loginSlice';
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
@@ -21,6 +22,18 @@ const script = document.createElement('script');
         //eslint-disable-next-line
         (window as any).Kakao.init(KakaoAppKey);
 };
+
+const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+const nickname = sessionStorage.getItem('nickname');
+const profileImg = sessionStorage.getItem('profileImg');
+if (isLoggedIn === 'true' && nickname && profileImg) {
+  store.dispatch(
+    login({
+      nickname,
+      profileImg,
+    })
+  );
+}
 
 root.render(
   <Provider store={store}>
