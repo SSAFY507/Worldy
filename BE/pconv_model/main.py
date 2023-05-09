@@ -36,4 +36,6 @@ def get_model(nation_id: str, img_num : str):
 
     inpaint.inpaint_by_model(img, mask)
 
-    s3.upload_img(nations_code[nation_id], img_num)
+    result = s3.upload_img(nations_code[nation_id], img_num)
+
+    return result

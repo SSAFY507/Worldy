@@ -4,7 +4,6 @@ from botocore.client import Config
 from PIL import Image
 import pymysql
 import config
-import random
 
 
 # S3 설정
@@ -48,3 +47,5 @@ def upload_img(nation_code, img_num):
     s3.Bucket(config.BUCKET_NAME).put_object(
             Key=save_data, Body=data, ContentType='image/jpg')
     print(file_path, " : S3 hidden 이미지 저장완료")
+
+    return save_data

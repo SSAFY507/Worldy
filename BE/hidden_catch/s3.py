@@ -28,7 +28,7 @@ conn = pymysql.connect(host=config.MYSQL_URL,
 def get_img(nation_code):
     img_num = random.randrange(1,6)
     bucket = s3.Bucket(config.BUCKET_NAME)
-    object = bucket.Object("hidden_catch/" + nation_code + "/" + str(img_num) + ".jpg")
+    object = bucket.Object("hidden_catch/" + nation_code + "/original/" + str(img_num) + ".jpg")
     response = object.get()
     file_stream = response['Body']
     img = Image.open(file_stream)
@@ -42,15 +42,19 @@ def get_img(nation_code):
 def upload_img(nation_code, img_num):
     file_path = "./img/original.jpg"
     data = open(file_path, 'rb')
-    save_data = "hidden_catch/" + nation_code+ "/" + str(img_num) + ".jpg"
+    save_data = "hidden_catch/" + nation_code+ "/original/" + str(img_num) + ".jpg"
 
     s3.Bucket(config.BUCKET_NAME).put_object(
             Key=save_data, Body=data, ContentType='image/jpg')
     print(file_path, " : S3 original 이미지 저장완료")
 
-    file_path = "./img/hidden.jpg"
+    # file_path = "./img/hidden.jpg"
+    # data = open(file_path, 'rb')
+    # save_data = "hidden_catch/" + nation_code+ "/different/" + str(img_num) + ".jpg"
+
+    file_path = "./img/mask.jpg"
     data = open(file_path, 'rb')
-    save_data = "hidden_catch/" + nation_code+ "/different/" + str(img_num) + ".jpg"
+    save_data = "hidden_catch/" + nation_code+ "/mask/" + str(img_num) + ".jpg"
 
     s3.Bucket(config.BUCKET_NAME).put_object(
             Key=save_data, Body=data, ContentType='image/jpg')
