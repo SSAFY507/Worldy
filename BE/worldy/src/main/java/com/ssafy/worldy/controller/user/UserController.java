@@ -7,6 +7,7 @@ import com.ssafy.worldy.model.user.dto.KakaoLoginDto;
 import com.ssafy.worldy.model.user.dto.ScrapDto;
 import com.ssafy.worldy.model.user.service.KakaoUserService;
 import com.ssafy.worldy.model.user.service.UserQuizService;
+import com.ssafy.worldy.model.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,9 @@ public class UserController {
 
     @Autowired
     private UserQuizService userQuizService;
+
+    @Autowired
+    private UserService userService;
 
     public UserController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
         this.tokenProvider = tokenProvider;
@@ -68,10 +72,27 @@ public class UserController {
      * [ 스크랩한 퀴즈 전체 조회 ]
      * - 스크랩한 퀴즈 정보에 대하여 필요한 내용만 조합한 ScrapDto 조회
      * - 퀴즈 정보 (QuizDto, MultiAnswerDto), 내가 입력한 퀴즈 답변에 대한 정보 (QuizRecordDto) 조합
-     */
+     ***/
     @GetMapping("/scrap/all")
     public ResponseEntity<List<ScrapDto>> getAllScrap() {
         String kakaoId = SecurityContextHolder.getContext().getAuthentication().getName();
         return new ResponseEntity<>(userQuizService.getMyQuizLike(kakaoId), HttpStatus.OK);
+    }
+
+    /***
+     * [ 닉네임 중복 확인 ]
+     ***/
+    @GetMapping("/check/{nickName}")
+    public ResponseEntity<Boolean> checkNickName(@PathVariable String nickName) {
+        return new ResponseEntity<>(userService.checkNickName(nickName), HttpStatus.OK);
+    }
+
+    /***
+     * [ 닉네임 등록 ]
+     ***/
+    @PutMapping("/nickname/{nickName}")
+    public ResponseEntity<String> submitNickName(@PathVariable String nickName) {
+        String kakaoId = SecurityContextHolder.getContext().getAuthentication().getName();
+        return new ResponseEntity<>(userService.submitNickName(nickName, kakaoId), HttpStatus.ACCEPTED);
     }
 }
