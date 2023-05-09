@@ -28,21 +28,21 @@ export default function SocketTest() {
 
     console.log('퀴즈 요청 >>>')
     const data = {
-      "emoticon" : "happy",
-      "roomId" : "2386a4ee-355f-4f1d-9b77-118b2cbf99f9",
-      "kakaoId" : "wordy",
-      "type" : 'emoticon', 
+      "emoticon": "happy",
+      "roomId": "2386a4ee-355f-4f1d-9b77-118b2cbf99f9",
+      "kakaoId": "wordy",
+      "type": 'emoticon',
     }
     // ws.send("/pub/game/quiz/{kakaoId}/{gameRoomId}/{nationId}", {}, JSON.stringify(data));
-    ws.send("/pub/game/quiz/sundaykidz/2386a4ee-355f-4f1d-9b77-118b2cbf99f9/2", {},JSON.stringify(data));
+    ws.send("/pub/game/quiz/sundaykidz/2386a4ee-355f-4f1d-9b77-118b2cbf99f9/2", {}, JSON.stringify(data));
   }
 
   function sendEmoticon() {
     const data = {
-      "emoticon" : "happy",
-      "roomId" : "2386a4ee-355f-4f1d-9b77-118b2cbf99f9",
-      "kakaoId" : "wordy",
-      "type" : 'emoticon', 
+      "emoticon": "happy",
+      "roomId": "2386a4ee-355f-4f1d-9b77-118b2cbf99f9",
+      "kakaoId": "wordy",
+      "type": 'emoticon',
     }
     console.log('이모티콘 전송 >>>')
     ws.send("/pub/game/emoticon", {}, JSON.stringify(data));
@@ -51,9 +51,9 @@ export default function SocketTest() {
   function sendMsg() {
     //websockt emit
     const data = {
-      "roomId" : "2386a4ee-355f-4f1d-9b77-118b2cbf99f9",
-      "type" : "player",
-      "players" : [
+      "roomId": "2386a4ee-355f-4f1d-9b77-118b2cbf99f9",
+      "type": "player",
+      "players": [
         {
           "playerId": "미희",
           "playerNum": 1,
@@ -128,7 +128,7 @@ export default function SocketTest() {
         },
       ]
     }
-    
+
 
     console.log('데이터 전송 >>>')
     ws.send("/pub/game/player", {}, JSON.stringify(data));
@@ -140,7 +140,7 @@ export default function SocketTest() {
       <div className='flex flex-col'>
         <button className='w-[120px] h-[50px] mt-[20px]' onClick={sendMsg}>소켓 데이터 전송</button>
         <button className='w-[120px] h-[50px] mt-[20px]' onClick={sendEmoticon}>이모티콘 전송</button>
-        <button className='w-[120px] h-[50px] mt-[20px]'onClick={requestQuiz}>퀴즈 요청</button>
+        <button className='w-[120px] h-[50px] mt-[20px]' onClick={requestQuiz}>퀴즈 요청</button>
       </div>
 
     </div>
@@ -148,4 +148,3 @@ export default function SocketTest() {
   )
 }
 
-  

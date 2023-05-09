@@ -67,9 +67,9 @@ export default function Game2D(props: any) {
   return (<>
     <div className='w-full h-full bg-[#FFFDF4] flex justify-center items-center'>
       {/* 왼쪽영역 */}
-      <div className='w-[20%] h-full flex flex-col justify-center items-center'>
+      <div className='w-[20%] h-full flex flex-col justify-center items-end'>
         <div className='mt-[30px] mb-[30px] h-[40px] text-[20px]'>턴 : { }</div>
-        <div className='w-[320px] h-[840px] mb-[50px] outline outline-1 flex flex-col justify-around items-center'>
+        <div className='w-[320px] h-[840px] mb-[50px]  flex flex-col justify-around items-center'>
           {pList.map((i, index) => {
             return <div key={index}>
               <div className='w-[300px] h-[260px] bg-[#F4F2EC] rounded-[8px] flex flex-col justify-center items-center'>
@@ -105,8 +105,8 @@ export default function Game2D(props: any) {
 
 
       {/* 가운데 영역 */}
-      <div className='w-[60%] h-full bg-white flex justify-center items-center'>
-        <div className='w-[1030px] h-[1030px] bg-[#F4F2EC] rounded-[20px] mb-[50px] flex justify-center items-center relative left-[180px]'>
+      <div className='w-[60%] h-full flex justify-center items-center mt-[40px]'>
+        <div className='w-[1010px] h-[1010px] bg-[#F4F2EC] rounded-[20px] mb-[50px] flex justify-center items-center relative left-[180px]'>
           <div className='w-[990px] h-[990px] bg-green-100 rounded-[14px] flex justify-center items-center'>
 
             {/* 0~ 10 */}
@@ -150,7 +150,7 @@ export default function Game2D(props: any) {
                 return <div key={index}>
                   {
                     i.type === 'nation' && (i.location >= 10 && i.location < 20) &&
-                    <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-red-400'>
+                    <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-green-400'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold '>{i.name}</div>
                       <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'></div>
                     </div>
@@ -185,7 +185,7 @@ export default function Game2D(props: any) {
                 return <div key={index}>
                   {
                     i.type === 'nation' && (i.location >= 20 && i.location < 30) &&
-                    <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-red-400'>
+                    <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-400'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold '>{i.name}</div>
                       <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'></div>
                     </div>
@@ -220,7 +220,7 @@ export default function Game2D(props: any) {
                 return <div key={index}>
                   {
                     i.type === 'nation' && (i.location >= 30 && i.location < 40) &&
-                    <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-red-400'>
+                    <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-purple-400'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold '>{i.name}</div>
                       <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'></div>
                     </div>
@@ -256,18 +256,18 @@ export default function Game2D(props: any) {
             </div>
           </div>
         </div>
-        <div className='w-[700px] h-[780px] flex flex-col justify-start items-center relative top-[-20px] left-[-490px]'>
-          <div className='w-[340px] h-[280px] rounded-[8px] bg-white mt-[20px] shadow-lg relative'>
+        <div className='w-[380px] h-[780px] flex flex-col justify-start items-center relative top-[-20px] left-[-510px]'>
+          <div className='w-[380px] h-[280px] rounded-[8px] bg-white shadow-lg'>
             {/* 주사위 영역 */}
             <Dice></Dice>
-            <div className='shbutton w-[340px] h-[60px] rounded-[4px] bg-red-500 flex justify-center items-center text-white text-[20px]'
+            <div id='shbutton' className='w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px]'
               onClick={() => {
                 rollDice();
               }}
             >주사위 던지기</div>
 
             {/* 콘솔창 영역 */}
-            <div className='w-[340px] h-[300px] bg-white rounded-[8px] mt-[140px] shadow-lg relative'></div>
+            <div className='w-[380px] h-[340px] bg-white rounded-[8px] mt-[140px] shadow-lg relative'></div>
           </div>
         </div>
       </div>
@@ -281,9 +281,9 @@ export default function Game2D(props: any) {
 
 
       {/* 오른쪽 영역 */}
-      <div className='w-[20%] h-full flex flex-col justify-center items-center'>
+      <div className='w-[20%] h-full flex flex-col justify-center items-start'>
         <div className='mt-[30px] mb-[30px] h-[40px] text-[20px]'>lap : { }</div>
-        <div className='w-[320px] h-[840px] mb-[50px] outline outline-1 flex flex-col justify-around items-center'>
+        <div className='w-[320px] h-[840px] mb-[50px]  flex flex-col justify-around items-center'>
           <div className='w-[300px] h-[260px] bg-[#F4F2EC] rounded-[8px] flex flex-col justify-center items-center'>
             <div className='w-[250px] h-[210px] bg-[#F4F2EC]'>
               <div className='flex justify-between'>

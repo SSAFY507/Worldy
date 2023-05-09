@@ -2,13 +2,14 @@ import React from 'react'
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import { useState } from 'react';
+import axios from 'axios';
 
 
 export default function CreateGame(props: any) {
 
 
   const setMode = props.setMode;
-
+  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzU3Mzg5MTAxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4Mzc3NTAxMX0.FGXDtMPT4TZdwoUDUc98lZNlYI7d4MK2YYu63b7nvQiJdzY2zItjIgmOAsM5_Y4hKIPv2eU5o9gOwdbgyRc8uQ  '
   return (<>
     <div className='w-full h-full bg-white flex flex-col justify-center items-center'>
       <h1>게임 만들기</h1>
@@ -16,6 +17,11 @@ export default function CreateGame(props: any) {
         console.log('매칭 api 호출');
         console.log('매칭 페이지 인터페이스 변경');
         setMode(1)
+        axios.get("https://k8a507.p.ssafy.io/api/game/matching", {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        })
       }}>랜덤 매칭</button>
       <button className='w-[200px] h-[70px] mt-[40px]' id='shbutton' onClick={() => {
         console.log('친구 대기실 인터페이스 변경')
