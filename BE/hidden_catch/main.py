@@ -23,6 +23,7 @@ nations_code = {"9" : "kr", "7" : "cn", "8" : "jp", "4" : "in", "19" : "gb", "18
 def read_root():
     return {"Hello": "World"}
 
+
 @app.get("/hidden_catch/{nation_id}")
 def get_img(nation_id: str):
     img_num = s3.get_img(nations_code[nation_id])
