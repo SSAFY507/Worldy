@@ -2,7 +2,6 @@ import boto3
 from dotenv import load_dotenv
 from botocore.client import Config
 from PIL import Image
-import pymysql
 import config
 import random
 
@@ -14,14 +13,6 @@ s3 = boto3.resource(
         aws_secret_access_key=config.AWS_SECRET_ACCESS_KEY,
         config=Config(signature_version='s3v4')
     )
-
-
-# DB 접속 정보
-conn = pymysql.connect(host=config.MYSQL_URL,
-                    user=config.MYSQL_USER,
-                    password=config.MYSQL_PASSWORD,
-                    db=config.MYSQL_DB,
-                    charset='utf8')
 
 
 # S3에서 가져온 이미지를 틀린 그림을 만들기 위해 임시로 저장하기
