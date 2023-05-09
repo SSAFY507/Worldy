@@ -46,8 +46,12 @@ const CountryMap:React.FC<Props> = (countryName) => {
   /** 카메라 커스텀 함수 */
   const SetupCamera = () => {
     const cam = new THREE.PerspectiveCamera(37, window.innerWidth / window.innerHeight, 0.1, 100);
-    cam.position.set(0, 5, 5);
-    cam.rotation.set(0, 10, 0);
+    cam.position.set(0, 0, 2);
+    cam.rotation.set(
+      THREE.MathUtils.degToRad(0),
+      THREE.MathUtils.degToRad(0),
+      THREE.MathUtils.degToRad(0)
+    );
     cam.lookAt(0, 0, 0);          // 카메라가 바라보는 곳이 0, 0, 0
     
     camera.current = cam;
@@ -122,30 +126,31 @@ const CountryMap:React.FC<Props> = (countryName) => {
       {url: europe_Spain, name: "europe_Spain", angle:[0, 10, 15], position:[0,0,0], size:0.5},
       {url: europe_UK, name: "europe_UK", angle:[0, 10, 15], position:[0,-0.5, 0], size:0.5},
       // {url: northAmerica_America, name: "northAmerica_America", angle:[10, 10, 10], position:[1,-2, 1], size:0.35},
-      {url: northAmerica_America, name: "northAmerica_America", angle:[-10, 45.7,-5], position:[0, 0, 0], size: 0.5},
+      {url: northAmerica_America, name: "northAmerica_America", angle:[ 0, 70, 0], position:[0, 0, 0], size: 0.5},
     ]
     items.forEach((item, index) => {
       if (item.name === countryName.countryName) {
         gltfLoader.load(item.url, (glb) => {
           const obj3d:THREE.Group = glb.scene;
           obj3d.name = item.name
-
-          obj3d.position.set(12, 1, 0);
-          obj3d.rotation.set(
+          console.log(obj3d)
+          // obj3d.children[0].position.set(0, 0, 0);
+          obj3d.children[0].position.set(0, 0, -0.2);
+          obj3d.children[0].rotation.set(
             THREE.MathUtils.degToRad(item.angle[0]),
             THREE.MathUtils.degToRad(item.angle[1]),
             THREE.MathUtils.degToRad(item.angle[2])
           )
-          obj3d.userData.position = item.position;
-          obj3d.userData.size = item.size;
-          obj3d.scale.set(3, 3, 3);
+          // obj3d.userData.position = item.position;
+          // obj3d.userData.size = item.size;
+          // obj3d.scale.set(1, 1, 1);
 
           // const helper = new THREE.AxesHelper
           // const shelper = new THREE.GridHelper
           // scene.current?.add(helper)
           // scene.current?.add(shelper)
 
-          scene.current?.add(obj3d);
+          scene.current?.add(obj3d.children[0]);
           // if (camera.current) {
           //   ZoomFit(obj3d, camera.current)
           // }
@@ -174,6 +179,9 @@ const CountryMap:React.FC<Props> = (countryName) => {
       controls.current = new OrbitControls(camera.current, divContainer.current!); // OrbitControls를 초기화합니다.
       controls.current.target.set(0,0,0)    // 카메라 회전점
       controls.current.enableDamping = true;        // 부드럽게 돌아가
+
+      
+  
       // 위아래 카메라 제한
       // controls.current.minPolarAngle = THREE.MathUtils.degToRad(0);   // 0도 부터
       // controls.current.maxPolarAngle = THREE.MathUtils.degToRad(60);  // 30도 까지 회전 가능
@@ -192,6 +200,11 @@ const CountryMap:React.FC<Props> = (countryName) => {
 
   const update = (time: number) => {
     time *= 0.01;
+    // console.log("객체 위치 : ",scene.current?.position)
+    // console.log("객체 기울기 :",scene.current?.rotation)
+    // console.log("카메라 위치 :", camera.current?.position)
+    // console.log("카메라 기울기 :", camera.current?.rotation)
+    // console.log("카메라 시각 :", camera.current?.lookAt)
   };
 
   useEffect(() => {
