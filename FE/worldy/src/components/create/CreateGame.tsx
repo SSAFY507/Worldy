@@ -10,6 +10,7 @@ export default function CreateGame(props: any) {
 
   const setMatchingId = props.setMatchingId
   const setMode = props.setMode;
+
   const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzU3Mzg5MTAxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4Mzc3NTAxMX0.FGXDtMPT4TZdwoUDUc98lZNlYI7d4MK2YYu63b7nvQiJdzY2zItjIgmOAsM5_Y4hKIPv2eU5o9gOwdbgyRc8uQ  '
   return (<>
     <div className='w-full h-full bg-white flex flex-col justify-center items-center'>
@@ -26,6 +27,7 @@ export default function CreateGame(props: any) {
           .then(response => {
             console.log(response.data);
             setMatchingId(response.data.roomId);
+            console.log(response.data.roomId);
           });
 
 

@@ -6,15 +6,18 @@ import Game2D from './Game2D';
 import Game3D from './Game3D';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
+import { useLocation } from "react-router-dom";
 
 
 export default function Main() {
 
 
-
+  const location2 = useLocation();
+  const roomData = location2.state.value;
   const params = useParams();
-  console.log('파라미터 얻기 :')
-  console.log(params.id);
+
+
+
   const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzU3Mzg5MTAxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4Mzc3NTAxMX0.FGXDtMPT4TZdwoUDUc98lZNlYI7d4MK2YYu63b7nvQiJdzY2zItjIgmOAsM5_Y4hKIPv2eU5o9gOwdbgyRc8uQ  '
   let headers = { Authorization: `Bearer ${accessToken}` };
   let receivedData: any = null;
@@ -27,114 +30,66 @@ export default function Main() {
     ws.connect(headers, (frame: any) => {
       console.log('소켓 연결')
       subscribe();
+
     });
+  }, [])
+
+
+  useEffect(() => {
+
   }, [])
 
 
   function subscribe() {
 
-    console.log('subcribe () 실행 >>>>>>>>>>>>')
+    console.log('subcribe () 실행 >>>>>')
     ws.subscribe(`/sub/${params.id}`, (event) => {
       const received = JSON.parse(event.body);
-      console.log('구독 응답')
-      if (received.type === 'player') {
-        console.log('플레이어 데이터 응답')
-        console.log(received);
-      } else if (received.type === 'cnt') {
-        console.log('cnt 응답')
-        console.log(received)
-      }
-      receivedData = received;
+
+
+
 
 
 
     });
   }
 
-  function sendMsg() {
 
-    let data = {
-      "roomId": params.id,
-      "type": "player",
-      "players": [
-        {
-          "playerId": "mihee",
-          "playerNum": 1,
-          "name": "미희",
-          "game": {
-            "location": 0,
-            "balance": 500,
-            "desert": 0,
-            "state": false,
-            "dice1": 0,
-            "dice2": 0,
-            "dice": 0,
-            "isDouble": false,
-            "own": [],
-            "lap": 0,
-            "ranking": 0
-          }
-        },
-        {
-          "playerId": "one",
-          "playerNum": 2,
-          "name": "원규",
-          "game": {
-            "location": 0,
-            "balance": 500,
-            "desert": 0,
-            "state": false,
-            "dice1": 0,
-            "dice2": 0,
-            "dice": 0,
-            "isDouble": false,
-            "own": [],
-            "lap": 0,
-            "ranking": 0
-          }
-        },
-        {
-          "playerId": "sunday",
-          "playerNum": 3,
-          "name": "성훈",
-          "game": {
-            "location": 0,
-            "balance": 500,
-            "desert": 0,
-            "state": false,
-            "dice1": 0,
-            "dice2": 0,
-            "dice": 0,
-            "isDouble": false,
-            "own": [],
-            "lap": 0,
-            "ranking": 0
-          }
-        },
-        {
-          "playerId": "seol",
-          "playerNum": 4,
-          "name": "설희",
-          "game": {
-            "location": 0,
-            "balance": 500,
-            "desert": 0,
-            "state": false,
-            "dice1": 0,
-            "dice2": 0,
-            "dice": 0,
-            "isDouble": false,
-            "own": [],
-            "lap": 0,
-            "ranking": 0
-          }
-        },
-      ]
-    }
+  // 참여한 플레이어 데이터 세팅하기
+  function setGameData() {
+    console.log('룸 정보 :>>>>>>')
+    console.log(roomData);
+    let _p1 = roomData[0];
+    let _p2 = roomData[1];
+    let _p3 = roomData[2];
+    let _p4 = roomData[3];
+    console.log('참여한 플레이어 데이터 최초 세팅')
+
+    setP1((prevState) => ({
+      ...prevState,
+      playerId: _p1.kakaoId,
+      playerNum: 1,
+      name: roomData,
+      type: 'player',
+      game: {
+        ...prevState.game,
+        location: 0,
+        balance: 1000,
+        desert: 0,
+        state: false,
+        dice1: 0,
+        dice2: 0,
+        dice: 0,
+        isDouble: false,
+        own: [],
+        lap: 0,
+        ranking: 0,
+      }
+    }))
 
 
-    console.log('각 플레이어 데이터 전송 >>>')
-    ws.send("/pub/game/player", {}, JSON.stringify(data));
+    // console.log('플레이어 데이터 전송 >>>')
+    // ws.send("/pub/game/player", {}, JSON.stringify(romData));
   }
 
 
@@ -152,16 +107,15 @@ export default function Main() {
 
   // 플레이어 데이터 세팅
   const [p1, setP1] = useState<Player>({
-    roomId: '',
-    type: 'player',
-    playerId: '',
+    playerId: "seol",
     playerNum: 1,
-    name: '성훈',
+    name: "설희",
+    type: 'player',
     game: {
       location: 0,
       balance: 500,
       desert: 0,
-      state: true,
+      state: false,
       dice1: 0,
       dice2: 0,
       dice: 0,
@@ -172,11 +126,10 @@ export default function Main() {
     },
   })
   const [p2, setP2] = useState<Player>({
-    roomId: '',
-    type: 'player',
-    playerId: '',
+    playerId: "one",
     playerNum: 2,
-    name: '한빈',
+    name: "원규",
+    type: 'player',
     game: {
       location: 0,
       balance: 500,
@@ -193,11 +146,10 @@ export default function Main() {
   })
 
   const [p3, setP3] = useState<Player>({
-    roomId: '',
-    type: 'player',
-    playerId: '',
+    playerId: "sunday",
     playerNum: 3,
-    name: '정훈',
+    name: "성훈",
+    type: 'player',
     game: {
       location: 0,
       balance: 500,
@@ -214,11 +166,10 @@ export default function Main() {
   })
 
   const [p4, setP4] = useState<Player>({
-    roomId: '',
-    type: 'player',
-    playerId: '',
+    playerId: "seol",
     playerNum: 4,
-    name: '원규',
+    name: "설희",
+    type: 'player',
     game: {
       location: 0,
       balance: 500,
@@ -1257,7 +1208,7 @@ export default function Main() {
           onClick={(e) => {
             e.preventDefault();
             setStart(true);
-            sendMsg();
+            setGameData();
           }}
         >게임스타트</div>
       </div>}
