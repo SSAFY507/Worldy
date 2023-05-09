@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './dice.css'
 import Dice from './Dice';
 
@@ -53,22 +53,42 @@ export default function Game2D(props: any) {
   const p2 = props.p[1];
   const p3 = props.p[2];
   const p4 = props.p[3];
+  const me = props.me;
   const setP1 = props.setP[0];
   const setP2 = props.setP[1];
   const setP3 = props.setP[2];
   const setP4 = props.setP[3];
+  const setMe = props.setMe;
+  
   const worldMap = props.worldMap;
   const setWorldMap = props.setWorldMap;
 
+  const tmpList = [p1,p2,p3,p4];
 
+  let pList: Player[] = [p1,p2,p3];
 
-  const pList = [p1, p2, p3];
+  useEffect(() => {
+
+    for(let i=0; i< tmpList.length; i++) {
+      
+      if(tmpList[i].playerNum !== me.playerNum ) {
+        console.log(tmpList[i].playerNum)
+        console.log(me.playerNum)
+        console.log(tmpList[i]);
+        console.log('푸시하기!')
+        pList.push(tmpList[i]);
+      }
+    }
+    console.log('pList >>>>')
+    console.log(pList)
+  }, [])
+
 
   return (<>
     <div className='w-full h-full bg-[#FFFDF4] flex justify-center items-center'>
       {/* 왼쪽영역 */}
       <div className='w-[20%] h-full flex flex-col justify-center items-end'>
-        <div className='mt-[30px] mb-[30px] h-[40px] text-[20px]'>턴 : { }</div>
+        <div className='mt-[30px] mb-[30px] h-[40px] text-[20px]'>턴 : {pList[0].playerId}</div>
         <div className='w-[320px] h-[840px] mb-[50px]  flex flex-col justify-around items-center'>
           {pList.map((i, index) => {
             return <div key={index}>

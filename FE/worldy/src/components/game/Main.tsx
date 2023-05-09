@@ -13,20 +13,15 @@ export default function Main() {
 
   let roomData: any = null;
   const params = useParams();
-  const location2 = useLocation();
-
-  if (location2) {
-
-    if (location2.state) {
-      roomData = location2.state.value;
-    } else {
-      roomData = {}
-    }
-
-  }
+  const location = useLocation();
+  const loginUser = '2756798359';
 
 
+  roomData = location.state.value;
 
+  console.log('roomData : ');
+  console.log(roomData.user1)
+  console.log(roomData.user1.kakaoId);
   const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzU3Mzg5MTAxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4Mzc3NTAxMX0.FGXDtMPT4TZdwoUDUc98lZNlYI7d4MK2YYu63b7nvQiJdzY2zItjIgmOAsM5_Y4hKIPv2eU5o9gOwdbgyRc8uQ  '
   let headers = { Authorization: `Bearer ${accessToken}` };
   let receivedData: any = null;
@@ -66,24 +61,64 @@ export default function Main() {
 
   // 참여한 플레이어 데이터 세팅하기
   function setGameData() {
-    console.log('룸 정보 :>>>>>>')
-    console.log(roomData);
-    let _p1 = roomData[0];
-    let _p2 = roomData[1];
-    let _p3 = roomData[2];
-    let _p4 = roomData[3];
+
+    let _p1 = roomData.user1;
+    let _p2 = roomData.user2;
+    let _p3 = roomData.user3;
+    let _p4 = roomData.user4;
+    let myId = 'ㅇㄹㅇㄹㅇㄹ';
+    let myNum = 7;
+    const ps = [_p1, _p2, _p3, _p4];
+
     console.log('참여한 플레이어 데이터 최초 세팅')
+
+    ps.forEach((e, index) => {
+      if(e.kakaoId === loginUser ) {
+        console.log('플레이어 일치' + (index+1))
+        console.log(e);
+
+        myId = e.kakaoId;
+        myNum = index+1;
+        // setMe((prevState) => ({
+        //   ...prevState,
+        //   playerId: '내 정보 아이디다',
+        //   playerNum: (index+1),
+        //   name: '성훈',
+        //   type: 'player',
+        //   game: {
+        //     ...prevState.game,
+        //     location: 0,
+        //     balance: 500,
+        //     desert: 0,
+        //     state: false,
+        //     dice1: 0,
+        //     dice2: 0,
+        //     dice: 0,
+        //     isDouble: false,
+        //     own: [],
+        //     lap: 0,
+        //     ranking: 0,
+        //   }
+        // }))
+        
+        // console.log('내 정보')
+        // console.log(me);
+      }
+    });
+
+    
+    
 
     setP1((prevState) => ({
       ...prevState,
       playerId: _p1.kakaoId,
       playerNum: 1,
-      name: roomData,
+      name: '설희',
       type: 'player',
       game: {
         ...prevState.game,
         location: 0,
-        balance: 1000,
+        balance: 500,
         desert: 0,
         state: false,
         dice1: 0,
@@ -96,9 +131,106 @@ export default function Main() {
       }
     }))
 
+    setP2((prevState) => ({
+      ...prevState,
+      playerId: _p2.kakaoId,
+      playerNum: 2,
+      name: '성훈',
+      type: 'player',
+      game: {
+        ...prevState.game,
+        location: 0,
+        balance: 500,
+        desert: 0,
+        state: false,
+        dice1: 0,
+        dice2: 0,
+        dice: 0,
+        isDouble: false,
+        own: [],
+        lap: 0,
+        ranking: 0,
+      }
+    }))
+
+    setP3((prevState) => ({
+      ...prevState,
+      playerId: _p3.kakaoId,
+      playerNum: 3,
+      name: '미희',
+      type: 'player',
+      game: {
+        ...prevState.game,
+        location: 0,
+        balance: 500,
+        desert: 0,
+        state: false,
+        dice1: 0,
+        dice2: 0,
+        dice: 0,
+        isDouble: false,
+        own: [],
+        lap: 0,
+        ranking: 0,
+      }
+    }))
+
+    setP4((prevState) => ({
+      ...prevState,
+      playerId: _p4.kakaoId,
+      playerNum: 4,
+      name: '원규',
+      type: 'player',
+      game: {
+        ...prevState.game,
+        location: 0,
+        balance: 500,
+        desert: 0,
+        state: false,
+        dice1: 0,
+        dice2: 0,
+        dice: 0,
+        isDouble: false,
+        own: [],
+        lap: 0,
+        ranking: 0,
+      }
+    }))
+
+    setMe((prevState) => ({
+      ...prevState,
+      playerId: myId,
+      playerNum: myNum,
+      name: '내 아이디',
+      type: 'player',
+      game: {
+        ...prevState.game,
+        location: 0,
+        balance: 500,
+        desert: 0,
+        state: false,
+        dice1: 0,
+        dice2: 0,
+        dice: 0,
+        isDouble: false,
+        own: [],
+        lap: 0,
+        ranking: 0,
+      }
+    }))
+
+    console.log('me >>>>')
+    console.log(me);
+    console.log(p1)
+    console.log(p2)
+    console.log(p3)
+    console.log(p4)
+
+    
+
 
     // console.log('플레이어 데이터 전송 >>>')
-    // ws.send("/pub/game/player", {}, JSON.stringify(romData));
+    // ws.send("/pub/game/player", {}, JSON.stringify(roomData));
   }
 
 
@@ -116,7 +248,7 @@ export default function Main() {
 
   // 플레이어 데이터 세팅
   const [p1, setP1] = useState<Player>({
-    playerId: "seol",
+    playerId: "",
     playerNum: 1,
     name: "설희",
     type: 'player',
@@ -135,7 +267,7 @@ export default function Main() {
     },
   })
   const [p2, setP2] = useState<Player>({
-    playerId: "one",
+    playerId: "",
     playerNum: 2,
     name: "원규",
     type: 'player',
@@ -155,7 +287,7 @@ export default function Main() {
   })
 
   const [p3, setP3] = useState<Player>({
-    playerId: "sunday",
+    playerId: "",
     playerNum: 3,
     name: "성훈",
     type: 'player',
@@ -175,7 +307,7 @@ export default function Main() {
   })
 
   const [p4, setP4] = useState<Player>({
-    playerId: "seol",
+    playerId: "",
     playerNum: 4,
     name: "설희",
     type: 'player',
@@ -193,6 +325,27 @@ export default function Main() {
       ranking: 0,
     },
   })
+
+  const [me, setMe] = useState<Player>({
+    playerId: "",
+    playerNum: 4,
+    name: "",
+    type: 'player',
+    game: {
+      location: 0,
+      balance: 500,
+      desert: 0,
+      state: false,
+      dice1: 0,
+      dice2: 0,
+      dice: 0,
+      isDouble: false,
+      own: [],
+      lap: 0,
+      ranking: 0,
+    },
+  })
+
 
   // 아이템(보물상자)
   const [item, setItem] = useState<Item[]>([
@@ -1222,7 +1375,7 @@ export default function Main() {
         >게임스타트</div>
       </div>}
       {start && <div>
-        {mode && <Game2D p={p} setP={setP} worldMap={worldMap} setWorldMap={setWorldMap}></Game2D>}
+        {mode && <Game2D p={p} me={me} setMe={setMe} setP={setP} worldMap={worldMap} setWorldMap={setWorldMap}></Game2D>}
         {!mode && <Game3D p={p} setP={setP} worldMap={worldMap} setWorldMap={setWorldMap}></Game3D>}
       </div>}
 
