@@ -25,6 +25,7 @@ import { useState, useRef } from 'react';
 import Game from './routes/Game';
 import Socket from './routes/Socket';
 import Payment from './routes/Payment';
+import Create from './routes/Create';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -143,6 +144,7 @@ const AppLayout = () => {
               <MyPage setRef={myPageRef} handleQnaModal={handleQnaModal} />
             }
           />
+          <Route path='/create' element={<Create />} />
           <Route path='/game' element={<Game />} />
           <Route path='/game/:id' element={<Game />} />
           <Route path='/socket' element={<Socket />} />

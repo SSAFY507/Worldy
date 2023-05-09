@@ -1,0 +1,32 @@
+import React from 'react'
+import SockJS from 'sockjs-client';
+import { Stomp } from '@stomp/stompjs';
+import { useState } from 'react';
+
+
+export default function CreateGame(props: any) {
+
+
+  const setMode = props.setMode;
+
+  return (<>
+    <div className='w-full h-full bg-white flex flex-col justify-center items-center'>
+      <h1>게임 만들기</h1>
+      <button className='w-[200px] h-[70px] mt-[40px]' id='shbutton' onClick={() => {
+        console.log('매칭 api 호출');
+        console.log('매칭 페이지 인터페이스 변경');
+        setMode(1)
+      }}>랜덤 매칭</button>
+      <button className='w-[200px] h-[70px] mt-[40px]' id='shbutton' onClick={() => {
+        console.log('친구 대기실 인터페이스 변경')
+        console.log('방 만들기 api 실행');
+        console.log('카카오톡 공유하기 실행');
+        console.log('/game/{roomId} 라우터 이동');
+        setMode(2);
+      }}>친구와 함께하기</button>
+
+    </div>
+  </>
+  )
+}
+

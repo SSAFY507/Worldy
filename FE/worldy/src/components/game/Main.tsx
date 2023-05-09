@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import CreateGame from './CreateGame';
 import { Route } from 'react-router';
 import Room from './Room';
+import CreateGame from '../create/CreateGame';
+import Game2D from './Game2D';
+import Game3D from './Game3D';
 
-
-export default function Test() {
+export default function Main() {
 
   const [contents, setContents] = useState<String>('');
-  const [mode, setMode] = useState<string>('');
+  const [mode, setMode] = useState<number>(2);
   // 백으로부터 응답 받은 데이터
   let res = {};
 
@@ -1107,8 +1108,8 @@ export default function Test() {
   return (<>
     <div className='w-full h-full z-[600] bg-red-500 flex flex-col justify-center items-center'>
 
-      {mode === '' && <CreateGame mode={mode} setMode={setMode}></CreateGame>}
-      {mode === '게임' && <Room p={p} setP={setP} worldMap={worldMap} setWorldMap={setWorldMap}></Room>}
+      {mode === 2 && <Game2D p={p} setP={setP} worldMap={worldMap} setWorldMap={setWorldMap}></Game2D>}
+      {mode === 3 && <Game2D p={p} setP={setP} worldMap={worldMap} setWorldMap={setWorldMap}></Game2D>}
 
 
 
@@ -1125,7 +1126,7 @@ export default function Test() {
         <button className='w-[120px] h-[50px] mt-[20px] shbutton'onClick={requestQuiz}>퀴즈 요청</button>
       </div> */}
 
-    </div>
+    </div >
   </>
   )
 }
