@@ -14,7 +14,7 @@ import europe_France from "../../assets/lowpoly/europe_France.glb"
 import europe_Italia from "../../assets/lowpoly/europe_Italia.glb"
 import europe_Spain from "../../assets/lowpoly/europe_Spain.glb"
 import europe_UK from "../../assets/lowpoly/europe_UK.glb"
-import northAmerica_America from "../../assets/lowpoly/country.glb";
+import northAmerica_America from "../../assets/lowpoly/Country_America.glb";
 
 // import northAmerica_America from "../../assets/lowpoly/northAmerica_America.glb"
 
@@ -135,12 +135,12 @@ const CountryMap:React.FC<Props> = (countryName) => {
           obj3d.name = item.name
           console.log(obj3d)
           // obj3d.children[0].position.set(0, 0, 0);
-          obj3d.children[0].position.set(0, 0, -0.2);
-          obj3d.children[0].rotation.set(
-            THREE.MathUtils.degToRad(item.angle[0]),
-            THREE.MathUtils.degToRad(item.angle[1]),
-            THREE.MathUtils.degToRad(item.angle[2])
-          )
+          // obj3d.children[0].position.set(0, 0, -0.2);
+          // obj3d.children[0].rotation.set(
+          //   THREE.MathUtils.degToRad(item.angle[0]),
+          //   THREE.MathUtils.degToRad(item.angle[1]),
+          //   THREE.MathUtils.degToRad(item.angle[2])
+          // )
           // obj3d.userData.position = item.position;
           // obj3d.userData.size = item.size;
           // obj3d.scale.set(1, 1, 1);
@@ -150,7 +150,7 @@ const CountryMap:React.FC<Props> = (countryName) => {
           // scene.current?.add(helper)
           // scene.current?.add(shelper)
 
-          scene.current?.add(obj3d.children[0]);
+          scene.current?.add(obj3d);
           // if (camera.current) {
           //   ZoomFit(obj3d, camera.current)
           // }
