@@ -8,19 +8,25 @@ import ReactDOM from 'react-dom';
 import BUTTON_RED from './Button_Red';
 import '../styles/NavBarAnimation.css';
 import SallyPath from '../assets/images/SallyProfilePic.png';
+import { useSelector } from 'react-redux';
+
+import {
+  loginNickName,
+  loginProfileImg,
+  loginState,
+} from '../_store/slices/loginSlice';
+import { logout } from '../_store/slices/loginSlice';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
 
 type NavListType = {
   name: string;
   path: string;
 };
 
-export default function Navbar({
-  onLoginClick,
-  onLoginAdmin,
-}: {
-  onLoginClick: () => void;
-  onLoginAdmin: () => void;
-}) {
+export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
+  const navigate = useNavigate();
+
   const navList: NavListType[] = [
     { name: '홈', path: '/' },
     { name: '게임 정보', path: '/info' },
@@ -30,21 +36,16 @@ export default function Navbar({
     { name: '고객 지원', path: '/support' },
   ];
 
+  const checkLoginState = useSelector(loginState);
+  const dispatch = useDispatch();
+  console.log('checkLoginState', checkLoginState);
+
   const handleLoginModalClick = (e: any) => {
     e.preventDefault();
     onLoginClick();
   };
 
   const [tempLoginColor, setTempLoginColor] = useState<boolean>(false);
-  const adminLogin = () => {
-    onLoginAdmin();
-    setTempLoginColor((prev) => !prev);
-  };
-
-  const [loginState, setLoginState] = useState<boolean>(false);
-  const handleLoginState = () => {
-    setLoginState(!loginState);
-  };
 
   const [hoverAfterLoginIcon, setHoverAfetrLoginIcon] =
     useState<boolean>(false);
@@ -80,8 +81,8 @@ export default function Navbar({
     setClickStateAfterLoginIcon(!clickStateAfterLoginIcon);
   };
 
-  const userNick: string = 'Sunday';
-  const userName: string = '김설희';
+  const userNick: string = useSelector(loginNickName);
+  const userProfileImg: string = useSelector(loginProfileImg);
 
   const [hoverModalContent, setHoverModalContent] = useState<number>(0);
 
@@ -106,8 +107,8 @@ export default function Navbar({
       >
         <div className='w-full h-[4em] flex flex-row justify-stretch items-center border-b-[.05em] border-solid border-0 border-[rgba(255,255,255,0.2)] '>
           <div className='w-[5em] h-full flex justify-center items-center'>
-            <div className=' w-[2.5em] h-[2.5em] rounded-full  overflow-hidden bg-[rgba(255,255,255,0.5)]'>
-              <img src={SallyPath} alt='쌜리' className='w-full h-full' />
+            <div className=' w-[2.5em] h-[2.5em] rounded-full grid place-content-center  overflow-hidden bg-[rgba(255,255,255,0.5)]'>
+              <img src={userProfileImg} alt='쌜리' className='' />
             </div>
           </div>
           <div className='h-full flex-1 py-[.5em] flex flex-col justify-stretch items-center  text-white'>
@@ -141,18 +142,21 @@ export default function Navbar({
           >
             고객 지원
           </a>
-          <a
+          <button
             className={`w-full h-[2.8em] text-center  flex justify-center items-center ${
               hoverModalContent === 3
                 ? 'bg-[rgba(255,255,255,0.1)] text-white'
                 : ''
             }`}
-            href='/support'
             onMouseEnter={() => hoverModalMyPage(3)}
             onMouseLeave={() => hoverModalMyPage(0)}
+            onClick={() => {
+              dispatch(logout());
+              navigate('/');
+            }}
           >
             로그아웃
-          </a>
+          </button>
         </div>
       </div>
     </div>
@@ -160,7 +164,7 @@ export default function Navbar({
 
   return (
     <>
-      <nav>
+      <nav className='z-50'>
         <div className='w-screen h-20 bg-neutral-950 flex flex-row items-center justify-between px-6 z-50'>
           <div className='w-1/6 h-full flex flex-row justify-start items-center'>
             <div className='w-fit h-fit' id='StarButton'>
@@ -189,30 +193,24 @@ export default function Navbar({
               ))}
             </ul>
           </div>
-          <div className='w-1/6 h-full flex flex-row items-center justify-between'>
-            <div className='flex-1 h-full flex flex-row justify-end items-center  outline-white'>
-              <button
-                className='w-[2.5em] h-[2.5em]  grid place-items-center outline-red-300'
-                onClick={handleLoginState}
-              >
+          <div className='w-1/6 h-full flex flex-row items-center justify-end'>
+            {/* <div className='flex-1 h-full flex flex-row justify-end items-center  outline-white'>
+              <button className='w-[2.5em] h-[2.5em]  grid place-items-center outline-red-300'>
                 <ImSearch color='white' />
               </button>
-              <button
-                className='w-[2.5em] h-[2.5em] ml-[1.5em]  grid place-items-center outline-red-300'
-                onClick={adminLogin}
-              >
+              <button className='w-[2.5em] h-[2.5em] ml-[1.5em]  grid place-items-center outline-red-300'>
                 <AiOutlineGlobal
                   size='20'
                   color={tempLoginColor ? 'green' : 'white'}
                 />
               </button>
-            </div>
+            </div> */}
             <div
               className={`${
-                loginState ? 'w-fit' : 'w-1/2'
+                checkLoginState ? 'w-fit' : 'w-1/2'
               } h-full flex flex-row justify-center items-center outline-white`}
             >
-              {loginState ? (
+              {checkLoginState ? (
                 AferLoginIconButtonComponent
               ) : (
                 <BUTTON_RED
