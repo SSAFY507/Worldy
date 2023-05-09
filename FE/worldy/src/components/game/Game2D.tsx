@@ -105,7 +105,7 @@ export default function Game2D(props: any) {
 
 
       {/* 가운데 영역 */}
-      <div className='w-[60%] h-full flex justify-center items-center mt-[40px]'>
+      <div className='w-[60%] h-full flex justify-center items-center mb-[20px]'>
         <div className='w-[1010px] h-[1010px] bg-[#F4F2EC] rounded-[20px] mb-[50px] flex justify-center items-center relative left-[180px]'>
           <div className='w-[990px] h-[990px] bg-green-100 rounded-[14px] flex justify-center items-center'>
 
@@ -135,7 +135,7 @@ export default function Game2D(props: any) {
                   }
                   {
                     i.type === 'item' && (i.location >= 0 && i.location < 10) &&
-                    <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-400'>
+                    <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-orange-400'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold '>{i.name}</div>
                       <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'></div>
                     </div>
@@ -170,7 +170,7 @@ export default function Game2D(props: any) {
                   }
                   {
                     i.type === 'item' && (i.location >= 10 && i.location < 20) &&
-                    <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-400'>
+                    <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-orange-400'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold '>{i.name}</div>
                       <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'></div>
                     </div>
@@ -205,7 +205,7 @@ export default function Game2D(props: any) {
                   }
                   {
                     i.type === 'item' && (i.location >= 20 && i.location < 30) &&
-                    <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-400'>
+                    <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-orange-400'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold '>{i.name}</div>
                       <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'></div>
                     </div>
@@ -246,7 +246,7 @@ export default function Game2D(props: any) {
                   }
                   {
                     i.type === 'item' && (i.location >= 30 && i.location < 40) &&
-                    <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-400'>
+                    <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-orange-400'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold '>{i.name}</div>
                       <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'></div>
                     </div>

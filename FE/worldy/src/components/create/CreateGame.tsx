@@ -8,6 +8,7 @@ import axios from 'axios';
 export default function CreateGame(props: any) {
 
 
+  const setMatchingId = props.setMatchingId
   const setMode = props.setMode;
   const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzU3Mzg5MTAxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4Mzc3NTAxMX0.FGXDtMPT4TZdwoUDUc98lZNlYI7d4MK2YYu63b7nvQiJdzY2zItjIgmOAsM5_Y4hKIPv2eU5o9gOwdbgyRc8uQ  '
   return (<>
@@ -22,6 +23,13 @@ export default function CreateGame(props: any) {
             Authorization: `Bearer ${accessToken}`
           }
         })
+          .then(response => {
+            console.log(response.data);
+            setMatchingId(response.data.roomId);
+          });
+
+
+
       }}>랜덤 매칭</button>
       <button className='w-[200px] h-[70px] mt-[40px]' id='shbutton' onClick={() => {
         console.log('친구 대기실 인터페이스 변경')

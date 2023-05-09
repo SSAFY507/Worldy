@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Route } from 'react-router';
+import { Route, useParams } from 'react-router';
 import Room from './Room';
 import CreateGame from '../create/CreateGame';
 import Game2D from './Game2D';
@@ -11,110 +11,129 @@ import { Stomp } from '@stomp/stompjs';
 export default function Main() {
 
 
+
+  const params = useParams();
+  console.log('파라미터 얻기 :')
+  console.log(params.id);
+  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzU3Mzg5MTAxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4Mzc3NTAxMX0.FGXDtMPT4TZdwoUDUc98lZNlYI7d4MK2YYu63b7nvQiJdzY2zItjIgmOAsM5_Y4hKIPv2eU5o9gOwdbgyRc8uQ  '
+  let headers = { Authorization: `Bearer ${accessToken}` };
+  let receivedData: any = null;
+
   // 소켓 연결
   const socket = new SockJS('https://k8a507.p.ssafy.io/api/stomp/game');
   const ws = Stomp.over(socket);
 
-  ws.connect({}, (frame: any) => {
-    console.log("connected to Chat server:", frame);
-    subscribe();
-  });
+  useEffect(() => {
+    ws.connect(headers, (frame: any) => {
+      console.log('소켓 연결')
+      subscribe();
+    });
+  }, [])
+
 
   function subscribe() {
 
-
-    ws.subscribe(`/sub/2386a4ee-355f-4f1d-9b77-118b2cbf99f9`, (event) => {
+    console.log('subcribe () 실행 >>>>>>>>>>>>')
+    ws.subscribe(`/sub/${params.id}`, (event) => {
       const received = JSON.parse(event.body);
-      console.log('받은 데이터 >>>>>');
-      console.log(received);
-      let data = received;
+      console.log('구독 응답')
+      if (received.type === 'player') {
+        console.log('플레이어 데이터 응답')
+        console.log(received);
+      } else if (received.type === 'cnt') {
+        console.log('cnt 응답')
+        console.log(received)
+      }
+      receivedData = received;
+
+
 
     });
   }
 
   function sendMsg() {
-    //websockt emit
-    const data = {
-      "roomId": "2386a4ee-355f-4f1d-9b77-118b2cbf99f9",
+
+    let data = {
+      "roomId": params.id,
       "type": "player",
       "players": [
         {
-          "playerId": "미희",
+          "playerId": "mihee",
           "playerNum": 1,
-          "name": "mihee",
+          "name": "미희",
           "game": {
-            "location": 1,
-            "balance": 1,
-            "desert": 1,
-            "state": 1,
-            "dice1": 1,
-            "dice2": 1,
-            "dice": 2,
-            "isDouble": 1,
-            "own": [0],
-            "lap": 1,
-            "ranking": 1
+            "location": 0,
+            "balance": 500,
+            "desert": 0,
+            "state": false,
+            "dice1": 0,
+            "dice2": 0,
+            "dice": 0,
+            "isDouble": false,
+            "own": [],
+            "lap": 0,
+            "ranking": 0
           }
         },
         {
-          "playerId": "원규",
+          "playerId": "one",
           "playerNum": 2,
-          "name": "mihee",
+          "name": "원규",
           "game": {
-            "location": 1,
-            "balance": 1,
-            "desert": 1,
-            "state": 1,
-            "dice1": 1,
-            "dice2": 1,
-            "dice": 2,
-            "isDouble": 1,
-            "own": [0],
-            "lap": 1,
-            "ranking": 1
+            "location": 0,
+            "balance": 500,
+            "desert": 0,
+            "state": false,
+            "dice1": 0,
+            "dice2": 0,
+            "dice": 0,
+            "isDouble": false,
+            "own": [],
+            "lap": 0,
+            "ranking": 0
           }
         },
         {
-          "playerId": "성훈",
+          "playerId": "sunday",
           "playerNum": 3,
-          "name": "mihee",
+          "name": "성훈",
           "game": {
-            "location": 1,
-            "balance": 1,
-            "desert": 1,
-            "state": 1,
-            "dice1": 1,
-            "dice2": 1,
-            "dice": 2,
-            "isDouble": 1,
-            "own": [0],
-            "lap": 1,
-            "ranking": 1
+            "location": 0,
+            "balance": 500,
+            "desert": 0,
+            "state": false,
+            "dice1": 0,
+            "dice2": 0,
+            "dice": 0,
+            "isDouble": false,
+            "own": [],
+            "lap": 0,
+            "ranking": 0
           }
         },
         {
-          "playerId": "설희",
+          "playerId": "seol",
           "playerNum": 4,
-          "name": "mihee",
+          "name": "설희",
           "game": {
-            "location": 1,
-            "balance": 1,
-            "desert": 1,
-            "state": 1,
-            "dice1": 1,
-            "dice2": 1,
-            "dice": 2,
-            "isDouble": 1,
-            "own": [0],
-            "lap": 1,
-            "ranking": 1
+            "location": 0,
+            "balance": 500,
+            "desert": 0,
+            "state": false,
+            "dice1": 0,
+            "dice2": 0,
+            "dice": 0,
+            "isDouble": false,
+            "own": [],
+            "lap": 0,
+            "ranking": 0
           }
         },
       ]
     }
 
 
-    console.log('데이터 전송 >>>')
+    console.log('각 플레이어 데이터 전송 >>>')
     ws.send("/pub/game/player", {}, JSON.stringify(data));
   }
 
@@ -122,7 +141,9 @@ export default function Main() {
 
 
   const [contents, setContents] = useState<String>('');
-  const [mode, setMode] = useState<number>(2);
+  const [mode, setMode] = useState<boolean>(true);
+  const [start, setStart] = useState<boolean>(false);
+  const [data, setData] = useState<Object[]>();
   // 백으로부터 응답 받은 데이터
   let res = {};
 
@@ -1220,12 +1241,31 @@ export default function Main() {
 
 
   return (<>
-    <div className='w-full h-full z-[600] bg-white flex flex-col justify-center items-center'>
-      <div className='w-full h-[50px] flex justify-end'>
-        <div className='w-[100px] h-[40px] rounded-[4px] flex justify-center items-center rounded-full bg-blue-400 text-[24px]'>3D 모드</div>
+    <div className='w-screen h-screen bg-[#FFFDF4]'>
+      <div className='w-full bg-[#FFFDF4] flex items-start justify-around fixed-top z-50'>
+        <div className='w-full h-[60px] flex items-end justify-end'>
+          {/* <img className='w-[100px] h-[54px] flex items-end mt-[20px] ml-[60px] object-cover' src='/game/LogoColored.png' alt='로고이미지'></img> */}
+          <div className='w-[100px] h-[40px] rounded-[4px] mr-[120px] flex justify-center items-center rounded-full bg-blue-400 text-[18px] text-white hover:cursor-pointer hover:bg-blue-500'
+            onClick={() => {
+              setMode(!mode);
+            }}
+          >3D 모드</div>
+        </div>
       </div>
-      {mode === 2 && <Game2D p={p} setP={setP} worldMap={worldMap} setWorldMap={setWorldMap}></Game2D>}
-      {mode === 3 && <Game2D p={p} setP={setP} worldMap={worldMap} setWorldMap={setWorldMap}></Game2D>}
+      {!start && <div className='w-full h-full bg-[#FFFDF4] flex flex-col justify-center items-center'>
+        <div id='shbutton' className='w-[200px] h-[50px] text-[24px] flex justify-center items-center'
+          onClick={(e) => {
+            e.preventDefault();
+            setStart(true);
+            sendMsg();
+          }}
+        >게임스타트</div>
+      </div>}
+      {start && <div>
+        {mode && <Game2D p={p} setP={setP} worldMap={worldMap} setWorldMap={setWorldMap}></Game2D>}
+        {!mode && <Game3D p={p} setP={setP} worldMap={worldMap} setWorldMap={setWorldMap}></Game3D>}
+      </div>}
+
 
 
 
