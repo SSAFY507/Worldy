@@ -142,3 +142,55 @@
 } */
 
 /* //////////////////////////////// */
+
+.logoutbtn {
+  width: 300px;
+  height: 50px;
+  border-radius: 5px;
+  border: none;
+  transition: all 0.5s ease-in-out;
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  background: rgba(4, 15, 22, 0);
+  color: #e6e6e6;
+}
+
+.logoutbtn:hover {
+  box-shadow: 0 0 20px 0px #2e2e2e3a;
+}
+
+.logoutbtn .logouticon {
+  position: absolute;
+  height: 40px;
+  width: 75px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.5s;
+}
+
+.logoutbtn .logouttext {
+  transform: translateX(65px);
+}
+
+.logoutbtn:hover .logouticon {
+  width: 300px;
+}
+.logouticon {
+  color: #e6e6e6;
+}
+
+.logoutbtn:hover .logouttext {
+  transition: all 0.5s;
+  opacity: 0;
+}
+
+.logoutbtn:focus {
+  outline: none;
+}
+
+.logoutbtn:active .logouticon {
+  transform: scale(0.85);
+}

@@ -21,10 +21,13 @@ import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
 import Updates from './routes/Updates';
 import pathBI from './assets/images/MainPageBackground.png';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Game from './routes/Game';
 import Socket from './routes/Socket';
 import Payment from './routes/Payment';
+
+import { loginState } from './_store/slices/loginSlice';
+import { useSelector } from 'react-redux';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -41,12 +44,6 @@ const AppLayout = () => {
 
   const closeLoginModal = () => {
     setShowLoginModal(false);
-  };
-
-  const [login, setLogin] = useState<boolean>(false);
-
-  const handleLoginAdmin = () => {
-    setLogin(!login);
   };
 
   // useEffect(() => {
@@ -68,11 +65,8 @@ const AppLayout = () => {
     closeLoginModal();
   };
 
-  const handleNavigate = (path: string, login: boolean) => {
-    if (path === '/') {
-      setLogin(login);
-    }
-    navigate(path);
+  const endTutorial = () => {
+    navigate('/');
   };
 
   const exploreUrl = location.pathname.substr(0, 8);
@@ -86,23 +80,21 @@ const AppLayout = () => {
     setQnaModal(input);
   };
 
+  const checkLoginState = useSelector(loginState);
+
   return (
     <div
       className='hide-scrollbar w-screen h-screen flex flex-col bg-white overflow-hidden'
       style={{
-        backgroundImage: login ? undefined : `url(${pathBI})`,
+        backgroundImage: checkLoginState ? undefined : `url(${pathBI})`,
         backgroundSize: '100%',
       }}
     >
-      <div className='z-10'>
-        {exploreUrl !== '/explore' &&
+      <div className='z-50'>
+        {location.pathname !== '/tutorial' &&
+          exploreUrl !== '/explore' &&
           monopolyUrl !== '/monopoly' &&
-          gameUrl !== '/game' && (
-            <Navbar
-              onLoginClick={handleLoginModal}
-              onLoginAdmin={handleLoginAdmin}
-            />
-          )}
+          gameUrl !== '/game' && <Navbar onLoginClick={handleLoginModal} />}
         {showLoginModal && (
           <LoginModal
             onClose={closeLoginModal}
@@ -113,7 +105,7 @@ const AppLayout = () => {
       </div>
       <div className='flex-1 h-full max-h-full'>
         <Routes>
-          {login ? (
+          {checkLoginState ? (
             <Route
               path='/'
               element={
@@ -148,9 +140,7 @@ const AppLayout = () => {
           <Route path='/socket' element={<Socket />} />
           <Route
             path='/tutorial'
-            element={
-              <Tutorial onClickEndTutorial={() => handleNavigate('/', true)} />
-            }
+            element={<Tutorial onClickEndTutorial={() => endTutorial()} />}
           />
           <Route path='/payment' element={<Payment />} />
         </Routes>

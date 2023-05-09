@@ -14,6 +14,8 @@ import { CSSTransition } from 'react-transition-group';
 
 import WrAnswer from '../assets/images/WrongAnswer.png';
 import CrAnswer from '../assets/images/CorrectAnswer.png';
+import { useDispatch } from 'react-redux';
+import { addNickname } from '../_store/slices/loginSlice';
 
 type TutorialItemType = {
   imgsrc: string;
@@ -91,15 +93,22 @@ export default function Tutorial({
     }
   }, [nickName]);
 
+  const dispatch = useDispatch();
+
+  const setFinalNickname = () => {
+    dispatch(addNickname(nickName));
+  };
+
   //닉네임이 Sunday(중복X)이면 true, 중복이면 false
   const checkNickName = () => {
-    if (nickName === 'Sunday') setNickNameState(true);
+    if (nickName.length >= 3 && nickName.length <= 8) setNickNameState(true);
     else setNickNameState(false);
   };
 
   //닉네임이 미중복 확인 됐으니 다음으로 넘어가기(submit)
   const handleSubmitNickName = () => {
     console.log('넘어가기', targetIndex);
+    setFinalNickname();
     setPopupText(false);
     setPopupItem(false);
     setTargetIndex(1);
@@ -169,16 +178,18 @@ export default function Tutorial({
           ? ''
           : nickNameState
           ? '사용 가능한 닉네임입니다.'
-          : '이미 존재하는 닉네임입니다.'}
+          : '3~8자의 닉네임을 입력해주세요.'}
       </div>
     </div>
   );
 
   //////////////////////////////////////////////////// 관심있는 분야
-  const interestsItems: string[] = ['언어', '역사', '지리', '경제', '없음'];
+  const interestsItems: string[] = ['문화', '역사', '시사', '없음'];
   const [selectedInterest, setSelectedInterest] = useState<string>('');
+  const [selectedInterestIndex, setSelectedInterestIndex] = useState<number>(0);
 
   const submitInterest = (index: number) => {
+    setSelectedInterestIndex(index);
     const tempInterest = interestsItems[index];
     setSelectedInterest(interestsItems[index]);
     setPopupText(false);
@@ -238,6 +249,7 @@ export default function Tutorial({
           setPopupText(false);
           setPopupItem(false);
           setTargetIndex(3);
+          setSelectedInterestIndex(3);
         }}
         onMouseEnter={() => setHoveredIndex(-4)}
         onMouseLeave={() => setHoveredIndex(-1)}
@@ -268,28 +280,107 @@ export default function Tutorial({
 
   /////////////////////////////////////////////////
 
-  const quizList: quizItemType[] = [
-    {
-      difficulty: '상',
-      category: '역사',
-      quizText: '다음 중 가장 오래된 고대 문명은 어디인가요?',
-      answer: '메소포타미아',
-      selections: ['메소포타미아', '이집트', '중국', '인도문명'],
-    },
-    {
-      difficulty: '하',
-      category: '역사',
-      quizText: '역사 문제 2?',
-      answer: '메소포타미아',
-      selections: ['메소포타미아', '이집트', '중국', '인도문명'],
-    },
-    {
-      difficulty: '중',
-      category: '역사',
-      quizText: '역사 문제 3?',
-      answer: '메소포타미아',
-      selections: ['메소포타미아', '이집트', '중국', '인도문명'],
-    },
+  const quizList: quizItemType[][] = [
+    [
+      {
+        difficulty: '하',
+        category: '문화',
+        quizText: '다음 중 빈센트 반 고흐의 작품을 골라주세요.',
+        answer: '별이 빛나는 밤',
+        selections: ['가니카', '거울 앞의 소녀', '데모셀', '별이 빛나는 밤'],
+      },
+      {
+        difficulty: '중',
+        category: '문화',
+        quizText:
+          '다음 중 유네스코 세계문화유산에 등재된 이탈리아의 고고학적 유산을 골라주세요.',
+        answer: '콜로세움',
+        selections: ['콜로세움', '아테네 학당', '스톤헨지', '테베의 절'],
+      },
+      {
+        difficulty: '상',
+        category: '문화',
+        quizText:
+          '무용 예술의 한 종류인 [카타크]는 어느 나라의 전통 무용을 골라주세요.',
+        answer: '인도',
+        selections: ['인도', '이집트', '터키', '이란'],
+      },
+    ],
+    [
+      {
+        difficulty: '하',
+        category: '역사',
+        quizText: '한글을 창제하신 분을 골라주세요.',
+        answer: '세종대왕',
+        selections: ['세종대왕', '이성계', '이순신', '장영실'],
+      },
+      {
+        difficulty: '중',
+        category: '역사',
+        quizText:
+          '다음 중 루이 16세와 함께 프랑스 혁명 시기 중요 인물인 마리 앙투아네트의 국적을 골라주세요.',
+        answer: '오스트리아',
+        selections: ['프랑스', '오스트리아', '영국', '스페인'],
+      },
+      {
+        difficulty: '상',
+        category: '역사',
+        quizText: '1차 세계 대전이 시작된 연도는 언제인가요?',
+        answer: '1914년',
+        selections: ['1905년', '1914년', '1917년', '1939년'],
+      },
+    ],
+    [
+      {
+        difficulty: '하',
+        category: '시사',
+        quizText:
+          '다음 중 신종 코로나바이러스 감염증 (COVID-19)이 처음 발생한 중국의 도시를 골라주세요.',
+        answer: '우한',
+        selections: ['상하이', '베이징', '광저우', '우한'],
+      },
+      {
+        difficulty: '중',
+        category: '시사',
+        quizText: '대한민국에서 IMF 구제 금융 요청이 체결된 년도를 골라주세요.',
+        answer: '1997년도',
+        selections: ['1995년도', '1997년도', '1999년도', '2001년도'],
+      },
+      {
+        difficulty: '상',
+        category: '시사',
+        quizText:
+          '다음 중 국제 금융기구인 세계은행의 본부가 위치한 나라을 골라주세요.',
+        answer: '미국',
+        selections: ['미국', '캐나다', '프랑스', '영국'],
+      },
+    ],
+    [
+      {
+        difficulty: '하',
+        category: '시사',
+        quizText:
+          '다음 중 신종 코로나바이러스 감염증 (COVID-19)이 처음 발생한 중국의 도시을 골라주세요.',
+        answer: '우한',
+        selections: ['상하이', '베이징', '광저우', '우한'],
+      },
+      {
+        difficulty: '중',
+        category: '역사',
+        quizText:
+          '다음 중 루이 16세와 함께 프랑스 혁명 시기 중요 인물인 마리 앙투아네트의 국적을 골라주세요.',
+        answer: '오스트리아',
+        selections: ['프랑스', '오스트리아', '영국', '스페인'],
+      },
+      {
+        difficulty: '상',
+        category: '문화',
+        quizText:
+          '무용 예술의 한 종류인 [카타크]는 어느 나라의 전통 무용을 골라주세요.',
+        answer: '인도',
+        selections: ['인도', '이집트', '터키', '이란'],
+      },
+    ],
   ];
 
   const [selectAnswer, setSelectAnswer] = useState<string>('');
@@ -328,13 +419,15 @@ export default function Tutorial({
       <div className='h-[80px]  outline-red-400 w-full flex flex-col justify-end items-center'>
         <div className='w-full h-[60px] flex flex-row justify-between items-center rounded-t-[10px] bg-buttonRed font-PtdRegular text-white text-[18px]'>
           <div className='w-1/4 h-full  outline-blue-400 flex justify-center items-center'>
-            난이도 : {quizList[quizTargetIndex].difficulty}
+            난이도 :{' '}
+            {quizList[selectedInterestIndex][quizTargetIndex].difficulty}
           </div>
           <div className='w-1/2 h-[60px]  outline-green-200 flex justify-center items-end'>
             <img src={loadedImages['TutorialQuizText']} alt='QuizText' />
           </div>
           <div className='w-1/4 h-full  outline-blue-400 flex justify-center items-center'>
-            카테고리 : {quizList[quizTargetIndex].category}
+            카테고리 :{' '}
+            {quizList[selectedInterestIndex][quizTargetIndex].category}
           </div>
         </div>
       </div>
@@ -342,39 +435,51 @@ export default function Tutorial({
         <div
           className='h-full bg-[#34e7ff]'
           style={{
-            width: `${((quizTargetIndex + 1) * 100) / quizList.length}%`,
+            width: `${((quizTargetIndex + 1) * 100) / 3}%`,
           }}
         ></div>
       </div>
       <div className='w-full flex-1 bg-white py-[25px] px-[40px] rounded-b-[10px]'>
         <div className='w-full h-full  flex flex-col justify-between items-center'>
           <div className=' outline-blue-400 w-full h-fit mb-[10px] font-PtdSemiBOld leading-[40px] flex justify-center items-center px-[30px] text-[35px] text-center py-[10px]'>
-            {quizList[quizTargetIndex].quizText}
+            {quizList[selectedInterestIndex][quizTargetIndex].quizText}
           </div>
           <div className=' outline-blue-200 flex-1 w-full flex flex-wrap justify-between content-between'>
-            {quizList[quizTargetIndex].selections.map((item, index) => (
-              <button
-                key={index}
-                className='h-[47%] w-[47%] rounded-[15px] bg-[#ededed] flex justify-center items-center text-[24px] font-PtdMedium'
-                onClick={() => setSelectAnswer(item)}
-                style={
-                  selectAnswer === item
-                    ? {
-                        backgroundColor: '#FF6962',
-                        color: 'white',
-                      }
-                    : {}
-                }
-              >
-                {item}
-              </button>
-            ))}
+            {quizList[selectedInterestIndex][quizTargetIndex].selections.map(
+              (item, index) => (
+                <button
+                  key={index}
+                  className={`h-[47%] w-[47%] rounded-[15px] bg-[#ededed] flex justify-center items-center text-[24px] font-PtdMedium  ${
+                    quizResult !== null &&
+                    quizList[selectedInterestIndex][quizTargetIndex].answer ===
+                      item
+                      ? 'outline outline-[8px] outline-blue-300'
+                      : ''
+                  }`}
+                  onClick={() => setSelectAnswer(item)}
+                  style={
+                    selectAnswer === item
+                      ? {
+                          backgroundColor: '#FF6962',
+                          color: 'white',
+                        }
+                      : {}
+                  }
+                >
+                  {item}
+                </button>
+              )
+            )}
           </div>
           <div className=' outline-blue-200 h-[80px] w-full mt-[20px]'>
             <button
-              className='rounded-[10px] bg-[#d9d9d9] w-full h-full text-[30px] font-medium text-white'
+              className={`rounded-[10px] bg-[#d9d9d9] w-full h-full text-[30px] font-medium text-white`}
               style={selectAnswer !== '' ? { backgroundColor: '#FF6962' } : {}}
-              onClick={() => checkAnswer(quizList[quizTargetIndex].answer)}
+              onClick={() =>
+                checkAnswer(
+                  quizList[selectedInterestIndex][quizTargetIndex].answer
+                )
+              }
             >
               제출하기
             </button>
@@ -392,7 +497,7 @@ export default function Tutorial({
                     <img
                       src={quizResultImage}
                       alt='quizResult'
-                      className='opacity-80'
+                      className='opacity-80 w-[150px]'
                     />
                   </div>
                 </CSSTransition>

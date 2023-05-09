@@ -12,6 +12,8 @@ import { IoIosLogOut, IoLogoGameControllerB } from 'react-icons/io';
 import { AiOutlineBulb } from 'react-icons/ai';
 import { FiArrowUpRight } from 'react-icons/fi';
 import { SiPowerapps } from 'react-icons/si';
+import { IoMdPower } from 'react-icons/io';
+
 import {
   RiQuestionAnswerFill,
   RiSave3Fill,
@@ -26,6 +28,14 @@ import '../styles/TailWind.css';
 
 import QuizModal from '../components/QuizModal';
 import QNAMoveButton from '../components/QNAMoveButton';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router';
+import {
+  loginNickName,
+  loginProfileImg,
+  logout,
+} from '../_store/slices/loginSlice';
+import { useSelector } from 'react-redux';
 
 type MyPageMenuType = {
   icon: React.ReactNode;
@@ -74,6 +84,9 @@ export default function MyPage({
   const QARef = useRef<HTMLDivElement>(null);
   const loginRecordRef = useRef<HTMLDivElement>(null);
   const logoutRef = useRef<HTMLDivElement>(null);
+
+  const userNickname: string = useSelector(loginNickName);
+  const userProfileImg: string = useSelector(loginProfileImg);
 
   const scrollToContent = (ref: React.RefObject<HTMLDivElement>) => {
     if (containerRef.current && ref.current) {
@@ -194,17 +207,95 @@ export default function MyPage({
 
   const date = moment().format('YYYY-MM-DD');
 
+  const level = 3;
+  const exp = 29;
+
+  const levelContent = (): JSX.Element => {
+    return (
+      <div className='w-[500px] flex flex-row justify-between items-center'>
+        <span className='mr-[20px]'>LV.{level}</span>
+        <div className=' w-full h-[40px]  ml-[20px] flex flex-col justify-between items-start  outline-white'>
+          <div className='w-fit text-[15px] h-fit flex flex-row justify-center items-center '>
+            EXP : ({exp}/100)
+          </div>
+          <div className='relative h-[10px] w-[400px] outline outline-[rgba(255,255,255,0.5)] flex flex-row justify-start items-center'>
+            <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
+            <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
+            <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
+            <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
+            <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
+            <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
+            <div
+              className='absolute top-0 left-0 h-[10px] bg-blue-300'
+              style={{ width: `${exp}%` }}
+            ></div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+  const tierContent = (): JSX.Element => {
+    return (
+      <div className='w-[500px]  h-[40px]  my-[10px] flex flex-row justify-between items-center'>
+        <div
+          className={`${
+            rankInfo[1] === '브론즈' ? 'opacity-100' : 'opacity-30'
+          } h-[40px] bg-[rgba(255,255,255,0.2)] rounded-[100px] flex flex-row justify-center items-center py-[8px] px-[10px]`}
+        >
+          Bronze
+          <SiPowerapps size={22} color={'#6a3805'} className='ml-[10px]' />
+        </div>
+        <div
+          className={`${
+            rankInfo[1] === '실버' ? 'opacity-100' : 'opacity-30'
+          } h-[40px] bg-[rgba(255,255,255,0.2)] rounded-[100px] flex flex-row justify-center items-center py-[8px] px-[10px]`}
+        >
+          Silver
+          <SiPowerapps size={22} color={'#a4a4a4'} className='ml-[10px]' />
+        </div>
+        <div
+          className={`${
+            rankInfo[1] === '골드' ? 'opacity-100' : 'opacity-30'
+          } h-[40px] bg-[rgba(255,255,255,0.2)] rounded-[100px] flex flex-row justify-center items-center py-[8px] px-[10px]`}
+        >
+          Gold
+          <SiPowerapps size={22} color={'#C9B037'} className='ml-[10px]' />
+        </div>
+        <div
+          className={`${
+            rankInfo[1] === '플레티넘' ? 'opacity-100' : 'opacity-30'
+          } h-[40px] bg-[rgba(255,255,255,0.2)] rounded-[100px] flex flex-row justify-center items-center py-[8px] px-[10px]`}
+        >
+          Platinum
+          <SiPowerapps size={22} color={'#86FFF8'} className='ml-[10px]' />
+        </div>
+      </div>
+    );
+  };
+
   const accountInfoContentComponent = () => {
     return (
-      <div className=' min-h-300px h-fit'>
-        <div className='w-full h-full mb-[15px]'>
-          {contentBoxComponent({ title: '이름', content: '김설희' })}
+      <div className='w-[95%] min-h-300px h-fit'>
+        <div className='w-full h-fit flex flex-row justify-between items-center'>
+          <div className='flex-1 h-full mb-[15px] mr-[20px]'>
+            {contentBoxComponent({ title: '닉네임', content: userNickname })}
+          </div>
+          <div className='w-[70px] h-[70px] rounded-full grid place-content-center overflow-hidden mb-[15px] outline-[5px] outline outline-[rgba(255,255,255,0.2)]'>
+            <img
+              src={userProfileImg}
+              alt='프로필 사진'
+              className='w-full h-full'
+            />
+          </div>
         </div>
         <div className='w-full h-full mb-[15px]'>
-          {contentBoxComponent({ title: '닉네임', content: 'SeolHEEHEE' })}
+          {contentBoxComponent({
+            title: '레벨',
+            content: levelContent(),
+          })}
         </div>
         <div className='w-full h-full'>
-          {contentBoxComponent({ title: '가입 날짜', content: date })}
+          {contentBoxComponent({ title: '티어', content: tierContent() })}
         </div>
       </div>
     );
@@ -553,7 +644,7 @@ export default function MyPage({
     content,
   }: {
     title: string;
-    content: string;
+    content: any;
   }) => {
     return (
       <div className='w-full h-[80px] bg-[rgba(255,255,255,0.08)] flex flex-col justify-stretch items-start rounded-lg p-[10px]'>
@@ -603,22 +694,21 @@ export default function MyPage({
 
   const myName = '훈';
 
+  const myRank = rankList.myRank;
+  const rankInfo: string[] =
+    myRank < 30
+      ? ['#86FFF8', '플레티넘']
+      : myRank < 80
+      ? ['#C9B037', '골드']
+      : myRank < 150
+      ? ['#a4a4a4', '실버']
+      : ['#6a3805', '브론즈'];
   const rankContent = (): JSX.Element => {
     // if (rankList.myRank <= 10) {
     //   const tempList: rankListType = rankList;
     //   tempList.topTen[rankList.myRank - 1] = myName;
     //   setMyRankList(tempList);
     // }
-
-    const myRank = rankList.myRank;
-    const rankInfo: string[] =
-      myRank < 30
-        ? ['#86FFF8', '다이아']
-        : myRank < 80
-        ? ['#C9B037', '골드']
-        : myRank < 150
-        ? ['#a4a4a4', '실버']
-        : ['#6a3805', '브론즈'];
 
     return (
       <div className='w-full h-fit  outline-yellow-300'>
@@ -709,7 +799,7 @@ export default function MyPage({
                   />
                 </div>
                 <div className='w-[100px] flex-2 grid place-ontent-right pl-[20px]'>
-                  <span className='font-PtdLight text-white text-[20px] text-[#B2B2B2]'>
+                  <span className='font-PtdLight text-[20px] text-[#B2B2B2]'>
                     lv.1
                   </span>
                 </div>
@@ -740,7 +830,7 @@ export default function MyPage({
                   </span>
                 </div>
                 <div className='w-[100px] flex-2 grid place-ontent-right'>
-                  <span className='font-PtdLight text-white text-[20px] text-[#B2B2B2]'>
+                  <span className='font-PtdLight text-[20px] text-[#B2B2B2]'>
                     lv.1
                   </span>
                 </div>
@@ -755,6 +845,9 @@ export default function MyPage({
     );
   };
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const qnaLinkContent = (): JSX.Element => {
     return (
       <div className='w-full grid place-content-center'>
@@ -763,8 +856,31 @@ export default function MyPage({
     );
   };
 
+  const [iconColor, setIconColor] = useState<string>('#E6E6E6');
+
   const logoutContent = (): JSX.Element => {
-    return <div className='w-full h-[100px]'></div>;
+    return (
+      <div
+        className='relative w-full h-[60px] outline-white grid place-content-center'
+        onMouseEnter={() => setIconColor('#FF4D45')}
+        onMouseLeave={() => setIconColor('#E6E6E6')}
+      >
+        <button
+          className='logoutbtn'
+          onClick={() => {
+            dispatch(logout());
+            navigate('/');
+          }}
+        >
+          <span className='logouticon w-fit h-fit outline-white'>
+            <IoMdPower size={26} color={iconColor} />
+          </span>
+          <span className='logouttext  font-PtdSemiBOld'>
+            로그아웃 하시겠습니까?
+          </span>
+        </button>
+      </div>
+    );
   };
 
   return (
