@@ -155,7 +155,40 @@ export default function CreateGame(props: any) {
       <button className='w-[200px] h-[70px] mt-[40px]' id='shbutton' onClick={playFriends}>친구랑 같이하기</button>
       <button className='w-[200px] h-[70px] mt-[40px]' id='shbutton' onClick={randomMatch}>랜덤 매칭</button>
       <button className='w-[200px] h-[70px] mt-[40px]' id='shbutton' onClick={() => {
-        // window.Kakao.Link.sendDefault();
+
+        const roomId = '740580a9-44c8-46f3-8018-3a72f55dd2db';
+
+        console.log((window as any).Kakao.Link);
+        
+        // (window as any).Kakao.Link.sendDefault({
+        //   objectType: 'feed',
+        //   content: {
+        //     title: 'Worldy Game에 초대합니다.',
+        //     description: 'Worldy Game과 함께 세계를 탐험해보세요.',
+        //     imageUrl: 'http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg',
+        //     link: {
+        //       webUrl: 'https://k8a507.p.ssafy.io/game',
+        //       mobileWebUrl: 'https://k8a507.p.ssafy.io/game',
+        //     },
+        //   },
+        //   buttons: [
+        //     {
+        //       title: 'Worldy Game 입장',
+        //       link: {
+        //         webUrl: 'https://k8a507.p.ssafy.io/game',
+        //         mobileWebUrl: 'https://k8a507.p.ssafy.io/game',
+        //       },
+        //     },
+        //   ],
+        // });   
+
+
+
+
+        // (window as any).Kakao.Link.sendCustom({
+        //   templateId: 93476,
+        // });
+
       }}>카카오 공유하기</button>
 
 

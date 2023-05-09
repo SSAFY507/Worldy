@@ -19,5 +19,10 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: ["react","@typescript-eslint"],
+  rules : {
+    // 기본 설정을 꺼주어야 한다. 
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "warn"
+  }
 };
