@@ -12,15 +12,15 @@ import { useEffect } from 'react';
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 
-
-// const KakaoAppKey: string = '19dbd953fa840cb821c17969d419e263';
-// window.Kakao.init(KakaoAppKey);
-// window.Kakao.isInitialized(); // init되면 true, 아니면 false를 반환한다
-
-
-
-
-
+const KakaoAppKey = '19dbd953fa840cb821c17969d419e263';
+const script = document.createElement('script');
+      script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
+      script.async = true;
+      document.body.appendChild(script);
+      script.onload = () => {
+        //eslint-disable-next-line
+        (window as any).Kakao.init(KakaoAppKey);
+};
 
 root.render(
   <Provider store={store}>

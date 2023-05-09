@@ -10,6 +10,7 @@ export default function Create() {
   const [matchingId, setMatchingId] = useState<string>('');
   const [roomId, setRoomId] = useState<string>('');
 
+
   const [loaded, setLoaded] = useState<boolean>(false);
   setTimeout(() => {
     setLoaded(true);
@@ -17,9 +18,9 @@ export default function Create() {
   return (
     <div className='w-screen h-screen bg-white'>
       <div>매칭용 임시 룸 id : {matchingId}</div>
-      {mode === 0 && <CreateGame setMode={setMode} setMatchingId={setMatchingId} roomId={roomId} />}
+      {mode === 0 && <CreateGame setMode={setMode} setRoomId={setRoomId} setMatchingId={setMatchingId} roomId={roomId} />}
       {mode === 1 && <Matching matchingId={matchingId} />}
-      {mode === 2 && <Waiting />}
+      {mode === 2 && <Waiting roomId={roomId} />}
     </div>
   );
 }
