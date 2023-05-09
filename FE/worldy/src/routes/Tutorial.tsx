@@ -14,6 +14,8 @@ import { CSSTransition } from 'react-transition-group';
 
 import WrAnswer from '../assets/images/WrongAnswer.png';
 import CrAnswer from '../assets/images/CorrectAnswer.png';
+import { useDispatch } from 'react-redux';
+import { addNickname } from '../_store/slices/loginSlice';
 
 type TutorialItemType = {
   imgsrc: string;
@@ -91,15 +93,22 @@ export default function Tutorial({
     }
   }, [nickName]);
 
+  const dispatch = useDispatch();
+
+  const setFinalNickname = () => {
+    dispatch(addNickname(nickName));
+  };
+
   //닉네임이 Sunday(중복X)이면 true, 중복이면 false
   const checkNickName = () => {
-    if (nickName === 'Sunday') setNickNameState(true);
+    if (nickName.length >= 3 && nickName.length <= 8) setNickNameState(true);
     else setNickNameState(false);
   };
 
   //닉네임이 미중복 확인 됐으니 다음으로 넘어가기(submit)
   const handleSubmitNickName = () => {
     console.log('넘어가기', targetIndex);
+    setFinalNickname();
     setPopupText(false);
     setPopupItem(false);
     setTargetIndex(1);
@@ -169,7 +178,7 @@ export default function Tutorial({
           ? ''
           : nickNameState
           ? '사용 가능한 닉네임입니다.'
-          : '이미 존재하는 닉네임입니다.'}
+          : '3~8자의 닉네임을 입력해주세요.'}
       </div>
     </div>
   );
@@ -302,7 +311,7 @@ export default function Tutorial({
         difficulty: '하',
         category: '역사',
         quizText: '한글을 창제하신 분을 골라주세요.',
-        answer: '1914년',
+        answer: '세종대왕',
         selections: ['세종대왕', '이성계', '이순신', '장영실'],
       },
       {
@@ -426,7 +435,7 @@ export default function Tutorial({
         <div
           className='h-full bg-[#34e7ff]'
           style={{
-            width: `${((quizTargetIndex + 1) * 100) / quizList.length}%`,
+            width: `${((quizTargetIndex + 1) * 100) / 3}%`,
           }}
         ></div>
       </div>

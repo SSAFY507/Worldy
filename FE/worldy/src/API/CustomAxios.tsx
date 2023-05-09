@@ -5,18 +5,18 @@ type InputType = {
   APIType: 'get' | 'post' | 'put' | 'delete';
   UrlQuery: string;
   Body?: Map<string, any>;
+  Token?: string;
 };
 
 export default async function CustomAxios(input: InputType): Promise<any> {
-  const QUERY =
-    input.UrlQuery.at(0) === '/' ? input.UrlQuery.slice(1) : input.UrlQuery;
-  const URL = `http://localhost:8000/api/${QUERY}`;
-
   try {
     const config = {
       method: input.APIType,
-      url: URL,
+      url: input.UrlQuery,
       data: input.Body ? Object.fromEntries(input.Body) : undefined,
+      headers: input.Token
+        ? { Authorization: `Bearer ${input.Token}` }
+        : undefined,
     };
 
     const { data } = await axios(config);
@@ -49,7 +49,7 @@ export default async function CustomAxios(input: InputType): Promise<any> {
         const response = await CustomAxios({
           APIName: "MyPost",
           APIType: "post",
-          UrlQuery: "/game/monopoly?uid=1&dice=3",
+          UrlQuery: "http://localhost:9090/api/help/write",
           Body: requestBody,
         });
 
