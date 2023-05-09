@@ -12,7 +12,13 @@ import { JsxElement } from 'typescript';
 
 import '../styles/QuizModalStyles.css';
 import { TbCategory2, TbWorld } from 'react-icons/tb';
-import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
+import { BsBookmark, BsBookmarkFill, BsBoxArrowUpRight } from 'react-icons/bs';
+import { BiImage } from 'react-icons/bi';
+
+import tempImage1 from '../assets/images/thumb2.png';
+import tempImage2 from '../assets/images/Carousel5.png';
+import tempImage3 from '../assets/images/JoshCurious.png';
+import { IoIosPhotos } from 'react-icons/io';
 
 type ScrappedQuizType = {
   quizId: number; //퀴즈 id
@@ -334,11 +340,13 @@ export default function QuizModal({
               <input type='checkbox' onClick={handleHint} />
               <span className='uiverse-slider '></span>
             </label>
-            <span className='ml-[10px] text-[#ACACAC]'>힌트 보기</span>
+            <span className='ml-[10px] text-[#ACACAC] font-PtdLight'>
+              힌트 보기
+            </span>
           </>
         ) : (
           <>
-            <span className='ml-[10px] text-[#ACACAC]'>
+            <span className='ml-[10px] text-[#ACACAC] font-PtdLight'>
               힌트가 없는 문제입니다.
             </span>
           </>
@@ -358,9 +366,9 @@ export default function QuizModal({
       <div className='flex flex-row justify-center items-center'>
         <button onClick={scrapThisQuiz}>
           {scrapped ? (
-            <BsBookmarkFill size={24} color={'#ACACAC'} />
+            <BsBookmarkFill size={18} color={'#ACACAC'} />
           ) : (
-            <BsBookmark size={24} color={'#ACACAC'} />
+            <BsBookmark size={18} color={'#ACACAC'} />
           )}
         </button>
         <span className='ml-[10px] text-[#ACACAC]'>스크랩</span>
@@ -377,7 +385,7 @@ export default function QuizModal({
         ? '문화/역사'
         : '기타';
     return (
-      <div className='w-fit h-full flex flex-row justify-end items-center text-[#ACACAC] font-PtdMedium'>
+      <div className='w-fit h-full flex flex-row justify-end items-center text-[#ACACAC] font-PtdLight'>
         <span className='w-fit h-[40%] px-[10px] flex flex-row justify-center items-center border-0 border-r-[2px] border-[#ACACAC] border-solid'>
           {input.nationName}
         </span>
@@ -394,20 +402,36 @@ export default function QuizModal({
   const [flipped, setFlipped] = useState<boolean>(false);
   const [correctState, setCorrectState] = useState<boolean | null>(null);
   const submitAndFlip = () => {
-    setFlipped(true);
-    setCorrectState(submitAnswer === input.answer);
+    if (submitCheck) {
+      setFlipped(true);
+      setCorrectState(submitAnswer === input.answer);
+    } else {
+      setSubmitCheck(true);
+    }
   };
+
+  const [beforeSubmitAnswer, setBeforeSubmitAnswer] = useState<string>('');
+
+  useEffect(() => {
+    if (submitAnswer === '' || submitAnswer !== beforeSubmitAnswer)
+      setSubmitCheck(false);
+    setBeforeSubmitAnswer(submitAnswer);
+  }, [submitAnswer]);
 
   const submitButton = (): JSX.Element => {
     return (
       <button
         className={`w-[500px] h-[60px] rounded-md font-PtdLight text-[25px] ${
-          submitAnswer ? 'bg-white text-black' : 'bg-[#D4D4D4] text-[#9F9F9F]'
+          submitAnswer
+            ? submitCheck
+              ? 'bg-[#61C7BB] text-white'
+              : 'bg-white text-black'
+            : 'bg-[#D4D4D4] text-[#9F9F9F]'
         }`}
         disabled={!submitAnswer}
         onClick={submitAndFlip}
       >
-        제출하기
+        {submitCheck ? '제출하기' : '선택 완료'}
       </button>
     );
   };
@@ -441,9 +465,26 @@ export default function QuizModal({
     );
   };
 
+  const [hintImageState, setHintImageState] = useState<boolean>(false);
+
+  const [submitCheck, setSubmitCheck] = useState<boolean>(false);
+
+  const [showBack, setShowBack] = useState<boolean>(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowBack(true);
+      console.log('보기');
+    }, 1500);
+  }, [flipped]);
+
   const fromtContainer = (): JSX.Element => {
     return (
-      <div className='frontcontainer'>
+      <div
+        className={`frontcontainer transition-all duration-[500ms] ease-in-out ${
+          flipped ? 'opacity-0' : 'opacity-100'
+        }`}
+      >
         <div className='h-[70px] w-full flex flex-col-reverse justify-start items-center rounded-t-xl bg-[#61C7BB]  outline-red-500'>
           <div className='w-full h-[55px] bg-[#F5F5F5] rounded-t-xl outline-red-300 flex flex-col jutsify-stretch items-center'>
             <div className='w-full h-[20px] outline-yellow-500 flex flex-row justify-center items-end'>
@@ -453,11 +494,40 @@ export default function QuizModal({
                 className='w-fit h-[60px]'
               />
             </div>
-            <div className='w-full h-fit flex flex-row justify-end items-center'>
-              <div className='w-[50px] h-fit  outline-yellow-500 grid place-content-center text-gray-800'>
+            <div className='w-full h-fit flex flex-row justify-between items-center px-[30px]'>
+              <div className=' w-fit w-min-[5px] h-full outline-balck flex flex-row justify-start items-center pt-[5px] pl-[5px]'>
+                {input.image === '' && (
+                  <div className={`relative  `}>
+                    {/* {hintImageState && ( */}
+                    <div
+                      className={`absolute -z-10 top-0 flex flex-row justify-start outline-white w-[400px] h-fit bg-[#F5F5F5] rounded-xl overflow-hidden transition-all duration-500 ease-in-out  ${
+                        hintImageState ? 'left-[-450px]' : 'left-[0px]'
+                      }`}
+                    >
+                      <img
+                        src={tempImage1}
+                        alt='힌트 이미지'
+                        className='w-[90%] h-fit max-h-[500px] '
+                      />
+                      <div className='m-[10px]'>
+                        <IoIosPhotos color={'lightgray'} size={20} />
+                      </div>
+                    </div>
+                    {/* )} */}
+                    <span
+                      className='text-[#BFBFBF] mx-[10px] font-PtdLight mt-[3px] hover:text-[#61C7BB] cursor-default'
+                      onMouseEnter={() => setHintImageState(true)}
+                      onMouseLeave={() => setHintImageState(false)}
+                    >
+                      이미지 보기
+                    </span>
+                  </div>
+                )}
+              </div>
+              <div className='w-fit h-fit  outline-yellow-500 grid place-content-center text-gray-800 hover:cursor-pointer'>
                 <AiOutlineClose
-                  size={30}
-                  color='gray'
+                  size={25}
+                  color='#BFBFBF'
                   onClick={() => closeModal()}
                   className='cursor-pointer'
                 />
@@ -467,7 +537,7 @@ export default function QuizModal({
         </div>
         <div className='w-full h-[200px] bg-[#F5F5F5]  outline-red-500 flex flex-row justify-center items-center pt-[10px] pb-[20px] px-[50px] overflow-y-scroll on-scrollbar-quizmodal'>
           <span
-            className='font-PtdSemiBOld text-center'
+            className='font-PtdRegular text-center text-gray-700'
             style={{
               fontSize: `${
                 textSize > 30 ? 30 : textSize < 20 ? 20 : textSize
@@ -497,9 +567,13 @@ export default function QuizModal({
 
   const backContainer = (): JSX.Element => {
     return (
-      <div className='backcontainer'>
+      <div
+        className={`backcontainer transition-all duration-[2000ms] ease-in-out ${
+          !showBack ? 'opacity-0' : 'opacity-100'
+        }`}
+      >
         <div className='h-[70px] w-full flex flex-col-reverse justify-start items-center rounded-t-xl bg-[#61C7BB]  outline-red-500'>
-          <div className='w-full h-[55px] bg-[#eaeaea] rounded-t-xl outline-red-300 flex flex-col jutsify-stretch items-center'>
+          <div className='w-full h-[55px] bg-[#eaeaea] rounded-t-xl  outline-red-300 flex flex-col jutsify-stretch items-center'>
             <div className='w-full h-[20px] outline-yellow-500 flex flex-row justify-center items-end'>
               <img
                 src={ResultBlueText}
