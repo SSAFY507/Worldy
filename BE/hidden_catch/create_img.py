@@ -1,6 +1,7 @@
 from wx import *
 import cv2
 import numpy as np
+import requests
 
 
 # 이미지 크기 조정
@@ -130,6 +131,10 @@ def centering_image(src, dst, ref, width = 400, height = 600):
 
     return src_output, dst_output,  ref_output, t
 
+def create_hidden_catch(nation_id, img_num):
+    response = requests.get("http://k8a507.p.ssafy.io:8000/model/" + str(nation_id) + "/" + str(img_num))
+    
+    return response
 
 # 원본 이미지를 받아서, 틀린 그림 이미지를 만들어 넘겨준다
 def get_next_quiz(NextImagePath):
@@ -150,10 +155,13 @@ def get_next_quiz(NextImagePath):
     # 마스크 부분을 복원해주는 함수 - inpanint()
     cv2.xphoto.inpaint(ref, imgMask, dst, 0)
 
+    # AI를 이용하여 저장
+    #create_hidden_catch(nation_id, img_num)
+
     src, dst, ref , t = centering_image(src, dst, ref)
     # img = np.hstack([src,dst,ref])
 
-    cv2.imwrite("./hidden.jpg", dst)
+    cv2.imwrite("./img/result.jpg", dst)
 
     # 넘겨주는 값은 바뀐 자리의 위치 정보
     return pts
