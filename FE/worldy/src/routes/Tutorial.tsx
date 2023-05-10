@@ -8,14 +8,16 @@ import pathJP from '../assets/images/JoshPanic.png';
 import pathJJ from '../assets/images/JoshJumping.png';
 import pathTQT from '../assets/images/TutorialQuizText.png';
 import pathJR from '../assets/images/JoshReady.png';
-import LoaderPyramid from '../components/LoaderPyramid';
+import LoaderPyramid from '../components/Loaders/LoaderPyramid';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 import { CSSTransition } from 'react-transition-group';
 
 import WrAnswer from '../assets/images/WrongAnswer.png';
 import CrAnswer from '../assets/images/CorrectAnswer.png';
 import { useDispatch } from 'react-redux';
-import { addNickname } from '../_store/slices/loginSlice';
+import { addNickname, loginToken } from '../_store/slices/loginSlice';
+import { useSelector } from 'react-redux';
+import CustomAxios from '../API/CustomAxios';
 
 type TutorialItemType = {
   imgsrc: string;
@@ -100,18 +102,56 @@ export default function Tutorial({
   };
 
   //닉네임이 Sunday(중복X)이면 true, 중복이면 false
-  const checkNickName = () => {
-    if (nickName.length >= 3 && nickName.length <= 8) setNickNameState(true);
-    else setNickNameState(false);
+  const checkNickName = async () => {
+    if (nickName.length >= 3 && nickName.length <= 8) {
+      await checkNicknameAxios();
+      if (checkNicknameResult === false) setNickNameState(true);
+      else setNickNameState(false);
+    }
   };
 
   //닉네임이 미중복 확인 됐으니 다음으로 넘어가기(submit)
-  const handleSubmitNickName = () => {
+  const handleSubmitNickName = async () => {
     console.log('넘어가기', targetIndex);
-    setFinalNickname();
+    setFinalNickname(); //redux에 닉네임 저장
+    await submitNickNameAxios(); //서버에 닉네임 저장
+    console.log('submitNickNameAxios 결과', submitkNicknameResult);
     setPopupText(false);
     setPopupItem(false);
     setTargetIndex(1);
+  };
+
+  const [checkNicknameResult, setCheckNicknameResult] = useState(null);
+  const [submitkNicknameResult, setSubmitNicknameResult] = useState(null);
+  const token: string = useSelector(loginToken);
+
+  const checkNicknameAxios = async () => {
+    try {
+      const response = await CustomAxios({
+        APIName: 'checkNickName',
+        APIType: 'get',
+        UrlQuery: `https://k8a507.p.ssafy.io/api/user/check/${nickName}`,
+        Token: token,
+      });
+
+      setCheckNicknameResult(response);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+  const submitNickNameAxios = async () => {
+    try {
+      const response = await CustomAxios({
+        APIName: 'submitNickName',
+        APIType: 'put',
+        UrlQuery: `https://k8a507.p.ssafy.io/api/user/check/${nickName}`,
+        Token: token,
+      });
+
+      setSubmitNicknameResult(response);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   };
 
   const eneterNickNameContentItem = (
@@ -178,7 +218,7 @@ export default function Tutorial({
           ? ''
           : nickNameState
           ? '사용 가능한 닉네임입니다.'
-          : '3~8자의 닉네임을 입력해주세요.'}
+          : '이미 존재하는 닉네임입니다.'}
       </div>
     </div>
   );
@@ -600,6 +640,7 @@ export default function Tutorial({
       }
     }
   }, [targetIndex]);
+
   return (
     <>
       {loadedAll ? (
