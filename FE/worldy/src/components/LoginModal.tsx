@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import pathGC from '../assets/images/GameController.png';
 import pathLL from '../assets/images/LoginLogo.png';
 import pathKLB from '../assets/images/KakaoLoginButton.png';
-import LoaderPyramid from './LoaderPyramid';
+import LoaderPyramid from './Loaders/LoaderPyramid';
 import KakaoLogin from './KakaoLogin';
 import axios from 'axios';
 import { access } from 'fs';
@@ -186,7 +186,7 @@ export default function LoginModal({
                 <svg
                   stroke='currentColor'
                   fill='currentColor'
-                  stroke-width='0'
+                  strokeWidth='0'
                   viewBox='0 0 1024 1024'
                   height='1.8em'
                   width='1.8em'
