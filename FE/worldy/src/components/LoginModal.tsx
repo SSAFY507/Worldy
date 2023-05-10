@@ -37,7 +37,7 @@ export default function LoginModal({
     if (isLoaded) {
       setTimeout(() => {
         setLoadedAll(true);
-      }, 300);
+      });
     }
   }, [isLoaded]);
 
@@ -121,14 +121,12 @@ export default function LoginModal({
                 <KakaoLogin />
               </div>
               <div className=' w-full h-20 flex flex-col items-center justify-between py-4 font-PtdMedium text-base'>
-                <div className='flex flex-row justify-center items-center'>
-                  <div className=' '>
-                    저희 Wordly는 회원님의 정보를 다음과 같이 처리합니다.
-                  </div>
+                <div className='flex flex-row justify-center items-center text-[15px]'>
+                  저희 Worldy는 회원님의 정보를 다음과 같이 처리합니다.
                 </div>
                 <button
                   onClick={handleShowPersonalAccept}
-                  className='underline underline-offset-2 decoration-2 text-[19px] mt-[2px] text-blue-400'
+                  className='underline underline-offset-2 decoration-2 text-[13px] mt-[2px] text-blue-400'
                 >
                   개인 정보 처리방침
                 </button>
