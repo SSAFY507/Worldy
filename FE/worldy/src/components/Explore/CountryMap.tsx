@@ -1,9 +1,15 @@
 import * as THREE from "three";
 
+import { SetAnimation, SetupCamera, SetupControls, SetupLight } from "./ThreejsOptionComponent";
 import { useEffect, useRef } from "react";
 
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import africa_Egypt from "../../assets/lowpoly/africa_Egypt.glb"
 import asia_China from "../../assets/lowpoly/asia_China.glb"
 import asia_India from "../../assets/lowpoly/asia_india.glb"
@@ -16,10 +22,6 @@ import europe_Spain from "../../assets/lowpoly/europe_Spain.glb"
 import europe_UK from "../../assets/lowpoly/europe_UK.glb"
 import northAmerica_America from "../../assets/lowpoly/Country_America.glb";
 
-// import northAmerica_America from "../../assets/lowpoly/northAmerica_America.glb"
-
-
-
 interface Props {
   countryName: string;
 }
@@ -31,7 +33,120 @@ const CountryMap:React.FC<Props> = (countryName) => {
   const camera = useRef<THREE.PerspectiveCamera | null>(null);
   const controls = useRef<OrbitControls |null>(null);
 
-    /** 배경함수 */
+  const raycasterRef = useRef<THREE.Raycaster | null>(null);
+  const selectedObjectRef = useRef<THREE.Object3D | null>(null);
+  const selectedCountryRef = useRef<THREE.Object3D | null>(null);
+
+  const outlinePassRef = useRef<OutlinePass | null>(null);
+  const composerRef = useRef<EffectComposer | null>(null);
+  const effectFXAARef = useRef<ShaderPass | null>(null);
+
+  const assetSet = new Set(["paintBox", "historyBox", "quizBox", "foodBox", "personalityBox",  "newsBox"])
+  let selectedName = "";
+
+
+  /** 마우스 추적 */
+  const SetupPicking = () => {
+    const raycaster = new THREE.Raycaster();
+    divContainer.current?.addEventListener("pointermove", OnPointerMove);
+    raycasterRef.current = raycaster;
+  }
+
+  /** 마우스 추적하여 근처 대륙 객체 찾기 */
+  const FindObject = (event:any) => {
+    // 현재 마우스의 위치 찾기
+    const mouse = new THREE.Vector2
+    mouse.set((event.clientX / window.innerWidth) * 2 - 1, -(event.clientY / window.innerHeight) * 2 + 1);
+
+    raycasterRef.current?.setFromCamera(mouse, camera.current!)
+
+    // 객체 이름이 asset인 객체만 고르기
+    const assets:THREE.Object3D[] = [];
+    scene.current?.children.forEach((obj3d) => {
+      if (obj3d){
+        obj3d.children.forEach((asset) => {
+          if (assetSet.has(asset.name)) {
+            assets.push(asset);
+          }
+        })
+      }
+    })
+    return assets
+  }
+
+  /** 강조할 대륙 객체 추적 */
+  const OnPointerMove = (event:PointerEvent) => {
+    if (event.isPrimary === false) return;
+
+    // 마우스 위치 추적하고 대륙 객체 저장
+    const assets:THREE.Object3D[] = FindObject(event)!
+    let selectedObject: THREE.Object3D;
+    
+    const intersects: any[] = raycasterRef.current!.intersectObjects(assets)
+
+
+    // 나라 안에 위에서 충돌한 객체가 들어 있으면 호버
+    if (intersects.length) {
+      // console.log("intersects :", intersects)
+      // console.log("assets : ", assets)
+      assets.forEach((obj3d) => {
+        if (intersects[0].object.name === obj3d.name){
+          // console.log("int : ", intersects[0].object.name)
+          // console.log("ass : ", obj3d.name)
+          selectedObject = obj3d;
+        }
+      });
+  
+      // 이전 호버효과 초기화 
+      if (selectedName && selectedName !== selectedObject!.name) {
+        selectedName = selectedObject!.name
+
+        SetAnimation(selectedObjectRef.current!.position, selectedObjectRef.current!.position.x, selectedObject!.position.y, selectedObjectRef.current!.position.z, 1)
+      }
+
+      // 해당하는 에셋 호버 효과 
+      SetAnimation(selectedObject!.position, selectedObject!.position.x, selectedObject!.position.y, selectedObject!.position.z, 1)
+      
+      // 해당하는 에셋 강조 효과 
+      outlinePassRef.current!.edgeStrength = 25;  
+      outlinePassRef.current!.selectedObjects = [ selectedObject! ];
+      selectedObjectRef.current = selectedObject!;
+      return;
+    }
+    
+    // // 마우스가 대륙에 있지 않으면 호버 초기화
+    // else if (selectedObjectRef.current) {
+    //   // 줌 아웃 상태
+    //     SetAnimation(selectedObjectRef.current.position, selectedObjectRef.current.position.x, selectedObject!.position.y, selectedObjectRef.current.position.z, 1)
+
+    // }
+    
+    outlinePassRef.current!.selectedObjects = [];
+    
+  }
+  
+  /** 객체 강조 후처리 */
+  const SetupPostProcess = () => {
+    const composer = new EffectComposer(renderer.current!);
+
+    const renderPass = new RenderPass(scene.current!, camera.current!);
+    composer.addPass(renderPass);
+
+    const outlinePass = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), scene.current!, camera.current!);
+    composer.addPass(outlinePass);
+
+    const effetFXAA = new ShaderPass(FXAAShader);
+    effetFXAA.uniforms["resolution"].value.set(1/window.innerWidth, 1/window.innerHeight);
+    composer.addPass(effetFXAA);
+
+    outlinePassRef.current = outlinePass;
+    composerRef.current = composer;
+    effectFXAARef.current = effetFXAA;
+
+  }
+  
+
+  /** 배경함수 */
   const Background = () => {
 
     //2. 이미지를 배경으로 (방법 여러개지만, 여기서는 Texture 이용)
@@ -42,42 +157,6 @@ const CountryMap:React.FC<Props> = (countryName) => {
       
     })
   } 
-
-  /** 카메라 커스텀 함수 */
-  const SetupCamera = () => {
-    const cam = new THREE.PerspectiveCamera(37, window.innerWidth / window.innerHeight, 0.1, 100);
-    cam.position.set(-0.11, 0.09, 1.8);
-    cam.rotation.set(
-      THREE.MathUtils.degToRad(0),
-      THREE.MathUtils.degToRad(0),
-      THREE.MathUtils.degToRad(0)
-    );
-    cam.lookAt(0, 0, 0);          // 카메라가 바라보는 곳이 0, 0, 0
-    
-    camera.current = cam;
-    scene.current?.add(cam)
-  };
-
-  /** 조명 커스텀 함수 */
-  const SetupLight = () => {
-    // Add lights
-    const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.61 );
-    hemiLight.position.set( 0, 50, 0 );
-
-    // Add hemisphere light to scene   
-    scene.current?.add( hemiLight );
-    const color = 0xffffff;
-    const intensity = 1;
-    const light = new THREE.DirectionalLight(color, intensity);
-    // const light = new THREE.AmbientLight(color,intensity)
-    // const light = new THREE.HemisphereLight("#b0d8f5", "#bb7a1c", 1)
-
-    light.position.set(-1, 3, 4);
-    // scene.current?.add(light);
-    // 카메라에 조명을 달았음
-    camera.current?.add(light)
-  };
-
 
   /** 모델 커스텀 함수 */
   const SetupModel = () => {
@@ -100,9 +179,12 @@ const CountryMap:React.FC<Props> = (countryName) => {
           const obj3d:THREE.Group = glb.scene;
           obj3d.name = item.name
           obj3d.children.forEach((obj, idx) => {
-            console.log(obj.name)
+            if (assetSet.has(obj.name)) {
+              obj.children.forEach((children) => {
+                children.name = obj.name
+              })
+            }
           })
-          console.log(obj3d)
           obj3d.position.set(0,-0.1, 0.5);
           obj3d.rotation.set(
             THREE.MathUtils.degToRad(item.angle[0]),
@@ -111,10 +193,6 @@ const CountryMap:React.FC<Props> = (countryName) => {
           )
           obj3d.scale.set(1, 1, 1);
           
-          // const helper = new THREE.AxesHelper
-          // const shelper = new THREE.GridHelper
-          // scene.current?.add(helper)
-          // scene.current?.add(shelper)
           scene.current?.add(obj3d);
           // if (camera.current) {
           //   ZoomFit(obj3d, camera.current)
@@ -127,7 +205,7 @@ const CountryMap:React.FC<Props> = (countryName) => {
   };
 
   /** 렌더링 될 때마다 사이즈 초기화 */
-  const resize = () => {
+  const Resize = () => {
     const width = divContainer.current?.clientWidth || 0;
     const height = divContainer.current?.clientHeight || 0;
 
@@ -135,31 +213,19 @@ const CountryMap:React.FC<Props> = (countryName) => {
       camera.current.aspect = width / height;
       camera.current.updateProjectionMatrix();
     }
+    renderer.current?.setPixelRatio(window.devicePixelRatio);
     renderer.current?.setSize(width, height);
+
+    composerRef.current?.setSize(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio)
+
+    effectFXAARef.current?.uniforms["resolution"].value.set(1/(window.innerWidth*window.devicePixelRatio), 1/(window.innerHeight*window.devicePixelRatio))
+
   };
   
-  /** 마우스 그래그로 회전시킴 */
-  const SetupControls = () => {
-    if (camera.current) {
-      controls.current = new OrbitControls(camera.current, divContainer.current!); // OrbitControls를 초기화합니다.
-      controls.current.target.set(0,0,0)    // 카메라 회전점
-      controls.current.enableDamping = true;        // 부드럽게 돌아가
-
-      
-  
-      // 위아래 카메라 제한
-      // controls.current.minPolarAngle = THREE.MathUtils.degToRad(0);   // 0도 부터
-      // controls.current.maxPolarAngle = THREE.MathUtils.degToRad(60);  // 30도 까지 회전 가능
-      // // 좌우 카메라 제한
-      // controls.current.minAzimuthAngle = THREE.MathUtils.degToRad(-15); // -5도 부터
-      // controls.current.maxAzimuthAngle = THREE.MathUtils.degToRad(15);  // 5도 까지
-      // console.log(camera.current!.fov)
-    }
-  }
-
   const render = (time: number) => {
     renderer.current?.render(scene.current!, camera.current!);
     update(time);
+    composerRef.current?.render();
     requestAnimationFrame(render);
   };
 
@@ -182,14 +248,30 @@ const CountryMap:React.FC<Props> = (countryName) => {
       const scn = new THREE.Scene();
       scene.current = scn;
 
-      Background();
-      SetupCamera();
-      SetupLight();
-      SetupModel();
-      SetupControls();
+      window.addEventListener("resize", Resize);
+      SetupPicking();
 
-      window.onresize = resize;
-      resize();
+
+      const cam = SetupCamera(37, 0.1, 25, new THREE.Vector3(-0.11, 0.09, 1.8), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0));
+      camera.current = cam
+      scene.current.add(cam)
+      controls.current =  SetupControls(camera.current!, divContainer.current!, 0, 360, -180, 180);
+
+      // Add lights
+      const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.61 );
+      hemiLight.position.set( 0, 50, 0 );
+      // Add hemisphere light to scene   
+      scene.current?.add( hemiLight );
+      const light = SetupLight(0xffffff, 1.5, new THREE.Vector3(0, 5, 0), new THREE.Vector3(0, 0, 0) );
+      scene.current.add(light.target)
+      camera.current?.add(light)
+
+      Background();
+      SetupModel();
+      SetupPostProcess();
+
+      window.onresize = Resize;
+      Resize();
 
       requestAnimationFrame(render);
     }

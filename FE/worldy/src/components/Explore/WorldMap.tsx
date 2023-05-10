@@ -63,6 +63,15 @@ const WorldMap = () => {
   
   const navigate = useNavigate();
 
+
+  /** 마우스 추적 */
+  const SetupPicking = () => {
+    const raycaster = new THREE.Raycaster();
+    divContainer.current?.addEventListener("pointermove", OnPointerMove);
+    divContainer.current?.addEventListener("dblclick", OnDblClick);
+    raycasterRef.current = raycaster;
+  }
+
   /** 마우스 추적하여 근처 대륙 객체 찾기 */
   const FindObject = (event:any) => {
     // 현재 마우스의 위치 찾기
@@ -90,14 +99,6 @@ const WorldMap = () => {
       }
     })
     return continents
-  }
-
-  /** 마우스 추적 */
-  const SetupPicking = () => {
-    const raycaster = new THREE.Raycaster();
-    divContainer.current?.addEventListener("pointermove", OnPointerMove);
-    divContainer.current?.addEventListener("dblclick", OnDblClick);
-    raycasterRef.current = raycaster;
   }
 
   /** 마우스 한번 클릭 */
@@ -461,7 +462,6 @@ const WorldMap = () => {
       scene.current = scn;
 
       window.addEventListener("resize", Resize);
-      // divContainer.current.addEventListener("pointermove", OnPointerMove, false);
       SetupPicking();
 
 
@@ -473,8 +473,8 @@ const WorldMap = () => {
       scene.current.add(light.target)
       camera.current?.add(light)
 
-      SetupModel();
       Background();
+      SetupModel();
       SetupPostProcess();
 
       window.onresize = Resize;

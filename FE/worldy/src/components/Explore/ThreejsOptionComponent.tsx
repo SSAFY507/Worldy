@@ -79,6 +79,9 @@ export const CreateTextGeometry = (text: string, x:number, y:number, z:number, n
 
 /** 조명 커스텀 함수 return => light */
 export const SetupLight = (color:THREE.ColorRepresentation, intensity:number, position:THREE.Vector3, targetPosition:THREE.Vector3) => {
+  const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.61 );
+  hemiLight.position.set( 0, 50, 0 );
+  
   const light = new THREE.DirectionalLight(color, intensity);
 
   light.position.copy(position);
