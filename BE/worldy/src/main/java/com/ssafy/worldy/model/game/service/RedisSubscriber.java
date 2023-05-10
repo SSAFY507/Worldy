@@ -56,7 +56,14 @@ public class RedisSubscriber {
                 // subscriber에게 메시지 전송
                 log.info("Redis Subscribe Message : " + playerCnt.toString());
                 template.convertAndSend("/sub/" + playerCnt.getRoomId(), playerCnt);
-            }else {
+            } else if (publishMessage.contains("worldmap")) {
+
+                WorldMap worldMap = objectMapper.readValue(publishMessage, WorldMap.class);
+
+                // subscriber에게 메시지 전송
+                log.info("Redis Subscribe Message : " + worldMap.toString());
+                template.convertAndSend("/sub/" + worldMap.getRoomId(), worldMap);
+            } else {
 
                 // subscriber에게 메시지 전송
                 log.info("Redis Subscribe Message : ");
