@@ -19,9 +19,6 @@ export default function Main() {
 
   roomData = location.state.value;
 
-  console.log('roomData : ');
-  console.log(roomData.user1)
-  console.log(roomData.user1.kakaoId);
   const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzU3Mzg5MTAxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4Mzc3NTAxMX0.FGXDtMPT4TZdwoUDUc98lZNlYI7d4MK2YYu63b7nvQiJdzY2zItjIgmOAsM5_Y4hKIPv2eU5o9gOwdbgyRc8uQ  '
   let headers = { Authorization: `Bearer ${accessToken}` };
   let receivedData: any = null;
@@ -39,19 +36,10 @@ export default function Main() {
   }, [])
 
 
-  useEffect(() => {
-
-  }, [])
-
-
   function subscribe() {
 
-    console.log('subcribe () 실행 >>>>>')
     ws.subscribe(`/sub/${params.id}`, (event) => {
       const received = JSON.parse(event.body);
-
-
-
 
 
 
@@ -66,48 +54,16 @@ export default function Main() {
     let _p2 = roomData.user2;
     let _p3 = roomData.user3;
     let _p4 = roomData.user4;
-    let myId = 'ㅇㄹㅇㄹㅇㄹ';
-    let myNum = 7;
+    let myId = '';
+    let myNum = 0;
     const ps = [_p1, _p2, _p3, _p4];
 
-    console.log('참여한 플레이어 데이터 최초 세팅')
-
     ps.forEach((e, index) => {
-      if(e.kakaoId === loginUser ) {
-        console.log('플레이어 일치' + (index+1))
-        console.log(e);
-
+      if (e.kakaoId === loginUser) {
         myId = e.kakaoId;
-        myNum = index+1;
-        // setMe((prevState) => ({
-        //   ...prevState,
-        //   playerId: '내 정보 아이디다',
-        //   playerNum: (index+1),
-        //   name: '성훈',
-        //   type: 'player',
-        //   game: {
-        //     ...prevState.game,
-        //     location: 0,
-        //     balance: 500,
-        //     desert: 0,
-        //     state: false,
-        //     dice1: 0,
-        //     dice2: 0,
-        //     dice: 0,
-        //     isDouble: false,
-        //     own: [],
-        //     lap: 0,
-        //     ranking: 0,
-        //   }
-        // }))
-        
-        // console.log('내 정보')
-        // console.log(me);
+        myNum = index + 1;
       }
     });
-
-    
-    
 
     setP1((prevState) => ({
       ...prevState,
@@ -219,16 +175,6 @@ export default function Main() {
       }
     }))
 
-    console.log('me >>>>')
-    console.log(me);
-    console.log(p1)
-    console.log(p2)
-    console.log(p3)
-    console.log(p4)
-
-    
-
-
     // console.log('플레이어 데이터 전송 >>>')
     // ws.send("/pub/game/player", {}, JSON.stringify(roomData));
   }
@@ -240,6 +186,15 @@ export default function Main() {
   const [mode, setMode] = useState<boolean>(true);
   const [start, setStart] = useState<boolean>(false);
   const [data, setData] = useState<Object[]>();
+  const [metaData, setMetaData] = useState<Object>({
+    currentLocation: 0,
+    dice1: 0,
+    dice2: 0,
+    dice: 0,
+    turn: 1,
+    turnOver: false,
+    isDouble: false,
+  });
   // 백으로부터 응답 받은 데이터
   let res = {};
 
@@ -250,7 +205,7 @@ export default function Main() {
   const [p1, setP1] = useState<Player>({
     playerId: "",
     playerNum: 1,
-    name: "설희",
+    name: "",
     type: 'player',
     game: {
       location: 0,
@@ -261,6 +216,7 @@ export default function Main() {
       dice2: 0,
       dice: 0,
       isDouble: false,
+
       own: [],
       lap: 0,
       ranking: 0,
@@ -269,7 +225,7 @@ export default function Main() {
   const [p2, setP2] = useState<Player>({
     playerId: "",
     playerNum: 2,
-    name: "원규",
+    name: "",
     type: 'player',
     game: {
       location: 0,
@@ -289,7 +245,7 @@ export default function Main() {
   const [p3, setP3] = useState<Player>({
     playerId: "",
     playerNum: 3,
-    name: "성훈",
+    name: "",
     type: 'player',
     game: {
       location: 0,
@@ -309,7 +265,7 @@ export default function Main() {
   const [p4, setP4] = useState<Player>({
     playerId: "",
     playerNum: 4,
-    name: "설희",
+    name: "",
     type: 'player',
     game: {
       location: 0,
@@ -1375,7 +1331,7 @@ export default function Main() {
         >게임스타트</div>
       </div>}
       {start && <div>
-        {mode && <Game2D p={p} me={me} setMe={setMe} setP={setP} worldMap={worldMap} setWorldMap={setWorldMap}></Game2D>}
+        {mode && <Game2D metaData={metaData} setMetaData={setMetaData} p={p} me={me} setMe={setMe} setP={setP} worldMap={worldMap} setWorldMap={setWorldMap}></Game2D>}
         {!mode && <Game3D p={p} setP={setP} worldMap={worldMap} setWorldMap={setWorldMap}></Game3D>}
       </div>}
 

@@ -2,45 +2,6 @@ import React, { useEffect, useState } from 'react'
 import './dice.css'
 import Dice from './Dice';
 
-// 주사위 던지는 함수
-const rollDice = () => {
-  console.log('주사위 함수 실행');
-  const dice1 = Math.floor(Math.random() * 6 + 1);
-  const dice2 = Math.floor(Math.random() * 6 + 1);
-  showDice(dice1, dice2);
-}
-
-
-// 주사위 흔드는 함수
-function showDice(dice1: number, dice2: number): void {
-
-  const dicesElement1 = document.querySelectorAll(".dice");
-  const dicesElement2 = document.querySelectorAll(".dice2");
-
-  dicesElement1.forEach(function (dice) {
-    dice.classList.remove("active");
-    animateDice(dice1, dice);
-
-  });
-
-  dicesElement2.forEach(function (dice) {
-    dice.classList.remove("active");
-    animateDice(dice2, dice);
-  });
-
-
-}
-
-function animateDice(randomNumber: number, dice: any) {
-  if (dice.id === `dice-${randomNumber}`) {
-
-    setTimeout(function () {
-      dice.classList.add("active");
-    });
-  }
-
-}
-
 
 
 
@@ -49,46 +10,163 @@ function animateDice(randomNumber: number, dice: any) {
 
 export default function Game2D(props: any) {
 
+
   const p1 = props.p[0];
   const p2 = props.p[1];
   const p3 = props.p[2];
   const p4 = props.p[3];
   const me = props.me;
+  const metaData = props.metaData;
   const setP1 = props.setP[0];
   const setP2 = props.setP[1];
   const setP3 = props.setP[2];
   const setP4 = props.setP[3];
   const setMe = props.setMe;
-  
+  const setMetaData = props.setMetaData;
+
+
   const worldMap = props.worldMap;
   const setWorldMap = props.setWorldMap;
 
-  const tmpList = [p1,p2,p3,p4];
+  const tmpList = [p1, p2, p3, p4];
 
-  let pList: Player[] = [p1,p2,p3];
+  let pList: Player[] = [];
 
-  useEffect(() => {
-
-    for(let i=0; i< tmpList.length; i++) {
-      
-      if(tmpList[i].playerNum !== me.playerNum ) {
-        console.log(tmpList[i].playerNum)
-        console.log(me.playerNum)
-        console.log(tmpList[i]);
-        console.log('푸시하기!')
-        pList.push(tmpList[i]);
-      }
+  for (let i = 0; i < tmpList.length; i++) {
+    if (tmpList[i].playerNum !== me.playerNum) {
+      pList.push(tmpList[i]);
     }
-    console.log('pList >>>>')
-    console.log(pList)
-  }, [])
+  }
+
+
+
+  // 주사위 던지는 함수
+  const rollDice = () => {
+    console.log('주사위 함수 실행');
+    const dice1 = Math.floor(Math.random() * 6 + 1);
+    const dice2 = Math.floor(Math.random() * 6 + 1);
+    let isDouble = false;
+    if (dice1 === dice2) {
+      isDouble = true;
+    }
+
+    showDice(dice1, dice2);
+    setMetaData((prevState: any) => ({
+      ...prevState,
+      dice1: dice1,
+      dice2: dice2,
+      dice: dice1 + dice2,
+      isDouble: isDouble,
+    }))
+  }
+
+
+  // 주사위 흔드는 함수
+  function showDice(dice1: number, dice2: number): void {
+
+    const dicesElement1 = document.querySelectorAll(".dice");
+    const dicesElement2 = document.querySelectorAll(".dice2");
+
+    dicesElement1.forEach(function (dice) {
+      dice.classList.remove("active");
+      animateDice(dice1, dice);
+
+    });
+
+    dicesElement2.forEach(function (dice) {
+      dice.classList.remove("active");
+      animateDice(dice2, dice);
+    });
+
+
+  }
+
+  function animateDice(randomNumber: number, dice: any) {
+    if (dice.id === `dice-${randomNumber}`) {
+
+      setTimeout(function () {
+        dice.classList.add("active");
+      });
+    }
+  }
+
+  // 다른 플레이어 턴
+  function playerTurn(turn: number) {
+
+    console.log('플레이어 턴 실행')
+
+    let p = null;
+    let setP = null;
+    if (turn === 1) {
+      p = p1;
+      setP = setP1;
+    } else if (turn === 2) {
+      p = p2;
+      setP = setP2;
+    } else if (turn === 3) {
+      p = p3;
+      setP = setP3;
+    } else if (turn === 4) {
+      p = p4;
+      setP = setP4;
+    }
+
+
+    // 무인도아니면
+    if (p.desert === 0) {
+      // 위치이동
+      console.log('무인도 아님')
+
+
+
+
+
+      // 데이터 세팅
+      setP((prevState: any) => ({
+        ...prevState,
+        game: {
+          ...prevState.game,
+          location: 10,
+        }
+      }))
+
+
+
+
+
+
+    }
+
+
+
+    // 무인도이면
+    else if (p.desert > 0) {
+
+    }
+
+
+
+
+
+
+  }
+
+
 
 
   return (<>
     <div className='w-full h-full bg-[#FFFDF4] flex justify-center items-center'>
       {/* 왼쪽영역 */}
       <div className='w-[20%] h-full flex flex-col justify-center items-end'>
-        <div className='mt-[30px] mb-[30px] h-[40px] text-[20px]'>턴 : {pList[0].playerId}</div>
+
+        {/* 게임 메타 데이터 */}
+        <div className='mt-[30px] mb-[30px] w-[300px] h-[180px] rounded-[4px] flex flex-col justify-center items-center bg-gray-200 text-[20px]'>
+          <div>현재 턴 : {metaData.turn} </div>
+          <div>턴오버 : {metaData.turnOver ? 'true' : 'false'} </div>
+          <div>현재위치 {metaData.currentLocation} : </div>
+          <div>주사위 : [ {metaData.dice1}, {metaData.dice2} ] </div>
+          <div>더블 : {metaData.isDouble ? '더블!' : '더블아님'} </div>
+        </div>
         <div className='w-[320px] h-[840px] mb-[50px]  flex flex-col justify-around items-center'>
           {pList.map((i, index) => {
             return <div key={index}>
@@ -283,8 +361,19 @@ export default function Game2D(props: any) {
             <div id='shbutton' className='w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px]'
               onClick={() => {
                 rollDice();
+
               }}
             >주사위 던지기</div>
+
+            <div id='shbutton' className='w-[380px] h-[60px] rounded-[4px] flex justify-center items-center absolute top-[300px] text-white text-[20px]'
+              onClick={() => {
+                rollDice();
+                playerTurn(metaData.turn);
+
+              }}
+            >다른 사람 주사위</div>
+
+
 
             {/* 콘솔창 영역 */}
             <div className='w-[380px] h-[340px] bg-white rounded-[8px] mt-[140px] shadow-lg relative'></div>
@@ -307,23 +396,23 @@ export default function Game2D(props: any) {
           <div className='w-[300px] h-[260px] bg-[#F4F2EC] rounded-[8px] flex flex-col justify-center items-center'>
             <div className='w-[250px] h-[210px] bg-[#F4F2EC]'>
               <div className='flex justify-between'>
-                <div className=''>플레이어{p4.playerNum}</div>
+                <div className=''>플레이어{me.playerNum}</div>
                 <div className=''>현재 위치</div>
               </div>
               <div className='flex justify-between h-[34px] mt-[10px] mb-[10px] border-solid border-gray-400 border-b-[1px]'>
-                <div className='text-[22px]'>{p4.name}</div>
-                <div className='text-[22px]'>[{p4.game.location}]</div>
+                <div className='text-[22px]'>{me.name}</div>
+                <div className='text-[22px]'>[{me.game.location}]</div>
               </div>
               <div className='flex flex-col w-full h-[60px] items-between'>
                 <div className=''>보유자산</div>
                 <div className='flex mt-[10px]'>
-                  <div className='text-[20px]'>{p4.game.balance} 만원</div>
+                  <div className='text-[20px]'>{me.game.balance} 만원</div>
                 </div>
               </div>
               <div className='flex flex-col w-full h-[60px] items-between'>
                 <div className=''>소유국가</div>
                 <div className='flex mt-[10px]'>
-                  <div className='text-[20px]'>[{p4.game.own}]</div>
+                  <div className='text-[20px]'>[{me.game.own}]</div>
                 </div>
               </div>
             </div>
