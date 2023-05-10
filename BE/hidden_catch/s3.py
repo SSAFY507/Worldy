@@ -39,14 +39,14 @@ def upload_img(nation_code, img_num):
             Key=save_data, Body=data, ContentType='image/jpg')
     print(file_path, " : S3 original 이미지 저장완료")
 
-    # file_path = "./img/hidden.jpg"
-    # data = open(file_path, 'rb')
-    # save_data = "hidden_catch/" + nation_code+ "/different/" + str(img_num) + ".jpg"
-
-    file_path = "./img/mask.jpg"
+    file_path = "./img/result.jpg"
     data = open(file_path, 'rb')
-    save_data = "hidden_catch/" + nation_code+ "/mask/" + str(img_num) + ".jpg"
+    save_data = "hidden_catch/" + nation_code+ "/different/" + str(img_num) + ".jpg"
+
+    # file_path = "./img/mask.jpg"
+    # data = open(file_path, 'rb')
+    # save_data = "hidden_catch/" + nation_code+ "/mask/" + str(img_num) + ".jpg"
 
     s3.Bucket(config.BUCKET_NAME).put_object(
             Key=save_data, Body=data, ContentType='image/jpg')
-    print(file_path, " : S3 hidden 이미지 저장완료")
+    print(file_path, " : S3 result 이미지 저장완료")
