@@ -9,7 +9,7 @@ import { Stomp } from '@stomp/stompjs';
 import { useLocation } from "react-router-dom";
 
 
-export default function Main() {
+export default function Main2() {
 
   let roomData: any = null;
   const params = useParams();
@@ -65,118 +65,41 @@ export default function Main() {
       }
     });
 
-    setP1((prevState) => ({
+    setPlayer((prevState: any) => ({
       ...prevState,
-      playerId: _p1.kakaoId,
-      playerNum: 1,
-      name: '설희',
-      type: 'player',
-      game: {
-        ...prevState.game,
-        location: 0,
-        balance: 500,
-        desert: 0,
-        state: false,
-        dice1: 0,
-        dice2: 0,
-        dice: 0,
-        isDouble: false,
-        own: [],
-        lap: 0,
-        ranking: 0,
-      }
+      p1: {
+        ...prevState.p1,
+        playerId: _p1.kakaoId,
+        name: '설희',
+        game: {
+          ...prevState.p1.game,
+        }
+      },
+      p2: {
+        ...prevState.p2,
+        playerId: _p2.kakaoId,
+        name: '성훈',
+        game: {
+          ...prevState.p2.game,
+        }
+      },
+      p3: {
+        ...prevState.p3,
+        playerId: _p3.kakaoId,
+        name: '미희',
+        game: {
+          ...prevState.p3.game,
+        }
+      },
+      p4: {
+        ...prevState.p4,
+        playerId: _p4.kakaoId,
+        name: '원규',
+        game: {
+          ...prevState.p4.game,
+        }
+      },
     }))
-
-    setP2((prevState) => ({
-      ...prevState,
-      playerId: _p2.kakaoId,
-      playerNum: 2,
-      name: '성훈',
-      type: 'player',
-      game: {
-        ...prevState.game,
-        location: 0,
-        balance: 500,
-        desert: 0,
-        state: false,
-        dice1: 0,
-        dice2: 0,
-        dice: 0,
-        isDouble: false,
-        own: [],
-        lap: 0,
-        ranking: 0,
-      }
-    }))
-
-    setP3((prevState) => ({
-      ...prevState,
-      playerId: _p3.kakaoId,
-      playerNum: 3,
-      name: '미희',
-      type: 'player',
-      game: {
-        ...prevState.game,
-        location: 0,
-        balance: 500,
-        desert: 0,
-        state: false,
-        dice1: 0,
-        dice2: 0,
-        dice: 0,
-        isDouble: false,
-        own: [],
-        lap: 0,
-        ranking: 0,
-      }
-    }))
-
-    setP4((prevState) => ({
-      ...prevState,
-      playerId: _p4.kakaoId,
-      playerNum: 4,
-      name: '원규',
-      type: 'player',
-      game: {
-        ...prevState.game,
-        location: 0,
-        balance: 500,
-        desert: 0,
-        state: false,
-        dice1: 0,
-        dice2: 0,
-        dice: 0,
-        isDouble: false,
-        own: [],
-        lap: 0,
-        ranking: 0,
-      }
-    }))
-
-    setMe((prevState) => ({
-      ...prevState,
-      playerId: myId,
-      playerNum: myNum,
-      name: '내 아이디',
-      type: 'player',
-      game: {
-        ...prevState.game,
-        location: 0,
-        balance: 500,
-        desert: 0,
-        state: false,
-        dice1: 0,
-        dice2: 0,
-        dice: 0,
-        isDouble: false,
-        own: [],
-        lap: 0,
-        ranking: 0,
-      }
-    }))
-
-    // console.log('플레이어 데이터 전송 >>>')
-    // ws.send("/pub/game/player", {}, JSON.stringify(roomData));
   }
 
 
@@ -203,198 +126,87 @@ export default function Main() {
 
 
   // 플레이어 데이터 세팅
-  const [p1, setP1] = useState<Player>({
-    playerId: "",
-    pNum: 1,
-    name: "",
-    type: 'player',
-    game: {
-      location: 0,
-      balance: 500,
-      desert: 0,
-      state: false,
-      dice1: 0,
-      dice2: 0,
-      dice: 0,
-      isDouble: false,
 
-      own: [],
-      lap: 0,
-      ranking: 0,
+  const [player, setPlayer] = useState<NewPlayer>({
+    p1: {
+      pNum: 1,
+      playerId: '',
+      name: '',
+      type: 'player',
+      game: {
+        location: 0,
+        balance: 500,
+        desert: 0,
+        state: false,
+        dice1: 0,
+        dice2: 0,
+        dice: 0,
+        isDouble: false,
+        own: [],
+        lap: 0,
+        ranking: 0,
+      }
     },
-  })
-  const [p2, setP2] = useState<Player>({
-    playerId: "",
-    pNum: 2,
-    name: "",
-    type: 'player',
-    game: {
-      location: 0,
-      balance: 500,
-      desert: 0,
-      state: false,
-      dice1: 0,
-      dice2: 0,
-      dice: 0,
-      isDouble: false,
-      own: [],
-      lap: 0,
-      ranking: 0,
+    p2: {
+      pNum: 2,
+      playerId: '',
+      name: '',
+      type: 'player',
+      game: {
+        location: 0,
+        balance: 500,
+        desert: 0,
+        state: false,
+        dice1: 0,
+        dice2: 0,
+        dice: 0,
+        isDouble: false,
+        own: [],
+        lap: 0,
+        ranking: 0,
+      }
     },
-  })
-
-  const [p3, setP3] = useState<Player>({
-    playerId: "",
-    pNum: 3,
-    name: "",
-    type: 'player',
-    game: {
-      location: 0,
-      balance: 500,
-      desert: 0,
-      state: false,
-      dice1: 0,
-      dice2: 0,
-      dice: 0,
-      isDouble: false,
-      own: [],
-      lap: 0,
-      ranking: 0,
+    p3: {
+      pNum: 3,
+      playerId: '',
+      name: '',
+      type: 'player',
+      game: {
+        location: 0,
+        balance: 500,
+        desert: 0,
+        state: false,
+        dice1: 0,
+        dice2: 0,
+        dice: 0,
+        isDouble: false,
+        own: [],
+        lap: 0,
+        ranking: 0,
+      }
     },
-  })
-
-  const [p4, setP4] = useState<Player>({
-    playerId: "",
-    pNum: 4,
-    name: "",
-    type: 'player',
-    game: {
-      location: 0,
-      balance: 500,
-      desert: 0,
-      state: false,
-      dice1: 0,
-      dice2: 0,
-      dice: 0,
-      isDouble: false,
-      own: [],
-      lap: 0,
-      ranking: 0,
-    },
-  })
-
-  const [me, setMe] = useState<Player>({
-    playerId: "",
-    pNum: 4,
-    name: "",
-    type: 'player',
-    game: {
-      location: 0,
-      balance: 500,
-      desert: 0,
-      state: false,
-      dice1: 0,
-      dice2: 0,
-      dice: 0,
-      isDouble: false,
-      own: [],
-      lap: 0,
-      ranking: 0,
+    p4: {
+      pNum: 4,
+      playerId: '',
+      name: '',
+      type: 'player',
+      game: {
+        location: 0,
+        balance: 500,
+        desert: 0,
+        state: false,
+        dice1: 0,
+        dice2: 0,
+        dice: 0,
+        isDouble: false,
+        own: [],
+        lap: 0,
+        ranking: 0,
+      }
     },
   })
 
 
-  // 아이템(보물상자)
-  const [item, setItem] = useState<Item[]>([
-    {
-      id: 0,
-      title: '운수 좋은 날',
-      content: '주사위를 한 번 더 던지세요!',
-    },
-    {
-      id: 1,
-      title: '무인도 불시착',
-      content: '비행기가 고장나서 무인도에 갇혔습니다. 무인도로 가세요.',
-    },
-    {
-      id: 2,
-      title: '자유여행권',
-      content: '한번에 이동하고 싶은 곳을 클릭하세요.',
-    },
-    {
-      id: 3,
-      title: '코로나19 확진',
-      content: '코로나에 걸렸습니다. 2턴 간 자가격리에 들어갑니다.',
-    },
-    {
-      id: 4,
-      title: '호텔에 짐을 놓고 왔습니다.',
-      content: '뒤로 2 칸 이동하세요.',
-    },
-    {
-      id: 5,
-      title: '졸음',
-      content: '졸다가 3역을 지나쳤습니다. 앞으로 3 칸 이동',
-    },
-    {
-      id: 6,
-      title: '복권 당첨',
-      content: '100만원을 받으세요!',
-    },
-    {
-      id: 7,
-      title: '세무조사',
-      content: '국세청에서 세무 조사를 시작합니다. 국세청으로 이동하세요.',
-    },
-    {
-      id: 8,
-      title: '주식 투자',
-      content: '투자한 주식이 대박났습니다. 200만원을 받으세요.',
-    },
-    {
-      id: 9,
-      title: '올림픽 티켓 수령',
-      content: '올림픽을 관람하러갑니다.',
-    },
-    {
-      id: 10,
-      title: 'BTS 콘서트',
-      content: '콘서트를 보러 대한민국으로 이동합니다.',
-    },
-    {
-      id: 11,
-      title: '미국 여행',
-      content: '미국으로 이동하세요',
-    },
-    {
-      id: 12,
-      title: '피라미드 대탐험',
-      content: '새로운 피라미드가 발견됐습니다. 이집트로 이동하세요.',
-    },
-    {
-      id: 13,
-      title: '로마의 휴일',
-      content: '휴가를 받았습니다. 이탈리아로 이동하세요.',
-    },
-    {
-      id: 14,
-      title: '과속 벌금',
-      content: '과속은 위험합니다. 벌금 -100만원',
-    },
-    {
-      id: 15,
-      title: '통행 면제권',
-      content: '1회 다른 플레이어의 나라에 무료로 머무를 수 있습니다.',
-    },
-    {
-      id: 16,
-      title: '뒤로 걷기 캠페인',
-      content: '뒤로 3칸 이동하세요.',
-    },
-
-
-
-  ])
 
 
   // 월드맵(지도)
@@ -1306,9 +1118,6 @@ export default function Main() {
 
 
 
-  const p = [p1, p2, p3, p4]
-  const setP = [setP1, setP2, setP3, setP4]
-
 
   return (<>
     <div className='w-screen h-screen bg-[#FFFDF4]'>
@@ -1329,11 +1138,11 @@ export default function Main() {
             setStart(true);
             setGameData();
           }}
-        >게임스타트</div>
+        >게임 시작하기</div>
       </div>}
       {start && <div>
-        {mode && <Game2D setTurnOver={setTurnOver} turnOver={turnOver} metaData={metaData} setMetaData={setMetaData} p={p} me={me} setMe={setMe} setP={setP} worldMap={worldMap} setWorldMap={setWorldMap}></Game2D>}
-        {!mode && <Game3D p={p} setP={setP} worldMap={worldMap} setWorldMap={setWorldMap}></Game3D>}
+        {mode && <Game2D loginUser={loginUser} metaData={metaData} setMetaData={setMetaData} player={player} setPlayer={setPlayer} worldMap={worldMap} setWorldMap={setWorldMap}></Game2D>}
+        {!mode && <Game3D worldMap={worldMap} setWorldMap={setWorldMap}></Game3D>}
       </div>}
 
 

@@ -4,6 +4,87 @@
 declare module 'gameType';
 
 //Object Type 선언
+
+type NewPlayer = {
+  p1: {
+    pNum: number,
+    playerId: string,
+    name: string,
+    type: string,
+    game: {
+      location: number,
+      balance: number,
+      desert: number,
+      state: boolean,
+      dice1: number,
+      dice2: number,
+      dice: number,
+      isDouble: boolean,
+      own: [],
+      lap: number,
+      ranking: number,
+    }
+  },
+  p2: {
+    pNum: number,
+    playerId: string,
+    name: string,
+    type: string,
+    game: {
+      location: number,
+      balance: number,
+      desert: number,
+      state: boolean,
+      dice1: number,
+      dice2: number,
+      dice: number,
+      isDouble: boolean,
+      own: [],
+      lap: number,
+      ranking: number,
+    }
+  },
+  p3: {
+    pNum: number,
+    playerId: string,
+    name: string,
+    type: string,
+    game: {
+      location: number,
+      balance: number,
+      desert: number,
+      state: boolean,
+      dice1: number,
+      dice2: number,
+      dice: number,
+      isDouble: boolean,
+      own: [],
+      lap: number,
+      ranking: number,
+    }
+  },
+  p4: {
+    pNum: number,
+    playerId: string,
+    name: string,
+    type: string,
+    game: {
+      location: number,
+      balance: number,
+      desert: number,
+      state: boolean,
+      dice1: number,
+      dice2: number,
+      dice: number,
+      isDouble: boolean,
+      own: [],
+      lap: number,
+      ranking: number,
+    }
+  },
+}
+
+
 type Price = {
   land: number,
   villa: number,
@@ -47,14 +128,24 @@ type Game = {
 }
 
 type Player = {
+  pNum: number,
   playerId: string,
-  playerNum: number,
   name: string,
-  game: Game,
   type: string,
-
+  game: {
+    location: number,
+    balance: number,
+    desert: number,
+    state: boolean,
+    dice1: number,
+    dice2: number,
+    dice: number,
+    isDouble: boolean,
+    own: [],
+    lap: number,
+    ranking: number,
+  }
 }
-
 type Item = {
   id: number,
   title: string,

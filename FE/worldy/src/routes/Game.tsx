@@ -4,6 +4,7 @@ import TestFor3DEdit from '../components/TestFor3DEdit';
 import LoaderPyramid from '../components/LoaderPyramid';
 import Main from '../components/game/Main';
 import { useParams } from 'react-router';
+import Main2 from '../components/game/Main2';
 
 export default function Game() {
   const params = useParams();
@@ -16,7 +17,7 @@ export default function Game() {
   return (
     <div className='w-screen h-screen'>
       {loaded ? (
-        <Main />
+        <Main2 />
       ) : (
         <div className='w-full h-full bg-white'>
           <LoaderPyramid text='3D 급하게 조립 중...' />
