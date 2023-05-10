@@ -30,6 +30,7 @@ import PaySuccess from './routes/PayResult';
 import { loginState } from './_store/slices/loginSlice';
 import { useSelector } from 'react-redux';
 import PayResult from './routes/PayResult';
+import Callback from './routes/Callback';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -126,7 +127,8 @@ const AppLayout = () => {
       }}
     >
       <div className='z-50'>
-        {location.pathname !== '/tutorial' &&
+        {location.pathname !== '/tutori' &&
+          location.pathname !== '/user/kakao/callback' &&
           exploreUrl !== '/payment' &&
           exploreUrl !== '/explore' &&
           monopolyUrl !== '/monopoly' &&
@@ -141,6 +143,7 @@ const AppLayout = () => {
       </div>
       <div className='flex-1 h-full max-h-full'>
         <Routes>
+          <Route path='/user/kakao/callback' element={<Callback />} />
           {checkLoginState ? (
             <Route
               path='/'

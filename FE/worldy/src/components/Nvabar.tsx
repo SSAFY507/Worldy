@@ -45,8 +45,6 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
     onLoginClick();
   };
 
-  const [tempLoginColor, setTempLoginColor] = useState<boolean>(false);
-
   const [hoverAfterLoginIcon, setHoverAfetrLoginIcon] =
     useState<boolean>(false);
 
