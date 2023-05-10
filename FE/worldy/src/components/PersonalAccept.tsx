@@ -66,9 +66,9 @@ export default function PersonalAccept({ closePA }: { closePA: () => void }) {
                   xmlns='http://www.w3.org/2000/svg'
                 >
                   <path
-                    fill-rule='evenodd'
+                    fillRule='evenodd'
                     d='M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z'
-                    clip-rule='evenodd'
+                    clipRule='evenodd'
                   ></path>
                 </svg>
                 서비스가 제대로 작동하는지 확인
@@ -84,9 +84,9 @@ export default function PersonalAccept({ closePA }: { closePA: () => void }) {
                   xmlns='http://www.w3.org/2000/svg'
                 >
                   <path
-                    fill-rule='evenodd'
+                    fillRule='evenodd'
                     d='M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z'
-                    clip-rule='evenodd'
+                    clipRule='evenodd'
                   ></path>
                 </svg>
                 제대로 작동하지 않을 경우 문제 해결 및 수정
@@ -102,9 +102,9 @@ export default function PersonalAccept({ closePA }: { closePA: () => void }) {
                   xmlns='http://www.w3.org/2000/svg'
                 >
                   <path
-                    fill-rule='evenodd'
+                    fillRule='evenodd'
                     d='M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z'
-                    clip-rule='evenodd'
+                    clipRule='evenodd'
                   ></path>
                 </svg>
                 제대로 작동하는지 알아보기 위해 테스트
@@ -120,9 +120,9 @@ export default function PersonalAccept({ closePA }: { closePA: () => void }) {
                   xmlns='http://www.w3.org/2000/svg'
                 >
                   <path
-                    fill-rule='evenodd'
+                    fillRule='evenodd'
                     d='M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z'
-                    clip-rule='evenodd'
+                    clipRule='evenodd'
                   ></path>
                 </svg>
                 기능 관련 아이디어에 대한 의견 수렴
@@ -151,9 +151,9 @@ export default function PersonalAccept({ closePA }: { closePA: () => void }) {
                   xmlns='http://www.w3.org/2000/svg'
                 >
                   <path
-                    fill-rule='evenodd'
+                    fillRule='evenodd'
                     d='M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z'
-                    clip-rule='evenodd'
+                    clipRule='evenodd'
                   ></path>
                 </svg>
                 회원님의 정보를 열람하기 위한 서비스 내 도구를 이용하여
@@ -170,9 +170,9 @@ export default function PersonalAccept({ closePA }: { closePA: () => void }) {
                   xmlns='http://www.w3.org/2000/svg'
                 >
                   <path
-                    fill-rule='evenodd'
+                    fillRule='evenodd'
                     d='M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z'
-                    clip-rule='evenodd'
+                    clipRule='evenodd'
                   ></path>
                 </svg>
                 삭제하기 위한 서비스 내 도구를 이용하여 개인정보의 정정

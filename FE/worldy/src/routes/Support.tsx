@@ -138,9 +138,9 @@ export default function Support({
               xmlns='http://www.w3.org/2000/svg'
             >
               <path
-                fill-rule='evenodd'
+                fillRule='evenodd'
                 d='M11.354 1.646a.5.5 0 010 .708L5.707 8l5.647 5.646a.5.5 0 01-.708.708l-6-6a.5.5 0 010-.708l6-6a.5.5 0 01.708 0z'
-                clip-rule='evenodd'
+                clipRule='evenodd'
               ></path>
             </svg>
           </div>
@@ -194,7 +194,7 @@ export default function Support({
     <div
       className={`hide-scrollbar w-full h-full min-h-full ${
         !loadedAll ? '' : 'pt-[20px]'
-      } flex justify-center items-start overflow-y-clip`}
+      } flex justify-center items-start overflow-y-clip relative`}
       style={{ backgroundImage: `url(${pathBg})`, backgroundSize: '100%' }}
     >
       {loadedAll ? (
@@ -236,7 +236,7 @@ export default function Support({
                     <svg
                       stroke='currentColor'
                       fill='currentColor'
-                      stroke-width='0'
+                      strokeWidth='0'
                       viewBox='0 0 1024 1024'
                       height='1.5em'
                       width='1.5em'
@@ -282,7 +282,7 @@ export default function Support({
                       <path
                         d='M14.412 0C15.294 0 16 .68 16 1.529V11.55c0 .529-.275 1.02-.745 1.303l-6.392 3.906c-.53.321-1.177.321-1.706 0L.745 12.853A1.514 1.514 0 0 1 0 11.55V1.53C0 .679.706 0 1.588 0zM7.748 2.485C5.582 2.485 4.11 3.9 4.11 6.407c0 2.156 1.088 3.562 2.774 3.922.576 1.221 1.78 2.094 3.509 2.094.63 0 1.141-.103 1.44-.257l-.33-1.334-.155.046a2.882 2.882 0 0 1-.742.097c-.64 0-1.354-.195-1.717-.718 1.525-.442 2.496-1.818 2.496-3.85 0-2.495-1.472-3.922-3.637-3.922zm0 1.57c1.045 0 1.696.873 1.696 2.352 0 1.591-.651 2.505-1.696 2.505-1.046 0-1.686-.914-1.686-2.505 0-1.479.64-2.352 1.686-2.352z'
                         fill='current'
-                        fill-rule='evenodd'
+                        fillRule='evenodd'
                       ></path>
                     </svg>
                     자주 묻는 질문
