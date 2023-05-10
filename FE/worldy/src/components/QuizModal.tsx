@@ -47,6 +47,9 @@ export default function QuizModal({
   input: ScrappedQuizType;
   closeModal: () => void;
 }) {
+  console.log(input);
+
+
   const size: number = 200;
 
   const textSize: number = 200 / (input.content.length / 20);
