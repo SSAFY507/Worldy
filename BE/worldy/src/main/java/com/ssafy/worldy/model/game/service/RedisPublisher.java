@@ -55,6 +55,7 @@ public class RedisPublisher {
 
         redisTemplate.convertAndSend(topic.getTopic(), gameQuizDto);
     }
+
     /**
      * 게임 인원수 데이터 전송
      **/
@@ -64,5 +65,16 @@ public class RedisPublisher {
         log.info("Quiz : " + playerCnt.toString());
 
         redisTemplate.convertAndSend(topic.getTopic(), playerCnt);
+    }
+
+    /**
+     * 게임 맵 데이터 전송
+     **/
+    public void publish(WorldMap worldMap) {
+
+        log.info("Topic : " + topic.getTopic());
+        log.info("Quiz : " + worldMap.toString());
+
+        redisTemplate.convertAndSend(topic.getTopic(), worldMap);
     }
 }
