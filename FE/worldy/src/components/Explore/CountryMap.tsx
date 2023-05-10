@@ -78,64 +78,21 @@ const CountryMap:React.FC<Props> = (countryName) => {
     camera.current?.add(light)
   };
 
-  // /** 카메라 적정 위치 구하는 함수 */
-  // const ZoomFit = (object3D:any, camera:THREE.PerspectiveCamera) => {
-  //   // 모델 경계 박스
-  //   const box = new THREE.Box3().setFromObject(object3D);
-  //   // 모델 경계 박스 대각 길이
-  //   const sizeBox = box.getSize(new THREE.Vector3()).length();
-  //   // 모델의 경계 박스 중심 위치
-  //   const centerBox = box.getCenter(new THREE.Vector3());
-
-  //   const ratio = scene.current?.children[1].userData.size;
-
-  //   // 모델 크기의 절반값
-  //   const halfSizeModel = sizeBox * ratio;
-
-  //   // 카메라의 fov의 절반값
-  //   const halfFov = THREE.MathUtils.degToRad(camera.fov * 0.6);
-
-  //   // 모델을 화면에 꽉 채우기 위한 적당한 거리
-  //   const distance = halfSizeModel / Math.tan(halfFov);
-
-  //   // 모델 중심에서 카메라 위치로 향하는 방향 단위 벡터 계산
-  //   const direction = (new THREE.Vector3()).subVectors(
-  //     camera.position,
-  //     centerBox
-  //   ).normalize();
-
-  //   // "단위 방향 벡터" 방향으로 모델 중심 위치에서 distance 거리에 대한 위치
-  //   const position = direction.multiplyScalar(distance).add(centerBox);
-  //   camera.position.copy(position);
-
-  //   // 모델의 크기에 맞게 카메라의 near, far 값을 대략적으로 조정
-  //   camera.near = sizeBox / 100;
-  //   camera.far = sizeBox * 100;
-
-  //   // 카메라 기본 속성 변경에 따른 투영행렬 업데이트
-  //   camera.updateProjectionMatrix();
-  //   const [a, b, c] = scene.current?.children[1].userData.position
-  //   // 카메라가 모델의 중심을 바라 보도록 함
-  //   camera.lookAt(centerBox.x + a, centerBox.y + b, centerBox.z + c);
-  //   // camera.lookAt(centerBox.x, centerBox.y, centerBox.z);
-  // }
-
 
   /** 모델 커스텀 함수 */
   const SetupModel = () => {
     const gltfLoader = new GLTFLoader();
     const items = [
-      {url: africa_Egypt, name: "africa_Egypt", angle:[5, 15, 15], position:[0.3,-0.5, 0], size:0.5},
-      {url: asia_China, name: "asia_China", angle:[0, 10,-5], position:[0,-1.5,0.5], size:0.45},
-      {url: asia_India, name: "asia_india", angle:[0, 0, 15], position:[1,-1.5,-1], size:0.5},
-      {url: asia_Japen, name: "asia_Japen", angle:[15, 10, 5], position:[-1,-0.5, 0.5], size:0.45},
-      {url: asia_Korea, name: "asia_Korea", angle:[0, 10, 10], position:[0, 0, 0.5], size:0.5},
-      {url: europe_France, name: "europe_France", angle:[10, 10, 5], position:[0,-1, 0], size:0.5},
-      {url: europe_Italia, name: "europe_Italia", angle:[10, 0, 10], position:[0,0,0], size:0.5},
-      {url: europe_Spain, name: "europe_Spain", angle:[0, 10, 15], position:[0,0,0], size:0.5},
-      {url: europe_UK, name: "europe_UK", angle:[0, 10, 15], position:[0,-0.5, 0], size:0.5},
-      // {url: northAmerica_America, name: "northAmerica_America", angle:[10, 10, 10], position:[1,-2, 1], size:0.35},
-      {url: northAmerica_America, name: "northAmerica_America", angle:[ 0, 265, 0], position:[0, 0, 0], size: 0.5},
+      {url: africa_Egypt, name: "africa_Egypt", angle:[5, 15, 15], size:0.5},
+      {url: asia_China, name: "asia_China", angle:[0, 10,-5], size:0.45},
+      {url: asia_India, name: "asia_india", angle:[0, 0, 15], size:0.5},
+      {url: asia_Japen, name: "asia_Japen", angle:[15, 10, 5], size:0.45},
+      {url: asia_Korea, name: "asia_Korea", angle:[0, 10, 10], size:0.5},
+      {url: europe_France, name: "europe_France", angle:[10, 10, 5], size:0.5},
+      {url: europe_Italia, name: "europe_Italia", angle:[10, 0, 10], size:0.5},
+      {url: europe_Spain, name: "europe_Spain", angle:[0, 10, 15], size:0.5},
+      {url: europe_UK, name: "europe_UK", angle:[0, 10, 15], size:0.5},
+      {url: northAmerica_America, name: "northAmerica_America", angle:[ 0, 265, 0], size: 0.5},
     ]
     items.forEach((item, index) => {
       if (item.name === countryName.countryName) {
@@ -145,15 +102,13 @@ const CountryMap:React.FC<Props> = (countryName) => {
           obj3d.children.forEach((obj, idx) => {
             console.log(obj.name)
           })
-          // obj3d.position.set(0, 0, 0);
+          console.log(obj3d)
           obj3d.position.set(0,-0.1, 0.5);
           obj3d.rotation.set(
             THREE.MathUtils.degToRad(item.angle[0]),
             THREE.MathUtils.degToRad(item.angle[1]),
             THREE.MathUtils.degToRad(item.angle[2])
           )
-          // obj3d.userData.position = item.position;
-          // obj3d.userData.size = item.size;
           obj3d.scale.set(1, 1, 1);
           
           // const helper = new THREE.AxesHelper
