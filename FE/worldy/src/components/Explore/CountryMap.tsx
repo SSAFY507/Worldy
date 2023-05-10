@@ -46,7 +46,7 @@ const CountryMap:React.FC<Props> = (countryName) => {
   /** 카메라 커스텀 함수 */
   const SetupCamera = () => {
     const cam = new THREE.PerspectiveCamera(37, window.innerWidth / window.innerHeight, 0.1, 100);
-    cam.position.set(0, 0, 2);
+    cam.position.set(-0.11, 0.09, 1.8);
     cam.rotation.set(
       THREE.MathUtils.degToRad(0),
       THREE.MathUtils.degToRad(0),
@@ -60,9 +60,18 @@ const CountryMap:React.FC<Props> = (countryName) => {
 
   /** 조명 커스텀 함수 */
   const SetupLight = () => {
+    // Add lights
+    const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.61 );
+    hemiLight.position.set( 0, 50, 0 );
+
+    // Add hemisphere light to scene   
+    scene.current?.add( hemiLight );
     const color = 0xffffff;
     const intensity = 1;
     const light = new THREE.DirectionalLight(color, intensity);
+    // const light = new THREE.AmbientLight(color,intensity)
+    // const light = new THREE.HemisphereLight("#b0d8f5", "#bb7a1c", 1)
+
     light.position.set(-1, 3, 4);
     // scene.current?.add(light);
     // 카메라에 조명을 달았음
@@ -126,30 +135,31 @@ const CountryMap:React.FC<Props> = (countryName) => {
       {url: europe_Spain, name: "europe_Spain", angle:[0, 10, 15], position:[0,0,0], size:0.5},
       {url: europe_UK, name: "europe_UK", angle:[0, 10, 15], position:[0,-0.5, 0], size:0.5},
       // {url: northAmerica_America, name: "northAmerica_America", angle:[10, 10, 10], position:[1,-2, 1], size:0.35},
-      {url: northAmerica_America, name: "northAmerica_America", angle:[ 0, 70, 0], position:[0, 0, 0], size: 0.5},
+      {url: northAmerica_America, name: "northAmerica_America", angle:[ 0, 265, 0], position:[0, 0, 0], size: 0.5},
     ]
     items.forEach((item, index) => {
       if (item.name === countryName.countryName) {
         gltfLoader.load(item.url, (glb) => {
           const obj3d:THREE.Group = glb.scene;
           obj3d.name = item.name
-          console.log(obj3d)
-          // obj3d.children[0].position.set(0, 0, 0);
-          // obj3d.children[0].position.set(0, 0, -0.2);
-          // obj3d.children[0].rotation.set(
-          //   THREE.MathUtils.degToRad(item.angle[0]),
-          //   THREE.MathUtils.degToRad(item.angle[1]),
-          //   THREE.MathUtils.degToRad(item.angle[2])
-          // )
+          obj3d.children.forEach((obj, idx) => {
+            console.log(obj.name)
+          })
+          // obj3d.position.set(0, 0, 0);
+          obj3d.position.set(0,-0.1, 0.5);
+          obj3d.rotation.set(
+            THREE.MathUtils.degToRad(item.angle[0]),
+            THREE.MathUtils.degToRad(item.angle[1]),
+            THREE.MathUtils.degToRad(item.angle[2])
+          )
           // obj3d.userData.position = item.position;
           // obj3d.userData.size = item.size;
-          // obj3d.scale.set(1, 1, 1);
-
+          obj3d.scale.set(1, 1, 1);
+          
           // const helper = new THREE.AxesHelper
           // const shelper = new THREE.GridHelper
           // scene.current?.add(helper)
           // scene.current?.add(shelper)
-
           scene.current?.add(obj3d);
           // if (camera.current) {
           //   ZoomFit(obj3d, camera.current)
