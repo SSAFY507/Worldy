@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import pathBg from '../assets/images/PaymentResultBackground.png';
+import PayResultClass from '../components/PayResultClass';
 
 type PayResultStringType = {
   result: string;
@@ -15,6 +16,7 @@ export default function PayResult({ input }: { input: PayResultStringType }) {
       style={{ backgroundImage: `url(${pathBg})`, backgroundSize: '100%' }}
     >
       <div className='outline outline-white flex flex-col justify-center items-center bg-[rgba(255,255,255,0.5)] rounded-xl p-[20px]'>
+        <PayResultClass location={window.location} />
         <span
           className={`text-[50px] font-PtdExtraBold rounded-full text-white ${
             input.result === '결제 성공'
