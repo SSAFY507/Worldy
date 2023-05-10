@@ -20,7 +20,4 @@ module.exports = {
     },
   },
   plugins: [],
-  devServer: {
-    disableHostCheck: true
-  },
 };
