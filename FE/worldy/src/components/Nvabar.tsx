@@ -181,14 +181,26 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
             <ul className='flex flex-row items-center justify-center h-full'>
               {navList.map((item, index) => (
                 <li key={index} className='mx-10'>
-                  <a href={item.path}>
-                    <div
-                      id='NavBarButtons-Animation'
-                      className=' w-20 text-lg h-10 flex flex-row items-center justify-center text-center text-white font-PtdRegular '
-                    >
-                      {item.name}
-                    </div>
-                  </a>
+                  {!checkLoginState && index >= 2 ? (
+                    <button>
+                      <div
+                        id='NavBarButtons-Animation'
+                        className=' w-20 text-lg h-10 flex flex-row items-center justify-center text-center text-white font-PtdRegular '
+                        onClick={handleLoginModalClick}
+                      >
+                        {item.name}
+                      </div>
+                    </button>
+                  ) : (
+                    <a href={item.path}>
+                      <div
+                        id='NavBarButtons-Animation'
+                        className=' w-20 text-lg h-10 flex flex-row items-center justify-center text-center text-white font-PtdRegular '
+                      >
+                        {item.name}
+                      </div>
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
