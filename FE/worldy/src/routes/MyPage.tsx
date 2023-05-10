@@ -36,6 +36,9 @@ import {
   logout,
 } from '../_store/slices/loginSlice';
 import { useSelector } from 'react-redux';
+import useLoadImagesHook from '../_hooks/useLoadImagesHook';
+import LoaderPyramid from '../components/Loaders/LoaderPyramid';
+import LoaderBlueCircle from '../components/Loaders/LoaderBlueCircle';
 
 type MyPageMenuType = {
   icon: React.ReactNode;
@@ -77,6 +80,21 @@ export default function MyPage({
   setRef: string;
   handleQnaModal: (input: number) => void;
 }) {
+  const myImageList = {
+    pathBG: pathBG,
+  };
+
+  const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
+  const [loadedAll, setLoadedAll] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isLoaded) {
+      setTimeout(() => {
+        setLoadedAll(true);
+      }, 1000);
+    }
+  }, [isLoaded]);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const accountInfoRef = useRef<HTMLDivElement>(null);
   const quizScrapRef = useRef<HTMLDivElement>(null);
@@ -850,7 +868,7 @@ export default function MyPage({
 
   const qnaLinkContent = (): JSX.Element => {
     return (
-      <div className='w-full grid place-content-center'>
+      <div className='w-full h-[100px]  grid place-content-center'>
         <QNAMoveButton handleQnaModal={handleQnaModal} />
       </div>
     );
@@ -888,70 +906,72 @@ export default function MyPage({
       className='w-full h-full flex flex-row justify-center items-center overflow-y-clip'
       style={{ backgroundImage: `url(${pathBG})`, backgroundSize: '100%' }}
     >
-      {quizModalState && (
-        <QuizModal
-          input={tempScrappedQuizList[selectedQuizId]}
-          closeModal={() => setQuizModalState(false)}
-        />
-      )}
-      <div
-        className={`w-[80%] h-full  flex flex-row justify-stretch items-center ${
-          quizModalState ? 'blur-sm' : ''
-        }`}
-      >
-        <div className='w-[25%] h-full pt-[5em]'>
-          <div className='w-[90%] h-fit  flex flex-col items-start'>
-            <div className='flex flex-row justify-start pl-[15px]'>
-              <span className='text-white font-PtdBold text-[3em]'>
-                마이 페이지
-              </span>
-            </div>
-            <div className='w-full h-fit my-[3em] '>
-              {MyPageMenuItems.map((item, index) =>
-                MyPageMenuComponent({ input: item, key: index })
-              )}
-            </div>
-          </div>
-        </div>
-        <div
-          className='flex-1 h-full pt-[60px]  overflow-y-scroll pb-[30em]'
-          ref={containerRef}
-        >
+      {loadedAll ? (
+        <>
+          {quizModalState && (
+            <QuizModal
+              input={tempScrappedQuizList[selectedQuizId]}
+              closeModal={() => setQuizModalState(false)}
+            />
+          )}
           <div
-            className=' w-full h-fit pt-[20px] text-white'
-            ref={accountInfoRef}
+            className={`w-[80%] h-full  flex flex-row justify-stretch items-center ${
+              quizModalState ? 'blur-sm' : ''
+            }`}
           >
-            {MyPageContentComponent({
-              title: '계정 정보',
-              contentInfo:
-                '계정 정보 중, Worldy Game 닉네임은 게임 내에서 특정 플레이어를 인식하거나 찾을 때 사용됩니다.',
-              content: accountInfoContentComponent(),
-            })}
-          </div>
-          <div className=' w-full h-fit pt-[20px]' ref={quizScrapRef}>
-            {MyPageContentComponent({
-              title: '퀴즈 스크랩',
-              contentInfo:
-                '지난 세계 탐험 여행에서 만난 다양한 퀴즈 중, 플레이어가 따로 저장해둔 퀴즈들을 모아 볼 수 있습니다.',
-              content: quizScrapContentComponent(),
-            })}
-          </div>
-          <div className=' w-full h-fit pt-[20px]' ref={gameLogRef}>
-            {MyPageContentComponent({
-              title: '랭킹',
-              contentInfo:
-                '모든 플레이어들 사이에서 당신의 순위와 랭크를 확인할 수 있습니다. 당신의 경쟁 상대는 누구인가요?',
-              content: rankContent(),
-            })}
-          </div>
-          <div className=' w-full h-fit pt-[20px]' ref={QARef}>
-            {MyPageContentComponent({
-              title: 'Q&A',
-              contentInfo: null,
-              content: qnaLinkContent(),
-            })}
-          </div>
-          {/* <div className=' w-full h-fit pt-[20px]' ref={loginRecordRef}>
+            <div className='w-[25%] h-full pt-[5em]'>
+              <div className='w-[90%] h-fit  flex flex-col items-start'>
+                <div className='flex flex-row justify-start pl-[15px]'>
+                  <span className='text-white font-PtdBold text-[3em]'>
+                    마이 페이지
+                  </span>
+                </div>
+                <div className='w-full h-fit my-[3em] '>
+                  {MyPageMenuItems.map((item, index) =>
+                    MyPageMenuComponent({ input: item, key: index })
+                  )}
+                </div>
+              </div>
+            </div>
+            <div
+              className='flex-1 h-full pt-[60px]  overflow-y-scroll pb-[30em]'
+              ref={containerRef}
+            >
+              <div
+                className=' w-full h-fit pt-[20px] text-white'
+                ref={accountInfoRef}
+              >
+                {MyPageContentComponent({
+                  title: '계정 정보',
+                  contentInfo:
+                    '계정 정보 중, Worldy Game 닉네임은 게임 내에서 특정 플레이어를 인식하거나 찾을 때 사용됩니다.',
+                  content: accountInfoContentComponent(),
+                })}
+              </div>
+              <div className=' w-full h-fit pt-[20px]' ref={quizScrapRef}>
+                {MyPageContentComponent({
+                  title: '퀴즈 스크랩',
+                  contentInfo:
+                    '지난 세계 탐험 여행에서 만난 다양한 퀴즈 중, 플레이어가 따로 저장해둔 퀴즈들을 모아 볼 수 있습니다.',
+                  content: quizScrapContentComponent(),
+                })}
+              </div>
+              <div className=' w-full h-fit pt-[20px]' ref={gameLogRef}>
+                {MyPageContentComponent({
+                  title: '랭킹',
+                  contentInfo:
+                    '모든 플레이어들 사이에서 당신의 순위와 랭크를 확인할 수 있습니다. 당신의 경쟁 상대는 누구인가요?',
+                  content: rankContent(),
+                })}
+              </div>
+              <div className=' w-full h-fit pt-[20px]' ref={QARef}>
+                {MyPageContentComponent({
+                  title: 'Q&A',
+                  contentInfo: null,
+                  content: qnaLinkContent(),
+                })}
+              </div>
+              {/* <div className=' w-full h-fit pt-[20px]' ref={loginRecordRef}>
             {MyPageContentComponent({
               title: '로그인 기록',
               contentInfo:
@@ -959,15 +979,21 @@ export default function MyPage({
               content: undefined,
             })}
           </div> */}
-          <div className=' w-full h-fit pt-[20px]' ref={logoutRef}>
-            {MyPageContentComponent({
-              title: '로그아웃',
-              contentInfo: null,
-              content: logoutContent(),
-            })}
+              <div className=' w-full h-fit pt-[20px]' ref={logoutRef}>
+                {MyPageContentComponent({
+                  title: '로그아웃',
+                  contentInfo: null,
+                  content: logoutContent(),
+                })}
+              </div>
+            </div>
           </div>
+        </>
+      ) : (
+        <div className='w-full h-full bg-white'>
+          <LoaderBlueCircle text='정보 모으는 중...' />
         </div>
-      </div>
+      )}
     </div>
   );
 }
