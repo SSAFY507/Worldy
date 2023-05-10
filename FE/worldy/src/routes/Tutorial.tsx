@@ -111,10 +111,11 @@ export default function Tutorial({
   };
 
   //닉네임이 미중복 확인 됐으니 다음으로 넘어가기(submit)
-  const handleSubmitNickName = () => {
+  const handleSubmitNickName = async () => {
     console.log('넘어가기', targetIndex);
     setFinalNickname(); //redux에 닉네임 저장
-    submitNickNameAxios(); //서버에 닉네임 저장
+    await submitNickNameAxios(); //서버에 닉네임 저장
+    console.log('submitNickNameAxios 결과', submitkNicknameResult);
     setPopupText(false);
     setPopupItem(false);
     setTargetIndex(1);
