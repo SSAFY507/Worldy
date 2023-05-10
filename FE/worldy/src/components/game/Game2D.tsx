@@ -342,27 +342,48 @@ export default function Game2D(props: any) {
                     i.type === 'nation' && (i.location >= 0 && i.location < 10) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-red-400'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold '>{i.name}</div>
-                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'></div>
+                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-around items-center bg-white flex-wrap'>
+                        {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]'>{player.p1.name}</div>}
+                        {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]'>{player.p2.name}</div>}
+                        {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]'>{player.p3.name}</div>}
+                        {i.location === player.p4.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]'>{player.p4.name}</div>}
+                      </div>
                     </div>
                   }
                   {
                     i.type === 'city' && (i.location >= 0 && i.location < 10) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-gray-200'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center font-PtdExtraBold '>{i.name}</div>
-                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'></div>
+                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'>
+                        {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]'>{player.p1.name}</div>}
+                        {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]'>{player.p2.name}</div>}
+                        {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]'>{player.p3.name}</div>}
+                        {i.location === player.p4.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]'>{player.p4.name}</div>}
+                      </div>
                     </div>
                   }
                   {
                     i.type === 'start' && (i.location >= 0 && i.location < 10) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-500'>
-                      <div className='w-[82px] h-[82px] rounded-[2px] flex justify-center items-center font-PtdExtraBold bg-white text-[20px]'>START</div>
+                      <div className='w-[82px] h-[82px] rounded-[2px] flex justify-around items-center flex-wrap text-[10px]'>
+                        <img src='/game/f0.png' className='w-[82px] h-[82px] object-cover absolute z-[1] blur-[2px]'></img>
+                        {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p1.name}</div>}
+                        {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p2.name}</div>}
+                        {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p3.name}</div>}
+                        {i.location === player.p4.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p4.name}</div>}
+                      </div>
                     </div>
                   }
                   {
                     i.type === 'item' && (i.location >= 0 && i.location < 10) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-orange-400'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold '>{i.name}</div>
-                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'></div>
+                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'>
+                        {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]'>{player.p1.name}</div>}
+                        {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]'>{player.p2.name}</div>}
+                        {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]'>{player.p3.name}</div>}
+                        {i.location === player.p4.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]'>{player.p4.name}</div>}
+                      </div>
                     </div>
                   }
                 </div>
@@ -377,27 +398,48 @@ export default function Game2D(props: any) {
                     i.type === 'nation' && (i.location >= 10 && i.location < 20) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-green-400'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold '>{i.name}</div>
-                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'></div>
+                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'>
+                        {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]'>{player.p1.name}</div>}
+                        {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]'>{player.p2.name}</div>}
+                        {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]'>{player.p3.name}</div>}
+                        {i.location === player.p4.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]'>{player.p4.name}</div>}
+                      </div>
                     </div>
                   }
                   {
                     i.type === 'city' && (i.location >= 10 && i.location < 20) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-gray-200'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center font-PtdExtraBold '>{i.name}</div>
-                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'></div>
+                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'>
+                        {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]'>{player.p1.name}</div>}
+                        {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]'>{player.p2.name}</div>}
+                        {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]'>{player.p3.name}</div>}
+                        {i.location === player.p4.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]'>{player.p4.name}</div>}
+                      </div>
                     </div>
                   }
                   {
                     i.type === 'desert' && (i.location >= 10 && i.location < 20) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-500'>
-                      <div className='w-[82px] h-[82px] rounded-[2px] flex justify-center items-center font-PtdExtraBold bg-white text-[20px]'>무인도</div>
+                      <div className='w-[82px] h-[82px] rounded-[2px] flex justify-around items-center flex-wrap text-[10px]'>
+                        <img src='/game/f10.png' className='w-[82px] h-[82px] object-cover absolute z-[1] blur-[2px]'></img>
+                        {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p1.name}</div>}
+                        {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p2.name}</div>}
+                        {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p3.name}</div>}
+                        {i.location === player.p4.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p4.name}</div>}
+                      </div>
                     </div>
                   }
                   {
                     i.type === 'item' && (i.location >= 10 && i.location < 20) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-orange-400'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold '>{i.name}</div>
-                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'></div>
+                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'>
+                        {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]'>{player.p1.name}</div>}
+                        {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]'>{player.p2.name}</div>}
+                        {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]'>{player.p3.name}</div>}
+                        {i.location === player.p4.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]'>{player.p4.name}</div>}
+                      </div>
                     </div>
                   }
                 </div>
@@ -412,27 +454,48 @@ export default function Game2D(props: any) {
                     i.type === 'nation' && (i.location >= 20 && i.location < 30) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-400'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold '>{i.name}</div>
-                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'></div>
+                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'>
+                        {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]'>{player.p1.name}</div>}
+                        {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]'>{player.p2.name}</div>}
+                        {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]'>{player.p3.name}</div>}
+                        {i.location === player.p4.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]'>{player.p4.name}</div>}
+                      </div>
                     </div>
                   }
                   {
                     i.type === 'city' && (i.location >= 20 && i.location < 30) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-gray-200'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center font-PtdExtraBold '>{i.name}</div>
-                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'></div>
+                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'>
+                        {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]'>{player.p1.name}</div>}
+                        {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]'>{player.p2.name}</div>}
+                        {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]'>{player.p3.name}</div>}
+                        {i.location === player.p4.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]'>{player.p4.name}</div>}
+                      </div>
                     </div>
                   }
                   {
                     i.type === 'port' && (i.location >= 20 && i.location < 30) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-500'>
-                      <div className='w-[82px] h-[82px] rounded-[2px] flex justify-center items-center font-PtdExtraBold bg-white text-[20px]'>정거장</div>
+                      <div className='w-[82px] h-[82px] rounded-[2px] flex justify-around items-center flex-wrap text-[10px]'>
+                        <img src='/game/f20.png' className='w-[82px] h-[82px] object-cover absolute z-[1] blur-[2px]'></img>
+                        {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p1.name}</div>}
+                        {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p2.name}</div>}
+                        {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p3.name}</div>}
+                        {i.location === player.p4.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p4.name}</div>}
+                      </div>
                     </div>
                   }
                   {
                     i.type === 'item' && (i.location >= 20 && i.location < 30) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-orange-400'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold '>{i.name}</div>
-                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'></div>
+                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'>
+                        {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]'>{player.p1.name}</div>}
+                        {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]'>{player.p2.name}</div>}
+                        {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]'>{player.p3.name}</div>}
+                        {i.location === player.p4.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]'>{player.p4.name}</div>}
+                      </div>
                     </div>
                   }
                 </div>
@@ -447,33 +510,60 @@ export default function Game2D(props: any) {
                     i.type === 'nation' && (i.location >= 30 && i.location < 40) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-purple-400'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold '>{i.name}</div>
-                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'></div>
+                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'>
+                        {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]'>{player.p1.name}</div>}
+                        {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]'>{player.p2.name}</div>}
+                        {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]'>{player.p3.name}</div>}
+                        {i.location === player.p4.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]'>{player.p4.name}</div>}
+                      </div>
                     </div>
                   }
                   {
                     i.type === 'city' && (i.location >= 30 && i.location < 40) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-gray-200'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center font-PtdExtraBold '>{i.name}</div>
-                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'></div>
+                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'>
+                        {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]'>{player.p1.name}</div>}
+                        {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]'>{player.p2.name}</div>}
+                        {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]'>{player.p3.name}</div>}
+                        {i.location === player.p4.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]'>{player.p4.name}</div>}
+                      </div>
                     </div>
                   }
                   {
                     i.type === 'olympic' && (i.location >= 30 && i.location < 40) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-500'>
-                      <div className='w-[82px] h-[82px] rounded-[2px] flex justify-center items-center font-PtdExtraBold bg-white text-[20px]'>올림픽</div>
+                      <div className='w-[82px] h-[82px] rounded-[2px] flex justify-around items-center flex-wrap text-[10px]'>
+                        <img src='/game/f30.png' className='w-[82px] h-[82px] object-fill absolute z-[1] blur-[2px]'></img>
+                        {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p1.name}</div>}
+                        {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p2.name}</div>}
+                        {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p3.name}</div>}
+                        {i.location === player.p4.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p4.name}</div>}
+                      </div>
                     </div>
                   }
                   {
                     i.type === 'tax' && (i.location >= 30 && i.location < 40) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-500'>
-                      <div className='w-[82px] h-[82px] rounded-[2px] flex justify-center items-center font-PtdExtraBold bg-white text-[20px]'>국세청</div>
+                      <div className='w-[82px] h-[82px] rounded-[2px] flex justify-around items-center flex-wrap text-[10px]'>
+                        <img src='/game/f37.png' className='w-[82px] h-[82px] object-cover absolute z-[1] blur-[2px]'></img>
+                        {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p1.name}</div>}
+                        {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p2.name}</div>}
+                        {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p3.name}</div>}
+                        {i.location === player.p4.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px] z-[10]'>{player.p4.name}</div>}
+                      </div>
                     </div>
                   }
                   {
                     i.type === 'item' && (i.location >= 30 && i.location < 40) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-orange-400'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold '>{i.name}</div>
-                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'></div>
+                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'>
+                        {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]'>{player.p1.name}</div>}
+                        {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]'>{player.p2.name}</div>}
+                        {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]'>{player.p3.name}</div>}
+                        {i.location === player.p4.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]'>{player.p4.name}</div>}
+                      </div>
                     </div>
                   }
                 </div>
@@ -562,7 +652,7 @@ export default function Game2D(props: any) {
 
 
 
-    </div>
+    </div >
   </>
   )
 }
