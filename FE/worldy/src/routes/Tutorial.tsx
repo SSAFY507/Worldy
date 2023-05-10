@@ -8,7 +8,7 @@ import pathJP from '../assets/images/JoshPanic.png';
 import pathJJ from '../assets/images/JoshJumping.png';
 import pathTQT from '../assets/images/TutorialQuizText.png';
 import pathJR from '../assets/images/JoshReady.png';
-import LoaderPyramid from '../components/LoaderPyramid';
+import LoaderPyramid from '../components/Loaders/LoaderPyramid';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 import { CSSTransition } from 'react-transition-group';
 

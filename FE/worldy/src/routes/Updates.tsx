@@ -5,7 +5,7 @@ import moment from 'moment';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 import '../styles/UpdateCardStyle.css';
 import Pagination from '../components/Pagination';
-import LoaderPyramid from '../components/LoaderPyramid';
+import LoaderPyramid from '../components/Loaders/LoaderPyramid';
 
 type updateLogType = {
   id: number;

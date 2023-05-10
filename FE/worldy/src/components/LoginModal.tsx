@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import pathGC from '../assets/images/GameController.png';
 import pathLL from '../assets/images/LoginLogo.png';
 import pathKLB from '../assets/images/KakaoLoginButton.png';
-import LoaderPyramid from './LoaderPyramid';
+import LoaderPyramid from './Loaders/LoaderPyramid';
 import KakaoLogin from './KakaoLogin';
 import axios from 'axios';
 import { access } from 'fs';
