@@ -19,7 +19,7 @@ import MyPage from './routes/MyPage';
 import Navbar from './components/Nvabar';
 import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
-import Updates from './routes/Updates';
+// import Updates from './routes/Updates';
 import pathBI from './assets/images/MainPageBackground.png';
 import { useState, useRef, useEffect } from 'react';
 import Game from './routes/Game';
@@ -157,7 +157,7 @@ const AppLayout = () => {
             />
           )}
           <Route path='/info' element={<GameInfo />} />
-          <Route path='/updates' element={<Updates />} />
+          {/* <Route path='/updates' element={<Updates />} /> */}
           <Route path='/explore' element={<Explore />} />
           <Route path='/explore/:country' element={<Country />} />
           <Route path='/monopoly' element={<Monopoly />} />
