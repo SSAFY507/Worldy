@@ -352,7 +352,7 @@ export default function Support({
           </div>
         </>
       ) : (
-        <div className='w-full h-full bg-white'>
+        <div className='w-full h-full bg-white pt-20'>
           <LoaderBlueCircle text='무엇을 도와드릴까요?' />
         </div>
       )}
