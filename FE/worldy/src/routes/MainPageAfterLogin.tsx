@@ -112,7 +112,7 @@ export default function MainPageAfterLogin({
       headerText: '업데이트 1.0.1',
       TitleText: '새로운 패치노트를 만나보세요',
       contentText:
-        '이번 패치노트에서는 밸런스를 위해 주사위 확률 변경, 아이템 강도 조정, 캐릭터 움직임 모션 변경이 추가되었습니다. 여러분들의 피드백을 담아 사용성 좋은 게임으로 거듭나기 위해 노력하겠습니다.',
+        '이번 패치노트에서는 밸런스를 위해 주사위 확률 변경, 아이템 강도 조정이 추가되었습니다. 여러분들의 피드백을 담아 좋은 게임으로 거듭나기 위해 노력하겠습니다.',
       buttonText: '',
       image: Carousel3,
       textBlack: true,
@@ -125,7 +125,7 @@ export default function MainPageAfterLogin({
       headerText: '명예의 전당',
       TitleText: '최고의 플레이어들, 랭킹',
       contentText:
-        '전국 모든 플레이어들과 함께하는 멋진 게임에서 랭킹 1위를 차지해보세요. 다양한 퀴즈들과 함께 즐길 수 있으며, 업데이트되는 랭킹에서 다른 게이머들과 경쟁할 수 있습니다. 지금 바로 참여하여 세계적인 명성을 떨치는 게이머가 되어보세요',
+        '전국 모든 플레이어들과 함께하는 멋진 게임에서 랭킹 1위를 차지해보세요. 다양한 퀴즈들과 함께 즐길 수 있으며, 업데이트되는 랭킹에서 다른 게이머들과 경쟁할 수 있습니다. 지금 바로 참여하여 명성을 떨치는 게이머가 되어보세요',
       buttonText: '랭킹 확인하기',
       image: Carousel4,
       textBlack: false,
@@ -147,7 +147,7 @@ export default function MainPageAfterLogin({
     },
   ]);
   return (
-    <div className='w-full h-full relative flex flex-col justify-center items-stretch'>
+    <div className='w-full h-full relative flex flex-col justify-center items-stretch bg-gray-200'>
       <div className='h-full outline-black flex flex-row items-center justify-center z-30'>
         <CarouselComponent images={imageList} loaded={loadedAll} />
       </div>

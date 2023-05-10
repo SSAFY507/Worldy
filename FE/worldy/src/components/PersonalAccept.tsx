@@ -20,7 +20,8 @@ export default function PersonalAccept({ closePA }: { closePA: () => void }) {
             <br />
             <p>
               수집 및 이용 목적 : 문의 대응, 이용자 식별
-              <br /> 항목 : 캐릭터 명<br />
+              <br /> 항목 : 닉네임
+              <br />
               보유 및 이용기간: 수집일로부터 1개월 (법령에 특별한 규정이 있을
               경우 관련 법령에 따라 보관)
             </p>
@@ -66,9 +67,9 @@ export default function PersonalAccept({ closePA }: { closePA: () => void }) {
                   xmlns='http://www.w3.org/2000/svg'
                 >
                   <path
-                    fill-rule='evenodd'
+                    fillRule='evenodd'
                     d='M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z'
-                    clip-rule='evenodd'
+                    clipRule='evenodd'
                   ></path>
                 </svg>
                 서비스가 제대로 작동하는지 확인
@@ -84,9 +85,9 @@ export default function PersonalAccept({ closePA }: { closePA: () => void }) {
                   xmlns='http://www.w3.org/2000/svg'
                 >
                   <path
-                    fill-rule='evenodd'
+                    fillRule='evenodd'
                     d='M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z'
-                    clip-rule='evenodd'
+                    clipRule='evenodd'
                   ></path>
                 </svg>
                 제대로 작동하지 않을 경우 문제 해결 및 수정
@@ -102,9 +103,9 @@ export default function PersonalAccept({ closePA }: { closePA: () => void }) {
                   xmlns='http://www.w3.org/2000/svg'
                 >
                   <path
-                    fill-rule='evenodd'
+                    fillRule='evenodd'
                     d='M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z'
-                    clip-rule='evenodd'
+                    clipRule='evenodd'
                   ></path>
                 </svg>
                 제대로 작동하는지 알아보기 위해 테스트
@@ -120,9 +121,9 @@ export default function PersonalAccept({ closePA }: { closePA: () => void }) {
                   xmlns='http://www.w3.org/2000/svg'
                 >
                   <path
-                    fill-rule='evenodd'
+                    fillRule='evenodd'
                     d='M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z'
-                    clip-rule='evenodd'
+                    clipRule='evenodd'
                   ></path>
                 </svg>
                 기능 관련 아이디어에 대한 의견 수렴
@@ -151,13 +152,13 @@ export default function PersonalAccept({ closePA }: { closePA: () => void }) {
                   xmlns='http://www.w3.org/2000/svg'
                 >
                   <path
-                    fill-rule='evenodd'
+                    fillRule='evenodd'
                     d='M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z'
-                    clip-rule='evenodd'
+                    clipRule='evenodd'
                   ></path>
                 </svg>
                 회원님의 정보를 열람하기 위한 서비스 내 도구를 이용하여
-                개인정보의 열람 및 회원님의 정보 정정
+                개인정보의 열람 및 회원님의 정보 확인
               </span>
               <span className='flex justify-start items-center'>
                 <svg
@@ -170,12 +171,12 @@ export default function PersonalAccept({ closePA }: { closePA: () => void }) {
                   xmlns='http://www.w3.org/2000/svg'
                 >
                   <path
-                    fill-rule='evenodd'
+                    fillRule='evenodd'
                     d='M8 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z'
-                    clip-rule='evenodd'
+                    clipRule='evenodd'
                   ></path>
                 </svg>
-                삭제하기 위한 서비스 내 도구를 이용하여 개인정보의 정정
+                삭제하기 위한 서비스 내 도구를 이용하여 개인정보의 삭제
               </span>
               <br />
               WORLDY SOFT는 회원님의 요청을 받은 후 회원님의 요청이 정당한지

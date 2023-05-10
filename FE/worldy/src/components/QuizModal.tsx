@@ -475,7 +475,7 @@ export default function QuizModal({
     setTimeout(() => {
       setShowBack(true);
       console.log('보기');
-    }, 1500);
+    }, 1700);
   }, [flipped]);
 
   const fromtContainer = (): JSX.Element => {
@@ -568,7 +568,7 @@ export default function QuizModal({
   const backContainer = (): JSX.Element => {
     return (
       <div
-        className={`backcontainer transition-all duration-[2000ms] ease-in-out ${
+        className={`backcontainer transition-all duration-[1000ms] ease-in-out ${
           !showBack ? 'opacity-0' : 'opacity-100'
         }`}
       >
