@@ -56,13 +56,30 @@ export default function Support({
   const subjectList: SupportItemType[][] = [
     [
       {
-        content: '회원 가입은 어떻게 하는 건가요?',
+        content: '따로 계정을 생성할 수는 없나요?',
         date: '2023-04-30',
-        response: '카카오톡 가입하시면 됩니다',
+        response:
+          '카카오톡 계정을 이용하여 로그인하는 서비스로, 카카오톡을 가입하셔야합니다.',
       },
-      { content: '질문 1-2', date: '2023-04-29', response: '답변 2' },
-      { content: '질문 1-2', date: '2023-04-29', response: '답변 2' },
-      { content: '질문 1-2', date: '2023-04-29', response: '답변 2' },
+      {
+        content: '여러 계정을 사용하고싶은데, 방법이 없을까요?',
+        date: '2023-04-29',
+        response:
+          '개인정보 보호 및 악성 플레이 사전 방지를 위해 1명당 1개의 계정 사용을 권고드립니다.',
+      },
+      {
+        content:
+          '국내 전화번호 계정을 해외 전화번호 계정으로 변경하려 합니다. 해외 전화번호 변경 후 현재 플레이 중인 아이디를 계속 이용할 수 있나요?',
+        date: '2023-04-29',
+        response:
+          '아니요, 이용할 수 없습니다. 해외 전화번호 계정으로 이전 시 데이터는 모두 삭제되며, 복구할 수 없습니다.',
+      },
+      {
+        content:
+          '현재 사용중인 계정의 명의와 다른 명의로 된 전화번호를 사용하고 있습니다. 해당 전화번호로 계정 변경이 가능한가요?',
+        date: '2023-04-29',
+        response: '아니요, 동일한 명의를 가진 전화번호로만 변경이 가능합니다. ',
+      },
       {
         content: '질문 1-2',
         date: '2023-04-29',
@@ -92,6 +109,9 @@ export default function Support({
       //     ? ''
       //     : ' outline outline-[1px] outline-[rgb(175,175,175)]'
       // }`}
+      // className={` outline outline-white ${
+      //   subjectList[subjectIndex].length === index + 1 ? 'mb-[50px]' : ''
+      // }}`}
       >
         <button
           className={`w-full h-fit flex flex-row justify-between items-center px-[15px] py-[10px] 
@@ -338,11 +358,11 @@ export default function Support({
                 </button>
               </div>
             </div>
-            <div className='hide-scrollbar w-[70%] h-fit max-h-full  pt-[20px] px-[1px] flex flex-col justify-start items-center overflow-scroll'>
+            <div className='on-scrollbar-support w-[70%] h-[450px] pt-[20px] px-[15px] pb-0 mb-0 flex flex-col justify-start items-center overflow-y-scroll '>
               {subjectList[subjectIndex].map((item, index) => (
                 <div
                   key={index}
-                  className=' outline-white my-[10px] w-full h-fit '
+                  className=' outline-white  my-[10px] w-full h-fit '
                 >
                   {ItemBox(item, index)}
                 </div>

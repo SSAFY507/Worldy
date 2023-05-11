@@ -108,7 +108,7 @@ export default function Tutorial({
   //닉네임이 Sunday(중복X)이면 true, 중복이면 false
   const checkNickNameDup = async () => {
     if (nickName.length >= 3 && nickName.length <= 8) {
-      await checkNicknameAxios();
+      await checkNicknameAxiosBasic();
     }
   };
 
@@ -133,14 +133,16 @@ export default function Tutorial({
     //console.log('닉네임 중복 결과 ', checkNicknameResult);
   }, [checkNicknameResult]);
 
+  const loginStateToken = sessionStorage.getItem('token');
   const checkNicknameAxios = async () => {
-    console.log('토큰', token);
+    console.log('토큰', loginStateToken);
     try {
       const response = await CustomAxios({
         APIName: 'checkNickName',
         APIType: 'get',
+        // UrlQuery: `https://localhost:9090/api/user/check/${nickName}`,
         UrlQuery: `https://k8a507.p.ssafy.io/api/user/check/${nickName}`,
-        Token: token,
+        Token: loginStateToken,
       });
       //console.log('닉네임 중복 체크 성공');
       setCheckNicknameResult(response);
@@ -150,13 +152,30 @@ export default function Tutorial({
     //console.log('token이 무엇이냐 ', token);
   };
 
+  const checkNicknameAxiosBasic = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${loginToken}`,
+        },
+      };
+      const checkNicknameResponse = await axios.get(
+        `http://localhost:9090/api/user/check/${nickName}`,
+        config
+      );
+      console.log('checknickname 결과', checkNicknameResponse);
+    } catch (error) {
+      console.error('카카오 로그인 새로운 api 실패', error);
+    }
+  };
+
   const submitNickNameAxios = async () => {
     try {
       const response = await CustomAxios({
         APIName: 'submitNickName',
         APIType: 'put',
         UrlQuery: `https://k8a507.p.ssafy.io/api/user/nickname/${nickName}`,
-        Token: token,
+        Token: loginStateToken,
       });
 
       setSubmitNicknameResult(response);
@@ -166,7 +185,7 @@ export default function Tutorial({
   };
 
   const eneterNickNameContentItem = (
-    <div className='w-full  outline-blue-500 py-[10px] flex- flex-col justify-start items-center'>
+    <div className='w-full  outline-blue-500 py-[10px] flex- flex-col justify-start items-center '>
       <div className='w-full h-fit outline-blue-200 flex flex-row justify-between items-center'>
         <input
           className='h-[60px] w-[90%] rounded-[10px] bg-[rgba(255,255,255,0.3)] text-white pl-[20px] p-[10px] text-[25px] font-PtdRegular'

@@ -39,6 +39,7 @@ import { useSelector } from 'react-redux';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 import LoaderPyramid from '../components/Loaders/LoaderPyramid';
 import LoaderBlueCircle from '../components/Loaders/LoaderBlueCircle';
+import CustomAxios from '../API/CustomAxios';
 
 type MyPageMenuType = {
   icon: React.ReactNode;
@@ -874,6 +875,35 @@ export default function MyPage({
     );
   };
 
+  const [logoutResult, setLogoutResult] = useState<any>();
+
+  const logoutAxios = async () => {
+    const loginToken = sessionStorage.getItem('token');
+    console.log('로그아웃 시 토큰 : ', loginToken);
+    try {
+      const response = await CustomAxios({
+        APIName: 'logout',
+        APIType: 'get',
+        UrlQuery: 'https://localhost:9090/api/user/logout',
+        Token: loginToken,
+      });
+      setLogoutResult(response);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const logoutClick = async () => {
+    await logoutAxios().then(() => {
+      dispatch(logout());
+      navigate('/');
+    });
+  };
+
+  useEffect(() => {
+    console.log('로그아웃 결과: ', logoutResult);
+  }, [logoutResult]);
+
   const [iconColor, setIconColor] = useState<string>('#E6E6E6');
 
   const logoutContent = (): JSX.Element => {
@@ -883,13 +913,7 @@ export default function MyPage({
         onMouseEnter={() => setIconColor('#FF4D45')}
         onMouseLeave={() => setIconColor('#E6E6E6')}
       >
-        <button
-          className='logoutbtn'
-          onClick={() => {
-            dispatch(logout());
-            navigate('/');
-          }}
-        >
+        <button className='logoutbtn' onClick={logoutClick}>
           <span className='logouticon w-fit h-fit outline-white'>
             <IoMdPower size={26} color={iconColor} />
           </span>
