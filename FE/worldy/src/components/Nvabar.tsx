@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LogoWhite from '../assets/images/Logo-white.png';
 import WorldySoftLogo from '../assets/images/WorldySoftLogo.png';
 import { ImSearch } from 'react-icons/im';
@@ -18,6 +18,7 @@ import {
 import { logout } from '../_store/slices/loginSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
+import CustomAxios from '../API/CustomAxios';
 
 type NavListType = {
   name: string;
@@ -39,6 +40,35 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
   const checkLoginState = useSelector(loginState);
   const dispatch = useDispatch();
   console.log('checkLoginState', checkLoginState);
+
+  const [logoutResult, setLogoutResult] = useState<any>();
+
+  const logoutAxios = async () => {
+    const loginToken = sessionStorage.getItem('token');
+    console.log('로그아웃 시 토큰 : ', loginToken);
+    try {
+      const response = await CustomAxios({
+        APIName: 'logout',
+        APIType: 'get',
+        UrlQuery: 'https://localhost:9090/api/user/logout',
+        Token: loginToken,
+      });
+      setLogoutResult(response);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(() => {
+    console.log('로그아웃 결과: ', logoutResult);
+  }, [logoutResult]);
+
+  const logoutClick = async () => {
+    await logoutAxios().then(() => {
+      dispatch(logout());
+      navigate('/');
+    });
+  };
 
   const handleLoginModalClick = (e: any) => {
     e.preventDefault();
@@ -148,10 +178,7 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
             }`}
             onMouseEnter={() => hoverModalMyPage(3)}
             onMouseLeave={() => hoverModalMyPage(0)}
-            onClick={() => {
-              dispatch(logout());
-              navigate('/');
-            }}
+            onClick={logoutClick}
           >
             로그아웃
           </button>
