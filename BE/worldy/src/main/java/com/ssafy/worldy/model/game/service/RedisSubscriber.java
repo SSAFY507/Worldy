@@ -49,13 +49,13 @@ public class RedisSubscriber {
                 // subscriber에게 메시지 전송
                 log.info("Redis Subscribe Message : " + gameQuiz.toString());
                 template.convertAndSend("/sub/" + gameQuiz.getRoomId(), gameQuiz);
-            } else if (publishMessage.contains("cnt")) {
+            } else if (publishMessage.contains("enter")) {
 
-                PlayerCnt playerCnt = objectMapper.readValue(publishMessage, PlayerCnt.class);
+                EnterPlayerList enterPlayerList = objectMapper.readValue(publishMessage, EnterPlayerList.class);
 
                 // subscriber에게 메시지 전송
-                log.info("Redis Subscribe Message : " + playerCnt.toString());
-                template.convertAndSend("/sub/" + playerCnt.getRoomId(), playerCnt);
+                log.info("Redis Subscribe Message : " + enterPlayerList.toString());
+                template.convertAndSend("/sub/" + enterPlayerList.getRoomId(), enterPlayerList);
             } else if (publishMessage.contains("worldmap")) {
 
                 WorldMap worldMap = objectMapper.readValue(publishMessage, WorldMap.class);
