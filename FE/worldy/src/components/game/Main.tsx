@@ -8,26 +8,84 @@ import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import { useLocation } from "react-router-dom";
 
+export type ScrappedQuizType = {
+  quizId: number; //퀴즈 id
+  nationName: string; //국가명
+  level: number; //퀴즈 수준
+  quizType: string; //퀴즈 유형
+  category: string; //카테고리
+  image: string; //이미지
+  content: string; //문제
+  answer: string; //정답
+  multiFirst: string | null; //1번
+  multiSecond: string | null; //2번
+  multiThird: string | null; //3번
+  multiFourth: string | null; //4번
+  hint: boolean; //힌트
+  commentary: string; //힌트 유형
+  userAnswer: string | null; //유저가 적은 정답(맞았으면 null)
+  success: boolean; //맞춘 문제인가
+  explanation?: string;
+};
+
+let socket : any;
+let ws : any;
 
 export default function Main() {
+
+  // 로그인 확인
+  const token = sessionStorage.getItem('token');
+
+  if(!token) {
+    
+  }
 
   let roomData: any = null;
   const params = useParams();
   const location = useLocation();
   const loginUser = '2756798359';
 
+  let received : any;
+
 
   roomData = location.state.value;
 
-  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzU3Mzg5MTAxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4Mzc3NTAxMX0.FGXDtMPT4TZdwoUDUc98lZNlYI7d4MK2YYu63b7nvQiJdzY2zItjIgmOAsM5_Y4hKIPv2eU5o9gOwdbgyRc8uQ  '
+  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzU3Mzg5MTAxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4Mzk0OTY2N30.zZsk4JnHTobz2XFd6KlNubhXgh7VHpW3xagW1R2oZko0zkAI4-UM0tzLUnPKUAPn7HvKC6ObLaz8n4KcRNbUDQ'
   let headers = { Authorization: `Bearer ${accessToken}` };
-  let receivedData: any = null;
+  
+  // socket receivedData
+  let receivedData: any;
 
-  // 소켓 연결
-  const socket = new SockJS('https://k8a507.p.ssafy.io/api/stomp/game');
-  const ws = Stomp.over(socket);
+  // quizData
+  let quizData: any;
+
+  // quiz modal 선언하기 위한 변수
+  const [quizModalState, setQuizModalState] = useState<boolean>(false);
+  // quizData 선언하기 위한 변수
+  const [quiz, setQuiz] = useState<ScrappedQuizType>({
+    quizId: 0,
+    nationName: '',
+    level: 0,
+    quizType: '',
+    category: '',
+    image: '',
+    content: '',
+    answer: '',
+    multiFirst: null, //1번
+    multiSecond: null, //2번
+    multiThird: null, //3번
+    multiFourth: null, //4번
+    hint: true, //힌트
+    commentary: '',
+    userAnswer: '', //유저가 적은 정답(맞았으면 null)
+    success: true, //맞춘 문제인가
+    explanation: '',
+  })
 
   useEffect(() => {
+    // 소켓 연결
+    socket = new SockJS('https://k8a507.p.ssafy.io/api/stomp/game');
+    ws = Stomp.over(socket);
     ws.connect(headers, (frame: any) => {
       console.log('소켓 연결')
       subscribe();
@@ -38,11 +96,54 @@ export default function Main() {
 
   function subscribe() {
 
-    ws.subscribe(`/sub/${params.id}`, (event) => {
-      const received = JSON.parse(event.body);
+    ws.subscribe(`/sub/${params.id}`, (event:any) => {
+      received = JSON.parse(event.body);
 
 
+      if(received.type === 'quiz') {
+        quizData = received.quizDto;
+        
+        console.log('quizData');
+        console.log(quizData);
+        
+        if(quizData.multiAnswerList) {
+          setQuiz((prevState:any ) => ({
+            ...prevState,
+            quizId: quizData.quizId,
+            nationName : quizData.nation.nationName,
+            level : quizData.level,
+            quizType : quizData.quizType,
+            category : quizData.catetory,
+            image : quizData.image,
+            content : quizData.content,
+            answer : quizData.answer,
+            multiFirst : quizData.multiAnswerList[0].answer,
+            multiSecond : quizData.multiAnswerList[1].answer,
+            multiThird : quizData.multiAnswerList[2].answer,
+            multiFourth : quizData.multiAnswerList[3].answer,
+            hint : quizData.hintType,
+            commentary : quizData.hint,
+            explanation : quizData.commentary
+          }))
 
+        } else {
+          setQuiz((prevState:any ) => ({
+            ...prevState,
+            quizId: quizData.quizId,
+            nationName : quizData.nation.nationName,
+            level : quizData.level,
+            quizType : quizData.quizType,
+            category : quizData.catetory,
+            image : quizData.image,
+            content : quizData.content,
+            answer : quizData.answer,
+            hint : quizData.hintType,
+            commentary : quizData.hint,
+            explanation : quizData.commentary
+          }))
+        }
+        setQuizModalState(true);
+      }
     });
   }
 
@@ -65,122 +166,42 @@ export default function Main() {
       }
     });
 
-    setP1((prevState) => ({
+    setPlayer((prevState: any) => ({
       ...prevState,
-      playerId: _p1.kakaoId,
-      playerNum: 1,
-      name: '설희',
-      type: 'player',
-      game: {
-        ...prevState.game,
-        location: 0,
-        balance: 500,
-        desert: 0,
-        state: false,
-        dice1: 0,
-        dice2: 0,
-        dice: 0,
-        isDouble: false,
-        own: [],
-        lap: 0,
-        ranking: 0,
-      }
+      p1: {
+        ...prevState.p1,
+        playerId: _p1.kakaoId,
+        name: '설희',
+        game: {
+          ...prevState.p1.game,
+        }
+      },
+      p2: {
+        ...prevState.p2,
+        playerId: _p2.kakaoId,
+        name: '성훈',
+        game: {
+          ...prevState.p2.game,
+        }
+      },
+      p3: {
+        ...prevState.p3,
+        playerId: _p3.kakaoId,
+        name: '미희',
+        game: {
+          ...prevState.p3.game,
+        }
+      },
+      p4: {
+        ...prevState.p4,
+        playerId: _p4.kakaoId,
+        name: '원규',
+        game: {
+          ...prevState.p4.game,
+        }
+      },
     }))
-
-    setP2((prevState) => ({
-      ...prevState,
-      playerId: _p2.kakaoId,
-      playerNum: 2,
-      name: '성훈',
-      type: 'player',
-      game: {
-        ...prevState.game,
-        location: 0,
-        balance: 500,
-        desert: 0,
-        state: false,
-        dice1: 0,
-        dice2: 0,
-        dice: 0,
-        isDouble: false,
-        own: [],
-        lap: 0,
-        ranking: 0,
-      }
-    }))
-
-    setP3((prevState) => ({
-      ...prevState,
-      playerId: _p3.kakaoId,
-      playerNum: 3,
-      name: '미희',
-      type: 'player',
-      game: {
-        ...prevState.game,
-        location: 0,
-        balance: 500,
-        desert: 0,
-        state: false,
-        dice1: 0,
-        dice2: 0,
-        dice: 0,
-        isDouble: false,
-        own: [],
-        lap: 0,
-        ranking: 0,
-      }
-    }))
-
-    setP4((prevState) => ({
-      ...prevState,
-      playerId: _p4.kakaoId,
-      playerNum: 4,
-      name: '원규',
-      type: 'player',
-      game: {
-        ...prevState.game,
-        location: 0,
-        balance: 500,
-        desert: 0,
-        state: false,
-        dice1: 0,
-        dice2: 0,
-        dice: 0,
-        isDouble: false,
-        own: [],
-        lap: 0,
-        ranking: 0,
-      }
-    }))
-
-    setMe((prevState) => ({
-      ...prevState,
-      playerId: myId,
-      playerNum: myNum,
-      name: '내 아이디',
-      type: 'player',
-      game: {
-        ...prevState.game,
-        location: 0,
-        balance: 500,
-        desert: 0,
-        state: false,
-        dice1: 0,
-        dice2: 0,
-        dice: 0,
-        isDouble: false,
-        own: [],
-        lap: 0,
-        ranking: 0,
-      }
-    }))
-
-    // console.log('플레이어 데이터 전송 >>>')
-    // ws.send("/pub/game/player", {}, JSON.stringify(roomData));
   }
-
-
-
 
   const [contents, setContents] = useState<String>('');
   const [mode, setMode] = useState<boolean>(true);
@@ -191,10 +212,11 @@ export default function Main() {
     dice1: 0,
     dice2: 0,
     dice: 0,
-    turn: 1,
-    turnOver: false,
+    turn: 0,
     isDouble: false,
   });
+  const [turnOver, setTurnOver] = useState<boolean>(false);
+
   // 백으로부터 응답 받은 데이터
   let res = {};
 
@@ -202,198 +224,85 @@ export default function Main() {
 
 
   // 플레이어 데이터 세팅
-  const [p1, setP1] = useState<Player>({
-    playerId: "",
-    playerNum: 1,
-    name: "",
-    type: 'player',
-    game: {
-      location: 0,
-      balance: 500,
-      desert: 0,
-      state: false,
-      dice1: 0,
-      dice2: 0,
-      dice: 0,
-      isDouble: false,
 
-      own: [],
-      lap: 0,
-      ranking: 0,
+  const [player, setPlayer] = useState<NewPlayer>({
+    roomId : '',
+    type : 'player',
+    p1: {
+      playerNum: 1,
+      playerId: '',
+      name: '',
+      game: {
+        location: 0,
+        balance: 500,
+        desert: 0,
+        state: false,
+        dice1: 0,
+        dice2: 0,
+        dice: 0,
+        isDouble: false,
+        own: [],
+        lap: 0,
+        ranking: 0,
+      }
     },
-  })
-  const [p2, setP2] = useState<Player>({
-    playerId: "",
-    playerNum: 2,
-    name: "",
-    type: 'player',
-    game: {
-      location: 0,
-      balance: 500,
-      desert: 0,
-      state: false,
-      dice1: 0,
-      dice2: 0,
-      dice: 0,
-      isDouble: false,
-      own: [],
-      lap: 0,
-      ranking: 0,
+    p2: {
+      playerNum: 2,
+      playerId: '',
+      name: '',
+      game: {
+        location: 0,
+        balance: 500,
+        desert: 0,
+        state: false,
+        dice1: 0,
+        dice2: 0,
+        dice: 0,
+        isDouble: false,
+        own: [],
+        lap: 0,
+        ranking: 0,
+      }
     },
-  })
-
-  const [p3, setP3] = useState<Player>({
-    playerId: "",
-    playerNum: 3,
-    name: "",
-    type: 'player',
-    game: {
-      location: 0,
-      balance: 500,
-      desert: 0,
-      state: false,
-      dice1: 0,
-      dice2: 0,
-      dice: 0,
-      isDouble: false,
-      own: [],
-      lap: 0,
-      ranking: 0,
+    p3: {
+      playerNum: 3,
+      playerId: '',
+      name: '',
+      game: {
+        location: 0,
+        balance: 500,
+        desert: 0,
+        state: false,
+        dice1: 0,
+        dice2: 0,
+        dice: 0,
+        isDouble: false,
+        own: [],
+        lap: 0,
+        ranking: 0,
+      }
     },
-  })
-
-  const [p4, setP4] = useState<Player>({
-    playerId: "",
-    playerNum: 4,
-    name: "",
-    type: 'player',
-    game: {
-      location: 0,
-      balance: 500,
-      desert: 0,
-      state: false,
-      dice1: 0,
-      dice2: 0,
-      dice: 0,
-      isDouble: false,
-      own: [],
-      lap: 0,
-      ranking: 0,
-    },
-  })
-
-  const [me, setMe] = useState<Player>({
-    playerId: "",
-    playerNum: 4,
-    name: "",
-    type: 'player',
-    game: {
-      location: 0,
-      balance: 500,
-      desert: 0,
-      state: false,
-      dice1: 0,
-      dice2: 0,
-      dice: 0,
-      isDouble: false,
-      own: [],
-      lap: 0,
-      ranking: 0,
+    p4: {
+      playerNum: 4,
+      playerId: '',
+      name: '',
+      game: {
+        location: 0,
+        balance: 500,
+        desert: 0,
+        state: false,
+        dice1: 0,
+        dice2: 0,
+        dice: 0,
+        isDouble: false,
+        own: [],
+        lap: 0,
+        ranking: 0,
+      }
     },
   })
 
 
-  // 아이템(보물상자)
-  const [item, setItem] = useState<Item[]>([
-    {
-      id: 0,
-      title: '운수 좋은 날',
-      content: '주사위를 한 번 더 던지세요!',
-    },
-    {
-      id: 1,
-      title: '무인도 불시착',
-      content: '비행기가 고장나서 무인도에 갇혔습니다. 무인도로 가세요.',
-    },
-    {
-      id: 2,
-      title: '자유여행권',
-      content: '한번에 이동하고 싶은 곳을 클릭하세요.',
-    },
-    {
-      id: 3,
-      title: '코로나19 확진',
-      content: '코로나에 걸렸습니다. 2턴 간 자가격리에 들어갑니다.',
-    },
-    {
-      id: 4,
-      title: '호텔에 짐을 놓고 왔습니다.',
-      content: '뒤로 2 칸 이동하세요.',
-    },
-    {
-      id: 5,
-      title: '졸음',
-      content: '졸다가 3역을 지나쳤습니다. 앞으로 3 칸 이동',
-    },
-    {
-      id: 6,
-      title: '복권 당첨',
-      content: '100만원을 받으세요!',
-    },
-    {
-      id: 7,
-      title: '세무조사',
-      content: '국세청에서 세무 조사를 시작합니다. 국세청으로 이동하세요.',
-    },
-    {
-      id: 8,
-      title: '주식 투자',
-      content: '투자한 주식이 대박났습니다. 200만원을 받으세요.',
-    },
-    {
-      id: 9,
-      title: '올림픽 티켓 수령',
-      content: '올림픽을 관람하러갑니다.',
-    },
-    {
-      id: 10,
-      title: 'BTS 콘서트',
-      content: '콘서트를 보러 대한민국으로 이동합니다.',
-    },
-    {
-      id: 11,
-      title: '미국 여행',
-      content: '미국으로 이동하세요',
-    },
-    {
-      id: 12,
-      title: '피라미드 대탐험',
-      content: '새로운 피라미드가 발견됐습니다. 이집트로 이동하세요.',
-    },
-    {
-      id: 13,
-      title: '로마의 휴일',
-      content: '휴가를 받았습니다. 이탈리아로 이동하세요.',
-    },
-    {
-      id: 14,
-      title: '과속 벌금',
-      content: '과속은 위험합니다. 벌금 -100만원',
-    },
-    {
-      id: 15,
-      title: '통행 면제권',
-      content: '1회 다른 플레이어의 나라에 무료로 머무를 수 있습니다.',
-    },
-    {
-      id: 16,
-      title: '뒤로 걷기 캠페인',
-      content: '뒤로 3칸 이동하세요.',
-    },
-
-
-
-  ])
 
 
   // 월드맵(지도)
@@ -1305,9 +1214,6 @@ export default function Main() {
 
 
 
-  const p = [p1, p2, p3, p4]
-  const setP = [setP1, setP2, setP3, setP4]
-
 
   return (<>
     <div className='w-screen h-screen bg-[#FFFDF4]'>
@@ -1328,21 +1234,12 @@ export default function Main() {
             setStart(true);
             setGameData();
           }}
-        >게임스타트</div>
+        >게임 시작하기</div>
       </div>}
       {start && <div>
-        {mode && <Game2D metaData={metaData} setMetaData={setMetaData} p={p} me={me} setMe={setMe} setP={setP} worldMap={worldMap} setWorldMap={setWorldMap}></Game2D>}
-        {!mode && <Game3D p={p} setP={setP} worldMap={worldMap} setWorldMap={setWorldMap}></Game3D>}
+        {mode && <Game2D quizModalState = {quizModalState} ws={ws} quiz={quiz} closeModal={() => setQuizModalState(false)} loginUser={loginUser} metaData={metaData} setMetaData={setMetaData} player={player} setPlayer={setPlayer} worldMap={worldMap} setWorldMap={setWorldMap}></Game2D>}
+        {!mode && <Game3D worldMap={worldMap} setWorldMap={setWorldMap}></Game3D>}
       </div>}
-
-
-
-
-
-
-
-
-
 
       {/* <div>소켓 테스트용</div>
       <div className='flex flex-col'>
@@ -1355,4 +1252,3 @@ export default function Main() {
   </>
   )
 }
-

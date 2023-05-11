@@ -19,6 +19,8 @@ import tempImage1 from '../assets/images/thumb2.png';
 import tempImage2 from '../assets/images/Carousel5.png';
 import tempImage3 from '../assets/images/JoshCurious.png';
 import { IoIosPhotos } from 'react-icons/io';
+import { keyboardKey } from '@testing-library/user-event';
+
 
 type ScrappedQuizType = {
   quizId: number; //퀴즈 id
@@ -40,14 +42,14 @@ type ScrappedQuizType = {
   explanation?: string;
 };
 
-export default function QuizModal({
+export default function GameQuizModal({
   input,
   closeModal,
 }: {
   input: ScrappedQuizType;
   closeModal: () => void;
 }) {
-  console.log(input);
+//   console.log(input);
 
   const size: number = 200;
 
@@ -117,6 +119,12 @@ export default function QuizModal({
     }
   };
 
+  const handleEnter = (e : React.KeyboardEvent<HTMLInputElement>)=>{
+    if(e.key === 'Enter'){
+        submitAndFlip()
+    }
+  }
+  
   const blankBoxComponent = () => {
     const tempCompList: JSX.Element[] = [];
     for (let i = 0; i < input.answer.length; i++) {
@@ -140,6 +148,7 @@ export default function QuizModal({
           value={blankInputAnswer[i]}
           onChange={(e) => handleBlankAnswer({ e, i })}
           placeholder={hintState ? `${input.commentary.charAt(i)}` : ''}
+          onKeyDown={(e)=>handleEnter(e)}
         />
       );
     }
@@ -161,7 +170,7 @@ export default function QuizModal({
     return (
       <>
         <div
-          className={`w-full h-full flex flex-col justify-center items-center p-[30px] text-black transition-all duration-3000 ease-in`}
+          className={`w-full h-full flex flex-col justify-center items-center p-[30px] text-black transition-all duration-3000 ease-in `}
         >
           {hintState ? (
             <>
@@ -416,7 +425,7 @@ export default function QuizModal({
 
   useEffect(() => {
     if (submitAnswer === '' || submitAnswer !== beforeSubmitAnswer)
-      setSubmitCheck(false);
+      setSubmitCheck(true);
     setBeforeSubmitAnswer(submitAnswer);
   }, [submitAnswer]);
 
@@ -425,9 +434,7 @@ export default function QuizModal({
       <button
         className={`w-[500px] h-[60px] rounded-md font-PtdLight text-[25px] ${
           submitAnswer
-            ? submitCheck
-              ? 'bg-[#61C7BB] text-white'
-              : 'bg-white text-black'
+            ?  'bg-[#61C7BB] text-white'
             : 'bg-[#D4D4D4] text-[#9F9F9F]'
         }`}
         disabled={!submitAnswer}
@@ -440,7 +447,7 @@ export default function QuizModal({
   const closeButton = (): JSX.Element => {
     return (
       <button
-        className='w-[500px] h-[60px] rounded-md font-PtdLight text-[25px] bg-white text-black'
+        className='w-[500px] h-[60px] rounded-md font-PtdLight text-[25px] bg-[#61C7BB] text-white'
         onClick={closeModal}
       >
         확인
@@ -479,6 +486,34 @@ export default function QuizModal({
       console.log('보기');
     }, 1500);
   }, [flipped]);
+
+  const limitTime = 16;
+  const [timecount, setTimecount] = useState<number>(0);
+  const [timerOut, setTimerOut] = useState<boolean>(false);
+  useEffect(() => {
+    const intervalId: NodeJS.Timeout = setInterval(() => {
+        setTimecount((prevTime) => {
+        const newTime = prevTime + 0.01;
+        if (newTime > limitTime) {
+          clearInterval(intervalId)
+          setTimerOut(true);
+        }
+        return newTime;
+      });
+    }, 10);
+
+    // Cleanup function to clear the interval on component unmount
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  useEffect(()=>{
+    if(timerOut){
+        console.log('setFlipped')
+        setFlipped(true)
+    }
+  },[timerOut])
 
   const fromtContainer = (): JSX.Element => {
     return (
@@ -526,14 +561,7 @@ export default function QuizModal({
                   </div>
                 )}
               </div>
-              <div className='w-fit h-fit  outline-yellow-500 grid place-content-center text-gray-800 hover:cursor-pointer'>
-                <AiOutlineClose
-                  size={25}
-                  color='#BFBFBF'
-                  onClick={() => closeModal()}
-                  className='cursor-pointer'
-                />
-              </div>
+              
             </div>
           </div>
         </div>
@@ -550,7 +578,9 @@ export default function QuizModal({
             Q. {input.content}
           </span>
         </div>
-        <div className='w-full h-[10px] bg-[#E0E0E0]'></div>
+        <div className='w-full h-[10px] bg-[#61C7BB] relative flex flex-row justify-end items-center'>
+            <div className='absolute top-0 left-0 h-[10px] max-w-full bg-[#E0E0E0]' style={{width: `${timecount*100/limitTime}%`}}></div>
+        </div>
         <div className='relative bg-[#E0E0E0] w-full h-[300px]  outline-blue-500'>
           {quizContent()}
         </div>
@@ -583,16 +613,6 @@ export default function QuizModal({
                 className='w-fit h-[52px]'
               />
             </div>
-            <div className='w-full h-fit flex flex-row justify-end items-center'>
-              <div className='w-[50px] h-fit  outline-yellow-500 grid place-content-center text-gray-800'>
-                <AiOutlineClose
-                  size={30}
-                  color='gray'
-                  onClick={() => closeModal()}
-                  className='cursor-pointer'
-                />
-              </div>
-            </div>
           </div>
         </div>
         <div className='w-full h-[200px] bg-[#eaeaea]  outline-red-500 flex flex-col justify-start items-start pt-[5px] px-[50px]'>
@@ -605,7 +625,7 @@ export default function QuizModal({
               ? '정답입니다'
               : correctState === false
               ? '오답입니다'
-              : 'null결과'}
+              : '시간 초과입니다'}
           </span>
           <div className='w-full h-[70px] flex flex-row justify-start items-center outline-yellow-500 overflow-y-scroll on-scrollbar-quizmodal'>
             <span
@@ -621,28 +641,28 @@ export default function QuizModal({
             </span>
           </div>
           <div
-            className={` w-full h-[50px] mt-[10px] rounded-[10px] overflow-hidden ${
+            className={` w-full h-[50px] mt-[10px] rounded-[10px] overflow-hidden                                            ${
               correctState === true
-                ? 'bg-[#26aaa5]'
+                ? ''
                 : correctState === false
-                ? 'bg-[#4f4f4f]'
+                ? ''
                 : ''
             }`}
           >
             <div
               className={`${
                 correctState === true
-                  ? 'correctanswer text-[#80ffe6]'
+                  ? 'gamecorrectanswer text-[#80ffe6]'
                   : correctState === false
-                  ? 'incorrectanswer'
+                  ? 'gameincorrectanswer'
                   : ''
               } w-full h-full grid place-content-center font-PtdBold text-[20px] `}
             >
-              A. {input.answer}
+              A. {input.quizType === 'multi'? `${input.answer === '1'? input.multiFirst : input.answer === '2'? input.multiSecond : input.answer === '3'? input.multiThird : input.multiFourth}`: input.answer }
             </div>
           </div>
           <div className='w-full flex-1 outline-black flex flex-row justify-start items-center font-PtdRegular text-[#ACACAC]'>
-            <span>'닉네임 값 없다야'님이 입력한 답은 "{submitAnswer}"</span>
+            <span>'닉네임 값 없다야'님이 입력한 답은 "{submitAnswer !== ""? submitAnswer : '없음'}"</span>
           </div>
         </div>
         <div className='relative bg-[#F5F5F5] w-full h-[300px]  outline-blue-500'>
@@ -663,13 +683,13 @@ export default function QuizModal({
 
   return (
     <div
-      className={` z-50 absolute top-[15%] left-1/2 -translate-x-1/2 -translate-y-1/2 outline-white
+      className={` z-50 absolute top-[15%] left-1/2 -translate-x-1/2 -translate-y-1/2 
       flex flex-col justify-start items-center
       ${!flipped ? 'cardcontainer' : 'cardcontainer-flipped'}
      `}
       style={{ width: `${size * 3}px`, height: 'fit' }}
     >
-      <div className='cardcontainer-inner w-full h-full'>
+      <div className='cardcontainer-inner w-full h-full '>
         {fromtContainer()}
         {backContainer()}
       </div>

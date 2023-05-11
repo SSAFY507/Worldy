@@ -4,6 +4,85 @@
 declare module 'gameType';
 
 //Object Type 선언
+
+type NewPlayer = {
+  roomId : string,
+  type : string,
+  p1: {
+    playerNum: number,
+    playerId: string,
+    name: string,
+    game: {
+      location: number,
+      balance: number,
+      desert: number,
+      state: boolean,
+      dice1: number,
+      dice2: number,
+      dice: number,
+      isDouble: boolean,
+      own: [],
+      lap: number,
+      ranking: number,
+    }
+  },
+  p2: {
+    playerNum: number,
+    playerId: string,
+    name: string,
+    game: {
+      location: number,
+      balance: number,
+      desert: number,
+      state: boolean,
+      dice1: number,
+      dice2: number,
+      dice: number,
+      isDouble: boolean,
+      own: [],
+      lap: number,
+      ranking: number,
+    }
+  },
+  p3: {
+    playerNum: number,
+    playerId: string,
+    name: string,
+    game: {
+      location: number,
+      balance: number,
+      desert: number,
+      state: boolean,
+      dice1: number,
+      dice2: number,
+      dice: number,
+      isDouble: boolean,
+      own: [],
+      lap: number,
+      ranking: number,
+    }
+  },
+  p4: {
+    playerNum: number,
+    playerId: string,
+    name: string,
+    game: {
+      location: number,
+      balance: number,
+      desert: number,
+      state: boolean,
+      dice1: number,
+      dice2: number,
+      dice: number,
+      isDouble: boolean,
+      own: [],
+      lap: number,
+      ranking: number,
+    }
+  },
+}
+
+
 type Price = {
   land: number,
   villa: number,
@@ -47,14 +126,24 @@ type Game = {
 }
 
 type Player = {
-  playerId: string,
   playerNum: number,
+  playerId: string,
   name: string,
-  game: Game,
   type: string,
-
+  game: {
+    location: number,
+    balance: number,
+    desert: number,
+    state: boolean,
+    dice1: number,
+    dice2: number,
+    dice: number,
+    isDouble: boolean,
+    own: [],
+    lap: number,
+    ranking: number,
+  }
 }
-
 type Item = {
   id: number,
   title: string,
