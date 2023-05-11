@@ -1,0 +1,36 @@
+#NavBarButtons-Animation {
+  cursor: pointer;
+  background-color: transparent;
+  color: white;
+  border: none;
+  position: relative;
+  z-index: 3;
+}
+
+#NavBarButtons-Animation::before,
+#NavBarButtons-Animation::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: rgb(94, 94, 94);
+  transform: scaleX(0);
+  transition: transform 0.25s;
+}
+
+#NavBarButtons-Animation::before {
+  top: -3px;
+  transform-origin: left;
+}
+#NavBarButtons-Animation::after {
+  bottom: -3px;
+  transform-origin: right;
+}
+
+#NavBarButtons-Animation:hover::before,
+#NavBarButtons-Animation:hover::after {
+  transform: scaleX(1);
+}
+
+/* ///////////////// */

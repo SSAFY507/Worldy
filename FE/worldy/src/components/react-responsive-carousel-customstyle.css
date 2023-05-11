@@ -1,0 +1,91 @@
+.carousel .control-dots .dot {
+  /* 원하는 스타일 변경을 적용하세요 */
+  width: 18px;
+  height: 18px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  box-shadow: none;
+  opacity: 0.8;
+}
+
+.carousel .control-dots .dot.selected {
+  /* 선택된 dot에 대한 스타일 변경을 적용하세요 */
+  background-color: #ff4d45;
+}
+
+.carousel .control-dots {
+  /* dot들이 위치한 컨테이너에 대한 스타일 변경을 적용하세요 (예: 간격 조절) */
+  padding: 10px;
+}
+
+.carousel .control-arrow {
+  /* 화살표 버튼 가로 영역 늘리기 */
+  width: 90px;
+}
+
+.carousel .control-prev.control-arrow {
+  /* 왼쪽 버튼 그라데이션 적용 */
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0) 90%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 10px;
+}
+
+.carousel .control-next.control-arrow {
+  /* 오른쪽 버튼 그라데이션 적용 */
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0) 90%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-right: 10px;
+}
+
+.carousel .control-prev.control-arrow:hover {
+  /* 왼쪽 버튼 그라데이션 적용 */
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0) 90%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.carousel .control-next.control-arrow:hover {
+  /* 오른쪽 버튼 그라데이션 적용 */
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0) 90%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.carousel .control-prev.control-arrow:before {
+  border-right: 20px solid #fff;
+  display: none;
+}
+.carousel .control-next.control-arrow:before {
+  border-left: 20px solid #fff;
+  display: none;
+}
+
+.hide-things .carousel .control-dots {
+  display: none;
+}
+.hide-things .carousel .control-next {
+  display: none;
+}
+.hide-things .carousel .control-prev {
+  display: none;
+}

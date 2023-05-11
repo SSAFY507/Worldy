@@ -1,0 +1,9 @@
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+  border-radius: 5px;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -1,0 +1,196 @@
+.truncate-multiline {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3; /* 표시할 텍스트 줄 수를 지정합니다. */
+  overflow: hidden;
+}
+
+/* ////////////////////// */
+.button-success {
+  --green: #1bfdd0;
+  font-size: 15px;
+  padding: 0.7em 2.7em;
+  letter-spacing: 0.06em;
+  position: relative;
+  font-family: inherit;
+  border-radius: 0.6em;
+  overflow: hidden;
+  transition: all 0.3s;
+  line-height: 1.4em;
+  border: 2px solid var(--green);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(
+    to right,
+    rgba(27, 253, 238, 0.1) 1%,
+    transparent 40%,
+    transparent 60%,
+    rgba(27, 253, 238, 0.1) 100%
+  );
+  color: var(--green);
+  box-shadow: inset 0 0 10px rgba(27, 253, 230, 0.4),
+    0 0 9px 3px rgba(27, 253, 156, 0.1);
+}
+
+.button-success:hover {
+  color: #82ffea;
+  box-shadow: inset 0 0 10px rgba(27, 253, 253, 0.6),
+    0 0 9px 3px rgba(27, 245, 253, 0.2);
+}
+
+.button-success:before {
+  content: '';
+  position: absolute;
+
+  left: -4em;
+  width: 4em;
+  height: 100%;
+  top: 0;
+  transition: transform 0.4s ease-in-out;
+  background: linear-gradient(
+    to right,
+    transparent 1%,
+    rgba(27, 253, 242, 0.3) 40%,
+    rgba(27, 253, 242, 0.3) 60%,
+    transparent 100%
+  );
+}
+
+.button-success:hover:before {
+  transform: translateX(17em);
+}
+
+.button-failed {
+  --red: #8b8b8b;
+  background: var(-red);
+  font-size: 15px;
+  padding: 0.7em 2.7em;
+  letter-spacing: 0.06em;
+  position: relative;
+  font-family: inherit;
+  border-radius: 0.6em;
+  overflow: hidden;
+  transition: all 0.3s;
+  line-height: 1.4em;
+  border: 2px solid var(--red);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(
+    to right,
+    rgba(201, 201, 201, 0.1) 1%,
+    transparent 40%,
+    transparent 60%,
+    rgba(201, 201, 201, 0.1) 100%
+  );
+  color: var(--red);
+  box-shadow: inset 0 0 10px rgba(163, 163, 163, 0.4),
+    0 0 9px 3px rgba(166, 166, 166, 0.1);
+}
+
+.button-failed:hover {
+  color: rgb(192, 192, 192);
+  box-shadow: inset 0 0 10px rgba(123, 123, 123, 0.6),
+    0 0 9px 3px rgba(200, 200, 200, 0.2);
+}
+
+.rangking {
+  background: linear-gradient(
+    270deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.5) 50.2%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  /* background: linear-gradient(
+    to right,
+    rgba(201, 201, 201, 0.1) 1%,
+    transparent 40%,
+
+    transparent 60%,
+    rgba(201, 201, 201, 0.1) 100%
+  );
+  background: linear-gradient(
+    to right,
+    transparent 1%,
+    rgba(168, 168, 168, 0.3) 40%,
+    rgba(168, 168, 168, 0.3) 60%,
+    transparent 100%
+  ); */
+}
+/* 
+.button-failed:before {
+  color: rgba(255, 255, 255, 0.6);
+  content: '';
+  position: absolute;
+  left: -4em;
+  width: 4em;
+  height: 100%;
+  top: 0;
+  transition: transform 0.4s ease-in-out;
+  background: linear-gradient(
+    to right,
+    transparent 1%,
+    rgba(168, 168, 168, 0.3) 40%,
+    rgba(168, 168, 168, 0.3) 60%,
+    transparent 100%
+  );
+}
+
+.button-failed:hover:before {
+  transform: translateX(17em);
+} */
+
+/* //////////////////////////////// */
+
+.logoutbtn {
+  width: 300px;
+  height: 50px;
+  border-radius: 5px;
+  border: none;
+  transition: all 0.5s ease-in-out;
+  font-size: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  background: rgba(4, 15, 22, 0);
+  color: #e6e6e6;
+}
+
+.logoutbtn:hover {
+  box-shadow: 0 0 20px 0px #2e2e2e3a;
+}
+
+.logoutbtn .logouticon {
+  position: absolute;
+  height: 40px;
+  width: 75px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.5s;
+}
+
+.logoutbtn .logouttext {
+  transform: translateX(65px);
+}
+
+.logoutbtn:hover .logouticon {
+  width: 300px;
+}
+.logouticon {
+  color: #e6e6e6;
+}
+
+.logoutbtn:hover .logouttext {
+  transition: all 0.5s;
+  opacity: 0;
+}
+
+.logoutbtn:focus {
+  outline: none;
+}
+
+.logoutbtn:active .logouticon {
+  transform: scale(0.85);
+}
