@@ -60,6 +60,6 @@ start_image_scheduler()
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/crawling/exchange_rate")
-def crawling_exchange_rate():
-    return exchange_rate.find_exchange_rate(nations.keys())
+@app.get("/crawling/exchange_rate/{nation_name}")
+def crawling_exchange_rate(nation_name : str):
+    return exchange_rate.find_exchange_rate(nations.keys(), nation_name)

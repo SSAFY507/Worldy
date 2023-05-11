@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-def find_exchange_rate(nations):
+def find_exchange_rate(nations, nation):
     address = 'https://finance.naver.com'
     addition = '/marketindex/?tabSel=exchange#tab_section'
 
@@ -32,4 +32,4 @@ def find_exchange_rate(nations):
             rate_list[name[0]] = info
 
     print(rate_list)
-    return rate_list
+    return {nation : rate_list[nation]}
