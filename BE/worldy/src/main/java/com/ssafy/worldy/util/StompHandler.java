@@ -3,10 +3,12 @@ package com.ssafy.worldy.util;
 import com.ssafy.worldy.exception.CustomException;
 import com.ssafy.worldy.exception.CustomExceptionList;
 import com.ssafy.worldy.jwt.TokenProvider;
-import com.ssafy.worldy.model.game.dto.PlayerCnt;
+import com.ssafy.worldy.model.game.dto.EnterPlayerList;
 import com.ssafy.worldy.model.game.repo.GameRoomRepo;
 import com.ssafy.worldy.model.game.service.GameMatchingProducer;
 import com.ssafy.worldy.model.game.service.RedisPublisher;
+import com.ssafy.worldy.model.user.entity.User;
+import com.ssafy.worldy.model.user.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
@@ -19,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -36,6 +39,7 @@ public class StompHandler implements ChannelInterceptor {
     private final TokenProvider tokenProvider;
     private final GameMatchingProducer gameMatchingProducer;
     private final RedisPublisher redisPublisher;
+    private final UserRepo userRepo;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
@@ -99,8 +103,26 @@ public class StompHandler implements ChannelInterceptor {
                     int cnt = (int)gameRoomRepo.playerCnt(roomId);
                     log.info("현재 인원 수 : " +  cnt);
 
-                    PlayerCnt playerCnt = PlayerCnt.builder().type("cnt").roomId(roomId).cnt(cnt).build();
-                    redisPublisher.publish(playerCnt);
+                    // 방에 입장한 유저 데이터 전송
+                    List<String> player = gameRoomRepo.findGameRoom(roomId);
+                    EnterPlayerList enterPlayerList = EnterPlayerList.builder().roomId(roomId).type("enter").cnt(cnt).build();
+
+                    for(int i=0;i<player.size();i++) {
+                        if(i==0) {
+                            User user = userRepo.findByKakaoId(player.get(i)).orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
+                            enterPlayerList.setUser1(user.toEnterPlayer());
+                        } else if(i==1) {
+                            User user = userRepo.findByKakaoId(player.get(i)).orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
+                            enterPlayerList.setUser2(user.toEnterPlayer());
+                        } else if(i==2) {
+                            User user = userRepo.findByKakaoId(player.get(i)).orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
+                            enterPlayerList.setUser3(user.toEnterPlayer());
+                        } else if(i==3) {
+                            User user = userRepo.findByKakaoId(player.get(i)).orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
+                            enterPlayerList.setUser4(user.toEnterPlayer());
+                        } else break;
+                    }
+                    redisPublisher.publish(enterPlayerList);
                 }
             }
 
