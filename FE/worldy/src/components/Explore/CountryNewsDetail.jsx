@@ -5,7 +5,6 @@ import React, { useState } from "react";
 import {ReactComponent as ArrowBackIosNewIcon} from "../../assets/images/arrowback.svg";
 import {ReactComponent as ArrowForwardIosIcon}  from "../../assets/images/arrowfront.svg";
 import {ReactComponent as LinkIcon}  from "../../assets/images/glyph.svg";
-import { Color } from "three";
 
 const MAX_VISIBILITY = 2;
 
@@ -80,7 +79,7 @@ const Carousel = ({ children }) => {
   );
 };
 
-const CarouselCustom = props => {
+const CountryNewsDetail = props => {
   return (
     <div className="flex flex-row">
       <Carousel>
@@ -106,4 +105,4 @@ const CarouselCustom = props => {
   );
 };
 
-export default CarouselCustom;
+export default CountryNewsDetail;
