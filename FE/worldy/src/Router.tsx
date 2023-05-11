@@ -24,9 +24,18 @@ import Socket from './routes/Socket';
 import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
 import Updates from './routes/Updates';
+import pathBI from './assets/images/MainPageBackground.png';
+import { useState, useRef, useEffect } from 'react';
+import Game from './routes/Game';
+import Socket from './routes/Socket';
+import Payment from './routes/Payment';
+import PaySuccess from './routes/PayResult';
+
 import { loginState } from './_store/slices/loginSlice';
 import pathBI from './assets/images/MainPageBackground.png';
 import { useSelector } from 'react-redux';
+import PayResult from './routes/PayResult';
+import Callback from './routes/Callback';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -81,6 +90,39 @@ const AppLayout = () => {
 
   const checkLoginState = useSelector(loginState);
 
+  type PayResultStringType = {
+    result: string;
+    content: JSX.Element;
+    buttontext: string;
+  };
+
+  const paymentSuccessInput: PayResultStringType = {
+    result: '결제 성공',
+    content: (
+      <div>
+        결제가 성공적으로 처리되었습니다.
+        <br />
+        기부에 대한 감사를 전합니다!
+        <br />
+        당신의 소중한 행동이 많은 변화를 만들어낼 것입니다.
+        <br />
+        함께 더 나은 세상을 만들어나가는 데 기여해주셔서 감사합니다.
+      </div>
+    ),
+    buttontext: '홈으로',
+  };
+  const paymentFailureInput: PayResultStringType = {
+    result: '결제 실패',
+    content: (
+      <div>
+        결제 및 기부가 정상적으로 처리되지 않았습니다.
+        <br />
+        잠시 후 다시 시도해주세요.
+      </div>
+    ),
+    buttontext: '돌아가기',
+  };
+
   return (
     <div
       className='hide-scrollbar w-screen h-screen flex flex-col bg-white overflow-hidden'
@@ -90,7 +132,9 @@ const AppLayout = () => {
       }}
     >
       <div className='z-50'>
-        {location.pathname !== '/tutorial' &&
+        {location.pathname !== '/tutori' &&
+          location.pathname !== '/user/kakao/callback' &&
+          exploreUrl !== '/payment' &&
           exploreUrl !== '/explore' &&
           monopolyUrl !== '/monopoly' &&
           gameUrl !== '/game' && <Navbar onLoginClick={handleLoginModal} />}
@@ -104,6 +148,7 @@ const AppLayout = () => {
       </div>
       <div className='flex-1 h-full max-h-full'>
         <Routes>
+          <Route path='/user/kakao/callback' element={<Callback />} />
           {checkLoginState ? (
             <Route
               path='/'
@@ -142,6 +187,14 @@ const AppLayout = () => {
             element={<Tutorial onClickEndTutorial={() => endTutorial()} />}
           />
           <Route path='/payment' element={<Payment />} />
+          <Route
+            path='/paymentsuccess'
+            element={<PayResult input={paymentSuccessInput} />}
+          />
+          <Route
+            path='/paymentfailure'
+            element={<PayResult input={paymentFailureInput} />}
+          />
         </Routes>
       </div>
     </div>

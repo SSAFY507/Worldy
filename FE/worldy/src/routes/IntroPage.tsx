@@ -6,7 +6,7 @@ import BUTTON_RED from '../components/Button_Red';
 import pathBI from '../assets/images/MainPageBackground.png';
 import pathLC from '../assets/images/LogoColored.png';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
-import LoaderPyramid from '../components/LoaderPyramid';
+import LoaderPyramid from '../components/Loaders/LoaderPyramid';
 import { CSSTransition } from 'react-transition-group';
 import '../styles/CSSTransitionStyles.css';
 
@@ -64,7 +64,7 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
     setTimeout(() => setPopupSecondBr(true), 3000);
     setTimeout(() => setPopupThird(true), 3800);
     setTimeout(() => setPopupGreyInfo(true), 3800);
-    console.log('헉');
+    //console.log('헉');
   }, []);
 
   return (

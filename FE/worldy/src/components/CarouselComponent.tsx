@@ -7,6 +7,8 @@ import './react-responsive-carousel-customstyle.css';
 import BUTTON_RED from './Button_Red';
 import LoaderLinear from './LoaderLinear';
 import DoateModal from './DonateModal';
+import LoaderPyramid from './Loaders/LoaderPyramid';
+import LoaderBlueCircle from './Loaders/LoaderBlueCircle';
 
 type ImageListType = {
   headerImage: string;
@@ -63,132 +65,133 @@ export default function CarouselComponent({
 
   const handleDonateStateRemain = (event: React.MouseEvent) => {
     event.stopPropagation();
-    console.log('안쪽 ㅋ르릭');
   };
 
   return (
     <div className={` relative w-screen h-full ${loaded ? '' : 'hide-things'}`}>
-      {donateState && (
-        <div
-          className='absolute w-screen h-full bg-[rgba(0,0,0,0.5)] grid place-content-center top-0 left-0 z-10'
-          onClick={handleDonateState}
-        >
-          <div className='z-20' onClick={handleDonateStateRemain}>
-            <DoateModal />
-          </div>
-        </div>
-      )}
-      <div className={`${donateState ? 'blur-[6px]' : ''}`}>
-        <Carousel
-          selectedItem={currentSlideIndex}
-          showArrows={true}
-          infiniteLoop={true}
-          interval={5000}
-          autoPlay={!donateState}
-          swipeable={true}
-          transitionTime={1500}
-          stopOnHover={true}
-          showThumbs={false}
-          // showIndicators={true}
-          showStatus={false}
-          onChange={(index) => setCurrentSlideindex(index)}
-        >
-          {images.map((item, index) =>
-            loaded ? (
-              <div
-                key={index}
-                className={` outline-blue-500 flex flex-row justify-start items-center pl-20`}
-                style={{
-                  height: carouselHeight,
-                  backgroundImage: `url(${item.image})`,
-                  backgroundSize: '100%',
-                }}
-              >
-                <div className='ml-[15px] outline-black w-1/2 h-fit flex flex-col justify-stretch items-center'>
-                  <div className='mb-4  outline-red-400 w-full h-1/6 flex flex-row justify-start items-center'>
-                    <div className='w-14 h-14 mr-4'>
-                      <img src={item.headerImage} alt='headerImage' />
+      {loaded ? (
+        <>
+          {donateState && (
+            <div
+              className='absolute w-screen h-full bg-[rgba(0,0,0,0.5)] grid place-content-center top-0 left-0 z-10'
+              onClick={handleDonateState}
+            >
+              <div className='z-20' onClick={handleDonateStateRemain}>
+                <DoateModal />
+              </div>
+            </div>
+          )}
+          <div className={`${donateState ? 'blur-[6px]' : ''}`}>
+            <Carousel
+              selectedItem={currentSlideIndex}
+              showArrows={true}
+              infiniteLoop={true}
+              interval={5000}
+              autoPlay={!donateState}
+              swipeable={true}
+              transitionTime={1500}
+              stopOnHover={true}
+              showThumbs={false}
+              // showIndicators={true}
+              showStatus={false}
+              onChange={(index) => setCurrentSlideindex(index)}
+            >
+              {images.map((item, index) => (
+                <div
+                  key={index}
+                  className={` outline-blue-500 flex flex-row justify-start items-center pl-20`}
+                  style={{
+                    height: carouselHeight,
+                    backgroundImage: `url(${item.image})`,
+                    backgroundSize: '100%',
+                  }}
+                >
+                  <div className='ml-[15px] outline-black w-1/2 h-fit flex flex-col justify-stretch items-center'>
+                    <div className='mb-4  outline-red-400 w-full h-1/6 flex flex-row justify-start items-center'>
+                      <div className='w-14 h-14 mr-4'>
+                        <img src={item.headerImage} alt='headerImage' />
+                      </div>
+                      <div className='h-full flex flex-1 items-center justify-start'>
+                        <span
+                          className='font-PtdSemiBOld text-4xl'
+                          style={
+                            item.textBlack
+                              ? { color: 'black' }
+                              : { color: 'white' }
+                          }
+                        >
+                          {item.headerText}
+                        </span>
+                      </div>
                     </div>
-                    <div className='h-full flex flex-1 items-center justify-start'>
-                      <span
-                        className='font-PtdSemiBOld text-4xl'
+                    <div className='mb-6  outline-red-400 w-full h-1/6 flex flex-row justify-start items-center'>
+                      <h1
+                        className='text-6xl font-PtdExtraBold'
                         style={
                           item.textBlack
                             ? { color: 'black' }
                             : { color: 'white' }
                         }
                       >
-                        {item.headerText}
-                      </span>
+                        {item.TitleText}
+                      </h1>
                     </div>
-                  </div>
-                  <div className='mb-6  outline-red-400 w-full h-1/6 flex flex-row justify-start items-center'>
-                    <h1
-                      className='text-6xl font-PtdExtraBold'
-                      style={
-                        item.textBlack ? { color: 'black' } : { color: 'white' }
-                      }
-                    >
-                      {item.TitleText}
-                    </h1>
-                  </div>
-                  <div className='mb-6  outline-red-400 w-full h-fit flex flex-row justify-start items-center'>
-                    <div
-                      className=' outline-blue-400 w-4/6 text-start font-PtdLight text-xl'
-                      style={
-                        item.textBlack ? { color: 'black' } : { color: 'white' }
-                      }
-                    >
-                      {item.contentText}
-                    </div>
-                  </div>
-                  <div className='mb-4 outline-red-800 w-full h-fit flex flex-row justify-start items-center'>
-                    {item.buttonText !== '' && (
-                      <BUTTON_RED
-                        text={item.buttonText}
-                        fontSize={20}
-                        onClick={
-                          item.buttonText === '기부하기'
-                            ? handleDonateState
-                            : item.buttonClick
+                    <div className='mb-6  outline-red-400 w-full h-fit flex flex-row justify-start items-center'>
+                      <div
+                        className=' outline-blue-400 w-4/6 text-start font-PtdLight text-xl'
+                        style={
+                          item.textBlack
+                            ? { color: 'black' }
+                            : { color: 'white' }
                         }
-                        width={200}
-                        height={50}
-                        rounded={false}
-                      />
-                    )}
+                      >
+                        {item.contentText}
+                      </div>
+                    </div>
+                    <div className='mb-4 outline-red-800 w-full h-fit flex flex-row justify-start items-center'>
+                      {item.buttonText !== '' && (
+                        <BUTTON_RED
+                          text={item.buttonText}
+                          fontSize={20}
+                          onClick={
+                            item.buttonText === '기부하기'
+                              ? handleDonateState
+                              : item.buttonClick
+                          }
+                          width={200}
+                          height={50}
+                          rounded={false}
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ) : (
-              <div className='h-[680px] flex flex-row justify-center items-center'>
-                <LoaderLinear text='loading...' />
-              </div>
-            )
-          )}
-        </Carousel>
-        {loaded ? (
-          <div className='mt-2 px-[300px] w-fuil h-[150px] flex justify-between items-start pt-2'>
-            {images.map((item, index) => (
-              <div
-                className={`flex flex-row justify-center items-start p-[5px] h-[137px]
+              ))}
+            </Carousel>
+            <div className='mt-2 px-[300px] w-fuil h-[150px] flex justify-between items-start pt-2'>
+              {images.map((item, index) => (
+                <div
+                  key={index}
+                  className={`flex flex-row justify-center items-start p-[5px] h-[137px]
             ${currentSlideIndex === index ? ' bg-red-300 rounded-[14px]' : ''}
             `}
-              >
-                <button
-                  key={index}
-                  onClick={() => handleThumbnailClick(index)}
-                  className='w-[210px] h-[120px] '
                 >
-                  <img src={item.thumb} alt='Thumbnail' sizes='100%' />
-                </button>
-              </div>
-            ))}
+                  <button
+                    onClick={() => handleThumbnailClick(index)}
+                    className='w-[210px] h-[120px] '
+                  >
+                    <img src={item.thumb} alt='Thumbnail' sizes='100%' />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
-        ) : (
-          <></>
-        )}
-      </div>
+        </>
+      ) : (
+        <div className='w-full h-full bg-white pt-20'>
+          <LoaderLinear />
+        </div>
+      )}
     </div>
   );
 }

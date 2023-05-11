@@ -13,6 +13,7 @@ interface AppState {
     item_name: string;
     quantity: number;
     total_amount: number;
+    vat_amount: number;
     tax_free_amount: number;
     approval_url: string;
     fail_url: string;
@@ -33,9 +34,10 @@ class Payment extends Component<{}, AppState> {
       item_name: '기부',
       quantity: 1,
       total_amount: 2200,
+      vat_amount: 0,
       tax_free_amount: 0,
-      approval_url: 'http://localhost:3000/mypage',
-      fail_url: 'http://localhost:3000/',
+      approval_url: 'http://localhost:3000/paymentsuccess',
+      fail_url: 'http://localhost:3000/paymentfailure',
       cancel_url: 'http://localhost:3000/',
     },
   };
@@ -46,6 +48,7 @@ class Payment extends Component<{}, AppState> {
     const { params } = this.state;
     axios({
       // 프록시에 카카오 도메인을 설정했으므로 결제 준비 url만 주자
+      baseURL: 'https://kapi.kakao.com',
       url: '/v1/payment/ready',
       // 결제 준비 API는 POST 메소드라고 한다.
       method: 'POST',
@@ -65,6 +68,7 @@ class Payment extends Component<{}, AppState> {
       console.log(next_redirect_pc_url);
       console.log(tid);
       // 응답 data로 state 갱신
+      window.localStorage.setItem('tid', tid);
       this.setState({ next_redirect_pc_url, tid });
     });
   }
