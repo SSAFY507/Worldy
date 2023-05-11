@@ -1,23 +1,20 @@
 import * as THREE from "three";
 
+import { CreateObject, CreateTextGeometry, SetAnimation, SetupCamera, SetupControls, SetupLight } from "./ThreejsOptionComponent";
 import { useEffect, useRef, useState } from "react";
 
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
-import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
-import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js"
-import { Vector3 } from "@react-three/fiber";
 import africa from "../../assets/lowpoly/africa.glb";
 import asia from "../../assets/lowpoly/asia.glb";
 import basemap from "../../assets/lowpoly/basemap.glb";
 import bg from "../../assets/images/WorldBackgrorund.jpg"
 import europe from "../../assets/lowpoly/europe.glb";
-import fontJSON from "../../assets/fonts/NanumMyeongjo_Regular.json";
 import { gsap } from 'gsap';
 import northAmerica from "../../assets/lowpoly/northAmerica.glb";
 import oceania from "../../assets/lowpoly/oceania.glb";
@@ -66,15 +63,13 @@ const WorldMap = () => {
   
   const navigate = useNavigate();
 
-  /** 동적 애니메이션 함수 */
-  const SetAnimation = (option:any, x:number, y:number, z:number, duration:number) => {
-    gsap.to(option, {
-      duration: duration,
-      x: x,
-      y: y,
-      z: z,
-      ease: "power4.out", // 선택사항: 애니메이션 효과를 조절할 수 있습니다.
-    });
+
+  /** 마우스 추적 */
+  const SetupPicking = () => {
+    const raycaster = new THREE.Raycaster();
+    divContainer.current?.addEventListener("pointermove", OnPointerMove);
+    divContainer.current?.addEventListener("dblclick", OnDblClick);
+    raycasterRef.current = raycaster;
   }
 
   /** 마우스 추적하여 근처 대륙 객체 찾기 */
@@ -104,14 +99,6 @@ const WorldMap = () => {
       }
     })
     return continents
-  }
-
-  /** 마우스 추적 */
-  const SetupPicking = () => {
-    const raycaster = new THREE.Raycaster();
-    divContainer.current?.addEventListener("pointermove", OnPointerMove);
-    divContainer.current?.addEventListener("dblclick", OnDblClick);
-    raycasterRef.current = raycaster;
   }
 
   /** 마우스 한번 클릭 */
@@ -349,80 +336,6 @@ const WorldMap = () => {
     })
   } 
 
-  /** 카메라 커스텀 함수 */
-  const SetupCamera = () => {
-    // const width = divContainer.current?.clientWidth || 0;
-    // const height = divContainer.current?.clientHeight || 0;
-    const cam = new THREE.PerspectiveCamera(37, window.innerWidth / window.innerHeight, 0.1, 25);
-    cam.position.set(0, 10 , 6);      // 카메라의 위치는 7, 7, 0
-    cam.rotation.set(0, 0, 0);
-    cam.lookAt(0, 0, 0);          // 카메라가 바라보는 곳이 0, 0, 0
-    
-    camera.current = cam;
-
-    scene.current?.add(cam)
-  };
-
-  /** 객체 생성 함수 */
-  const CreateObject = (w:number, h:number, x:number, y:number, z:number, name:string, angleX:number, angleY:number, angleZ:number) => {
-    const createGeometry = new THREE.PlaneGeometry(w, h);
-    const createMaterial = new THREE.MeshBasicMaterial({
-      color: "#ffffff",
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0,
-    });
-
-    const createMesh = new THREE.Mesh(createGeometry, createMaterial)
-
-    createMesh.position.set(x, y, z)
-    createMesh.name = name
-
-    createMesh.rotation.set(THREE.MathUtils.degToRad(angleX), THREE.MathUtils.degToRad(angleY), THREE.MathUtils.degToRad(angleZ));
-    
-    return createMesh;
-  }
-
-  /** 3D TextGeometry 생성 함수 */
-  const CreateTextGeometry = (text: string, x:number, y:number, z:number, name:string, angleX:number, angleY:number, angleZ:number) => {
-    const loader = new FontLoader();
-    const font = loader.parse(fontJSON);
-    const geometry = new TextGeometry(
-      text,
-      {
-        font: font,
-        size: 0.25,
-        height: 0.2,
-        curveSegments: 12,
-        bevelEnabled: true,
-        bevelThickness:  0.03,
-        bevelSize: 0.03,
-        bevelOffset: 0.005,
-        // bevelSegments: 15
-      }
-    );
-    
-    // 위의 4줄을 한줄로 표현 가능
-    geometry.center();
-
-    const material = new THREE.MeshStandardMaterial({
-      color: "#689F38",
-      roughness: 0.3,
-      metalness: 0.7
-    });
-
-    const mesh = new THREE.Mesh(geometry, material);
-
-    // 처음에 안보이게
-    // mesh.visible = false;
-
-    mesh.position.set(x, y, z)
-    mesh.rotation.set(THREE.MathUtils.degToRad(angleX), THREE.MathUtils.degToRad(angleY), THREE.MathUtils.degToRad(angleZ));
-    mesh.name = name
-
-    return mesh
-  }
-
   /** 모델 커스텀 함수 */
   const SetupModel = () => {
     const gltfLoader = new GLTFLoader();
@@ -503,41 +416,8 @@ const WorldMap = () => {
     // scene.current?.add(oceaniaText);
   };
 
-  /** 조명 커스텀 함수 */
-  const SetupLight = () => {
-    const color = 0xffffff;
-    const intensity = 1.5;
-    const light = new THREE.DirectionalLight(color, intensity);
-    // light.position.set(-1, 2, 4);
-
-    light.position.set(0, 5, 0);
-    light.target.position.set(0, 0, 0);
-    scene.current?.add(light.target);    // 조명의 위치와 조명이 가리키는 방향을 알려줌
-
-    // scene.current?.add(light);
-    // 카메라에 조명을 달았음
-    camera.current?.add(light)
-  };
-
-  /** 마우스 그래그로 회전시킴 */
-  const SetupControls = () => {
-    if (camera.current) {
-      controls.current = new OrbitControls(camera.current, divContainer.current!); // OrbitControls를 초기화합니다.
-      controls.current.target.set(0, 0, 0)    // 카메라 회전점
-      controls.current.enableDamping = true;        // 부드럽게 돌아가
-      // 위아래 카메라 제한
-      controls.current.minPolarAngle = THREE.MathUtils.degToRad(50);   // 0도 부터
-      controls.current.maxPolarAngle = THREE.MathUtils.degToRad(50);  // 60도 까지 회전 가능
-      // 좌우 카메라 제한
-      controls.current.minAzimuthAngle = THREE.MathUtils.degToRad(0); // -15도 부터
-      controls.current.maxAzimuthAngle = THREE.MathUtils.degToRad(0);  // 15도 까지
-    }
-  }
-
   const Update = (time: number) => {
     time *= 0.01;
-    // cube.current!.rotation.x = time;
-    // cube.current!.rotation.y = time;
     controls.current?.update()
   };
 
@@ -582,16 +462,21 @@ const WorldMap = () => {
       scene.current = scn;
 
       window.addEventListener("resize", Resize);
-      // divContainer.current.addEventListener("pointermove", OnPointerMove, false);
       SetupPicking();
 
-      SetupCamera();
-      SetupControls();
-      SetupLight();
-      SetupModel();
+
+      const cam = SetupCamera(37, 0.1, 25, new THREE.Vector3(0, 10, 6), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0));
+      camera.current = cam
+      scene.current.add(cam)
+      controls.current =  SetupControls(camera.current!, divContainer.current!, 50, 50, 0, 0);
+      const light = SetupLight(0xffffff, 1.5, new THREE.Vector3(0, 5, 0), new THREE.Vector3(0, 0, 0) );
+      scene.current.add(light.target)
+      camera.current?.add(light)
+
       Background();
+      SetupModel();
       SetupPostProcess();
-      
+
       window.onresize = Resize;
       Resize();
 
