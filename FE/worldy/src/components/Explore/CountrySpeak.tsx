@@ -3,7 +3,6 @@ import * as React from 'react';
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
 import { CSSTransition } from 'react-transition-group';
-import CarouselCustom from './CarouselCustom';
 import CrAnswer from '../../assets/images/CorrectAnswer.png';
 import LoaderPyramid from '../LoaderPyramid';
 import WrAnswer from '../../assets/images/WrongAnswer.png';
@@ -18,6 +17,7 @@ import pathTB from '../../assets/images/TutorialBackground.png';
 import pathTQT from '../../assets/images/TutorialQuizText.png';
 import { useDispatch } from 'react-redux';
 import useLoadImagesHook from '../../_hooks/useLoadImagesHook';
+import CountryNewsDetail from './CountryNewsDetail';
 
 /*
   1. click하면 text index + 1
@@ -206,7 +206,7 @@ const CountrySpeak  = ({GetSelectAssetName}:Props) => {
         <div className="w-1/3">
         </div>
         <div className="mt-40 mr-40 w-1/4 flex flex-row itmes-center">
-          <CarouselCustom data={data}/>
+          <CountryNewsDetail data={data}/>
         </div>
       </div>
     </div>
