@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
 import { CSSTransition } from 'react-transition-group';
 import CrAnswer from '../../assets/images/CorrectAnswer.png';
-import LoaderPyramid from '../LoaderPyramid';
+// import LoaderPyramid from '../LoaderPyramid';
 import WrAnswer from '../../assets/images/WrongAnswer.png';
 import book from '../../assets/images/bookIcon.png'
 import newsIcon from '../../assets/images/newsIcon.png'
