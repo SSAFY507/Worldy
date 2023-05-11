@@ -6,11 +6,12 @@ declare module 'gameType';
 //Object Type 선언
 
 type NewPlayer = {
+  roomId: string,
+  type: string,
   p1: {
-    pNum: number,
+    playerNum: number,
     playerId: string,
     name: string,
-    type: string,
     game: {
       location: number,
       balance: number,
@@ -26,10 +27,9 @@ type NewPlayer = {
     }
   },
   p2: {
-    pNum: number,
+    playerNum: number,
     playerId: string,
     name: string,
-    type: string,
     game: {
       location: number,
       balance: number,
@@ -45,10 +45,9 @@ type NewPlayer = {
     }
   },
   p3: {
-    pNum: number,
+    playerNum: number,
     playerId: string,
     name: string,
-    type: string,
     game: {
       location: number,
       balance: number,
@@ -64,10 +63,9 @@ type NewPlayer = {
     }
   },
   p4: {
-    pNum: number,
+    playerNum: number,
     playerId: string,
     name: string,
-    type: string,
     game: {
       location: number,
       balance: number,
@@ -128,7 +126,7 @@ type Game = {
 }
 
 type Player = {
-  pNum: number,
+  playerNum: number,
   playerId: string,
   name: string,
   type: string,

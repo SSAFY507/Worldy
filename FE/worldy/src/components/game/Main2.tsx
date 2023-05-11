@@ -128,11 +128,12 @@ export default function Main2() {
   // 플레이어 데이터 세팅
 
   const [player, setPlayer] = useState<NewPlayer>({
+    roomId: '',
+    type: 'player',
     p1: {
-      pNum: 1,
+      playerNum: 1,
       playerId: '',
       name: '',
-      type: 'player',
       game: {
         location: 0,
         balance: 500,
@@ -148,10 +149,9 @@ export default function Main2() {
       }
     },
     p2: {
-      pNum: 2,
+      playerNum: 2,
       playerId: '',
       name: '',
-      type: 'player',
       game: {
         location: 0,
         balance: 500,
@@ -167,10 +167,9 @@ export default function Main2() {
       }
     },
     p3: {
-      pNum: 3,
+      playerNum: 3,
       playerId: '',
       name: '',
-      type: 'player',
       game: {
         location: 0,
         balance: 500,
@@ -186,10 +185,9 @@ export default function Main2() {
       }
     },
     p4: {
-      pNum: 4,
+      playerNum: 4,
       playerId: '',
       name: '',
-      type: 'player',
       game: {
         location: 0,
         balance: 500,
@@ -245,7 +243,7 @@ export default function Main2() {
       landmark: '카오산 로드',
       contents: '태국의 수도는 방콕. 어쩌구 저쩌구',
       continent: '아시아',
-      owner: 0,
+      owner: 4,
       option: 0,
       toll: 0,
       build: {
@@ -269,7 +267,7 @@ export default function Main2() {
       landmark: '싱가포르 무역센터',
       contents: '싱가포르의 수도는 싱가폴\ 도시 국가이다.',
       continent: '아시아',
-      owner: 0,
+      owner: 3,
       option: 0,
       toll: 0,
       build: {
@@ -360,7 +358,7 @@ export default function Main2() {
       landmark: '사우디 이슬람 모스크',
       contents: '사우디 아라비아는 석유가 많이 난다. 저쩌구',
       continent: '아시아',
-      owner: 0,
+      owner: 1,
       option: 0,
       toll: 0,
       build: {
@@ -383,7 +381,7 @@ export default function Main2() {
       landmark: '만리장성',
       contents: '중국의 수도는 베이징. 어쩌구 저쩌구',
       continent: '아시아',
-      owner: 0,
+      owner: 1,
       option: 0,
       toll: 0,
       build: {
@@ -406,7 +404,7 @@ export default function Main2() {
       landmark: '후지산',
       contents: '일본의 수도는 후지산. 어쩌구 저쩌구',
       continent: '아시아',
-      owner: 0,
+      owner: 1,
       option: 0,
       toll: 0,
       build: {
@@ -429,7 +427,7 @@ export default function Main2() {
       landmark: '경복궁',
       contents: '한국의 수도는 서울. BTS, 봉준호, 손흥민, Jay Park',
       continent: '아시아',
-      owner: 0,
+      owner: 1,
       option: 0,
       toll: 0,
       build: {

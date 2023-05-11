@@ -205,7 +205,7 @@ export default function Main() {
   // 플레이어 데이터 세팅
   const [p1, setP1] = useState<Player>({
     playerId: "",
-    pNum: 1,
+    playerNum: 1,
     name: "",
     type: 'player',
     game: {
@@ -225,7 +225,7 @@ export default function Main() {
   })
   const [p2, setP2] = useState<Player>({
     playerId: "",
-    pNum: 2,
+    playerNum: 2,
     name: "",
     type: 'player',
     game: {
@@ -245,7 +245,7 @@ export default function Main() {
 
   const [p3, setP3] = useState<Player>({
     playerId: "",
-    pNum: 3,
+    playerNum: 3,
     name: "",
     type: 'player',
     game: {
@@ -265,7 +265,7 @@ export default function Main() {
 
   const [p4, setP4] = useState<Player>({
     playerId: "",
-    pNum: 4,
+    playerNum: 4,
     name: "",
     type: 'player',
     game: {
@@ -285,7 +285,7 @@ export default function Main() {
 
   const [me, setMe] = useState<Player>({
     playerId: "",
-    pNum: 4,
+    playerNum: 4,
     name: "",
     type: 'player',
     game: {
