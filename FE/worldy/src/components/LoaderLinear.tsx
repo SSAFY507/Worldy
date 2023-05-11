@@ -1,6 +1,6 @@
 import './LoaderLinearStyle.css';
 
-export default function LoaderLinear({ text }: { text: string }) {
+export default function LoaderLinear() {
   return (
     <div className='w-full h-full flex flex-col justify-center items-center'>
       <div id='load'>
@@ -11,15 +11,6 @@ export default function LoaderLinear({ text }: { text: string }) {
         <div style={{ fontSize: 35 }}>O</div>
         <div style={{ fontSize: 35 }}>W</div>
       </div>
-      {/* <div className='loader'>
-        <p className='heading'>Loading</p>
-        <div className='loading'>
-          <div className='load'></div>
-          <div className='load'></div>
-          <div className='load'></div>
-          <div className='load'></div>
-        </div>
-      </div> */}
     </div>
   );
 }
