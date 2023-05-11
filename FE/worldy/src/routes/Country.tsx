@@ -32,12 +32,12 @@ const Country = () => {
   });
   return (
     <div className='relative'>
-      <div className='absolute top-0 left-0 w-full h-full'>
+      <div className='z-20 absolute top-0 left-0 w-full h-20'>
         <WorldMapNavbarComponent />
       </div>
       {(selectAsset)
         ?
-        <div className="absolute w-full h-full">
+        <div className="z-10 absolute w-full h-full">
           <CountrySpeak GetSelectAssetName={GetSelectAssetName}/>
         </div>
         :

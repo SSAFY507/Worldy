@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+
+import { useEffect, useState } from 'react';
 
 import { BsExclamationCircle } from 'react-icons/bs';
-import { IoMdArrowRoundBack } from 'react-icons/io';
-import logoColoredBlue from '../../assets/images/LogoColoredBlue.png';
-import ExchangeRateIcon from '../../assets/images/ExchangeRateIcon.png';
-import Moon from '../../assets/images/Moon.png';
 import Cloud from '../../assets/images/Cloud.png';
+import ExchangeRateIcon from '../../assets/images/ExchangeRateIcon.png';
+import { IoMdArrowRoundBack } from 'react-icons/io';
+import Moon from '../../assets/images/Moon.png';
+import logoColoredBlue from '../../assets/images/LogoColoredBlue.png';
 
 export default function WorldMapNavbarComponent() {
   const list = {
@@ -101,19 +102,19 @@ export default function WorldMapNavbarComponent() {
         </button>
         <div className='absolute top-[130px] w-fit h-fit flex flex-col justify-start items-start  ml-[30px] pl-[20px]'>
           {/* border-0 border-l-[4px] border-white border-solid */}
-          <span
+          {/* <span
             className='text-[50px] text-white font-PtdExtraBold'
             onMouseEnter={() => setDoDDiyong(true)}
             onMouseLeave={() => setDoDDiyong(false)}
           >
             {list.country}
-          </span>
-          <span className='text-[40px] mt-[2px] text-[rgba(235,235,235,1)] font-PtdExtraLight'>
+          </span> */}
+          {/* <span className='text-[40px] mt-[2px] text-[rgba(235,235,235,1)] font-PtdExtraLight'>
             {list.countryEng}
-          </span>
+          </span> */}
         </div>
       </div>
-      <div className='h-[80px] w-[80%]  outline-white overflow-hidden'>
+      {/* <div className='h-[80px] w-[80%]  outline-white overflow-hidden'>
         <div
           className='h-full w-full flex flex-row justify-center items-center transition-all duration-500 ease-out '
           style={{ marginTop: doDDiyong ? '0px' : '60px' }}
@@ -127,8 +128,8 @@ export default function WorldMapNavbarComponent() {
             {list.titlecontent}
           </span>
         </div>
-      </div>
-      <div className='relative h-full w-[20%]  outline-white flex flex-row justify-end items-center'>
+      </div> */}
+      {/* <div className='relative h-full w-[20%]  outline-white flex flex-row justify-end items-center'>
         <img src={logoColoredBlue} alt='colored logo' className='w-[100px]' />
         <div className='absolute top-[80px] -right-[30px] w-[400px] h-[20px]  bg-[#65ADFF]' />
 
@@ -203,7 +204,7 @@ export default function WorldMapNavbarComponent() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

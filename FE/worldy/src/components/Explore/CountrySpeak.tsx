@@ -3,9 +3,12 @@ import * as React from 'react';
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
 import { CSSTransition } from 'react-transition-group';
+import CarouselCustom from './CarouselCustom';
 import CrAnswer from '../../assets/images/CorrectAnswer.png';
 import LoaderPyramid from '../LoaderPyramid';
 import WrAnswer from '../../assets/images/WrongAnswer.png';
+import book from '../../assets/images/bookIcon.png'
+import newsIcon from '../../assets/images/newsIcon.png'
 import pathBA from '../../assets/images/BtgAttention.png';
 import pathBC from '../../assets/images/BtgCurious.png';
 import pathBH from '../../assets/images/BtgHandup.png';
@@ -138,66 +141,81 @@ const CountrySpeak  = ({GetSelectAssetName}:Props) => {
     }
   }, [targetIndex]);
 
-  return (
-    <div className='w-full h-full relative flex'>
-      <div className='z-20 absolute h-1/4 w-full flex flex-col justify-end items-end'>
-        <img
-          className='h-[90%]'
-          src={TutorialItemList[targetIndex].imgsrc}
-          alt='설설'
-        />
-      </div>
-      <div className='z-10 absolute bg-[rgba(0,0,0,0.8)] h-full w-1/4 flex justify-end opacity-25'>
-        <div className=''>
+  const data = [
+    {
+      link: "https://github.com/Lee-hanbin",
+      press: "",
+      summary: "얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리",
+      thumbnailLink: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDYuvXXrtU9czKyRpF0dBbPkUebPVeDLseFg&usqp=CAU",
+      title: "샬라샬라",
+    },
+    {
+      link: "https://github.com/Lee-hanbin",
+      press: "",
+      summary: "얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리",
+      thumbnailLink: "https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F076%2F2022%2F08%2F24%2F2022082401001759800108441_20220824151804165.jpg&type=sc960_832",
+      title: "샬라샬라샬랄라",
+    },
+    {
+      link: "https://github.com/Lee-hanbin",
+      press: "",
+      summary: "얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리",
+      thumbnailLink: "https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5339%2F2023%2F03%2F03%2F0000261078_001_20230303161201781.jpg&type=a340",
+      title: "샬라샬라샬랄라",
+    },
+  ]
 
+
+  return (
+    <div>
+      <div className="w-full h-full absolute flex items-end">
+        <div className="z-10 translate-x-10 absolute w-1/4 ">
+          <img
+            className="h-[50%]"
+            src={newsIcon}
+            alt=""
+          />
+        </div>
+        <div className="z-10 absolute translate-x-80 h-1/2 ">
+          <img
+            className="h-[100%]"
+            src={TutorialItemList[targetIndex].imgsrc}
+            alt=""
+          />
+        </div>
+        <div className="z-5 absolute bg-[rgba(0,0,0,0.3)] h-full w-1/4 flex flex-col">
+          <div className="h-2/3 flex flex-col justify-center text-white p-20">
+            <div className="h-1/2 flex flex-col">
+              <div className="flex flex-col pb-10">
+                <div className='text-3xl pb-5'>
+                  <img className="h-10" src={book} alt=""/>
+                </div>
+                <div className='text-4xl font-extrabold'>미국 최신 뉴스</div>
+                <div className='text-xl font-extralight'>United States Latest News</div>
+              </div>
+              <div className="h-1/2">
+                <div className="pb-1">미국의 최신 뉴스를 제공합니다.</div>
+                <div className="pb-1">하루에 한 번, 매일 아침 업데이트 되는</div>
+                <div className="pb-1">미국의 새로운 소식을 만나보세요</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className=" absolute w-full h-full flex flex-row justify-center ">
+        <div className="w-1/3">
+        </div>
+        <div className="mt-40 mr-40 w-1/4 flex flex-row itmes-center">
+          <CarouselCustom data={data}/>
         </div>
       </div>
     </div>
   );
+  
 
 }
 
 
 export default CountrySpeak;
 
-// {/* <div className='w-full h-3/4 py-10 pl-20 pr-10'>
-// <div className='w-3/5 h-fit flex flex-col justify-between items-start'>
-//   <div className='outline-white h-[30px] w-full font-PtdLight text-[#f9c53a] text-[20px] flex justify-start items-center'>
-//     <CSSTransition
-//       in={popupName}
-//       timeout={3000}
-//       classNames='CSSTransition-Tutorial-Popup'
-//       unmountOnExit
-//     >
-//       <div>{targetIndex !== 4 ? npcName : null}</div>
-//     </CSSTransition>
-//   </div>
-//   <div className='h-fit w-full my-[10px] text-white text-[30px] font-PtdExtraLight leading-[45px] py-[5px]'>
-//     <CSSTransition
-//       in={popupText}
-//       timeout={1000}
-//       classNames='CSSTransition-Tutorial-Popup'
-//       unmountOnExit
-//     >
-//       <div>
-//         {TutorialItemList[targetIndex].contentText}
-//         <div className='border-b-[1.5px] border-b-white border-solid w-fit font-PtdLight'>
-//           {TutorialItemList[targetIndex].contentCoreText}
-//         </div>
-//       </div>
-//     </CSSTransition>
-//   </div>
-//   <div className='outline-white flex-1 max-h-full w-full flex flex-col justify-end items-center'>
-//     {/* <CSSTransition
-//       in={popupItem}
-//       timeout={1000}
-//       classNames='CSSTransition-Tutorial-Popup'
-//       unmountOnExit
-//     > */}
-//       {/* <div className='w-full h-full  outline-red-400'>
-//         {TutorialItemList[targetIndex].contentItem}
-//       </div> */}
-//     {/* </CSSTransition> */}
-//   </div>
-// </div>
-// </div> */}
+
