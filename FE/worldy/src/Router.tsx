@@ -91,7 +91,7 @@ const AppLayout = () => {
     >
       <div className='z-50'>
         {location.pathname !== '/tutorial' &&
-          // exploreUrl !== '/explore' &&
+          exploreUrl !== '/explore' &&
           monopolyUrl !== '/monopoly' &&
           gameUrl !== '/game' && <Navbar onLoginClick={handleLoginModal} />}
         {showLoginModal && (

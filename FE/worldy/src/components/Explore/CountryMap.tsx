@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import { SetAnimation, SetupCamera, SetupControls, SetupLight } from "./ThreejsOptionComponent";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
@@ -26,6 +26,7 @@ import { useNavigate } from "react-router";
 
 interface Props {
   countryName: string;
+  selectAsset: string;
   GetSelectAssetName: (name:string) => void;
 };
 
@@ -34,7 +35,7 @@ interface AssetsType {
 }
 
 
-const CountryMap = ({countryName, GetSelectAssetName}:Props) => {
+const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
   const divContainer = useRef<HTMLDivElement>(null);
   const renderer = useRef<THREE.WebGLRenderer | null>(null);
   const scene = useRef<THREE.Scene | null>(null);
@@ -61,7 +62,7 @@ const CountryMap = ({countryName, GetSelectAssetName}:Props) => {
     newsBox: "📰오늘의 뉴스📰"
   }
   let selectedName:string = "";
-
+  let selectTmp:boolean = false
   /** 마우스 추적 */
   const SetupPicking = () => {
     const raycaster = new THREE.Raycaster();
@@ -95,7 +96,8 @@ const CountryMap = ({countryName, GetSelectAssetName}:Props) => {
   /** 강조할 대륙 객체 추적 */
   const OnPointerMove = (event:PointerEvent) => {
     if (event.isPrimary === false) return;
-
+    if (selectTmp) return;
+     
     // 마우스 위치 추적하고 대륙 객체 저장
     const assets:THREE.Object3D[] = FindObject(event)!
     let selectedObject: THREE.Object3D;
@@ -151,15 +153,21 @@ const CountryMap = ({countryName, GetSelectAssetName}:Props) => {
   const OnClick = (event:any) => {
     const name:string = selectedName;
     // const moveCountry = name;
-
+    console.log(selectTmp)
     if (assetSet.has(name)) {
       if (name === "back") {
         alert("대륙으로 이동합니다")
         navigate("/explore")
       }
       else {
-        alert(`${assetObject[name]}`)
-        GetSelectAssetName(name)
+        if (selectTmp === false) {
+          alert(`${assetObject[name]}`)
+          GetSelectAssetName(name)
+          selectTmp = true;
+        } else {
+          selectTmp = false;
+          return
+        }
       }
     } else {
       // alert(`오픈 예정입니다!😉`)
@@ -277,6 +285,7 @@ const CountryMap = ({countryName, GetSelectAssetName}:Props) => {
 
   const update = (time: number) => {
     time *= 0.01;
+
   };
 
   useEffect(() => {
@@ -293,7 +302,6 @@ const CountryMap = ({countryName, GetSelectAssetName}:Props) => {
 
       window.addEventListener("resize", Resize);
       SetupPicking();
-
 
       const cam = SetupCamera(37, 0.1, 25, new THREE.Vector3(-0.11, 0.09, 1.8), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0));
       camera.current = cam

@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState } from 'react'
 
 import CountryMap from '../components/Explore/CountryMap';
+import CountrySpeak from '../components/Explore/CountrySpeak';
 import { CountryType } from '../components/Explore/WorldMap';
 import { useEffect } from 'react';
 import { useParams } from 'react-router';
@@ -27,18 +28,20 @@ const Country = () => {
   const GetSelectAssetName = ((name:string) => {
     setSelectAsset(name);
   });
-  console.log(selectAsset)
-  // useEffect(() => {
-  //   if (selectAsset) {
-
-  //   }
-  // },[selectAsset])
-
   return (
-    <>
-      {/* <h1>여기는 {countryName} 이야</h1> */}
-      <CountryMap countryName={countryName} GetSelectAssetName= {GetSelectAssetName}/>
-    </>
+    <div>
+      {(selectAsset)
+        ?
+        <div className="absolute w-full h-full">
+          <CountrySpeak GetSelectAssetName={GetSelectAssetName}/>
+        </div>
+        :
+        null
+      }
+      <div className={`${(selectAsset) ? "blur-sm": ""}`}>
+        <CountryMap countryName={countryName} GetSelectAssetName={GetSelectAssetName} selectAsset={selectAsset}/>
+      </div>
+    </div>
   )
 }
 
