@@ -1,168 +1,299 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
-import { useEffect, useRef } from "react";
+import { SetAnimation, SetupCamera, SetupControls, SetupLight } from "./ThreejsOptionComponent";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import africa_Egypt from "../../assets/lowpoly/africa_Egypt.glb"
-import asia_China from "../../assets/lowpoly/asia_China.glb"
-import asia_India from "../../assets/lowpoly/asia_india.glb"
-import asia_Japen from "../../assets/lowpoly/asia_Japen.glb"
-import asia_Korea from "../../assets/lowpoly/asia_Korea.glb"
-import bg from "../../assets/images/WorldBackgrorund.jpg"
-import europe_France from "../../assets/lowpoly/europe_France.glb"
-import europe_Italia from "../../assets/lowpoly/europe_Italia.glb"
-import europe_Spain from "../../assets/lowpoly/europe_Spain.glb"
-import europe_UK from "../../assets/lowpoly/europe_UK.glb"
-import northAmerica_America from "../../assets/lowpoly/country.glb";
-
-// import northAmerica_America from "../../assets/lowpoly/northAmerica_America.glb"
-
-
+import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
+import africa_Egypt from '../../assets/lowpoly/Country_America.glb';
+import asia_China from '../../assets/lowpoly/Country_America.glb';
+import asia_India from '../../assets/lowpoly/Country_America.glb';
+import asia_Japen from '../../assets/lowpoly/Country_America.glb';
+import asia_Korea from '../../assets/lowpoly/Country_America.glb';
+import back from '../../assets/lowpoly/back.glb';
+import bg from '../../assets/images/WorldBackgrorund.jpg';
+import europe_France from '../../assets/lowpoly/Country_America.glb';
+import europe_Italia from '../../assets/lowpoly/Country_America.glb';
+import europe_Spain from '../../assets/lowpoly/Country_America.glb';
+import europe_UK from '../../assets/lowpoly/Country_America.glb';
+import northAmerica_America from '../../assets/lowpoly/Country_America.glb';
+import { useNavigate } from 'react-router';
 
 interface Props {
   countryName: string;
+  selectAsset: string;
+  GetSelectAssetName: (name:string) => void;
+};
+
+interface AssetsType {
+  [key: string]: string;
 }
 
-const CountryMap:React.FC<Props> = (countryName) => {
+
+const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
   const divContainer = useRef<HTMLDivElement>(null);
   const renderer = useRef<THREE.WebGLRenderer | null>(null);
   const scene = useRef<THREE.Scene | null>(null);
   const camera = useRef<THREE.PerspectiveCamera | null>(null);
-  const controls = useRef<OrbitControls |null>(null);
+  // const controls = useRef<OrbitControls |null>(null);
 
-    /** 배경함수 */
+  const raycasterRef = useRef<THREE.Raycaster | null>(null);
+  const selectedObjectRef = useRef<THREE.Object3D | null>(null);
+  // const selectedCountryRef = useRef<THREE.Object3D | null>(null);
+
+  const outlinePassRef = useRef<OutlinePass | null>(null);
+  const composerRef = useRef<EffectComposer | null>(null);
+  const effectFXAARef = useRef<ShaderPass | null>(null);
+
+  const navigate = useNavigate();
+
+  const assetSet = new Set(["paintBox", "historyBox", "quizBox", "foodBox", "personalityBox",  "newsBox", "back"])
+  const assetObject:AssetsType = {
+    paintBox: "🖼틀린 그림 찾기🖼",
+    historyBox: "🧭역사에 대해 알아보자!",
+    quizBox: "🎁퀴즈 풀고 Level Up!🎁",
+    foodBox: "🍜🍛🍣🍻",
+    personalityBox: "👴🤴인물을 알아보자!👳‍♂️🎅",
+    newsBox: "📰오늘의 뉴스📰"
+  }
+  let selectedName:string = "";
+  let selectTmp:boolean = false
+  /** 마우스 추적 */
+  const SetupPicking = () => {
+    const raycaster = new THREE.Raycaster();
+    divContainer.current?.addEventListener('pointermove', OnPointerMove);
+    divContainer.current?.addEventListener('click', OnClick);
+    raycasterRef.current = raycaster;
+  };
+
+  /** 마우스 추적하여 근처 대륙 객체 찾기 */
+  const FindObject = (event: any) => {
+    // 현재 마우스의 위치 찾기
+    const mouse = new THREE.Vector2();
+    mouse.set(
+      (event.clientX / window.innerWidth) * 2 - 1,
+      -(event.clientY / window.innerHeight) * 2 + 1
+    );
+
+    raycasterRef.current?.setFromCamera(mouse, camera.current!);
+
+    // 객체 이름이 asset인 객체만 고르기
+    const assets: THREE.Object3D[] = [];
+    scene.current?.children.forEach((obj3d) => {
+      if (obj3d) {
+        obj3d.children.forEach((asset) => {
+          if (assetSet.has(asset.name)) {
+            assets.push(asset);
+          }
+        });
+      }
+    });
+    return assets;
+  };
+
+  /** 강조할 대륙 객체 추적 */
+  const OnPointerMove = (event: PointerEvent) => {
+    if (event.isPrimary === false) return;
+    if (selectTmp) return;
+     
+    // 마우스 위치 추적하고 대륙 객체 저장
+    const assets: THREE.Object3D[] = FindObject(event)!;
+    let selectedObject: THREE.Object3D;
+
+    const intersects: any[] = raycasterRef.current!.intersectObjects(assets);
+
+    // 나라 안에 위에서 충돌한 객체가 들어 있으면 호버
+    if (intersects.length) {
+      assets.forEach((obj3d) => {
+        if (intersects[0].object.name === obj3d.name) {
+          selectedObject = obj3d;
+        }
+      });
+      selectedName = selectedObject!.name;
+
+      // 해당하는 에셋 호버 효과
+      SetAnimation(
+        selectedObject!.position,
+        selectedObject!.position.x,
+        selectedObject!.position.y,
+        selectedObject!.position.z,
+        1
+      );
+
+      // 해당하는 에셋 강조 효과
+      outlinePassRef.current!.edgeStrength = 25;
+      outlinePassRef.current!.selectedObjects = [selectedObject!];
+      selectedObjectRef.current = selectedObject!;
+      return;
+    }
+
+    selectedName = '';
+    outlinePassRef.current!.selectedObjects = [];
+  };
+
+  /** 객체 강조 후처리 */
+  const SetupPostProcess = () => {
+    const composer = new EffectComposer(renderer.current!);
+
+    const renderPass = new RenderPass(scene.current!, camera.current!);
+    composer.addPass(renderPass);
+
+    const outlinePass = new OutlinePass(
+      new THREE.Vector2(window.innerWidth, window.innerHeight),
+      scene.current!,
+      camera.current!
+    );
+    composer.addPass(outlinePass);
+
+    const effetFXAA = new ShaderPass(FXAAShader);
+    effetFXAA.uniforms['resolution'].value.set(
+      1 / window.innerWidth,
+      1 / window.innerHeight
+    );
+    composer.addPass(effetFXAA);
+
+    outlinePassRef.current = outlinePass;
+    composerRef.current = composer;
+    effectFXAARef.current = effetFXAA;
+  };
+
+  /** 마우스 한번 클릭 */
+  const OnClick = (event:any) => {
+    const name:string = selectedName;
+    // const moveCountry = name;
+    console.log(selectTmp)
+    if (assetSet.has(name)) {
+      if (name === "back") {
+        alert("대륙으로 이동합니다")
+        navigate("/explore")
+      }
+      else {
+        if (selectTmp === false) {
+          alert(`${assetObject[name]}`)
+          GetSelectAssetName(name)
+          selectTmp = true;
+        } else {
+          selectTmp = false;
+          return
+        }
+      }
+    } else {
+      // alert(`오픈 예정입니다!😉`)
+    }
+    // 클릭 이벤트 처리
+    console.log('click');
+  };
+
+  /** 배경함수 */
   const Background = () => {
-
     //2. 이미지를 배경으로 (방법 여러개지만, 여기서는 Texture 이용)
     const loader = new THREE.TextureLoader();
 
-    loader.load(bg, texture => {
+    loader.load(bg, (texture) => {
       scene.current!.background = texture;
-      
-    })
-  } 
-
-  /** 카메라 커스텀 함수 */
-  const SetupCamera = () => {
-    const cam = new THREE.PerspectiveCamera(37, window.innerWidth / window.innerHeight, 0.1, 100);
-    cam.position.set(0, 0, 2);
-    cam.rotation.set(
-      THREE.MathUtils.degToRad(0),
-      THREE.MathUtils.degToRad(0),
-      THREE.MathUtils.degToRad(0)
-    );
-    cam.lookAt(0, 0, 0);          // 카메라가 바라보는 곳이 0, 0, 0
-    
-    camera.current = cam;
-    scene.current?.add(cam)
+    });
   };
-
-  /** 조명 커스텀 함수 */
-  const SetupLight = () => {
-    const color = 0xffffff;
-    const intensity = 1;
-    const light = new THREE.DirectionalLight(color, intensity);
-    light.position.set(-1, 3, 4);
-    // scene.current?.add(light);
-    // 카메라에 조명을 달았음
-    camera.current?.add(light)
-  };
-
-  // /** 카메라 적정 위치 구하는 함수 */
-  // const ZoomFit = (object3D:any, camera:THREE.PerspectiveCamera) => {
-  //   // 모델 경계 박스
-  //   const box = new THREE.Box3().setFromObject(object3D);
-  //   // 모델 경계 박스 대각 길이
-  //   const sizeBox = box.getSize(new THREE.Vector3()).length();
-  //   // 모델의 경계 박스 중심 위치
-  //   const centerBox = box.getCenter(new THREE.Vector3());
-
-  //   const ratio = scene.current?.children[1].userData.size;
-
-  //   // 모델 크기의 절반값
-  //   const halfSizeModel = sizeBox * ratio;
-
-  //   // 카메라의 fov의 절반값
-  //   const halfFov = THREE.MathUtils.degToRad(camera.fov * 0.6);
-
-  //   // 모델을 화면에 꽉 채우기 위한 적당한 거리
-  //   const distance = halfSizeModel / Math.tan(halfFov);
-
-  //   // 모델 중심에서 카메라 위치로 향하는 방향 단위 벡터 계산
-  //   const direction = (new THREE.Vector3()).subVectors(
-  //     camera.position,
-  //     centerBox
-  //   ).normalize();
-
-  //   // "단위 방향 벡터" 방향으로 모델 중심 위치에서 distance 거리에 대한 위치
-  //   const position = direction.multiplyScalar(distance).add(centerBox);
-  //   camera.position.copy(position);
-
-  //   // 모델의 크기에 맞게 카메라의 near, far 값을 대략적으로 조정
-  //   camera.near = sizeBox / 100;
-  //   camera.far = sizeBox * 100;
-
-  //   // 카메라 기본 속성 변경에 따른 투영행렬 업데이트
-  //   camera.updateProjectionMatrix();
-  //   const [a, b, c] = scene.current?.children[1].userData.position
-  //   // 카메라가 모델의 중심을 바라 보도록 함
-  //   camera.lookAt(centerBox.x + a, centerBox.y + b, centerBox.z + c);
-  //   // camera.lookAt(centerBox.x, centerBox.y, centerBox.z);
-  // }
-
 
   /** 모델 커스텀 함수 */
   const SetupModel = () => {
     const gltfLoader = new GLTFLoader();
     const items = [
-      {url: africa_Egypt, name: "africa_Egypt", angle:[5, 15, 15], position:[0.3,-0.5, 0], size:0.5},
-      {url: asia_China, name: "asia_China", angle:[0, 10,-5], position:[0,-1.5,0.5], size:0.45},
-      {url: asia_India, name: "asia_india", angle:[0, 0, 15], position:[1,-1.5,-1], size:0.5},
-      {url: asia_Japen, name: "asia_Japen", angle:[15, 10, 5], position:[-1,-0.5, 0.5], size:0.45},
-      {url: asia_Korea, name: "asia_Korea", angle:[0, 10, 10], position:[0, 0, 0.5], size:0.5},
-      {url: europe_France, name: "europe_France", angle:[10, 10, 5], position:[0,-1, 0], size:0.5},
-      {url: europe_Italia, name: "europe_Italia", angle:[10, 0, 10], position:[0,0,0], size:0.5},
-      {url: europe_Spain, name: "europe_Spain", angle:[0, 10, 15], position:[0,0,0], size:0.5},
-      {url: europe_UK, name: "europe_UK", angle:[0, 10, 15], position:[0,-0.5, 0], size:0.5},
-      // {url: northAmerica_America, name: "northAmerica_America", angle:[10, 10, 10], position:[1,-2, 1], size:0.35},
-      {url: northAmerica_America, name: "northAmerica_America", angle:[ 0, 70, 0], position:[0, 0, 0], size: 0.5},
-    ]
+      {
+        url: africa_Egypt,
+        name: 'africa_Egypt',
+        angle: [0, 265, 0],
+        size: 0.5,
+      },
+      { url: asia_China, name: 'asia_China', angle: [0, 265, 0], size: 0.5 },
+      { url: asia_India, name: 'asia_india', angle: [0, 265, 0], size: 0.5 },
+      { url: asia_Japen, name: 'asia_Japen', angle: [0, 265, 0], size: 0.5 },
+      { url: asia_Korea, name: 'asia_Korea', angle: [0, 265, 0], size: 0.5 },
+      {
+        url: europe_France,
+        name: 'europe_France',
+        angle: [0, 265, 0],
+        size: 0.5,
+      },
+      {
+        url: europe_Italia,
+        name: 'europe_Italia',
+        angle: [0, 265, 0],
+        size: 0.5,
+      },
+      {
+        url: europe_Spain,
+        name: 'europe_Spain',
+        angle: [0, 265, 0],
+        size: 0.5,
+      },
+      { url: europe_UK, name: 'europe_UK', angle: [0, 265, 0], size: 0.5 },
+      {
+        url: northAmerica_America,
+        name: 'northAmerica_America',
+        angle: [0, 265, 0],
+        size: 0.5,
+      },
+    ];
     items.forEach((item, index) => {
-      if (item.name === countryName.countryName) {
+      if (item.name === countryName) {
         gltfLoader.load(item.url, (glb) => {
-          const obj3d:THREE.Group = glb.scene;
-          obj3d.name = item.name
-          console.log(obj3d)
-          // obj3d.children[0].position.set(0, 0, 0);
-          obj3d.children[0].position.set(0, 0, -0.2);
-          obj3d.children[0].rotation.set(
+          const obj3d: THREE.Group = glb.scene;
+          obj3d.name = item.name;
+          obj3d.children.forEach((obj, idx) => {
+            obj.receiveShadow = true;
+            obj.castShadow = true; // 그림자 주기
+            if (assetSet.has(obj.name)) {
+              obj.children.forEach((children) => {
+                children.name = obj.name;
+                children.receiveShadow = true;
+                children.castShadow = true;
+              });
+            } else if (obj.name === 'ground') {
+              obj.children.forEach((children) => {
+                children.receiveShadow = true;
+                // children.castShadow =true;
+              });
+            } else {
+              obj.children.forEach((children) => {
+                children.receiveShadow = false;
+                children.castShadow = false;
+              });
+            }
+          });
+          obj3d.position.set(0, -0.1, 0.5);
+          obj3d.rotation.set(
             THREE.MathUtils.degToRad(item.angle[0]),
             THREE.MathUtils.degToRad(item.angle[1]),
             THREE.MathUtils.degToRad(item.angle[2])
-          )
-          // obj3d.userData.position = item.position;
-          // obj3d.userData.size = item.size;
-          // obj3d.scale.set(1, 1, 1);
-
-          // const helper = new THREE.AxesHelper
-          // const shelper = new THREE.GridHelper
-          // scene.current?.add(helper)
-          // scene.current?.add(shelper)
-
-          scene.current?.add(obj3d.children[0]);
-          // if (camera.current) {
-          //   ZoomFit(obj3d, camera.current)
-          // }
-        })
+          );
+          obj3d.scale.set(1, 1, 1);
+          obj3d.receiveShadow = true;
+          scene.current?.add(obj3d);
+        });
       }
-    })
+    });
 
-    // cube.current = mesh;
+    // gltfLoader.load(back, (glb)=>{
+    //   const iconObj = glb.scene;
+    //   // iconObj.name = "back"
+    //   // iconObj.position.set(0,0, 0);
+    //   // iconObj.rotation.set(
+    //   //   THREE.MathUtils.degToRad(0),
+    //   //   THREE.MathUtils.degToRad(0),
+    //   //   THREE.MathUtils.degToRad(0)
+    //   // )
+    //   iconObj.scale.set(1, 1, 1);
+    //   scene.current?.add(iconObj);
+    // })
   };
 
   /** 렌더링 될 때마다 사이즈 초기화 */
-  const resize = () => {
+  const Resize = () => {
     const width = divContainer.current?.clientWidth || 0;
     const height = divContainer.current?.clientHeight || 0;
 
@@ -170,72 +301,78 @@ const CountryMap:React.FC<Props> = (countryName) => {
       camera.current.aspect = width / height;
       camera.current.updateProjectionMatrix();
     }
+    renderer.current?.setPixelRatio(window.devicePixelRatio);
     renderer.current?.setSize(width, height);
-  };
-  
-  /** 마우스 그래그로 회전시킴 */
-  const SetupControls = () => {
-    if (camera.current) {
-      controls.current = new OrbitControls(camera.current, divContainer.current!); // OrbitControls를 초기화합니다.
-      controls.current.target.set(0,0,0)    // 카메라 회전점
-      controls.current.enableDamping = true;        // 부드럽게 돌아가
 
-      
-  
-      // 위아래 카메라 제한
-      // controls.current.minPolarAngle = THREE.MathUtils.degToRad(0);   // 0도 부터
-      // controls.current.maxPolarAngle = THREE.MathUtils.degToRad(60);  // 30도 까지 회전 가능
-      // // 좌우 카메라 제한
-      // controls.current.minAzimuthAngle = THREE.MathUtils.degToRad(-15); // -5도 부터
-      // controls.current.maxAzimuthAngle = THREE.MathUtils.degToRad(15);  // 5도 까지
-      // console.log(camera.current!.fov)
-    }
-  }
+    composerRef.current?.setSize(
+      window.innerWidth * window.devicePixelRatio,
+      window.innerHeight * window.devicePixelRatio
+    );
+
+    effectFXAARef.current?.uniforms['resolution'].value.set(
+      1 / (window.innerWidth * window.devicePixelRatio),
+      1 / (window.innerHeight * window.devicePixelRatio)
+    );
+  };
 
   const render = (time: number) => {
     renderer.current?.render(scene.current!, camera.current!);
     update(time);
+    composerRef.current?.render();
     requestAnimationFrame(render);
   };
 
   const update = (time: number) => {
     time *= 0.01;
-    // console.log("객체 위치 : ",scene.current?.position)
-    // console.log("객체 기울기 :",scene.current?.rotation)
-    // console.log("카메라 위치 :", camera.current?.position)
-    // console.log("카메라 기울기 :", camera.current?.rotation)
-    // console.log("카메라 시각 :", camera.current?.lookAt)
+
   };
 
   useEffect(() => {
     if (divContainer.current) {
       const ren = new THREE.WebGLRenderer({ antialias: true });
       ren.setPixelRatio(window.devicePixelRatio);
+      //그림자 활성화
+      ren.shadowMap.enabled = true;
       divContainer.current.appendChild(ren.domElement);
       renderer.current = ren;
 
       const scn = new THREE.Scene();
       scene.current = scn;
 
-      Background();
-      SetupCamera();
-      SetupLight();
-      SetupModel();
-      SetupControls();
+      window.addEventListener('resize', Resize);
+      SetupPicking();
 
-      window.onresize = resize;
-      resize();
+      const cam = SetupCamera(37, 0.1, 25, new THREE.Vector3(-0.11, 0.09, 1.8), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0));
+      camera.current = cam
+      scene.current.add(cam)
+
+      // Add lights
+      const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.5);
+
+      hemiLight.position.set(0, 50, 0);
+      // Add hemisphere light to scene
+      scene.current?.add(hemiLight);
+      const light = SetupLight(
+        '#CCF2F4',
+        0.9,
+        new THREE.Vector3(7, 15, 15),
+        new THREE.Vector3(-2, 2, 2)
+      );
+      scene.current.add(light.target);
+      camera.current?.add(light);
+
+      Background();
+      SetupModel();
+      SetupPostProcess();
+
+      window.onresize = Resize;
+      Resize();
 
       requestAnimationFrame(render);
     }
   }, []);
 
-  return(
-  <div
-    style={{ backgroundColor: 'grey', width: '100%', height: 1000 }}
-    ref={divContainer} 
-  />
-  )
+  return <div style={{ width: '100%', height: 1000 }} ref={divContainer} />;
 };
 
 export default CountryMap;
