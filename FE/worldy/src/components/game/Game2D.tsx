@@ -270,8 +270,11 @@ export default function Game2D(props: any) {
           }
         }))
       }
-
     }
+    setMetaData((prevState: any) => ({
+      ...prevState,
+      currentLocation: result,
+    }))
     return result;
   }
 
@@ -598,7 +601,14 @@ export default function Game2D(props: any) {
 
 
             {/* 콘솔창 영역 */}
-            <div className='w-[380px] h-[340px] bg-white rounded-[8px] mt-[140px] shadow-lg relative'></div>
+            <div className='w-[380px] h-[340px] bg-white rounded-[8px] mt-[150px] shadow-lg relative flex justify-center items-center'>
+              <div className='w-[320px] h-[300px] bg-red-200 flex flex-col items-center'>
+                <div className='w-full h-[100px] bg-green-200 flex flex-col items-center'>
+                  [{worldMap[metaData.currentLocation].name}]
+                </div>
+                <div className='w-full h-[200px] bg-yellow-200'></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
