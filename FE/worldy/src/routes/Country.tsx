@@ -2,6 +2,7 @@ import React, { useMemo, useRef, useState } from 'react'
 
 import CountryMap from '../components/Explore/CountryMap';
 import { CountryType } from '../components/Explore/WorldMap';
+import { useEffect } from 'react';
 import { useParams } from 'react-router';
 
 const countryLst: CountryType = {
@@ -21,10 +22,22 @@ const Country = () => {
   const params = useParams();
   const countryName:string = params.country || "";
 
+  const [selectAsset, setSelectAsset] = useState<string>("");
+
+  const GetSelectAssetName = ((name:string) => {
+    setSelectAsset(name);
+  });
+  console.log(selectAsset)
+  // useEffect(() => {
+  //   if (selectAsset) {
+
+  //   }
+  // },[selectAsset])
+
   return (
     <>
       {/* <h1>여기는 {countryName} 이야</h1> */}
-      <CountryMap countryName={countryName}/>
+      <CountryMap countryName={countryName} GetSelectAssetName= {GetSelectAssetName}/>
     </>
   )
 }

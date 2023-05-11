@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
 import { SetAnimation, SetupCamera, SetupControls, SetupLight } from "./ThreejsOptionComponent";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
@@ -26,6 +26,7 @@ import { useNavigate } from "react-router";
 
 interface Props {
   countryName: string;
+  GetSelectAssetName: (name:string) => void;
 };
 
 interface AssetsType {
@@ -33,7 +34,7 @@ interface AssetsType {
 }
 
 
-const CountryMap:React.FC<Props> = (countryName) => {
+const CountryMap = ({countryName, GetSelectAssetName}:Props) => {
   const divContainer = useRef<HTMLDivElement>(null);
   const renderer = useRef<THREE.WebGLRenderer | null>(null);
   const scene = useRef<THREE.Scene | null>(null);
@@ -59,8 +60,7 @@ const CountryMap:React.FC<Props> = (countryName) => {
     personalityBox: "👴🤴인물을 알아보자!👳‍♂️🎅",
     newsBox: "📰오늘의 뉴스📰"
   }
-  let selectedName = "";
-
+  let selectedName:string = "";
 
   /** 마우스 추적 */
   const SetupPicking = () => {
@@ -149,7 +149,7 @@ const CountryMap:React.FC<Props> = (countryName) => {
 
   /** 마우스 한번 클릭 */
   const OnClick = (event:any) => {
-    const name = selectedName;
+    const name:string = selectedName;
     // const moveCountry = name;
 
     if (assetSet.has(name)) {
@@ -159,6 +159,7 @@ const CountryMap:React.FC<Props> = (countryName) => {
       }
       else {
         alert(`${assetObject[name]}`)
+        GetSelectAssetName(name)
       }
     } else {
       // alert(`오픈 예정입니다!😉`)
@@ -195,7 +196,7 @@ const CountryMap:React.FC<Props> = (countryName) => {
       {url: northAmerica_America, name: "northAmerica_America", angle:[ 0, 265, 0], size: 0.5},
     ]
     items.forEach((item, index) => {
-      if (item.name === countryName.countryName) {
+      if (item.name === countryName) {
         gltfLoader.load(item.url, (glb) => {
           const obj3d:THREE.Group = glb.scene;
           obj3d.name = item.name
