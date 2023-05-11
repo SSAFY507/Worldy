@@ -157,6 +157,12 @@ export default function QuizModal({
     else setSubmitAnswer(input);
   };
 
+  const handleSubmitMultiAnswer = (input: number) => {
+    const submitted = input.toString();
+    if (submitAnswer === submitted) setSubmitAnswer('');
+    else setSubmitAnswer(submitted);
+  };
+
   const contentOX = (): JSX.Element => {
     return (
       <>
@@ -250,7 +256,7 @@ export default function QuizModal({
             className={`${
               submitAnswer === prevInput.multiAnswerText ? 'clickedmulti' : ''
             } beforemulti w-[200px] h-[80px] mx-[10px] rounded-md shadow-md bg-[#F2F2F2] flex flex-row justify-center items-center`}
-            onClick={() => handleSubmitAnswer(prevInput.multiAnswerText)}
+            onClick={() => handleSubmitMultiAnswer(key + 1)}
           >
             <span
               className='w-full h-full flex flex-row justify-center items-center'
@@ -477,7 +483,7 @@ export default function QuizModal({
     setTimeout(() => {
       setShowBack(true);
       console.log('보기');
-    }, 1500);
+    }, 1700);
   }, [flipped]);
 
   const fromtContainer = (): JSX.Element => {
@@ -570,7 +576,7 @@ export default function QuizModal({
   const backContainer = (): JSX.Element => {
     return (
       <div
-        className={`backcontainer transition-all duration-[2000ms] ease-in-out ${
+        className={`backcontainer transition-all duration-[1000ms] ease-in-out ${
           !showBack ? 'opacity-0' : 'opacity-100'
         }`}
       >

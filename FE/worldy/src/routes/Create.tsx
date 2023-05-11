@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import LoaderPyramid from '../components/LoaderPyramid';
+import LoaderPyramid from '../components/Loaders/LoaderPyramid';
 import CreateGame from '../components/create/CreateGame';
 import Matching from '../components/create/Matching';
 import Waiting from '../components/create/Waiting';

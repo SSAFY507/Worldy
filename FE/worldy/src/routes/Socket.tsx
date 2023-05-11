@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import LoaderPyramid from '../components/LoaderPyramid';
+import LoaderPyramid from '../components/Loaders/LoaderPyramid';
 import SocketTest from '../components/game/SocketTest';
 
 export default function Socket() {

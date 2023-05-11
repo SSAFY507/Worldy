@@ -34,7 +34,7 @@ export default function QNAMoveButton({
       <button className='QNAbuttoncard' onClick={() => moveToSupport(2)}>
         <span>신고하기</span>
       </button>
-      <p className='absolute top-0 left-0  w-full h-full QNAbuttontext  bg-none rounded-md flex flex-row justify-between items-start'>
+      <div className='absolute top-0 left-0  w-full h-full QNAbuttontext  bg-none rounded-md flex flex-row justify-between items-start'>
         <div className='flex flex-col justify-center items-start'>
           <span className='text-[25px] font-PtdSemiBOld text-white'>
             궁금한 점이 있으신가요?
@@ -46,7 +46,7 @@ export default function QNAMoveButton({
         <div className='flex flex-row justify-end items-center'>
           <FiArrowUpRight size={25} color={'white'} />
         </div>
-      </p>
+      </div>
     </div>
   );
 }
