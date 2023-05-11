@@ -32,6 +32,7 @@ export default function Callback(): JSX.Element {
       // );
       setAccessToken(kakaoLoginResponse.data.tokenDto.accessToken);
       setProfileImg(kakaoLoginResponse.data.profileImg);
+      // setNickname(kakaoLoginResponse.data.nickname)
     } catch (error) {
       console.error('카카오 로그인 새로운 api 실패', error);
     }
