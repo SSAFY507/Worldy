@@ -46,7 +46,7 @@ public class KakaoUserService {
     public KakaoLoginDto kakaoLogin(String code) throws JsonProcessingException {
 
         // 1. 인가코드로 access 토큰 요청
-        //String accessToken = getAccessToken(code, "https://k8a507.p.ssafy.io/user/kakao/callback");
+        // String accessToken = getAccessToken(code, "https://k8a507.p.ssafy.io/user/kakao/callback");
         String accessToken = getAccessToken(code, "http://localhost:3000/user/kakao/callback");
 
         // 2. 없는 회원의 경우 회원가입

@@ -34,7 +34,7 @@ def get_img(nation_id: str):
     # 틀린 그림 S3에 올리기 및 업데이트
     s3.upload_img(nations_code[nation_id], img_num)
 
-    original_url = "https://worldy-soft.s3.ap-northeast-2.amazonaws.com/hidden_catch/" + nations_code[nation_id] + "/" + str(img_num) + ".jpg"
+    original_url = "https://worldy-soft.s3.ap-northeast-2.amazonaws.com/hidden_catch/" + nations_code[nation_id] + "/original/" + str(img_num) + ".jpg"
     diff_url = "https://worldy-soft.s3.ap-northeast-2.amazonaws.com/hidden_catch/" + nations_code[nation_id] + "/different/" + str(img_num) + ".jpg"
 
     return {"original_url" : original_url, "diff_url" : diff_url, "answerPoints" : answerPoints, "img_num" : img_num}
