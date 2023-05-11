@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import TestFor3DEdit from '../components/TestFor3DEdit';
-import LoaderPyramid from '../components/LoaderPyramid';
 import Main from '../components/game/Main';
+import LoaderPyramid from '../components/Loaders/LoaderPyramid';
 import { useParams } from 'react-router';
 import Main2 from '../components/game/Main2';
 

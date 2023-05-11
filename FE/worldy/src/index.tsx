@@ -24,12 +24,15 @@ const script = document.createElement('script');
 };
 
 const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-const nickname = sessionStorage.getItem('nickname');
+const nickname =
+  sessionStorage.getItem('nickname') === ''
+    ? '임시 닉네임'
+    : sessionStorage.getItem('nickname');
 const profileImg = sessionStorage.getItem('profileImg');
-if (isLoggedIn === 'true' && nickname && profileImg) {
+if (isLoggedIn === 'true' && profileImg) {
   store.dispatch(
     login({
-      nickname,
+      // nickname,
       profileImg,
     })
   );
