@@ -5,7 +5,7 @@ type InputType = {
   APIType: 'get' | 'post' | 'put' | 'delete';
   UrlQuery: string;
   Body?: Map<string, any>;
-  Token?: string;
+  Token: string | null;
 };
 
 export default async function CustomAxios(input: InputType): Promise<any> {
