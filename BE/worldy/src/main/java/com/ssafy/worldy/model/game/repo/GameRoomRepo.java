@@ -71,6 +71,16 @@ public class GameRoomRepo {
      }
 
      /**
+      * 게임에 입장한 플레이어 조회
+      */
+     public List<String> findGameRoom(String roomId) {
+
+         List<String> player = opsHashGameRoomPlayer.get(GAME_PLYER, roomId);
+
+         return player;
+     }
+
+     /**
       * 게임에 입장한 플레이어 수
       */
      public double playerCnt(String roomId) {

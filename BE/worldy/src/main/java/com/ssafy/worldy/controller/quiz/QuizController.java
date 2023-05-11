@@ -66,4 +66,15 @@ public class QuizController {
         quizService.insertQuizRecord(quizRecordInsertDto);
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
+
+    /***
+     * [ 퀴즈 결과 ]
+     * - 유저가 푼 퀴즈의 결과 저장
+     ***/
+    @GetMapping("/hidden/{nationId}")
+    public ResponseEntity<HiddenCatchDto> getHiddenCatch(@PathVariable Long nationId){
+
+        HiddenCatchDto hiddenCatchDto = quizService.getHiddenCatch(nationId);
+        return new ResponseEntity<>(hiddenCatchDto, HttpStatus.OK);
+    }
 }

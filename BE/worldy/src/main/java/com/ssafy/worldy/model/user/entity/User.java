@@ -1,6 +1,7 @@
 package com.ssafy.worldy.model.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.worldy.model.game.dto.EnterPlayer;
 import com.ssafy.worldy.model.game.dto.MyRankDto;
 import com.ssafy.worldy.model.game.dto.TopRankDto;
 import com.ssafy.worldy.model.user.dto.UserDto;
@@ -125,5 +126,14 @@ public class User {
                 .profileImg(this.profileImg)
                 .tier(this.tier)
                 .level(this.level) .build();
+    }
+
+    public EnterPlayer toEnterPlayer() {
+        return EnterPlayer.builder()
+                .kakaoId(this.kakaoId)
+                .nickName(this.nickName)
+                .profileImg(this.profileImg)
+                .mmr(this.mmr)
+                .level(this.level).build();
     }
 }
