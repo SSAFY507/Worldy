@@ -64,7 +64,7 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
     setTimeout(() => setPopupSecondBr(true), 3000);
     setTimeout(() => setPopupThird(true), 3800);
     setTimeout(() => setPopupGreyInfo(true), 3800);
-    console.log('헉');
+    //console.log('헉');
   }, []);
 
   return (

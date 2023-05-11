@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import '../styles/SupportModalStyles.css';
 import PersonalAccept from './PersonalAccept';
 import CustomAxios from '../API/CustomAxios';
-import { loginToken } from '../_store/slices/loginSlice';
+import { loginToken, wholeState } from '../_store/slices/loginSlice';
 import { useSelector } from 'react-redux';
+import { useSelect } from '@react-three/drei';
 
 type askTypeListType = {
   value: number;
@@ -114,9 +115,19 @@ export default function SupportModal({
   }, [contentText]);
 
   const [result, setResult] = useState(null);
-  const token: string = useSelector(loginToken);
+  const token: string = sessionStorage.getItem('token') || '';
+  const things = useSelector(wholeState);
 
-  const fetchData = async () => {
+  useEffect(() => {
+    console.log('토근 왜 안나와', token);
+  }, [token]);
+
+  useEffect(() => {
+    console.log('전부', things);
+  }, [things]);
+
+  const submitHelpAxios = async () => {
+    console.log('토큰 : ', token);
     try {
       const requestBody = new Map([
         ['category', askTypeList[askType].name],
@@ -126,11 +137,11 @@ export default function SupportModal({
       const response = await CustomAxios({
         APIName: 'writeHelp',
         APIType: 'post',
+        // UrlQuery: 'https://localhost:9090/api/help/write',
         UrlQuery: 'https://k8a507.p.ssafy.io/api/help/write',
         Body: requestBody,
         Token: token,
       });
-
       setResult(response);
       console.log('리퀘스트 바디', requestBody);
     } catch (error) {
@@ -139,7 +150,7 @@ export default function SupportModal({
   };
 
   const submitHelp = () => {
-    fetchData();
+    submitHelpAxios();
   };
 
   return (
