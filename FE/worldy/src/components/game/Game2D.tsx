@@ -481,6 +481,9 @@ export default function Game2D(props: any) {
         <div className='w-[320px] h-[840px] mb-[50px]  flex flex-col justify-around items-center'>
           {pList.map((i, index) => {
             return <div key={index}>
+              {i.playerNum === (metaData.turn + 1) &&
+              <div className={`w-[80px] h-[30px] bg-blue-400 relative left-[-6px] top-[0px] z-[100] text-white text-[12px] border-[10px] border-solid border-blue-400 rounded-[2px] flex justify-center items-center`}>Player {i.playerNum} 턴</div>
+              }
               <div className={`w-[300px] h-[260px] bg-[#F4F2EC] rounded-[8px] flex flex-col justify-center items-center ${(metaData.turn + 1) === i.playerNum ? 'outline outline-[6px] outline-blue-400' : ''}`}>
                 <div className='w-[250px] h-[210px] bg-[#F4F2EC]'>
                   <div className='flex justify-between'>
@@ -489,7 +492,7 @@ export default function Game2D(props: any) {
                   </div>
                   <div className='flex justify-between h-[34px] mt-[10px] mb-[10px] border-solid border-gray-400 border-b-[1px]'>
                     <div className='text-[22px]'>{i.name}</div>
-                    <div className='text-[22px]'>[{i.game.location}]</div>
+                    <div className='text-[22px]'>[{worldMap[i.game.location].name}]</div>
                   </div>
                   <div className='flex flex-col w-full h-[60px] items-between'>
                     <div className=''>보유자산</div>
@@ -497,16 +500,18 @@ export default function Game2D(props: any) {
                       <div className='text-[20px]'>{i.game.balance} 만원</div>
                     </div>
                   </div>
-                  <div className='flex flex-col w-full h-[60px] items-between'>
-                    <div className=''>소유국가</div>
-                    <div className='flex mt-[10px]'>
-                      <div className='text-[20px]'>[{i.game.own}]</div>
+                  <div className='flex flex-col w-full h-[140px] items-between'>
+                    <div className=''>소유국가[총{i.game.own.length}개]</div>
+                    <div className='flex mt-[10px] h-[80px] w-full'>
+                      <div className='text-[14px]  h-[80px] w-full flex flex-wrap'>{i.game.own.map((e, index) => {
+                        return <div key={index} className='flex flex-wrap'>
+                          <img className='w-[30px] h-[20px] bg-red-200 mr-[4px]' src={`/game/f${e}.png`}></img>
+                        </div>
+                      })}</div>
                     </div>
                   </div>
                 </div>
-                {i.playerNum === (metaData.turn + 1) &&
-                  <div className={`w-[80px] h-[30px] bg-blue-400 relative left-[-80px] top-[-240px] z-[100] text-white text-[12px] rounded-full flex justify-center items-center`}>Player {i.playerNum} 턴</div>
-                }
+
 
               </div>
             </div>
@@ -530,7 +535,7 @@ export default function Game2D(props: any) {
                     i.type === 'nation' && (i.location >= 0 && i.location < 10) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-red-400'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold '>{i.name}</div>
-                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-around items-center bg-white flex-wrap'>
+                      <div className={`w-[84px] h-[54px] rounded-[2px] flex justify-around items-center flex-wrap ${i.owner === 0 && 'bg-white'} ${i.owner === 1 && 'bg-red-100'} ${i.owner === 2 && 'bg-green-100'} ${i.owner === 3 && 'bg-blue-100'} ${i.owner === 4 && 'bg-purple-100'}`}>
                         {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]'>{player.p1.name}</div>}
                         {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]'>{player.p2.name}</div>}
                         {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]'>{player.p3.name}</div>}
@@ -586,7 +591,7 @@ export default function Game2D(props: any) {
                     i.type === 'nation' && (i.location >= 10 && i.location < 20) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-green-400'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold '>{i.name}</div>
-                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'>
+                      <div className={`w-[84px] h-[54px] rounded-[2px] flex justify-center items-center ${i.owner === 0 && 'bg-white'} ${i.owner === 1 && 'bg-red-100'} ${i.owner === 2 && 'bg-green-100'} ${i.owner === 3 && 'bg-blue-100'} ${i.owner === 4 && 'bg-purple-100'}`}>
                         {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]'>{player.p1.name}</div>}
                         {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]'>{player.p2.name}</div>}
                         {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]'>{player.p3.name}</div>}
@@ -642,7 +647,7 @@ export default function Game2D(props: any) {
                     i.type === 'nation' && (i.location >= 20 && i.location < 30) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-400'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold '>{i.name}</div>
-                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'>
+                      <div className={`w-[84px] h-[54px] rounded-[2px] flex justify-center items-center ${i.owner === 0 && 'bg-white'} ${i.owner === 1 && 'bg-red-100'} ${i.owner === 2 && 'bg-green-100'} ${i.owner === 3 && 'bg-blue-100'} ${i.owner === 4 && 'bg-purple-100'}`}>
                         {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]'>{player.p1.name}</div>}
                         {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]'>{player.p2.name}</div>}
                         {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]'>{player.p3.name}</div>}
@@ -698,7 +703,7 @@ export default function Game2D(props: any) {
                     i.type === 'nation' && (i.location >= 30 && i.location < 40) &&
                     <div className='w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-purple-400'>
                       <div className='w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold '>{i.name}</div>
-                      <div className='w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white'>
+                      <div className={`w-[84px] h-[54px] rounded-[2px] flex justify-center items-center ${i.owner === 0 && 'bg-white'} ${i.owner === 1 && 'bg-red-100'} ${i.owner === 2 && 'bg-green-100'} ${i.owner === 3 && 'bg-blue-100'} ${i.owner === 4 && 'bg-purple-100'}`}>
                         {i.location === player.p1.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]'>{player.p1.name}</div>}
                         {i.location === player.p2.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]'>{player.p2.name}</div>}
                         {i.location === player.p3.game.location && <div className='w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]'>{player.p3.name}</div>}
@@ -897,7 +902,7 @@ export default function Game2D(props: any) {
                     </div>
                   }
 
-                  {/* 2. 내 소유지 일 때 */}
+                  {/* 2. 내 소유지일 때 */}
                   {mode === 2 &&
                     <div className='flex flex-col justify-center itmes-center'>당신의 땅입니다.</div>
                   }
@@ -940,39 +945,53 @@ export default function Game2D(props: any) {
 
       {/* 오른쪽 영역 */}
       <div className={`w-[20%] h-full flex flex-col justify-center items-start rounded-[4px]`}>
-
-        <div className={`w-[320px] h-[840px] mb-[50px]  flex flex-col justify-around items-center rounded-[8px]  ${myTurn ? 'outline outline-[6px] outline-blue-400' : ''}`}>
-          <div className='w-[300px] h-[260px] bg-[#F4F2EC] rounded-[8px] flex flex-col justify-center items-center'>
-            <div className='w-[250px] h-[210px] bg-[#F4F2EC]'>
+        {myTurn &&
+          <div className={`w-[80px] h-[30px] bg-blue-400 relative left-[-4px] top-[0px] z-[100] text-white text-[12px] rounded-[4px] flex justify-center items-center`}>Player 턴</div>
+        }          
+        <div className={`w-[320px] h-[900px] mb-[50px]  flex flex-col justify-around items-center bg-gray-100 rounded-[8px]  ${myTurn ? 'outline outline-[6px] outline-blue-400' : ''}`}>
+          <div className='w-[300px] h-[180px] bg-white rounded-[8px] flex flex-col justify-center items-center'>
+            <div className='w-[250px] h-[130px]'>
               <div className='flex justify-between'>
                 <div className=''>플레이어 [{me.playerNum}]</div>
                 <div className=''>현재 위치</div>
               </div>
               <div className='flex justify-between h-[34px] mt-[10px] mb-[10px] border-solid border-gray-400 border-b-[1px]'>
                 <div className='text-[22px]'>{me.name}</div>
-                <div className='text-[22px]'>[{me.game.location}]</div>
+                <div className='text-[22px]'>[{worldMap[me.game.location].name}]</div>
               </div>
-              <div className='flex flex-col w-full h-[60px] items-between'>
+              <div className='flex flex-col w-full h-[40px] items-between'>
                 <div className=''>보유자산</div>
                 <div className='flex mt-[10px]'>
                   <div className='text-[20px]'>{me.game.balance} 만원</div>
                 </div>
               </div>
-              <div className='flex flex-col w-full h-[60px] items-between'>
-                <div className=''>소유국가</div>
-                <div className='flex mt-[10px]'>
-                  <div className='text-[20px]'>[{me.game.own}]</div>
-                </div>
-              </div>
             </div>
           </div>
-          <div className='w-[300px] h-[540px] bg-[#F4F2EC] rounded-[8px]'>
-            <div></div>
+          <div className='w-[300px] h-[680px] bg-white rounded-[8px] flex flex-col justify-center items-center'>
+            <div className='w-[260px] h-[640px]'>
+              {me.game.own.map((e:number, index:number)=> {
+                return <div key={index} className='h-[60px] flex flex-col items-center justify-start'>
+                  <div className='w-full h-[60px] bg-gray-100 rounded-[6px] flex items-center mb-[10px]'>
+                    <img className='w-[36px] h-[24px] flex justify-center items-center bg-purple-400 ml-[14px]' src={`/game/f${e}.png`} alt='국기'></img>
+                    <div className='w-[80px] h-[26px] flex justify-start text-[18px] font-PtdBold items-center ml-[10px]'>{worldMap[e].name}</div>
+                    <div className='w-[100px] h-[30px] flex justify-end items-center mr-[14px]' >
+                      {worldMap[e].build.villa &&
+                        <img className='w-[26px] h-[26px] object-fit ml-[10px]' src='/game/villa.png'></img>
+                      }
+                      {worldMap[e].build.hotel &&
+                        <img className='w-[24px] h-[24px] object-fit ml-[10px]' src='/game/hotel.png'></img>
+                      }
+                      {worldMap[e].build.landmark &&
+                        <img className='w-[26px] h-[30px] object-fit ml-[10px]' src='/game/landmark.png'></img>
+                      }
+                    </div>
+                  </div>
+                </div>
+              })}
+            </div>
           </div>
         </div>
-        {myTurn &&
-          <div className={`w-[80px] h-[30px] bg-blue-400 relative left-[30px] top-[-910px] z-[100] text-white text-[12px] rounded-full flex justify-center items-center`}>Player 턴</div>
-        }
+
       </div>
 
 

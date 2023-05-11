@@ -10,7 +10,7 @@ export default function Matching(props: any) {
   let roomId = '기본';
   const socket = new SockJS('https://k8a507.p.ssafy.io/api/stomp/game');
   const ws = Stomp.over(socket);
-  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzU3Mzg5MTAxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4Mzc3NTAxMX0.FGXDtMPT4TZdwoUDUc98lZNlYI7d4MK2YYu63b7nvQiJdzY2zItjIgmOAsM5_Y4hKIPv2eU5o9gOwdbgyRc8uQ  '
+  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzY0NzMxODk0IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4Mzk4MzE0NX0.oGiiDwRqKnuiWMH6YkbWtYLFr9MMXF3hE8DhLRWOgYp8UHg5C6_q9idAid6FCS2Uimr9QOR_Bt-sVxHtGVzqKQ'
   let headers = { Authorization: `Bearer ${accessToken}` };
   const navigate = useNavigate();
 
