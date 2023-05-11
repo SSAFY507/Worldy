@@ -107,17 +107,17 @@ const CountrySpeak  = ({GetSelectAssetName}:Props) => {
   const [popupText, setPopupText] = useState<boolean>(false);
   const [popupItem, setPopupItem] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (loadedAll) {
-      setTimeout(() => {
-        setPopupName(true);
-        setPopupText(true);
-      }, 500);
-      setTimeout(() => {
-        setPopupItem(true);
-      }, 1500);
-    }
-  }, [loadedAll]);
+  // useEffect(() => {
+  //   if (loadedAll) {
+  //     setTimeout(() => {
+  //       setPopupName(true);
+  //       setPopupText(true);
+  //     }, 500);
+  //     setTimeout(() => {
+  //       setPopupItem(true);
+  //     }, 1500);
+  //   }
+  // }, [loadedAll]);
 
   useEffect(() => {
     if (targetIndex !== 0) {
@@ -137,64 +137,67 @@ const CountrySpeak  = ({GetSelectAssetName}:Props) => {
       }
     }
   }, [targetIndex]);
+
   return (
-    <>
-      <div className='w-full h-full relative'>
-        <div className='z-20 absolute w-1/4 h-full flex flex-row justify-end items-end'>
-          <img
-            className='h-[90%]'
-            src={TutorialItemList[targetIndex].imgsrc}
-            alt='설설'
-          />
-        </div>
-        <div className='z-10 absolute top-1/2 bg-[rgba(0,0,0,0.8)] w-full h-1/2 flex justify-end'>
-          <div className='h-full w-3/4 py-10 pl-20 pr-10'>
-            <div className='w-3/5 h-fit flex flex-col justify-between items-start'>
-              <div className='outline-white h-[30px] w-full font-PtdLight text-[#f9c53a] text-[20px] flex justify-start items-center'>
-                <CSSTransition
-                  in={popupName}
-                  timeout={3000}
-                  classNames='CSSTransition-Tutorial-Popup'
-                  unmountOnExit
-                >
-                  <div>{targetIndex !== 4 ? npcName : null}</div>
-                </CSSTransition>
-              </div>
-              <div className='h-fit w-full my-[10px] text-white text-[30px] font-PtdExtraLight leading-[45px] py-[5px]'>
-                <CSSTransition
-                  in={popupText}
-                  timeout={1000}
-                  classNames='CSSTransition-Tutorial-Popup'
-                  unmountOnExit
-                >
-                  <div>
-                    {TutorialItemList[targetIndex].contentText}
-                    <div className='border-b-[1.5px] border-b-white border-solid w-fit font-PtdLight'>
-                      {TutorialItemList[targetIndex].contentCoreText}
-                    </div>
-                  </div>
-                </CSSTransition>
-              </div>
-              <div className='outline-white flex-1 max-h-full w-full flex flex-col justify-end items-center'>
-                {/* <CSSTransition
-                  in={popupItem}
-                  timeout={1000}
-                  classNames='CSSTransition-Tutorial-Popup'
-                  unmountOnExit
-                > */}
-                  {/* <div className='w-full h-full  outline-red-400'>
-                    {TutorialItemList[targetIndex].contentItem}
-                  </div> */}
-                {/* </CSSTransition> */}
-              </div>
-            </div>
-          </div>
+    <div className='w-full h-full relative flex'>
+      <div className='z-20 absolute h-1/4 w-full flex flex-col justify-end items-end'>
+        <img
+          className='h-[90%]'
+          src={TutorialItemList[targetIndex].imgsrc}
+          alt='설설'
+        />
+      </div>
+      <div className='z-10 absolute bg-[rgba(0,0,0,0.8)] h-full w-1/4 flex justify-end opacity-25'>
+        <div className=''>
+
         </div>
       </div>
-    </>
+    </div>
   );
 
 }
 
 
 export default CountrySpeak;
+
+// {/* <div className='w-full h-3/4 py-10 pl-20 pr-10'>
+// <div className='w-3/5 h-fit flex flex-col justify-between items-start'>
+//   <div className='outline-white h-[30px] w-full font-PtdLight text-[#f9c53a] text-[20px] flex justify-start items-center'>
+//     <CSSTransition
+//       in={popupName}
+//       timeout={3000}
+//       classNames='CSSTransition-Tutorial-Popup'
+//       unmountOnExit
+//     >
+//       <div>{targetIndex !== 4 ? npcName : null}</div>
+//     </CSSTransition>
+//   </div>
+//   <div className='h-fit w-full my-[10px] text-white text-[30px] font-PtdExtraLight leading-[45px] py-[5px]'>
+//     <CSSTransition
+//       in={popupText}
+//       timeout={1000}
+//       classNames='CSSTransition-Tutorial-Popup'
+//       unmountOnExit
+//     >
+//       <div>
+//         {TutorialItemList[targetIndex].contentText}
+//         <div className='border-b-[1.5px] border-b-white border-solid w-fit font-PtdLight'>
+//           {TutorialItemList[targetIndex].contentCoreText}
+//         </div>
+//       </div>
+//     </CSSTransition>
+//   </div>
+//   <div className='outline-white flex-1 max-h-full w-full flex flex-col justify-end items-center'>
+//     {/* <CSSTransition
+//       in={popupItem}
+//       timeout={1000}
+//       classNames='CSSTransition-Tutorial-Popup'
+//       unmountOnExit
+//     > */}
+//       {/* <div className='w-full h-full  outline-red-400'>
+//         {TutorialItemList[targetIndex].contentItem}
+//       </div> */}
+//     {/* </CSSTransition> */}
+//   </div>
+// </div>
+// </div> */}
