@@ -15,7 +15,7 @@ INSERT_WEATHER = "insert into weather (weather_name, temp, nation_id) values (%s
 UPDATE_WEATHER = "update weather set weather_name = %s, temp = %s where nation_id = %s"
 
 # 나라/도시 정보
-nations = {"한국" : ['Seoul', '서울'], "중국" : ['Beijing', '베이징'], "일본" : ['Tokyo', '도쿄'], "인도" : ['New Delhi', '뉴델리'],
+nations = {"대한민국" : ['Seoul', '서울'], "중국" : ['Beijing', '베이징'], "일본" : ['Tokyo', '도쿄'], "인도" : ['New Delhi', '뉴델리'],
         "영국" : ['London', '런던'], "프랑스" : ['Paris', '파리'], "이탈리아" : ['Roma', '로마'], "스페인" : ['Madrid', '마드리드'],
         "미국" : ['Washington D.C.', '워싱턴 D.C.'], "이집트" : ['Cairo', '카이로']}
 

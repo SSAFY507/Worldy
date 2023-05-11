@@ -59,6 +59,14 @@ public class QuizService {
         Quiz quiz = quizRepo.findById(quizRecordInsertDto.getQuizId()).get();
         User user = userRepo.findById(quizRecordInsertDto.getUserId()).get();
 
+        int point = 0;
+
+        if(quiz.getLevel() == 3) point = 25;
+        else if(quiz.getLevel() == 2) point = 20;
+        else if(quiz.getLevel() == 1) point = 15;
+
+        user.updateExp(point);
+
         quizRecordRepo.save(quizRecordInsertDto.toEntity(user, quiz));
     }
 }
