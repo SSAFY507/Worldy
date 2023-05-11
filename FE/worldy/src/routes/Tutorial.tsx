@@ -18,6 +18,7 @@ import { useDispatch } from 'react-redux';
 import { addNickname, loginToken } from '../_store/slices/loginSlice';
 import { useSelector } from 'react-redux';
 import CustomAxios from '../API/CustomAxios';
+import axios from 'axios';
 
 type TutorialItemType = {
   imgsrc: string;
@@ -61,7 +62,7 @@ export default function Tutorial({
     if (isLoaded) {
       setTimeout(() => {
         setLoadedAll(true);
-        console.log(loadedImages);
+        //console.log(loadedImages);
       }, 300);
     }
   }, [isLoaded]);
@@ -72,8 +73,8 @@ export default function Tutorial({
   //   닉네임 입력창 관련/////////////////////////////////////
   const [nickName, setNickName] = useState<string>('');
 
-  // 가능한 닉네임인가?
-  const [nickNameState, setNickNameState] = useState<boolean | null>(null);
+  // 가능한 닉네임인가? true : 제출 가능 상태, false : 다시 입력해야하
+  const [noDupNickName, setNoDupNickName] = useState<boolean | null>(null);
 
   //닉네임값 업데이트
   const handleCheckNickName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,17 +82,20 @@ export default function Tutorial({
     setNickName(inputText);
   };
 
-  //닉네임 입력 버튼 관련 //////////////////////////////////////
-  const [nickNameCheckBtnState, setNickNameCheckBtnState] =
-    useState<boolean>(false);
+  //닉네임 입력 버튼 관련 true : 3~10자 채움 false : 길이 불가능
+  const [ableNickNameLength, setAbleNickNameLength] = useState<boolean>(false);
+
+  const [checkNicknameResult, setCheckNicknameResult] = useState(null);
+  const [submitkNicknameResult, setSubmitNicknameResult] = useState(null);
+  const token: string = useSelector(loginToken);
 
   //닉네임 길이가 3~10자일 때만 체크 가능ㄴ
   useEffect(() => {
-    setNickNameState(null);
+    setNoDupNickName(null);
     if (nickName.length >= 3 && nickName.length <= 10) {
-      setNickNameCheckBtnState(true);
+      setAbleNickNameLength(true);
     } else {
-      setNickNameCheckBtnState(false);
+      setAbleNickNameLength(false);
     }
   }, [nickName]);
 
@@ -102,30 +106,35 @@ export default function Tutorial({
   };
 
   //닉네임이 Sunday(중복X)이면 true, 중복이면 false
-  const checkNickName = async () => {
+  const checkNickNameDup = async () => {
     if (nickName.length >= 3 && nickName.length <= 8) {
       await checkNicknameAxios();
-      if (checkNicknameResult === false) setNickNameState(true);
-      else setNickNameState(false);
     }
   };
 
+  useEffect(() => {
+    if (checkNicknameResult === null) setNoDupNickName(null);
+    else if (checkNicknameResult === false) setNoDupNickName(true);
+    else setNoDupNickName(false);
+  }, [checkNicknameResult]);
+
   //닉네임이 미중복 확인 됐으니 다음으로 넘어가기(submit)
   const handleSubmitNickName = async () => {
-    console.log('넘어가기', targetIndex);
+    //console.log('넘어가기', targetIndex);
     setFinalNickname(); //redux에 닉네임 저장
     await submitNickNameAxios(); //서버에 닉네임 저장
-    console.log('submitNickNameAxios 결과', submitkNicknameResult);
+    //console.log('submitNickNameAxios 결과', submitkNicknameResult);
     setPopupText(false);
     setPopupItem(false);
     setTargetIndex(1);
   };
 
-  const [checkNicknameResult, setCheckNicknameResult] = useState(null);
-  const [submitkNicknameResult, setSubmitNicknameResult] = useState(null);
-  const token: string = useSelector(loginToken);
+  useEffect(() => {
+    //console.log('닉네임 중복 결과 ', checkNicknameResult);
+  }, [checkNicknameResult]);
 
   const checkNicknameAxios = async () => {
+    console.log('토큰', token);
     try {
       const response = await CustomAxios({
         APIName: 'checkNickName',
@@ -133,18 +142,20 @@ export default function Tutorial({
         UrlQuery: `https://k8a507.p.ssafy.io/api/user/check/${nickName}`,
         Token: token,
       });
-
+      //console.log('닉네임 중복 체크 성공');
       setCheckNicknameResult(response);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
+    //console.log('token이 무엇이냐 ', token);
   };
+
   const submitNickNameAxios = async () => {
     try {
       const response = await CustomAxios({
         APIName: 'submitNickName',
         APIType: 'put',
-        UrlQuery: `https://k8a507.p.ssafy.io/api/user/check/${nickName}`,
+        UrlQuery: `https://k8a507.p.ssafy.io/api/user/nickname/${nickName}`,
         Token: token,
       });
 
@@ -167,15 +178,15 @@ export default function Tutorial({
         <button
           className='h-[60px] w-[60px] rounded-[10px] flex justify-center items-center'
           style={
-            nickNameState
+            noDupNickName === true
               ? { backgroundColor: '#18C609' }
-              : nickNameCheckBtnState
+              : ableNickNameLength
               ? { backgroundColor: '#fed745' }
               : { backgroundColor: '#d9d9d9' }
           }
-          onClick={nickNameState ? handleSubmitNickName : checkNickName}
+          onClick={noDupNickName ? handleSubmitNickName : checkNickNameDup}
         >
-          {nickNameState ? ( //가능한 닉네임 확인되면 Next, 그 전까지는 Check
+          {noDupNickName ? ( //가능한 닉네임 확인되면 Next, 그 전까지는 Check
             /* next */
             <svg
               stroke='currentColor'
@@ -207,16 +218,16 @@ export default function Tutorial({
       <div
         className=' h-[40px] w-full py-[10px] pl-[20px] text-[20px] flex justify-start items-center font-PtdRegular'
         style={
-          nickNameState === null
+          noDupNickName === null
             ? undefined
-            : nickNameState
+            : noDupNickName
             ? { color: 'green' }
             : { color: 'red' }
         }
       >
-        {nickNameState === null
+        {noDupNickName === null
           ? ''
-          : nickNameState
+          : noDupNickName
           ? '사용 가능한 닉네임입니다.'
           : '이미 존재하는 닉네임입니다.'}
       </div>

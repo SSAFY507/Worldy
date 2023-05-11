@@ -16,7 +16,7 @@ export default function PersonalAccept({ closePA }: { closePA: () => void }) {
               [개인 정보 수집 및 이용 동의]
             </h1>
             <br />
-            <p>WORDLY SOFT는 다음과 같이 개인정보를 수집하고있습니다.</p>
+            <p>WORLDY SOFT는 다음과 같이 개인정보를 수집하고있습니다.</p>
             <br />
             <p>
               수집 및 이용 목적 : 문의 대응, 이용자 식별
