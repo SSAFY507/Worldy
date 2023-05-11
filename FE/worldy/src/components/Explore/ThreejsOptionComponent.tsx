@@ -79,14 +79,22 @@ export const CreateTextGeometry = (text: string, x:number, y:number, z:number, n
 
 /** 조명 커스텀 함수 return => light */
 export const SetupLight = (color:THREE.ColorRepresentation, intensity:number, position:THREE.Vector3, targetPosition:THREE.Vector3) => {
-  const hemiLight = new THREE.HemisphereLight( 0xffffff, 0xffffff, 0.61 );
-  hemiLight.position.set( 0, 50, 0 );
   
   const light = new THREE.DirectionalLight(color, intensity);
 
   light.position.copy(position);
   light.target.position.copy(targetPosition);
+  light.shadow.camera.top = light.shadow.camera.right = 6;
+  light.shadow.camera.bottom = light.shadow.camera.left = -6;
 
+  // 그림자 품질향상
+  light.shadow.mapSize.width = light.shadow.mapSize.height = 2048;
+
+  // 그림자의 외곽을 블러링
+  light.shadow.radius = 3;
+
+  // 그림자 여부
+  light.castShadow = true;
   return light
 };
 
