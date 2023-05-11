@@ -7,8 +7,38 @@ import LoaderPyramid from '../components/Loaders/LoaderPyramid';
 //import Test from '../components/game/Test';
 
 import { useParams } from 'react-router';
+import { useNavigate } from 'react-router';
+import Swal from 'sweetalert2'
+import LoginModal from '../components/LoginModal';
 
 export default function Game() {
+  
+  // 로그인 확인
+  const token = sessionStorage.getItem('token');
+  const navigate = useNavigate();
+
+  const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
+  const closeLoginModal = () => {
+    setShowLoginModal(false);
+  };
+
+  const handleFirstLogin = (firstLogin: boolean) => {
+    
+    // if (firstLogin) {
+    //   sessionStorage.setItem('gameId', `${gameId}`);
+    //   navigate('/tutorial');
+    // } else {
+    //   navigate(`/game/${gameId}`);
+    // }
+    // closeLoginModal();
+  }
+   
+  useEffect(() => {
+    if(!token) {
+      setShowLoginModal(true);
+    }
+  }, [])
+  
   const params = useParams();
   const gameId = params.id;
 
@@ -18,6 +48,13 @@ export default function Game() {
   }, 1000);
   return (
     <div className='w-screen h-screen'>
+      {showLoginModal && (
+          <LoginModal
+            onClose={closeLoginModal}
+            onClickKakaoLogin={handleFirstLogin}
+          />
+      )}
+
       {loaded ? (
         <Main />
       ) : (
@@ -25,6 +62,7 @@ export default function Game() {
           <LoaderPyramid text='3D 급하게 조립 중...' />
         </div>
       )}
+      
     </div>
   );
 }

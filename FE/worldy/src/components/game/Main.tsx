@@ -33,13 +33,6 @@ let ws : any;
 
 export default function Main() {
 
-  // 로그인 확인
-  const token = sessionStorage.getItem('token');
-
-  if(!token) {
-    
-  }
-
   let roomData: any = null;
   const params = useParams();
   const location = useLocation();
@@ -48,7 +41,40 @@ export default function Main() {
   let received : any;
 
 
-  roomData = location.state.value;
+  roomData = {
+    "user1": {
+      "kakaoId": "2757389101",
+      "roomId": "waiting-2757389101",
+      "mmr": 1587,
+      "level": 0,
+      "startWaitingTime": "2023-05-03 17:08:28:28"
+    },
+    "user2": {
+      "kakaoId": "2756798359",
+      "roomId": "waiting-2756798359",
+      "mmr": 1314,
+      "level": 0,
+      "startWaitingTime": "2023-05-03 17:08:30:79"
+    },
+    "user3": {
+      "kakaoId": "2762535269",
+      "roomId": "waiting-2762535269",
+      "mmr": 1185,
+      "level": 0,
+      "startWaitingTime": "2023-05-03 17:08:34:43"
+    },
+    "user4": {
+      "kakaoId": "2772224261",
+      "roomId": "waiting-2772224261",
+      "mmr": 1464,
+      "level": 0,
+      "startWaitingTime": "2023-05-03 17:08:39:66"
+    },
+    "gameRoom": {
+      "roomId": "82f2141c-f63f-4f53-bf3d-c20b3ef9adda"
+    }
+  }
+  //roomData = location.state.value;
 
   const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzU3Mzg5MTAxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4Mzk0OTY2N30.zZsk4JnHTobz2XFd6KlNubhXgh7VHpW3xagW1R2oZko0zkAI4-UM0tzLUnPKUAPn7HvKC6ObLaz8n4KcRNbUDQ'
   let headers = { Authorization: `Bearer ${accessToken}` };

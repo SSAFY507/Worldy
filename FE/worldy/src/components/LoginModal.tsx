@@ -46,6 +46,8 @@ export default function LoginModal({
   const clickKakaoLogin = () => {
     //게임 시작 눌렀을 때 처음 로그인이면 튜토리얼로, 아니면 메인페이지로
     onClickKakaoLogin(firstLogin);
+
+    
   };
 
   ////////////////////카카오 로그인 버튼 관련

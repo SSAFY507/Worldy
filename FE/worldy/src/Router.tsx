@@ -48,7 +48,6 @@ const AppLayout = () => {
   const closeLoginModal = () => {
     setShowLoginModal(false);
   };
-
   // useEffect(() => {
   //   if (login) setImageBackgroundImage(new Image());
   // }, [login]);
@@ -68,8 +67,20 @@ const AppLayout = () => {
     closeLoginModal();
   };
 
+  // const endTutorial = () => {
+  //   navigate('/');
+  // };
+ 
   const endTutorial = () => {
-    navigate('/');
+
+    const gameId = sessionStorage.getItem('gameId');
+    
+    // 헤더 확인해서 roomId 있으면 
+    if(gameId) {
+      navigate(`/game/${gameId}`);
+    } else {
+      navigate('/');
+    }
   };
 
   const exploreUrl = location.pathname.substr(0, 8);
