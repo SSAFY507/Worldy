@@ -133,7 +133,7 @@ export default function Tutorial({
   }, [checkNicknameResult]);
 
   const checkNicknameAxios = async () => {
-    console.log('토큰', getLoginToken);
+    console.log('Session에서의 가져오는 토큰', getLoginToken);
     try {
       const response = await CustomAxios({
         APIName: 'checkNickName',

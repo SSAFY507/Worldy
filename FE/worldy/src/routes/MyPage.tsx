@@ -194,10 +194,10 @@ export default function MyPage({
           {input.icon}
         </span>
         <span
-          className={`w-full ml-[.5em] text-[1.2em] text-white font-PtdMedium flex flex-row justify-between items-center`}
+          className={`w-full ml-[.5em] text-[1.2em] text-white font-PtdMedium flex flex-row justify-start items-center`}
         >
           {input.title}
-          {input.move && <FiArrowUpRight className='mr-[1em]' />}
+          {input.move && <FiArrowUpRight className='ml-[1em]' />}
         </span>
       </button>
     );

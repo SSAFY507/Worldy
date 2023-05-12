@@ -128,7 +128,7 @@ export default function SupportModal({
   }, [things]);
 
   const submitHelpAxios = async () => {
-    console.log('토큰 : ', token);
+    console.log('커스터엄 토큰 : ', token);
     try {
       const requestBody = new Map([
         ['category', askTypeList[askType].name],
@@ -174,7 +174,7 @@ export default function SupportModal({
   }
 
   const submitHelp = () => {
-    submitHelpAxiosBasic();
+    submitHelpAxios().then(handleCloseModal);
     // submitHelpAxios();
   };
 

@@ -85,8 +85,10 @@ const AppLayout = () => {
 
   useEffect(() => {
     if (checkLoginState && (checkNickname === '' || checkNickname === null))
+      //로그인돼있는데 닉네임 없으면 tutorial
       navigate('/tutorial');
-  }, []);
+    else if (!checkLoginState) navigate('/'); //로그인 안돼있으면 홈으로
+  }, [location]);
 
   type PayResultStringType = {
     result: string;
