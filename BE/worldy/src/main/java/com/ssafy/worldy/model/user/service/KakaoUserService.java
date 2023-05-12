@@ -55,7 +55,7 @@ public class KakaoUserService {
         // 3. 로그인 JWT 토큰 발행
         TokenDto tokenDto = createToken(user);
 
-        return new KakaoLoginDto(tokenDto, user.getKakaoId(), user.getProfileImg());
+        return new KakaoLoginDto(tokenDto, user.getKakaoId(), user.getProfileImg(), user.getNickName());
     }
 
     // access, refresh 토큰 발급 및 저장
