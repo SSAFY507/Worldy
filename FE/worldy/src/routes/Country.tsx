@@ -16,11 +16,10 @@ const Country = () => {
   const GetSelectAssetName = ((name:string) => {
     setSelectAsset(name);
   });
-
   return (
     <div className='relative'>
       <div className='z-20 absolute top-0 left-0 w-full h-20'>
-        <WorldMapNavbarComponent />
+        <WorldMapNavbarComponent GetSelectAssetName={GetSelectAssetName} selectAsset={selectAsset} />
       </div>
       {(selectAsset)
         ?
