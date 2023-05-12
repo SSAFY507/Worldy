@@ -49,11 +49,9 @@ const Card = props => (
 );
 
 const Carousel = ({ children }) => {
-  const [active, setActive] = useState(1);
-  // const count = React.Children.count(children);
   const count = children.length;
+  const [active, setActive] = useState(Math.floor(count / 2));
 
-  console.log(children)
   return (
     <div className="carousel">
       {active > 0 && (
@@ -62,6 +60,7 @@ const Carousel = ({ children }) => {
       {/* <ArrowBackIosNewIcon className="nav left" style={{ width: "3rem" }} onClick={() => setActive(i => (i + count - 1) % count)}/> */}
       {children.map((child, i) => (
         <div
+          key={i}
           className="card-container"
           style={{
             "--active": i === active ? 1 : 0,
@@ -92,6 +91,7 @@ const CountryNewsDetail = props => {
         {props.data.map((item, idx) => {
           return (
             <Card
+              key={idx}
               title={item.title.length <= 15 ? item.title : item.title.substr(0, 15) + "..."}
               content={
                 item.summary

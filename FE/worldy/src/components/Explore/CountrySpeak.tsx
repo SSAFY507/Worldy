@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
 import { CSSTransition } from 'react-transition-group';
 import CountryNewsDetail from './CountryNewsDetail';
+import { CountryType } from '../../components/Explore/WorldMap';
 import CrAnswer from '../../assets/images/CorrectAnswer.png';
 import WrAnswer from '../../assets/images/WrongAnswer.png';
 import book from '../../assets/images/bookIcon.png'
@@ -18,26 +19,6 @@ import pathTQT from '../../assets/images/TutorialQuizText.png';
 import { useDispatch } from 'react-redux';
 import useLoadImagesHook from '../../_hooks/useLoadImagesHook';
 
-// import LoaderPyramid from '../LoaderPyramid';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-  1. click하면 text index + 1
-  2. text index가 끝까지 가면 GetSelectAssetName("")
-*/
-
 interface TutorialItemType {
   imgsrc: string;
   contentText?: string;
@@ -47,10 +28,26 @@ interface TutorialItemType {
 };
 
 interface Props {
+  selectAsset: string;
+  countryName: string;
   GetSelectAssetName: (name:string) => void;
 };
 
-const CountrySpeak  = ({GetSelectAssetName}:Props) => {
+const countryLst: CountryType = {
+  asia_Korea: '대한민국',
+  asia_China: '중국',
+  asia_India: '인도',
+  asia_Japen: '일본',
+  africa_Egypt: '이집트',
+  europe_France: '프랑스',
+  europe_Italia: '이탈리아',
+  europe_Spain: '스페인',
+  europe_UK: '영국',
+  northAmerica_America: '미국',
+};
+
+
+const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
 //   ///////////////////////////////
   const myImageList = {
     TutorialBackground: pathTB,
@@ -64,54 +61,49 @@ const CountrySpeak  = ({GetSelectAssetName}:Props) => {
     CorrectAnswer: CrAnswer,
   };
 
-  const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
-  const [loadedAll, setLoadedAll] = useState<boolean>(false);
+  // const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
+  // const [loadedAll, setLoadedAll] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (isLoaded) {
-      setTimeout(() => {
-        setLoadedAll(true);
-        console.log(loadedImages);
-      }, 300);
-    }
-  }, [isLoaded]);
-
-  //////////////////////////////
-  const npcName = '설희';
-
-  /////////////////////////////////////////////////
+  // useEffect(() => {
+  //   if (isLoaded) {
+  //     setTimeout(() => {
+  //       setLoadedAll(true);
+  //       console.log(loadedImages);
+  //     }, 300);
+  //   }
+  // }, [isLoaded]);
 
   const TutorialItemList: TutorialItemType[] = [
     {
-      imgsrc: loadedImages['BtgAttention'],
+      imgsrc: myImageList['BtgAttention'],
       contentText:
         '안녕, 내 이름은 설희야. 책 읽는 걸 매우 좋아해! 책을 읽다 보면 내가 경험해보지 못한 세상이 참 넓은 것 같아. 아차! 내 정신 좀 봐, ',
       contentCoreText: '넌 이름이 뭐야?',
       // contentItem: eneterNickNameContentItem,
     },
     {
-      imgsrc: loadedImages['BtgCurious'],
+      imgsrc: myImageList['BtgCurious'],
       contentText: `역사는 역사다`,
       contentCoreText: '혹시 평소에 관심있는 분야가 있니?',
       // contentItem: selectInterests,
     },
     {
-      imgsrc: loadedImages['BtgHandup'],
+      imgsrc: myImageList['BtgHandup'],
       contentText: `오! 안녕안녕`,
       // contentItem: takeQuiz,
     },
     {
-      imgsrc: loadedImages['BtgPointing'],
+      imgsrc: myImageList['BtgPointing'],
       contentText:
         '이런, 아직은 자신있는 분야가 없구나? 그렇다면 내가 랜덤한 분야의 퀴즈를 내볼게, 한 번 맞춰볼래? 너무 어렵진 않을 거야!',
       // contentItem: mustTakeQuiz,
     },
     {
-      imgsrc: loadedImages['BtgTeach'],
+      imgsrc: myImageList['BtgTeach'],
       // contentItem: showQuiz,
     },
     {
-      imgsrc: loadedImages['BtgCurious'],
+      imgsrc: myImageList['BtgCurious'],
       contentText:
         '좋아! 잘 했어. 방금 푼 퀴즈들은 앞으로 우리가  만나게 될 WORLDY 세상의 맛보기일 뿐이야. 이제 준비가 된 것 같은데, 어때? 바로 출발할까?',
       // contentItem: readyToGo,
@@ -120,10 +112,8 @@ const CountrySpeak  = ({GetSelectAssetName}:Props) => {
 
   const [targetIndex, setTargetIndex] = useState<number>(0);
 
-  const [popupName, setPopupName] = useState<boolean>(false);
-  const [popupText, setPopupText] = useState<boolean>(false);
-  const [popupItem, setPopupItem] = useState<boolean>(false);
-
+  console.log(11111111111111111111111111111111111111111111)
+  
   // useEffect(() => {
   //   if (loadedAll) {
   //     setTimeout(() => {
@@ -136,24 +126,31 @@ const CountrySpeak  = ({GetSelectAssetName}:Props) => {
   //   }
   // }, [loadedAll]);
 
-  useEffect(() => {
-    if (targetIndex !== 0) {
-      setPopupText(false);
-      setPopupItem(false);
-      if (targetIndex === 4) {
-        setTimeout(() => {
-          setPopupItem(true);
-        }, 200);
-      } else {
-        setTimeout(() => {
-          setPopupText(true);
-        }, 500);
-        setTimeout(() => {
-          setPopupItem(true);
-        }, 1500);
-      }
+  // useEffect(() => {
+  //   if (targetIndex !== 0) {
+  //     setPopupText(false);
+  //     setPopupItem(false);
+  //     if (targetIndex === 4) {
+  //       setTimeout(() => {
+  //         setPopupItem(true);
+  //       }, 200);
+  //     } else {
+  //       setTimeout(() => {
+  //         setPopupText(true);
+  //       }, 500);
+  //       setTimeout(() => {
+  //         setPopupItem(true);
+  //       }, 1500);
+  //     }
+  //   }
+  // }, [targetIndex]);
+  const ment = {
+    history: {
+      title: `${countryName} 최신 뉴스`,
+      subTitle: `${countryLst[countryName]} `
+
     }
-  }, [targetIndex]);
+  }
 
   const data = [
     {
