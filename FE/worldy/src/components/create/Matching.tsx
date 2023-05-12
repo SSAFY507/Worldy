@@ -4,35 +4,39 @@ import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import { useEffect, useState } from 'react'
 
+
+let socket: any;
+let ws: any;
+
 export default function Matching(props: any) {
 
   const matchingId = props.matchingId;
   let roomId = '기본';
-  const socket = new SockJS('https://k8a507.p.ssafy.io/api/stomp/game');
-  const ws = Stomp.over(socket);
-  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzY0NzMxODk0IiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4Mzk4MzE0NX0.oGiiDwRqKnuiWMH6YkbWtYLFr9MMXF3hE8DhLRWOgYp8UHg5C6_q9idAid6FCS2Uimr9QOR_Bt-sVxHtGVzqKQ'
+  const accessToken = sessionStorage.getItem('token');
   let headers = { Authorization: `Bearer ${accessToken}` };
   const navigate = useNavigate();
 
+  useEffect(() => {
+    socket = new SockJS('https://k8a507.p.ssafy.io/api/stomp/game');
+    ws = Stomp.over(socket);
+    ws.connect(headers, (frame: any) => {
+      console.log("소켓연결", frame);
+      subscribe();
+    });
 
-  ws.connect(headers, (frame: any) => {
-    console.log("connected to Chat server:", frame);
-    subscribe();
-  });
+  }, [])
+
+
+
 
 
   function subscribe() {
 
 
-    ws.subscribe(`/sub/${matchingId}`, (event) => {
+    ws.subscribe(`/sub/${matchingId}`, (event: any) => {
       const received = JSON.parse(event.body);
       console.log('응답받은 데이터 >>>>>');
       console.log(received);
-      console.log('룸 아이디: ');
-      // console.log(received.gameRoom.roomId);
-      //roomId = received.gameRoom.roomId;
-
-      //console.log(roomId);
       roomId = '2386a4ee-355f-4f1d-9b77-118b2cbf99f9'
 
 

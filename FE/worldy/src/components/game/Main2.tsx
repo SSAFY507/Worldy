@@ -8,6 +8,9 @@ import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import { useLocation } from "react-router-dom";
 
+// 소켓 연결
+let socket;
+let ws: any;
 
 export default function Main2() {
 
@@ -19,15 +22,15 @@ export default function Main2() {
 
   roomData = location.state.value;
 
-  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzU3Mzg5MTAxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4Mzc3NTAxMX0.FGXDtMPT4TZdwoUDUc98lZNlYI7d4MK2YYu63b7nvQiJdzY2zItjIgmOAsM5_Y4hKIPv2eU5o9gOwdbgyRc8uQ  '
+  const accessToken = sessionStorage.getItem('token');
   let headers = { Authorization: `Bearer ${accessToken}` };
-  let receivedData: any = null;
+  console.log('방 번호')
+  console.log(params.id)
 
-  // 소켓 연결
-  const socket = new SockJS('https://k8a507.p.ssafy.io/api/stomp/game');
-  const ws = Stomp.over(socket);
 
   useEffect(() => {
+    socket = new SockJS('https://k8a507.p.ssafy.io/api/stomp/game');
+    ws = Stomp.over(socket);
     ws.connect(headers, (frame: any) => {
       console.log('소켓 연결')
       subscribe();
@@ -38,8 +41,83 @@ export default function Main2() {
 
   function subscribe() {
 
-    ws.subscribe(`/sub/${params.id}`, (event) => {
+    ws.subscribe(`/sub/${params.id}`, (event: any) => {
       const received = JSON.parse(event.body);
+      console.log('sendData한 후 응답>>>')
+      console.log(received);
+      if (received.type === 'player') {
+        setPlayer((prevState: any) => ({
+          ...prevState,
+          p1: {
+            ...prevState.p1,
+            game: {
+              ...prevState.p1.game,
+              location: received.p1.game.location,
+              balance: received.p1.game.balance,
+              desert: received.p1.game.desert,
+              state: received.p1.game.state,
+              dice1: received.p1.game.dice1,
+              dice2: received.p1.game.dice2,
+              dice: received.p1.game.dice,
+              isDouble: received.p1.game.isDouble,
+              own: received.p1.game.own,
+              lap: received.p1.game.lap,
+              ranking: received.p1.game.ranking,
+            }
+          },
+          p2: {
+            ...prevState.p2,
+            game: {
+              ...prevState.p2.game,
+              location: received.p2.game.location,
+              balance: received.p2.game.balance,
+              desert: received.p2.game.desert,
+              state: received.p2.game.state,
+              dice1: received.p2.game.dice1,
+              dice2: received.p2.game.dice2,
+              dice: received.p2.game.dice,
+              isDouble: received.p2.game.isDouble,
+              own: received.p2.game.own,
+              lap: received.p2.game.lap,
+              ranking: received.p2.game.ranking,
+            }
+          },
+          p3: {
+            ...prevState.p3,
+            game: {
+              ...prevState.p3.game,
+              location: received.p3.game.location,
+              balance: received.p3.game.balance,
+              desert: received.p3.game.desert,
+              state: received.p3.game.state,
+              dice1: received.p3.game.dice1,
+              dice2: received.p3.game.dice2,
+              dice: received.p3.game.dice,
+              isDouble: received.p3.game.isDouble,
+              own: received.p3.game.own,
+              lap: received.p3.game.lap,
+              ranking: received.p3.game.ranking,
+            }
+          },
+          p4: {
+            ...prevState.p4,
+            game: {
+              ...prevState.p4.game,
+              location: received.p4.game.location,
+              balance: received.p4.game.balance,
+              desert: received.p4.game.desert,
+              state: received.p4.game.state,
+              dice1: received.p4.game.dice1,
+              dice2: received.p4.game.dice2,
+              dice: received.p4.game.dice,
+              isDouble: received.p4.game.isDouble,
+              own: received.p4.game.own,
+              lap: received.p4.game.lap,
+              ranking: received.p4.game.ranking,
+            }
+          },
+        }))
+      }
 
 
 
@@ -47,9 +125,24 @@ export default function Main2() {
   }
 
 
+
+
+
+  function sendData() {
+    //websockt emit
+    const data = player;
+    console.log('보낼 데이터 >>')
+    console.log(data)
+
+    console.log('소켓으로 데이터 전송 >>>')
+    ws.send("/pub/game/player", {}, JSON.stringify(data));
+  }
+
+
   // 참여한 플레이어 데이터 세팅하기
   function setGameData() {
-
+    console.log('최초 방 정보 세팅할 떄')
+    console.log(params.id)
     let _p1 = roomData.user1;
     let _p2 = roomData.user2;
     let _p3 = roomData.user3;
@@ -67,6 +160,8 @@ export default function Main2() {
 
     setPlayer((prevState: any) => ({
       ...prevState,
+      roomId: params.id,
+      type: 'player',
       p1: {
         ...prevState.p1,
         playerId: _p1.kakaoId,
@@ -1114,7 +1209,9 @@ export default function Main2() {
     },
   ])
 
-
+  // useEffect(() => {
+  //   sendData();
+  // }, [player])
 
 
   return (<>
@@ -1139,7 +1236,7 @@ export default function Main2() {
         >게임 시작하기</div>
       </div>}
       {start && <div>
-        {mode && <Game2D loginUser={loginUser} metaData={metaData} setMetaData={setMetaData} player={player} setPlayer={setPlayer} worldMap={worldMap} setWorldMap={setWorldMap}></Game2D>}
+        {mode && <Game2D sendData={sendData} loginUser={loginUser} metaData={metaData} setMetaData={setMetaData} player={player} setPlayer={setPlayer} worldMap={worldMap} setWorldMap={setWorldMap}></Game2D>}
         {!mode && <Game3D worldMap={worldMap} setWorldMap={setWorldMap}></Game3D>}
       </div>}
 

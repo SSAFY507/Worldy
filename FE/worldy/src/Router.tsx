@@ -7,11 +7,9 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
 
 import Country from './routes/Country';
 import Explore from './routes/Explore';
-import Game from './routes/Game';
 import GameInfo from './routes/GameInfo';
 import IntroPage from './routes/IntroPage';
 import LoginModal from './components/LoginModal';
@@ -19,19 +17,15 @@ import MainPageAfterLogin from './routes/MainPageAfterLogin';
 import Monopoly from './routes/Monopoly';
 import MyPage from './routes/MyPage';
 import Navbar from './components/Nvabar';
-import Payment from './routes/Payment';
-import Socket from './routes/Socket';
 import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
 import Updates from './routes/Updates';
-import pathBI from './assets/images/MainPageBackground.png';
 import { useState, useRef, useEffect } from 'react';
 import Game from './routes/Game';
 import Socket from './routes/Socket';
 import Payment from './routes/Payment';
 import Create from './routes/Create';
 import PaySuccess from './routes/PayResult';
-
 import { loginState } from './_store/slices/loginSlice';
 import pathBI from './assets/images/MainPageBackground.png';
 import { useSelector } from 'react-redux';

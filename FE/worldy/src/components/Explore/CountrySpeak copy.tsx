@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
 import { CSSTransition } from 'react-transition-group';
 import CrAnswer from '../../assets/images/CorrectAnswer.png';
-import LoaderPyramid from '../LoaderPyramid';
+import LoaderPyramid from '../Loaders/LoaderPyramid';
 import WrAnswer from '../../assets/images/WrongAnswer.png';
 import pathBA from '../../assets/images/BtgAttention.png';
 import pathBC from '../../assets/images/BtgCurious.png';
@@ -30,11 +30,11 @@ interface TutorialItemType {
 };
 
 interface Props {
-  GetSelectAssetName: (name:string) => void;
+  GetSelectAssetName: (name: string) => void;
 };
 
-const CountrySpeak  = ({GetSelectAssetName}:Props) => {
-//   ///////////////////////////////
+const CountrySpeak = ({ GetSelectAssetName }: Props) => {
+  //   ///////////////////////////////
   const myImageList = {
     TutorialBackground: pathTB,
     BtgAttention: pathBA,
@@ -182,7 +182,7 @@ const CountrySpeak  = ({GetSelectAssetName}:Props) => {
                   classNames='CSSTransition-Tutorial-Popup'
                   unmountOnExit
                 > */}
-                  {/* <div className='w-full h-full  outline-red-400'>
+                {/* <div className='w-full h-full  outline-red-400'>
                     {TutorialItemList[targetIndex].contentItem}
                   </div> */}
                 {/* </CSSTransition> */}

@@ -11,8 +11,7 @@ export default function CreateGame(props: any) {
   const setMatchingId = props.setMatchingId
   const setMode = props.setMode;
   const setRoomId = props.setRoomId;
-
-  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzU3Mzg5MTAxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4Mzc3NTAxMX0.FGXDtMPT4TZdwoUDUc98lZNlYI7d4MK2YYu63b7nvQiJdzY2zItjIgmOAsM5_Y4hKIPv2eU5o9gOwdbgyRc8uQ  '
+  let accessToken = sessionStorage.getItem('token');
 
   return (<>
     <div className='w-full h-full bg-white flex flex-col justify-center items-center'>

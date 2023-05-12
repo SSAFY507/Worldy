@@ -15,7 +15,7 @@ export default function Game2D(props: any) {
 
 
 
-
+  const sendData = props.sendData
 
   const player = props.player;
   const setPlayer = props.setPlayer;
@@ -30,7 +30,9 @@ export default function Game2D(props: any) {
   const [myTurn, setMyTurn] = useState<boolean>(false);
   const [mode, setMode] = useState<number>(0);
   const [buyOption, setBuyOption] = useState<number>(0);
+  const [buildOption, setBuildOption] = useState<number>(0);
   const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [buildPrice, setBuildPrice] = useState<number>(0);
 
 
   let pList: Player[] = [];
@@ -102,6 +104,20 @@ export default function Game2D(props: any) {
     }
   }, [buyOption])
 
+
+  // 빌드 옵션이 바뀔 때, 총 빌드 가격 변경
+  useEffect(() => {
+
+    const spot = worldMap[metaData.currentLocation]
+
+    if (buildOption === 0) {
+      setBuildPrice(spot.price.villa);
+    } else if (buyOption === 1) {
+      setBuildPrice(spot.price.hotel);
+    } else if (buyOption === 2) {
+      setBuildPrice(spot.price.landmark);
+    }
+  }, [buildOption])
 
 
   // 주사위 던지는 함수
@@ -193,7 +209,9 @@ export default function Game2D(props: any) {
 
     // 구매 옵션 초기화
     setBuyOption(0);
+    setBuildOption(0);
     setTotalPrice(worldMap[newLocation].price.land);
+    setBuildPrice(worldMap[newLocation].price.villa);
     console.log('setPlayer 실행')
     // 이동 데이터 세팅
     if (turn === 0) {
@@ -340,7 +358,82 @@ export default function Game2D(props: any) {
   // 구매하기
   function buy(turn: number, spot: Spot, buyOption: number) {
 
+    // 잔액이 있는지 확인
+    if (turn === 0) {
+      if ((player.p1.game.balance - totalPrice) < 0) {
+        alert('잔액이 부족합니다.')
+        return
+      }
+    } else if (turn === 1) {
+      if ((player.p2.game.balance - totalPrice) < 0) {
+        alert('잔액이 부족합니다.')
+        return
+      }
+    } else if (turn === 2) {
+      if ((player.p3.game.balance - totalPrice) < 0) {
+        alert('잔액이 부족합니다.')
+        return
+      }
+    } else if (turn === 3) {
+      if ((player.p4.game.balance - totalPrice) < 0) {
+        alert('잔액이 부족합니다.')
+        return
+      }
+    }
 
+    // 금액 결제 및 구매 국가 리스트에 추가
+    if (turn === 0) {
+
+      setPlayer((prevState: any) => ({
+        ...prevState,
+        p1: {
+          ...prevState.p1,
+          game: {
+            ...prevState.p1.game,
+            balance: prevState.p1.game.balance - totalPrice,
+            own: [...prevState.p1.game.own, spot.location],
+          }
+        }
+      }))
+    } else if (turn === 1) {
+      setPlayer((prevState: any) => ({
+        ...prevState,
+        p2: {
+          ...prevState.p2,
+          game: {
+            ...prevState.p2.game,
+            balance: prevState.p2.game.balance - totalPrice,
+            own: [...prevState.p2.game.own, spot.location],
+          }
+        }
+      }))
+    } else if (turn === 2) {
+      setPlayer((prevState: any) => ({
+        ...prevState,
+        p3: {
+          ...prevState.p3,
+          game: {
+            ...prevState.p3.game,
+            balance: prevState.p3.game.balance - totalPrice,
+            own: [...prevState.p3.game.own, spot.location],
+          }
+        }
+      }))
+    } else if (turn === 3) {
+      setPlayer((prevState: any) => ({
+        ...prevState,
+        p4: {
+          ...prevState.p4,
+          game: {
+            ...prevState.p4.game,
+            balance: prevState.p4.game.balance - totalPrice,
+            own: [...prevState.p4.game.own, spot.location],
+          }
+        }
+      }))
+    }
+
+    // 각 지역에 소유주 추가
     if (buyOption === 0) {
       setWorldMap((prevState: any) =>
         prevState.map((item: any, key: number) =>
@@ -408,16 +501,52 @@ export default function Game2D(props: any) {
     }
 
 
-    // 금액 결제 및 구매 국가 리스트에 추가
+    // 구매완료 페이지로 UI 변경
+    setMode(7)
+
+  }
+
+  // 건설하기
+  function build(turn: number, spot: Spot, buildOption: number) {
+
+    console.log('build() iniit >>>>')
+    console.log('buildOption : ')
+    console.log(buildOption)
+    console.log('buildPrice : ')
+    console.log(buildPrice)
+    // 잔액이 있는지 확인
     if (turn === 0) {
+      if ((player.p1.game.balance - buildPrice) < 0) {
+        alert('잔액이 부족합니다.')
+        return
+      }
+    } else if (turn === 1) {
+      if ((player.p2.game.balance - buildPrice) < 0) {
+        alert('잔액이 부족합니다.')
+        return
+      }
+    } else if (turn === 2) {
+      if ((player.p3.game.balance - buildPrice) < 0) {
+        alert('잔액이 부족합니다.')
+        return
+      }
+    } else if (turn === 3) {
+      if ((player.p4.game.balance - buildPrice) < 0) {
+        alert('잔액이 부족합니다.')
+        return
+      }
+    }
+
+    // 금액 결제 및 구매
+    if (turn === 0) {
+
       setPlayer((prevState: any) => ({
         ...prevState,
         p1: {
           ...prevState.p1,
           game: {
             ...prevState.p1.game,
-            balance: prevState.p1.game.balance - totalPrice,
-            own: [...prevState.p1.game.own, spot.location],
+            balance: prevState.p1.game.balance - buildPrice,
           }
         }
       }))
@@ -428,8 +557,7 @@ export default function Game2D(props: any) {
           ...prevState.p2,
           game: {
             ...prevState.p2.game,
-            balance: prevState.p2.game.balance - totalPrice,
-            own: [...prevState.p2.game.own, spot.location],
+            balance: prevState.p2.game.balance - buildPrice,
           }
         }
       }))
@@ -440,8 +568,7 @@ export default function Game2D(props: any) {
           ...prevState.p3,
           game: {
             ...prevState.p3.game,
-            balance: prevState.p3.game.balance - totalPrice,
-            own: [...prevState.p3.game.own, spot.location],
+            balance: prevState.p3.game.balance - buildPrice,
           }
         }
       }))
@@ -452,14 +579,65 @@ export default function Game2D(props: any) {
           ...prevState.p4,
           game: {
             ...prevState.p4.game,
-            balance: prevState.p4.game.balance - totalPrice,
-            own: [...prevState.p4.game.own, spot.location],
+            balance: prevState.p4.game.balance - buildPrice,
           }
         }
       }))
     }
 
+    // 지역에 건물 추가
+    if (buildOption === 0) {
+      setWorldMap((prevState: any) =>
+        prevState.map((item: any, key: number) =>
+          key === spot.location ? {
+            ...item,
+            build: {
+              land: item.build.land,
+              villa: true,
+              hotel: item.build.hotel,
+              landmark: item.build.landmark,
+            }
+          } : item
+        )
+      );
+
+    } else if (buildOption === 1) {
+      setWorldMap((prevState: any) =>
+        prevState.map((item: any, key: number) =>
+          key === spot.location ? {
+            ...item,
+            build: {
+              land: item.build.land,
+              villa: item.build.villa,
+              hotel: true,
+              landmark: item.build.landmark,
+            }
+          } : item
+        )
+      );
+
+    } else if (buildOption === 2) {
+      setWorldMap((prevState: any) =>
+        prevState.map((item: any, key: number) =>
+          key === spot.location ? {
+            ...item,
+            build: {
+              land: item.build.land,
+              villa: item.build.villa,
+              hotel: item.build.hotel,
+              landmark: true,
+            }
+          } : item
+        )
+      );
+
+    }
+
+    // 구매완료 페이지로 UI 변경
+    setMode(7)
+
   }
+
 
 
 
@@ -482,7 +660,7 @@ export default function Game2D(props: any) {
           {pList.map((i, index) => {
             return <div key={index}>
               {i.playerNum === (metaData.turn + 1) &&
-              <div className={`w-[80px] h-[30px] bg-blue-400 relative left-[-6px] top-[0px] z-[100] text-white text-[12px] border-[10px] border-solid border-blue-400 rounded-[2px] flex justify-center items-center`}>Player {i.playerNum} 턴</div>
+                <div className={`w-[80px] h-[30px] bg-blue-400 relative left-[-6px] top-[0px] z-[100] text-white text-[12px] border-[10px] border-solid border-blue-400 rounded-[2px] flex justify-center items-center`}>Player {i.playerNum} 턴</div>
               }
               <div className={`w-[300px] h-[260px] bg-[#F4F2EC] rounded-[8px] flex flex-col justify-center items-center ${(metaData.turn + 1) === i.playerNum ? 'outline outline-[6px] outline-blue-400' : ''}`}>
                 <div className='w-[250px] h-[210px] bg-[#F4F2EC]'>
@@ -786,6 +964,9 @@ export default function Game2D(props: any) {
                   ...prevState,
                   turnOver: true,
                 }))
+                setMode(0);
+                console.log('socket 센드 데이터');
+                sendData();
               }}
             >턴 종료</div>
 
@@ -796,7 +977,7 @@ export default function Game2D(props: any) {
                 {/*  */}
                 <div className='w-full h-[80px] flex flex-col items-center'>
                   <div className=''>
-                    [{worldMap[metaData.currentLocation].location}][{worldMap[metaData.currentLocation].type}]
+                    [{worldMap[metaData.currentLocation].location}][{worldMap[metaData.currentLocation].continent ? worldMap[metaData.currentLocation].continent : '특수지역'}]
                   </div>
                   <div className='w-full h-[80px] flex items-center justify-center border-0 border-b-[1px] border-solid border-gray-400'>
                     <img src={`/game/f${metaData.currentLocation}.png`} alt='이미지' className='w-[50px] h-[32px] rounded-[4px] object-cover absolute left-[30px]'></img>
@@ -824,7 +1005,7 @@ export default function Game2D(props: any) {
                     }
                   </div>
                 </div>
-                <div className='w-full h-[220px] mt-[6px] bg-gray-100 flex justify-center items-center'>
+                <div className='w-full h-[220px] mt-[6px] flex justify-center items-center'>
                   {/* mode에 따라 갈아끼울 영역 */}
                   {/* 1. 국가일 때 */}
                   {mode === 0 &&
@@ -840,7 +1021,7 @@ export default function Game2D(props: any) {
                             setTotalPrice(worldMap[metaData.currentLocation].price.land)
                           }}
                           className={`w-[70px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px] hover:bg-gray-200 hover:cursor-pointer ${buyOption === 0 ? 'bg-gray-300' : ''}`}>
-                          <img className='w-[22px] h-[22px] object-fit mt-[10px]' src='/game/land.png' alt='이미지'></img>
+                          <img className='w-[20px] h-[20px] object-fit mt-[10px]' src='/game/land.png' alt='이미지'></img>
                           <div className='text-[16px] mt-[12px] font-PtdExtraBold'>땅</div>
                           <div className='flex flex-col justify-center items-center'><p className='text-[16px] font-Ptd'>{worldMap[metaData.currentLocation].price.land}</p><p className='text-[8px]'>만원</p></div>
                         </div>
@@ -851,7 +1032,7 @@ export default function Game2D(props: any) {
                             setTotalPrice(worldMap[metaData.currentLocation].price.land + worldMap[metaData.currentLocation].price.villa)
                           }}
                           className={`w-[70px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px] hover:bg-gray-200 hover:cursor-pointer ${buyOption === 1 ? 'bg-gray-300' : ''}`}>
-                          <img className='w-[22px] h-[22px] object-fit mt-[10px]' src='/game/villa.png' alt='이미지'></img>
+                          <img className='w-[26px] h-[26px] object-fit mt-[10px]' src='/game/villa.png' alt='이미지'></img>
                           <div className='text-[16] mt-[12px] font-PtdExtraBold'>별장</div>
                           <div className='flex flex-col justify-center items-center'><p className='text-[16px] font-Ptd'>{worldMap[metaData.currentLocation].price.villa}</p><p className='text-[8px]'>만원</p></div>
                         </div>
@@ -872,10 +1053,10 @@ export default function Game2D(props: any) {
                             setBuyOption(3);
                             setTotalPrice(worldMap[metaData.currentLocation].price.landmark)
                           }}
-                          className={`w-[70px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px] hover:bg-gray-200 hover:cursor-pointer ${buyOption === 3 ? 'bg-gray-300' : ''}`}>
-                          <img className='w-[22px] h-[22px] object-fit mt-[10px]' src='/game/landmark.png' alt='이미지'></img>
-                          <div className='text-[16px] mt-[12px] font-PtdExtraBold'>랜드마크</div>
-                          <div className='flex flex-col justify-center items-center'><p className='text-[16px] font-Ptd'>{worldMap[metaData.currentLocation].price.landmark}</p><p className='text-[8px]'>만원</p></div>
+                          className={`w-[70px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px] hover:bg-gray-200 hover:cursor-pointer ${worldMap[metaData.currentLocation].owner === (metaData.turn + 1) ? '' : 'pointer-events-none'}  ${buyOption === 3 ? 'bg-gray-300' : ''}`}>
+                          <img className='w-[24px] h-[28px] object-fit mt-[10px]' src={`${worldMap[metaData.currentLocation].owner === (metaData.turn + 1) ? '/game/landmark.png' : '/game/landmark_gray.png'}`} alt='이미지'></img>
+                          <div className={`text-[16px] mt-[12px] font-PtdExtraBold ${worldMap[metaData.currentLocation].owner === (metaData.turn + 1) ? '' : 'text-gray-300'}`}>랜드마크</div>
+                          <div className='flex flex-col justify-center items-center'><p className={`text-[16px] font-Ptd ${worldMap[metaData.currentLocation].owner === (metaData.turn + 1) ? '' : 'text-gray-300'}`}>{worldMap[metaData.currentLocation].price.landmark}</p><p className={`text-[8px] ${worldMap[metaData.currentLocation].owner === (metaData.turn + 1) ? '' : 'text-gray-300'}`}>만원</p></div>
                         </div>
                       </div>
                       {/* 총 가격 영역 */}
@@ -904,28 +1085,174 @@ export default function Game2D(props: any) {
 
                   {/* 2. 내 소유지일 때 */}
                   {mode === 2 &&
-                    <div className='flex flex-col justify-center itmes-center'>당신의 땅입니다.</div>
-                  }
+                    <div>
+                      <div className='w-full h-[120px] flex items-center justify-between border-0 border-b-[1px] border-solid border-gray-400 pb-[6px]'>
 
+                        {/* 별장 건설 */}
+                        {worldMap[metaData.currentLocation].build.villa &&
+                          <div
+                            className={`w-[94px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px]`}>
+                            <img className='w-[26px] h-[26px] object-fit mt-[10px]' src='/game/villa_gray.png' alt='이미지'></img>
+                            <div className='text-[16] mt-[12px] font-PtdExtraBold text-[#C2C2C2]'>별장</div>
+                            <div className='text-[16] mt-[12px] font-Ptd text-[#C2C2C2]'>건설완료</div>
+                          </div>
+                        }
+                        {!worldMap[metaData.currentLocation].build.villa &&
+                          <div
+                            onClick={() => {
+                              setBuildOption(0);
+                              setBuildPrice(worldMap[metaData.currentLocation].price.villa)
+                            }}
+                            className={`w-[94px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px] hover:bg-gray-200 hover:cursor-pointer ${buildOption === 0 ? 'bg-gray-300' : ''}`}>
+                            <img className='w-[26px] h-[26px] object-fit mt-[10px]' src='/game/villa.png' alt='이미지'></img>
+                            <div className='text-[16] mt-[12px] font-PtdExtraBold'>별장</div>
+                            <div className='flex flex-col justify-center items-center'><p className='text-[16px] font-Ptd'>{worldMap[metaData.currentLocation].price.villa}</p><p className='text-[8px]'>만원</p></div>
+                          </div>
+                        }
+                        {/* 호텔 건설 */}
+                        {worldMap[metaData.currentLocation].build.hotel &&
+                          <div
+                            className={`w-[94px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px]`}>
+                            <img className='w-[26px] h-[26px] object-fit mt-[10px]' src='/game/hotel_gray.png' alt='이미지'></img>
+                            <div className='text-[16] mt-[12px] font-PtdExtraBold text-[#C2C2C2]'>호텔</div>
+                            <div className='text-[16] mt-[12px] font-Ptd text-[#C2C2C2]'>건설완료</div>
+                          </div>
+                        }
+                        {!worldMap[metaData.currentLocation].build.hotel &&
+                          <div
+                            onClick={() => {
+                              setBuildOption(1);
+                              setBuildPrice(worldMap[metaData.currentLocation].price.hotel)
+                            }}
+                            className={`w-[94px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px] hover:bg-gray-200 hover:cursor-pointer ${buildOption === 1 ? 'bg-gray-300' : ''}`}>
+                            <img className='w-[22px] h-[22px] object-fit mt-[10px]' src='/game/hotel.png' alt='이미지'></img>
+                            <div className='text-[16px] mt-[12px] font-PtdExtraBold'>호텔</div>
+                            <div className='flex flex-col justify-center items-center'><p className='text-[16px] font-Ptd'>{worldMap[metaData.currentLocation].price.hotel}</p><p className='text-[8px]'>만원</p></div>
+                          </div>
+                        }
+                        {/* 랜드마크 건설*/}
+                        {worldMap[metaData.currentLocation].build.landmark &&
+                          <div
+                            className={`w-[94px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px]`}>
+                            <img className='w-[26px] h-[26px] object-fit mt-[10px]' src='/game/villa_gray.png' alt='이미지'></img>
+                            <div className='text-[16] mt-[12px] font-PtdExtraBold text-[#C2C2C2]'>랜드마크</div>
+                            <div className='text-[16] mt-[12px] font-Ptd text-[#C2C2C2]'>건설완료</div>
+                          </div>
+                        }
+                        {!worldMap[metaData.currentLocation].build.landmark &&
+                          <div
+                            onClick={() => {
+                              setBuildOption(2);
+                              setBuildPrice(worldMap[metaData.currentLocation].price.landmark)
+                            }}
+                            className={`w-[94px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px] hover:bg-gray-200 hover:cursor-pointer ${worldMap[metaData.currentLocation].owner === (metaData.turn + 1) ? '' : 'pointer-events-none'}  ${buildOption === 2 ? 'bg-gray-300' : ''}`}>
+                            <img className='w-[24px] h-[28px] object-fit mt-[10px]' src={`${worldMap[metaData.currentLocation].owner === (metaData.turn + 1) ? '/game/landmark.png' : '/game/landmark_gray.png'}`} alt='이미지'></img>
+                            <div className={`text-[16px] mt-[12px] font-PtdExtraBold ${worldMap[metaData.currentLocation].owner === (metaData.turn + 1) ? '' : 'text-gray-300'}`}>랜드마크</div>
+                            <div className='flex flex-col justify-center items-center'><p className={`text-[16px] font-Ptd ${worldMap[metaData.currentLocation].owner === (metaData.turn + 1) ? '' : 'text-gray-300'}`}>{worldMap[metaData.currentLocation].price.landmark}</p><p className={`text-[8px] ${worldMap[metaData.currentLocation].owner === (metaData.turn + 1) ? '' : 'text-gray-300'}`}>만원</p></div>
+                          </div>
+                        }
+                      </div>
+                      {/* 총 가격 영역 */}
+                      {!(worldMap[metaData.currentLocation].build.villa && worldMap[metaData.currentLocation].build.hotel && worldMap[metaData.currentLocation].build.landmark) &&
+                        <div>
+                          <div className='w-full h-[40px] flex justify-end items-end'>
+                            <span className='text-[20px]'>총 가격 :&nbsp;&nbsp;</span><span className='text-[32px] font-PtdExtraBold'>{buildPrice}&nbsp;</span><span className='text-[18px]'>만원</span>
+                          </div>
+                          {/* 버튼 영역 */}
+                          <div className='w-[330px] h-[52px] flex items-end justify-between'>
+                            <div className='w-[154px] h-[46px] bg-blue-400 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-blue-500 hover:cursor-pointer'
+                              onClick={() => {
+                                build(metaData.turn, worldMap[metaData.currentLocation], buildOption);
+                              }}
+                            >건설하기</div>
+                            <div className='w-[154px] h-[46px] bg-gray-400 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-gray-500 hover:cursor-pointer'
+                              onClick={() => {
+                                setMetaData((prevState: any) => ({
+                                  ...prevState,
+                                  turnOver: true,
+                                }))
+                                setMode(0)
+                              }}
+                            >Skip</div>
+                          </div>
+
+                        </div>
+                      }
+                      {(worldMap[metaData.currentLocation].build.villa && worldMap[metaData.currentLocation].build.hotel && worldMap[metaData.currentLocation].build.landmark) &&
+                        <div>
+
+                          <div className='w-full h-[40px] flex justify-center items-center'>
+                            이미 모든 건물은 건설하셨습니다.
+                          </div>
+                          <div className='w-[330px] h-[52px] flex items-end justify-between'>
+                            <div className='w-full h-[46px] bg-gray-400 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-gray-500 hover:cursor-pointer'
+                              onClick={() => {
+                                setMetaData((prevState: any) => ({
+                                  ...prevState,
+                                  turnOver: true,
+                                }))
+                                setMode(0)
+                              }}
+                            >확인</div>
+                          </div>
+                        </div>
+                      }
+
+                    </div>
+                  }
 
                   {/* 3. 통행료 지불 */}
                   {mode === 3 &&
-                    <div className='flex flex-col justify-center itmes-center'>통행료를 지불하세요</div>
+                    <div className='w-full flex flex-col justify-center itmes-center'>
+                      <div className='w-full h-[40px] text-[20px] font-PtdBold flex justify-center items-center'>통행료를 지불하세요</div>
+                      <div className='w-full h-[100px] flex justify-center items-center'>
+                        {worldMap[metaData.currentLocation].build.land &&
+                          <div className='w-[70px] h-[90px] rounded-[8px] bg-gray-200 flex flex-col justify-center items-center mr-[12px] ml-[12px]'>
+                            <img src="/game/land.png" alt="" className='w-[34px] h-[34px] object-cover' />
+                            <div className='mt-[10px]'>대지</div>
+                          </div>
+                        }
+                        {worldMap[metaData.currentLocation].build.villa &&
+                          <div className='w-[70px] h-[90px] rounded-[8px] bg-gray-200 flex flex-col justify-center items-center mr-[12px] ml-[12px]'>
+                            <img src="/game/villa.png" alt="" className='w-[34px] h-[34px] object-cover' />
+                            <div className='mt-[10px]'>별장</div>
+                          </div>
+                        }
+                        {worldMap[metaData.currentLocation].build.hotel &&
+                          <div className='w-[70px] h-[90px] rounded-[8px] bg-gray-200 flex flex-col justify-center items-center mr-[12px] ml-[12px]'>
+                            <img src="/game/hotel.png" alt="" className='w-[34px] h-[34px] object-cover' />
+                            <div className='mt-[10px]'>호텔</div>
+                          </div>
+                        }
+                        {worldMap[metaData.currentLocation].build.landmark &&
+                          <div className='w-[70px] h-[90px] bg-blue-200 flex flex-col justify-center items-center'>
+                            <img src="/game/landmark.png" alt="" className='w-[34px] h-[34px] object-cover' />
+                            <div className='mt-[10px]'>랜드마크</div>
+                          </div>
+                        }
+
+                      </div>
+                      <div className='w-full h-[60px]'></div>
+                    </div>
                   }
 
-                  {/* 4. 통행료 지불 */}
+                  {/* 4. 보물상자 */}
                   {mode === 4 &&
-                    <div className='flex flex-col justify-center itmes-center'>보물 상자를 열어보세요</div>
+                    <div className='flex flex-col justify-center itmes-center'>보물상자입니다.</div>
                   }
 
-                  {/* 5. 통행료 지불 */}
+                  {/* 5. 특수지역*/}
                   {mode === 5 &&
-                    <div className='flex flex-col justify-center itmes-center'>특수 지역입니다.</div>
+                    <div className='flex flex-col justify-center itmes-center'>특수지역입니다.</div>
                   }
 
-                  {/* 6. 통행료 지불 */}
+                  {/* 6. 자유이동*/}
                   {mode === 6 &&
-                    <div className='flex flex-col justify-center itmes-center'>이동하고 싶은 지역을 클릭하세요.</div>
+                    <div className='flex flex-col justify-center itmes-center'>이동하고싶은 지역을 클릭하세요.</div>
+                  }
+                  {/* 7. 구매완료*/}
+                  {mode === 7 &&
+                    <div className='flex flex-col justify-center itmes-center'>구매 및 건설 완료.</div>
                   }
 
                 </div>
@@ -947,7 +1274,7 @@ export default function Game2D(props: any) {
       <div className={`w-[20%] h-full flex flex-col justify-center items-start rounded-[4px]`}>
         {myTurn &&
           <div className={`w-[80px] h-[30px] bg-blue-400 relative left-[-4px] top-[0px] z-[100] text-white text-[12px] rounded-[4px] flex justify-center items-center`}>Player 턴</div>
-        }          
+        }
         <div className={`w-[320px] h-[900px] mb-[50px]  flex flex-col justify-around items-center bg-gray-100 rounded-[8px]  ${myTurn ? 'outline outline-[6px] outline-blue-400' : ''}`}>
           <div className='w-[300px] h-[180px] bg-white rounded-[8px] flex flex-col justify-center items-center'>
             <div className='w-[250px] h-[130px]'>
@@ -969,7 +1296,7 @@ export default function Game2D(props: any) {
           </div>
           <div className='w-[300px] h-[680px] bg-white rounded-[8px] flex flex-col justify-center items-center'>
             <div className='w-[260px] h-[640px]'>
-              {me.game.own.map((e:number, index:number)=> {
+              {me.game.own.map((e: number, index: number) => {
                 return <div key={index} className='h-[60px] flex flex-col items-center justify-start'>
                   <div className='w-full h-[60px] bg-gray-100 rounded-[6px] flex items-center mb-[10px]'>
                     <img className='w-[36px] h-[24px] flex justify-center items-center bg-purple-400 ml-[14px]' src={`/game/f${e}.png`} alt='국기'></img>
