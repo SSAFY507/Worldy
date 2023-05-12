@@ -298,58 +298,7 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
       </div>
     </div>
   );
-  
-
 }
 
 
 export default CountrySpeak;
-
-
-/*
-  return (
-    <div >
-      <div className="w-full h-full absolute flex items-end bg-[rgba(255,255,255,0.4)]">
-        <div className="z-10 translate-x-10 absolute w-1/4 ">
-          <img
-            className="h-[50%]"
-            src={ment[`${selectAsset}`].icon}
-            alt=""
-          />
-        </div>
-        <div className="z-10 absolute translate-x-80 h-3/5 ">
-          <img
-            className="h-[100%]"
-            src={ment[`${selectAsset}`].npcImg}
-            alt=""
-          />
-        </div>
-        <div className="z-5 absolute bg-[rgba(0,0,0,0.3)] h-full w-1/4 flex flex-col">
-          <div className="h-2/3 flex flex-col justify-center text-white p-20">
-            <div className="h-1/2 flex flex-col">
-              <div className="flex flex-col pb-10">
-                <div className='text-3xl pb-5'>
-                  <img className="h-10" src={book} alt=""/>
-                </div>
-                <div className='text-4xl font-PtdExtraBold'>{ment[`${selectAsset}`].title}</div>
-                <div className='text-2xl font-PtdLight'>{ment[`${selectAsset}`].subTitle}</div>
-              </div>
-              <div className="h-1/2">
-                <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[0]}</div>
-                <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[1]}</div>
-                <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[2]}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className=" absolute w-full h-full flex flex-row justify-center">
-        <div className="w-1/3" />
-        <div className="mt-40 mr-40 w-1/4 flex flex-row itmes-center">
-          {(selectAsset === "historyBox") ? <CountryNewsDetail data={data}/> :null}
-          {(selectAsset === "quizBox") ? <CountryQuizDetail /> : null}
-        </div>
-      </div>
-    </div>
-  );
-*/
