@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import LoaderPyramid from "../Loaders/LoaderPyramid";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
@@ -19,6 +20,7 @@ import { gsap } from 'gsap';
 import northAmerica from "../../assets/lowpoly/northAmerica.glb";
 import oceania from "../../assets/lowpoly/oceania.glb";
 import southAmerica from "../../assets/lowpoly/southAmerica.glb";
+import useLoadImagesHook from "../../_hooks/useLoadImagesHook";
 import { useNavigate } from "react-router";
 
 export interface CountryType {
@@ -61,6 +63,28 @@ const WorldMap = () => {
   let selectedName2:string = "";
   let clickTimeout:any = null;
   
+  // const myImageList = {
+  //   WorldAfrica: africa,
+  //   WorldAsia: asia,
+  //   WorldEurope: europe,
+  //   WorldNorthAmerica: northAmerica,
+  //   WorldOceania: oceania,
+  //   WorldSouthAmerica: southAmerica,
+  //   WorldBasemap: basemap,
+  //   WorldBackground: bg,
+  // };
+
+  // const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
+  // const [loadedAll, setLoadedAll] = useState<boolean>(false);
+  // console.log(loadedImages)
+  // useEffect(() => {
+  //   console.log(myImageList)
+  //   if (isLoaded) {
+  //     setLoadedAll(true);
+  //     console.log(loadedImages);
+  //   }
+  // }, [isLoaded]);
+
   const navigate = useNavigate();
 
 
@@ -495,5 +519,20 @@ const WorldMap = () => {
     />
   )
 };
+
+
+{/* <>
+{loadedAll ?  (
+  <div
+  style={{ backgroundColor: 'grey', width: '100%', height: 1000 }}
+  ref={divContainer} 
+  />
+) : (
+  <div className='w-full h-[1000px] bg-white'>
+    < LoaderPyramid text='🧳세계 탐험 가보자고!🧳' />
+  </div>
+)
+}
+</> */}
 
 export default WorldMap;
