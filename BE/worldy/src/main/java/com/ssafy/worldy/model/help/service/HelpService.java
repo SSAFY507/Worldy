@@ -2,6 +2,7 @@ package com.ssafy.worldy.model.help.service;
 
 import com.ssafy.worldy.model.help.dto.HelpCreateDto;
 import com.ssafy.worldy.model.help.dto.HelpDto;
+import com.ssafy.worldy.model.help.dto.HelpResponseDto;
 import com.ssafy.worldy.model.help.repo.HelpRepo;
 import com.ssafy.worldy.model.user.dto.UserDto;
 import com.ssafy.worldy.model.user.service.KakaoUserService;
@@ -13,6 +14,8 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class HelpService {
@@ -60,5 +63,10 @@ public class HelpService {
 
         System.out.println(response.getBody());
         System.out.println(response.getStatusCodeValue());
+    }
+
+    // 모든 글 조회
+    public List<HelpResponseDto> getAllHelp() {
+        return helpRepo.findAll().stream().map(HelpResponseDto::new).collect(Collectors.toList());
     }
 }
