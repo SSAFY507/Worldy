@@ -116,6 +116,7 @@ public class KakaoUserService {
 
         // 회원가입
         if (user == null) {
+            System.out.println("===== 처음 가입하는 사용자 =====");
             String age = null;
             String gender = null;
 
