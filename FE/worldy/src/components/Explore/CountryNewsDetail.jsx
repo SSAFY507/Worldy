@@ -55,7 +55,7 @@ const Carousel = ({ children }) => {
   return (
     <div className="carousel">
       {active > 0 && (
-        <ArrowBackIosNewIcon className="nav left" style={{ width: "3rem" }} onClick={() => setActive(i => (i + count - 1) % count)}/>
+        <ArrowBackIosNewIcon className="nav left" onClick={() => setActive(i => (i + count - 1) % count)}/>
         )}
       {/* <ArrowBackIosNewIcon className="nav left" style={{ width: "3rem" }} onClick={() => setActive(i => (i + count - 1) % count)}/> */}
       {children.map((child, i) => (
@@ -78,7 +78,7 @@ const Carousel = ({ children }) => {
       {/* <AiOutlineLeft className="nav right" /> */}
       {/* <ArrowForwardIosIcon className="nav right shadow-none" style={{ width: "3rem" }} onClick={() => setActive(i => (i + 1) % count)}/> */}
       {active < count - 1 && (
-        <ArrowForwardIosIcon className="nav right" style={{ width: "3rem" }} onClick={() => setActive(i => (i + 1) % count)}/>
+        <ArrowForwardIosIcon className="nav right" onClick={() => setActive(i => (i + 1) % count)}/>
       )}
     </div>
   );
@@ -86,27 +86,25 @@ const Carousel = ({ children }) => {
 
 const CountryNewsDetail = props => {
   return (
-    <div className="flex flex-row">
-      <Carousel>
-        {props.data.map((item, idx) => {
-          return (
-            <Card
-              key={idx}
-              title={item.title.length <= 15 ? item.title : item.title.substr(0, 15) + "..."}
-              content={
-                item.summary
-                  ? item.summary.length <= 30
-                    ? item.summary
-                    : item.summary.substr(0, 30) + "..."
-                  : null
-              }
-              src={item.thumbnailLink || item.thumbnail}
-              link={item.link || item.url}
-            />
-          );
-        })}
-      </Carousel>
-    </div>
+    <Carousel>
+      {props.data.map((item, idx) => {
+        return (
+          <Card
+            key={idx}
+            title={item.title.length <= 15 ? item.title : item.title.substr(0, 15) + "..."}
+            content={
+              item.summary
+                ? item.summary.length <= 30
+                  ? item.summary
+                  : item.summary.substr(0, 30) + "..."
+                : null
+            }
+            src={item.thumbnailLink || item.thumbnail}
+            link={item.link || item.url}
+          />
+        );
+      })}
+    </Carousel>
   );
 };
 

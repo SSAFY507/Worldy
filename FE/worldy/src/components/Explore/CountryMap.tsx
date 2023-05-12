@@ -17,6 +17,7 @@ import asia_Japen from '../../assets/lowpoly/Country_America.glb';
 import asia_Korea from '../../assets/lowpoly/Country_America.glb';
 import back from '../../assets/lowpoly/back.glb';
 import bg from '../../assets/images/WorldBackgrorund.jpg';
+import { current } from '@reduxjs/toolkit';
 import europe_France from '../../assets/lowpoly/Country_America.glb';
 import europe_Italia from '../../assets/lowpoly/Country_America.glb';
 import europe_Spain from '../../assets/lowpoly/Country_America.glb';
@@ -63,6 +64,7 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
   }
   let selectedName:string = "";
   let selectTmp:boolean = false
+
   /** 마우스 추적 */
   const SetupPicking = () => {
     const raycaster = new THREE.Raycaster();
@@ -99,7 +101,6 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
   /** 강조할 대륙 객체 추적 */
   const OnPointerMove = (event: PointerEvent) => {
     if (event.isPrimary === false) return;
-    if (selectTmp) return;
      
     // 마우스 위치 추적하고 대륙 객체 저장
     const assets: THREE.Object3D[] = FindObject(event)!;
@@ -124,6 +125,7 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
         selectedObject!.position.z,
         1
       );
+      divContainer.current!.style.cursor = 'pointer';
 
       // 해당하는 에셋 강조 효과
       outlinePassRef.current!.edgeStrength = 25;
@@ -131,9 +133,9 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
       selectedObjectRef.current = selectedObject!;
       return;
     }
-
     selectedName = '';
     outlinePassRef.current!.selectedObjects = [];
+    divContainer.current!.style.cursor = 'auto';
   };
 
   /** 객체 강조 후처리 */
@@ -166,7 +168,7 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
   const OnClick = (event:any) => {
     const name:string = selectedName;
     // const moveCountry = name;
-    console.log(selectTmp)
+    // console.log(selectTmp)
     if (assetSet.has(name)) {
       if (name === "back") {
         alert("대륙으로 이동합니다")
@@ -324,7 +326,6 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
 
   const update = (time: number) => {
     time *= 0.01;
-
   };
 
   useEffect(() => {

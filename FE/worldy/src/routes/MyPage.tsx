@@ -1,45 +1,45 @@
+import '../styles/MyPageStyles.css';
+import '../styles/TailWind.css';
+
 import * as React from 'react';
-import { useState, useEffect, useRef } from 'react';
-import pathBG from '../assets/images/MyPageBackground.png';
+
+import { BiBrain, BiLogOut } from 'react-icons/bi';
 import {
-  BsFillPersonLinesFill,
   BsBookmarksFill,
   BsFillCaretDownFill,
+  BsFillPersonLinesFill,
   BsThreeDotsVertical,
 } from 'react-icons/bs';
-import { BiLogOut, BiBrain } from 'react-icons/bi';
 import { IoIosLogOut, IoLogoGameControllerB } from 'react-icons/io';
-import { AiOutlineBulb } from 'react-icons/ai';
-import { FiArrowUpRight } from 'react-icons/fi';
-import { SiPowerapps } from 'react-icons/si';
-import { IoMdPower } from 'react-icons/io';
-
+import { MdAccessTimeFilled, MdKeyboardDoubleArrowRight } from 'react-icons/md';
 import {
   RiQuestionAnswerFill,
   RiSave3Fill,
   RiVipCrownFill,
 } from 'react-icons/ri';
-import { MdAccessTimeFilled, MdKeyboardDoubleArrowRight } from 'react-icons/md';
-import { TbWorld, TbCategory2 } from 'react-icons/tb';
-import moment from 'moment';
-
-import '../styles/MyPageStyles.css';
-import '../styles/TailWind.css';
-
-import QuizModal from '../components/QuizModal';
-import QNAMoveButton from '../components/QNAMoveButton';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { TbCategory2, TbWorld } from 'react-icons/tb';
 import {
   loginNickName,
   loginProfileImg,
   logout,
 } from '../_store/slices/loginSlice';
-import { useSelector } from 'react-redux';
-import useLoadImagesHook from '../_hooks/useLoadImagesHook';
-import LoaderPyramid from '../components/Loaders/LoaderPyramid';
-import LoaderBlueCircle from '../components/Loaders/LoaderBlueCircle';
+import { useEffect, useRef, useState } from 'react';
+
+import { AiOutlineBulb } from 'react-icons/ai';
 import CustomAxios from '../API/CustomAxios';
+import { FiArrowUpRight } from 'react-icons/fi';
+import { IoMdPower } from 'react-icons/io';
+import LoaderBlueCircle from '../components/Loaders/LoaderBlueCircle';
+import LoaderPyramid from '../components/Loaders/LoaderPyramid';
+import QNAMoveButton from '../components/QNAMoveButton';
+import QuizModal from '../components/QuizModal';
+import { SiPowerapps } from 'react-icons/si';
+import moment from 'moment';
+import pathBG from '../assets/images/MyPageBackground.png';
+import { useDispatch } from 'react-redux';
+import useLoadImagesHook from '../_hooks/useLoadImagesHook';
+import { useNavigate } from 'react-router';
+import { useSelector } from 'react-redux';
 
 type MyPageMenuType = {
   icon: React.ReactNode;

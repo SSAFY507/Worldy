@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import LoaderPyramid from "../Loaders/LoaderPyramid";
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
@@ -19,14 +20,13 @@ import { gsap } from 'gsap';
 import northAmerica from "../../assets/lowpoly/northAmerica.glb";
 import oceania from "../../assets/lowpoly/oceania.glb";
 import southAmerica from "../../assets/lowpoly/southAmerica.glb";
+import useLoadImagesHook from "../../_hooks/useLoadImagesHook";
 import { useNavigate } from "react-router";
 
 export interface CountryType {
-  [key: string]: string|string[];
+  [key: string]: string;
 }
-export interface SpeakType {
-  [key: string]: CountryType;
-}
+
 const WorldMap = () => {
 
   const divContainer = useRef<HTMLDivElement>(null);
@@ -63,6 +63,28 @@ const WorldMap = () => {
   let selectedName2:string = "";
   let clickTimeout:any = null;
   
+  // const myImageList = {
+  //   WorldAfrica: africa,
+  //   WorldAsia: asia,
+  //   WorldEurope: europe,
+  //   WorldNorthAmerica: northAmerica,
+  //   WorldOceania: oceania,
+  //   WorldSouthAmerica: southAmerica,
+  //   WorldBasemap: basemap,
+  //   WorldBackground: bg,
+  // };
+
+  // const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
+  // const [loadedAll, setLoadedAll] = useState<boolean>(false);
+  // console.log(loadedImages)
+  // useEffect(() => {
+  //   console.log(myImageList)
+  //   if (isLoaded) {
+  //     setLoadedAll(true);
+  //     console.log(loadedImages);
+  //   }
+  // }, [isLoaded]);
+
   const navigate = useNavigate();
 
 
@@ -245,7 +267,8 @@ const WorldMap = () => {
       // 해당하는 대륙 호버 효과 
       SetAnimation(selectedObject!.position, selectedObject!.position.x, 0.5, selectedObject!.position.z, 1)
       SetAnimation(selectedObject!.scale, 1.05, 1.05, 1.05, 1)
-      
+      divContainer.current!.style.cursor = 'pointer';
+
       // 해당하는 대륙 강조 효과 
       outlinePassRef.current!.edgeStrength = 25;  
       outlinePassRef.current!.selectedObjects = [ selectedObject! ];
@@ -286,6 +309,8 @@ const WorldMap = () => {
           // 해당하는 대륙 호버 효과 
           SetAnimation(selectedCountry!.position, selectedCountry!.position.x, -0.2, selectedCountry!.position.z, 1)
           SetAnimation(selectedCountry!.scale, 0.00074, 0.00075, 0.00074, 1)
+          divContainer.current!.style.cursor = 'pointer';
+
           // 해당하는 대륙 강조 효과 
           outlinePassRef.current!.edgeStrength = 40;  
           // outlinePassRef.current!.visibleEdgeColor = new THREE.Color(0x000000); 
@@ -300,7 +325,8 @@ const WorldMap = () => {
       }
     }
     outlinePassRef.current!.selectedObjects = [];
-    
+    divContainer.current!.style.cursor = 'auto';
+
   }
   
   /** 객체 강조 후처리 */
@@ -493,5 +519,20 @@ const WorldMap = () => {
     />
   )
 };
+
+
+{/* <>
+{loadedAll ?  (
+  <div
+  style={{ backgroundColor: 'grey', width: '100%', height: 1000 }}
+  ref={divContainer} 
+  />
+) : (
+  <div className='w-full h-[1000px] bg-white'>
+    < LoaderPyramid text='🧳세계 탐험 가보자고!🧳' />
+  </div>
+)
+}
+</> */}
 
 export default WorldMap;
