@@ -40,6 +40,7 @@ export const loginSlice = createSlice({
       sessionStorage.removeItem('isLoggedIn');
       sessionStorage.removeItem('nickname');
       sessionStorage.removeItem('profileImg');
+      sessionStorage.removeItem('token');
     },
     addNickname: (state, action: PayloadAction<string>) => {
       state.nickname = action.payload;

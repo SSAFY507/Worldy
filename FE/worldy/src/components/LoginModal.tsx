@@ -50,7 +50,7 @@ export default function LoginModal({
 
   ////////////////////카카오 로그인 버튼 관련
 
-  const checkLoginState = useSelector(loginState);
+  const checkLoginState = sessionStorage.getItem('isLoggedIn');
   const dispatch = useDispatch();
 
   const [submitKakaoTokenResult, setSubmitKakaoTokenResult] = useState<any>();

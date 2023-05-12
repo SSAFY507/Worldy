@@ -55,9 +55,6 @@ const AppLayout = () => {
 
   //페이지 이동 Route용으로 <Route><Route> => <Routes><Route>로 변경했습니다.
 
-  //카카오 로그인 눌렀을 때, 첫 로그인이면 Tutorial로, 아니면 Mainpage로
-  const [firstLoginState, setFirstLoginState] = useState<boolean>(false);
-
   const handleFirstLogin = (firstLogin: boolean) => {
     console.log('LoginModal로부터 넘어온 firstLogin', firstLogin);
     if (firstLogin) {
@@ -83,7 +80,13 @@ const AppLayout = () => {
     setQnaModal(input);
   };
 
-  const checkLoginState = useSelector(loginState);
+  const checkLoginState = sessionStorage.getItem('isLoggedIn');
+  const checkNickname = sessionStorage.getItem('nickname') || '';
+
+  useEffect(() => {
+    if (checkLoginState && (checkNickname === '' || checkNickname === null))
+      navigate('/tutorial');
+  }, []);
 
   type PayResultStringType = {
     result: string;

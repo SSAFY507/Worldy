@@ -58,6 +58,14 @@ export default function MainPageAfterLogin({
     thumb5: thumb5,
   };
 
+  const checkLoginState = sessionStorage.getItem('isLoggedIn');
+  const checkNickname = sessionStorage.getItem('nickname') || '';
+
+  useEffect(() => {
+    if (checkLoginState && (checkNickname === '' || checkNickname === null))
+      navigate('/tutorial');
+  }, []);
+
   const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
   const [loadedAll, setLoadedAll] = useState<boolean>(false);
 
@@ -147,7 +155,7 @@ export default function MainPageAfterLogin({
     },
   ]);
   return (
-    <div className='w-full h-full relative flex flex-col justify-center items-stretch bg-gray-200'>
+    <div className='w-full h-full relative flex flex-col justify-center items-stretch bg-[#fafaf5]'>
       <div className='h-full outline-black flex flex-row items-center justify-center z-30'>
         <CarouselComponent images={imageList} loaded={loadedAll} />
       </div>
