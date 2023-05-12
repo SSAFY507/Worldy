@@ -102,7 +102,6 @@ const CountryNewsDetail = props => {
               }
               src={item.thumbnailLink || item.thumbnail}
               link={item.link || item.url}
-              key={idx}
             />
           );
         })}

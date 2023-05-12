@@ -4,8 +4,8 @@ import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
 import { CSSTransition } from 'react-transition-group';
 import CountryNewsDetail from './CountryNewsDetail';
-import { CountryType } from '../../components/Explore/WorldMap';
 import CrAnswer from '../../assets/images/CorrectAnswer.png';
+import { SpeakType } from '../../components/Explore/WorldMap';
 import WrAnswer from '../../assets/images/WrongAnswer.png';
 import book from '../../assets/images/bookIcon.png'
 import newsIcon from '../../assets/images/newsIcon.png'
@@ -33,17 +33,47 @@ interface Props {
   GetSelectAssetName: (name:string) => void;
 };
 
-const countryLst: CountryType = {
-  asia_Korea: '대한민국',
-  asia_China: '중국',
-  asia_India: '인도',
-  asia_Japen: '일본',
-  africa_Egypt: '이집트',
-  europe_France: '프랑스',
-  europe_Italia: '이탈리아',
-  europe_Spain: '스페인',
-  europe_UK: '영국',
-  northAmerica_America: '미국',
+const countryLst: SpeakType = {
+  asia_Korea: {
+    KOREAN: '대한민국',
+    ENGLISH: 'Korea',
+  },
+  asia_China: {
+    KOREAN: '중국',
+    ENGLISH: 'China',
+  },
+  asia_india: {
+    KOREAN: '인도',
+    ENGLISH: 'India',
+  },
+  asia_Japen: {
+    KOREAN: '일본',
+    ENGLISH: 'Japen',
+  },
+  africa_Egypt: {
+    KOREAN: '이집트',
+    ENGLISH: 'Egypt',
+  },
+  europe_France: {
+    KOREAN: '프랑스',
+    ENGLISH: 'France',
+  },
+  europe_Italia: {
+    KOREAN: '이탈리아',
+    ENGLISH: 'Italia',
+  },
+  europe_Spain: {
+    KOREAN: '스페인',
+    ENGLISH: 'Spain',
+  },
+  europe_UK: {
+    KOREAN: '영국',
+    ENGLISH: 'United Kingdom',
+  },
+  northAmerica_America: {
+    KOREAN: '미국',
+    ENGLISH: 'United States',
+  },
 };
 
 
@@ -111,8 +141,6 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
   ];
 
   const [targetIndex, setTargetIndex] = useState<number>(0);
-
-  console.log(11111111111111111111111111111111111111111111)
   
   // useEffect(() => {
   //   if (loadedAll) {
@@ -144,14 +172,22 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
   //     }
   //   }
   // }, [targetIndex]);
-  const ment = {
-    history: {
-      title: `${countryName} 최신 뉴스`,
-      subTitle: `${countryLst[countryName]} `
 
+  const ment:SpeakType = {
+    historyBox: {
+      title: `${countryLst[`${countryName}`].KOREAN} 최신 뉴스`,
+      subTitle: `${countryLst[`${countryName}`].ENGLISH} Latest News`,
+      contents: [`${countryLst[`${countryName}`].KOREAN}의 최신 뉴스를 제공합니다.`, "하루에 한 번, 매일 아침 업데이트 되는", `${countryLst[countryName].KOREAN}의 새로운 소식을 만나보세요`]
+    },
+    quizBox:{
+      title: `${countryLst[`${countryName}`].KOREAN} 상식 퀴즈`,
+      subTitle: `${countryLst[`${countryName}`].ENGLISH} Trivia Quiz`,
+      contents: ["시사, 역사, 문화 등", "다양한 카테고리의 재미있는", `${countryLst[countryName].KOREAN} 상식 퀴즈를 풀어보세요!`]
     }
   }
-
+  console.log(selectAsset)
+  console.log(selectAsset)
+  console.log(ment[`${selectAsset}`])
   const data = [
     {
       link: "https://github.com/Lee-hanbin",
@@ -222,13 +258,13 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
                 <div className='text-3xl pb-5'>
                   <img className="h-10" src={book} alt=""/>
                 </div>
-                <div className='text-5xl font-PtdExtraBold'>미국 최신 뉴스</div>
-                <div className='text-2xl font-PtdLight'>United States Latest News</div>
+                <div className='text-4xl font-PtdExtraBold'>{ment[`${selectAsset}`].title}</div>
+                <div className='text-2xl font-PtdLight'>{ment[`${selectAsset}`].subTitle}</div>
               </div>
               <div className="h-1/2">
-                <div className="pb-1 font-PtdLight">미국의 최신 뉴스를 제공합니다.</div>
-                <div className="pb-1 font-PtdLight">하루에 한 번, 매일 아침 업데이트 되는</div>
-                <div className="pb-1 font-PtdLight">미국의 새로운 소식을 만나보세요</div>
+                <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[0]}</div>
+                <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[1]}</div>
+                <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[2]}</div>
               </div>
             </div>
           </div>
