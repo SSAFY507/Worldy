@@ -434,71 +434,147 @@ export default function Game2D(props: any) {
     }
 
     // 각 지역에 소유주 추가
+
     if (buyOption === 0) {
-      setWorldMap((prevState: any) =>
-        prevState.map((item: any, key: number) =>
-          key === spot.location ? {
-            ...item,
-            owner: (turn + 1),
-            build: {
-              land: true,
-              villa: item.build.villa,
-              hotel: item.build.hotel,
-              landmark: item.build.landmark,
-            }
-          } : item
-        )
-      );
-
+      setWorldMap((prevState: any) => ({
+        worldMap: [
+          ...prevState.worldMap,
+          prevState.worldMap.map((item: any, key: number) => {
+            key === spot.location ? {
+              ...item,
+              owner: (turn + 1),
+              build: {
+                land: true,
+                villa: item.build.villa,
+                hotel: item.build.hotel,
+                landmark: item.build.landmark,
+              }
+            } : item
+          }
+          )]
+      }))
     } else if (buyOption === 1) {
-      setWorldMap((prevState: any) =>
-        prevState.map((item: any, key: number) =>
-          key === spot.location ? {
-            ...item,
-            owner: (turn + 1),
-            build: {
-              land: true,
-              villa: true,
-              hotel: item.build.hotel,
-              landmark: item.build.landmark,
-            }
-          } : item
-        )
-      );
-
+      setWorldMap((prevState: any) => ({
+        worldMap: [
+          ...prevState.worldMap,
+          prevState.worldMap.map((item: any, key: number) => {
+            key === spot.location ? {
+              ...item,
+              owner: (turn + 1),
+              build: {
+                land: true,
+                villa: true,
+                hotel: item.build.hotel,
+                landmark: item.build.landmark,
+              }
+            } : item
+          }
+          )]
+      }))
     } else if (buyOption === 2) {
-      setWorldMap((prevState: any) =>
-        prevState.map((item: any, key: number) =>
-          key === spot.location ? {
-            ...item,
-            owner: (turn + 1),
-            build: {
-              land: true,
-              villa: item.build.villa,
-              hotel: true,
-              landmark: item.build.landmark,
-            }
-          } : item
-        )
-      );
-
+      setWorldMap((prevState: any) => ({
+        worldMap: [
+          ...prevState.worldMap,
+          prevState.worldMap.map((item: any, key: number) => {
+            key === spot.location ? {
+              ...item,
+              owner: (turn + 1),
+              build: {
+                land: true,
+                villa: item.build.villa,
+                hotel: true,
+                landmark: item.build.landmark,
+              }
+            } : item
+          }
+          )]
+      }))
     } else if (buyOption === 3) {
-      setWorldMap((prevState: any) =>
-        prevState.map((item: any, key: number) =>
-          key === spot.location ? {
-            ...item,
-            owner: (turn + 1),
-            build: {
-              land: item.build.land,
-              villa: item.build.villa,
-              hotel: item.build.hotel,
-              landmark: true,
-            }
-          } : item
-        )
-      );
-
+      setWorldMap((prevState: any) => ({
+        worldMap: [
+          ...prevState.worldMap,
+          prevState.worldMap.map((item: any, key: number) => {
+            key === spot.location ? {
+              ...item,
+              owner: (turn + 1),
+              build: {
+                land: true,
+                villa: item.build.villa,
+                hotel: item.build.hotel,
+                landmark: true,
+              }
+            } : item
+          }
+          )]
+      }))
     }
+
+
+    // if (buyOption === 0) {
+    //   setWorldMap((prevState: any) =>
+    //     prevState.map((item: any, key: number) =>
+    //       key === spot.location ? {
+    //         ...item,
+    //         owner: (turn + 1),
+    //         build: {
+    //           land: true,
+    //           villa: item.build.villa,
+    //           hotel: item.build.hotel,
+    //           landmark: item.build.landmark,
+    //         }
+    //       } : item
+    //     )
+    //   );
+
+    // } else if (buyOption === 1) {
+    //   setWorldMap((prevState: any) =>
+    //     prevState.map((item: any, key: number) =>
+    //       key === spot.location ? {
+    //         ...item,
+    //         owner: (turn + 1),
+    //         build: {
+    //           land: true,
+    //           villa: true,
+    //           hotel: item.build.hotel,
+    //           landmark: item.build.landmark,
+    //         }
+    //       } : item
+    //     )
+    //   );
+
+    // } else if (buyOption === 2) {
+    //   setWorldMap((prevState: any) =>
+    //     prevState.map((item: any, key: number) =>
+    //       key === spot.location ? {
+    //         ...item,
+    //         owner: (turn + 1),
+    //         build: {
+    //           land: true,
+    //           villa: item.build.villa,
+    //           hotel: true,
+    //           landmark: item.build.landmark,
+    //         }
+    //       } : item
+    //     )
+    //   );
+
+    // } else if (buyOption === 3) {
+    //   setWorldMap((prevState: any) =>
+    //     prevState.map((item: any, key: number) =>
+    //       key === spot.location ? {
+    //         ...item,
+    //         owner: (turn + 1),
+    //         build: {
+    //           land: item.build.land,
+    //           villa: item.build.villa,
+    //           hotel: item.build.hotel,
+    //           landmark: true,
+    //         }
+    //       } : item
+    //     )
+    //   );
+
+    // }
 
 
     // 구매완료 페이지로 UI 변경
@@ -965,7 +1041,7 @@ export default function Game2D(props: any) {
                   turnOver: true,
                 }))
                 setMode(0);
-                console.log('socket 센드 데이터');
+                console.log()
                 sendData();
               }}
             >턴 종료</div>

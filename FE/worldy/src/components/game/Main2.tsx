@@ -119,12 +119,8 @@ export default function Main2() {
             }
           },
         }))
-      } else if (received.type === 'worldmap') {
-        setWorldMap((prevState: any) => ({
-          ...prevState,
-          worldmap: received.worldMap,
-        }))
       }
+
 
 
     });
@@ -136,14 +132,14 @@ export default function Main2() {
 
   function sendData() {
     //websockt emit
-    const playerData = player;
-    const mapData = worldMap;
-    const gameData = metaData;
+    const data = player;
+    console.log('보낼 데이터 >>')
+    console.log(data)
 
     console.log('소켓으로 데이터 전송 >>>')
-    ws.send("/pub/game/player", {}, JSON.stringify(playerData));
-    ws.send("/pub/game/map", {}, JSON.stringify(mapData));
-    // ws.send("/pub/game/metadata", {}, JSON.stringify(gameData));
+    ws.send("/pub/game/player", {}, JSON.stringify(data));
+    // ws.send("/pub/game/map", {}, JSON.stringify(data));
+    // ws.send("/pub/game/player", {}, JSON.stringify(data));
   }
 
 
@@ -213,8 +209,6 @@ export default function Main2() {
   const [start, setStart] = useState<boolean>(false);
   const [data, setData] = useState<Object[]>();
   const [metaData, setMetaData] = useState<Object>({
-    roomId: '',
-    type: 'metaData',
     currentLocation: 0,
     dice1: 0,
     dice2: 0,
@@ -313,7 +307,7 @@ export default function Main2() {
 
 
   // 월드맵(지도)
-  const [worldMap, setWorldMap] = useState<Object>({
+  const [worldMap, setWorldMap] = useState<any>({
     roomId: '',
     type: 'worldmap',
     worldMap:
@@ -1252,7 +1246,7 @@ export default function Main2() {
         >게임 시작하기</div>
       </div>}
       {start && <div>
-        {mode && <Game2D sendData={sendData} loginUser={loginUser} metaData={metaData} setMetaData={setMetaData} player={player} setPlayer={setPlayer} worldMap={worldMap} setWorldMap={setWorldMap}></Game2D>}
+        {mode && <Game2D sendData={sendData} loginUser={loginUser} metaData={metaData} setMetaData={setMetaData} player={player} setPlayer={setPlayer} worldMap={worldMap.worldMap} setWorldMap={setWorldMap}></Game2D>}
         {!mode && <Game3D worldMap={worldMap} setWorldMap={setWorldMap}></Game3D>}
       </div>}
 
