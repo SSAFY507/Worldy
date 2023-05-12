@@ -17,6 +17,7 @@ import asia_Japen from '../../assets/lowpoly/Country_America.glb';
 import asia_Korea from '../../assets/lowpoly/Country_America.glb';
 import back from '../../assets/lowpoly/back.glb';
 import bg from '../../assets/images/WorldBackgrorund.jpg';
+import { current } from '@reduxjs/toolkit';
 import europe_France from '../../assets/lowpoly/Country_America.glb';
 import europe_Italia from '../../assets/lowpoly/Country_America.glb';
 import europe_Spain from '../../assets/lowpoly/Country_America.glb';
@@ -124,6 +125,7 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
         selectedObject!.position.z,
         1
       );
+      divContainer.current!.style.cursor = 'pointer';
 
       // 해당하는 에셋 강조 효과
       outlinePassRef.current!.edgeStrength = 25;
@@ -131,9 +133,9 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
       selectedObjectRef.current = selectedObject!;
       return;
     }
-
     selectedName = '';
     outlinePassRef.current!.selectedObjects = [];
+    divContainer.current!.style.cursor = 'auto';
   };
 
   /** 객체 강조 후처리 */
