@@ -194,7 +194,7 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
   // }, [targetIndex]);
 
   const ment:SpeakType = {
-    historyBox: {
+    newsBox: {
       title: `${countryLst[`${countryName}`].KOREAN} 최신 뉴스`,
       subTitle: `${countryLst[`${countryName}`].ENGLISH} Latest News`,
       contents: [`${countryLst[`${countryName}`].KOREAN}의 최신 뉴스를 제공합니다.`, "하루에 한 번, 매일 아침 업데이트 되는", `${countryLst[countryName].KOREAN}의 새로운 소식을 만나보세요`],
@@ -292,8 +292,10 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
           </div>
         </div>
         <div className="h-full w-3/4 flex flex-col justify-center items-center">
-          {(selectAsset === "historyBox") ? <CountryNewsDetail data={data}/> :null}
+          {(selectAsset === "newsBox") ? <CountryNewsDetail data={data}/> :null}
           {(selectAsset === "quizBox") ? <CountryQuizDetail /> : null}
+          {/* {(selectAsset === "historyBox") ? <CountryNewsDetail data={data}/> :null} */}
+
         </div>
       </div>
     </div>

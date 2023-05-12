@@ -243,7 +243,8 @@ const WorldMap = () => {
       // 해당하는 대륙 호버 효과 
       SetAnimation(selectedObject!.position, selectedObject!.position.x, 0.5, selectedObject!.position.z, 1)
       SetAnimation(selectedObject!.scale, 1.05, 1.05, 1.05, 1)
-      
+      divContainer.current!.style.cursor = 'pointer';
+
       // 해당하는 대륙 강조 효과 
       outlinePassRef.current!.edgeStrength = 25;  
       outlinePassRef.current!.selectedObjects = [ selectedObject! ];
@@ -284,6 +285,8 @@ const WorldMap = () => {
           // 해당하는 대륙 호버 효과 
           SetAnimation(selectedCountry!.position, selectedCountry!.position.x, -0.2, selectedCountry!.position.z, 1)
           SetAnimation(selectedCountry!.scale, 0.00074, 0.00075, 0.00074, 1)
+          divContainer.current!.style.cursor = 'pointer';
+
           // 해당하는 대륙 강조 효과 
           outlinePassRef.current!.edgeStrength = 40;  
           // outlinePassRef.current!.visibleEdgeColor = new THREE.Color(0x000000); 
@@ -298,7 +301,8 @@ const WorldMap = () => {
       }
     }
     outlinePassRef.current!.selectedObjects = [];
-    
+    divContainer.current!.style.cursor = 'auto';
+
   }
   
   /** 객체 강조 후처리 */
