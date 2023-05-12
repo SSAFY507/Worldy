@@ -31,6 +31,7 @@ public class QuizService {
     private final UserRepo userRepo;
     private final QuizRecordRepo quizRecordRepo;
     private final QuizLikeRepo quizLikeRepo;
+
     @Value("${fastapi.hidden-catch.url}")
     private String requestUrl;
 
