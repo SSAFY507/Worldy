@@ -14,4 +14,6 @@ public class KakaoLoginDto {
     private String kakaoId; // 카카오 아이디
 
     private String profileImg; // 프로필 이미지
+
+    private String nickName; // 닉네임
 }
