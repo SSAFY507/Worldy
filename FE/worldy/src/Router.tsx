@@ -147,7 +147,7 @@ const AppLayout = () => {
       <div className='flex-1 h-full max-h-full'>
         <Routes>
           <Route path='/user/kakao/callback' element={<Callback />} />
-          {!checkLoginState ? (
+          {checkLoginState ? (
             <Route
               path='/'
               element={
