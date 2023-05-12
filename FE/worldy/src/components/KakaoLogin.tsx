@@ -14,8 +14,8 @@ export default function KakaoLogin() {
 
     window.Kakao.Auth.authorize({
       // 최종 배포이후에는 localhost가 아닌 j8a707 url로 요청해야함
-      redirectUri: 'https://k8a507.p.ssafy.io/user/kakao/callback',
-      // redirectUri: 'http://localhost:3000/user/kakao/callback',
+      // redirectUri: 'https://k8a507.p.ssafy.io/user/kakao/callback',
+      redirectUri: 'http://localhost:3000/user/kakao/callback',
     });
   };
 
