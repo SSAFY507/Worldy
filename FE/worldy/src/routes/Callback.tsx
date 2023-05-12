@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { useSearchParams } from 'react-router-dom';
-import { addToken, loginState } from '../_store/slices/loginSlice';
+import { addNickname, addToken, loginState } from '../_store/slices/loginSlice';
 import { login } from '../_store/slices/loginSlice';
 
 import LoaderPyramid from '../components/Loaders/LoaderPyramid';
@@ -20,19 +20,14 @@ export default function Callback(): JSX.Element {
   const [nickname, setNickname] = useState<string>('');
 
   const kakaoLogin = async () => {
-    // console.log(urlToken);
     try {
       const kakaoLoginResponse = await axios.get(
         `https://k8a507.p.ssafy.io/api/user/kakao/login?code=${urlToken}`
       );
-      // console.log('kakaologinresponse', kakaoLoginResponse);
-      // console.log(
-      //   '토큰토큰토큰kakaoLoginResponse.data.tokenDto.accessToken',
-      //   kakaoLoginResponse.data.tokenDto.accessToken
-      // );
+      console.log('전부', kakaoLoginResponse.data);
       setAccessToken(kakaoLoginResponse.data.tokenDto.accessToken);
       setProfileImg(kakaoLoginResponse.data.profileImg);
-      // setNickname(kakaoLoginResponse.data.nickname)
+      setNickname(kakaoLoginResponse.data.nickName);
     } catch (error) {
       console.error('카카오 로그인 새로운 api 실패', error);
     }
@@ -47,11 +42,15 @@ export default function Callback(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (accessToken) {
+    if (accessToken !== '') {
       dispatch(login({ profileImg: profileImg }));
       dispatch(addToken(accessToken));
-      if (nickname === '') navigate('/tutorial');
-      else navigate('/');
+      console.log('토큰 추가 후 홈페이지로 이동', accessToken);
+      if (nickname === '' || nickname === null) navigate('/tutorial');
+      else {
+        dispatch(addNickname(nickname));
+        navigate('/');
+      }
     }
   }, [accessToken]);
 

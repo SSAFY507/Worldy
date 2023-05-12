@@ -16,7 +16,6 @@ import WrAnswer from '../assets/images/WrongAnswer.png';
 import CrAnswer from '../assets/images/CorrectAnswer.png';
 import { useDispatch } from 'react-redux';
 import { addNickname, loginToken } from '../_store/slices/loginSlice';
-import { useSelector } from 'react-redux';
 import CustomAxios from '../API/CustomAxios';
 import axios from 'axios';
 
@@ -82,17 +81,17 @@ export default function Tutorial({
     setNickName(inputText);
   };
 
-  //닉네임 입력 버튼 관련 true : 3~10자 채움 false : 길이 불가능
+  //닉네임 입력 버튼 관련 true : 3~8자 채움 false : 길이 불가능
   const [ableNickNameLength, setAbleNickNameLength] = useState<boolean>(false);
 
   const [checkNicknameResult, setCheckNicknameResult] = useState(null);
   const [submitkNicknameResult, setSubmitNicknameResult] = useState(null);
-  const token: string = useSelector(loginToken);
+  const getLoginToken: string | null = sessionStorage.getItem('token');
 
-  //닉네임 길이가 3~10자일 때만 체크 가능ㄴ
+  //닉네임 길이가 3~8자일 때만 체크 가능ㄴ
   useEffect(() => {
     setNoDupNickName(null);
-    if (nickName.length >= 3 && nickName.length <= 10) {
+    if (nickName.length >= 3 && nickName.length <= 8) {
       setAbleNickNameLength(true);
     } else {
       setAbleNickNameLength(false);
@@ -108,7 +107,7 @@ export default function Tutorial({
   //닉네임이 Sunday(중복X)이면 true, 중복이면 false
   const checkNickNameDup = async () => {
     if (nickName.length >= 3 && nickName.length <= 8) {
-      await checkNicknameAxiosBasic();
+      await checkNicknameAxios();
     }
   };
 
@@ -133,16 +132,14 @@ export default function Tutorial({
     //console.log('닉네임 중복 결과 ', checkNicknameResult);
   }, [checkNicknameResult]);
 
-  const loginStateToken = sessionStorage.getItem('token');
   const checkNicknameAxios = async () => {
-    console.log('토큰', loginStateToken);
+    console.log('토큰', getLoginToken);
     try {
       const response = await CustomAxios({
         APIName: 'checkNickName',
         APIType: 'get',
-        // UrlQuery: `https://localhost:9090/api/user/check/${nickName}`,
         UrlQuery: `https://k8a507.p.ssafy.io/api/user/check/${nickName}`,
-        Token: loginStateToken,
+        Token: getLoginToken,
       });
       //console.log('닉네임 중복 체크 성공');
       setCheckNicknameResult(response);
@@ -152,22 +149,22 @@ export default function Tutorial({
     //console.log('token이 무엇이냐 ', token);
   };
 
-  const checkNicknameAxiosBasic = async () => {
-    try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${loginToken}`,
-        },
-      };
-      const checkNicknameResponse = await axios.get(
-        `http://localhost:9090/api/user/check/${nickName}`,
-        config
-      );
-      console.log('checknickname 결과', checkNicknameResponse);
-    } catch (error) {
-      console.error('카카오 로그인 새로운 api 실패', error);
-    }
-  };
+  // const checkNicknameAxiosBasic = async () => {
+  //   try {
+  //     const config = {
+  //       headers: {
+  //         Authorization: `Bearer ${loginToken}`,
+  //       },
+  //     };
+  //     const checkNicknameResponse = await axios.get(
+  //       `https://k8a507.p.ssafy.io/api/user/check/${nickName}`,
+  //       config
+  //     );
+  //     console.log('checknickname 결과', checkNicknameResponse);
+  //   } catch (error) {
+  //     console.error('카카오 로그인 새로운 api 실패', error);
+  //   }
+  // };
 
   const submitNickNameAxios = async () => {
     try {
@@ -175,7 +172,7 @@ export default function Tutorial({
         APIName: 'submitNickName',
         APIType: 'put',
         UrlQuery: `https://k8a507.p.ssafy.io/api/user/nickname/${nickName}`,
-        Token: loginStateToken,
+        Token: getLoginToken,
       });
 
       setSubmitNicknameResult(response);
@@ -191,7 +188,7 @@ export default function Tutorial({
           className='h-[60px] w-[90%] rounded-[10px] bg-[rgba(255,255,255,0.3)] text-white pl-[20px] p-[10px] text-[25px] font-PtdRegular'
           type='text'
           value={nickName}
-          placeholder='닉네임을 입력해주세요 (3~10자)'
+          placeholder='닉네임을 입력해주세요 (3~8자)'
           onChange={handleCheckNickName}
         />
         <button
