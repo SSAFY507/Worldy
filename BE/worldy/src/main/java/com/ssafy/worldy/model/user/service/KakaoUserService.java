@@ -139,11 +139,6 @@ public class KakaoUserService {
             // 비밀번호 암호화 (kakaoId를 암호화해서 비밀번호로 저장)
             String encodedPassword = passwordEncoder.encode(kakaoId);
 
-            // 권한 부여
-            Authority authority = Authority.builder()
-                    .authorityName(ROLE_USER)
-                    .build();
-
             user = User.builder()
                     .kakaoId(kakaoId)
                     .password(encodedPassword)
@@ -153,9 +148,14 @@ public class KakaoUserService {
                     .exp(0)
                     .level(1)
                     .tier("Silver")
-                    .mmr(1000)
-                    .authorities(Collections.singleton(authority)).build();
+                    .mmr(1000).build();
         }
+
+        // 권한 부여
+        Authority authority = Authority.builder()
+                .authorityName(ROLE_USER)
+                .build();
+        user.setAuthorities(Collections.singleton(authority));
 
         // 프로필 이미지는 로그인 할 때마다 업데이트
         String profileImg = jsonNode.get("properties").get("profile_image").asText();
