@@ -24,8 +24,8 @@ const Country = () => {
   const params = useParams();
   const countryName: string = params.country || '';
 
-  const [selectAsset, setSelectAsset] = useState<string>("");
-  // const [selectAsset, setSelectAsset] = useState<string>("aaa");
+  // const [selectAsset, setSelectAsset] = useState<string>("");
+  const [selectAsset, setSelectAsset] = useState<string>("aaa");
 
   const GetSelectAssetName = ((name:string) => {
     setSelectAsset(name);
@@ -37,13 +37,13 @@ const Country = () => {
       </div>
       {(selectAsset)
         ?
-        <div className="z-10 absolute w-full h-full">
+        <div className="z-10 absolute w-full h-full ">
           <CountrySpeak GetSelectAssetName={GetSelectAssetName}/>
         </div>
         :
         null
       }
-      <div className={`${(selectAsset) ? "blur-sm": ""}`}>
+      <div className={`${(selectAsset) ? "blur z-5" : ""}`}>
         <CountryMap countryName={countryName} GetSelectAssetName={GetSelectAssetName} selectAsset={selectAsset} />
       </div>
     </div>

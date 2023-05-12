@@ -3,8 +3,8 @@ import * as React from 'react';
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
 import { CSSTransition } from 'react-transition-group';
+import CountryNewsDetail from './CountryNewsDetail';
 import CrAnswer from '../../assets/images/CorrectAnswer.png';
-// import LoaderPyramid from '../LoaderPyramid';
 import WrAnswer from '../../assets/images/WrongAnswer.png';
 import book from '../../assets/images/bookIcon.png'
 import newsIcon from '../../assets/images/newsIcon.png'
@@ -17,7 +17,21 @@ import pathTB from '../../assets/images/TutorialBackground.png';
 import pathTQT from '../../assets/images/TutorialQuizText.png';
 import { useDispatch } from 'react-redux';
 import useLoadImagesHook from '../../_hooks/useLoadImagesHook';
-import CountryNewsDetail from './CountryNewsDetail';
+
+// import LoaderPyramid from '../LoaderPyramid';
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
   1. click하면 text index + 1
@@ -145,6 +159,27 @@ const CountrySpeak  = ({GetSelectAssetName}:Props) => {
     {
       link: "https://github.com/Lee-hanbin",
       press: "",
+      summary: "우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙",
+      thumbnailLink: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDYuvXXrtU9czKyRpF0dBbPkUebPVeDLseFg&usqp=CAU",
+      title: "샬라샬라",
+    },
+    {
+      link: "https://github.com/Lee-hanbin",
+      press: "",
+      summary: "우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙",
+      thumbnailLink: "https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F076%2F2022%2F08%2F24%2F2022082401001759800108441_20220824151804165.jpg&type=sc960_832",
+      title: "샬라샬라샬랄라",
+    },
+    {
+      link: "https://github.com/Lee-hanbin",
+      press: "",
+      summary: "우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙우아아아아ㅏ앙",
+      thumbnailLink: "https://search.pstatic.net/common/?src=http%3A%2F%2Fimgnews.naver.net%2Fimage%2F5339%2F2023%2F03%2F03%2F0000261078_001_20230303161201781.jpg&type=a340",
+      title: "샬라샬라샬랄라",
+    },
+    {
+      link: "https://github.com/Lee-hanbin",
+      press: "",
       summary: "얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리얄리얄리얄리리리리",
       thumbnailLink: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDYuvXXrtU9czKyRpF0dBbPkUebPVeDLseFg&usqp=CAU",
       title: "샬라샬라",
@@ -167,8 +202,8 @@ const CountrySpeak  = ({GetSelectAssetName}:Props) => {
 
 
   return (
-    <div>
-      <div className="w-full h-full absolute flex items-end">
+    <div >
+      <div className="w-full h-full absolute flex items-end bg-[rgba(255,255,255,0.4)]">
         <div className="z-10 translate-x-10 absolute w-1/4 ">
           <img
             className="h-[50%]"
@@ -176,7 +211,7 @@ const CountrySpeak  = ({GetSelectAssetName}:Props) => {
             alt=""
           />
         </div>
-        <div className="z-10 absolute translate-x-80 h-1/2 ">
+        <div className="z-10 absolute translate-x-80 h-3/5 ">
           <img
             className="h-[100%]"
             src={TutorialItemList[targetIndex].imgsrc}
@@ -190,19 +225,19 @@ const CountrySpeak  = ({GetSelectAssetName}:Props) => {
                 <div className='text-3xl pb-5'>
                   <img className="h-10" src={book} alt=""/>
                 </div>
-                <div className='text-4xl font-extrabold'>미국 최신 뉴스</div>
-                <div className='text-xl font-extralight'>United States Latest News</div>
+                <div className='text-5xl font-PtdExtraBold'>미국 최신 뉴스</div>
+                <div className='text-2xl font-PtdLight'>United States Latest News</div>
               </div>
               <div className="h-1/2">
-                <div className="pb-1">미국의 최신 뉴스를 제공합니다.</div>
-                <div className="pb-1">하루에 한 번, 매일 아침 업데이트 되는</div>
-                <div className="pb-1">미국의 새로운 소식을 만나보세요</div>
+                <div className="pb-1 font-PtdLight">미국의 최신 뉴스를 제공합니다.</div>
+                <div className="pb-1 font-PtdLight">하루에 한 번, 매일 아침 업데이트 되는</div>
+                <div className="pb-1 font-PtdLight">미국의 새로운 소식을 만나보세요</div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div className=" absolute w-full h-full flex flex-row justify-center ">
+      <div className=" absolute w-full h-full flex flex-row justify-center">
         <div className="w-1/3">
         </div>
         <div className="mt-40 mr-40 w-1/4 flex flex-row itmes-center">

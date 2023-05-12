@@ -35,7 +35,7 @@ $card-size: 24rem;
   height: 700px;
   transform: rotateY(calc(var(--offset) * 40deg)) scaleY(calc(1 + var(--abs-offset) * -0.3))
     translateZ(calc(var(--abs-offset) * -25rem)) translateX(calc(var(--direction) * -4rem));
-  filter: blur(calc(var(--abs-offset) * 0.8rem));
+  filter: blur(calc(var(--abs-offset) * 0.2rem));
   transition: all 0.3s ease-out;
   &::after {
     content: "";
@@ -82,24 +82,24 @@ $card-size: 24rem;
 }
 
 .nav {
-  color: rgba(255, 178, 249, 0.962);
+  // color: rgba(255, 178, 249, 0.962);
   position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
   top: 25%;
   z-index: 40;
   cursor: pointer;
-  user-select: none;
-  background: unset;
-  border: unset;
+  // user-select: none;
+  // background: unset;
+  // border: unset;
 
   &.left {
-    transform: translateX(1280%) translatey(0%);
+    transform: translateX(1400%)
   }
 
   &.right {
     // right: 0;
-    transform: translateX(-280%) translatey(0%);
+    transform: translateX(-380%)
   }
 }
