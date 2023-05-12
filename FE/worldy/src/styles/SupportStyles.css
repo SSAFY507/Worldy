@@ -6,3 +6,19 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* //////////// */
+.on-scrollbar-support::-webkit-scrollbar {
+  display: block;
+  border-radius: 5px;
+  width: 10px;
+}
+
+.on-scrollbar-support {
+  -ms-overflow-style: scrollbar;
+  scrollbar-width: 2px;
+}
+.on-scrollbar-support::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.307);
+  border-radius: 100px;
+}

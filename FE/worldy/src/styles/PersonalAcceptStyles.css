@@ -1,4 +1,4 @@
-.on-scrollbar::-webkit-scrollbar {
+.on-bar::-webkit-scrollbar {
   display: block;
   border-radius: 5px;
   width: 10px;

@@ -39,6 +39,7 @@ import { useSelector } from 'react-redux';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 import LoaderPyramid from '../components/Loaders/LoaderPyramid';
 import LoaderBlueCircle from '../components/Loaders/LoaderBlueCircle';
+import CustomAxios from '../API/CustomAxios';
 
 type MyPageMenuType = {
   icon: React.ReactNode;
@@ -103,8 +104,8 @@ export default function MyPage({
   const loginRecordRef = useRef<HTMLDivElement>(null);
   const logoutRef = useRef<HTMLDivElement>(null);
 
-  const userNickname: string = useSelector(loginNickName);
-  const userProfileImg: string = useSelector(loginProfileImg);
+  const userNickname: string = sessionStorage.getItem('nickname') || '';
+  const userProfileImg: string | null = sessionStorage.getItem('profileImg');
 
   const scrollToContent = (ref: React.RefObject<HTMLDivElement>) => {
     if (containerRef.current && ref.current) {
@@ -300,7 +301,7 @@ export default function MyPage({
           </div>
           <div className='w-[70px] h-[70px] rounded-full grid place-content-center overflow-hidden mb-[15px] outline-[5px] outline outline-[rgba(255,255,255,0.2)]'>
             <img
-              src={userProfileImg}
+              src={userProfileImg || ''}
               alt='프로필 사진'
               className='w-full h-full'
             />
@@ -584,7 +585,7 @@ export default function MyPage({
       quizId: 0,
       nationName: '대한민국',
       level: 1,
-      quizType: 'OX',
+      quizType: 'ox',
       category: 'cul',
       image: '',
       content: '일본의 모든 도시는 한국의 모든 도시와 표준시가 1시간 차이난다.',
@@ -641,7 +642,7 @@ export default function MyPage({
       quizId: 0,
       nationName: '대한민국',
       level: 1,
-      quizType: 'OX',
+      quizType: 'ox',
       category: 'cul',
       image: '',
       content: '대한민국에서 쓰이는 언어는 한극어이다.',
@@ -710,8 +711,6 @@ export default function MyPage({
 
   const [rankList, setMyRankList] = useState<rankListType>(inputList);
 
-  const myName = '훈';
-
   const myRank = rankList.myRank;
   const rankInfo: string[] =
     myRank < 30
@@ -759,7 +758,7 @@ export default function MyPage({
           className={`w-full h-fit  outline-red-300 flex flex-col justify-start items-start transition-all duration-1000 ease-in-out`}
         >
           <div className='text-[#6A6A6A] font-PtdRegular text-[22px] mx-[15px] '>
-            <span>{myName}</span>
+            <span>{userNickname}</span>
             <span></span>
             님의 랭킹 정보
           </div>
@@ -844,7 +843,7 @@ export default function MyPage({
                 </div>
                 <div className='w-fit h-fit flex flex-row flex-1 justify-center items-center -ml-[200px]'>
                   <span className='font-PtdLight text-white text-[20px]'>
-                    {myName}
+                    {userNickname}
                   </span>
                 </div>
                 <div className='w-[100px] flex-2 grid place-ontent-right'>
@@ -874,6 +873,35 @@ export default function MyPage({
     );
   };
 
+  const [logoutResult, setLogoutResult] = useState<any>();
+
+  const logoutAxios = async () => {
+    const loginToken = sessionStorage.getItem('token');
+    console.log('로그아웃 시 토큰 : ', loginToken);
+    try {
+      const response = await CustomAxios({
+        APIName: 'logout',
+        APIType: 'get',
+        UrlQuery: 'https://k8a507.p.ssafy.io/api/user/logout',
+        Token: loginToken,
+      });
+      setLogoutResult(response);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const logoutClick = async () => {
+    await logoutAxios().then(() => {
+      dispatch(logout());
+      navigate('/');
+    });
+  };
+
+  useEffect(() => {
+    console.log('로그아웃 결과: ', logoutResult);
+  }, [logoutResult]);
+
   const [iconColor, setIconColor] = useState<string>('#E6E6E6');
 
   const logoutContent = (): JSX.Element => {
@@ -883,13 +911,7 @@ export default function MyPage({
         onMouseEnter={() => setIconColor('#FF4D45')}
         onMouseLeave={() => setIconColor('#E6E6E6')}
       >
-        <button
-          className='logoutbtn'
-          onClick={() => {
-            dispatch(logout());
-            navigate('/');
-          }}
-        >
+        <button className='logoutbtn' onClick={logoutClick}>
           <span className='logouticon w-fit h-fit outline-white'>
             <IoMdPower size={26} color={iconColor} />
           </span>

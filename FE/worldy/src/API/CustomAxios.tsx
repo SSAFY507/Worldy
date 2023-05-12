@@ -5,7 +5,7 @@ type InputType = {
   APIType: 'get' | 'post' | 'put' | 'delete';
   UrlQuery: string;
   Body?: Map<string, any>;
-  Token?: string;
+  Token: string | null;
 };
 
 export default async function CustomAxios(input: InputType): Promise<any> {
@@ -20,6 +20,7 @@ export default async function CustomAxios(input: InputType): Promise<any> {
     };
 
     const { data } = await axios(config);
+    console.log(`${input.APIName} API 성공`, data);
     return data;
   } catch (e) {
     console.log(

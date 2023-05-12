@@ -13,6 +13,8 @@ import PersonalAccept from './PersonalAccept';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToken, loginState } from '../_store/slices/loginSlice';
 import { login, logout } from '../_store/slices/loginSlice';
+import CustomAxios from '../API/CustomAxios';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 type PointerOutProps = {
   onClose: () => void;
@@ -35,7 +37,7 @@ export default function LoginModal({
     if (isLoaded) {
       setTimeout(() => {
         setLoadedAll(true);
-      }, 300);
+      });
     }
   }, [isLoaded]);
 
@@ -48,40 +50,14 @@ export default function LoginModal({
 
   ////////////////////카카오 로그인 버튼 관련
 
-  const checkLoginState = useSelector(loginState);
+  const checkLoginState = sessionStorage.getItem('isLoggedIn');
   const dispatch = useDispatch();
 
-  const handleKakaoLoginSuccess = async (response: any) => {
-    console.log('카카오 로그인 성공', response);
-    const accessToken = response.access_token;
-    dispatch(addToken(accessToken));
-    try {
-      const userInfoResponse = await axios.get(
-        'https://kapi.kakao.com/v2/user/me',
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-      const userData = userInfoResponse.data;
-      console.log('사진 ', userData.properties.profile_image);
-      dispatch(
-        login({ nickname: '', profileImg: userData.properties.profile_image })
-      );
-      console.log('유저 정보', userData);
-      onClickKakaoLogin(firstLogin);
-    } catch (error) {
-      console.error('유저 정보 가져오기 실패', error);
-    }
-  };
+  const [submitKakaoTokenResult, setSubmitKakaoTokenResult] = useState<any>();
+
+  //카카오 로그인 성공 시 데이터 확인 및 분할
 
   const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
-
-  const handleKakaoLoginFailure = (error: any) => {
-    console.log('카카오 실패', error);
-    setShowErrorModal(true);
-  };
 
   const closeErrorModal = () => {
     setShowErrorModal(false);
@@ -142,27 +118,15 @@ export default function LoginModal({
                 <img src={loadedImages['LoginLogo']} alt='로그인 로고' />
               </div>
               <div className=' w-full h-fit flex justify-center items-center mt-[15px]'>
-                <KakaoLogin
-                  onSuccess={handleKakaoLoginSuccess}
-                  onFailure={handleKakaoLoginFailure}
-                />
-                {/* <button>
-                  <img src={KakaoLoginButton} alt='카카오 로그인 버튼' />
-                </button> */}
+                <KakaoLogin />
               </div>
               <div className=' w-full h-20 flex flex-col items-center justify-between py-4 font-PtdMedium text-base'>
-                <div className='flex flex-row justify-center items-center'>
-                  <div className=' '>
-                    저희 Wordly는 회원님의 정보를 다음과 같이 처리합니다.
-                  </div>
-                  {/* <div className='text-blue-400 underline underline-offset-2 decoration-2'>
-                    <button onClick={clickKakaoLogin}>계정 생성</button>
-                    <a href='/'>계정 생성</a>
-                  </div> */}
+                <div className='flex flex-row justify-center items-center text-[15px]'>
+                  저희 Worldy는 회원님의 정보를 다음과 같이 처리합니다.
                 </div>
                 <button
                   onClick={handleShowPersonalAccept}
-                  className='underline underline-offset-2 decoration-2 text-[19px] mt-[2px] text-blue-400'
+                  className='underline underline-offset-2 decoration-2 text-[13px] mt-[2px] text-blue-400'
                 >
                   개인 정보 처리방침
                 </button>

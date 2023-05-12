@@ -7,9 +7,11 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
 
 import Country from './routes/Country';
 import Explore from './routes/Explore';
+import Game from './routes/Game';
 import GameInfo from './routes/GameInfo';
 import IntroPage from './routes/IntroPage';
 import LoginModal from './components/LoginModal';
@@ -17,19 +19,18 @@ import MainPageAfterLogin from './routes/MainPageAfterLogin';
 import Monopoly from './routes/Monopoly';
 import MyPage from './routes/MyPage';
 import Navbar from './components/Nvabar';
+import Socket from './routes/Socket';
 import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
 // import Updates from './routes/Updates';
 import pathBI from './assets/images/MainPageBackground.png';
-import { useState, useRef, useEffect } from 'react';
-import Game from './routes/Game';
-import Socket from './routes/Socket';
-import Payment from './routes/Payment';
 import PaySuccess from './routes/PayResult';
 
 import { loginState } from './_store/slices/loginSlice';
 import { useSelector } from 'react-redux';
 import PayResult from './routes/PayResult';
+import Callback from './routes/Callback';
+import Payment from './routes/Payment';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -53,9 +54,6 @@ const AppLayout = () => {
   // }, [login]);
 
   //페이지 이동 Route용으로 <Route><Route> => <Routes><Route>로 변경했습니다.
-
-  //카카오 로그인 눌렀을 때, 첫 로그인이면 Tutorial로, 아니면 Mainpage로
-  const [firstLoginState, setFirstLoginState] = useState<boolean>(false);
 
   const handleFirstLogin = (firstLogin: boolean) => {
     console.log('LoginModal로부터 넘어온 firstLogin', firstLogin);
@@ -82,7 +80,13 @@ const AppLayout = () => {
     setQnaModal(input);
   };
 
-  const checkLoginState = useSelector(loginState);
+  const checkLoginState = sessionStorage.getItem('isLoggedIn');
+  const checkNickname = sessionStorage.getItem('nickname') || '';
+
+  useEffect(() => {
+    if (checkLoginState && (checkNickname === '' || checkNickname === null))
+      navigate('/tutorial');
+  }, []);
 
   type PayResultStringType = {
     result: string;
@@ -126,7 +130,8 @@ const AppLayout = () => {
       }}
     >
       <div className='z-50'>
-        {location.pathname !== '/tutorial' &&
+        {location.pathname !== '/tutori' &&
+          location.pathname !== '/user/kakao/callback' &&
           exploreUrl !== '/payment' &&
           exploreUrl !== '/explore' &&
           monopolyUrl !== '/monopoly' &&
@@ -141,6 +146,7 @@ const AppLayout = () => {
       </div>
       <div className='flex-1 h-full max-h-full'>
         <Routes>
+          <Route path='/user/kakao/callback' element={<Callback />} />
           {checkLoginState ? (
             <Route
               path='/'

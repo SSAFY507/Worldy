@@ -1,0 +1,105 @@
+$color-purple: #8b5cf6;
+$color-pink: #ec4899;
+$color-gray: #9ca3af;
+$color-black: #1f2937;
+$card-size: 24rem;
+
+//body {
+//  width: 50vw;
+//  height: 50vh;
+//  display: flex;
+//  align-items: center;
+//  justify-content: center;
+//  overflow: hidden;
+//  font-family: "Montserrat", sans-serif;
+//}
+//
+//* {
+//  box-sizing: border-box;
+//}
+
+.carousel {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  width: 600px;
+  height: 700px;
+  perspective: 600px;
+  transform-style: preserve-3d;
+}
+
+.card-container {
+  position: absolute;
+  display: flex;
+  width: 550px;
+  height: 700px;
+  transform: rotateY(calc(var(--offset) * 40deg)) scaleY(calc(1 + var(--abs-offset) * -0.3))
+    translateZ(calc(var(--abs-offset) * -25rem)) translateX(calc(var(--direction) * -4rem));
+  filter: blur(calc(var(--abs-offset) * 0.8rem));
+  transition: all 0.3s ease-out;
+  &::after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 550px;
+    height: 276px;
+    border-radius: 10px 10px 0px 0px;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0) 50%);
+  }
+}
+
+.card {
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  height: 700px;
+  padding: 6.5rem 1rem 0.5rem 1rem;
+  // background-color: hsl(280deg, 40%, calc(100% - var(--abs-offset) * 50%));
+  border-radius: 1rem;
+  color: $color-gray;
+  text-align: justify;
+  transition: all 0.3s ease-out;
+  justify-content: flex-end;
+
+  h3 {
+    display: flex;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 2px #626262;
+    z-index: 1;
+  }
+
+  p {
+    display: flex;
+    font-size: 0.7rem;
+    color: white;
+    text-shadow: 1px 1px 2px #626262;
+    z-index: 1;
+  }
+}
+
+.nav {
+  color: rgba(255, 178, 249, 0.962);
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 25%;
+  z-index: 40;
+  cursor: pointer;
+  user-select: none;
+  background: unset;
+  border: unset;
+
+  &.left {
+    transform: translateX(1280%) translatey(0%);
+  }
+
+  &.right {
+    // right: 0;
+    transform: translateX(-280%) translatey(0%);
+  }
+}
