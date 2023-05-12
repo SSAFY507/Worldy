@@ -30,7 +30,7 @@ export default function CarouselComponent({
   images: ImageListType[];
   loaded: boolean;
 }) {
-  const [carouselHeight, setCarouselHeight] = useState<number>(680);
+  const [carouselHeight, setCarouselHeight] = useState<number>(700);
   // useEffect(() => {
   //   setCarouselHeight(680);
   // }, []);
@@ -99,7 +99,7 @@ export default function CarouselComponent({
               {images.map((item, index) => (
                 <div
                   key={index}
-                  className={` outline-blue-500 flex flex-row justify-start items-center pl-20`}
+                  className={`w-full outline-blue-500 flex flex-row justify-start items-center pl-20`}
                   style={{
                     height: carouselHeight,
                     backgroundImage: `url(${item.image})`,

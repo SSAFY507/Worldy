@@ -18,10 +18,7 @@ const root = createRoot(container);
 // window.Kakao.isInitialized(); // init되면 true, 아니면 false를 반환한다
 
 const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-const nickname =
-  sessionStorage.getItem('nickname') === ''
-    ? '임시 닉네임'
-    : sessionStorage.getItem('nickname');
+const nickname = sessionStorage.getItem('nickname') || '';
 const profileImg = sessionStorage.getItem('profileImg');
 if (isLoggedIn === 'true' && profileImg) {
   store.dispatch(

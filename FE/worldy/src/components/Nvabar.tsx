@@ -8,7 +8,6 @@ import ReactDOM from 'react-dom';
 import BUTTON_RED from './Button_Red';
 import '../styles/NavBarAnimation.css';
 import SallyPath from '../assets/images/SallyProfilePic.png';
-import { useSelector } from 'react-redux';
 
 import {
   loginNickName,
@@ -37,7 +36,7 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
     { name: '고객 지원', path: '/support' },
   ];
 
-  const checkLoginState = useSelector(loginState);
+  const checkLoginState = sessionStorage.getItem('isLoggedIn');
   const dispatch = useDispatch();
   console.log('checkLoginState', checkLoginState);
 
@@ -50,7 +49,7 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
       const response = await CustomAxios({
         APIName: 'logout',
         APIType: 'get',
-        UrlQuery: 'https://localhost:9090/api/user/logout',
+        UrlQuery: 'https://k8a507.p.ssafy.io/api/user/logout',
         Token: loginToken,
       });
       setLogoutResult(response);
@@ -109,8 +108,8 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
     setClickStateAfterLoginIcon(!clickStateAfterLoginIcon);
   };
 
-  const userNick: string = useSelector(loginNickName);
-  const userProfileImg: string = useSelector(loginProfileImg);
+  const userNick: string = sessionStorage.getItem('nickname') || '';
+  const userProfileImg: string | null = sessionStorage.getItem('profileImg');
 
   const [hoverModalContent, setHoverModalContent] = useState<number>(0);
 
@@ -136,11 +135,11 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
         <div className='w-full h-[4em] flex flex-row justify-stretch items-center border-b-[.05em] border-solid border-0 border-[rgba(255,255,255,0.2)] '>
           <div className='w-[5em] h-full flex justify-center items-center'>
             <div className=' w-[2.5em] h-[2.5em] rounded-full grid place-content-center  overflow-hidden bg-[rgba(255,255,255,0.5)]'>
-              <img src={userProfileImg} alt='쌜리' className='' />
+              <img src={userProfileImg || ''} alt='쌜리' className='' />
             </div>
           </div>
           <div className='h-full flex-1 py-[.5em] flex flex-col justify-stretch items-center  text-white'>
-            <div className='h-full w-full flex justify-start items-center font-PtdSemiBOld text-[20px]'>
+            <div className='h-full w-full flex justify-start items-center font-PtdSemiBOld text-[15px]'>
               {userNick}
             </div>
           </div>
@@ -206,7 +205,7 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
             <ul className='flex flex-row items-center justify-center h-full'>
               {navList.map((item, index) => (
                 <li key={index} className='mx-10'>
-                  {!checkLoginState && index >= 2 ? (
+                  {!checkLoginState && index >= 1 ? (
                     <button>
                       <div
                         id='NavBarButtons-Animation'
