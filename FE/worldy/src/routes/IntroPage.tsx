@@ -9,6 +9,7 @@ import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 import LoaderPyramid from '../components/Loaders/LoaderPyramid';
 import { CSSTransition } from 'react-transition-group';
 import '../styles/CSSTransitionStyles.css';
+import Footer from '../components/Footer';
 
 function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
   const tempClick = () => {
@@ -64,7 +65,7 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
     setTimeout(() => setPopupSecondBr(true), 3000);
     setTimeout(() => setPopupThird(true), 3800);
     setTimeout(() => setPopupGreyInfo(true), 3800);
-    console.log('헉');
+    //console.log('헉');
   }, []);
 
   return (
@@ -72,8 +73,9 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
       {loadedAll ? (
         <div
           // style={{ backgroundColor: 'rgba(27, 27, 27, 0.5)' }}
-          className='h-full flex flex-col justify-center items-center'
+          className='h-full flex flex-col justify-center items-center relative'
         >
+          <Footer />
           {moreInfo && (
             <CSSTransition
               in={popupGreyInfo}
@@ -82,7 +84,7 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
               unmountOnExit
             >
               <div
-                className='z-0 absolute top-20 left-0 h-14 w-screen flex flex-row justify-between items-center text-base'
+                className='z-0 absolute top-0 left-0 h-14 w-screen flex flex-row justify-between items-center text-base'
                 style={{ backgroundColor: '#333336' }}
               >
                 <div className='w-1/4'></div>

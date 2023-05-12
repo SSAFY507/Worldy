@@ -4,8 +4,10 @@ import { useState, useEffect } from 'react';
 import '../styles/SupportModalStyles.css';
 import PersonalAccept from './PersonalAccept';
 import CustomAxios from '../API/CustomAxios';
-import { loginToken } from '../_store/slices/loginSlice';
+import { loginToken, wholeState } from '../_store/slices/loginSlice';
 import { useSelector } from 'react-redux';
+import { useSelect } from '@react-three/drei';
+import axios from 'axios';
 
 type askTypeListType = {
   value: number;
@@ -114,9 +116,19 @@ export default function SupportModal({
   }, [contentText]);
 
   const [result, setResult] = useState(null);
-  const token: string = useSelector(loginToken);
+  const token: string | null = sessionStorage.getItem('token');
+  const things = useSelector(wholeState);
 
-  const fetchData = async () => {
+  useEffect(() => {
+    console.log('토근 왜 안나와', token);
+  }, [token]);
+
+  useEffect(() => {
+    console.log('전부', things);
+  }, [things]);
+
+  const submitHelpAxios = async () => {
+    console.log('토큰 : ', token);
     try {
       const requestBody = new Map([
         ['category', askTypeList[askType].name],
@@ -126,11 +138,11 @@ export default function SupportModal({
       const response = await CustomAxios({
         APIName: 'writeHelp',
         APIType: 'post',
+        // UrlQuery: 'https://localhost:9090/api/help/write',
         UrlQuery: 'https://k8a507.p.ssafy.io/api/help/write',
         Body: requestBody,
         Token: token,
       });
-
       setResult(response);
       console.log('리퀘스트 바디', requestBody);
     } catch (error) {
@@ -138,8 +150,32 @@ export default function SupportModal({
     }
   };
 
+  // 요청 헤더 및 바디를 포함하는 POST 요청 함수를 정의합니다.
+  async function submitHelpAxiosBasic() {
+    console.log('문의 토큰 : ', token);
+
+    try {
+      const response = await axios.post(
+        'https://k8a507.p.ssafy.io/api/help/write',
+        // 요청 바디 데이터를 객체 형식으로 전달합니다.
+        { category: askTypeList[askType].name, content: contentText },
+        {
+          headers: {
+            // 요청 헤더 정보를 설정합니다.
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+      console.log('문으 ㅣ전송 성공');
+    } catch (error) {
+      console.error(`Error: ${error}`);
+    }
+  }
+
   const submitHelp = () => {
-    fetchData();
+    submitHelpAxiosBasic();
+    // submitHelpAxios();
   };
 
   return (
