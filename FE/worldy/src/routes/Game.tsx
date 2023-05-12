@@ -8,8 +8,8 @@ import LoaderPyramid from '../components/Loaders/LoaderPyramid';
 
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router';
-import Swal from 'sweetalert2'
-import LoginModal from '../components/LoginModal';
+
+import GameLoginModal from '../components/LoginModal';
 
 export default function Game() {
   
@@ -18,24 +18,21 @@ export default function Game() {
   const navigate = useNavigate();
 
   const [showLoginModal, setShowLoginModal] = useState<boolean>(false);
+
   const closeLoginModal = () => {
     setShowLoginModal(false);
   };
 
   const handleFirstLogin = (firstLogin: boolean) => {
-    
-    // if (firstLogin) {
-    //   sessionStorage.setItem('gameId', `${gameId}`);
-    //   navigate('/tutorial');
-    // } else {
-    //   navigate(`/game/${gameId}`);
-    // }
-    // closeLoginModal();
+    console.log(firstLogin);
   }
    
   useEffect(() => {
     if(!token) {
       setShowLoginModal(true);
+      sessionStorage.setItem('gameId', `${gameId}`);
+    } else {
+      sessionStorage.removeItem('gameId')
     }
   }, [])
   
@@ -49,7 +46,7 @@ export default function Game() {
   return (
     <div className='w-screen h-screen'>
       {showLoginModal && (
-          <LoginModal
+          <GameLoginModal
             onClose={closeLoginModal}
             onClickKakaoLogin={handleFirstLogin}
           />

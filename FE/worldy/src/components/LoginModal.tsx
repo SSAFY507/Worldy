@@ -84,7 +84,7 @@ export default function LoginModal({
       >
         {loadedAll ? (
           <div>
-            <div id='XbuttonFrame' className='flex flex-row justify-end'>
+            { !sessionStorage.getItem('gameId') ? (<div id='XbuttonFrame' className='flex flex-row justify-end'>
               <button onClick={onClose}>
                 <div>
                   <svg
@@ -100,7 +100,8 @@ export default function LoginModal({
                   </svg>
                 </div>
               </button>
-            </div>
+            </div>) : 
+            <div className='mt-[9%]'/>}
             <div className='h-full my-4 flex flex-col justify-between px-12'>
               <div className=' w-full h-24 flex flex-row justify-center items-center px-[10px] '>
                 <div className=' w-[90px] h-[90px] '>

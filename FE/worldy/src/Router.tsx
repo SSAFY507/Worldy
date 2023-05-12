@@ -67,9 +67,6 @@ const AppLayout = () => {
     closeLoginModal();
   };
 
-  // const endTutorial = () => {
-  //   navigate('/');
-  // };
  
   const endTutorial = () => {
 
