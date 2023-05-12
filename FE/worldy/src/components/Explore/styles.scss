@@ -22,6 +22,7 @@ $card-size: 24rem;
   position: relative;
   display: flex;
   flex-direction: row;
+  justify-content: center;
   width: 600px;
   height: 700px;
   perspective: 600px;
@@ -95,11 +96,13 @@ $card-size: 24rem;
   // border: unset;
 
   &.left {
-    transform: translateX(1400%)
+    transform: translateX(900%);
+    width: 3rem;
   }
 
   &.right {
     // right: 0;
-    transform: translateX(-380%)
+    transform: translateX(-900%);
+    width: 3rem;
   }
 }

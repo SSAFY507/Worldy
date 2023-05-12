@@ -8,8 +8,15 @@ import ExchangeRateIcon from '../../assets/images/ExchangeRateIcon.png';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import Moon from '../../assets/images/Moon.png';
 import logoColoredBlue from '../../assets/images/LogoColoredBlue.png';
+import { useNavigate } from 'react-router';
 
-export default function WorldMapNavbarComponent() {
+interface Props {
+  selectAsset: string;
+  GetSelectAssetName: (name:string) => void;
+};
+
+const WorldMapNavbarComponent  = ({ selectAsset, GetSelectAssetName}:Props) => {
+
   const list = {
     country: '미국',
     countryEng: 'United States',
@@ -39,7 +46,9 @@ export default function WorldMapNavbarComponent() {
 
   const [timeLineString, setTimeLineString] = useState<string>('');
   const [timeAPM, setTimeAPM] = useState<string>('');
-
+  
+  const navigate = useNavigate();
+  
   useEffect(() => {
     setTimeLineString(
       infoList.time < 11
@@ -98,7 +107,22 @@ export default function WorldMapNavbarComponent() {
       </button> */}
       <div className='relative h-full w-[20%]  outline-white flex flex-row justify-start items-center'>
         <button>
-          <IoMdArrowRoundBack size={30} color={'#D2D2D2'} />
+          <IoMdArrowRoundBack 
+            size={30} 
+            color={'#D2D2D2'}
+            onClick={() => {
+              if (selectAsset) {
+                // detail page인 경우, Country Map 으로
+                GetSelectAssetName("")
+                alert("나라로 이동합니다.")
+              } else {  
+                // Country Map인 경우, World Map 으로
+                alert("대륙으로 이동합니다.")
+                navigate('/explore')
+
+              }
+            }} 
+          />
         </button>
         <div className='absolute top-[130px] w-fit h-fit flex flex-col justify-start items-start  ml-[30px] pl-[20px]'>
           {/* border-0 border-l-[4px] border-white border-solid */}
@@ -208,3 +232,5 @@ export default function WorldMapNavbarComponent() {
     </div>
   );
 }
+
+export default WorldMapNavbarComponent;
