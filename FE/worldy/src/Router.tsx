@@ -19,23 +19,18 @@ import MainPageAfterLogin from './routes/MainPageAfterLogin';
 import Monopoly from './routes/Monopoly';
 import MyPage from './routes/MyPage';
 import Navbar from './components/Nvabar';
-import Payment from './routes/Payment';
 import Socket from './routes/Socket';
 import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
 import Updates from './routes/Updates';
 import pathBI from './assets/images/MainPageBackground.png';
-import { useState, useRef, useEffect } from 'react';
-import Game from './routes/Game';
-import Socket from './routes/Socket';
-import Payment from './routes/Payment';
 import PaySuccess from './routes/PayResult';
 
 import { loginState } from './_store/slices/loginSlice';
-import pathBI from './assets/images/MainPageBackground.png';
 import { useSelector } from 'react-redux';
 import PayResult from './routes/PayResult';
 import Callback from './routes/Callback';
+import Payment from './routes/Payment';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
