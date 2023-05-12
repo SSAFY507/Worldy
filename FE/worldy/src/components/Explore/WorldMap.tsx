@@ -22,11 +22,9 @@ import southAmerica from "../../assets/lowpoly/southAmerica.glb";
 import { useNavigate } from "react-router";
 
 export interface CountryType {
-  [key: string]: string|string[];
+  [key: string]: string;
 }
-export interface SpeakType {
-  [key: string]: CountryType;
-}
+
 const WorldMap = () => {
 
   const divContainer = useRef<HTMLDivElement>(null);

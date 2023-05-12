@@ -10,20 +10,18 @@ const Country = () => {
   const params = useParams();
   const countryName: string = params.country || '';
 
-  const [selectAsset, setSelectAsset] = useState<string>("");
+  const [selectAsset, setSelectAsset] = useState<string>("quizBox");
   // const [selectAsset, setSelectAsset] = useState<string>("aaa");
 
   const GetSelectAssetName = ((name:string) => {
     setSelectAsset(name);
   });
-  console.log(11111111111111111111111111111111)
-  console.log(selectAsset)
 
   return (
     <div className='relative'>
-      {/* <div className='z-20 absolute top-0 left-0 w-full h-20'>
+      <div className='z-20 absolute top-0 left-0 w-full h-20'>
         <WorldMapNavbarComponent />
-      </div> */}
+      </div>
       {(selectAsset)
         ?
         <div className="z-10 absolute w-full h-full ">

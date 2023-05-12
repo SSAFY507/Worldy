@@ -4,11 +4,11 @@ import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
 import { CSSTransition } from 'react-transition-group';
 import CountryNewsDetail from './CountryNewsDetail';
+import CountryQuizDetail from './CountryQuizDetail';
 import CrAnswer from '../../assets/images/CorrectAnswer.png';
-import { SpeakType } from '../../components/Explore/WorldMap';
 import WrAnswer from '../../assets/images/WrongAnswer.png';
-import book from '../../assets/images/bookIcon.png'
-import newsIcon from '../../assets/images/newsIcon.png'
+import book from '../../assets/images/bookIcon.png';
+import newsIcon from '../../assets/images/newsIcon.png';
 import pathBA from '../../assets/images/BtgAttention.png';
 import pathBC from '../../assets/images/BtgCurious.png';
 import pathBH from '../../assets/images/BtgHandup.png';
@@ -16,6 +16,7 @@ import pathBP from '../../assets/images/BtgPointing.png';
 import pathBT from '../../assets/images/BtgTeach.png';
 import pathTB from '../../assets/images/TutorialBackground.png';
 import pathTQT from '../../assets/images/TutorialQuizText.png';
+import quizIcon from '../../assets/images/quizIcon.png';
 import { useDispatch } from 'react-redux';
 import useLoadImagesHook from '../../_hooks/useLoadImagesHook';
 
@@ -33,7 +34,26 @@ interface Props {
   GetSelectAssetName: (name:string) => void;
 };
 
-const countryLst: SpeakType = {
+interface SpeakType {
+  [key: string]: DetailType;
+}
+
+interface DetailType {
+  title: string,
+  subTitle: string,
+  contents: string[],
+  icon: string,
+  npcImg: string,
+}
+
+interface Country {
+  [key: string]: {
+    KOREAN: string,
+    ENGLISH: string,
+  }
+}
+
+const countryLst: Country = {
   asia_Korea: {
     KOREAN: '대한민국',
     ENGLISH: 'Korea',
@@ -177,17 +197,19 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
     historyBox: {
       title: `${countryLst[`${countryName}`].KOREAN} 최신 뉴스`,
       subTitle: `${countryLst[`${countryName}`].ENGLISH} Latest News`,
-      contents: [`${countryLst[`${countryName}`].KOREAN}의 최신 뉴스를 제공합니다.`, "하루에 한 번, 매일 아침 업데이트 되는", `${countryLst[countryName].KOREAN}의 새로운 소식을 만나보세요`]
+      contents: [`${countryLst[`${countryName}`].KOREAN}의 최신 뉴스를 제공합니다.`, "하루에 한 번, 매일 아침 업데이트 되는", `${countryLst[countryName].KOREAN}의 새로운 소식을 만나보세요`],
+      icon: newsIcon,
+      npcImg: pathBA
     },
     quizBox:{
       title: `${countryLst[`${countryName}`].KOREAN} 상식 퀴즈`,
       subTitle: `${countryLst[`${countryName}`].ENGLISH} Trivia Quiz`,
-      contents: ["시사, 역사, 문화 등", "다양한 카테고리의 재미있는", `${countryLst[countryName].KOREAN} 상식 퀴즈를 풀어보세요!`]
+      contents: ["시사, 역사, 문화 등", "다양한 카테고리의 재미있는", `${countryLst[countryName].KOREAN} 상식 퀴즈를 풀어보세요!`],
+      icon: quizIcon,
+      npcImg: pathBP
     }
   }
-  console.log(selectAsset)
-  console.log(selectAsset)
-  console.log(ment[`${selectAsset}`])
+ 
   const data = [
     {
       link: "https://github.com/Lee-hanbin",
@@ -235,19 +257,70 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
 
 
   return (
+    <div className="w-full h-full flex items-end">
+      <div className="z-10 w-1/4 translate-x-10 absolute">
+        <img
+          className="h-[50%]"
+          src={ment[`${selectAsset}`].icon}
+          alt=""
+        />
+      </div>
+      <div className="z-10 h-3/5 translate-x-80 absolute">
+        <img
+          className="h-[100%]"
+          src={ment[`${selectAsset}`].npcImg}
+          alt=""
+        />
+      </div>
+      <div className="w-full h-full flex flex-row items-end bg-[rgba(255,255,255,0.4)]">
+        <div className="h-full w-1/4 flex flex-col bg-[rgba(0,0,0,0.3)] ">
+          <div className="h-2/3 flex flex-col justify-center text-white p-20">
+            <div className="h-1/2 flex flex-col">
+              <div className="flex flex-col pb-10">
+                <div className='text-3xl pb-5'>
+                  <img className="h-10" src={book} alt=""/>
+                </div>
+                <div className='text-4xl font-PtdExtraBold'>{ment[`${selectAsset}`].title}</div>
+                <div className='text-2xl font-PtdLight'>{ment[`${selectAsset}`].subTitle}</div>
+              </div>
+              <div className="h-1/2">
+                <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[0]}</div>
+                <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[1]}</div>
+                <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[2]}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="h-full w-3/4 flex flex-col justify-center items-center">
+          {(selectAsset === "historyBox") ? <CountryNewsDetail data={data}/> :null}
+          {(selectAsset === "quizBox") ? <CountryQuizDetail /> : null}
+        </div>
+      </div>
+    </div>
+  );
+  
+
+}
+
+
+export default CountrySpeak;
+
+
+/*
+  return (
     <div >
       <div className="w-full h-full absolute flex items-end bg-[rgba(255,255,255,0.4)]">
         <div className="z-10 translate-x-10 absolute w-1/4 ">
           <img
             className="h-[50%]"
-            src={newsIcon}
+            src={ment[`${selectAsset}`].icon}
             alt=""
           />
         </div>
         <div className="z-10 absolute translate-x-80 h-3/5 ">
           <img
             className="h-[100%]"
-            src={TutorialItemList[targetIndex].imgsrc}
+            src={ment[`${selectAsset}`].npcImg}
             alt=""
           />
         </div>
@@ -271,19 +344,12 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
         </div>
       </div>
       <div className=" absolute w-full h-full flex flex-row justify-center">
-        <div className="w-1/3">
-        </div>
+        <div className="w-1/3" />
         <div className="mt-40 mr-40 w-1/4 flex flex-row itmes-center">
-          <CountryNewsDetail data={data}/>
+          {(selectAsset === "historyBox") ? <CountryNewsDetail data={data}/> :null}
+          {(selectAsset === "quizBox") ? <CountryQuizDetail /> : null}
         </div>
       </div>
     </div>
   );
-  
-
-}
-
-
-export default CountrySpeak;
-
-
+*/
