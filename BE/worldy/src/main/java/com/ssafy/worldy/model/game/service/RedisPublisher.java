@@ -78,4 +78,15 @@ public class RedisPublisher {
 
         redisTemplate.convertAndSend(topic.getTopic(), gameEnterUser);
     }
+
+    /**
+     * 게임 메타 데이터 전송
+     **/
+    public void publish(MetaData metaData) {
+
+        log.info("Topic : " + topic.getTopic());
+        log.info("Quiz : " + metaData.toString());
+
+        redisTemplate.convertAndSend(topic.getTopic(), metaData);
+    }
 }
