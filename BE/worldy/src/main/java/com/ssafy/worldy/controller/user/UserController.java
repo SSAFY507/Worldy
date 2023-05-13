@@ -63,7 +63,7 @@ public class UserController {
     public ResponseEntity<String> logout() {
 
         String kakaoId = SecurityContextHolder.getContext().getAuthentication().getName();
-        kakaoUserService.logout(kakaoId);
+        // kakaoUserService.logout(kakaoId);
 
         return new ResponseEntity<>("[kakaoId : " + kakaoId + "] logout success", HttpStatus.OK);
     }

@@ -55,7 +55,7 @@ public class KakaoUserService {
         // 3. 로그인 JWT 토큰 발행
         TokenDto tokenDto = createToken(user);
 
-        return new KakaoLoginDto(tokenDto, user.getKakaoId(), user.getProfileImg());
+        return new KakaoLoginDto(tokenDto, user.getKakaoId(), user.getProfileImg(), user.getNickName());
     }
 
     // access, refresh 토큰 발급 및 저장
@@ -116,6 +116,7 @@ public class KakaoUserService {
 
         // 회원가입
         if (user == null) {
+            System.out.println("===== 처음 가입하는 사용자 =====");
             String age = null;
             String gender = null;
 
@@ -188,15 +189,15 @@ public class KakaoUserService {
         return objectMapper.readTree(responseBody);
     }
 
-    // 로그아웃
-    @Transactional
-    public void logout(String kakaoId) {
-
-        UserDto userDto = getUserDto(kakaoId);
-
-        userDto.setRefreshToken(null);
-        userRepo.save(userDto.toEntity());
-    }
+//    // 로그아웃
+//    @Transactional
+//    public void logout(String kakaoId) {
+//
+//        UserDto userDto = getUserDto(kakaoId);
+//
+//        userDto.setRefreshToken(null);
+//        userRepo.save(userDto.toEntity());
+//    }
 
     // kakaoId로 UserDto 조회
     public UserDto getUserDto(String kakaoId) {
