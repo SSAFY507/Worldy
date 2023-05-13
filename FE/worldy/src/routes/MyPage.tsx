@@ -67,11 +67,11 @@ export type ScrappedQuizType = {
   multiSecond: string | null; //2번
   multiThird: string | null; //3번
   multiFourth: string | null; //4번
-  hint: boolean; //힌트
-  commentary: string; //힌트 유형
+  hint: string;
+  hintType: boolean; //힌트
   userAnswer: string | null; //유저가 적은 정답(맞았으면 null)
   success: boolean; //맞춘 문제인가
-  explanation?: string;
+  commentary: string;
 };
 
 export default function MyPage({
@@ -319,16 +319,147 @@ export default function MyPage({
       </div>
     );
   };
+  //////////////////////////////////////////////////
 
+  //퀴즈 타입 (-1 : 닫힘, 0 : 전체, 1 : 나라별, 2 : 난이도별, 3 : 카테고리별)
   const [scrappedQuizTypeSelect, setScrappedQuizTypeSelet] =
     useState<number>(-1);
+  //퀴즈 타입 버튼 인덱스 (-1 : 버튼 안 누른 상태, 0 : 전체 버튼, 1 : 나라별, 2 : 난이도별, 3: 카테고리별, 4 : 화살표)
+  const [quizPopDownKeyState, setQuizPopDownKeyState] = useState<number>(-1);
+
+  //선택된 타입의 string (전체, 나라별, 난이도별, 카테고리별)
+  const [selectedType, setSelectedType] = useState<string>('');
+  //세부 카테고리 선택 인덱스
+  const [quizMenuSelected, setQuizMenuSelected] = useState<number>(0);
+  //세부 카테고리 (한국,중국 ,... , 상,중,하, 시사,문화...)
+  const [selectedValue, setSelectedValue] = useState<string>('');
+
+  //스크랩 퀴즈 창 열기 / 닫기
+  const [quizPopDownBoxState, setQuizPopDownBoxState] =
+    useState<boolean>(false);
+
+  //스크랩 퀴즈 선택 id
+  const [selectedQuizId, setSelectedQuizId] = useState<number>(0);
+  //스크랩 퀴즈 모달 열기 닫기
+  const [quizModalState, setQuizModalState] = useState<boolean>(false);
+  //받아오는 퀴즈 리스트
+  const [axiosScrappedQuizList, setAxiosScrappedQuizList] = useState<
+    ScrappedQuizType[]
+  >([]);
+  //선택 사항에 따른 분류된 퀴즈 리스트
+  const [sortedScrapQuizList, setSortedScrapQuizList] = useState<
+    ScrappedQuizType[]
+  >([]);
+
+  //퀴즈 타입 인덱스값 설정 (같은 버튼 누르면 닫기로 -1)
   const handleScrappedQuizTypeSelect = (input: number) => {
+    console.log('const 1');
     setScrappedQuizTypeSelet(input === scrappedQuizTypeSelect ? -1 : input);
   };
+  //버튼 눌러서 퀴즈 타입 설정
   const clickQuizType = (input: number) => {
+    console.log('const 2');
     handleQuizPopDownKeyState(input);
-    handleScrappedQuizTypeSelect(input === 4 ? 1 : input);
+    console.log('버튼 누른 input', input);
+    if (input === 1) setSelectedType('나라별');
+    else if (input === 2) setSelectedType('난이도별');
+    else if (input === 3) setSelectedType('카테고리별');
+    else setSelectedType('전체');
+    handleScrappedQuizTypeSelect(input === 4 ? 0 : input);
   };
+  //버튼 눌러서 스크랩 창 열기 닫기
+  const handleQuizPopDownKeyState = (input: number) => {
+    console.log('const 3');
+    if (input === 4) {
+      //화살표 눌렀을 때
+      quizPopDownBoxState //열려있으면 버튼 인덱스 -1로 하고 닫기
+        ? setQuizPopDownKeyState(-1) //
+        : setQuizPopDownKeyState(0);
+    } else setQuizPopDownKeyState(quizPopDownKeyState === input ? -1 : input);
+  };
+
+  const handleQuizModal = (select: number) => {
+    console.log('const 4');
+    setSelectedQuizId(select);
+    setTimeout(() => {
+      setQuizModalState(true);
+    }, 100);
+  };
+
+  const sortScrappedQuizByCategory = ({
+    type,
+    value,
+  }: {
+    type: string;
+    value: string;
+  }) => {
+    console.log('const 5');
+    const inputvalue =
+      value === '상'
+        ? '3'
+        : value === '중'
+        ? '2'
+        : value === '하'
+        ? '1'
+        : value === '문화/역사'
+        ? 'cul'
+        : value === '시사'
+        ? 'aff'
+        : value === '기타'
+        ? 'etc'
+        : value;
+    console.log('선택된 카테고리 벨류 : ', value);
+    console.log('분류된 밸류 ', inputvalue);
+    if (inputvalue === '없음') setSortedScrapQuizList([]);
+    else if (inputvalue !== '전체') {
+      //내부 선택이 있으면 타입 분류 및 카테고리 분류
+      var tempList: ScrappedQuizType[] = [];
+      console.log(`선택한 타입 : ${type} => 카테고리 : ${inputvalue}`);
+      for (let i = 0; i < axiosScrappedQuizList.length; i++) {
+        if (type === '나라별') {
+          if (axiosScrappedQuizList[i].nationName === inputvalue)
+            tempList.push(axiosScrappedQuizList[i]);
+        } else if (type === '난이도별') {
+          if (axiosScrappedQuizList[i].level === +inputvalue)
+            tempList.push(axiosScrappedQuizList[i]);
+        } else {
+          if (axiosScrappedQuizList[i].category === inputvalue) {
+            tempList.push(axiosScrappedQuizList[i]);
+          }
+        }
+      }
+      setSortedScrapQuizList(tempList);
+    } else {
+      //내부 선택 없으면 타입 분류만
+      console.log('전체 밸류');
+      setSortedScrapQuizList(axiosScrappedQuizList);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedType === '') return;
+    console.log('useEffect 1', selectedType);
+    setSelectedValue('전체');
+    sortScrappedQuizByCategory({ type: selectedType, value: selectedValue });
+  }, [selectedType]);
+
+  useEffect(() => {
+    if (selectedValue === '') return;
+    console.log('useEffect 2', selectedValue);
+    sortScrappedQuizByCategory({ type: selectedType, value: selectedValue });
+  }, [selectedValue]);
+
+  useEffect(() => {
+    console.log('useEffect 3', quizPopDownKeyState);
+    setQuizMenuSelected(0); //세부 셀렉 0
+    setQuizPopDownBoxState(quizPopDownKeyState === -1 ? false : true);
+    console.log('타입 변함', quizPopDownKeyState);
+    if (quizPopDownKeyState !== -1) scrollToContent(quizScrapRef);
+  }, [quizPopDownKeyState]); //퀴즈 타입 버튼 인덱스
+
+  useEffect(() => {
+    getScrappedQuizListAxios();
+  }, []);
 
   const quizScrapContentComponent = () => {
     return (
@@ -414,15 +545,15 @@ export default function MyPage({
           } px-[10px] pb-[0px]`}
         >
           <div className='w-[140px] h-full  outline-blue-300 overflow-y-scroll  px-[15px]'>
+            {/* quizPopDownKeyState : 전체/나라별/난이도별/카테고리별/화살표 누름 */}
             {quizSelectMenuList[
               quizPopDownKeyState === -1 ? 0 : quizPopDownKeyState
             ].map((item, key) => quizMenuBar({ input: item, key: key }))}
           </div>
           <div className='flex-1 h-full  outline-white overflow-y-scroll flex flex-col justify-start items-start px-[10px]'>
-            {sortScrappedQuizByCategory({
-              type: selectedType,
-              value: selectedValue,
-            }).map((item, key) => quizPreviewBox({ input: item, key: key }))}
+            {sortedScrapQuizList.map((item, key) =>
+              quizPreviewBox({ input: item, key: key })
+            )}
             {/* {tempScrappedQuizList.map((item, key) =>
               quizPreviewBox({ input: item, key: key })
             )} */}
@@ -446,75 +577,24 @@ export default function MyPage({
     );
   };
 
-  const [selectedType, setSelectedType] = useState<string>('전체');
-  const [selectedValue, setSelectedValue] = useState<string>('전체');
+  const getLoginToken: string | null = sessionStorage.getItem('token');
 
-  const sortScrappedQuizByCategory = ({
-    type,
-    value,
-  }: {
-    type: string;
-    value: string;
-  }): ScrappedQuizType[] => {
-    const inputvalue =
-      value === '상'
-        ? '3'
-        : '중'
-        ? '2'
-        : '하'
-        ? '1'
-        : '문화/역사'
-        ? 'cul'
-        : '시사'
-        ? 'aff'
-        : '기타'
-        ? 'etc'
-        : value;
-    console.log('타입 , 밸류: ', type, inputvalue);
-
-    if (value !== '전체') {
-      var tempList: ScrappedQuizType[] = [];
-      for (let i = 0; i < tempScrappedQuizList.length; i++) {
-        if (type === '나라별') {
-          if (tempScrappedQuizList[i].nationName === inputvalue)
-            tempList.push(tempScrappedQuizList[i]);
-        } else if (type === '난이도별') {
-          if (tempScrappedQuizList[i].level === +inputvalue)
-            tempList.push(tempScrappedQuizList[i]);
-        } else {
-          if (tempScrappedQuizList[i].category === inputvalue) {
-            tempList.push(tempScrappedQuizList[i]);
-          }
-        }
-      }
-      return tempList;
-    } else {
-      return tempScrappedQuizList;
+  const getScrappedQuizListAxios = async () => {
+    console.log('Session에서의 가져오는 토큰', getLoginToken);
+    try {
+      const response = await CustomAxios({
+        APIName: 'getScrappedQuiz',
+        APIType: 'get',
+        UrlQuery: `https://k8a507.p.ssafy.io/api/user/scrap/all`,
+        Token: getLoginToken,
+      });
+      //console.log('닉네임 중복 체크 성공');
+      console.log('퀴즈 스크랩 받은 거 : ', response[0].quizId);
+      setAxiosScrappedQuizList(response);
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
-
-    // return [
-    //   {
-    //     quizId: 0,
-    //     nationName: '대한민국',
-    //     level: 1,
-    //     quizType: 'ox',
-    //     category: 'cul',
-    //     image: '',
-    //     content:
-    //       '일본의 모든 도시는 한국의 모든 도시와 표준시가 1시간 차이난다.',
-    //     answer: 'O',
-    //     multiFirst: null, //1번
-    //     multiSecond: null, //2번
-    //     multiThird: null, //3번
-    //     multiFourth: null, //4번
-    //     hint: true, //힌트
-    //     commentary: '일본은 한국보다 실제 시간이 30분 빠릅니다',
-    //     userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
-    //     success: true, //맞춘 문제인가
-    //     explanation:
-    //       '한국의 중앙 자오선은 동경 127.5°이며 일본의 중앙 자오선은 동경 135°로 일본이 30분 더 빠릅니다. 그러나 일제의 잔재로, 실제로는 일본 표준 자오선인 동경 135°에 맞춰 표준시를 사용하고 있습니다. 반면 북한은 광복 70주년에 표준시를 다시 30분 늦췄고 한국은 북한과 30분의 시차를 가지는 상황입니다.',
-    //   },
-    // ];
+    //console.log('token이 무엇이냐 ', token);
   };
 
   const quizSelectMenuList: string[][] = [
@@ -579,11 +659,6 @@ export default function MyPage({
     );
   };
 
-  const [quizMenuSelected, setQuizMenuSelected] = useState<number>(0);
-
-  /* from-[#958e8e] 
-          via-[#76b8b2]
-          to-[#00ffbf99] */
   const quizPreviewBox = ({
     input,
     key,
@@ -649,105 +724,6 @@ export default function MyPage({
     );
   };
 
-  const [quizPopDownKeyState, setQuizPopDownKeyState] = useState<number>(-1);
-
-  useEffect(() => {
-    setQuizMenuSelected(0);
-  }, [quizPopDownKeyState]);
-
-  const handleQuizPopDownKeyState = (input: number) => {
-    if (input === 4) {
-      quizPopDownBoxState
-        ? setQuizPopDownKeyState(-1)
-        : setQuizPopDownKeyState(1);
-    } else setQuizPopDownKeyState(quizPopDownKeyState === input ? -1 : input);
-  };
-
-  const [quizPopDownBoxState, setQuizPopDownBoxState] = useState<boolean>(true);
-
-  useEffect(() => {
-    setQuizPopDownBoxState(quizPopDownKeyState === -1 ? false : true);
-    if (quizPopDownKeyState !== -1) scrollToContent(quizScrapRef);
-  }, [quizPopDownKeyState]);
-
-  const tempScrappedQuizList: ScrappedQuizType[] = [
-    {
-      quizId: 0,
-      nationName: '대한민국',
-      level: 1,
-      quizType: 'ox',
-      category: 'cul',
-      image: '',
-      content: '일본의 모든 도시는 한국의 모든 도시와 표준시가 1시간 차이난다.',
-      answer: 'O',
-      multiFirst: null, //1번
-      multiSecond: null, //2번
-      multiThird: null, //3번
-      multiFourth: null, //4번
-      hint: true, //힌트
-      commentary: '일본은 한국보다 실제 시간이 30분 빠릅니다',
-      userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
-      success: true, //맞춘 문제인가
-      explanation:
-        '한국의 중앙 자오선은 동경 127.5°이며 일본의 중앙 자오선은 동경 135°로 일본이 30분 더 빠릅니다. 그러나 일제의 잔재로, 실제로는 일본 표준 자오선인 동경 135°에 맞춰 표준시를 사용하고 있습니다. 반면 북한은 광복 70주년에 표준시를 다시 30분 늦췄고 한국은 북한과 30분의 시차를 가지는 상황입니다.',
-    },
-    {
-      quizId: 0,
-      nationName: '중국',
-      level: 2,
-      quizType: 'multi',
-      category: 'cul',
-      image: '',
-      content:
-        '중국의 역사는 매우 오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요..',
-      answer: '하나라',
-      multiFirst: '진나라진나라진나라', //1번
-      multiSecond: '명나라', //2번
-      multiThird: '하나라', //3번
-      multiFourth: '성나라', //4번
-      hint: true, //힌트
-      commentary: '힌트 무슨 유형인가', //힌트 유형
-      userAnswer: '1', //유저가 적은 정답(맞았으면 null)
-      success: false, //맞춘 문제인가
-    },
-    {
-      quizId: 0,
-      nationName: '대한민국',
-      level: 1,
-      quizType: 'blank',
-      category: 'cul',
-      image: '',
-      content: '세종대왕.',
-      answer: '세종대왕',
-      multiFirst: null, //1번
-      multiSecond: null, //2번
-      multiThird: null, //3번
-      multiFourth: null, //4번
-      hint: true, //힌트
-      commentary: 'ㅅㅈㄷㅇ', //힌트 유형
-      userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
-      success: false, //맞춘 문제인가
-    },
-    {
-      quizId: 0,
-      nationName: '대한민국',
-      level: 1,
-      quizType: 'ox',
-      category: 'cul',
-      image: '',
-      content: '대한민국에서 쓰이는 언어는 한극어이다.',
-      answer: 'X',
-      multiFirst: null, //1번
-      multiSecond: null, //2번
-      multiThird: null, //3번
-      multiFourth: null, //4번
-      hint: false, //힌트
-      commentary: '힌트 무슨 유형인가', //힌트 유형
-      userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
-      success: false, //맞춘 문제인가
-    },
-  ];
-
   const contentBoxComponent = ({
     title,
     content,
@@ -765,16 +741,6 @@ export default function MyPage({
         </div>
       </div>
     );
-  };
-
-  const [quizModalState, setQuizModalState] = useState<boolean>(false);
-  const [selectedQuizId, setSelectedQuizId] = useState<number>(0);
-
-  const handleQuizModal = (select: number) => {
-    setSelectedQuizId(select);
-    setTimeout(() => {
-      setQuizModalState(true);
-    }, 100);
   };
 
   ////////////////////////////////////////
@@ -1022,7 +988,7 @@ export default function MyPage({
         <>
           {quizModalState && (
             <QuizModal
-              input={tempScrappedQuizList[selectedQuizId]}
+              input={axiosScrappedQuizList[selectedQuizId]}
               closeModal={() => setQuizModalState(false)}
             />
           )}
