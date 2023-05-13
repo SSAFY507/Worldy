@@ -309,24 +309,34 @@ export default function Main() {
             }     
           }
           else if(received.cnt>=5) {
+
+            // console.log('유저 확인');
+            
             let check = true;
       
-            if (loginUser===received.user1.kakaoId) {
-              check = false;
-            } else if (loginUser===received.user2.kakaoId) {
-              check = false;
-            } else if (loginUser===received.user3.kakaoId) {
-              check = false;
-            } else if (loginUser===received.user4.kakaoId) {
-              check = false;
-            } 
+            // if (loginUser===received.user1.kakaoId) {
+            //   check = false;
+            // } else if (loginUser===received.user2.kakaoId) {
+            //   check = false;
+            // } else if (loginUser===received.user3.kakaoId) {
+            //   check = false;
+            // } else if (loginUser===received.user4.kakaoId) {
+            //   check = false;
+            // } 
 
+            // setGameStart(!check);
             setUserCheck(check);
           }
       }
     })
   }
 
+  // 게임 방이 가득차면 redirect
+  if(userCheck) {
+    navigate('/');
+  }
+
+    
   function sendData() {
     //websockt emit
     const data = player;
@@ -396,11 +406,6 @@ export default function Main() {
   //     },
   //   }));
   // }
-
-  // 게임 방이 가득차면 redirect
-  if(userCheck) {
-    navigate('/');
-  }
 
   // // 참여한 플레이어 데이터 세팅하기
   // function setGameData() {
@@ -1470,7 +1475,7 @@ export default function Main() {
 
   return (
     <>
-
+    {userCheck? <div>true</div> : <div>false</div>}
     <div className='w-screen h-screen bg-[#FFFDF4]'>
       <div className='w-full bg-[#FFFDF4] flex items-start justify-around fixed-top z-50'>
         <div className='w-full h-[60px] flex items-end justify-end'>
