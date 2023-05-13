@@ -49,25 +49,7 @@ const AppLayout = () => {
     setShowLoginModal(false);
   };
 
-  // useEffect(() => {
-  //   if (login) setImageBackgroundImage(new Image());
-  // }, [login]);
-
   //페이지 이동 Route용으로 <Route><Route> => <Routes><Route>로 변경했습니다.
-
-  const handleFirstLogin = (firstLogin: boolean) => {
-    console.log('LoginModal로부터 넘어온 firstLogin', firstLogin);
-    if (firstLogin) {
-      navigate('/tutorial');
-    } else {
-      navigate('/');
-    }
-    closeLoginModal();
-  };
-
-  const endTutorial = () => {
-    navigate('/');
-  };
 
   const exploreUrl = location.pathname.substr(0, 8);
   const monopolyUrl = location.pathname.substr(0, 9);
@@ -84,8 +66,15 @@ const AppLayout = () => {
   const checkNickname = sessionStorage.getItem('nickname') || '';
 
   useEffect(() => {
-    if (checkLoginState && (checkNickname === '' || checkNickname === null))
-      navigate('/tutorial');
+    if (location.pathname !== '/user/kakao/callback')
+      if (checkLoginState && (checkNickname === '' || checkNickname === null)) {
+        //로그인돼있는데 닉네임 없으면 tutorial
+        navigate('/tutorial');
+        console.log('닉네임 설정해주세요 (tutorial로 이동)');
+      } else if (!checkLoginState) {
+        navigate('/'); //로그인 안돼있으면 홈으로
+        console.log('로그인 해주세요(Home으로 이동)');
+      }
   }, []);
 
   type PayResultStringType = {
@@ -136,17 +125,11 @@ const AppLayout = () => {
           exploreUrl !== '/explore' &&
           monopolyUrl !== '/monopoly' &&
           gameUrl !== '/game' && <Navbar onLoginClick={handleLoginModal} />}
-        {showLoginModal && (
-          <LoginModal
-            onClose={closeLoginModal}
-            onClickKakaoLogin={handleFirstLogin}
-          />
-        )}
+        {showLoginModal && <LoginModal onClose={closeLoginModal} />}
         {/* Routes : 여러 컴퍼넌트 중 URL과 일치하는 '첫번째' Route 컴퍼넌트만 렌더링 */}
       </div>
       <div className='flex-1 h-full max-h-full'>
         <Routes>
-          <Route path='/user/kakao/callback' element={<Callback />} />
           {checkLoginState ? (
             <Route
               path='/'
@@ -162,10 +145,11 @@ const AppLayout = () => {
               element={<IntroPage onLoginClick={handleLoginModal} />}
             />
           )}
+          <Route path='/user/kakao/callback' element={<Callback />} />
           <Route path='/info' element={<GameInfo />} />
           <Route path='/updates' element={<Updates />} />
-          <Route path='/explore' element={<Explore />} />
           <Route path='/explore/:country' element={<Country />} />
+          <Route path='/explore' element={<Explore />} />
           <Route path='/monopoly' element={<Monopoly />} />
           <Route
             path='/support'
@@ -177,14 +161,10 @@ const AppLayout = () => {
               <MyPage setRef={myPageRef} handleQnaModal={handleQnaModal} />
             }
           />
-          <Route path='/game' element={<Game />} />
           <Route path='/game/:id' element={<Game />} />
+          <Route path='/game' element={<Game />} />
           <Route path='/socket' element={<Socket />} />
-          <Route
-            path='/tutorial'
-            element={<Tutorial onClickEndTutorial={() => endTutorial()} />}
-          />
-          <Route path='/payment' element={<Payment />} />
+          <Route path='/tutorial' element={<Tutorial />} />
           <Route
             path='/paymentsuccess'
             element={<PayResult input={paymentSuccessInput} />}
@@ -193,6 +173,7 @@ const AppLayout = () => {
             path='/paymentfailure'
             element={<PayResult input={paymentFailureInput} />}
           />
+          <Route path='/payment' element={<Payment />} />
         </Routes>
       </div>
     </div>
