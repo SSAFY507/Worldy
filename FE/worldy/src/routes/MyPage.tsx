@@ -194,10 +194,10 @@ export default function MyPage({
           {input.icon}
         </span>
         <span
-          className={`w-full ml-[.5em] text-[1.2em] text-white font-PtdMedium flex flex-row justify-between items-center`}
+          className={`w-full ml-[.5em] text-[1.2em] text-white font-PtdMedium flex flex-row justify-start items-center`}
         >
           {input.title}
-          {input.move && <FiArrowUpRight className='mr-[1em]' />}
+          {input.move && <FiArrowUpRight className='ml-[1em]' />}
         </span>
       </button>
     );
@@ -342,7 +342,10 @@ export default function MyPage({
                 : 'bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.2)] '
             }
             `}
-            onClick={() => clickQuizType(0)}
+            onClick={() => {
+              clickQuizType(0);
+              setSelectedType('전체');
+            }}
           >
             <span className='text-white text-[20px] font-PtdSemiBOld'>
               전체
@@ -358,7 +361,10 @@ export default function MyPage({
                 : 'bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.2)] '
             }
             `}
-            onClick={() => clickQuizType(1)}
+            onClick={() => {
+              clickQuizType(1);
+              setSelectedType('나라별');
+            }}
           >
             <span className='text-white text-[18px] font-PtdSemiBOld'>
               나라별
@@ -372,7 +378,10 @@ export default function MyPage({
                 : 'bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.2)] '
             }
             `}
-            onClick={() => clickQuizType(2)}
+            onClick={() => {
+              clickQuizType(2);
+              setSelectedType('난이도별');
+            }}
           >
             <span className='text-white text-[18px] font-PtdSemiBOld'>
               난이도별
@@ -387,7 +396,10 @@ export default function MyPage({
                 : 'bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.2)] '
             }
             `}
-            onClick={() => clickQuizType(3)}
+            onClick={() => {
+              clickQuizType(3);
+              setSelectedType('카테고리별');
+            }}
           >
             <span className='text-white text-[18px] font-PtdSemiBOld'>
               카테고리별
@@ -407,9 +419,13 @@ export default function MyPage({
             ].map((item, key) => quizMenuBar({ input: item, key: key }))}
           </div>
           <div className='flex-1 h-full  outline-white overflow-y-scroll flex flex-col justify-start items-start px-[10px]'>
-            {tempScrappedQuizList.map((item, key) =>
+            {sortScrappedQuizByCategory({
+              type: selectedType,
+              value: selectedValue,
+            }).map((item, key) => quizPreviewBox({ input: item, key: key }))}
+            {/* {tempScrappedQuizList.map((item, key) =>
               quizPreviewBox({ input: item, key: key })
-            )}
+            )} */}
           </div>
         </div>
         <button
@@ -428,6 +444,77 @@ export default function MyPage({
         </button>
       </div>
     );
+  };
+
+  const [selectedType, setSelectedType] = useState<string>('전체');
+  const [selectedValue, setSelectedValue] = useState<string>('전체');
+
+  const sortScrappedQuizByCategory = ({
+    type,
+    value,
+  }: {
+    type: string;
+    value: string;
+  }): ScrappedQuizType[] => {
+    const inputvalue =
+      value === '상'
+        ? '3'
+        : '중'
+        ? '2'
+        : '하'
+        ? '1'
+        : '문화/역사'
+        ? 'cul'
+        : '시사'
+        ? 'aff'
+        : '기타'
+        ? 'etc'
+        : value;
+    console.log('타입 , 밸류: ', type, inputvalue);
+
+    if (value !== '전체') {
+      var tempList: ScrappedQuizType[] = [];
+      for (let i = 0; i < tempScrappedQuizList.length; i++) {
+        if (type === '나라별') {
+          if (tempScrappedQuizList[i].nationName === inputvalue)
+            tempList.push(tempScrappedQuizList[i]);
+        } else if (type === '난이도별') {
+          if (tempScrappedQuizList[i].level === +inputvalue)
+            tempList.push(tempScrappedQuizList[i]);
+        } else {
+          if (tempScrappedQuizList[i].category === inputvalue) {
+            tempList.push(tempScrappedQuizList[i]);
+          }
+        }
+      }
+      return tempList;
+    } else {
+      return tempScrappedQuizList;
+    }
+
+    // return [
+    //   {
+    //     quizId: 0,
+    //     nationName: '대한민국',
+    //     level: 1,
+    //     quizType: 'ox',
+    //     category: 'cul',
+    //     image: '',
+    //     content:
+    //       '일본의 모든 도시는 한국의 모든 도시와 표준시가 1시간 차이난다.',
+    //     answer: 'O',
+    //     multiFirst: null, //1번
+    //     multiSecond: null, //2번
+    //     multiThird: null, //3번
+    //     multiFourth: null, //4번
+    //     hint: true, //힌트
+    //     commentary: '일본은 한국보다 실제 시간이 30분 빠릅니다',
+    //     userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
+    //     success: true, //맞춘 문제인가
+    //     explanation:
+    //       '한국의 중앙 자오선은 동경 127.5°이며 일본의 중앙 자오선은 동경 135°로 일본이 30분 더 빠릅니다. 그러나 일제의 잔재로, 실제로는 일본 표준 자오선인 동경 135°에 맞춰 표준시를 사용하고 있습니다. 반면 북한은 광복 70주년에 표준시를 다시 30분 늦췄고 한국은 북한과 30분의 시차를 가지는 상황입니다.',
+    //   },
+    // ];
   };
 
   const quizSelectMenuList: string[][] = [
@@ -480,7 +567,10 @@ export default function MyPage({
         }
         `}
         key={key}
-        onClick={() => setQuizMenuSelected(key)}
+        onClick={() => {
+          setQuizMenuSelected(key);
+          setSelectedValue(input);
+        }}
       >
         <span className={`${key === 0 ? 'text-[22px]' : 'text-[16px]'} `}>
           {input}
@@ -505,7 +595,7 @@ export default function MyPage({
       input.level === 1 ? '하' : input.level === 2 ? '중' : '상';
     const categ: string =
       input.category === 'cul'
-        ? '문화'
+        ? '문화/역사'
         : input.category === 'aff'
         ? '시사'
         : '기타';
