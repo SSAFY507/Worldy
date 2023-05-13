@@ -4,11 +4,13 @@ import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
 import { CSSTransition } from 'react-transition-group';
 import CountryNewsDetail from './CountryNewsDetail';
+import CountryPaintDetail from './CountryPaintDetail';
 import CountryQuizDetail from './CountryQuizDetail';
 import CrAnswer from '../../assets/images/CorrectAnswer.png';
 import WrAnswer from '../../assets/images/WrongAnswer.png';
 import book from '../../assets/images/bookIcon.png';
 import newsIcon from '../../assets/images/newsIcon.png';
+import paintIcon from '../../assets/images/paint.png'
 import pathBA from '../../assets/images/BtgAttention.png';
 import pathBC from '../../assets/images/BtgCurious.png';
 import pathBH from '../../assets/images/BtgHandup.png';
@@ -207,6 +209,13 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
       contents: ["시사, 역사, 문화 등", "다양한 카테고리의 재미있는", `${countryLst[countryName].KOREAN} 상식 퀴즈를 풀어보세요!`],
       icon: quizIcon,
       npcImg: pathBP
+    },
+    paintBox:{
+      title: "틀림 그림 찾기",
+      subTitle: "Hidden Catch of AI",
+      contents: [`${countryLst[`${countryName}`].KOREAN}의 명소 이미지가 등장합니다.`, "시간 안에 AI가 바꾸어 놓은 부분 중" , "세 가지를 찾아보세요!"],
+      icon: paintIcon,
+      npcImg: pathBC
     }
   }
  
@@ -294,7 +303,7 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
         <div className="h-full w-3/4 flex flex-col justify-center items-center">
           {(selectAsset === "newsBox") ? <CountryNewsDetail data={data}/> :null}
           {(selectAsset === "quizBox") ? <CountryQuizDetail /> : null}
-          {/* {(selectAsset === "historyBox") ? <CountryNewsDetail data={data}/> :null} */}
+          {(selectAsset === "paintBox") ? <CountryPaintDetail /> :null}
 
         </div>
       </div>

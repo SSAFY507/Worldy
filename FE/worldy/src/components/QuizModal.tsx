@@ -485,7 +485,7 @@ export default function QuizModal({
     }, 1700);
   }, [flipped]);
 
-  const fromtContainer = (): JSX.Element => {
+  const frontContainer = (): JSX.Element => {
     return (
       <div
         className={`frontcontainer transition-all duration-[500ms] ease-in-out ${
@@ -675,7 +675,7 @@ export default function QuizModal({
       style={{ width: `${size * 3}px`, height: 'fit' }}
     >
       <div className='cardcontainer-inner w-full h-full'>
-        {fromtContainer()}
+        {frontContainer()}
         {backContainer()}
       </div>
     </div>
