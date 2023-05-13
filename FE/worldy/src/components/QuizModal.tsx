@@ -535,7 +535,7 @@ export default function QuizModal({
                 <AiOutlineClose
                   size={25}
                   color='#BFBFBF'
-                  onClick={() => closeModal()}
+                  onClick={closeModal}
                   className='cursor-pointer'
                 />
               </div>
@@ -593,7 +593,7 @@ export default function QuizModal({
                 <AiOutlineClose
                   size={30}
                   color='gray'
-                  onClick={() => closeModal()}
+                  onClick={closeModal}
                   className='cursor-pointer'
                 />
               </div>
