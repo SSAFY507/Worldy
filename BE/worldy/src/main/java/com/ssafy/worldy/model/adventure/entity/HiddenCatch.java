@@ -24,9 +24,12 @@ public class HiddenCatch {
     @JoinColumn(name = "nation_id")
     private Nation nation;
 
-    @Column(name = "original_img")
-    private String originalImg;
+    @Column(name = "img_title")
+    private String imgTitle;
 
-    @Column(name = "hidden_img")
-    private String hiddenImg;
+    @Column(name = "img_content", length = 500)
+    private String imgContent;
+
+    @Column(name = "img_num")
+    private int imgNum;
 }
