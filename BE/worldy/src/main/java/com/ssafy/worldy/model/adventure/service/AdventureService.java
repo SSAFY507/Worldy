@@ -13,10 +13,12 @@ import com.ssafy.worldy.util.FastAPIUtil;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -70,12 +72,53 @@ public class AdventureService {
         WeatherDto weatherDto = getWeatherDto(nationId);
         ExchangeRateDto exchangeRateDto = getExchangeRateDto(nationId);
 
+        // 세계 시간 구해오기
+        // "중국" : 7, "일본" : 8, "인도" : 4, "영국" : 19, "프랑스" : 18, "이탈리아" : 14, "스페인" : 12, "미국" : 39, "이집트" : 27
+        TimeZone timezone;
+        Date date = new Date();
+        DateFormat df = new SimpleDateFormat("HH mm");
+        timezone = TimeZone.getTimeZone("Asia/Seoul");
+        df.setTimeZone(timezone);
+        String strTime = df.format(date);
+
+        StringTokenizer st = new StringTokenizer(strTime, " ");
+        int time = Integer.parseInt(st.nextToken());
+        int min = Integer.parseInt(st.nextToken());
+
+        if(nationId == 7){
+            time -= 1;
+            if(time < 0) time *= -1;
+        }else if(nationId == 4){
+            time -= 2;
+            if(min < 30) time -= 1;
+            if(time < 0) time *= -1;
+        }else if(nationId == 19){
+            time -= 8;
+            if(time < 0) time *= -1;
+        }else if(nationId == 18){
+            time -= 7;
+            if(time < 0) time *= -1;
+        }else if(nationId == 14){
+            time -= 7;
+            if(time < 0) time *= -1;
+        }else if(nationId == 12){
+            time -= 7;
+            if(time < 0) time *= -1;
+        }else if(nationId == 39){
+            time -= 13;
+            if(time < 0) time *= -1;
+        }else if(nationId == 27){
+            time -= 6;
+            if(time < 0) time *= -1;
+        }
+
         return DynamicInfoDto.builder()
                 .nationName(exchangeRateDto.getNationName())
                 .exchangeRate(exchangeRateDto.getExchangeRate())
                 .newsDtoList(newsDtoList)
                 .weatherName(weatherDto.getWeatherName())
                 .temp(weatherDto.getTemp())
+                .time(time)
                 .build();
     }
 

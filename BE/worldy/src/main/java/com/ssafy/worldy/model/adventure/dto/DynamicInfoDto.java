@@ -22,4 +22,6 @@ public class DynamicInfoDto {
     private String weatherName;
 
     private float temp;
+
+    private int time;
 }
