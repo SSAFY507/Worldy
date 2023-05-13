@@ -5,19 +5,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @SuperBuilder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InfoDto {
-
-    private Long infoId;
+public class DynamicInfoDto {
 
     private String nationName;
 
-    private String category;
+    private String exchangeRate;
 
-    private String content;
+    private List<NewsDto> newsDtoList;
 
-    private String img;
+    private String weatherName;
+
+    private float temp;
+
+    private int time;
 }
