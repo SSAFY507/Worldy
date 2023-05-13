@@ -63,6 +63,13 @@ public class RedisSubscriber {
                 // subscriber에게 메시지 전송
                 log.info("Redis Subscribe Message : " + worldMap.toString());
                 template.convertAndSend("/sub/" + worldMap.getRoomId(), worldMap);
+            } else if (publishMessage.contains("metaData")) {
+
+                MetaData metaData = objectMapper.readValue(publishMessage, MetaData.class);
+
+                // subscriber에게 메시지 전송
+                log.info("Redis Subscribe Message : " + metaData.toString());
+                template.convertAndSend("/sub/" + metaData.getRoomId(), metaData);
             } else {
 
                 // subscriber에게 메시지 전송
