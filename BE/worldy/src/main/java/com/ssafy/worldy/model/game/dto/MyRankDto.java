@@ -13,6 +13,7 @@ public class MyRankDto {
     private String nickName; // 닉네임
     private String profileImg;
     private String tier; // mmr 기반 티어
+    private int exp;
     private int level; // 경험치 기반 레벨
     private int percent; // 상위 퍼센트
 }
