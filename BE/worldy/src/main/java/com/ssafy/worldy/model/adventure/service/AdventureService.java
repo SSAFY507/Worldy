@@ -1,12 +1,11 @@
 package com.ssafy.worldy.model.adventure.service;
 
-import com.ssafy.worldy.model.adventure.dto.ExchangeRateDto;
-import com.ssafy.worldy.model.adventure.dto.InfoDto;
-import com.ssafy.worldy.model.adventure.dto.NewsDto;
-import com.ssafy.worldy.model.adventure.dto.WeatherDto;
+import com.ssafy.worldy.model.adventure.dto.*;
+import com.ssafy.worldy.model.adventure.entity.Info;
 import com.ssafy.worldy.model.adventure.entity.Nation;
 import com.ssafy.worldy.model.adventure.entity.News;
 import com.ssafy.worldy.model.adventure.entity.Weather;
+import com.ssafy.worldy.model.adventure.repo.InfoRepo;
 import com.ssafy.worldy.model.adventure.repo.NationRepo;
 import com.ssafy.worldy.model.adventure.repo.NewsRepo;
 import com.ssafy.worldy.model.adventure.repo.WeatherRepo;
@@ -26,10 +25,12 @@ public class AdventureService {
     private final NewsRepo newsRepo;
     private final WeatherRepo weatherRepo;
     private final NationRepo nationRepo;
+    private final InfoRepo infoRepo;
     @Value("${fastapi.exchange-rate.url}")
     private String requestUrl;
 
     public List<NewsDto> getNewsDtoList(Long nationId){
+
         List<NewsDto> newsDtoList = new ArrayList<>();
         List<News> newsList = newsRepo.findAllNewsByNationId(nationId);
 
@@ -41,11 +42,13 @@ public class AdventureService {
     }
 
     public WeatherDto getWeatherDto(Long nationId){
+
         Weather weather = weatherRepo.findAllWeatherByNationId(nationId);
         return weather.toDto();
     }
 
     public ExchangeRateDto getExchangeRateDto(Long nationId){
+
         Nation nation = nationRepo.findByNationId(nationId).get();
         String nationName = nation.getNationName();
 
@@ -61,17 +64,25 @@ public class AdventureService {
                 .build();
     }
 
-    public InfoDto getInfoDto(Long nationId){
+    public DynamicInfoDto getDynamicInfoDto(Long nationId){
+
         List<NewsDto> newsDtoList = getNewsDtoList(nationId);
         WeatherDto weatherDto = getWeatherDto(nationId);
         ExchangeRateDto exchangeRateDto = getExchangeRateDto(nationId);
 
-        return InfoDto.builder()
+        return DynamicInfoDto.builder()
                 .nationName(exchangeRateDto.getNationName())
                 .exchangeRate(exchangeRateDto.getExchangeRate())
                 .newsDtoList(newsDtoList)
                 .weatherName(weatherDto.getWeatherName())
                 .temp(weatherDto.getTemp())
                 .build();
+    }
+
+    public InfoDto getInfoDto(Long nationId, String category){
+
+        Info info = infoRepo.getInfoByNationIdAndCategory(nationId, category);
+
+        return info.toDto();
     }
 }

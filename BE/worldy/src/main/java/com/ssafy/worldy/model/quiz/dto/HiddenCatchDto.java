@@ -17,7 +17,11 @@ public class HiddenCatchDto {
 
     private String diffUrl; // 틀린 그림
 
-    private String imgNum; // 사진 번호
+    private int imgNum; // 사진 번호
 
     private List<List<String>> answerPointList; // 정답 좌표
+
+    private String imgTitle; // 이미지 이름
+    
+    private String imgContent; // 이미지 정보
 }

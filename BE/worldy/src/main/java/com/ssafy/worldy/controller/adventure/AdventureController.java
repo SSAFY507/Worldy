@@ -1,17 +1,11 @@
 package com.ssafy.worldy.controller.adventure;
 
-import com.ssafy.worldy.model.adventure.dto.ExchangeRateDto;
-import com.ssafy.worldy.model.adventure.dto.InfoDto;
-import com.ssafy.worldy.model.adventure.dto.NewsDto;
-import com.ssafy.worldy.model.adventure.dto.WeatherDto;
+import com.ssafy.worldy.model.adventure.dto.*;
 import com.ssafy.worldy.model.adventure.service.AdventureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,8 +31,13 @@ public class AdventureController {
         return new ResponseEntity<>(adventureService.getExchangeRateDto(nationId), HttpStatus.OK);
     }
 
-    @GetMapping("/info/{nationId}")
-    public ResponseEntity<InfoDto> getInfo(@PathVariable Long nationId){
-        return new ResponseEntity<>(adventureService.getInfoDto(nationId), HttpStatus.OK);
+    @GetMapping("/info/dynamic/{nationId}")
+    public ResponseEntity<DynamicInfoDto> getDynamicInfo(@PathVariable Long nationId){
+        return new ResponseEntity<>(adventureService.getDynamicInfoDto(nationId), HttpStatus.OK);
+    }
+
+    @GetMapping("/info/dynamic")
+    public ResponseEntity<InfoDto> getInfo(@RequestParam Long nation, @RequestParam String category){
+        return new ResponseEntity<>(adventureService.getInfoDto(nation, category), HttpStatus.OK);
     }
 }
