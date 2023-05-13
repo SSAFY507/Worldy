@@ -117,6 +117,7 @@ public class User {
                 .nickName(this.nickName)
                 .profileImg(this.profileImg)
                 .tier(this.tier)
+                .exp(this.exp)
                 .level(this.level) .build();
     }
 
