@@ -10,22 +10,79 @@ import '../styles/NavBarAnimation.css';
 import SallyPath from '../assets/images/SallyProfilePic.png';
 
 import {
+  addRankInfo,
   loginNickName,
   loginProfileImg,
   loginState,
+  myExp,
+  myLevel,
+  myRank,
+  myTier,
 } from '../_store/slices/loginSlice';
 import { logout } from '../_store/slices/loginSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import CustomAxios from '../API/CustomAxios';
+import { BsPlusCircle, BsPlusCircleFill } from 'react-icons/bs';
+import { useSelect } from '@react-three/drei';
+import { useSelector } from 'react-redux';
 
 type NavListType = {
   name: string;
   path: string;
 };
+type MyRankInfo = {
+  rank: number;
+  nickName: string;
+  profileImg: string;
+  tier: string;
+  level: number;
+  percent: number;
+  exp: number;
+};
 
 export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
   const navigate = useNavigate();
+
+  const getLoginToken: string | null = sessionStorage.getItem('token');
+
+  const [axiosMyRankInfo, setAxiosMyRankInfo] = useState<MyRankInfo>();
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(
+      addRankInfo({
+        rank: axiosMyRankInfo?.rank || 1,
+        tier: axiosMyRankInfo?.tier || 'Bronze',
+        level: axiosMyRankInfo?.level || 1,
+        exp: axiosMyRankInfo?.exp || 0,
+      })
+    );
+    console.log('넣는 데이터 : ' + axiosMyRankInfo?.tier);
+  }, [axiosMyRankInfo]);
+
+  useEffect(() => {
+    getRankInfoList();
+  }, []);
+
+  const getRankInfoList = async () => {
+    console.log('Session에서의 가져오는 토큰', getLoginToken);
+    try {
+      const response = await CustomAxios({
+        APIName: 'getRankInfoList',
+        APIType: 'get',
+        UrlQuery: `https://k8a507.p.ssafy.io/api/game/ranking`,
+        Token: getLoginToken,
+      });
+      //console.log('닉네임 중복 체크 성공');
+      console.log('랭크 리스트 받은 거: ', response);
+      setAxiosMyRankInfo(response.myRank);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    //console.log('token이 무엇이냐 ', token);
+  };
 
   const navList: NavListType[] = [
     { name: '홈', path: '/' },
@@ -37,19 +94,17 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
   ];
 
   const checkLoginState = sessionStorage.getItem('isLoggedIn');
-  const dispatch = useDispatch();
 
   const [logoutResult, setLogoutResult] = useState<any>();
 
   const logoutAxios = async () => {
-    const loginToken = sessionStorage.getItem('token');
-    console.log('로그아웃 시 토큰 : ', loginToken);
+    console.log('로그아웃 시 토큰 : ', getLoginToken);
     try {
       const response = await CustomAxios({
         APIName: 'logout',
         APIType: 'get',
         UrlQuery: 'https://k8a507.p.ssafy.io/api/user/logout',
-        Token: loginToken,
+        Token: getLoginToken,
       });
       setLogoutResult(response);
     } catch (error) {
@@ -80,26 +135,6 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
     setHoverAfetrLoginIcon(input);
   };
 
-  const afterLoginButtonIcon: JSX.Element = (
-    <div className='grid place-content-center w-full h-full'>
-      <svg
-        stroke='currentColor'
-        fill={`${hoverAfterLoginIcon ? 'rgb(255,77,69)' : 'white'}`}
-        strokeWidth='0'
-        viewBox='0 0 16 16'
-        height='1.5em'
-        width='1.5em'
-        xmlns='http://www.w3.org/2000/svg'
-      >
-        <path
-          fillRule='evenodd'
-          d='M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 100-6 3 3 0 000 6z'
-          clipRule='evenodd'
-        ></path>
-      </svg>
-    </div>
-  );
-
   const [clickStateAfterLoginIcon, setClickStateAfterLoginIcon] =
     useState<boolean>(false);
 
@@ -114,40 +149,115 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
 
   const hoverModalMyPage = (input: number) => [setHoverModalContent(input)];
 
+  // const levelContent = (): JSX.Element => {
+  //   return (
+  //     <div className='w-[500px] flex flex-row justify-between items-center'>
+  //       <span className='mr-[20px]'>LV.{axiosRankInfoList?.myRank.level}</span>
+  //       <div className=' w-full h-[40px]  ml-[20px] flex flex-col justify-between items-start  outline-white'>
+  //         <div className='w-fit text-[15px] h-fit flex flex-row justify-center items-center '>
+  //           EXP : ({axiosRankInfoList?.myRank.exp}
+  //           /100)
+  //         </div>
+  //         <div className='relative h-[10px] w-[400px] outline outline-[rgba(255,255,255,0.5)] flex flex-row justify-start items-center'>
+  //           <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
+  //           <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
+  //           <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
+  //           <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
+  //           <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
+  //           <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
+  //           <div
+  //             className='absolute top-0 left-0 h-[10px] bg-blue-300'
+  //             style={{ width: `${axiosRankInfoList?.myRank.exp}%` }}
+  //           ></div>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
+  // }; fill={`${hoverAfterLoginIcon ? 'rgb(255,77,69)' : 'white'}`}
+
+  const navProfileImg = useSelector(loginProfileImg);
+  const navNickname =
+    useSelector(loginNickName) || sessionStorage.getItem('nickname');
+  const navRank = useSelector(myRank);
+  const navTier = useSelector(myTier);
+  const navLevel = useSelector(myLevel);
+  const navExp = useSelector(myExp);
+  // const navExp = 37;
+
   const AferLoginIconButtonComponent: React.ReactNode = (
-    <div className='relative '>
+    <div className='relative  outline-white w-fit h-fit flex flex-row justify-between items-center'>
+      <div className='w-fit h-[65px] bg-[rgba(255,255,255,0.3)] rounded-full flex flex-row justify-between items-center px-[20px]'>
+        <div className='w-[50px] h-[50px] rounded-full overflow-hidden grid place-content-center mr-[10px]'>
+          <img src={navProfileImg} alt='프로필 이미지' />
+        </div>
+        <div className='w-[220px] h-full py-[3px] outline-white flex flex-col justify-between items-start px-[10px]'>
+          <div className='w-[200px] h-[30px] flex flex-row justify-between items-center '>
+            <span className='font-PtdMedium text-[18px] text-white'>
+              {navNickname}
+            </span>
+            <span className='font-PtdLight text-[18px] text-white'>
+              LV.{navLevel}
+            </span>
+          </div>
+          <div className='w-[200px] h-[20px] realtive'>
+            <div className='relative h-[10px] w-[200px] outline outline-[rgba(255,255,255,0.5)] flex flex-row justify-start items-center'>
+              <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
+              <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
+              <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
+              <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
+              <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
+              <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
+              <div
+                className='absolute top-0 left-0 h-[10px] bg-blue-300'
+                style={{ width: `${navExp}%` }}
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
       <button
-        className={` w-[2.5em] h-[2.5em]  ml-[1.5em] mr-[2em]  rounded-3xl `}
+        className={` w-[2.5em] h-[2.5em]  ml-[1.5em] mr-[2em]  rounded-3xl relative `}
         onMouseEnter={() => handleHoverAfterLoginIcon(true)}
         onMouseLeave={() => handleHoverAfterLoginIcon(false)}
         onClick={handleClickStateAfterLoginIcon}
       >
-        {afterLoginButtonIcon}
+        <div>
+          <BsPlusCircleFill
+            color={'rgb(255,77,69)'}
+            size={30}
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-1000 ease-out ${
+              clickStateAfterLoginIcon
+                ? 'opacity-100 rotate-[720deg]'
+                : 'opacity-0 rotate-0'
+            }`}
+          />
+        </div>
+        <div>
+          <BsPlusCircle
+            color={'white'}
+            size={30}
+            className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-all duration-1000 ease-out ${
+              !clickStateAfterLoginIcon
+                ? 'opacity-100 rotate-0'
+                : 'opacity-0 rotate-[720deg]'
+            }`}
+          />
+        </div>
       </button>
       <div
-        className={`w-[13em] h-fit bg-[rgba(0,0,0,0.6)] overflow-hidden flex flex-col justify-stretch items-center absolute outline outline-[.05em] outline-[rgba(255,255,255,0.2)] rounded-xl -bottom-[2em] right-0  transition-all duration-300 ease-out ${clickStateAfterLoginIcon
-          ? 'z-0 opacity-100 transform translate-y-[100%]'
-          : '-z-20 opacity-0 transform translate-y-0'
-          }`}
+        className={`w-[13em] h-fit bg-[rgba(0,0,0,0.6)] overflow-hidden flex flex-col justify-stretch items-center absolute outline outline-[.05em] outline-[rgba(255,255,255,0.2)] rounded-xl -bottom-[2em] right-[1em]  transition-all duration-300 ease-out ${
+          clickStateAfterLoginIcon
+            ? 'z-0 opacity-100 transform translate-y-[100%]'
+            : '-z-20 opacity-0 transform translate-y-0'
+        }`}
       >
-        <div className='w-full h-[4em] flex flex-row justify-stretch items-center border-b-[.05em] border-solid border-0 border-[rgba(255,255,255,0.2)] '>
-          <div className='w-[5em] h-full flex justify-center items-center'>
-            <div className=' w-[2.5em] h-[2.5em] rounded-full grid place-content-center  overflow-hidden bg-[rgba(255,255,255,0.5)]'>
-              <img src={userProfileImg || ''} alt='쌜리' className='' />
-            </div>
-          </div>
-          <div className='h-full flex-1 py-[.5em] flex flex-col justify-stretch items-center  text-white'>
-            <div className='h-full w-full flex justify-start items-center font-PtdSemiBOld text-[15px]'>
-              {userNick}
-            </div>
-          </div>
-        </div>
         <div className='w-full h-fit flex flex-col justify-center text-[rgba(220,220,220,0.8)] font-PtdRegular'>
           <a
-            className={`w-full h-[2.8em] text-center flex justify-center items-center border-b-[.05em] border-solid border-0 border-[rgba(255,255,255,0.2)] ${hoverModalContent === 1
-              ? 'bg-[rgba(255,255,255,0.1)] text-white'
-              : ''
-              }`}
+            className={`w-full h-[2.8em] text-center flex justify-center items-center border-b-[.05em] border-solid border-0 border-[rgba(255,255,255,0.2)] ${
+              hoverModalContent === 1
+                ? 'bg-[rgba(255,255,255,0.1)] text-white'
+                : ''
+            }`}
             href='/mypage'
             onMouseEnter={() => hoverModalMyPage(1)}
             onMouseLeave={() => hoverModalMyPage(0)}
@@ -155,10 +265,11 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
             마이페이지
           </a>
           <a
-            className={`w-full h-[2.8em] text-center  flex justify-center items-center border-b-[.05em] border-solid border-0 border-[rgba(255,255,255,0.2)] ${hoverModalContent === 2
-              ? 'bg-[rgba(255,255,255,0.1)] text-white'
-              : ''
-              }`}
+            className={`w-full h-[2.8em] text-center  flex justify-center items-center border-b-[.05em] border-solid border-0 border-[rgba(255,255,255,0.2)] ${
+              hoverModalContent === 2
+                ? 'bg-[rgba(255,255,255,0.1)] text-white'
+                : ''
+            }`}
             href='/support'
             onMouseEnter={() => hoverModalMyPage(2)}
             onMouseLeave={() => hoverModalMyPage(0)}
