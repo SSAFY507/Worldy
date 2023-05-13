@@ -18,6 +18,7 @@ import { useDispatch } from 'react-redux';
 import { addNickname, loginToken } from '../_store/slices/loginSlice';
 import CustomAxios from '../API/CustomAxios';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
 
 type TutorialItemType = {
   imgsrc: string;
@@ -35,11 +36,7 @@ type quizItemType = {
   selections: string[];
 };
 
-export default function Tutorial({
-  onClickEndTutorial,
-}: {
-  onClickEndTutorial: () => void;
-}) {
+export default function Tutorial() {
   ///////////////////////////////
   const myImageList = {
     TutorialBackground: pathTB,
@@ -351,14 +348,14 @@ export default function Tutorial({
     [
       {
         difficulty: '하',
-        category: '문화',
+        category: '문화/역사',
         quizText: '다음 중 빈센트 반 고흐의 작품을 골라주세요.',
         answer: '별이 빛나는 밤',
         selections: ['가니카', '거울 앞의 소녀', '데모셀', '별이 빛나는 밤'],
       },
       {
         difficulty: '중',
-        category: '문화',
+        category: '문화/역사',
         quizText:
           '다음 중 유네스코 세계문화유산에 등재된 이탈리아의 고고학적 유산을 골라주세요.',
         answer: '콜로세움',
@@ -366,7 +363,7 @@ export default function Tutorial({
       },
       {
         difficulty: '상',
-        category: '문화',
+        category: '문화/역사',
         quizText:
           '무용 예술의 한 종류인 [카타크]는 어느 나라의 전통 무용을 골라주세요.',
         answer: '인도',
@@ -441,7 +438,7 @@ export default function Tutorial({
       },
       {
         difficulty: '상',
-        category: '문화',
+        category: '문화/역사',
         quizText:
           '무용 예술의 한 종류인 [카타크]는 어느 나라의 전통 무용을 골라주세요.',
         answer: '인도',
@@ -480,6 +477,11 @@ export default function Tutorial({
   }, [quizResult]);
 
   const [popupCorrectIcon, setPopupCorrectIcon] = useState<boolean>(false);
+
+  const navigate = useNavigate();
+  const navigateHome = () => {
+    navigate('/');
+  };
 
   const showQuiz = (
     <div className=' outline-white absolute w-[600px] h-[720px] left-1/3 bottom-[100px] flex flex-col justify-stretch items-center '>
@@ -583,7 +585,9 @@ export default function Tutorial({
       <button
         className='w-full h-[80px] bg-[rgba(255,255,255,0.15)] rounded-[5px] text-left text-white pl-[20px] font-PtdLight text-[30px]'
         style={hoveredIndex === -9 ? hoveredStyle : {}}
-        onClick={onClickEndTutorial}
+        onClick={() => {
+          navigateHome();
+        }}
         onMouseEnter={() => setHoveredIndex(-9)}
         onMouseLeave={() => setHoveredIndex(-1)}
       >

@@ -259,7 +259,7 @@ export default function SupportModal({
         </div>
         <div className='w-full h-[3em] pt-[.5em]  flex flex-row justify-between items-center'>
           <button
-            onClick={() => submitHelp()}
+            onClick={submitHelp}
             className={`rounded-[4px] w-[47%] h-[60px]  outline-[rgba(255,255,255,0.6)] outline-1  font-PtdRegular ${
               submittable
                 ? 'hover:bg-[rgb(255,18,5)] bg-buttonRed outline-[rgba(255,255,255,0.6)] text-white'
@@ -270,7 +270,7 @@ export default function SupportModal({
             확인
           </button>
           <button
-            onClick={() => handleCloseModal()}
+            onClick={handleCloseModal}
             className=' rounded-[4px] w-[47%] h-[60px]  outline-[rgba(255,255,255,0.6)] outline-1 text-white font-PtdRegular text-[18px] bg-[rgba(255,255,255,0.2)] hover:bg-[rgba(206,206,206,0.2)]'
           >
             취소

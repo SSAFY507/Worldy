@@ -18,12 +18,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 
 type PointerOutProps = {
   onClose: () => void;
-  onClickKakaoLogin: (firstLogin: boolean) => void;
 };
-export default function LoginModal({
-  onClose,
-  onClickKakaoLogin,
-}: PointerOutProps) {
+export default function LoginModal({ onClose }: PointerOutProps) {
   const myImageList = {
     GameController: pathGC,
     LoginLogo: pathLL,
@@ -42,11 +38,6 @@ export default function LoginModal({
   }, [isLoaded]);
 
   const firstLogin: boolean = true;
-
-  const clickKakaoLogin = () => {
-    //게임 시작 눌렀을 때 처음 로그인이면 튜토리얼로, 아니면 메인페이지로
-    onClickKakaoLogin(firstLogin);
-  };
 
   ////////////////////카카오 로그인 버튼 관련
 
