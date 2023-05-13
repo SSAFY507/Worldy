@@ -241,16 +241,13 @@ export default function MyPage({
     );
   };
 
-  const exp = 99;
-
   const levelContent = (): JSX.Element => {
     return (
       <div className='w-[500px] flex flex-row justify-between items-center'>
         <span className='mr-[20px]'>LV.{axiosRankInfoList?.myRank.level}</span>
         <div className=' w-full h-[40px]  ml-[20px] flex flex-col justify-between items-start  outline-white'>
           <div className='w-fit text-[15px] h-fit flex flex-row justify-center items-center '>
-            EXP : (
-            {axiosRankInfoList?.myRank.exp ? axiosRankInfoList.myRank.exp : exp}
+            EXP : ({axiosRankInfoList?.myRank.exp}
             /100)
           </div>
           <div className='relative h-[10px] w-[400px] outline outline-[rgba(255,255,255,0.5)] flex flex-row justify-start items-center'>
@@ -262,7 +259,7 @@ export default function MyPage({
             <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
             <div
               className='absolute top-0 left-0 h-[10px] bg-blue-300'
-              style={{ width: `${exp}%` }}
+              style={{ width: `${axiosRankInfoList?.myRank.exp}%` }}
             ></div>
           </div>
         </div>
