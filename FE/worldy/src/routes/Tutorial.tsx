@@ -1,24 +1,25 @@
 import * as React from 'react';
-import { useState, useEffect, useLayoutEffect, useMemo } from 'react';
-import pathTB from '../assets/images/TutorialBackground.png';
-import pathJHB from '../assets/images/JoshHoldingBook.png';
-import pathJC from '../assets/images/JoshCurious.png';
-import pathJS from '../assets/images/JoshSitting.png';
-import pathJP from '../assets/images/JoshPanic.png';
-import pathJJ from '../assets/images/JoshJumping.png';
-import pathTQT from '../assets/images/TutorialQuizText.png';
-import pathJR from '../assets/images/JoshReady.png';
-import LoaderPyramid from '../components/Loaders/LoaderPyramid';
-import useLoadImagesHook from '../_hooks/useLoadImagesHook';
-import { CSSTransition } from 'react-transition-group';
 
-import WrAnswer from '../assets/images/WrongAnswer.png';
-import CrAnswer from '../assets/images/CorrectAnswer.png';
-import { useDispatch } from 'react-redux';
 import { addNickname, loginToken } from '../_store/slices/loginSlice';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
+
+import { CSSTransition } from 'react-transition-group';
+import CrAnswer from '../assets/images/CorrectAnswer.png';
 import CustomAxios from '../API/CustomAxios';
+import LoaderPyramid from '../components/Loaders/LoaderPyramid';
+import WrAnswer from '../assets/images/WrongAnswer.png';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
+import pathJC from '../assets/images/JoshCurious.png';
+import pathJHB from '../assets/images/JoshHoldingBook.png';
+import pathJJ from '../assets/images/JoshJumping.png';
+import pathJP from '../assets/images/JoshPanic.png';
+import pathJR from '../assets/images/JoshReady.png';
+import pathJS from '../assets/images/JoshSitting.png';
+import pathTB from '../assets/images/TutorialBackground.png';
+import pathTQT from '../assets/images/TutorialQuizText.png';
+import { useDispatch } from 'react-redux';
+import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 
 type TutorialItemType = {
   imgsrc: string;

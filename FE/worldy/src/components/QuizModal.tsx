@@ -1,24 +1,25 @@
+import '../styles/QuizModalStyles.css';
+
 import * as React from 'react';
-import { useState, useEffect, useRef } from 'react';
+
 import {
   AiOutlineBulb,
   AiOutlineClose,
   AiOutlineCloseCircle,
   AiOutlineExclamationCircle,
 } from 'react-icons/ai';
+import { BsBookmark, BsBookmarkFill, BsBoxArrowUpRight } from 'react-icons/bs';
+import { TbCategory2, TbWorld } from 'react-icons/tb';
+import { useEffect, useRef, useState } from 'react';
+
+import { BiImage } from 'react-icons/bi';
+import { IoIosPhotos } from 'react-icons/io';
+import { JsxElement } from 'typescript';
 import QuizBlueText from '../assets/images/QuizBlueText.png';
 import ResultBlueText from '../assets/images/ResultBlueText.png';
-import { JsxElement } from 'typescript';
-
-import '../styles/QuizModalStyles.css';
-import { TbCategory2, TbWorld } from 'react-icons/tb';
-import { BsBookmark, BsBookmarkFill, BsBoxArrowUpRight } from 'react-icons/bs';
-import { BiImage } from 'react-icons/bi';
-
 import tempImage1 from '../assets/images/thumb2.png';
 import tempImage2 from '../assets/images/Carousel5.png';
 import tempImage3 from '../assets/images/JoshCurious.png';
-import { IoIosPhotos } from 'react-icons/io';
 
 type ScrappedQuizType = {
   quizId: number; //퀴즈 id
