@@ -1,10 +1,12 @@
 package com.ssafy.worldy.model.quiz.service;
 
+import com.ssafy.worldy.model.adventure.entity.HiddenCatch;
 import com.ssafy.worldy.model.adventure.entity.Nation;
 import com.ssafy.worldy.model.adventure.repo.NationRepo;
 import com.ssafy.worldy.model.quiz.dto.*;
 import com.ssafy.worldy.model.quiz.entity.Quiz;
 import com.ssafy.worldy.model.quiz.entity.QuizRecord;
+import com.ssafy.worldy.model.quiz.repo.HiddenCatchRepo;
 import com.ssafy.worldy.model.quiz.repo.QuizLikeRepo;
 import com.ssafy.worldy.model.quiz.repo.QuizRecordRepo;
 import com.ssafy.worldy.model.quiz.repo.QuizRepo;
@@ -31,7 +33,7 @@ public class QuizService {
     private final UserRepo userRepo;
     private final QuizRecordRepo quizRecordRepo;
     private final QuizLikeRepo quizLikeRepo;
-
+    private final HiddenCatchRepo hiddenCatchRepo;
     @Value("${fastapi.hidden-catch.url}")
     private String requestUrl;
 
@@ -84,13 +86,14 @@ public class QuizService {
 
     public HiddenCatchDto getHiddenCatch(Long nationId){
 
+        // FastAPI 에게 틀린 그림 찾기 제작 요청
         FastAPIUtil fastAPIUtil = new FastAPIUtil();
 
         JSONObject result = fastAPIUtil.getRequestFastAPI(requestUrl+nationId);
 
         String originalUrl = result.get("original_url").toString();
         String diffUrl = result.get("diff_url").toString();
-        String imgNum = result.get("img_num").toString();
+        int imgNum = Integer.parseInt(result.get("img_num").toString());
         List<List<String>> answerPointList = new ArrayList<>();
 
         List<String> answerPoints = new ArrayList<>();
@@ -107,11 +110,16 @@ public class QuizService {
             answerPointList.add(list);
         }
 
+        // Mysql 에서 그림 정보 가져오기
+        HiddenCatch hiddenCatch = hiddenCatchRepo.findHiddenCatchByNationIdAndImgNum(nationId, imgNum);
+
         return HiddenCatchDto.builder()
                 .originalUrl(originalUrl)
                 .diffUrl(diffUrl)
                 .imgNum(imgNum)
                 .answerPointList(answerPointList)
+                .imgTitle(hiddenCatch.getImgTitle())
+                .imgContent(hiddenCatch.getImgContent())
                 .build();
     }
 }
