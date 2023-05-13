@@ -51,6 +51,38 @@ const AppLayout = () => {
 
   //페이지 이동 Route용으로 <Route><Route> => <Routes><Route>로 변경했습니다.
 
+  // useEffect(() => {
+  //   if (login) setImageBackgroundImage(new Image());
+  // }, [login]);
+
+  //페이지 이동 Route용으로 <Route><Route> => <Routes><Route>로 변경했습니다.
+
+  //카카오 로그인 눌렀을 때, 첫 로그인이면 Tutorial로, 아니면 Mainpage로
+  const [firstLoginState, setFirstLoginState] = useState<boolean>(false);
+
+  const handleFirstLogin = (firstLogin: boolean) => {
+    console.log('LoginModal로부터 넘어온 firstLogin', firstLogin);
+    if (firstLogin) {
+      navigate('/tutorial');
+    } else {
+      navigate('/');
+    }
+    closeLoginModal();
+  };
+
+ 
+  const endTutorial = () => {
+
+    const gameId = sessionStorage.getItem('gameId');
+    
+    // 헤더 확인해서 roomId 있으면 
+    if(gameId) {
+      navigate(`/game/${gameId}`);
+    } else {
+      navigate('/');
+    }
+  };
+
   const exploreUrl = location.pathname.substr(0, 8);
   const monopolyUrl = location.pathname.substr(0, 9);
   const gameUrl = location.pathname.substr(0, 5);

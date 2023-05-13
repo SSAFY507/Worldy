@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./dice.css";
 import Dice from "./Dice";
+import GameQuizModal from '../GameQuizModal';
+
 
 export default function Game2D(props: any) {
   const sendData = props.sendData;
@@ -21,6 +23,12 @@ export default function Game2D(props: any) {
   const [buildOption, setBuildOption] = useState<number>(0);
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [buildPrice, setBuildPrice] = useState<number>(0);
+
+  const ws = props.ws;
+
+  const closeModal = props.closeModal;
+  const quiz = props.quiz;
+  const quizModalState = props.quizModalState;
 
   let pList: Player[] = [];
   let me: any = {};

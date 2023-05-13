@@ -11,7 +11,10 @@ export default function CreateGame(props: any) {
   const setMatchingId = props.setMatchingId
   const setMode = props.setMode;
   const setRoomId = props.setRoomId;
-  let accessToken = sessionStorage.getItem('token');
+
+
+  const accessToken = sessionStorage.getItem('token');
+
 
   return (<>
     <div className='w-full h-full bg-white flex flex-col justify-center items-center'>
