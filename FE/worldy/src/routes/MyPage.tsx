@@ -74,6 +74,21 @@ export type ScrappedQuizType = {
   commentary: string;
 };
 
+type RankItemType = {
+  rank: number;
+  nickName: string;
+  profileImg: string;
+  tier: string;
+  level: number;
+  percent?: number;
+  exp?: number;
+};
+
+type RankListType = {
+  myRank: RankItemType;
+  rankTop10User: RankItemType[];
+};
+
 export default function MyPage({
   setRef,
   handleQnaModal,
@@ -84,6 +99,8 @@ export default function MyPage({
   const myImageList = {
     pathBG: pathBG,
   };
+
+  const getLoginToken: string | null = sessionStorage.getItem('token');
 
   const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
   const [loadedAll, setLoadedAll] = useState<boolean>(false);
@@ -224,18 +241,17 @@ export default function MyPage({
     );
   };
 
-  const date = moment().format('YYYY-MM-DD');
-
-  const level = 3;
-  const exp = 29;
+  const exp = 99;
 
   const levelContent = (): JSX.Element => {
     return (
       <div className='w-[500px] flex flex-row justify-between items-center'>
-        <span className='mr-[20px]'>LV.{level}</span>
+        <span className='mr-[20px]'>LV.{axiosRankInfoList?.myRank.level}</span>
         <div className=' w-full h-[40px]  ml-[20px] flex flex-col justify-between items-start  outline-white'>
           <div className='w-fit text-[15px] h-fit flex flex-row justify-center items-center '>
-            EXP : ({exp}/100)
+            EXP : (
+            {axiosRankInfoList?.myRank.exp ? axiosRankInfoList.myRank.exp : exp}
+            /100)
           </div>
           <div className='relative h-[10px] w-[400px] outline outline-[rgba(255,255,255,0.5)] flex flex-row justify-start items-center'>
             <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
@@ -258,7 +274,9 @@ export default function MyPage({
       <div className='w-[500px]  h-[40px]  my-[10px] flex flex-row justify-between items-center'>
         <div
           className={`${
-            rankInfo[1] === '브론즈' ? 'opacity-100' : 'opacity-30'
+            axiosRankInfoList?.myRank.tier === 'Bronze'
+              ? 'opacity-100'
+              : 'opacity-30'
           } h-[40px] bg-[rgba(255,255,255,0.2)] rounded-[100px] flex flex-row justify-center items-center py-[8px] px-[10px]`}
         >
           Bronze
@@ -266,7 +284,9 @@ export default function MyPage({
         </div>
         <div
           className={`${
-            rankInfo[1] === '실버' ? 'opacity-100' : 'opacity-30'
+            axiosRankInfoList?.myRank.tier === 'Silver'
+              ? 'opacity-100'
+              : 'opacity-30'
           } h-[40px] bg-[rgba(255,255,255,0.2)] rounded-[100px] flex flex-row justify-center items-center py-[8px] px-[10px]`}
         >
           Silver
@@ -274,7 +294,9 @@ export default function MyPage({
         </div>
         <div
           className={`${
-            rankInfo[1] === '골드' ? 'opacity-100' : 'opacity-30'
+            axiosRankInfoList?.myRank.tier === 'Gold'
+              ? 'opacity-100'
+              : 'opacity-30'
           } h-[40px] bg-[rgba(255,255,255,0.2)] rounded-[100px] flex flex-row justify-center items-center py-[8px] px-[10px]`}
         >
           Gold
@@ -282,7 +304,9 @@ export default function MyPage({
         </div>
         <div
           className={`${
-            rankInfo[1] === '플레티넘' ? 'opacity-100' : 'opacity-30'
+            axiosRankInfoList?.myRank.tier === 'Platinum'
+              ? 'opacity-100'
+              : 'opacity-30'
           } h-[40px] bg-[rgba(255,255,255,0.2)] rounded-[100px] flex flex-row justify-center items-center py-[8px] px-[10px]`}
         >
           Platinum
@@ -291,6 +315,31 @@ export default function MyPage({
       </div>
     );
   };
+
+  const [axiosRankInfoList, setAxiosRankInfoList] = useState<RankListType>();
+
+  const getRankInfoList = async () => {
+    console.log('Session에서의 가져오는 토큰', getLoginToken);
+    try {
+      const response = await CustomAxios({
+        APIName: 'getRankInfoList',
+        APIType: 'get',
+        UrlQuery: `https://k8a507.p.ssafy.io/api/game/ranking`,
+        Token: getLoginToken,
+      });
+      //console.log('닉네임 중복 체크 성공');
+      console.log('랭크 리스트 받은 거: ', response);
+      setAxiosRankInfoList(response);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    //console.log('token이 무엇이냐 ', token);
+  };
+
+  useEffect(() => {
+    console.log('랭크 받앙오기');
+    getRankInfoList();
+  }, []);
 
   const accountInfoContentComponent = () => {
     return (
@@ -353,33 +402,44 @@ export default function MyPage({
 
   //퀴즈 타입 인덱스값 설정 (같은 버튼 누르면 닫기로 -1)
   const handleScrappedQuizTypeSelect = (input: number) => {
-    console.log('const 1');
-    setScrappedQuizTypeSelet(input === scrappedQuizTypeSelect ? -1 : input);
+    if (quizPopDownBoxState) {
+      //열려있는 상태면
+      if (input === 4) {
+        setScrappedQuizTypeSelet(-1);
+      } else {
+        setScrappedQuizTypeSelet(input === scrappedQuizTypeSelect ? -1 : input); //같은 버튼 눌렀으면 닫기
+      }
+    } else {
+      if (input === 4) {
+        setScrappedQuizTypeSelet(0);
+      } else {
+        setScrappedQuizTypeSelet(input); //같은 버튼 눌렀으면 닫기
+      }
+    }
   };
   //버튼 눌러서 퀴즈 타입 설정
   const clickQuizType = (input: number) => {
-    console.log('const 2');
     handleQuizPopDownKeyState(input);
-    console.log('버튼 누른 input', input);
     if (input === 1) setSelectedType('나라별');
     else if (input === 2) setSelectedType('난이도별');
     else if (input === 3) setSelectedType('카테고리별');
-    else setSelectedType('전체');
-    handleScrappedQuizTypeSelect(input === 4 ? 0 : input);
+    else if (input === 0 || input === 4) setSelectedType('전체');
+    handleScrappedQuizTypeSelect(input);
   };
   //버튼 눌러서 스크랩 창 열기 닫기
   const handleQuizPopDownKeyState = (input: number) => {
-    console.log('const 3');
     if (input === 4) {
       //화살표 눌렀을 때
-      quizPopDownBoxState //열려있으면 버튼 인덱스 -1로 하고 닫기
-        ? setQuizPopDownKeyState(-1) //
-        : setQuizPopDownKeyState(0);
+      if (quizPopDownBoxState) {
+        //열려있으면 버튼 인덱스 -1로 하고 닫기
+        setQuizPopDownKeyState(-1); //
+      } else {
+        setQuizPopDownKeyState(0);
+      }
     } else setQuizPopDownKeyState(quizPopDownKeyState === input ? -1 : input);
   };
 
   const handleQuizModal = (select: number) => {
-    console.log('const 4');
     setSelectedQuizId(select);
     setTimeout(() => {
       setQuizModalState(true);
@@ -408,8 +468,6 @@ export default function MyPage({
         : value === '기타'
         ? 'etc'
         : value;
-    console.log('선택된 카테고리 벨류 : ', value);
-    console.log('분류된 밸류 ', inputvalue);
     if (inputvalue === '없음') setSortedScrapQuizList([]);
     else if (inputvalue !== '전체') {
       //내부 선택이 있으면 타입 분류 및 카테고리 분류
@@ -431,29 +489,24 @@ export default function MyPage({
       setSortedScrapQuizList(tempList);
     } else {
       //내부 선택 없으면 타입 분류만
-      console.log('전체 밸류');
       setSortedScrapQuizList(axiosScrappedQuizList);
     }
   };
 
   useEffect(() => {
     if (selectedType === '') return;
-    console.log('useEffect 1', selectedType);
     setSelectedValue('전체');
     sortScrappedQuizByCategory({ type: selectedType, value: selectedValue });
   }, [selectedType]);
 
   useEffect(() => {
     if (selectedValue === '') return;
-    console.log('useEffect 2', selectedValue);
     sortScrappedQuizByCategory({ type: selectedType, value: selectedValue });
   }, [selectedValue]);
 
   useEffect(() => {
-    console.log('useEffect 3', quizPopDownKeyState);
     setQuizMenuSelected(0); //세부 셀렉 0
     setQuizPopDownBoxState(quizPopDownKeyState === -1 ? false : true);
-    console.log('타입 변함', quizPopDownKeyState);
     if (quizPopDownKeyState !== -1) scrollToContent(quizScrapRef);
   }, [quizPopDownKeyState]); //퀴즈 타입 버튼 인덱스
 
@@ -545,7 +598,6 @@ export default function MyPage({
           } px-[10px] pb-[0px]`}
         >
           <div className='w-[140px] h-full  outline-blue-300 overflow-y-scroll  px-[15px]'>
-            {/* quizPopDownKeyState : 전체/나라별/난이도별/카테고리별/화살표 누름 */}
             {quizSelectMenuList[
               quizPopDownKeyState === -1 ? 0 : quizPopDownKeyState
             ].map((item, key) => quizMenuBar({ input: item, key: key }))}
@@ -554,9 +606,6 @@ export default function MyPage({
             {sortedScrapQuizList.map((item, key) =>
               quizPreviewBox({ input: item, key: key })
             )}
-            {/* {tempScrappedQuizList.map((item, key) =>
-              quizPreviewBox({ input: item, key: key })
-            )} */}
           </div>
         </div>
         <button
@@ -576,8 +625,6 @@ export default function MyPage({
       </div>
     );
   };
-
-  const getLoginToken: string | null = sessionStorage.getItem('token');
 
   const getScrappedQuizListAxios = async () => {
     console.log('Session에서의 가져오는 토큰', getLoginToken);
@@ -744,143 +791,118 @@ export default function MyPage({
   };
 
   ////////////////////////////////////////
-  type rankListType = {
-    topTen: string[];
-    myRank: number;
-  };
 
-  const inputList: rankListType = {
-    topTen: [
-      '설희',
-      '미희',
-      '원규',
-      '한빈',
-      '성훈',
-      '희설킴',
-      '희미팍',
-      '규원킴',
-      '빈한리',
-      '훈성리',
-    ],
-    myRank: 92,
-  };
-
-  const [rankList, setMyRankList] = useState<rankListType>(inputList);
-
-  const myRank = rankList.myRank;
-  const rankInfo: string[] =
-    myRank < 30
-      ? ['#86FFF8', '플레티넘']
-      : myRank < 80
-      ? ['#C9B037', '골드']
-      : myRank < 150
-      ? ['#a4a4a4', '실버']
-      : ['#6a3805', '브론즈'];
   const rankContent = (): JSX.Element => {
-    // if (rankList.myRank <= 10) {
-    //   const tempList: rankListType = rankList;
-    //   tempList.topTen[rankList.myRank - 1] = myName;
-    //   setMyRankList(tempList);
-    // }
+    const setRankColor = (input: string): string => {
+      if (input === 'Platinum') return '#86FFF8';
+      else if (input === 'Gold') return '#C9B037';
+      else if (input === 'Silver') return '#a4a4a4';
+      else return '#6a3805';
+    };
 
     return (
       <div className='w-full h-fit  outline-yellow-300'>
-        {/* <div className='w-full h-[100px] flex flex-row justify-between items-center  outline-blue-300 px-[20px]'>
-          <div className='w-fit h-2/3 px-[20px] bg-black rounded-xl grid place-content-center'>
-            <span className='text-white text-[25px]'>
-              나의 순위 : #.{rankList.myRank}
-            </span>
-          </div>
-          <div className='w-fit h-2/3 px-[20px] flex flex-row justify-center items-center bg-black rounded-xl'>
-            <span className='text-white flex flex-row justify-center items-center text-[25px] mr-[20px]'>
-              RANK :
-            </span>
-            <div className='w-fit h-2/3  outline-white bg-[rgba(62,62,62,0.7)]  rounded-xl flex flex-row justify-center items-center px-[10px]'>
-              <SiPowerapps
-                size={25}
-                color={rankInfo[0]}
-                className='mr-[10px]'
-              />
-              <span
-                className='text-[25px] font-PtdBold'
-                style={{ color: rankInfo[0] }}
-              >
-                {rankInfo[1]}
-              </span>
-            </div>
-          </div>
-        </div> */}
         <div
           className={`w-full h-fit  outline-red-300 flex flex-col justify-start items-start transition-all duration-1000 ease-in-out`}
         >
           <div className='text-[#6A6A6A] font-PtdRegular text-[22px] mx-[15px] '>
-            <span>{userNickname}</span>
-            <span></span>
-            님의 랭킹 정보
+            <span>
+              {userNickname}
+              님의 랭킹 정보
+            </span>
           </div>
           <div className='text-[#CBCBCB] font-PtdRegular text-[22px] mx-[15px] mt-[5px]'>
-            <span>전체 플레이어 중 상위 </span>
+            <span>전체 플레이어 중 </span>
             <span className='text-emerald-300'>
-              {myRank}위, 15% 이내입니다.
+              {axiosRankInfoList?.myRank.rank}위, 상위{' '}
+              {axiosRankInfoList?.myRank.percent}% 이내입니다.
             </span>
           </div>
           <div className='w-full h-[50px] flex flex-row justify-start items-start  text-white'></div>
           <div
             className={`w-full h-fit outline-white opacity-100 transition-all duration-1000  ease-in-out overflow-hidden flex flex-col justify-start items-center`}
           >
-            <div className='w-[450px] h-[50px] flex flex-row justify-start items-center text-[20px] text-[#6A6A6A] font-PtdLight'>
-              <span className='w-fit'>no.</span>
-              <span className='w-fit ml-[20px]'>nickname</span>
-              <span className='w-fit ml-[200px]'>level</span>
-              <span className='place-content-right ml-[50px]'>tier</span>
-            </div>
-
-            {rankList.topTen.map((item, key) => (
+            <div>
               <div
-                key={key}
-                className={`rangking relative flex flex-row justify-start items-center mb-[7px] bg-[rgba(0,0,0,0)] hover:bg-[rgba(180,180,180,0.3)] px-[10px] rounded-md ${
-                  key + 1 === myRank
-                    ? 'glowmyrank z-10  w-[500px] h-[50px] my-[15px] '
-                    : 'w-[490px] h-[45px]'
-                }`}
+                className={
+                  'relative flex flex-row justify-between items-center mb-[7px] bg-[rgba(0,0,0,0)] px-[10px] rounded-md w-[490px] h-[45px]'
+                }
               >
-                <div className='relative w-[50px] h-[50px]  grid place-content-center'>
-                  <span className='absolute top-0 left-0 w-[50px] h-[50px] grid place-content-center font-PtdLight text-[20px] text-gray-300'>
-                    {key + 1}
+                <div className='w-[50px] h-full mr-[10px] grid place-content-center border-0 border-b-[2px] border-solid border-gray-500'>
+                  <span className='grid place-content-center font-PtdLight text-[20px] text-gray-300'>
+                    Rank
                   </span>
                 </div>
-                <div className='w-fit h-fit flex flex-row justify-center items-center'>
-                  <span className='font-PtdLight text-white text-[20px] ml-[30px]'>
-                    {item}
+                <div className='w-[180px] h-full mr-[10px] flex flex-row justify-center items-center border-0 border-b-[2px] border-solid border-gray-500'>
+                  <span className='font-PtdLight text-gray-300 text-[20px] '>
+                    User
                   </span>
                 </div>
-                <div className='w-[50px] flex-1 flex-row flex justify-start items-center pl-[20px]'>
-                  <RiVipCrownFill
-                    className={`${
-                      key === 0
-                        ? 'text-[#D1C68F]'
-                        : key === 1
-                        ? 'text-[#a4a4a4]'
-                        : key === 2
-                        ? 'text-[#837D63]'
-                        : 'hidden'
-                    }
-                        ${key}
+                <div className='flex-1' />
+                <div className='w-[80px] h-full mr-[20px] grid place-content-center border-0 border-b-[2px] border-solid border-gray-500'>
+                  <span className='font-PtdLight text-gray-300 text-[20px] '>
+                    Level
+                  </span>
+                </div>
+                <div className='w-[50px] h-full  grid place-content-center border-0 border-b-[2px] border-solid border-gray-500'>
+                  <span className='font-PtdLight text-gray-300 text-[20px] '>
+                    Tier
+                  </span>
+                </div>
+              </div>
+              {axiosRankInfoList?.rankTop10User.map((item, key) => (
+                <div
+                  key={key}
+                  className={`rangking relative flex flex-row justify-between items-center mb-[7px] bg-[rgba(0,0,0,0)] hover:bg-[rgba(180,180,180,0.3)] px-[10px] rounded-md ${
+                    item.nickName === userNickname
+                      ? 'glowmyrank z-10  w-[500px] h-[50px] my-[15px] '
+                      : 'w-[490px] h-[45px]'
+                  }`}
+                >
+                  <div className='w-[50px] h-[50px] mr-[20px] grid place-content-center'>
+                    <span className='font-PtdLight text-[20px] text-gray-300'>
+                      {key + 1}
+                    </span>
+                  </div>
+                  <div className='flex-1 h-fit  outline-white flex justify-between items-center'>
+                    <div className='w-[30px] h-[30px] outline outline-[rgba(220,220,220,0.3)] rounded-full overflow-hidden grid place-content-center  mr-[20px]'>
+                      <img src={item.profileImg} alt='프로필 이미지' />
+                    </div>
+                    <div className='w-[150px] h-fit  outline-red-300 flex flex-row justify-start items-center '>
+                      <span className='font-PtdLight text-white text-[20px] truncate '>
+                        {item.nickName}
+                      </span>
+                    </div>
+                    <div className='w-[30px] flex-1 flex-row flex justify-start items-center '>
+                      <RiVipCrownFill
+                        className={`${
+                          key === 0
+                            ? 'text-[#D1C68F]'
+                            : key === 1
+                            ? 'text-[#a4a4a4]'
+                            : key === 2
+                            ? 'text-[#837D63]'
+                            : 'opacity-0'
+                        }
                         shadow-lg
                         w-[15px] h-[15px]
                         `}
-                  />
+                      />
+                    </div>
+                  </div>
+                  <div className='flex flex-row  outline-white justify-between items-center w-[120px] h-fit'>
+                    <div className='w-[30px] flex-2 grid place-ontent-right mr-[20px]'>
+                      <span className='font-PtdLight text-[20px] text-[#B2B2B2]'>
+                        lv.{item.level}
+                      </span>
+                    </div>
+                    <div className='w-fit h-2/3  outline-white bg-[rgba(62,62,62,0.7)] rounded-[100px] flex flex-row justify-center items-center px-[10px]'>
+                      <SiPowerapps size={22} color={setRankColor(item.tier)} />
+                    </div>
+                  </div>
                 </div>
-                <div className='w-[100px] flex-2 grid place-ontent-right pl-[20px]'>
-                  <span className='font-PtdLight text-[20px] text-[#B2B2B2]'>
-                    lv.1
-                  </span>
-                </div>
-                <div className='w-fit h-2/3 bg-[rgba(62,62,62,0.7)] rounded-[100px] flex flex-row justify-center items-center px-[10px]'>
-                  <SiPowerapps size={22} color={'#86FFF8'} />
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
             <div className='w-full h-fit grid place-content-center'>
               <BsThreeDotsVertical
                 size={20}
@@ -888,13 +910,13 @@ export default function MyPage({
                 className='my-[10px]'
               />
             </div>
-            {myRank > 10 && (
+            {axiosRankInfoList && axiosRankInfoList?.myRank.rank > 10 && (
               <div
                 className={`rangking w-[500px] h-[50px] flex flex-row justify-start items-center mt-[10px] mb-[25px] rounded-md bg-[rgba(0,0,0,0.1)] hover:bg-[rgba(180,180,180,0.5)] px-[10px] glowmyrank z-10`}
               >
                 <div className='relative w-[50px] h-[50px]  grid place-content-center'>
                   <span className='absolute top-0 left-0 w-[50px] h-[50px] grid place-content-center font-PtdLight text-[20px] text-gray-300'>
-                    {myRank}
+                    {axiosRankInfoList?.myRank.rank}
                   </span>
                 </div>
                 <div className='w-fit h-fit flex flex-row flex-1 justify-center items-center -ml-[200px]'>
@@ -904,11 +926,18 @@ export default function MyPage({
                 </div>
                 <div className='w-[100px] flex-2 grid place-ontent-right'>
                   <span className='font-PtdLight text-[20px] text-[#B2B2B2]'>
-                    lv.1
+                    lv.{axiosRankInfoList?.myRank.level}
                   </span>
                 </div>
                 <div className='w-fit h-2/3 bg-[rgba(62,62,62,0.7)] rounded-[100px] flex flex-row justify-center items-center px-[10px]'>
-                  <SiPowerapps size={22} color={rankInfo[0]} />
+                  <SiPowerapps
+                    size={22}
+                    color={setRankColor(
+                      axiosRankInfoList?.myRank.tier
+                        ? axiosRankInfoList.myRank.tier
+                        : 'Bronze'
+                    )}
+                  />
                 </div>
               </div>
             )}
