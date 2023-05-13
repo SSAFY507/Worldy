@@ -21,20 +21,20 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
     setMoreInfo(false);
   };
 
-  const KakaoAppKey = '19dbd953fa840cb821c17969d419e263';
+  // const KakaoAppKey = '19dbd953fa840cb821c17969d419e263';
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const script = document.createElement('script');
-      script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
-      script.async = true;
-      document.body.appendChild(script);
-      script.onload = () => {
-        //eslint-disable-next-line
-        (window as any).Kakao.init(KakaoAppKey);
-      };
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (typeof window !== 'undefined') {
+  //     const script = document.createElement('script');
+  //     script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
+  //     script.async = true;
+  //     document.body.appendChild(script);
+  //     script.onload = () => {
+  //       //eslint-disable-next-line
+  //       (window as any).Kakao.init(KakaoAppKey);
+  //     };
+  //   }
+  // }, []);
 
   const myImageList = {
     BackgroundImage: pathBI,
