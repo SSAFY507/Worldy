@@ -7,6 +7,10 @@ interface LoginState {
   nickname: string;
   profileImg: string;
   token: string;
+  rank: number;
+  tier: string;
+  level: number;
+  exp: number;
 }
 
 interface loginPayload {
@@ -19,6 +23,17 @@ const initialState: LoginState = {
   nickname: '',
   profileImg: '',
   token: '',
+  rank: 1,
+  tier: '',
+  level: 1,
+  exp: 1,
+};
+
+type rankInfo = {
+  rank: number;
+  tier: string;
+  level: number;
+  exp: number;
 };
 
 export const loginSlice = createSlice({
@@ -51,13 +66,24 @@ export const loginSlice = createSlice({
       sessionStorage.setItem('token', action.payload);
       console.log('토큰 추가', action.payload);
     },
+    addRankInfo: (state, action: PayloadAction<rankInfo>) => {
+      state.rank = action.payload.rank;
+      state.tier = action.payload.tier;
+      state.level = action.payload.level;
+      state.exp = action.payload.exp;
+    },
   },
 });
 
-export const { login, logout, addNickname, addToken } = loginSlice.actions;
+export const { login, logout, addNickname, addToken, addRankInfo } =
+  loginSlice.actions;
 export const wholeState = (state: RootState) => state.login;
 export const loginState = (state: RootState) => state.login.state;
 export const loginNickName = (state: RootState) => state.login.nickname;
 export const loginProfileImg = (state: RootState) => state.login.profileImg;
 export const loginToken = (state: RootState) => state.login.token;
+export const myRank = (state: RootState) => state.login.rank;
+export const myTier = (state: RootState) => state.login.tier;
+export const myLevel = (state: RootState) => state.login.level;
+export const myExp = (state: RootState) => state.login.exp;
 export default loginSlice.reducer;
