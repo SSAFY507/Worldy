@@ -7,6 +7,9 @@ import Game3D from './Game3D';
 import SockJS from 'sockjs-client';
 import { Stomp } from '@stomp/stompjs';
 import { useLocation } from "react-router-dom";
+import { useNavigate } from 'react-router';
+import { log } from 'console';
+import Enter from './Enter';
 
 export type ScrappedQuizType = {
   quizId: number; //퀴즈 id
@@ -36,47 +39,13 @@ export default function Main() {
   let roomData: any = null;
   const params = useParams();
   const location = useLocation();
-  const loginUser = '2756798359';
+  const loginUser = '2757389101';
 
   let received : any;
 
+  const navigate = useNavigate();
 
-  roomData = {
-    "user1": {
-      "kakaoId": "2757389101",
-      "roomId": "waiting-2757389101",
-      "mmr": 1587,
-      "level": 0,
-      "startWaitingTime": "2023-05-03 17:08:28:28"
-    },
-    "user2": {
-      "kakaoId": "2756798359",
-      "roomId": "waiting-2756798359",
-      "mmr": 1314,
-      "level": 0,
-      "startWaitingTime": "2023-05-03 17:08:30:79"
-    },
-    "user3": {
-      "kakaoId": "2762535269",
-      "roomId": "waiting-2762535269",
-      "mmr": 1185,
-      "level": 0,
-      "startWaitingTime": "2023-05-03 17:08:34:43"
-    },
-    "user4": {
-      "kakaoId": "2772224261",
-      "roomId": "waiting-2772224261",
-      "mmr": 1464,
-      "level": 0,
-      "startWaitingTime": "2023-05-03 17:08:39:66"
-    },
-    "gameRoom": {
-      "roomId": "82f2141c-f63f-4f53-bf3d-c20b3ef9adda"
-    }
-  }
-  //roomData = location.state.value;
-
-  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzU3Mzg5MTAxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4Mzk0OTY2N30.zZsk4JnHTobz2XFd6KlNubhXgh7VHpW3xagW1R2oZko0zkAI4-UM0tzLUnPKUAPn7HvKC6ObLaz8n4KcRNbUDQ'
+  const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyNzU3Mzg5MTAxIiwiYXV0aCI6IlJPTEVfVVNFUiIsImV4cCI6MTY4NDA0NjQ1MX0.6rvnWUJk7WS9aFJ02G1-NM6LQpCTAojYCAHTlCWn4M3N5brFegNKrJ4BZfhgSTw_goS7GppgQo0zT7hkg0RT9Q'
   let headers = { Authorization: `Bearer ${accessToken}` };
   
   // socket receivedData
@@ -107,6 +76,12 @@ export default function Main() {
     success: true, //맞춘 문제인가
     explanation: '',
   })
+
+  // 게임 포화상태 체크
+  const [userCheck, setUserCheck] = useState<boolean>(false);
+
+  // 게임 시작 체크
+  const [gameStart, setGameStart] = useState<boolean>(false);
 
   useEffect(() => {
     // 소켓 연결
@@ -169,65 +144,135 @@ export default function Main() {
           }))
         }
         setQuizModalState(true);
+      } else if (received.type === 'enter'){ // enter 에 들어온 순서대로 p를 채워나간 후 p4가 바뀌는 순간 player 데이터 전송
+          console.log(received);
+          if(received.cnt<=4) {
+            console.log("4이하 룸아이디 세팅");
+            
+            if(received.user1){
+              setPlayer((prevState:any) => ({
+                ...prevState,
+                roomId: received.roomId,
+                p1 : {
+                  ...prevState.p1,
+                  playerId : received.user1.kakaoId,
+                  name:received.user1.nickName,
+                }
+              }))
+            }
+            if(received.user2){
+              setPlayer((prevState:any) => ({
+                ...prevState,
+                roomId: received.roomId,
+                p2 : {
+                  ...prevState.p2,
+                  playerId : received.user2.kakaoId,
+                  name:received.user2.nickName,
+                }
+              }))
+            }
+            if(received.user3){
+              setPlayer((prevState:any) => ({
+                ...prevState,
+                roomId: received.roomId,
+                p3 : {
+                  ...prevState.p3,
+                  playerId : received.user3.kakaoId,
+                  name:received.user3.nickName,
+                }
+              }))
+            }   
+            if(received.user4){
+              setPlayer((prevState:any) => ({
+                ...prevState,
+                roomId: received.roomId,
+                p4 : {
+                  ...prevState.p4,
+                  playerId : received.user4.kakaoId,
+                  name:received.user4.nickName,
+                }
+              }))
+              setGameStart(true);
+            }      
+          }
+          else if(received.cnt>=5) {
+            let check = true;
+      
+            if (loginUser===received.user1.kakaoId) {
+              check = false;
+            } else if (loginUser===received.user2.kakaoId) {
+              check = false;
+            } else if (loginUser===received.user3.kakaoId) {
+              check = false;
+            } else if (loginUser===received.user4.kakaoId) {
+              check = false;
+            } 
+
+            setUserCheck(check);
+          }
       }
     });
   }
 
-
-  // 참여한 플레이어 데이터 세팅하기
-  function setGameData() {
-
-    let _p1 = roomData.user1;
-    let _p2 = roomData.user2;
-    let _p3 = roomData.user3;
-    let _p4 = roomData.user4;
-    let myId = '';
-    let myNum = 0;
-    const ps = [_p1, _p2, _p3, _p4];
-
-    ps.forEach((e, index) => {
-      if (e.kakaoId === loginUser) {
-        myId = e.kakaoId;
-        myNum = index + 1;
-      }
-    });
-
-    setPlayer((prevState: any) => ({
-      ...prevState,
-      p1: {
-        ...prevState.p1,
-        playerId: _p1.kakaoId,
-        name: '설희',
-        game: {
-          ...prevState.p1.game,
-        }
-      },
-      p2: {
-        ...prevState.p2,
-        playerId: _p2.kakaoId,
-        name: '성훈',
-        game: {
-          ...prevState.p2.game,
-        }
-      },
-      p3: {
-        ...prevState.p3,
-        playerId: _p3.kakaoId,
-        name: '미희',
-        game: {
-          ...prevState.p3.game,
-        }
-      },
-      p4: {
-        ...prevState.p4,
-        playerId: _p4.kakaoId,
-        name: '원규',
-        game: {
-          ...prevState.p4.game,
-        }
-      },
-    }))
+  // 게임 방이 가득차면 redirect
+  if(userCheck) {
+    navigate('/');
   }
+
+  // // 참여한 플레이어 데이터 세팅하기
+  // function setGameData() {
+
+  //   let _p1 = roomData.user1;
+  //   let _p2 = roomData.user2;
+  //   let _p3 = roomData.user3;
+  //   let _p4 = roomData.user4;
+  //   let myId = '';
+  //   let myNum = 0;
+  //   const ps = [_p1, _p2, _p3, _p4];
+
+  //   ps.forEach((e, index) => {
+  //     if (e.kakaoId === loginUser) {
+  //       myId = e.kakaoId;
+  //       myNum = index + 1;
+  //     }
+  //   });
+
+  //   setPlayer((prevState: any) => ({
+  //     ...prevState,
+  //     p1: {
+  //       ...prevState.p1,
+  //       playerId: _p1.kakaoId,
+  //       name: '설희',
+  //       game: {
+  //         ...prevState.p1.game,
+  //       }
+  //     },
+  //     p2: {
+  //       ...prevState.p2,
+  //       playerId: _p2.kakaoId,
+  //       name: '성훈',
+  //       game: {
+  //         ...prevState.p2.game,
+  //       }
+  //     },
+  //     p3: {
+  //       ...prevState.p3,
+  //       playerId: _p3.kakaoId,
+  //       name: '미희',
+  //       game: {
+  //         ...prevState.p3.game,
+  //       }
+  //     },
+  //     p4: {
+  //       ...prevState.p4,
+  //       playerId: _p4.kakaoId,
+  //       name: '원규',
+  //       game: {
+  //         ...prevState.p4.game,
+  //       }
+  //     },
+  //   }))
+  // }
 
   const [contents, setContents] = useState<String>('');
   const [mode, setMode] = useState<boolean>(true);
@@ -327,9 +372,6 @@ export default function Main() {
       }
     },
   })
-
-
-
 
   // 월드맵(지도)
   const [worldMap, setWorldMap] = useState<Spot[]>([
@@ -1253,16 +1295,9 @@ export default function Main() {
           >3D 모드</div>
         </div>
       </div>
-      {!start && <div className='w-full h-full bg-[#FFFDF4] flex flex-col justify-center items-center'>
-        <div id='shbutton' className='w-[200px] h-[50px] text-[24px] flex justify-center items-center'
-          onClick={(e) => {
-            e.preventDefault();
-            setStart(true);
-            setGameData();
-          }}
-        >게임 시작하기</div>
-      </div>}
-      {start && <div>
+      {!gameStart && <Enter></Enter>}
+      
+      {gameStart && <div>
         {mode && <Game2D quizModalState = {quizModalState} ws={ws} quiz={quiz} closeModal={() => setQuizModalState(false)} loginUser={loginUser} metaData={metaData} setMetaData={setMetaData} player={player} setPlayer={setPlayer} worldMap={worldMap} setWorldMap={setWorldMap}></Game2D>}
         {!mode && <Game3D worldMap={worldMap} setWorldMap={setWorldMap}></Game3D>}
       </div>}

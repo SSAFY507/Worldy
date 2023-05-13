@@ -9,7 +9,7 @@ import LoaderPyramid from '../components/Loaders/LoaderPyramid';
 import { useParams } from 'react-router';
 import { useNavigate } from 'react-router';
 
-import GameLoginModal from '../components/LoginModal';
+import LoginModal from '../components/LoginModal';
 
 export default function Game() {
   
@@ -46,7 +46,7 @@ export default function Game() {
   return (
     <div className='w-screen h-screen'>
       {showLoginModal && (
-          <GameLoginModal
+          <LoginModal
             onClose={closeLoginModal}
             onClickKakaoLogin={handleFirstLogin}
           />
