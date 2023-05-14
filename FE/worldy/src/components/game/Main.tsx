@@ -373,13 +373,13 @@ export default function Main() {
 
           let check = true;
 
-          if (loginUser===received.user1.name) {
+          if (loginUser===received.user1.nickName) {
             check = false;
-          } else if (loginUser===received.user2.name) {
+          } else if (loginUser===received.user2.nickName) {
             check = false;
-          } else if (loginUser===received.user3.name) {
+          } else if (loginUser===received.user3.nickName) {
             check = false;
-          } else if (loginUser===received.user4.name) {
+          } else if (loginUser===received.user4.nickName) {
             check = false;
           }
 
