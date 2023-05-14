@@ -119,6 +119,7 @@ export default function Game2D(props: any) {
       ...prevState,
       dice1: dice1,
       dice2: dice2,
+      dice: dice,
       isDouble: true,
     }));
     showDice(dice1, dice2);
@@ -177,6 +178,7 @@ export default function Game2D(props: any) {
       ...prevState,
       dice1: dice1,
       dice2: dice2,
+      dice: dice,
       isDouble: isDouble,
     }));
     showDice(dice1, dice2);
@@ -1563,7 +1565,8 @@ export default function Game2D(props: any) {
                     turnOver: true,
                   }));
                   setMode(0);
-                  console.log();
+                  console.log("sendData하기전 메타데이터 확인>>>> ");
+                  console.log(metaData);
                   sendData();
                 }}
               >
