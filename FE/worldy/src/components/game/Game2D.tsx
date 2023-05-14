@@ -5,6 +5,8 @@ import GameQuizModal from "../GameQuizModal";
 
 export default function Game2D(props: any) {
   const sendData = props.sendData;
+  
+  const profileImg = sessionStorage.getItem('profileImg');
 
   const player = props.player;
   const setPlayer = props.setPlayer;
@@ -293,7 +295,7 @@ export default function Game2D(props: any) {
             ...prevState.p1,
             game: {
               ...prevState.p1.game,
-              balance: prevState.p1.game.balance + 50,
+              balance: prevState.p1.game.balance + 500,
             },
           },
         }));
@@ -304,7 +306,7 @@ export default function Game2D(props: any) {
             ...prevState.p2,
             game: {
               ...prevState.p2.game,
-              balance: prevState.p2.game.balance + 50,
+              balance: prevState.p2.game.balance + 500,
             },
           },
         }));
@@ -315,7 +317,7 @@ export default function Game2D(props: any) {
             ...prevState.p3,
             game: {
               ...prevState.p3.game,
-              balance: prevState.p3.game.balance + 50,
+              balance: prevState.p3.game.balance + 500,
             },
           },
         }));
@@ -326,7 +328,7 @@ export default function Game2D(props: any) {
             ...prevState.p4,
             game: {
               ...prevState.p4.game,
-              balance: prevState.p4.game.balance + 50,
+              balance: prevState.p4.game.balance + 500,
             },
           },
         }));
@@ -517,7 +519,7 @@ export default function Game2D(props: any) {
             ...prevState.p4,
             game: {
               ...prevState.p4.game,
-              balance: prevState.p1.game.balance - spot.toll,
+              balance: prevState.p4.game.balance - spot.toll,
             },
           },
           p1: {
@@ -557,7 +559,9 @@ export default function Game2D(props: any) {
             },
           },
           p3: {
+            ...prevState.p3,
             game: {
+              ...prevState.p3.game,
               balance: prevState.p3.game.balance + spot.toll,
             },
           },
@@ -1097,6 +1101,9 @@ export default function Game2D(props: any) {
                         i.location >= 0 &&
                         i.location < 10 && (
                           <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-red-400">
+                            {metaData.currentLocation === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-gray-700 outline-dashed absolute z-[9000]">
+                              <img className="w-[40px] h-[40px] relative top-[-54px] left-[22px]" src="/game/down.png"></img>
+                            </div>: null}
                             <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
                               {i.name}
                             </div>
@@ -1131,22 +1138,22 @@ export default function Game2D(props: any) {
                               </div>
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p1.name}
+                                  {player.p1.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p2.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p2.name}
+                                  {player.p2.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p3.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p3.name}
+                                  {player.p3.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p4.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p4.name}
+                                  {player.p4.name.substr(0,2)}
                                 </div>
                               )}
                             </div>
@@ -1156,28 +1163,31 @@ export default function Game2D(props: any) {
                         i.location >= 0 &&
                         i.location < 10 && (
                           <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-gray-200">
+                              {metaData.currentLocation === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-gray-700 outline-dashed absolute z-[9000]">
+                              <img className="w-[40px] h-[40px] relative top-[-54px] left-[22px]" src="/game/down.png"></img>
+                            </div>: null}
                             <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center font-PtdExtraBold ">
                               {i.name}
                             </div>
                             <div className="w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white">
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p1.name}
+                                  {player.p1.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p2.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p2.name}
+                                  {player.p2.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p3.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p3.name}
+                                  {player.p3.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p4.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p4.name}
+                                  {player.p4.name.substr(0,2)}
                                 </div>
                               )}
                             </div>
@@ -1187,6 +1197,9 @@ export default function Game2D(props: any) {
                         i.location >= 0 &&
                         i.location < 10 && (
                           <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-500">
+                            {metaData.currentLocation === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-gray-700 outline-dashed absolute z-[9000]">
+                            <img className="w-[40px] h-[40px] relative top-[-54px] left-[22px]" src="/game/down.png"></img>
+                            </div>: null}
                             <div className="w-[82px] h-[82px] rounded-[2px] flex justify-around items-center flex-wrap text-[10px]">
                               <img
                                 src="/game/f0.png"
@@ -1194,22 +1207,22 @@ export default function Game2D(props: any) {
                               ></img>
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p1.name}
+                                  {player.p1.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p2.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p2.name}
+                                  {player.p2.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p3.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p3.name}
+                                  {player.p3.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p4.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p4.name}
+                                  {player.p4.name.substr(0,2)}
                                 </div>
                               )}
                             </div>
@@ -1219,28 +1232,31 @@ export default function Game2D(props: any) {
                         i.location >= 0 &&
                         i.location < 10 && (
                           <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-yellow-400">
+                            {metaData.currentLocation === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-gray-700 outline-dashed absolute z-[9000]">
+                            <img className="w-[40px] h-[40px] relative top-[-54px] left-[22px]" src="/game/down.png"></img>
+                            </div>: null}
                             <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
                               {i.name}
                             </div>
                             <div className="w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white">
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p1.name}
+                                  {player.p1.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p2.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p2.name}
+                                  {player.p2.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p3.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p3.name}
+                                  {player.p3.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p4.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p4.name}
+                                  {player.p4.name.substr(0,2)}
                                 </div>
                               )}
                             </div>
@@ -1260,6 +1276,9 @@ export default function Game2D(props: any) {
                         i.location >= 10 &&
                         i.location < 20 && (
                           <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-green-400">
+                            {metaData.currentLocation === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-gray-700 outline-dashed absolute z-[9000]">
+                              <img className="w-[40px] h-[40px] relative top-[30px] left-[100px]" src="/game/left.png"></img>
+                            </div>: null}
                             <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
                               {i.name}
                             </div>
@@ -1294,22 +1313,22 @@ export default function Game2D(props: any) {
                               </div>
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p1.name}
+                                  {player.p1.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p2.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p2.name}
+                                  {player.p2.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p3.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p3.name}
+                                  {player.p3.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p4.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p4.name}
+                                  {player.p4.name.substr(0,2)}
                                 </div>
                               )}
                             </div>
@@ -1319,28 +1338,31 @@ export default function Game2D(props: any) {
                         i.location >= 10 &&
                         i.location < 20 && (
                           <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-gray-200">
+                            {metaData.currentLocation === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-gray-700 outline-dashed absolute z-[9000]">
+                              <img className="w-[40px] h-[40px] relative top-[30px] left-[100px]" src="/game/left.png"></img>
+                            </div>: null}
                             <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center font-PtdExtraBold ">
                               {i.name}
                             </div>
                             <div className="w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white">
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p1.name}
+                                  {player.p1.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p2.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p2.name}
+                                  {player.p2.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p3.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p3.name}
+                                  {player.p3.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p4.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p4.name}
+                                  {player.p4.name.substr(0,2)}
                                 </div>
                               )}
                             </div>
@@ -1350,6 +1372,9 @@ export default function Game2D(props: any) {
                         i.location >= 10 &&
                         i.location < 20 && (
                           <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-500">
+                            {metaData.currentLocation === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-gray-700 outline-dashed absolute z-[9000]">
+                              <img className="w-[40px] h-[40px] relative top-[30px] left-[100px]" src="/game/left.png"></img>
+                            </div>: null}
                             <div className="w-[82px] h-[82px] rounded-[2px] flex justify-around items-center flex-wrap text-[10px]">
                               <img
                                 src="/game/f10.png"
@@ -1357,22 +1382,22 @@ export default function Game2D(props: any) {
                               ></img>
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p1.name}
+                                  {player.p1.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p2.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p2.name}
+                                  {player.p2.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p3.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p3.name}
+                                  {player.p3.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p4.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p4.name}
+                                  {player.p4.name.substr(0,2)}
                                 </div>
                               )}
                             </div>
@@ -1382,28 +1407,31 @@ export default function Game2D(props: any) {
                         i.location >= 10 &&
                         i.location < 20 && (
                           <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-yellow-400">
+                            {metaData.currentLocation === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-gray-700 outline-dashed absolute z-[9000]">
+                              <img className="w-[40px] h-[40px] relative top-[30px] left-[100px]" src="/game/left.png"></img>
+                            </div>: null}
                             <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
                               {i.name}
                             </div>
                             <div className="w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white">
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p1.name}
+                                  {player.p1.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p2.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p2.name}
+                                  {player.p2.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p3.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p3.name}
+                                  {player.p3.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p4.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p4.name}
+                                  {player.p4.name.substr(0,2)}
                                 </div>
                               )}
                             </div>
@@ -1423,6 +1451,9 @@ export default function Game2D(props: any) {
                         i.location >= 20 &&
                         i.location < 30 && (
                           <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-400">
+                            {metaData.currentLocation === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-gray-700 outline-dashed absolute z-[9000]">
+                              <img className="w-[40px] h-[40px] relative top-[100px] left-[30px]" src="/game/up.png"></img>
+                            </div>: null}
                             <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
                               {i.name}
                             </div>
@@ -1457,22 +1488,22 @@ export default function Game2D(props: any) {
                               </div>
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p1.name}
+                                  {player.p1.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p2.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p2.name}
+                                  {player.p2.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p3.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p3.name}
+                                  {player.p3.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p4.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p4.name}
+                                  {player.p4.name.substr(0,2)}
                                 </div>
                               )}
                             </div>
@@ -1482,28 +1513,31 @@ export default function Game2D(props: any) {
                         i.location >= 20 &&
                         i.location < 30 && (
                           <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-gray-200">
+                            {metaData.currentLocation === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-gray-700 outline-dashed absolute z-[9000]">
+                              <img className="w-[40px] h-[40px] relative top-[100px] left-[30px]" src="/game/up.png"></img>
+                            </div>: null}
                             <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center font-PtdExtraBold ">
                               {i.name}
                             </div>
                             <div className="w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white">
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p1.name}
+                                  {player.p1.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p2.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p2.name}
+                                  {player.p2.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p3.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p3.name}
+                                  {player.p3.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p4.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p4.name}
+                                  {player.p4.name.substr(0,2)}
                                 </div>
                               )}
                             </div>
@@ -1513,6 +1547,9 @@ export default function Game2D(props: any) {
                         i.location >= 20 &&
                         i.location < 30 && (
                           <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-500">
+                            {metaData.currentLocation === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-gray-700 outline-dashed absolute z-[9000]">
+                              <img className="w-[40px] h-[40px] relative top-[100px] left-[30px]" src="/game/up.png"></img>
+                            </div>: null}
                             <div className="w-[82px] h-[82px] rounded-[2px] flex justify-around items-center flex-wrap text-[10px]">
                               <img
                                 src="/game/f20.png"
@@ -1520,22 +1557,22 @@ export default function Game2D(props: any) {
                               ></img>
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p1.name}
+                                  {player.p1.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p2.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p2.name}
+                                  {player.p2.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p3.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p3.name}
+                                  {player.p3.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p4.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p4.name}
+                                  {player.p4.name.substr(0,2)}
                                 </div>
                               )}
                             </div>
@@ -1545,28 +1582,31 @@ export default function Game2D(props: any) {
                         i.location >= 20 &&
                         i.location < 30 && (
                           <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-yellow-400">
+                            {metaData.currentLocation === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-gray-700 outline-dashed absolute z-[9000]">
+                              <img className="w-[40px] h-[40px] relative top-[100px] left-[30px]" src="/game/up.png"></img>
+                            </div>: null}
                             <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
                               {i.name}
                             </div>
                             <div className="w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white">
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p1.name}
+                                  {player.p1.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p2.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p2.name}
+                                  {player.p2.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p3.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p3.name}
+                                  {player.p3.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p4.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p4.name}
+                                  {player.p4.name.substr(0,2)}
                                 </div>
                               )}
                             </div>
@@ -1586,6 +1626,9 @@ export default function Game2D(props: any) {
                         i.location >= 30 &&
                         i.location < 40 && (
                           <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-purple-400">
+                            {metaData.currentLocation === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-gray-700 outline-dashed absolute z-[9000]">
+                              <img className="w-[40px] h-[40px] relative top-[30px] right-[50px]" src="/game/right.png"></img>
+                            </div>: null}
                             <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
                               {i.name}
                             </div>
@@ -1620,22 +1663,22 @@ export default function Game2D(props: any) {
                               </div>
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p1.name}
+                                  {player.p1.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p2.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p2.name}
+                                  {player.p2.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p3.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p3.name}
+                                  {player.p3.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p4.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p4.name}
+                                  {player.p4.name.substr(0,2)}
                                 </div>
                               )}
                             </div>
@@ -1645,28 +1688,31 @@ export default function Game2D(props: any) {
                         i.location >= 30 &&
                         i.location < 40 && (
                           <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-gray-200">
+                            {metaData.currentLocation === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-gray-700 outline-dashed absolute z-[9000]">
+                              <img className="w-[40px] h-[40px] relative top-[30px] right-[50px]" src="/game/right.png"></img>
+                            </div>: null}
                             <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center font-PtdExtraBold ">
                               {i.name}
                             </div>
                             <div className="w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white">
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p1.name}
+                                  {player.p1.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p2.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p2.name}
+                                  {player.p2.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p3.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p3.name}
+                                  {player.p3.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p4.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p4.name}
+                                  {player.p4.name.substr(0,2)}
                                 </div>
                               )}
                             </div>
@@ -1676,6 +1722,9 @@ export default function Game2D(props: any) {
                         i.location >= 30 &&
                         i.location < 40 && (
                           <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-500">
+                            {metaData.currentLocation === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-gray-700 outline-dashed absolute z-[9000]">
+                              <img className="w-[40px] h-[40px] relative top-[30px] right-[50px]" src="/game/right.png"></img>
+                            </div>: null}
                             <div className="w-[82px] h-[82px] rounded-[2px] flex justify-around items-center flex-wrap text-[10px]">
                               <img
                                 src="/game/f30.png"
@@ -1683,22 +1732,22 @@ export default function Game2D(props: any) {
                               ></img>
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p1.name}
+                                  {player.p1.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p2.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p2.name}
+                                  {player.p2.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p3.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p3.name}
+                                  {player.p3.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p4.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p4.name}
+                                  {player.p4.name.substr(0,2)}
                                 </div>
                               )}
                             </div>
@@ -1708,6 +1757,9 @@ export default function Game2D(props: any) {
                         i.location >= 30 &&
                         i.location < 40 && (
                           <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-500">
+                            {metaData.currentLocation === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-gray-700 outline-dashed absolute z-[9000]">
+                              <img className="w-[40px] h-[40px] relative top-[30px] right-[50px]" src="/game/right.png"></img>
+                            </div>: null}
                             <div className="w-[82px] h-[82px] rounded-[2px] flex justify-around items-center flex-wrap text-[10px]">
                               <img
                                 src="/game/f37.png"
@@ -1715,22 +1767,22 @@ export default function Game2D(props: any) {
                               ></img>
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p1.name}
+                                  {player.p1.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p2.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p2.name}
+                                  {player.p2.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p3.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p3.name}
+                                  {player.p3.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p4.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p4.name}
+                                  {player.p4.name.substr(0,2)}
                                 </div>
                               )}
                             </div>
@@ -1740,28 +1792,31 @@ export default function Game2D(props: any) {
                         i.location >= 30 &&
                         i.location < 40 && (
                           <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-yellow-400">
+                            {metaData.currentLocation === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-gray-700 outline-dashed absolute z-[9000]">
+                              <img className="w-[40px] h-[40px] relative top-[30px] right-[50px]" src="/game/right.png"></img>
+                            </div>: null}
                             <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
                               {i.name}
                             </div>
                             <div className="w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white">
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p1.name}
+                                  {player.p1.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p2.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p2.name}
+                                  {player.p2.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p3.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p3.name}
+                                  {player.p3.name.substr(0,2)}
                                 </div>
                               )}
                               {i.location === player.p4.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px]">
-                                  {player.p4.name}
+                                  {player.p4.name.substr(0,2)}
                                 </div>
                               )}
                             </div>
@@ -1882,28 +1937,28 @@ export default function Game2D(props: any) {
                         worldMap[metaData.currentLocation].type ===
                           "nation" && (
                           <div className="flex w-[64px] h-[28px] justify-center items-center bg-red-500 rounded-[4px] absolute right-[30px] text-white text-[12px]">
-                            {player.p1.name} 소유
+                            {player.p1.name.substr(0,2)} 소유
                           </div>
                         )}
                       {worldMap[metaData.currentLocation].owner === 2 &&
                         worldMap[metaData.currentLocation].type ===
                           "nation" && (
                           <div className="flex w-[64px] h-[28px] justify-center items-center bg-green-500 rounded-[4px] absolute right-[30px] text-white text-[12px]">
-                            {player.p2.name} 소유
+                            {player.p2.name.substr(0,2)} 소유
                           </div>
                         )}
                       {worldMap[metaData.currentLocation].owner === 3 &&
                         worldMap[metaData.currentLocation].type ===
                           "nation" && (
                           <div className="flex w-[64px] h-[28px] justify-center items-center bg-blue-500 rounded-[4px] absolute right-[30px] text-white text-[12px]">
-                            {player.p3.name} 소유
+                            {player.p3.name.substr(0,2)} 소유
                           </div>
                         )}
                       {worldMap[metaData.currentLocation].owner === 4 &&
                         worldMap[metaData.currentLocation].type ===
                           "nation" && (
                           <div className="flex w-[64px] h-[28px] justify-center items-center bg-purple-500 rounded-[4px] absolute right-[30px] text-white text-[12px]">
-                            {player.p4.name} 소유
+                            {player.p4.name.substr(0,2)} 소유
                           </div>
                         )}
                     </div>
@@ -2401,7 +2456,7 @@ export default function Game2D(props: any) {
                           )}
                           {worldMap[metaData.currentLocation].build
                             .landmark && (
-                            <div className="w-[70px] h-[90px] bg-blue-200 flex flex-col justify-center items-center">
+                            <div className="w-[70px] h-[90px] rounded-[8px] bg-gray-200 flex flex-col justify-center items-center mr-[12px] ml-[12px]">
                               <img
                                 src="/game/landmark.png"
                                 alt=""
@@ -2431,14 +2486,24 @@ export default function Game2D(props: any) {
                     {/* 4. 보물상자 */}
                     {mode === 4 && (
                       <div className="flex flex-col justify-center itmes-center">
-                        보물상자입니다.
+                        <p className="text-[24px] text-center">{worldMap[metaData.currentLocation].contents}</p>
                       </div>
                     )}
 
                     {/* 5. 특수지역*/}
                     {mode === 5 && (
                       <div className="flex flex-col justify-center itmes-center">
-                        특수지역입니다.
+                        <p className="text-[24px] text-center w-full h-[120px]">{worldMap[metaData.currentLocation].contents}</p>
+                        <div className="w-[330px] h-[52px] flex items-end justify-between">
+                                <div
+                                  className="w-full h-[46px] bg-red-500 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-red-600 hover:cursor-pointer"
+                                  onClick={() => {
+
+                                  }}
+                                >
+                                  확인
+                                </div>
+                              </div>
                       </div>
                     )}
 
@@ -2451,7 +2516,7 @@ export default function Game2D(props: any) {
                     {/* 7. 구매완료*/}
                     {mode === 7 && (
                       <div className="flex flex-col justify-center itmes-center">
-                        구매 및 건설 완료.
+                        <div className="text-[24px] font-PtdBold">구매 및 건설 완료</div>
                       </div>
                     )}
                   </div>
@@ -2473,18 +2538,21 @@ export default function Game2D(props: any) {
             </div>
           )}
           <div
-            className={`w-[320px] h-[900px] mb-[50px]  flex flex-col justify-around items-center bg-gray-100 rounded-[8px]  ${
+            className={`w-[320px] h-[920px] mb-[50px]  flex flex-col justify-around items-center bg-gray-100 rounded-[8px]  ${
               myTurn ? "outline outline-[6px] outline-yellow-400" : ""
             }`}
           >
-            <div className="w-[300px] h-[180px] bg-white rounded-[8px] flex flex-col justify-center items-center">
-              <div className="w-[250px] h-[130px]">
-                <div className="flex justify-between">
+            <div className="w-[300px] h-[200px] bg-white rounded-[8px] flex flex-col justify-center items-center">
+              <div className="w-[250px] h-[140px]">
+                <div className="flex justify-between items-center">
                   <div className="">플레이어 [{me.playerNum}]</div>
                   <div className="">현재 위치</div>
                 </div>
-                <div className="flex justify-between h-[34px] mt-[10px] mb-[10px] border-solid border-gray-400 border-b-[1px]">
-                  <div className="text-[22px]">{me.name}</div>
+                <div className="flex items-center justify-between h-[70px] mt-[10px] mb-[10px] border-solid border-gray-400 border-b-[1px]">
+                  <div className="flex items-center">
+                    <img src={`${profileImg}`} alt="" className="w-[50px] h-[50px] rounded-full"/>
+                    <div className="text-[22px] ml-[6px]">{me.name}</div>
+                  </div>
                   <div className="text-[22px]">
                     [{worldMap[me.game.location].name}]
                   </div>
