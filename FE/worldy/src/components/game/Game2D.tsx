@@ -329,6 +329,9 @@ export default function Game2D(props: any) {
     return result;
   }
 
+  // 통행료 지불 함수
+  function payToll() {}
+
   // 구매하기
   function buy(turn: number, spot: Spot, buyOption: number) {
     // 잔액이 있는지 확인
