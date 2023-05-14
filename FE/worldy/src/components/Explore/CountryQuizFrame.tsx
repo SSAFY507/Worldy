@@ -128,7 +128,6 @@ const CountryQuizFrame = ({selectAsset}:Props) => {
   }
 
   const selectImg:JSX.Element[] = imgObject[selectAsset];
-  console.log(selectImg)
   const handleQuizModal = (select: number) => {
     setSelectedQuizId(select);
     setTimeout(() => {
@@ -140,7 +139,6 @@ const CountryQuizFrame = ({selectAsset}:Props) => {
     if (counting > -1) {
       setTimeout(() => {
         setCounting((i) => i-1)
-        console.log(counting)
       }, 1000);
     }
   },[counting])
@@ -156,7 +154,9 @@ const CountryQuizFrame = ({selectAsset}:Props) => {
           {(counting === 0) ? <div className="absolute">{selectImg[4]}</div> : null}
           {(counting === -1) 
             ?         
-            <div className="absolute h-[1100px]" >
+            <div className={
+              `${(selectAsset === "quizBox") ? "absolute h-[1100px] flex" : "h-full w-full flex items-center justify-center"} `} 
+            >
               {selectImg[5]}
             </div>    
             :

@@ -9,7 +9,8 @@ import CrAnswer from '../../assets/images/CorrectAnswer.png';
 import WrAnswer from '../../assets/images/WrongAnswer.png';
 import book from '../../assets/images/bookIcon.png';
 import newsIcon from '../../assets/images/newsIcon.png';
-import paintIcon from '../../assets/images/paint.png'
+import paint from '../../assets/images/paint.png'
+import paintIcon from '../../assets/images/paintIcon.png'
 import pathBA from '../../assets/images/BtgAttention.png';
 import pathBC from '../../assets/images/BtgCurious.png';
 import pathBH from '../../assets/images/BtgHandup.png';
@@ -17,6 +18,7 @@ import pathBP from '../../assets/images/BtgPointing.png';
 import pathBT from '../../assets/images/BtgTeach.png';
 import pathTB from '../../assets/images/TutorialBackground.png';
 import pathTQT from '../../assets/images/TutorialQuizText.png';
+import quiz from '../../assets/images/quiz.png'
 import quizIcon from '../../assets/images/quizIcon.png';
 import { useDispatch } from 'react-redux';
 import useLoadImagesHook from '../../_hooks/useLoadImagesHook';
@@ -45,6 +47,8 @@ interface DetailType {
   contents: string[],
   icon: string,
   npcImg: string,
+  mainIcon: string,
+
 }
 
 interface Country {
@@ -200,21 +204,24 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
       subTitle: `${countryLst[`${countryName}`].ENGLISH} Latest News`,
       contents: [`${countryLst[`${countryName}`].KOREAN}의 최신 뉴스를 제공합니다.`, "하루에 한 번, 매일 아침 업데이트 되는", `${countryLst[countryName].KOREAN}의 새로운 소식을 만나보세요`],
       icon: newsIcon,
-      npcImg: pathBA
+      npcImg: pathBA,
+      mainIcon: book,
     },
     quizBox:{
       title: `${countryLst[`${countryName}`].KOREAN} 상식 퀴즈`,
       subTitle: `${countryLst[`${countryName}`].ENGLISH} Trivia Quiz`,
       contents: ["시사, 역사, 문화 등", "다양한 카테고리의 재미있는", `${countryLst[countryName].KOREAN} 상식 퀴즈를 풀어보세요!`],
       icon: quizIcon,
-      npcImg: pathBP
+      npcImg: pathBP,
+      mainIcon: quiz,
     },
     paintBox:{
       title: "틀림 그림 찾기",
       subTitle: "Hidden Catch of AI",
       contents: [`${countryLst[`${countryName}`].KOREAN}의 명소 이미지가 등장합니다.`, "시간 안에 AI가 바꾸어 놓은 부분 중" , "세 가지를 찾아보세요!"],
       icon: paintIcon,
-      npcImg: pathBC
+      npcImg: pathBC,
+      mainIcon: paint,
     }
   }
  
@@ -286,7 +293,7 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
             <div className="h-1/2 flex flex-col">
               <div className="flex flex-col pb-10">
                 <div className='text-3xl pb-5'>
-                  <img className="h-10" src={book} alt=""/>
+                  <img className="h-10" src={ment[`${selectAsset}`].mainIcon} alt=""/>
                 </div>
                 <div className='text-4xl font-PtdExtraBold'>{ment[`${selectAsset}`].title}</div>
                 <div className='text-2xl font-PtdLight'>{ment[`${selectAsset}`].subTitle}</div>

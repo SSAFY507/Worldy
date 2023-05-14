@@ -10,7 +10,7 @@ const Country = () => {
   const params = useParams();
   const countryName: string = params.country || '';
 
-  const [selectAsset, setSelectAsset] = useState<string>("");
+  const [selectAsset, setSelectAsset] = useState<string>("paintBox");
   // ["paintBox", "historyBox", "quizBox", "foodBox", "personalityBox",  "newsBox", "back"
   const GetSelectAssetName = ((name:string) => {
     setSelectAsset(name);
