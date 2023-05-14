@@ -97,6 +97,7 @@ export default function Main() {
       const received = JSON.parse(event.body);
       console.log("sendData한 후 응답>>>");
       console.log(received);
+
       if (received.type === "player") {
         setPlayer((prevState: any) => ({
           ...prevState,
@@ -169,6 +170,15 @@ export default function Main() {
             },
           },
         }));
+      } else if (received.type === "worldmap") {
+        setWorldMap((prevState: any) => ({
+          ...prevState,
+          worldMap: received.worldMap,
+        }));
+      } else if (received.type === "metaData") {
+        setWorldMap((prevState: any) => ({
+          received,
+        }));
       } else if (received.type === "quiz") {
         quizData = received.quizDto;
 
@@ -228,6 +238,16 @@ export default function Main() {
               },
             }));
 
+            setMetaData((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setWorldMap((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
             //console.log("유저 1 데이터 받아오기");
 
             // 추후 주석처리
@@ -281,6 +301,16 @@ export default function Main() {
                 name: received.user2.nickName,
               },
             }));
+
+            setMetaData((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setWorldMap((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
           }
           if (received.user3) {
             setPlayer((prevState: any) => ({
@@ -291,6 +321,16 @@ export default function Main() {
                 playerId: received.user3.kakaoId,
                 name: received.user3.nickName,
               },
+            }));
+
+            setMetaData((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setWorldMap((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
             }));
           }
           if (received.user4) {
@@ -303,6 +343,17 @@ export default function Main() {
                 name: received.user4.nickName,
               },
             }));
+
+            setMetaData((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setWorldMap((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
             setGameStart(true);
           }
         } else if (received.cnt >= 5) {
@@ -334,14 +385,14 @@ export default function Main() {
 
   function sendData() {
     //websockt emit
-    const data = player;
-    console.log("보낼 데이터 >>");
-    console.log(data);
+    const platyerData = player;
+    const worldMapData = worldMap;
+    const meta = metaData;
 
     console.log("소켓으로 데이터 전송 >>>");
-    ws.send("/pub/game/player", {}, JSON.stringify(data));
-    // ws.send("/pub/game/map", {}, JSON.stringify(data));
-    // ws.send("/pub/game/player", {}, JSON.stringify(data));
+    ws.send("/pub/game/player", {}, JSON.stringify(platyerData));
+    ws.send("/pub/game/map", {}, JSON.stringify(worldMapData));
+    ws.send("/pub/game/meta", {}, JSON.stringify(meta));
   }
 
   // // 참여한 플레이어 데이터 세팅하기
@@ -462,6 +513,8 @@ export default function Main() {
   const [start, setStart] = useState<boolean>(false);
   const [data, setData] = useState<Object[]>();
   const [metaData, setMetaData] = useState<Object>({
+    roomId: "",
+    type: "meta",
     currentLocation: 0,
     dice1: 0,
     dice2: 0,
