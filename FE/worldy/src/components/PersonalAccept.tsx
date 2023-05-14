@@ -197,7 +197,7 @@ export default function PersonalAccept({ closePA }: { closePA: () => void }) {
         <div className='h-[4em]  outline-red-500 w-full flex justify-center items-center pb-[1em]'>
           <button
             className='bg-blue-500 w-[12em] h-full font-PtdSemiBOld text-white'
-            onClick={() => closePA()}
+            onClick={closePA}
           >
             확인
           </button>

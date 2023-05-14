@@ -37,7 +37,7 @@ class Payment extends Component<{}, AppState> {
       vat_amount: 0,
       tax_free_amount: 0,
       approval_url: 'http://localhost:3000/paymentsuccess',
-      fail_url: 'http://localhost:3000/paymentfailure',
+      fail_url: 'http://localhost:3000/',
       cancel_url: 'http://localhost:3000/',
     },
   };

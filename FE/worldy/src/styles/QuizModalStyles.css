@@ -59,10 +59,10 @@
 .clickedOXBlue {
   background: linear-gradient(
     to right,
-    rgba(27, 253, 238, 0.1) 1%,
+    rgba(22, 236, 222, 0.1) 1%,
     transparent 40%,
     transparent 60%,
-    rgba(27, 253, 238, 0.1) 100%
+    rgba(22, 236, 222, 0.1) 100%
   );
   background-color: #dcf2ff;
   color: #4dbeff;
@@ -112,6 +112,13 @@
 }
 
 .clickedOXRed {
+  background: linear-gradient(
+    to right,
+    rgba(255, 47, 81, 0.1) 1%,
+    transparent 40%,
+    transparent 60%,
+    rgba(255, 47, 81, 0.1) 100%
+  );
   background-color: #ffdbe1;
   color: #ff5270;
   box-shadow: inset 0 0 20px rgba(255, 193, 204, 0.6),
