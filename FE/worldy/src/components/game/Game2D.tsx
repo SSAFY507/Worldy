@@ -53,9 +53,9 @@ export default function Game2D(props: any) {
     me = player.p4;
   }
 
-  useEffect(() => {
-    sendData();
-  }, [metaData]);
+  // useEffect(() => {
+  //   sendData();
+  // }, [metaData.turn]);
 
   useEffect(() => {
     if (metaData.turnOver && !metaData.isDouble) {
@@ -71,6 +71,7 @@ export default function Game2D(props: any) {
         turnOver: false,
       }));
     }
+    sendData();
   }, [metaData.turnOver]);
 
   useEffect(() => {
