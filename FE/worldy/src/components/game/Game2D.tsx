@@ -32,22 +32,22 @@ export default function Game2D(props: any) {
   let pList: Player[] = [];
   let me: any = {};
 
-  if (loginUser !== player.p1.playerId) {
+  if (loginUser !== player.p1.name) {
     pList.push(player.p1);
   } else {
     me = player.p1;
   }
-  if (loginUser !== player.p2.playerId) {
+  if (loginUser !== player.p2.name) {
     pList.push(player.p2);
   } else {
     me = player.p2;
   }
-  if (loginUser !== player.p3.playerId) {
+  if (loginUser !== player.p3.name) {
     pList.push(player.p3);
   } else {
     me = player.p3;
   }
-  if (loginUser !== player.p4.playerId) {
+  if (loginUser !== player.p4.name) {
     pList.push(player.p4);
   } else {
     me = player.p4;

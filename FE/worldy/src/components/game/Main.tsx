@@ -7,9 +7,9 @@ import Game3D from "./Game3D";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
 import { useLocation } from "react-router-dom";
-import { useNavigate } from 'react-router';
-import { log } from 'console';
-import Enter from './Enter';
+import { useNavigate } from "react-router";
+import { log } from "console";
+import Enter from "./Enter";
 
 // 소켓 연결
 let socket;
@@ -34,20 +34,19 @@ export type ScrappedQuizType = {
   explanation?: string;
 };
 
-
 export default function Main() {
   let roomData: any = null;
   const params = useParams();
   const location = useLocation();
-  const loginUser = '2757389101';
+  const loginUser = sessionStorage.getItem("nickname");
 
-  let received : any;
+  let received: any;
 
   const navigate = useNavigate();
 
-  const accessToken = sessionStorage.getItem('token');
-    let headers = { Authorization: `Bearer ${accessToken}` };
-  
+  const accessToken = sessionStorage.getItem("token");
+  let headers = { Authorization: `Bearer ${accessToken}` };
+
   // socket receivedData
   let receivedData: any;
 
@@ -59,23 +58,23 @@ export default function Main() {
   // quizData 선언하기 위한 변수
   const [quiz, setQuiz] = useState<ScrappedQuizType>({
     quizId: 0,
-    nationName: '',
+    nationName: "",
     level: 0,
-    quizType: '',
-    category: '',
-    image: '',
-    content: '',
-    answer: '',
+    quizType: "",
+    category: "",
+    image: "",
+    content: "",
+    answer: "",
     multiFirst: null, //1번
     multiSecond: null, //2번
     multiThird: null, //3번
     multiFourth: null, //4번
     hint: true, //힌트
-    commentary: '',
-    userAnswer: '', //유저가 적은 정답(맞았으면 null)
+    commentary: "",
+    userAnswer: "", //유저가 적은 정답(맞았으면 null)
     success: true, //맞춘 문제인가
-    explanation: '',
-  })
+    explanation: "",
+  });
 
   // 게임 포화상태 체크
   const [userCheck, setUserCheck] = useState<boolean>(false);
@@ -85,7 +84,7 @@ export default function Main() {
 
   useEffect(() => {
     // 소켓 연결
-    socket = new SockJS('https://k8a507.p.ssafy.io/api/stomp/game');
+    socket = new SockJS("https://k8a507.p.ssafy.io/api/stomp/game");
     ws = Stomp.over(socket);
     ws.connect(headers, (frame: any) => {
       console.log("소켓 연결");
@@ -170,173 +169,169 @@ export default function Main() {
             },
           },
         }));
-      } else if(received.type === 'quiz') {
+      } else if (received.type === "quiz") {
         quizData = received.quizDto;
-        
-        console.log('quizData');
-        console.log(quizData);
-        
-        if(quizData.multiAnswerList) {
-          setQuiz((prevState:any ) => ({
-            ...prevState,
-            quizId: quizData.quizId,
-            nationName : quizData.nation.nationName,
-            level : quizData.level,
-            quizType : quizData.quizType,
-            category : quizData.catetory,
-            image : quizData.image,
-            content : quizData.content,
-            answer : quizData.answer,
-            multiFirst : quizData.multiAnswerList[0].answer,
-            multiSecond : quizData.multiAnswerList[1].answer,
-            multiThird : quizData.multiAnswerList[2].answer,
-            multiFourth : quizData.multiAnswerList[3].answer,
-            hint : quizData.hintType,
-            commentary : quizData.hint,
-            explanation : quizData.commentary
-          }))
 
-        } else {
-          setQuiz((prevState:any ) => ({
+        console.log("quizData");
+        console.log(quizData);
+
+        if (quizData.multiAnswerList) {
+          setQuiz((prevState: any) => ({
             ...prevState,
             quizId: quizData.quizId,
-            nationName : quizData.nation.nationName,
-            level : quizData.level,
-            quizType : quizData.quizType,
-            category : quizData.catetory,
-            image : quizData.image,
-            content : quizData.content,
-            answer : quizData.answer,
-            hint : quizData.hintType,
-            commentary : quizData.hint,
-            explanation : quizData.commentary
-          }))
+            nationName: quizData.nation.nationName,
+            level: quizData.level,
+            quizType: quizData.quizType,
+            category: quizData.catetory,
+            image: quizData.image,
+            content: quizData.content,
+            answer: quizData.answer,
+            multiFirst: quizData.multiAnswerList[0].answer,
+            multiSecond: quizData.multiAnswerList[1].answer,
+            multiThird: quizData.multiAnswerList[2].answer,
+            multiFourth: quizData.multiAnswerList[3].answer,
+            hint: quizData.hintType,
+            commentary: quizData.hint,
+            explanation: quizData.commentary,
+          }));
+        } else {
+          setQuiz((prevState: any) => ({
+            ...prevState,
+            quizId: quizData.quizId,
+            nationName: quizData.nation.nationName,
+            level: quizData.level,
+            quizType: quizData.quizType,
+            category: quizData.catetory,
+            image: quizData.image,
+            content: quizData.content,
+            answer: quizData.answer,
+            hint: quizData.hintType,
+            commentary: quizData.hint,
+            explanation: quizData.commentary,
+          }));
         }
         setQuizModalState(true);
-      } else if (received.type === 'enter'){ // enter 에 들어온 순서대로 p를 채워나간 후 p4가 바뀌는 순간 player 데이터 전송
-          console.log(received);
-          if(received.cnt<=4) {
-            console.log("4이하 룸아이디 세팅");
-            
-            if(received.user1){
-              setPlayer((prevState:any) => ({
-                ...prevState,
-                roomId: received.roomId,
-                p1 : {
-                  ...prevState.p1,
-                  playerId : received.user1.kakaoId,
-                  name:received.user1.nickName,
-                }
-              }))
+      } else if (received.type === "enter") {
+        // enter 에 들어온 순서대로 p를 채워나간 후 p4가 바뀌는 순간 player 데이터 전송
+        console.log(received);
+        if (received.cnt <= 4) {
+          console.log("4이하 룸아이디 세팅");
 
-              //console.log("유저 1 데이터 받아오기");
-              
-              // 추후 주석처리
-              //setGameStart(true);
-            }
+          if (received.user1) {
+            setPlayer((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+              p1: {
+                ...prevState.p1,
+                playerId: received.user1.kakaoId,
+                name: received.user1.nickName,
+              },
+            }));
 
-            // TEST
-            // if(received.user1){
-            //   setPlayer((prevState:any) => ({
-            //     ...prevState,
-            //     roomId: received.roomId,
-            //     p2 : {
-            //       ...prevState.p2,
-            //       playerId : '2756798359',
-            //       name:'설히',
-            //     }
-            //   }))
-            // }
-            // if(received.user1){
-            //   setPlayer((prevState:any) => ({
-            //     ...prevState,
-            //     roomId: received.roomId,
-            //     p3 : {
-            //       ...prevState.p3,
-            //       playerId : '2762535269',
-            //       name:'성훈',
-            //     }
-            //   }))
-            // }   
-            // if(received.user1){
-            //   setPlayer((prevState:any) => ({
-            //     ...prevState,
-            //     roomId: received.roomId,
-            //     p4 : {
-            //       ...prevState.p4,
-            //       playerId : '2772224261',
-            //       name:'히히',
-            //     }
-            //   }))
-            //   //setGameStart(true);
-            // } 
+            //console.log("유저 1 데이터 받아오기");
 
-
-            // 원본
-            if(received.user2){
-              setPlayer((prevState:any) => ({
-                ...prevState,
-                roomId: received.roomId,
-                p2 : {
-                  ...prevState.p2,
-                  playerId : received.user2.kakaoId,
-                  name:received.user2.nickName,
-                }
-              }))
-            }
-            if(received.user3){
-              setPlayer((prevState:any) => ({
-                ...prevState,
-                roomId: received.roomId,
-                p3 : {
-                  ...prevState.p3,
-                  playerId : received.user3.kakaoId,
-                  name:received.user3.nickName,
-                }
-              }))
-            }   
-            if(received.user4){
-              setPlayer((prevState:any) => ({
-                ...prevState,
-                roomId: received.roomId,
-                p4 : {
-                  ...prevState.p4,
-                  playerId : received.user4.kakaoId,
-                  name:received.user4.nickName,
-                }
-              }))
-              setGameStart(true);
-            }     
+            // 추후 주석처리
+            //setGameStart(true);
           }
-          else if(received.cnt>=5) {
 
-            // console.log('유저 확인');
-            
-            let check = true;
-      
-            // if (loginUser===received.user1.kakaoId) {
-            //   check = false;
-            // } else if (loginUser===received.user2.kakaoId) {
-            //   check = false;
-            // } else if (loginUser===received.user3.kakaoId) {
-            //   check = false;
-            // } else if (loginUser===received.user4.kakaoId) {
-            //   check = false;
-            // } 
+          // TEST
+          // if(received.user1){
+          //   setPlayer((prevState:any) => ({
+          //     ...prevState,
+          //     roomId: received.roomId,
+          //     p2 : {
+          //       ...prevState.p2,
+          //       playerId : '2756798359',
+          //       name:'설히',
+          //     }
+          //   }))
+          // }
+          // if(received.user1){
+          //   setPlayer((prevState:any) => ({
+          //     ...prevState,
+          //     roomId: received.roomId,
+          //     p3 : {
+          //       ...prevState.p3,
+          //       playerId : '2762535269',
+          //       name:'성훈',
+          //     }
+          //   }))
+          // }
+          // if(received.user1){
+          //   setPlayer((prevState:any) => ({
+          //     ...prevState,
+          //     roomId: received.roomId,
+          //     p4 : {
+          //       ...prevState.p4,
+          //       playerId : '2772224261',
+          //       name:'히히',
+          //     }
+          //   }))
+          //   //setGameStart(true);
+          // }
 
-            // setGameStart(!check);
-            setUserCheck(check);
+          // 원본
+          if (received.user2) {
+            setPlayer((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+              p2: {
+                ...prevState.p2,
+                playerId: received.user2.kakaoId,
+                name: received.user2.nickName,
+              },
+            }));
           }
+          if (received.user3) {
+            setPlayer((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+              p3: {
+                ...prevState.p3,
+                playerId: received.user3.kakaoId,
+                name: received.user3.nickName,
+              },
+            }));
+          }
+          if (received.user4) {
+            setPlayer((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+              p4: {
+                ...prevState.p4,
+                playerId: received.user4.kakaoId,
+                name: received.user4.nickName,
+              },
+            }));
+            setGameStart(true);
+          }
+        } else if (received.cnt >= 5) {
+          // console.log('유저 확인');
+
+          let check = true;
+
+          // if (loginUser===received.user1.kakaoId) {
+          //   check = false;
+          // } else if (loginUser===received.user2.kakaoId) {
+          //   check = false;
+          // } else if (loginUser===received.user3.kakaoId) {
+          //   check = false;
+          // } else if (loginUser===received.user4.kakaoId) {
+          //   check = false;
+          // }
+
+          // setGameStart(!check);
+          setUserCheck(check);
+        }
       }
-    })
+    });
   }
 
   // 게임 방이 가득차면 redirect
-  if(userCheck) {
-    navigate('/');
+  if (userCheck) {
+    navigate("/");
   }
 
-    
   function sendData() {
     //websockt emit
     const data = player;
@@ -462,7 +457,7 @@ export default function Main() {
   //   }))
   // }
 
-  const [contents, setContents] = useState<String>('');
+  const [contents, setContents] = useState<String>("");
   const [mode, setMode] = useState<boolean>(true);
   const [start, setStart] = useState<boolean>(false);
   const [data, setData] = useState<Object[]>();
@@ -1475,34 +1470,42 @@ export default function Main() {
 
   return (
     <>
-    {userCheck? <div>true</div> : <div>false</div>}
-    <div className='w-screen h-screen bg-[#FFFDF4]'>
-      <div className='w-full bg-[#FFFDF4] flex items-start justify-around fixed-top z-50'>
-        <div className='w-full h-[60px] flex items-end justify-end'>
-          {/* <img className='w-[100px] h-[54px] flex items-end mt-[20px] ml-[60px] object-cover' src='/game/LogoColored.png' alt='로고이미지'></img> */}
-          <div className='w-[100px] h-[40px] rounded-[4px] mr-[120px] flex justify-center items-center rounded-full bg-blue-400 text-[18px] text-white hover:cursor-pointer hover:bg-blue-500'
-            onClick={() => {
-              setMode(!mode);
-            }}
-          >3D 모드</div>
+      {userCheck ? <div>true</div> : <div>false</div>}
+      <div className="w-screen h-screen bg-[#FFFDF4]">
+        <div className="w-full bg-[#FFFDF4] flex items-start justify-around fixed-top z-50">
+          <div className="w-full h-[60px] flex items-end justify-end">
+            {/* <img className='w-[100px] h-[54px] flex items-end mt-[20px] ml-[60px] object-cover' src='/game/LogoColored.png' alt='로고이미지'></img> */}
+            <div
+              className="w-[100px] h-[40px] rounded-[4px] mr-[120px] flex justify-center items-center rounded-full bg-blue-400 text-[18px] text-white hover:cursor-pointer hover:bg-blue-500"
+              onClick={() => {
+                setMode(!mode);
+              }}
+            >
+              3D 모드
+            </div>
+          </div>
         </div>
-      </div>
-      {!gameStart && <Enter></Enter>}
-      
-      {gameStart && <div>
-        {mode && <Game2D 
-          sendData={sendData}
-          loginUser={loginUser}
-          metaData={metaData}
-          setMetaData={setMetaData}
-          player={player}
-          setPlayer={setPlayer}
-          worldMap={worldMap.worldMap}
-          setWorldMap={setWorldMap}
-        ></Game2D>}
-        {!mode && <Game3D worldMap={worldMap} setWorldMap={setWorldMap}></Game3D>}
-      </div>}
+        {!gameStart && <Enter></Enter>}
 
+        {gameStart && (
+          <div>
+            {mode && (
+              <Game2D
+                sendData={sendData}
+                loginUser={loginUser}
+                metaData={metaData}
+                setMetaData={setMetaData}
+                player={player}
+                setPlayer={setPlayer}
+                worldMap={worldMap.worldMap}
+                setWorldMap={setWorldMap}
+              ></Game2D>
+            )}
+            {!mode && (
+              <Game3D worldMap={worldMap} setWorldMap={setWorldMap}></Game3D>
+            )}
+          </div>
+        )}
       </div>
     </>
   );
