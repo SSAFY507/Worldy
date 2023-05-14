@@ -55,7 +55,7 @@ export default function Game2D(props: any) {
 
   useEffect(() => {
     sendData();
-  }, [metaData]);
+  }, [metaData.turn]);
 
   useEffect(() => {
     if (metaData.turnOver && !metaData.isDouble) {

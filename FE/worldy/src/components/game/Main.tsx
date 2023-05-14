@@ -10,6 +10,7 @@ import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router";
 import { log } from "console";
 import Enter from "./Enter";
+import GameRestartLoading from "./GameRestartLoading";
 
 // 소켓 연결
 let socket;
@@ -82,6 +83,9 @@ export default function Main() {
   // 게임 시작 체크
   const [gameStart, setGameStart] = useState<boolean>(false);
 
+  // 게임 유저가 재입장했을 경우 체크
+  const [gameLoading, setGameLoading] = useState<boolean>(false);
+
   useEffect(() => {
     // 소켓 연결
     socket = new SockJS("https://k8a507.p.ssafy.io/api/stomp/game");
@@ -97,6 +101,9 @@ export default function Main() {
       const received = JSON.parse(event.body);
 
       if (received.type === "player") {
+
+        setGameLoading(true);
+
         setPlayer((prevState: any) => ({
           ...prevState,
           p1: {
@@ -343,6 +350,9 @@ export default function Main() {
             }));
           }
           if (received.user4) {
+
+            setGameLoading(true);
+
             setPlayer((prevState: any) => ({
               ...prevState,
               roomId: received.roomId,
@@ -380,7 +390,7 @@ export default function Main() {
             check = false;
           }
 
-          // setGameStart(!check);
+          setGameStart(!check); // 게임 페이지로 이동 -> 초기에는 기본 세팅으로 playerdata 한 번이라도 전송되면 게임 진행 중인 세팅 값으로 변환
           setUserCheck(check);
         }
       }
@@ -1549,7 +1559,14 @@ export default function Main() {
         </div>
         {!gameStart && <Enter></Enter>}
 
-        {gameStart && (
+        // 재입장 시 로딩 페이지
+        {gameStart && !gameLoading && (
+          <div>
+            <GameRestartLoading/>
+          </div>
+        )}
+
+        {gameStart && gameLoading && (
           <div>
             {mode && (
               <Game2D
