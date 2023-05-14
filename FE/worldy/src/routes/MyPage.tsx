@@ -109,6 +109,9 @@ export default function MyPage({
     if (isLoaded) {
       setTimeout(() => {
         setLoadedAll(true);
+        setTimeout(() => {
+          setFillExp(true);
+        }, 300);
       }, 1000);
     }
   }, [isLoaded]);
@@ -338,29 +341,57 @@ export default function MyPage({
     getRankInfoList();
   }, []);
 
+  const userLevel = axiosRankInfoList?.myRank.level || '';
+  const userExp = axiosRankInfoList?.myRank.exp || 0;
+  const userTier = axiosRankInfoList?.myRank.tier || '';
+
+  const [fillExp, setFillExp] = useState<boolean>(false);
+
   const accountInfoContentComponent = () => {
     return (
-      <div className='w-[95%] min-h-300px h-fit'>
-        <div className='w-full h-fit flex flex-row justify-between items-center'>
-          <div className='flex-1 h-full mb-[15px] mr-[20px]'>
-            {contentBoxComponent({ title: '닉네임', content: userNickname })}
+      <div className='w-full h-fit  outline-white flex flex-col justify-between items-stretch'>
+        <div className='w-full h-[80px] outline-red-300 flex flex-row justify-start items-center'>
+          <div className='w-[70px] h-[70px] rounded-full overflow-hidden grid place-content-center'>
+            <img src={userProfileImg || ''} alt='프로필사진' />
           </div>
-          <div className='w-[70px] h-[70px] rounded-full grid place-content-center overflow-hidden mb-[15px] outline-[5px] outline outline-[rgba(255,255,255,0.2)]'>
-            <img
-              src={userProfileImg || ''}
-              alt='프로필 사진'
-              className='w-full h-full'
+          <div className='flex-1 h-full ml-[20px] flex flex-col justify-end items-start pb-[10px]'>
+            <span className='flex flex-row justify-start items-center text-[#B1B1B1] font-PtdMedium text-[23px] mb-[8px]'>
+              {userNickname}님은
+              <p className='text-white font-PtdBold mx-[10px]'>
+                LV.{userLevel},
+              </p>
+              <p
+                className={`flex flex-row justify-start items-center mr-[10px] text-[${setRankColor(
+                  userTier
+                )}] font-PtdBold`}
+              >
+                <SiPowerapps
+                  size={20}
+                  color={setRankColor(userTier)}
+                  className='mr-[7px]'
+                />
+                {userTier}
+              </p>
+              입니다.
+            </span>
+            <span className='text-[16px] font-PtdLight text-[#5A5A5A]'>
+              다음 레벨업까지 {100 - userExp}exp 남았습니다.
+            </span>
+          </div>
+        </div>
+        <div className='w-full h-[80px]  outline-white flex flex-col justify-end items-stretch'>
+          <div className='w-full h-[20px] flex flex-row justify-end items-center font-PtdRegular'>
+            <span className='text-[15px] text-[#5A5A5A] mr-[5px]'>exp</span>
+            <span className='text-[18px]'>{userExp}/100</span>
+          </div>
+          <div className='w-full h-[10px]  outline-red-300 flex flex-row justify-center items-center relative mt-[15px]'>
+            <div className='w-full h-[10px] rounded-full bg-[#454545]' />
+            <div
+              className={`${
+                fillExp ? `w-[${userExp}]` : 'w-0'
+              } h-[10px] transition-all duration-1000 ease-out bg-[#BDFFFF] absolute top-0 left-0 rounded-full`}
             />
           </div>
-        </div>
-        <div className='w-full h-full mb-[15px]'>
-          {contentBoxComponent({
-            title: '레벨',
-            content: levelContent(),
-          })}
-        </div>
-        <div className='w-full h-full'>
-          {contentBoxComponent({ title: '티어', content: tierContent() })}
         </div>
       </div>
     );
@@ -789,14 +820,13 @@ export default function MyPage({
 
   ////////////////////////////////////////
 
+  const setRankColor = (input: string): string => {
+    if (input === 'Platinum') return '#86FFF8';
+    else if (input === 'Gold') return '#C9B037';
+    else if (input === 'Silver') return '#a4a4a4';
+    else return '#6a3805';
+  };
   const rankContent = (): JSX.Element => {
-    const setRankColor = (input: string): string => {
-      if (input === 'Platinum') return '#86FFF8';
-      else if (input === 'Gold') return '#C9B037';
-      else if (input === 'Silver') return '#a4a4a4';
-      else return '#6a3805';
-    };
-
     return (
       <div className='w-full h-fit  outline-yellow-300'>
         <div
