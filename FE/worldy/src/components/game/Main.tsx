@@ -373,15 +373,15 @@ export default function Main() {
 
           let check = true;
 
-          // if (loginUser===received.user1.kakaoId) {
-          //   check = false;
-          // } else if (loginUser===received.user2.kakaoId) {
-          //   check = false;
-          // } else if (loginUser===received.user3.kakaoId) {
-          //   check = false;
-          // } else if (loginUser===received.user4.kakaoId) {
-          //   check = false;
-          // }
+          if (loginUser===received.user1.name) {
+            check = false;
+          } else if (loginUser===received.user2.name) {
+            check = false;
+          } else if (loginUser===received.user3.name) {
+            check = false;
+          } else if (loginUser===received.user4.name) {
+            check = false;
+          }
 
           // setGameStart(!check);
           setUserCheck(check);

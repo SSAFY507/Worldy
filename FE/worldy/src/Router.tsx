@@ -111,7 +111,6 @@ const AppLayout = () => {
         navigate("/tutorial");
         console.log("닉네임 설정해주세요 (tutorial로 이동)");
       } else if (!checkLoginState) {
-        console.log("로그인 해야 가능");
         
         const gameId = sessionStorage.getItem('gameId');
     
