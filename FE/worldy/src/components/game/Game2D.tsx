@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./dice.css";
 import Dice from "./Dice";
-import GameQuizModal from '../GameQuizModal';
-
+import GameQuizModal from "../GameQuizModal";
 
 export default function Game2D(props: any) {
   const sendData = props.sendData;
@@ -53,7 +52,6 @@ export default function Game2D(props: any) {
   } else {
     me = player.p4;
   }
-
   useEffect(() => {
     if (metaData.turnOver && !metaData.isDouble) {
       // 턴이 true이고, 더블이  false;
@@ -2153,6 +2151,7 @@ export default function Game2D(props: any) {
                           className="w-full h-[60px] flex justify-center rounded-[6px] items-center text-[16px] mt-[10px]"
                           onClick={() => {
                             console.log("통행료 지불");
+                            // payToll();
                           }}
                         >
                           통행료 {worldMap[metaData.currentLocation].toll} 만원
