@@ -29,6 +29,8 @@ export default function Game2D(props: any) {
   const quiz = props.quiz;
   const quizModalState = props.quizModalState;
 
+  const roomId = props.roomId;
+
   let pList: Player[] = [];
   let me: any = {};
 
@@ -110,26 +112,26 @@ export default function Game2D(props: any) {
     }
   }, [buildOption]);
 
-  // 주사위 던지는 함수
-  const rollDice = () => {
-    console.log("주사위 함수 실행");
-    const dice1 = Math.floor(Math.random() * 6 + 1);
-    const dice2 = Math.floor(Math.random() * 6 + 1);
-    const dice = dice1 + dice2;
-    let isDouble = false;
-    if (dice1 === dice2) {
-      isDouble = true;
-    }
+  // // 주사위 던지는 함수
+  // const rollDice = () => {
+  //   console.log("주사위 함수 실행");
+  //   const dice1 = Math.floor(Math.random() * 6 + 1);
+  //   const dice2 = Math.floor(Math.random() * 6 + 1);
+  //   const dice = dice1 + dice2;
+  //   let isDouble = false;
+  //   if (dice1 === dice2) {
+  //     isDouble = true;
+  //   }
 
-    setMetaData((prevState: any) => ({
-      ...prevState,
-      dice1: dice1,
-      dice2: dice2,
-      dice: dice,
-      isDouble: true,
-    }));
-    showDice(dice1, dice2);
-  };
+  //   setMetaData((prevState: any) => ({
+  //     ...prevState,
+  //     dice1: dice1,
+  //     dice2: dice2,
+  //     dice: dice,
+  //     isDouble: true,
+  //   }));
+  //   showDice(dice1, dice2);
+  // };
 
   // 주사위 흔드는 함수
   function showDice(dice1: number, dice2: number): void {
@@ -338,7 +340,231 @@ export default function Game2D(props: any) {
   }
 
   // 통행료 지불 함수
-  function payToll() {}
+  function payToll(turn: number, spot: Spot) {
+    if (turn === 0) {
+      if (spot.owner === 2) {
+        setPlayer((prevState: any) => ({
+          ...prevState,
+          p1: {
+            ...prevState.p1,
+            game: {
+              ...prevState.p1.game,
+              balance: prevState.p1.game.balance - spot.toll,
+            },
+          },
+          p2: {
+            ...prevState.p2,
+            game: {
+              ...prevState.p2.game,
+              balance: prevState.p2.game.balance + spot.toll,
+            },
+          },
+        }));
+      } else if (spot.owner === 3) {
+        setPlayer((prevState: any) => ({
+          ...prevState,
+          p1: {
+            ...prevState.p1,
+            game: {
+              ...prevState.p1.game,
+              balance: prevState.p1.game.balance - spot.toll,
+            },
+          },
+          p3: {
+            ...prevState.p3,
+            game: {
+              ...prevState.p3.game,
+              balance: prevState.p3.game.balance + spot.toll,
+            },
+          },
+        }));
+      } else if (spot.owner === 4) {
+        setPlayer((prevState: any) => ({
+          ...prevState,
+          p1: {
+            ...prevState.p1,
+            game: {
+              ...prevState.p1.game,
+              balance: prevState.p1.game.balance - spot.toll,
+            },
+          },
+          p4: {
+            ...prevState.p4,
+            game: {
+              ...prevState.p4.game,
+              balance: prevState.p4.game.balance + spot.toll,
+            },
+          },
+        }));
+      }
+    } else if (turn === 1) {
+      if (spot.owner === 1) {
+        setPlayer((prevState: any) => ({
+          ...prevState,
+          p2: {
+            ...prevState.p2,
+            game: {
+              ...prevState.p2.game,
+              balance: prevState.p2.game.balance - spot.toll,
+            },
+          },
+          p1: {
+            ...prevState.p1,
+            game: {
+              ...prevState.p1.game,
+              balance: prevState.p1.game.balance + spot.toll,
+            },
+          },
+        }));
+      } else if (spot.owner === 3) {
+        setPlayer((prevState: any) => ({
+          ...prevState,
+          p2: {
+            ...prevState.p2,
+            game: {
+              ...prevState.p2.game,
+              balance: prevState.p2.game.balance - spot.toll,
+            },
+          },
+          p3: {
+            ...prevState.p3,
+            game: {
+              ...prevState.p3.game,
+              balance: prevState.p3.game.balance + spot.toll,
+            },
+          },
+        }));
+      } else if (spot.owner === 4) {
+        setPlayer((prevState: any) => ({
+          ...prevState,
+          p3: {
+            ...prevState.p3,
+            game: {
+              ...prevState.p3.game,
+              balance: prevState.p3.game.balance - spot.toll,
+            },
+          },
+          p4: {
+            ...prevState.p4,
+            game: {
+              ...prevState.p4.game,
+              balance: prevState.p4.game.balance + spot.toll,
+            },
+          },
+        }));
+      }
+    } else if (turn === 3) {
+      if (spot.owner === 1) {
+        setPlayer((prevState: any) => ({
+          ...prevState,
+          p4: {
+            ...prevState.p4,
+            game: {
+              ...prevState.p4.game,
+              balance: prevState.p4.game.balance - spot.toll,
+            },
+          },
+          p1: {
+            ...prevState.p1,
+            game: {
+              ...prevState.p1.game,
+              balance: prevState.p1.game.balance + spot.toll,
+            },
+          },
+        }));
+      } else if (spot.owner === 2) {
+        setPlayer((prevState: any) => ({
+          ...prevState,
+          p4: {
+            ...prevState.p4,
+            game: {
+              ...prevState.p4.game,
+              balance: prevState.p4.game.balance - spot.toll,
+            },
+          },
+          p2: {
+            ...prevState.p2,
+            game: {
+              ...prevState.p2.game,
+              balance: prevState.p2.game.balance + spot.toll,
+            },
+          },
+        }));
+      } else if (spot.owner === 4) {
+        setPlayer((prevState: any) => ({
+          ...prevState,
+          p3: {
+            ...prevState.p3,
+            game: {
+              ...prevState.p3.game,
+              balance: prevState.p3.game.balance - spot.toll,
+            },
+          },
+          p4: {
+            ...prevState.p4,
+            game: {
+              ...prevState.p4.game,
+              balance: prevState.p4.game.balance + spot.toll,
+            },
+          },
+        }));
+      }
+    } else if (turn === 3) {
+      if (spot.owner === 1) {
+        setPlayer((prevState: any) => ({
+          ...prevState,
+          p4: {
+            ...prevState.p4,
+            game: {
+              ...prevState.p4.game,
+              balance: prevState.p1.game.balance - spot.toll,
+            },
+          },
+          p1: {
+            ...prevState.p1,
+            game: {
+              ...prevState.p1.game,
+              balance: prevState.p1.game.balance + spot.toll,
+            },
+          },
+        }));
+      } else if (spot.owner === 2) {
+        setPlayer((prevState: any) => ({
+          ...prevState,
+          p4: {
+            ...prevState.p4,
+            game: {
+              ...prevState.p4.game,
+              balance: prevState.p4.game.balance - spot.toll,
+            },
+          },
+          p2: {
+            ...prevState.p2,
+            game: {
+              ...prevState.p2.game,
+              balance: prevState.p2.game.balance + spot.toll,
+            },
+          },
+        }));
+      } else if (spot.owner === 3) {
+        setPlayer((prevState: any) => ({
+          ...prevState,
+          p4: {
+            ...prevState.p4,
+            game: {
+              ...prevState.p4.game,
+              balance: prevState.p4.game.balance - spot.toll,
+            },
+          },
+          p3: {
+            game: {
+              balance: prevState.p3.game.balance + spot.toll,
+            },
+          },
+        }));
+      }
+    }
+  }
 
   // 구매하기
   function buy(turn: number, spot: Spot, buyOption: number) {
@@ -769,7 +995,17 @@ export default function Game2D(props: any) {
 
   return (
     <>
-      <div className="w-full h-full bg-[#FFFDF4] flex justify-center items-center">
+      {/* 퀴즈 모달 */}
+      {quizModalState && (
+        <div className="shadow-md shadow-black w-fit h-fit">
+          <GameQuizModal input={quiz} closeModal={() => closeModal(false)} />
+        </div>
+      )}
+      <div
+        className={`w-full h-full bg-[#FFFDF4] flex justify-center items-center ${
+          quizModalState ? "blur-sm " : ""
+        }`}
+      >
         {/* 왼쪽영역 */}
         <div className="w-[20%] h-full flex flex-col justify-center items-end">
           {/* 메타 데이터 영역 */}
@@ -808,7 +1044,8 @@ export default function Game2D(props: any) {
                       <div className="flex justify-between h-[34px] mt-[10px] mb-[10px] border-solid border-gray-400 border-b-[1px]">
                         <div className="text-[22px]">{i.name}</div>
                         <div className="text-[22px]">
-                          [{worldMap[i.game.location].name}]
+                          [{worldMap[4].name}]
+                          {/* [{worldMap[i.game.location].name}] */}
                         </div>
                       </div>
                       <div className="flex flex-col w-full h-[60px] items-between">
@@ -821,7 +1058,8 @@ export default function Game2D(props: any) {
                       </div>
                       <div className="flex flex-col w-full h-[140px] items-between">
                         <div className="">
-                          소유국가[총{i.game.own.length}개]
+                          소유국가[총{3}개]
+                          {/* 소유국가[총{i.game.own.length}개] */}
                         </div>
                         <div className="flex mt-[10px] h-[80px] w-full">
                           <div className="text-[14px]  h-[80px] w-full flex flex-wrap">
@@ -1579,6 +1817,21 @@ export default function Game2D(props: any) {
                 턴 종료
               </div>
 
+              <div
+                id="shbutton"
+                className="w-[200px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px] absolute left-[400px] top-[360px]"
+                onClick={() => {
+                  const user = "kakao";
+                  ws.send(
+                    `/pub/game/quiz/${user}/${roomId}/${metaData.currentLocation}`,
+                    {},
+                    JSON.stringify(null)
+                  );
+                }}
+              >
+                퀴즈 요청
+              </div>
+
               {/* 콘솔창 영역 */}
               <div
                 className={`w-[380px] h-[340px] bg-white rounded-[8px] mt-[150px] shadow-lg relative flex justify-center items-center ${
@@ -2163,7 +2416,10 @@ export default function Game2D(props: any) {
                           className="w-full h-[60px] flex justify-center rounded-[6px] items-center text-[16px] mt-[10px]"
                           onClick={() => {
                             console.log("통행료 지불");
-                            // payToll();
+                            payToll(
+                              metaData.turn,
+                              worldMap[metaData.currentLocation]
+                            );
                           }}
                         >
                           통행료 {worldMap[metaData.currentLocation].toll} 만원

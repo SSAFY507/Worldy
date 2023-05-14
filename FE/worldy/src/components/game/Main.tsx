@@ -230,6 +230,7 @@ export default function Main() {
             explanation: quizData.commentary,
           }));
         }
+
         setQuizModalState(true);
       } else if (received.type === "enter") {
         // enter 에 들어온 순서대로 p를 채워나간 후 p4가 바뀌는 순간 player 데이터 전송
@@ -258,125 +259,122 @@ export default function Main() {
             }));
 
             //console.log("유저 1 데이터 받아오기");
-
-            // 추후 주석처리
-            //setGameStart(true);
           }
 
           // TEST
-          // if(received.user1){
-          //   setPlayer((prevState:any) => ({
-          //     ...prevState,
-          //     roomId: received.roomId,
-          //     p2 : {
-          //       ...prevState.p2,
-          //       playerId : '2756798359',
-          //       name:'설히',
-          //     }
-          //   }))
-          // }
-          // if(received.user1){
-          //   setPlayer((prevState:any) => ({
-          //     ...prevState,
-          //     roomId: received.roomId,
-          //     p3 : {
-          //       ...prevState.p3,
-          //       playerId : '2762535269',
-          //       name:'성훈',
-          //     }
-          //   }))
-          // }
-          // if(received.user1){
-          //   setPlayer((prevState:any) => ({
-          //     ...prevState,
-          //     roomId: received.roomId,
-          //     p4 : {
-          //       ...prevState.p4,
-          //       playerId : '2772224261',
-          //       name:'히히',
-          //     }
-          //   }))
-          //   //setGameStart(true);
-          // }
-
-          // 원본
-          if (received.user2) {
+          if (received.user1) {
             setPlayer((prevState: any) => ({
               ...prevState,
               roomId: received.roomId,
               p2: {
                 ...prevState.p2,
-                playerId: received.user2.kakaoId,
-                name: received.user2.nickName,
+                playerId: "2756798359",
+                name: "설히",
               },
             }));
-
-            setMetaData((prevState: any) => ({
-              ...prevState,
-              roomId: received.roomId,
-            }));
-
-            setWorldMap((prevState: any) => ({
-              ...prevState,
-              roomId: received.roomId,
-            }));
           }
-          if (received.user3) {
+          if (received.user1) {
             setPlayer((prevState: any) => ({
               ...prevState,
               roomId: received.roomId,
               p3: {
                 ...prevState.p3,
-                playerId: received.user3.kakaoId,
-                name: received.user3.nickName,
+                playerId: "2762535269",
+                name: "성훈",
               },
             }));
-
-            setMetaData((prevState: any) => ({
-              ...prevState,
-              roomId: received.roomId,
-            }));
-
-            setWorldMap((prevState: any) => ({
-              ...prevState,
-              roomId: received.roomId,
-            }));
           }
-          if (received.user4) {
+          if (received.user1) {
             setPlayer((prevState: any) => ({
               ...prevState,
               roomId: received.roomId,
               p4: {
                 ...prevState.p4,
-                playerId: received.user4.kakaoId,
-                name: received.user4.nickName,
+                playerId: "2772224261",
+                name: "히히",
               },
             }));
-
-            setMetaData((prevState: any) => ({
-              ...prevState,
-              roomId: received.roomId,
-            }));
-
-            setWorldMap((prevState: any) => ({
-              ...prevState,
-              roomId: received.roomId,
-            }));
-
             setGameStart(true);
           }
+
+          // 원본
+          // if (received.user2) {
+          //   setPlayer((prevState: any) => ({
+          //     ...prevState,
+          //     roomId: received.roomId,
+          //     p2: {
+          //       ...prevState.p2,
+          //       playerId: received.user2.kakaoId,
+          //       name: received.user2.nickName,
+          //     },
+          //   }));
+
+          //   setMetaData((prevState: any) => ({
+          //     ...prevState,
+          //     roomId: received.roomId,
+          //   }));
+
+          //   setWorldMap((prevState: any) => ({
+          //     ...prevState,
+          //     roomId: received.roomId,
+          //   }));
+          // }
+          // if (received.user3) {
+          //   setPlayer((prevState: any) => ({
+          //     ...prevState,
+          //     roomId: received.roomId,
+          //     p3: {
+          //       ...prevState.p3,
+          //       playerId: received.user3.kakaoId,
+          //       name: received.user3.nickName,
+          //     },
+          //   }));
+
+          //   setMetaData((prevState: any) => ({
+          //     ...prevState,
+          //     roomId: received.roomId,
+          //   }));
+
+          //   setWorldMap((prevState: any) => ({
+          //     ...prevState,
+          //     roomId: received.roomId,
+          //   }));
+          // }
+          // if (received.user4) {
+          //   setPlayer((prevState: any) => ({
+          //     ...prevState,
+          //     roomId: received.roomId,
+          //     p4: {
+          //       ...prevState.p4,
+          //       playerId: received.user4.kakaoId,
+          //       name: received.user4.nickName,
+          //     },
+          //   }));
+
+          //   setMetaData((prevState: any) => ({
+          //     ...prevState,
+          //     roomId: received.roomId,
+          //   }));
+
+          //   setWorldMap((prevState: any) => ({
+          //     ...prevState,
+          //     roomId: received.roomId,
+          //   }));
+
+          //   setGameStart(true);
+          // }
         } else if (received.cnt >= 5) {
           // console.log('유저 확인');
 
           let check = true;
 
-          if (loginUser===received.user1.nickName) {
+          if (loginUser === received.user1.nickName) {
             check = false;
-          } else if (loginUser===received.user2.nickName) {
+          } else if (loginUser === received.user2.nickName) {
             check = false;
-          } else if (loginUser===received.user3.nickName) {
+          } else if (loginUser === received.user3.nickName) {
             check = false;
-          } else if (loginUser===received.user4.nickName) {
+          } else if (loginUser === received.user4.nickName) {
             check = false;
           }
 
@@ -1561,6 +1559,11 @@ export default function Main() {
                 setPlayer={setPlayer}
                 worldMap={worldMap.worldMap}
                 setWorldMap={setWorldMap}
+                closeModal={() => setQuizModalState(false)}
+                quizModalState={quizModalState}
+                roomId={params.id}
+                ws={ws}
+                quiz={quiz}
               ></Game2D>
             )}
             {!mode && (
