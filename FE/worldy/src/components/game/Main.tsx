@@ -183,7 +183,13 @@ export default function Main() {
         console.log(received);
         console.log("메타 데이터 받음");
         setMetaData((prevState: any) => ({
-          received,
+          ...prevState,
+          currentLocation: received.currentLocation,
+          dice1: received.dice1,
+          dice2: received.dice2,
+          dice: received.dice,
+          isDouble: received.isDouble,
+          turn: received.turn,
         }));
       } else if (received.type === "quiz") {
         quizData = received.quizDto;
@@ -520,7 +526,7 @@ export default function Main() {
   const [data, setData] = useState<Object[]>();
   const [metaData, setMetaData] = useState<Object>({
     roomId: "",
-    type: "meta",
+    type: "metaData",
     currentLocation: 0,
     dice1: 0,
     dice2: 0,
