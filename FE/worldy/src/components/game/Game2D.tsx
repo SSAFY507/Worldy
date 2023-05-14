@@ -453,15 +453,15 @@ export default function Game2D(props: any) {
           },
         }));
       }
-    } else if (turn === 3) {
+    } else if (turn === 2) {
       if (spot.owner === 1) {
         setPlayer((prevState: any) => ({
           ...prevState,
-          p4: {
-            ...prevState.p4,
+          p3: {
+            ...prevState.p3,
             game: {
-              ...prevState.p4.game,
-              balance: prevState.p4.game.balance - spot.toll,
+              ...prevState.p3.game,
+              balance: prevState.p3.game.balance - spot.toll,
             },
           },
           p1: {
@@ -475,11 +475,11 @@ export default function Game2D(props: any) {
       } else if (spot.owner === 2) {
         setPlayer((prevState: any) => ({
           ...prevState,
-          p4: {
-            ...prevState.p4,
+          p3: {
+            ...prevState.p3,
             game: {
-              ...prevState.p4.game,
-              balance: prevState.p4.game.balance - spot.toll,
+              ...prevState.p3.game,
+              balance: prevState.p3.game.balance - spot.toll,
             },
           },
           p2: {
@@ -1835,7 +1835,7 @@ export default function Game2D(props: any) {
               {/* 콘솔창 영역 */}
               <div
                 className={`w-[380px] h-[340px] bg-white rounded-[8px] mt-[150px] shadow-lg relative flex justify-center items-center ${
-                  myTurn ? "outline outline-[6px] outline-blue-400" : ""
+                  myTurn ? "outline outline-[6px] outline-yellow-400" : ""
                 }`}
               >
                 <div className="w-[340px] h-[300px] flex flex-col items-center">
@@ -2467,14 +2467,14 @@ export default function Game2D(props: any) {
         >
           {myTurn && (
             <div
-              className={`w-[80px] h-[30px] bg-blue-400 relative left-[-4px] top-[0px] z-[100] text-white text-[12px] rounded-[4px] flex justify-center items-center`}
+              className={`w-[80px] h-[30px] bg-yellow-400 relative left-[-4px] top-[0px] z-[100] text-white text-[12px] rounded-[4px] flex justify-center items-center`}
             >
-              Player 턴
+              당신 차례
             </div>
           )}
           <div
             className={`w-[320px] h-[900px] mb-[50px]  flex flex-col justify-around items-center bg-gray-100 rounded-[8px]  ${
-              myTurn ? "outline outline-[6px] outline-blue-400" : ""
+              myTurn ? "outline outline-[6px] outline-yellow-400" : ""
             }`}
           >
             <div className="w-[300px] h-[180px] bg-white rounded-[8px] flex flex-col justify-center items-center">
