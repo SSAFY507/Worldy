@@ -171,12 +171,18 @@ export default function Main() {
           },
         }));
       } else if (received.type === "worldmap") {
+        console.log("worldMap 데이터 받음");
+        console.log(received);
+        console.log("worldMap 데이터 받음");
         setWorldMap((prevState: any) => ({
           ...prevState,
           worldMap: received.worldMap,
         }));
       } else if (received.type === "metaData") {
-        setWorldMap((prevState: any) => ({
+        console.log("메타 데이터 받음");
+        console.log(received);
+        console.log("메타 데이터 받음");
+        setMetaData((prevState: any) => ({
           received,
         }));
       } else if (received.type === "quiz") {
