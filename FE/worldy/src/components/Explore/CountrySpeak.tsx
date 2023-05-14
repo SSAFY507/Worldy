@@ -4,8 +4,7 @@ import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
 import { CSSTransition } from 'react-transition-group';
 import CountryNewsDetail from './CountryNewsDetail';
-import CountryPaintDetail from './CountryPaintDetail';
-import CountryQuizDetail from './CountryQuizDetail';
+import CountryQuizFrame from './CountryQuizFrame';
 import CrAnswer from '../../assets/images/CorrectAnswer.png';
 import WrAnswer from '../../assets/images/WrongAnswer.png';
 import book from '../../assets/images/bookIcon.png';
@@ -302,8 +301,8 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
         </div>
         <div className="h-full w-3/4 flex flex-col justify-center items-center">
           {(selectAsset === "newsBox") ? <CountryNewsDetail data={data}/> :null}
-          {(selectAsset === "quizBox") ? <CountryQuizDetail /> : null}
-          {(selectAsset === "paintBox") ? <CountryPaintDetail /> :null}
+          {(selectAsset === "quizBox" || selectAsset ==="paintBox") ? <CountryQuizFrame selectAsset={selectAsset}/> : null}
+          {/* {(selectAsset === "paintBox") ? <CountryPaintDetail /> :null} */}
 
         </div>
       </div>
