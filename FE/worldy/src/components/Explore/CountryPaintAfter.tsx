@@ -7,13 +7,16 @@ interface Props {
   answer: AnswerType,
 }
 
+// 확인을 누르면 다른 문제를 받아와야 하는 지? 
+//아니면 밖으로 내보내야 하는지 논의 필요
+
 const CountryPaintAfter = ({answer}:Props) => {
 
   return (
     <div className=' h-[408px] w-full flex flex-col items-center justify-between'>
       <div className=' h-[48px] w-[780px] flex felx-row justify-between '>
         <div className='h-full w-1/3 flex flex-row justify-between item py-4'>
-          <div className={`h-full text-center py-1 text-sm opacity-40 font-PtdRegular  ${(answer.result)? "text-[#24901A]": "text-[#9A0000]"}`}>틀린 그림 찾기에 성공했습니다.</div> 
+          <div className={`h-full text-center py-1 text-sm opacity-40 font-PtdRegular  ${(answer.result) ? "text-[#24901A]" : "text-[#9A0000]"}`}>{(answer.result) ? "틀린 그림 찾기에 성공했습니다." : "틀린 그림 찾기에 실패했습니다." }</div> 
         </div>
         <div className='h-full w-[100px] flex flex-row justify-end items-center'>
           <Exp className='h-full w-[10px] font-PtdRegular'/>
@@ -31,7 +34,7 @@ const CountryPaintAfter = ({answer}:Props) => {
           <div className='h-2/3 w-full px-10 pt-2 pb-5 text-xs inline-block'>{answer.description}</div>
         </div>
       </div>
-      <div className=' h-12 w-[780px] text-sm text-center font-PtdLight opacity-40 py-3 rounded-xl shadow-lg border-solid border-2 border-gray-200'>
+      <div className=' h-12 w-[780px] text-sm text-center font-PtdLight opacity-40 py-3 rounded-xl shadow-lg border-solid border-2 border-gray-200 cursor-pointer'>
         확인
       </div>
     </div>

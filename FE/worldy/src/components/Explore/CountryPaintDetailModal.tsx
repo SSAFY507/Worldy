@@ -13,16 +13,25 @@ export interface AnswerType {
   result: boolean,
   subTitle: string,
   description: string
+};
 
+export interface ProblemType {
+  collectImg: string,
+  quizImg: string
 };
 
 const CountryPaintDetailModal = ({input,closeModal}: {input: ScrappedQuizType; closeModal: () => void}) => {
   const [solvedFlag, setSolvedFlag] = useState<boolean>(true)
 
+  const problem:ProblemType = {
+    collectImg: answerImg,
+    quizImg: answerImg
+  } 
+
   const answer:AnswerType = {
     img: answerImg,
     title: "에펠탑",
-    result: true,
+    result: false,
     subTitle: "Eiffel Tower",
     description: "에펠탑(프랑스어: Tour Eiffel, [tuʁ ɛfɛl], 영어: Eiffel Tower)은 프랑스 파리의 상징적 건축물로, 1889년에 프랑스 혁명 100주년을 맞이하여 파리 만국 박람회를 개최하였는데 이 박람회를 상징할만한 기념물로 에펠 탑을 건축하였다.[1] 박람회가 열린 마르스 광장에 출입 관문에 위치해있다. 프랑스의 대표 건축물인 이 탑은 격자 구조로 이루어져 파리에서 가장 높은 건축물이며, 매년 수백만 명이 방문할 정도로 파리에서 빼놓을 수 없는 세계적으로 유명한 관광명소이다. 이 탑은 공모전을 통해 선정된 프랑스 공학자 귀스타브 에펠의 작품으로 이를 디자인한 그의 이름을 따서 명명했다."
   }
@@ -36,7 +45,7 @@ const CountryPaintDetailModal = ({input,closeModal}: {input: ScrappedQuizType; c
           ?
           <CountryPaintAfter answer={answer}/>
           :
-          <CountryPaintBefore />
+          <CountryPaintBefore problem={problem} />
         }
       </div>
     </div>
