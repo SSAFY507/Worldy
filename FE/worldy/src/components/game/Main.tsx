@@ -95,8 +95,6 @@ export default function Main() {
   function subscribe() {
     ws.subscribe(`/sub/${params.id}`, (event: any) => {
       const received = JSON.parse(event.body);
-      console.log("sendData한 후 응답>>>");
-      console.log(received);
 
       if (received.type === "player") {
         setPlayer((prevState: any) => ({
@@ -235,7 +233,6 @@ export default function Main() {
         setQuizModalState(true);
       } else if (received.type === "enter") {
         // enter 에 들어온 순서대로 p를 채워나간 후 p4가 바뀌는 순간 player 데이터 전송
-        console.log(received);
         if (received.cnt <= 4) {
           console.log("4이하 룸아이디 세팅");
 
