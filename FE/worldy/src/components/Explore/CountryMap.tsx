@@ -53,7 +53,8 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
 
   const navigate = useNavigate();
 
-  const assetSet = new Set(["paintBox", "historyBox", "quizBox", "foodBox", "personalityBox",  "newsBox", "back"])
+  // const assetSet = new Set(["paintBox", "historyBox", "quizBox", "foodBox", "personalityBox",  "newsBox", "back"])
+  const assetSet = new Set(["paintBox", "quizBox", "foodBox", "personalityBox",  "newsBox", "back"])
   const assetObject:AssetsType = {
     paintBox: "🖼틀린 그림 찾기🖼",
     historyBox: "🧭역사에 대해 알아보자!",

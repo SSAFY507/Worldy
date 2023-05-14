@@ -3,13 +3,16 @@ import * as React from 'react';
 import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
 
 import { CSSTransition } from 'react-transition-group';
+import CountryFamousFrame from './CountryFamousFrame';
 import CountryNewsDetail from './CountryNewsDetail';
 import CountryQuizFrame from './CountryQuizFrame';
 import CrAnswer from '../../assets/images/CorrectAnswer.png';
 import WrAnswer from '../../assets/images/WrongAnswer.png';
 import book from '../../assets/images/bookIcon.png';
+import food from '../../assets/images/food.png';
+import foodIcon from '../../assets/images/foodIcon.png';
 import newsIcon from '../../assets/images/newsIcon.png';
-import paint from '../../assets/images/paint.png'
+import paint from '../../assets/images/paint.png';
 import paintIcon from '../../assets/images/paintIcon.png'
 import pathBA from '../../assets/images/BtgAttention.png';
 import pathBC from '../../assets/images/BtgCurious.png';
@@ -18,7 +21,9 @@ import pathBP from '../../assets/images/BtgPointing.png';
 import pathBT from '../../assets/images/BtgTeach.png';
 import pathTB from '../../assets/images/TutorialBackground.png';
 import pathTQT from '../../assets/images/TutorialQuizText.png';
-import quiz from '../../assets/images/quiz.png'
+import person from '../../assets/images/person.png';
+import personIcon from '../../assets/images/personIcon.png';
+import quiz from '../../assets/images/quiz.png';
 import quizIcon from '../../assets/images/quizIcon.png';
 import { useDispatch } from 'react-redux';
 import useLoadImagesHook from '../../_hooks/useLoadImagesHook';
@@ -207,7 +212,7 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
       npcImg: pathBA,
       mainIcon: book,
     },
-    quizBox:{
+    quizBox: {
       title: `${countryLst[`${countryName}`].KOREAN} 상식 퀴즈`,
       subTitle: `${countryLst[`${countryName}`].ENGLISH} Trivia Quiz`,
       contents: ["시사, 역사, 문화 등", "다양한 카테고리의 재미있는", `${countryLst[countryName].KOREAN} 상식 퀴즈를 풀어보세요!`],
@@ -215,13 +220,29 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
       npcImg: pathBP,
       mainIcon: quiz,
     },
-    paintBox:{
+    paintBox: {
       title: "틀림 그림 찾기",
       subTitle: "Hidden Catch of AI",
       contents: [`${countryLst[`${countryName}`].KOREAN}의 명소 이미지가 등장합니다.`, "시간 안에 AI가 바꾸어 놓은 부분 중" , "세 가지를 찾아보세요!"],
       icon: paintIcon,
       npcImg: pathBC,
       mainIcon: paint,
+    },
+    personalityBox:{
+      title: `${countryLst[`${countryName}`].KOREAN} 유명 인물`,
+      subTitle: `${countryLst[`${countryName}`].ENGLISH} famous person`,
+      contents: [`${countryLst[`${countryName}`].KOREAN}의 유명 인물을 소개합니다.`, "다양한 인물의 설명과 함께" , "인스타그램, 유튜브를 확인해보세요."],
+      icon: personIcon,
+      npcImg: pathBA,
+      mainIcon: person,
+    },
+    foodBox: {
+      title: `${countryLst[`${countryName}`].KOREAN} 음식`,
+      subTitle: `${countryLst[`${countryName}`].ENGLISH} famous food`,
+      contents: [`${countryLst[`${countryName}`].KOREAN}의 대표 음식을 소개합니다.`, "다양한 음식에 대한 설명과" , "레시피를 확인해보세요!"],
+      icon: foodIcon,
+      npcImg: pathBA,
+      mainIcon: food,
     }
   }
  
@@ -293,7 +314,7 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
             <div className="h-1/2 flex flex-col">
               <div className="flex flex-col pb-10">
                 <div className='text-3xl pb-5'>
-                  <img className="h-10" src={ment[`${selectAsset}`].mainIcon} alt=""/>
+                  <img className="h-10 " src={ment[`${selectAsset}`].mainIcon} alt=""/>
                 </div>
                 <div className='text-4xl font-PtdExtraBold'>{ment[`${selectAsset}`].title}</div>
                 <div className='text-2xl font-PtdLight'>{ment[`${selectAsset}`].subTitle}</div>
@@ -308,8 +329,8 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
         </div>
         <div className="h-full w-3/4 flex flex-col justify-center items-center">
           {(selectAsset === "newsBox") ? <CountryNewsDetail data={data}/> :null}
-          {(selectAsset === "quizBox" || selectAsset ==="paintBox") ? <CountryQuizFrame selectAsset={selectAsset}/> : null}
-          {/* {(selectAsset === "paintBox") ? <CountryPaintDetail /> :null} */}
+          {(selectAsset === "quizBox" || selectAsset === "paintBox") ? <CountryQuizFrame selectAsset={selectAsset}/> : null}
+          {(selectAsset === "foodBox" || selectAsset === "personalityBox") ? <CountryFamousFrame selectAsset={selectAsset} /> :null}
 
         </div>
       </div>
