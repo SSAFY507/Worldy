@@ -52,6 +52,11 @@ export default function Game2D(props: any) {
   } else {
     me = player.p4;
   }
+
+  useEffect(() => {
+    sendData();
+  }, [metaData]);
+
   useEffect(() => {
     if (metaData.turnOver && !metaData.isDouble) {
       // 턴이 true이고, 더블이  false;
