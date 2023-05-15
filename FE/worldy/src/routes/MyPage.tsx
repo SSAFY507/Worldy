@@ -41,6 +41,7 @@ import { useDispatch } from 'react-redux';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
+import SHLoader from '../components/Loaders/SHLoader';
 
 type MyPageMenuType = {
   icon: React.ReactNode;
@@ -1049,7 +1050,7 @@ export default function MyPage({
 
   return (
     <div
-      className='w-full h-full flex flex-row justify-center items-center overflow-y-clip'
+      className='w-full h-full flex flex-row justify-center items-center overflow-y-clip bg-gray-900'
       style={{ backgroundImage: `url(${pathBG})`, backgroundSize: '100%' }}
     >
       {loadedAll ? (
@@ -1137,7 +1138,7 @@ export default function MyPage({
         </>
       ) : (
         <div className='w-full h-full bg-white'>
-          <LoaderBlueCircle text='정보 모으는 중...' />
+          <SHLoader text='정보 모으는 중...' />
         </div>
       )}
     </div>
