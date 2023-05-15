@@ -8,6 +8,7 @@ import SupportModal from '../components/SupportModal';
 import LoaderBlueCircle from '../components/Loaders/LoaderBlueCircle';
 import CustomAxios from '../API/CustomAxios';
 import axios from 'axios';
+import SHLoader from '../components/Loaders/SHLoader';
 
 type SupportItemType = {
   content: string;
@@ -490,7 +491,7 @@ export default function Support({
         </>
       ) : (
         <div className='w-full h-full bg-white pt-20'>
-          <LoaderBlueCircle text='무엇을 도와드릴까요?' />
+          <SHLoader text='무엇을 도와드릴까요?' />
         </div>
       )}
     </div>
