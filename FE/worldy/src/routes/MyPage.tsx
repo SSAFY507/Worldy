@@ -1,45 +1,46 @@
+import '../styles/MyPageStyles.css';
+import '../styles/TailWind.css';
+
 import * as React from 'react';
-import { useState, useEffect, useRef } from 'react';
-import pathBG from '../assets/images/MyPageBackground.png';
+
+import { BiBrain, BiLogOut } from 'react-icons/bi';
 import {
-  BsFillPersonLinesFill,
   BsBookmarksFill,
   BsFillCaretDownFill,
+  BsFillPersonLinesFill,
   BsThreeDotsVertical,
 } from 'react-icons/bs';
-import { BiLogOut, BiBrain } from 'react-icons/bi';
 import { IoIosLogOut, IoLogoGameControllerB } from 'react-icons/io';
-import { AiOutlineBulb } from 'react-icons/ai';
-import { FiArrowUpRight } from 'react-icons/fi';
-import { SiPowerapps } from 'react-icons/si';
-import { IoMdPower } from 'react-icons/io';
-
+import { MdAccessTimeFilled, MdKeyboardDoubleArrowRight } from 'react-icons/md';
 import {
   RiQuestionAnswerFill,
   RiSave3Fill,
   RiVipCrownFill,
 } from 'react-icons/ri';
-import { MdAccessTimeFilled, MdKeyboardDoubleArrowRight } from 'react-icons/md';
-import { TbWorld, TbCategory2 } from 'react-icons/tb';
-import moment from 'moment';
-
-import '../styles/MyPageStyles.css';
-import '../styles/TailWind.css';
-
-import QuizModal from '../components/QuizModal';
-import QNAMoveButton from '../components/QNAMoveButton';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router';
+import { TbCategory2, TbWorld } from 'react-icons/tb';
 import {
   loginNickName,
   loginProfileImg,
   logout,
+  myRank,
 } from '../_store/slices/loginSlice';
-import { useSelector } from 'react-redux';
-import useLoadImagesHook from '../_hooks/useLoadImagesHook';
-import LoaderPyramid from '../components/Loaders/LoaderPyramid';
-import LoaderBlueCircle from '../components/Loaders/LoaderBlueCircle';
+import { useEffect, useRef, useState } from 'react';
+
+import { AiOutlineBulb } from 'react-icons/ai';
 import CustomAxios from '../API/CustomAxios';
+import { FiArrowUpRight } from 'react-icons/fi';
+import { IoMdPower } from 'react-icons/io';
+import LoaderBlueCircle from '../components/Loaders/LoaderBlueCircle';
+import LoaderPyramid from '../components/Loaders/LoaderPyramid';
+import QNAMoveButton from '../components/QNAMoveButton';
+import QuizModal from '../components/QuizModal';
+import { SiPowerapps } from 'react-icons/si';
+import moment from 'moment';
+import pathBG from '../assets/images/MyPageBackground.png';
+import { useDispatch } from 'react-redux';
+import useLoadImagesHook from '../_hooks/useLoadImagesHook';
+import { useNavigate } from 'react-router';
+import { useSelector } from 'react-redux';
 
 type MyPageMenuType = {
   icon: React.ReactNode;
@@ -67,11 +68,26 @@ export type ScrappedQuizType = {
   multiSecond: string | null; //2번
   multiThird: string | null; //3번
   multiFourth: string | null; //4번
-  hint: boolean; //힌트
-  commentary: string; //힌트 유형
+  hint: string;
+  hintType: boolean; //힌트
   userAnswer: string | null; //유저가 적은 정답(맞았으면 null)
   success: boolean; //맞춘 문제인가
-  explanation?: string;
+  commentary: string;
+};
+
+type RankItemType = {
+  rank: number;
+  nickName: string;
+  profileImg: string;
+  tier: string;
+  level: number;
+  percent?: number;
+  exp?: number;
+};
+
+type RankListType = {
+  myRank: RankItemType;
+  rankTop10User: RankItemType[];
 };
 
 export default function MyPage({
@@ -85,6 +101,8 @@ export default function MyPage({
     pathBG: pathBG,
   };
 
+  const getLoginToken: string | null = sessionStorage.getItem('token');
+
   const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
   const [loadedAll, setLoadedAll] = useState<boolean>(false);
 
@@ -92,6 +110,9 @@ export default function MyPage({
     if (isLoaded) {
       setTimeout(() => {
         setLoadedAll(true);
+        setTimeout(() => {
+          setFillExp(true);
+        }, 300);
       }, 1000);
     }
   }, [isLoaded]);
@@ -105,7 +126,7 @@ export default function MyPage({
   const logoutRef = useRef<HTMLDivElement>(null);
 
   const userNickname: string = sessionStorage.getItem('nickname') || '';
-  const userProfileImg: string | null = sessionStorage.getItem('profileImg');
+  const userProfileImg: string = sessionStorage.getItem('profileImg') || '';
 
   const scrollToContent = (ref: React.RefObject<HTMLDivElement>) => {
     if (containerRef.current && ref.current) {
@@ -194,10 +215,10 @@ export default function MyPage({
           {input.icon}
         </span>
         <span
-          className={`w-full ml-[.5em] text-[1.2em] text-white font-PtdMedium flex flex-row justify-between items-center`}
+          className={`w-full ml-[.5em] text-[1.2em] text-white font-PtdMedium flex flex-row justify-start items-center`}
         >
           {input.title}
-          {input.move && <FiArrowUpRight className='mr-[1em]' />}
+          {input.move && <FiArrowUpRight className='ml-[1em]' />}
         </span>
       </button>
     );
@@ -224,18 +245,14 @@ export default function MyPage({
     );
   };
 
-  const date = moment().format('YYYY-MM-DD');
-
-  const level = 3;
-  const exp = 29;
-
   const levelContent = (): JSX.Element => {
     return (
       <div className='w-[500px] flex flex-row justify-between items-center'>
-        <span className='mr-[20px]'>LV.{level}</span>
+        <span className='mr-[20px]'>LV.{axiosRankInfoList?.myRank.level}</span>
         <div className=' w-full h-[40px]  ml-[20px] flex flex-col justify-between items-start  outline-white'>
           <div className='w-fit text-[15px] h-fit flex flex-row justify-center items-center '>
-            EXP : ({exp}/100)
+            EXP : ({axiosRankInfoList?.myRank.exp}
+            /100)
           </div>
           <div className='relative h-[10px] w-[400px] outline outline-[rgba(255,255,255,0.5)] flex flex-row justify-start items-center'>
             <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
@@ -246,7 +263,7 @@ export default function MyPage({
             <div className='z-10 h-full w-1/6 border-0 border-r-[1px] border-solid border-[rgba(255,255,255,0.3)]'></div>
             <div
               className='absolute top-0 left-0 h-[10px] bg-blue-300'
-              style={{ width: `${exp}%` }}
+              style={{ width: `${axiosRankInfoList?.myRank.exp}%` }}
             ></div>
           </div>
         </div>
@@ -258,7 +275,9 @@ export default function MyPage({
       <div className='w-[500px]  h-[40px]  my-[10px] flex flex-row justify-between items-center'>
         <div
           className={`${
-            rankInfo[1] === '브론즈' ? 'opacity-100' : 'opacity-30'
+            axiosRankInfoList?.myRank.tier === 'Bronze'
+              ? 'opacity-100'
+              : 'opacity-30'
           } h-[40px] bg-[rgba(255,255,255,0.2)] rounded-[100px] flex flex-row justify-center items-center py-[8px] px-[10px]`}
         >
           Bronze
@@ -266,7 +285,9 @@ export default function MyPage({
         </div>
         <div
           className={`${
-            rankInfo[1] === '실버' ? 'opacity-100' : 'opacity-30'
+            axiosRankInfoList?.myRank.tier === 'Silver'
+              ? 'opacity-100'
+              : 'opacity-30'
           } h-[40px] bg-[rgba(255,255,255,0.2)] rounded-[100px] flex flex-row justify-center items-center py-[8px] px-[10px]`}
         >
           Silver
@@ -274,7 +295,9 @@ export default function MyPage({
         </div>
         <div
           className={`${
-            rankInfo[1] === '골드' ? 'opacity-100' : 'opacity-30'
+            axiosRankInfoList?.myRank.tier === 'Gold'
+              ? 'opacity-100'
+              : 'opacity-30'
           } h-[40px] bg-[rgba(255,255,255,0.2)] rounded-[100px] flex flex-row justify-center items-center py-[8px] px-[10px]`}
         >
           Gold
@@ -282,7 +305,9 @@ export default function MyPage({
         </div>
         <div
           className={`${
-            rankInfo[1] === '플레티넘' ? 'opacity-100' : 'opacity-30'
+            axiosRankInfoList?.myRank.tier === 'Platinum'
+              ? 'opacity-100'
+              : 'opacity-30'
           } h-[40px] bg-[rgba(255,255,255,0.2)] rounded-[100px] flex flex-row justify-center items-center py-[8px] px-[10px]`}
         >
           Platinum
@@ -292,43 +317,234 @@ export default function MyPage({
     );
   };
 
+  const [axiosRankInfoList, setAxiosRankInfoList] = useState<RankListType>();
+
+  const getRankInfoList = async () => {
+    console.log('Session에서의 가져오는 토큰', getLoginToken);
+    try {
+      const response = await CustomAxios({
+        APIName: 'getRankInfoList',
+        APIType: 'get',
+        UrlQuery: `https://k8a507.p.ssafy.io/api/game/ranking`,
+        Token: getLoginToken,
+      });
+      //console.log('닉네임 중복 체크 성공');
+      console.log('랭크 리스트 받은 거: ', response);
+      setAxiosRankInfoList(response);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    //console.log('token이 무엇이냐 ', token);
+  };
+
+  useEffect(() => {
+    console.log('랭크 받앙오기');
+    getRankInfoList();
+  }, []);
+
+  const userLevel = axiosRankInfoList?.myRank.level || '';
+  const userExp = axiosRankInfoList?.myRank.exp || 0;
+  const userTier = axiosRankInfoList?.myRank.tier || '';
+  const userRank = axiosRankInfoList?.myRank.rank || 0;
+
+  const [fillExp, setFillExp] = useState<boolean>(false);
+
   const accountInfoContentComponent = () => {
     return (
-      <div className='w-[95%] min-h-300px h-fit'>
-        <div className='w-full h-fit flex flex-row justify-between items-center'>
-          <div className='flex-1 h-full mb-[15px] mr-[20px]'>
-            {contentBoxComponent({ title: '닉네임', content: userNickname })}
+      <div className='w-full h-fit  outline-white flex flex-col justify-between items-stretch'>
+        <div className='w-full h-[80px] -translate-y-[4px] outline-red-300 flex flex-row justify-start items-center'>
+          <div className='w-[70px] h-[70px] rounded-full overflow-hidden grid place-content-center'>
+            <img src={userProfileImg || ''} alt='프로필사진' />
           </div>
-          <div className='w-[70px] h-[70px] rounded-full grid place-content-center overflow-hidden mb-[15px] outline-[5px] outline outline-[rgba(255,255,255,0.2)]'>
-            <img
-              src={userProfileImg || ''}
-              alt='프로필 사진'
-              className='w-full h-full'
+          <div className='flex-1 h-full ml-[20px] flex flex-col justify-end items-start pb-[10px]'>
+            <span className='flex flex-row justify-start items-center text-[#B1B1B1] font-PtdRegular text-[20px] mb-[8px]'>
+              {userNickname}님은
+              <p className='text-white font-PtdBold mx-[10px]'>
+                LV.{userLevel},
+              </p>
+              <p
+                className={`flex flex-row justify-start items-center mr-[10px] font-PtdBold`}
+                style={{ color: setTierColor(userTier) }}
+              >
+                <SiPowerapps
+                  size={20}
+                  color={setTierColor(userTier)}
+                  className='mr-[7px]'
+                />
+                {userTier}
+              </p>
+              입니다.
+            </span>
+            <span className='text-[16px] font-PtdLight text-[#5A5A5A]'>
+              다음 레벨업까지 {100 - userExp}exp 남았습니다.
+            </span>
+          </div>
+        </div>
+        <div className='w-full h-[70px] pb-[5px] outline-white flex flex-col justify-end items-stretch'>
+          <div className='w-full h-[20px] flex flex-row justify-end items-center font-PtdRegular'>
+            <span className='text-[15px] text-[#5A5A5A] mr-[5px]'>exp</span>
+            <span className='text-[18px] text-[rgba(220,220,220,1)]'>
+              {userExp}/100
+            </span>
+          </div>
+          <div className='w-full h-[10px]  outline-red-300 flex flex-row justify-center items-center relative mt-[15px]'>
+            <div className='w-full h-[10px] rounded-full bg-[#454545]' />
+            <div
+              className={`${
+                fillExp ? `w-[${70}%]` : 'w-0'
+              } h-[10px] transition-all duration-[1300ms] ease-in-out  absolute top-0 left-0 rounded-full`}
+              style={{ backgroundColor: setTierColor(userTier) }}
             />
           </div>
-        </div>
-        <div className='w-full h-full mb-[15px]'>
-          {contentBoxComponent({
-            title: '레벨',
-            content: levelContent(),
-          })}
-        </div>
-        <div className='w-full h-full'>
-          {contentBoxComponent({ title: '티어', content: tierContent() })}
         </div>
       </div>
     );
   };
+  //////////////////////////////////////////////////
 
+  //퀴즈 타입 (-1 : 닫힘, 0 : 전체, 1 : 나라별, 2 : 난이도별, 3 : 카테고리별)
   const [scrappedQuizTypeSelect, setScrappedQuizTypeSelet] =
     useState<number>(-1);
+  //퀴즈 타입 버튼 인덱스 (-1 : 버튼 안 누른 상태, 0 : 전체 버튼, 1 : 나라별, 2 : 난이도별, 3: 카테고리별, 4 : 화살표)
+  const [quizPopDownKeyState, setQuizPopDownKeyState] = useState<number>(-1);
+
+  //선택된 타입의 string (전체, 나라별, 난이도별, 카테고리별)
+  const [selectedType, setSelectedType] = useState<string>('');
+  //세부 카테고리 선택 인덱스
+  const [quizMenuSelected, setQuizMenuSelected] = useState<number>(0);
+  //세부 카테고리 (한국,중국 ,... , 상,중,하, 시사,문화...)
+  const [selectedValue, setSelectedValue] = useState<string>('');
+
+  //스크랩 퀴즈 창 열기 / 닫기
+  const [quizPopDownBoxState, setQuizPopDownBoxState] =
+    useState<boolean>(false);
+
+  //스크랩 퀴즈 선택 id
+  const [selectedQuizId, setSelectedQuizId] = useState<number>(0);
+  //스크랩 퀴즈 모달 열기 닫기
+  const [quizModalState, setQuizModalState] = useState<boolean>(false);
+  //받아오는 퀴즈 리스트
+  const [axiosScrappedQuizList, setAxiosScrappedQuizList] = useState<
+    ScrappedQuizType[]
+  >([]);
+  //선택 사항에 따른 분류된 퀴즈 리스트
+  const [sortedScrapQuizList, setSortedScrapQuizList] = useState<
+    ScrappedQuizType[]
+  >([]);
+
+  //퀴즈 타입 인덱스값 설정 (같은 버튼 누르면 닫기로 -1)
   const handleScrappedQuizTypeSelect = (input: number) => {
-    setScrappedQuizTypeSelet(input === scrappedQuizTypeSelect ? -1 : input);
+    if (quizPopDownBoxState) {
+      //열려있는 상태면
+      if (input === 4) {
+        setScrappedQuizTypeSelet(-1);
+      } else {
+        setScrappedQuizTypeSelet(input === scrappedQuizTypeSelect ? -1 : input); //같은 버튼 눌렀으면 닫기
+      }
+    } else {
+      if (input === 4) {
+        setScrappedQuizTypeSelet(0);
+      } else {
+        setScrappedQuizTypeSelet(input); //같은 버튼 눌렀으면 닫기
+      }
+    }
   };
+  //버튼 눌러서 퀴즈 타입 설정
   const clickQuizType = (input: number) => {
     handleQuizPopDownKeyState(input);
-    handleScrappedQuizTypeSelect(input === 4 ? 1 : input);
+    if (input === 1) setSelectedType('나라별');
+    else if (input === 2) setSelectedType('난이도별');
+    else if (input === 3) setSelectedType('카테고리별');
+    else if (input === 0 || input === 4) setSelectedType('전체');
+    handleScrappedQuizTypeSelect(input);
   };
+  //버튼 눌러서 스크랩 창 열기 닫기
+  const handleQuizPopDownKeyState = (input: number) => {
+    if (input === 4) {
+      //화살표 눌렀을 때
+      if (quizPopDownBoxState) {
+        //열려있으면 버튼 인덱스 -1로 하고 닫기
+        setQuizPopDownKeyState(-1); //
+      } else {
+        setQuizPopDownKeyState(0);
+      }
+    } else setQuizPopDownKeyState(quizPopDownKeyState === input ? -1 : input);
+  };
+
+  const handleQuizModal = (select: number) => {
+    setSelectedQuizId(select);
+    setTimeout(() => {
+      setQuizModalState(true);
+    }, 100);
+  };
+
+  const sortScrappedQuizByCategory = ({
+    type,
+    value,
+  }: {
+    type: string;
+    value: string;
+  }) => {
+    console.log('const 5');
+    const inputvalue =
+      value === '상'
+        ? '3'
+        : value === '중'
+        ? '2'
+        : value === '하'
+        ? '1'
+        : value === '문화/역사'
+        ? 'cul'
+        : value === '시사'
+        ? 'aff'
+        : value === '기타'
+        ? 'etc'
+        : value;
+    if (inputvalue === '없음') setSortedScrapQuizList([]);
+    else if (inputvalue !== '전체') {
+      //내부 선택이 있으면 타입 분류 및 카테고리 분류
+      var tempList: ScrappedQuizType[] = [];
+      console.log(`선택한 타입 : ${type} => 카테고리 : ${inputvalue}`);
+      for (let i = 0; i < axiosScrappedQuizList.length; i++) {
+        if (type === '나라별') {
+          if (axiosScrappedQuizList[i].nationName === inputvalue)
+            tempList.push(axiosScrappedQuizList[i]);
+        } else if (type === '난이도별') {
+          if (axiosScrappedQuizList[i].level === +inputvalue)
+            tempList.push(axiosScrappedQuizList[i]);
+        } else {
+          if (axiosScrappedQuizList[i].category === inputvalue) {
+            tempList.push(axiosScrappedQuizList[i]);
+          }
+        }
+      }
+      setSortedScrapQuizList(tempList);
+    } else {
+      //내부 선택 없으면 타입 분류만
+      setSortedScrapQuizList(axiosScrappedQuizList);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedType === '') return;
+    setSelectedValue('전체');
+    sortScrappedQuizByCategory({ type: selectedType, value: selectedValue });
+  }, [selectedType]);
+
+  useEffect(() => {
+    if (selectedValue === '') return;
+    sortScrappedQuizByCategory({ type: selectedType, value: selectedValue });
+  }, [selectedValue]);
+
+  useEffect(() => {
+    setQuizMenuSelected(0); //세부 셀렉 0
+    setQuizPopDownBoxState(quizPopDownKeyState === -1 ? false : true);
+    if (quizPopDownKeyState !== -1) scrollToContent(quizScrapRef);
+  }, [quizPopDownKeyState]); //퀴즈 타입 버튼 인덱스
+
+  useEffect(() => {
+    getScrappedQuizListAxios();
+  }, []);
 
   const quizScrapContentComponent = () => {
     return (
@@ -342,7 +558,10 @@ export default function MyPage({
                 : 'bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.2)] '
             }
             `}
-            onClick={() => clickQuizType(0)}
+            onClick={() => {
+              clickQuizType(0);
+              setSelectedType('전체');
+            }}
           >
             <span className='text-white text-[20px] font-PtdSemiBOld'>
               전체
@@ -358,7 +577,10 @@ export default function MyPage({
                 : 'bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.2)] '
             }
             `}
-            onClick={() => clickQuizType(1)}
+            onClick={() => {
+              clickQuizType(1);
+              setSelectedType('나라별');
+            }}
           >
             <span className='text-white text-[18px] font-PtdSemiBOld'>
               나라별
@@ -372,7 +594,10 @@ export default function MyPage({
                 : 'bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.2)] '
             }
             `}
-            onClick={() => clickQuizType(2)}
+            onClick={() => {
+              clickQuizType(2);
+              setSelectedType('난이도별');
+            }}
           >
             <span className='text-white text-[18px] font-PtdSemiBOld'>
               난이도별
@@ -387,7 +612,10 @@ export default function MyPage({
                 : 'bg-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.2)] '
             }
             `}
-            onClick={() => clickQuizType(3)}
+            onClick={() => {
+              clickQuizType(3);
+              setSelectedType('카테고리별');
+            }}
           >
             <span className='text-white text-[18px] font-PtdSemiBOld'>
               카테고리별
@@ -407,7 +635,7 @@ export default function MyPage({
             ].map((item, key) => quizMenuBar({ input: item, key: key }))}
           </div>
           <div className='flex-1 h-full  outline-white overflow-y-scroll flex flex-col justify-start items-start px-[10px]'>
-            {tempScrappedQuizList.map((item, key) =>
+            {sortedScrapQuizList.map((item, key) =>
               quizPreviewBox({ input: item, key: key })
             )}
           </div>
@@ -428,6 +656,24 @@ export default function MyPage({
         </button>
       </div>
     );
+  };
+
+  const getScrappedQuizListAxios = async () => {
+    console.log('Session에서의 가져오는 토큰', getLoginToken);
+    try {
+      const response = await CustomAxios({
+        APIName: 'getScrappedQuiz',
+        APIType: 'get',
+        UrlQuery: `https://k8a507.p.ssafy.io/api/user/scrap/all`,
+        Token: getLoginToken,
+      });
+      //console.log('닉네임 중복 체크 성공');
+      console.log('퀴즈 스크랩 받은 거 : ', response[0].quizId);
+      setAxiosScrappedQuizList(response);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    //console.log('token이 무엇이냐 ', token);
   };
 
   const quizSelectMenuList: string[][] = [
@@ -480,7 +726,10 @@ export default function MyPage({
         }
         `}
         key={key}
-        onClick={() => setQuizMenuSelected(key)}
+        onClick={() => {
+          setQuizMenuSelected(key);
+          setSelectedValue(input);
+        }}
       >
         <span className={`${key === 0 ? 'text-[22px]' : 'text-[16px]'} `}>
           {input}
@@ -489,11 +738,6 @@ export default function MyPage({
     );
   };
 
-  const [quizMenuSelected, setQuizMenuSelected] = useState<number>(0);
-
-  /* from-[#958e8e] 
-          via-[#76b8b2]
-          to-[#00ffbf99] */
   const quizPreviewBox = ({
     input,
     key,
@@ -505,7 +749,7 @@ export default function MyPage({
       input.level === 1 ? '하' : input.level === 2 ? '중' : '상';
     const categ: string =
       input.category === 'cul'
-        ? '문화'
+        ? '문화/역사'
         : input.category === 'aff'
         ? '시사'
         : '기타';
@@ -559,105 +803,6 @@ export default function MyPage({
     );
   };
 
-  const [quizPopDownKeyState, setQuizPopDownKeyState] = useState<number>(-1);
-
-  useEffect(() => {
-    setQuizMenuSelected(0);
-  }, [quizPopDownKeyState]);
-
-  const handleQuizPopDownKeyState = (input: number) => {
-    if (input === 4) {
-      quizPopDownBoxState
-        ? setQuizPopDownKeyState(-1)
-        : setQuizPopDownKeyState(1);
-    } else setQuizPopDownKeyState(quizPopDownKeyState === input ? -1 : input);
-  };
-
-  const [quizPopDownBoxState, setQuizPopDownBoxState] = useState<boolean>(true);
-
-  useEffect(() => {
-    setQuizPopDownBoxState(quizPopDownKeyState === -1 ? false : true);
-    if (quizPopDownKeyState !== -1) scrollToContent(quizScrapRef);
-  }, [quizPopDownKeyState]);
-
-  const tempScrappedQuizList: ScrappedQuizType[] = [
-    {
-      quizId: 0,
-      nationName: '대한민국',
-      level: 1,
-      quizType: 'ox',
-      category: 'cul',
-      image: '',
-      content: '일본의 모든 도시는 한국의 모든 도시와 표준시가 1시간 차이난다.',
-      answer: 'O',
-      multiFirst: null, //1번
-      multiSecond: null, //2번
-      multiThird: null, //3번
-      multiFourth: null, //4번
-      hint: true, //힌트
-      commentary: '일본은 한국보다 실제 시간이 30분 빠릅니다',
-      userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
-      success: true, //맞춘 문제인가
-      explanation:
-        '한국의 중앙 자오선은 동경 127.5°이며 일본의 중앙 자오선은 동경 135°로 일본이 30분 더 빠릅니다. 그러나 일제의 잔재로, 실제로는 일본 표준 자오선인 동경 135°에 맞춰 표준시를 사용하고 있습니다. 반면 북한은 광복 70주년에 표준시를 다시 30분 늦췄고 한국은 북한과 30분의 시차를 가지는 상황입니다.',
-    },
-    {
-      quizId: 0,
-      nationName: '중국',
-      level: 2,
-      quizType: 'multi',
-      category: 'cul',
-      image: '',
-      content:
-        '중국의 역사는 매우 오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요..',
-      answer: '하나라',
-      multiFirst: '진나라진나라진나라', //1번
-      multiSecond: '명나라', //2번
-      multiThird: '하나라', //3번
-      multiFourth: '성나라', //4번
-      hint: true, //힌트
-      commentary: '힌트 무슨 유형인가', //힌트 유형
-      userAnswer: '1', //유저가 적은 정답(맞았으면 null)
-      success: false, //맞춘 문제인가
-    },
-    {
-      quizId: 0,
-      nationName: '대한민국',
-      level: 1,
-      quizType: 'blank',
-      category: 'cul',
-      image: '',
-      content: '세종대왕.',
-      answer: '세종대왕',
-      multiFirst: null, //1번
-      multiSecond: null, //2번
-      multiThird: null, //3번
-      multiFourth: null, //4번
-      hint: true, //힌트
-      commentary: 'ㅅㅈㄷㅇ', //힌트 유형
-      userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
-      success: false, //맞춘 문제인가
-    },
-    {
-      quizId: 0,
-      nationName: '대한민국',
-      level: 1,
-      quizType: 'ox',
-      category: 'cul',
-      image: '',
-      content: '대한민국에서 쓰이는 언어는 한극어이다.',
-      answer: 'X',
-      multiFirst: null, //1번
-      multiSecond: null, //2번
-      multiThird: null, //3번
-      multiFourth: null, //4번
-      hint: false, //힌트
-      commentary: '힌트 무슨 유형인가', //힌트 유형
-      userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
-      success: false, //맞춘 문제인가
-    },
-  ];
-
   const contentBoxComponent = ({
     title,
     content,
@@ -677,154 +822,110 @@ export default function MyPage({
     );
   };
 
-  const [quizModalState, setQuizModalState] = useState<boolean>(false);
-  const [selectedQuizId, setSelectedQuizId] = useState<number>(0);
-
-  const handleQuizModal = (select: number) => {
-    setSelectedQuizId(select);
-    setTimeout(() => {
-      setQuizModalState(true);
-    }, 100);
-  };
-
   ////////////////////////////////////////
-  type rankListType = {
-    topTen: string[];
-    myRank: number;
+
+  const setTierColor = (input: string): string => {
+    if (input === 'Platinum') return '#86FFF8';
+    else if (input === 'Gold') return '#C9B037';
+    else if (input === 'Silver') return '#E1FBFF';
+    else return '#6a3805';
   };
-
-  const inputList: rankListType = {
-    topTen: [
-      '설희',
-      '미희',
-      '원규',
-      '한빈',
-      '성훈',
-      '희설킴',
-      '희미팍',
-      '규원킴',
-      '빈한리',
-      '훈성리',
-    ],
-    myRank: 92,
-  };
-
-  const [rankList, setMyRankList] = useState<rankListType>(inputList);
-
-  const myRank = rankList.myRank;
-  const rankInfo: string[] =
-    myRank < 30
-      ? ['#86FFF8', '플레티넘']
-      : myRank < 80
-      ? ['#C9B037', '골드']
-      : myRank < 150
-      ? ['#a4a4a4', '실버']
-      : ['#6a3805', '브론즈'];
   const rankContent = (): JSX.Element => {
-    // if (rankList.myRank <= 10) {
-    //   const tempList: rankListType = rankList;
-    //   tempList.topTen[rankList.myRank - 1] = myName;
-    //   setMyRankList(tempList);
-    // }
-
     return (
       <div className='w-full h-fit  outline-yellow-300'>
-        {/* <div className='w-full h-[100px] flex flex-row justify-between items-center  outline-blue-300 px-[20px]'>
-          <div className='w-fit h-2/3 px-[20px] bg-black rounded-xl grid place-content-center'>
-            <span className='text-white text-[25px]'>
-              나의 순위 : #.{rankList.myRank}
-            </span>
-          </div>
-          <div className='w-fit h-2/3 px-[20px] flex flex-row justify-center items-center bg-black rounded-xl'>
-            <span className='text-white flex flex-row justify-center items-center text-[25px] mr-[20px]'>
-              RANK :
-            </span>
-            <div className='w-fit h-2/3  outline-white bg-[rgba(62,62,62,0.7)]  rounded-xl flex flex-row justify-center items-center px-[10px]'>
-              <SiPowerapps
-                size={25}
-                color={rankInfo[0]}
-                className='mr-[10px]'
-              />
-              <span
-                className='text-[25px] font-PtdBold'
-                style={{ color: rankInfo[0] }}
-              >
-                {rankInfo[1]}
-              </span>
-            </div>
-          </div>
-        </div> */}
         <div
           className={`w-full h-fit  outline-red-300 flex flex-col justify-start items-start transition-all duration-1000 ease-in-out`}
         >
-          <div className='text-[#6A6A6A] font-PtdRegular text-[22px] mx-[15px] '>
-            <span>{userNickname}</span>
-            <span></span>
-            님의 랭킹 정보
+          <div className='text-[#6A6A6A] font-PtdRegular text-[17px] mx-[15px] '>
+            <span>
+              {userNickname}
+              님의 랭킹 정보
+            </span>
           </div>
-          <div className='text-[#CBCBCB] font-PtdRegular text-[22px] mx-[15px] mt-[5px]'>
-            <span>전체 플레이어 중 상위 </span>
-            <span className='text-emerald-300'>
-              {myRank}위, 15% 이내입니다.
+          <div className='text-[#CBCBCB] font-PtdSemiBOld text-[20px] mx-[15px] mt-[5px]'>
+            <span>전체 플레이어 중 </span>
+            <span style={{ color: setTierColor(userTier) }}>
+              {axiosRankInfoList?.myRank.rank}위, 상위{' '}
+              {axiosRankInfoList?.myRank.percent}% 이내입니다.
             </span>
           </div>
           <div className='w-full h-[50px] flex flex-row justify-start items-start  text-white'></div>
           <div
             className={`w-full h-fit outline-white opacity-100 transition-all duration-1000  ease-in-out overflow-hidden flex flex-col justify-start items-center`}
           >
-            <div className='w-[450px] h-[50px] flex flex-row justify-start items-center text-[20px] text-[#6A6A6A] font-PtdLight'>
-              <span className='w-fit'>no.</span>
-              <span className='w-fit ml-[20px]'>nickname</span>
-              <span className='w-fit ml-[200px]'>level</span>
-              <span className='place-content-right ml-[50px]'>tier</span>
-            </div>
-
-            {rankList.topTen.map((item, key) => (
+            <div>
               <div
-                key={key}
-                className={`rangking relative flex flex-row justify-start items-center mb-[7px] bg-[rgba(0,0,0,0)] hover:bg-[rgba(180,180,180,0.3)] px-[10px] rounded-md ${
-                  key + 1 === myRank
-                    ? 'glowmyrank z-10  w-[500px] h-[50px] my-[15px] '
-                    : 'w-[490px] h-[45px]'
-                }`}
+                className={
+                  'relative flex flex-row justify-between items-center mb-[7px] bg-[rgba(0,0,0,0)] px-[10px] rounded-md w-[490px] h-[45px] font-PtdExtraLight text-gray-300 text-[16px] '
+                }
               >
-                <div className='relative w-[50px] h-[50px]  grid place-content-center'>
-                  <span className='absolute top-0 left-0 w-[50px] h-[50px] grid place-content-center font-PtdLight text-[20px] text-gray-300'>
-                    {key + 1}
-                  </span>
+                <div className='w-[50px] h-full mr-[10px] grid place-content-center '>
+                  <span className='grid place-content-center '>Rank</span>
                 </div>
-                <div className='w-fit h-fit flex flex-row justify-center items-center'>
-                  <span className='font-PtdLight text-white text-[20px] ml-[30px]'>
-                    {item}
-                  </span>
+                <div className='w-[180px] h-full mr-[10px] flex flex-row justify-center items-center '>
+                  <span className=''>User</span>
                 </div>
-                <div className='w-[50px] flex-1 flex-row flex justify-start items-center pl-[20px]'>
-                  <RiVipCrownFill
-                    className={`${
-                      key === 0
-                        ? 'text-[#D1C68F]'
-                        : key === 1
-                        ? 'text-[#a4a4a4]'
-                        : key === 2
-                        ? 'text-[#837D63]'
-                        : 'hidden'
-                    }
-                        ${key}
+                <div className='flex-1' />
+                <div className='w-[80px] h-full mr-[20px] grid place-content-center '>
+                  <span className=''>Level</span>
+                </div>
+                <div className='w-[50px] h-full  grid place-content-center '>
+                  <span className=''>Tier</span>
+                </div>
+              </div>
+              {axiosRankInfoList?.rankTop10User.map((item, key) => (
+                <div
+                  key={key}
+                  className={`rangking relative flex flex-row justify-between items-center mb-[7px] bg-[rgba(0,0,0,0)] hover:bg-[rgba(180,180,180,0.3)] px-[10px] rounded-md ${
+                    item.nickName === userNickname
+                      ? 'glowmyrank z-10  w-[500px] h-[50px] my-[15px] -translate-x-[5px]'
+                      : 'w-[490px] h-[45px]'
+                  }`}
+                >
+                  <div className='w-[50px] h-[50px] mr-[20px] grid place-content-center'>
+                    <span className='font-PtdLight text-[20px] text-gray-300'>
+                      {key + 1}
+                    </span>
+                  </div>
+                  <div className='flex-1 h-fit  outline-white flex justify-between items-center'>
+                    <div className='w-[25px] h-[25px]  outline-[rgba(220,220,220,0.3)] rounded-full overflow-hidden grid place-content-center  mr-[20px]'>
+                      <img src={item.profileImg} alt='프로필 이미지' />
+                    </div>
+                    <div className='w-[150px] h-fit  outline-red-300 flex flex-row justify-start items-center '>
+                      <span className='font-PtdRegular text-white text-[17px] truncate '>
+                        {item.nickName}
+                      </span>
+                    </div>
+                    <div className='w-[30px] flex-1 flex-row flex justify-start items-center '>
+                      <RiVipCrownFill
+                        className={`${
+                          key === 0
+                            ? 'text-[#D1C68F]'
+                            : key === 1
+                            ? 'text-[#a4a4a4]'
+                            : key === 2
+                            ? 'text-[#837D63]'
+                            : 'opacity-0'
+                        }
                         shadow-lg
                         w-[15px] h-[15px]
                         `}
-                  />
+                      />
+                    </div>
+                  </div>
+                  <div className='flex flex-row  outline-white justify-between items-center w-[120px] h-fit'>
+                    <div className='w-[30px] flex-2 grid place-ontent-right mr-[20px]'>
+                      <span className='font-PtdLight text-[18px] text-[#B2B2B2]'>
+                        lv.{item.level}
+                      </span>
+                    </div>
+                    <div className='w-fit h-2/3  outline-white bg-[rgba(62,62,62,0.7)] rounded-[100px] flex flex-row justify-center items-center px-[10px]'>
+                      <SiPowerapps size={22} color={setTierColor(item.tier)} />
+                    </div>
+                  </div>
                 </div>
-                <div className='w-[100px] flex-2 grid place-ontent-right pl-[20px]'>
-                  <span className='font-PtdLight text-[20px] text-[#B2B2B2]'>
-                    lv.1
-                  </span>
-                </div>
-                <div className='w-fit h-2/3 bg-[rgba(62,62,62,0.7)] rounded-[100px] flex flex-row justify-center items-center px-[10px]'>
-                  <SiPowerapps size={22} color={'#86FFF8'} />
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
             <div className='w-full h-fit grid place-content-center'>
               <BsThreeDotsVertical
                 size={20}
@@ -832,27 +933,35 @@ export default function MyPage({
                 className='my-[10px]'
               />
             </div>
-            {myRank > 10 && (
+            {axiosRankInfoList && axiosRankInfoList?.myRank.rank > 10 && (
               <div
-                className={`rangking w-[500px] h-[50px] flex flex-row justify-start items-center mt-[10px] mb-[25px] rounded-md bg-[rgba(0,0,0,0.1)] hover:bg-[rgba(180,180,180,0.5)] px-[10px] glowmyrank z-10`}
+                className={`rangking relative flex flex-row justify-between items-center mb-[10px] bg-[rgba(0,0,0,0)] hover:bg-[rgba(180,180,180,0.3)] px-[10px] rounded-md glowmyrank z-10  w-[500px] h-[50px] my-[15px] -translate-x-[5px]`}
               >
-                <div className='relative w-[50px] h-[50px]  grid place-content-center'>
-                  <span className='absolute top-0 left-0 w-[50px] h-[50px] grid place-content-center font-PtdLight text-[20px] text-gray-300'>
-                    {myRank}
+                <div className='w-[50px] h-[50px] mr-[20px] grid place-content-center'>
+                  <span className='font-PtdLight text-[20px] text-gray-300'>
+                    {userRank}
                   </span>
                 </div>
-                <div className='w-fit h-fit flex flex-row flex-1 justify-center items-center -ml-[200px]'>
-                  <span className='font-PtdLight text-white text-[20px]'>
-                    {userNickname}
-                  </span>
+                <div className='flex-1 h-fit  outline-white flex justify-between items-center'>
+                  <div className='w-[25px] h-[25px]  outline-[rgba(220,220,220,0.3)] rounded-full overflow-hidden grid place-content-center  mr-[20px]'>
+                    <img src={userProfileImg} alt='프로필 이미지' />
+                  </div>
+                  <div className='w-[150px] h-fit  outline-red-300 flex flex-row justify-start items-center '>
+                    <span className='font-PtdRegular text-white text-[17px] truncate '>
+                      {userNickname}
+                    </span>
+                  </div>
+                  <div className='w-[30px] flex-1 flex-row flex justify-start items-center '></div>
                 </div>
-                <div className='w-[100px] flex-2 grid place-ontent-right'>
-                  <span className='font-PtdLight text-[20px] text-[#B2B2B2]'>
-                    lv.1
-                  </span>
-                </div>
-                <div className='w-fit h-2/3 bg-[rgba(62,62,62,0.7)] rounded-[100px] flex flex-row justify-center items-center px-[10px]'>
-                  <SiPowerapps size={22} color={rankInfo[0]} />
+                <div className='flex flex-row  outline-white justify-between items-center w-[120px] h-fit'>
+                  <div className='w-[30px] flex-2 grid place-ontent-right mr-[20px]'>
+                    <span className='font-PtdLight text-[18px] text-[#B2B2B2]'>
+                      lv.{userLevel}
+                    </span>
+                  </div>
+                  <div className='w-fit h-2/3  outline-white bg-[rgba(62,62,62,0.7)] rounded-[100px] flex flex-row justify-center items-center px-[10px]'>
+                    <SiPowerapps size={22} color={setTierColor(userTier)} />
+                  </div>
                 </div>
               </div>
             )}
@@ -932,7 +1041,7 @@ export default function MyPage({
         <>
           {quizModalState && (
             <QuizModal
-              input={tempScrappedQuizList[selectedQuizId]}
+              input={axiosScrappedQuizList[selectedQuizId]}
               closeModal={() => setQuizModalState(false)}
             />
           )}

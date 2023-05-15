@@ -19,10 +19,18 @@
 /* main */
 .container {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   flex-direction: row;
   align-items: center;
 }
+
+/* DICES */
+.dice-container {
+  width: 100px;
+  height: 100px;
+
+}
+
 
 /* buttons */
 #shbutton {
@@ -50,19 +58,6 @@
   align-items: center;
 }
 
-.clear-button {
-  width: 50px;
-  justify-self: flex-end;
-}
-
-/* DICES */
-.dice-container {
-  width: 100px;
-  height: 100px;
-  margin: 4px;
-  margin-left: 50px;
-  margin-top: 60px;
-}
 
 .dice {
   display: none;

@@ -5,10 +5,11 @@ type InputType = {
   APIType: 'get' | 'post' | 'put' | 'delete';
   UrlQuery: string;
   Body?: Map<string, any>;
-  Token: string | null;
+  Token?: string | null;
 };
 
 export default async function CustomAxios(input: InputType): Promise<any> {
+  console.log('바디 : ', input.Body ? Object.fromEntries(input.Body) : '없음');
   try {
     const config = {
       method: input.APIType,
@@ -46,6 +47,9 @@ export default async function CustomAxios(input: InputType): Promise<any> {
           ['key1', 'value1'],
           ['key2', 'value2'],
         ]);
+
+        const requestBody = new Map([['query', ['match', ['content.nori', input]]]]);
+
 
         const response = await CustomAxios({
           APIName: "MyPost",
