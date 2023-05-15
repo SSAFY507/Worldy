@@ -25,6 +25,7 @@ import pathTB from '../assets/images/TutorialBackground.png';
 import pathTQT from '../assets/images/TutorialQuizText.png';
 import { useDispatch } from 'react-redux';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
+import LoaderLinear from '../components/Loaders/LoaderLinear';
 
 type TutorialItemType = {
   imgsrc: string;
@@ -786,8 +787,8 @@ export default function Tutorial() {
           </div>
         </div>
       ) : (
-        <div className='w-full h-full bg-white'>
-          <LoaderPyramid text='Josh 앉히는 중...' />
+        <div className='w-full h-full bg-white pt-20'>
+          <LoaderLinear />
         </div>
       )}
     </>

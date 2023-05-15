@@ -1,62 +1,3 @@
-/* .loader {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.heading {
-  color: black;
-  letter-spacing: 0.2em;
-  margin-bottom: 1em;
-}
-
-.loading {
-  display: flex;
-  width: 5em;
-  align-items: center;
-  justify-content: center;
-}
-
-.load {
-  width: 23px;
-  height: 3px;
-  background-color: limegreen;
-  animation: 1s move_5011 infinite;
-  border-radius: 5px;
-  margin: 0.1em;
-}
-
-.load:nth-child(1) {
-  animation-delay: 0.2s;
-}
-
-.load:nth-child(2) {
-  animation-delay: 0.4s;
-}
-
-.load:nth-child(3) {
-  animation-delay: 0.6s;
-}
-
-@keyframes move_5011 {
-  0% {
-    width: 0.2em;
-  }
-
-  25% {
-    width: 0.7em;
-  }
-
-  50% {
-    width: 1.5em;
-  }
-
-  100% {
-    width: 0.2em;
-  }
-} */
-
 #load {
   position: absolute;
   width: 600px;
@@ -77,7 +18,7 @@
   width: 20px;
   height: 36px;
   opacity: 0;
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: Ptd-ExtraBold;
   animation: move 2s linear infinite;
   -o-animation: move 2s linear infinite;
   -moz-animation: move 2s linear infinite;
