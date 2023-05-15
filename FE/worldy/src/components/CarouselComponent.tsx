@@ -5,7 +5,7 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import './react-responsive-carousel-customstyle.css';
 import BUTTON_RED from './Button_Red';
-import LoaderLinear from './LoaderLinear';
+import LoaderLinear from './Loaders/LoaderLinear';
 import DoateModal from './DonateModal';
 import LoaderPyramid from './Loaders/LoaderPyramid';
 import LoaderBlueCircle from './Loaders/LoaderBlueCircle';
