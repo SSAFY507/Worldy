@@ -11,14 +11,19 @@ const Country = () => {
   const countryName: string = params.country || '';
 
   const [selectAsset, setSelectAsset] = useState<string>("");
+  const [hoborAsset, setHoborAsset] = useState<string>("");
   // ["paintBox", "historyBox", "quizBox", "foodBox", "personalityBox",  "newsBox", "back"
   const GetSelectAssetName = ((name:string) => {
     setSelectAsset(name);
   });
+  const GetHorborAsset = ((name:string) => {
+    setHoborAsset(name);
+  });
+
   return (
     <div className='relative'>
       <div className='z-20 absolute top-0 left-0 w-full h-20'>
-        <WorldMapNavbarComponent GetSelectAssetName={GetSelectAssetName} selectAsset={selectAsset} />
+        <WorldMapNavbarComponent countryName={countryName} GetSelectAssetName={GetSelectAssetName} selectAsset={selectAsset} hoborAsset={hoborAsset} />
       </div>
       {(selectAsset)
         ?
@@ -29,7 +34,7 @@ const Country = () => {
         null
       }
       <div className={`${(selectAsset) ? "blur z-5" : ""}`}>
-        <CountryMap countryName={countryName} GetSelectAssetName={GetSelectAssetName} selectAsset={selectAsset} />
+        <CountryMap countryName={countryName} GetSelectAssetName={GetSelectAssetName} selectAsset={selectAsset} GetHorborAsset={GetHorborAsset}/>
       </div>
     </div>
   );
