@@ -65,7 +65,7 @@ interface Country {
   }
 }
 
-interface NewsDataType {
+export interface NewsDataType {
   id: number,
   nationName: string,
   newsTitle: string,
@@ -357,51 +357,54 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
     },
   ]
 
-
-  return (
-    <div className="w-full h-full flex items-end">
-      <div className="z-10 w-1/4 translate-x-10 absolute">
-        <img
-          className="h-[50%]"
-          src={ment[`${selectAsset}`].icon}
-          alt=""
-        />
-      </div>
-      <div className="z-10 h-3/5 translate-x-80 absolute">
-        <img
-          className="h-[100%]"
-          src={ment[`${selectAsset}`].npcImg}
-          alt=""
-        />
-      </div>
-      <div className="w-full h-full flex flex-row items-end bg-[rgba(255,255,255,0.4)]">
-        <div className="h-full w-1/4 flex flex-col bg-[rgba(0,0,0,0.3)] ">
-          <div className="h-2/3 flex flex-col justify-center text-white p-20">
-            <div className="h-1/2 flex flex-col">
-              <div className="flex flex-col pb-10">
-                <div className='text-3xl pb-5'>
-                  <img className="h-10 " src={ment[`${selectAsset}`].mainIcon} alt=""/>
+  if (axiosGetData) {
+    return (
+      <div className="w-full h-full flex items-end">
+        <div className="z-10 w-1/4 translate-x-10 absolute">
+          <img
+            className="h-[50%]"
+            src={ment[`${selectAsset}`].icon}
+            alt=""
+          />
+        </div>
+        <div className="z-10 h-3/5 translate-x-80 absolute">
+          <img
+            className="h-[100%]"
+            src={ment[`${selectAsset}`].npcImg}
+            alt=""
+          />
+        </div>
+        <div className="w-full h-full flex flex-row items-end bg-[rgba(255,255,255,0.4)]">
+          <div className="h-full w-1/4 flex flex-col bg-[rgba(0,0,0,0.3)] ">
+            <div className="h-2/3 flex flex-col justify-center text-white p-20">
+              <div className="h-1/2 flex flex-col">
+                <div className="flex flex-col pb-10">
+                  <div className='text-3xl pb-5'>
+                    <img className="h-10 " src={ment[`${selectAsset}`].mainIcon} alt=""/>
+                  </div>
+                  <div className='text-4xl font-PtdExtraBold'>{ment[`${selectAsset}`].title}</div>
+                  <div className='text-2xl font-PtdLight'>{ment[`${selectAsset}`].subTitle}</div>
                 </div>
-                <div className='text-4xl font-PtdExtraBold'>{ment[`${selectAsset}`].title}</div>
-                <div className='text-2xl font-PtdLight'>{ment[`${selectAsset}`].subTitle}</div>
-              </div>
-              <div className="h-1/2">
-                <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[0]}</div>
-                <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[1]}</div>
-                <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[2]}</div>
+                <div className="h-1/2">
+                  <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[0]}</div>
+                  <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[1]}</div>
+                  <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[2]}</div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="h-full w-3/4 flex flex-col justify-center items-center">
-          {(selectAsset === "newsBox") ? <CountryNewsDetail data={data}/> :null}
-          {(selectAsset === "quizBox" || selectAsset === "paintBox") ? <CountryQuizFrame selectAsset={selectAsset}/> : null}
-          {(selectAsset === "foodBox" || selectAsset === "personalityBox") ? <CountryFamousFrame selectAsset={selectAsset} /> :null}
-
+          <div className="h-full w-3/4 flex flex-col justify-center items-center">
+            {(selectAsset === "newsBox") ? <CountryNewsDetail data={axiosGetData}/> :null}
+            {(selectAsset === "quizBox" || selectAsset === "paintBox") ? <CountryQuizFrame selectAsset={selectAsset}/> : null}
+            {(selectAsset === "foodBox" || selectAsset === "personalityBox") ? <CountryFamousFrame selectAsset={selectAsset} /> :null}
+  
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return <div></div>
+  }
 }
 
 
