@@ -31,6 +31,7 @@ import { loginState } from "./_store/slices/loginSlice";
 import { useSelector } from "react-redux";
 import PayResult from "./routes/PayResult";
 import Callback from "./routes/Callback";
+import GameResult from "./routes/GameResult";
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -66,9 +67,9 @@ const AppLayout = () => {
       navigate('/tutorial');
     } else {
       const gameId = sessionStorage.getItem('gameId');
-    
+
       // 헤더 확인해서 roomId 있으면 
-      if(gameId) {
+      if (gameId) {
         navigate(`/game/${gameId}`);
       } else {
         navigate('/');
@@ -77,13 +78,13 @@ const AppLayout = () => {
     closeLoginModal();
   };
 
- 
+
   const endTutorial = () => {
 
     const gameId = sessionStorage.getItem('gameId');
-    
+
     // 헤더 확인해서 roomId 있으면 
-    if(gameId) {
+    if (gameId) {
       navigate(`/game/${gameId}`);
     } else {
       navigate('/');
@@ -111,18 +112,18 @@ const AppLayout = () => {
         navigate("/tutorial");
         console.log("닉네임 설정해주세요 (tutorial로 이동)");
       } else if (!checkLoginState) {
-        
+
         const gameId = sessionStorage.getItem('gameId');
-    
+
         // 헤더 확인해서 roomId 있으면 
-        if(gameId) {
+        if (gameId) {
           navigate(`/game/${gameId}`); // 게임 uri로 입장 후 로그인 안돼있으면
         } else {
           navigate('/'); //로그인 안돼있으면 홈으로
-        } 
+        }
 
         console.log("로그인 해주세요(Home으로 이동)");
-      } 
+      }
   }, []);
 
   type PayResultStringType = {
@@ -212,6 +213,7 @@ const AppLayout = () => {
           <Route path="/create" element={<Create />} />
           <Route path="/game" element={<Game />} />
           <Route path="/game/:id" element={<Game />} />
+          <Route path="/game/result" element={<GameResult />} />
           <Route path="/socket" element={<Socket />} />
           <Route path="/tutorial" element={<Tutorial />} />
           <Route
