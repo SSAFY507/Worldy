@@ -21,11 +21,11 @@ import Socket from './routes/Socket';
 import Support from './routes/Support';
 import pathBI from './assets/images/MainPageBackground.png';
 import Tutorial from './routes/Tutorial';
-import Updates from './routes/Updates';
 import { useState, useRef, useEffect } from 'react';
 import Game from './routes/Game';
 import Payment from './routes/Payment';
 import Create from './routes/Create';
+// import Updates from './routes/Updates';
 import PaySuccess from './routes/PayResult';
 import { loginState } from './_store/slices/loginSlice';
 import { useSelector } from 'react-redux';
@@ -147,7 +147,8 @@ const AppLayout = () => {
           )}
           <Route path='/user/kakao/callback' element={<Callback />} />
           <Route path='/info' element={<GameInfo />} />
-          <Route path='/updates' element={<Updates />} />
+          {/* <Route path='/updates' element={<Updates />} /> */}
+          <Route path='/explore' element={<Explore />} />
           <Route path='/explore/:country' element={<Country />} />
           <Route path='/explore' element={<Explore />} />
           <Route path='/monopoly' element={<Monopoly />} />
