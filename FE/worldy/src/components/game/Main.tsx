@@ -1612,7 +1612,7 @@ export default function Main() {
     {
       id: 16,
       title: '뒤로 걷기 캠페인',
-      content: '뒤로 3칸 이동하세요.',
+      content: '뒤로 2칸 이동하세요.',
     },
 
 
