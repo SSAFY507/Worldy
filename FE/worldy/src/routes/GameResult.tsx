@@ -6,7 +6,7 @@ export default function GameResult() {
   const location = useLocation();
   const gameResult = location.state;
   console.log(location);
-  console.log(location.state);
+  console.log(location.state.rankPlayer);
   return (
     <>
       <div className='w-full h-full bg-[#FFFDF4] flex flex-col justify-center items-center'>
