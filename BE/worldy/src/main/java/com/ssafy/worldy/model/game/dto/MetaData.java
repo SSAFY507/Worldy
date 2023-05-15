@@ -17,4 +17,6 @@ public class MetaData {
     private int dice;
     private int turn;
     private boolean isDouble;
+    private String itemMsg1;
+    private String itemMsg2;
 }
