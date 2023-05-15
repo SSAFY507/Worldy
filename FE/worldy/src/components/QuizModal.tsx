@@ -1,24 +1,25 @@
+import '../styles/QuizModalStyles.css';
+
 import * as React from 'react';
-import { useState, useEffect, useRef } from 'react';
+
 import {
   AiOutlineBulb,
   AiOutlineClose,
   AiOutlineCloseCircle,
   AiOutlineExclamationCircle,
 } from 'react-icons/ai';
+import { BsBookmark, BsBookmarkFill, BsBoxArrowUpRight } from 'react-icons/bs';
+import { TbCategory2, TbWorld } from 'react-icons/tb';
+import { useEffect, useRef, useState } from 'react';
+
+import { BiImage } from 'react-icons/bi';
+import { IoIosPhotos } from 'react-icons/io';
+import { JsxElement } from 'typescript';
 import QuizBlueText from '../assets/images/QuizBlueText.png';
 import ResultBlueText from '../assets/images/ResultBlueText.png';
-import { JsxElement } from 'typescript';
-
-import '../styles/QuizModalStyles.css';
-import { TbCategory2, TbWorld } from 'react-icons/tb';
-import { BsBookmark, BsBookmarkFill, BsBoxArrowUpRight } from 'react-icons/bs';
-import { BiImage } from 'react-icons/bi';
-
 import tempImage1 from '../assets/images/thumb2.png';
 import tempImage2 from '../assets/images/Carousel5.png';
 import tempImage3 from '../assets/images/JoshCurious.png';
-import { IoIosPhotos } from 'react-icons/io';
 
 type ScrappedQuizType = {
   quizId: number; //퀴즈 id
@@ -33,11 +34,11 @@ type ScrappedQuizType = {
   multiSecond: string | null; //2번
   multiThird: string | null; //3번
   multiFourth: string | null; //4번
-  hint: boolean; //힌트
-  commentary: string; //힌트 유형
+  hint: string;
+  hintType: boolean; //힌트
   userAnswer: string | null; //유저가 적은 정답(맞았으면 null)
   success: boolean; //맞춘 문제인가
-  explanation?: string;
+  commentary: string;
 };
 
 export default function QuizModal({
@@ -137,7 +138,7 @@ export default function QuizModal({
           onCompositionEnd={handleComposition}
           value={blankInputAnswer[i]}
           onChange={(e) => handleBlankAnswer({ e, i })}
-          placeholder={hintState ? `${input.commentary.charAt(i)}` : ''}
+          placeholder={hintState ? `${input.hint.charAt(i)}` : ''}
         />
       );
     }
@@ -177,7 +178,7 @@ export default function QuizModal({
               </div>
               <div className='w-full h-[150px] px-[50px] text-center'>
                 <span className='text-gray-700 font-PtdSemiBOld text-[25px] leading-[32px]'>
-                  {input.commentary}
+                  {input.hint}
                 </span>
               </div>
             </>
@@ -185,16 +186,16 @@ export default function QuizModal({
             <div className='outline-black flex flex-row justify-between items-center'>
               <button
                 className={`${
-                  submitAnswer === 'O' ? 'clickedOXBlue' : ''
-                } beforeOXBlue w-[200px] h-[120px] mr-[20px] rounded-md shadow-md bg-[#F2F2F2] flex flex-row justify-center items-center`}
+                  submitAnswer === 'O' ? 'clickedOXBlue' : 'bg-[#F2F2F2]'
+                } beforeOXBlue w-[200px] h-[120px] mr-[20px] rounded-md shadow-md flex flex-row justify-center items-center`}
                 onClick={() => handleSubmitAnswer('O')}
               >
                 <span className='text-[24px] font-PtdMedium'>O</span>
               </button>
               <button
                 className={`${
-                  submitAnswer === 'X' ? 'clickedOXRed' : ''
-                } beforeOXRed w-[200px] h-[120px] ml-[20px]  rounded-md shadow-md bg-[#F2F2F2] flex flex-row justify-center items-center`}
+                  submitAnswer === 'X' ? 'clickedOXRed' : 'bg-[#F2F2F2]'
+                } beforeOXRed w-[200px] h-[120px] ml-[20px]  rounded-md shadow-md flex flex-row justify-center items-center`}
                 onClick={() => handleSubmitAnswer('X')}
               >
                 <span className='text-[24px] font-PtdMedium'>X</span>
@@ -290,7 +291,7 @@ export default function QuizModal({
               </div>
               <div className='w-full h-[150px] px-[50px] text-center'>
                 <span className='text-gray-700 font-PtdSemiBOld text-[25px] leading-[32px]'>
-                  {input.commentary}
+                  {input.hint}
                 </span>
               </div>
             </>
@@ -334,13 +335,13 @@ export default function QuizModal({
   const handleHint = () => {
     setHintState(!hintState);
     console.log('잉');
-    console.log('input.commentary', input.commentary);
+    console.log('input.hint', input.hint);
   };
 
   const quizHintContent = (): JSX.Element => {
     return (
       <div className='flex flex-row justify-center items-center'>
-        {input.hint ? (
+        {input.hintType ? (
           <>
             <label className='uiverse-switch'>
               <input type='checkbox' onClick={handleHint} />
@@ -464,7 +465,7 @@ export default function QuizModal({
         </span>
         <div className='w-full h-fit flex flex-col justify-start items-center text-center overflow-y-scroll on-scrollbar-quizmodal'>
           <span className='text-[20px] leading-[26px] font-PtdRegular text-start text-[#767676]'>
-            {input.explanation}
+            {input.commentary}
           </span>
         </div>
       </div>
@@ -484,7 +485,7 @@ export default function QuizModal({
     }, 1700);
   }, [flipped]);
 
-  const fromtContainer = (): JSX.Element => {
+  const frontContainer = (): JSX.Element => {
     return (
       <div
         className={`frontcontainer transition-all duration-[500ms] ease-in-out ${
@@ -534,7 +535,7 @@ export default function QuizModal({
                 <AiOutlineClose
                   size={25}
                   color='#BFBFBF'
-                  onClick={() => closeModal()}
+                  onClick={closeModal}
                   className='cursor-pointer'
                 />
               </div>
@@ -592,7 +593,7 @@ export default function QuizModal({
                 <AiOutlineClose
                   size={30}
                   color='gray'
-                  onClick={() => closeModal()}
+                  onClick={closeModal}
                   className='cursor-pointer'
                 />
               </div>
@@ -674,7 +675,7 @@ export default function QuizModal({
       style={{ width: `${size * 3}px`, height: 'fit' }}
     >
       <div className='cardcontainer-inner w-full h-full'>
-        {fromtContainer()}
+        {frontContainer()}
         {backContainer()}
       </div>
     </div>

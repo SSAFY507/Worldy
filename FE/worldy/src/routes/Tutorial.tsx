@@ -1,23 +1,30 @@
 import * as React from 'react';
-import { useState, useEffect, useLayoutEffect, useMemo } from 'react';
-import pathTB from '../assets/images/TutorialBackground.png';
-import pathJHB from '../assets/images/JoshHoldingBook.png';
-import pathJC from '../assets/images/JoshCurious.png';
-import pathJS from '../assets/images/JoshSitting.png';
-import pathJP from '../assets/images/JoshPanic.png';
-import pathJJ from '../assets/images/JoshJumping.png';
-import pathTQT from '../assets/images/TutorialQuizText.png';
-import pathJR from '../assets/images/JoshReady.png';
-import LoaderPyramid from '../components/Loaders/LoaderPyramid';
-import useLoadImagesHook from '../_hooks/useLoadImagesHook';
-import { CSSTransition } from 'react-transition-group';
 
-import WrAnswer from '../assets/images/WrongAnswer.png';
+import {
+  addNickname,
+  addRankInfo,
+  loginToken,
+  myRank,
+} from '../_store/slices/loginSlice';
+import { useEffect, useLayoutEffect, useMemo, useState } from 'react';
+
+import { CSSTransition } from 'react-transition-group';
 import CrAnswer from '../assets/images/CorrectAnswer.png';
-import { useDispatch } from 'react-redux';
-import { addNickname, loginToken } from '../_store/slices/loginSlice';
 import CustomAxios from '../API/CustomAxios';
+import LoaderPyramid from '../components/Loaders/LoaderPyramid';
+import WrAnswer from '../assets/images/WrongAnswer.png';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
+import pathJC from '../assets/images/JoshCurious.png';
+import pathJHB from '../assets/images/JoshHoldingBook.png';
+import pathJJ from '../assets/images/JoshJumping.png';
+import pathJP from '../assets/images/JoshPanic.png';
+import pathJR from '../assets/images/JoshReady.png';
+import pathJS from '../assets/images/JoshSitting.png';
+import pathTB from '../assets/images/TutorialBackground.png';
+import pathTQT from '../assets/images/TutorialQuizText.png';
+import { useDispatch } from 'react-redux';
+import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 
 type TutorialItemType = {
   imgsrc: string;
@@ -35,11 +42,17 @@ type quizItemType = {
   selections: string[];
 };
 
-export default function Tutorial({
-  onClickEndTutorial,
-}: {
-  onClickEndTutorial: () => void;
-}) {
+type MyRankInfo = {
+  rank: number;
+  nickName: string;
+  profileImg: string;
+  tier: string;
+  level: number;
+  percent: number;
+  exp: number;
+};
+
+export default function Tutorial() {
   ///////////////////////////////
   const myImageList = {
     TutorialBackground: pathTB,
@@ -56,6 +69,40 @@ export default function Tutorial({
 
   const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
   const [loadedAll, setLoadedAll] = useState<boolean>(false);
+
+  const [myRankInfo, setAxiosMyRankInfo] = useState<MyRankInfo>();
+
+  useEffect(() => {
+    dispatch(
+      addRankInfo({
+        rank: myRankInfo?.rank || 1,
+        tier: myRankInfo?.tier || 'Bronze',
+        level: myRankInfo?.level || 1,
+        exp: myRankInfo?.exp || 0,
+      })
+    );
+  }, [myRankInfo]);
+  useEffect(() => {
+    getRankInfoList();
+  }, []);
+
+  const getRankInfoList = async () => {
+    console.log('Session에서의 가져오는 토큰', getLoginToken);
+    try {
+      const response = await CustomAxios({
+        APIName: 'getRankInfoList',
+        APIType: 'get',
+        UrlQuery: `https://k8a507.p.ssafy.io/api/game/ranking`,
+        Token: getLoginToken,
+      });
+      //console.log('닉네임 중복 체크 성공');
+      console.log('랭크 리스트 받은 거: ', response);
+      setAxiosMyRankInfo(response.myRank);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    //console.log('token이 무엇이냐 ', token);
+  };
 
   useEffect(() => {
     if (isLoaded) {
@@ -133,7 +180,7 @@ export default function Tutorial({
   }, [checkNicknameResult]);
 
   const checkNicknameAxios = async () => {
-    console.log('토큰', getLoginToken);
+    console.log('Session에서의 가져오는 토큰', getLoginToken);
     try {
       const response = await CustomAxios({
         APIName: 'checkNickName',
@@ -351,14 +398,14 @@ export default function Tutorial({
     [
       {
         difficulty: '하',
-        category: '문화',
+        category: '문화/역사',
         quizText: '다음 중 빈센트 반 고흐의 작품을 골라주세요.',
         answer: '별이 빛나는 밤',
         selections: ['가니카', '거울 앞의 소녀', '데모셀', '별이 빛나는 밤'],
       },
       {
         difficulty: '중',
-        category: '문화',
+        category: '문화/역사',
         quizText:
           '다음 중 유네스코 세계문화유산에 등재된 이탈리아의 고고학적 유산을 골라주세요.',
         answer: '콜로세움',
@@ -366,7 +413,7 @@ export default function Tutorial({
       },
       {
         difficulty: '상',
-        category: '문화',
+        category: '문화/역사',
         quizText:
           '무용 예술의 한 종류인 [카타크]는 어느 나라의 전통 무용을 골라주세요.',
         answer: '인도',
@@ -441,7 +488,7 @@ export default function Tutorial({
       },
       {
         difficulty: '상',
-        category: '문화',
+        category: '문화/역사',
         quizText:
           '무용 예술의 한 종류인 [카타크]는 어느 나라의 전통 무용을 골라주세요.',
         answer: '인도',
@@ -480,6 +527,11 @@ export default function Tutorial({
   }, [quizResult]);
 
   const [popupCorrectIcon, setPopupCorrectIcon] = useState<boolean>(false);
+
+  const navigate = useNavigate();
+  const navigateHome = () => {
+    navigate('/');
+  };
 
   const showQuiz = (
     <div className=' outline-white absolute w-[600px] h-[720px] left-1/3 bottom-[100px] flex flex-col justify-stretch items-center '>
@@ -583,7 +635,9 @@ export default function Tutorial({
       <button
         className='w-full h-[80px] bg-[rgba(255,255,255,0.15)] rounded-[5px] text-left text-white pl-[20px] font-PtdLight text-[30px]'
         style={hoveredIndex === -9 ? hoveredStyle : {}}
-        onClick={onClickEndTutorial}
+        onClick={() => {
+          navigateHome();
+        }}
         onMouseEnter={() => setHoveredIndex(-9)}
         onMouseLeave={() => setHoveredIndex(-1)}
       >
