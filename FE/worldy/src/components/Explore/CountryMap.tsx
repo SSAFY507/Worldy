@@ -176,7 +176,6 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName, GetHorborAsse
   const OnClick = (event:any) => {
     const name:string = selectedName;
     // const moveCountry = name;
-    console.log(selectTmp)
     if (assetSet.has(name)) {
       if (name === "back") {
         alert("대륙으로 이동합니다")

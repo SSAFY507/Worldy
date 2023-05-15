@@ -65,13 +65,32 @@ interface Country {
   }
 }
 
-export interface NewsDataType {
+interface NewsDataType {
   id: number,
   nationName: string,
   newsTitle: string,
   newsSummary: string,
   newsImg: string,
   newsUrl: string
+};
+
+interface QuizDataType {
+
+};
+
+interface PaintDataType {
+  originalUrl: string,
+  diffUrl: string,
+  imgNum: string,
+  answerPointList: string[][]
+};
+
+interface FoodDataType {
+
+};
+
+interface PersonalityDataType {
+
 };
 // nations = {"대한민국" : 9, "중국" : 7, "일본" : 8, "인도" : 4, "영국" : 19, "프랑스" : 18, "이탈리아" : 14, "스페인" : 12, "미국" : 39, "이집트" : 27}
 export const countryLst: Country = {
@@ -132,15 +151,16 @@ const DOMAIN = process.env.REACT_APP_BASE_URL
 const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
 
   const getLoginToken: string | null = sessionStorage.getItem('token');
-  const [axiosGetData, setAxiosGetData] = useState<NewsDataType | undefined>();
+  const [axiosGetData, setAxiosGetData] = useState<NewsDataType |QuizDataType| PaintDataType | FoodDataType | PersonalityDataType | undefined>();
   const countryId = countryLst[countryName].id
-  /** 뉴스 데이터 받는 함수 */
-  const getNewsList = async () => {
+
+  /** 데이터 받는 함수 */
+  const getDatasList = async (url:string) => {
     try {
       const response = await CustomAxios({
-        APIName: 'getNewsList',
+        APIName: 'getDatasList',
         APIType: 'get',
-        UrlQuery: DOMAIN + `/adventure/news/${countryId}`,
+        UrlQuery: DOMAIN + url,
         Token: getLoginToken,
       });
       setAxiosGetData(response)
@@ -148,24 +168,25 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
       console.log('Error fetching data:', error);
     }
   }
+
   useEffect(() => {
 
     if (getLoginToken){
       switch (selectAsset) {
         case "newsBox":
-          getNewsList();
+          getDatasList(`/adventure/news/${countryId}`);
           break;
         case "quizBox":
-          getNewsList();
+          getDatasList(``);
           break;
         case "paintBox":
-          getNewsList();
+          getDatasList(``);
           break;
         case "foodBox":
-          getNewsList();
+          getDatasList(``);
           break;
         case "personalityBox":
-          getNewsList();
+          getDatasList(``);
           break;
         default:
           break;

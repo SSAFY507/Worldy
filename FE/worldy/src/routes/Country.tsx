@@ -19,7 +19,7 @@ const Country = () => {
   const GetHorborAsset = ((name:string) => {
     setHoborAsset(name);
   });
-  console.log(hoborAsset)
+
   return (
     <div className='relative'>
       <div className='z-20 absolute top-0 left-0 w-full h-20'>
