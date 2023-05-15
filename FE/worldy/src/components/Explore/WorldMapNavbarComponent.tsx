@@ -12,21 +12,31 @@ import logoColoredBlue from '../../assets/images/LogoColoredBlue.png';
 import { useNavigate } from 'react-router';
 
 interface Props {
-  selectAsset: string;
+  hoborAsset: string;
+  selectAsset: string 
   countryName: string;
   GetSelectAssetName: (name:string) => void;
 };
+  // ["paintBox", "historyBox", "quizBox", "foodBox", "personalityBox",  "newsBox", "back"
 
 interface ListType {
   [key: string]: string;
 }
 
-const WorldMapNavbarComponent  = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
+const switchTrans:ListType = {
+  paintBox: "틀림 그림 찾기에 도전해보세요!",
+  quizBox: "퀴즈를 풀어보세요!",
+  personalityBox: "인물을 알아봐요!",
+  newsBox: "소식을 알아봐요!",
+  foodBox: "음식을 잘 아시나요?"
+}
+
+const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSelectAssetName}:Props) => {
 
   const list:ListType = {
     country: countryLst[`${countryName}`].KOREAN,
     countryEng: countryLst[`${countryName}`].ENGLISH,
-    titlecontent: `${countryLst[`${countryName}`].KOREAN}의 역사를 확인해주세요.`,
+    titlecontent: `${countryLst[`${countryName}`].KOREAN}의 ${switchTrans[`${hoborAsset}`]}`,
   };
 
   const infoList = {
@@ -63,9 +73,17 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, GetSelectAssetName}
         ? `${infoList.time - 12}PM`
         : `${infoList.time}AM`
     );
-  });
+  },[]);
 
   const [doDDiyong, setDoDDiyong] = useState<boolean>(false);
+  
+  useEffect(() => {
+    if(hoborAsset) {
+      setDoDDiyong(true)
+    } else {
+      setDoDDiyong(false)
+    }
+  },[hoborAsset])
 
   return (
     <div className='relative h-20 w-full bg-[#161617] flex flex-row justify-between px-[30px]'>
@@ -78,12 +96,13 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, GetSelectAssetName}
             onClick={() => {
               if (selectAsset) {
                 // detail page인 경우, Country Map 으로
-                GetSelectAssetName("")
-                alert("나라로 이동합니다.")
+                GetSelectAssetName("");
+                selectAsset = "";
+                alert("나라로 이동합니다.");
               } else {  
                 // Country Map인 경우, World Map 으로
-                alert("대륙으로 이동합니다.")
-                navigate('/explore')
+                alert("대륙으로 이동합니다.");
+                navigate('/explore');
               }
             }} 
           />
@@ -95,8 +114,6 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, GetSelectAssetName}
           <div className='absolute top-[130px] w-fit h-fit flex flex-col justify-start items-start  ml-[30px] pl-[20px]'>
             <span
               className='text-[50px] text-white font-PtdExtraBold'
-              onMouseEnter={() => setDoDDiyong(true)}
-              onMouseLeave={() => setDoDDiyong(false)}
             >
               {list.country}
             </span>
@@ -111,21 +128,21 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, GetSelectAssetName}
           className='h-full w-full flex flex-row justify-center items-center transition-all duration-500 ease-out '
           style={{ marginTop: doDDiyong ? '0px' : '60px' }}
         >
-          <BsExclamationCircle
-            color={'white'}
-            size={20}
-            className='mr-[10px]'
-          />
+          {doDDiyong ? <BsExclamationCircle color={'white'} size={20} className='mr-[10px]' /> : null}
           <span className=' text-[22px] font-PtdRegular text-white'>
-            {list.titlecontent}
+            {doDDiyong && list.titlecontent}
           </span>
+          {/* <div className='w-1/4'></div> */}
         </div>
       </div>
-      {/* <div className='relative h-full w-[20%]  outline-white flex flex-row justify-end items-center'>
+      <div className='relative h-full w-[20%]  outline-white flex flex-row justify-end items-center'>
         <img src={logoColoredBlue} alt='colored logo' className='w-[100px]' />
-        <div className='absolute top-[80px] -right-[30px] w-[400px] h-[20px]  bg-[#65ADFF]' />
-
-        <div className='absolute top-[100px] -right-[30px] w-[400px] h-[280px] p-[40px] bg-[#65ADFF]  outline-white flex flex-col justify-between items-center'>
+        {/* <div className='absolute top-[80px] -right-[30px] w-[400px] h-[20px]  bg-[#65ADFF]' /> */}
+        {(selectAsset) 
+        ?
+        null
+        :
+        <div className='absolute top-[100px] -right-[30px] w-[400px] h-[280px] p-[40px] outline-white flex flex-col justify-between items-center'>
           <div
             className='w-[300px] h-[50px] px-[20px] rounded-full shadow-lg shadow-[rgba(82,82,82,0.2)] flex flex-row justify-start items-center'
             style={{
@@ -196,7 +213,8 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, GetSelectAssetName}
             </div>
           </div>
         </div>
-      </div> */}
+      }
+      </div>
     </div>
   );
 }

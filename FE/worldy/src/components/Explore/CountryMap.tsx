@@ -29,6 +29,7 @@ interface Props {
   countryName: string;
   selectAsset: string;
   GetSelectAssetName: (name:string) => void;
+  GetHorborAsset: (name:string) => void;
 };
 
 interface AssetsType {
@@ -36,7 +37,7 @@ interface AssetsType {
 }
 
 
-const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
+const CountryMap = ({countryName, selectAsset, GetSelectAssetName, GetHorborAsset}:Props) => {
   const divContainer = useRef<HTMLDivElement>(null);
   const renderer = useRef<THREE.WebGLRenderer | null>(null);
   const scene = useRef<THREE.Scene | null>(null);
@@ -64,8 +65,13 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
     newsBox: "📰오늘의 뉴스📰"
   }
   let selectedName:string = "";
-  let selectTmp:boolean = false
+  let [selectTmp, setSelectTmp] = useState<boolean>(false)
 
+  useEffect(() => {
+    if (selectTmp) {
+      setSelectTmp(false)
+    }
+  }, [selectTmp])
   /** 마우스 추적 */
   const SetupPicking = () => {
     const raycaster = new THREE.Raycaster();
@@ -127,13 +133,14 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
         1
       );
       divContainer.current!.style.cursor = 'pointer';
-
+      GetHorborAsset(selectedName)
       // 해당하는 에셋 강조 효과
       outlinePassRef.current!.edgeStrength = 25;
       outlinePassRef.current!.selectedObjects = [selectedObject!];
       selectedObjectRef.current = selectedObject!;
       return;
     }
+    GetHorborAsset("")
     selectedName = '';
     outlinePassRef.current!.selectedObjects = [];
     divContainer.current!.style.cursor = 'auto';
@@ -169,7 +176,7 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
   const OnClick = (event:any) => {
     const name:string = selectedName;
     // const moveCountry = name;
-    // console.log(selectTmp)
+    console.log(selectTmp)
     if (assetSet.has(name)) {
       if (name === "back") {
         alert("대륙으로 이동합니다")
@@ -179,9 +186,10 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
         if (selectTmp === false) {
           alert(`${assetObject[name]}`)
           GetSelectAssetName(name)
-          selectTmp = true;
+          GetHorborAsset("")
+          setSelectTmp(true)
         } else {
-          selectTmp = false;
+          setSelectTmp(false)
           return
         }
       }
