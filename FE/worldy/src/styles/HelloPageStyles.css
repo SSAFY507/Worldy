@@ -1,0 +1,14 @@
+.DD {
+}
+
+.RD {
+  transform: translateX(800px) translateY(500px) rotate(90deg);
+}
+
+.CT {
+  transform: translateX(-50%) translateY(-100%) rotate(0deg);
+}
+
+.LB {
+  transform: translateX(-800px) translateY(-500px) rotate(-90deg);
+}
