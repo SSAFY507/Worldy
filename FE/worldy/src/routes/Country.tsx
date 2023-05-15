@@ -18,7 +18,7 @@ const Country = () => {
   return (
     <div className='relative'>
       <div className='z-20 absolute top-0 left-0 w-full h-20'>
-        <WorldMapNavbarComponent GetSelectAssetName={GetSelectAssetName} selectAsset={selectAsset} />
+        <WorldMapNavbarComponent countryName={countryName} GetSelectAssetName={GetSelectAssetName} selectAsset={selectAsset} />
       </div>
       {(selectAsset)
         ?

@@ -7,32 +7,27 @@ import Cloud from '../../assets/images/Cloud.png';
 import ExchangeRateIcon from '../../assets/images/ExchangeRateIcon.png';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import Moon from '../../assets/images/Moon.png';
+import { countryLst } from './CountrySpeak';
 import logoColoredBlue from '../../assets/images/LogoColoredBlue.png';
 import { useNavigate } from 'react-router';
 
 interface Props {
   selectAsset: string;
+  countryName: string;
   GetSelectAssetName: (name:string) => void;
 };
 
-const WorldMapNavbarComponent  = ({ selectAsset, GetSelectAssetName}:Props) => {
+interface ListType {
+  [key: string]: string;
+}
 
-  const list = {
-    country: '미국',
-    countryEng: 'United States',
-    titlecontent: '미국의 역사를 확인해주세요.',
+const WorldMapNavbarComponent  = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
+
+  const list:ListType = {
+    country: countryLst[`${countryName}`].KOREAN,
+    countryEng: countryLst[`${countryName}`].ENGLISH,
+    titlecontent: `${countryLst[`${countryName}`].KOREAN}의 역사를 확인해주세요.`,
   };
-
-  const menuFunc = () => {
-    console.log('메뉴');
-  };
-
-  const menuList = [
-    { title: '메뉴1', menuClick: menuFunc() },
-    { title: '메뉴2', menuClick: menuFunc() },
-    { title: '메뉴3', menuClick: menuFunc() },
-    { title: '메뉴4', menuClick: menuFunc() },
-  ];
 
   const infoList = {
     time: 18,
@@ -74,37 +69,7 @@ const WorldMapNavbarComponent  = ({ selectAsset, GetSelectAssetName}:Props) => {
 
   return (
     <div className='relative h-20 w-full bg-[#161617] flex flex-row justify-between px-[30px]'>
-      {/* <button
-        className={`z-10 absolute top-[120px] bg-[rgba(0,0,0,0.8)] h-[300px] w-[230px] rounded-r-3xl transition-all duration-1000 ease-in ${
-          clickedLeftMenu ? 'left-0' : '-left-[190px]'
-        }
-        flex flex-row justify-between items-center`}
-        onClick={() => setClickedLeftMenu((prev) => !prev)}
-      >
-        <div className='mr-[10px] bg-[rgba(0,0,0,0.5)] outline-black h-[280px] w-full flex flex-col justify-stretch items-start'>
-          {menuList.map((item, index) => (
-            <button
-              key={index}
-              className={`w-full bg-[rgba(220,220,220,0.2)] hover:bg-[rgba(255,255,255,0.4)] text-gray-300 hover:text-white ${
-                index !== 0
-                  ? 'border-0 border-t-[2px] border-[rgba(240,240,240,0.7)] border-solid'
-                  : ''
-              } 
-              grid place-content-center`}
-              style={{ height: `${280 / menuList.length}px` }}
-              onClick={() => item.menuClick}
-            >
-              <span className='font-PtdMedium text-[30px]'>{item.title}</span>
-            </button>
-          ))}
-        </div>
-        <div className='w-[30px] h-full  mx-[5px] py-[30px] flex flex-col justify-start items-center font-PtdExtraBold text-[20px] text-white'>
-          <span className='text-[18px]'>M</span>
-          <span className='text-[23px]'>E</span>
-          <span>N</span>
-          <span>U</span>
-        </div>
-      </button> */}
+
       <div className='relative h-full w-[20%]  outline-white flex flex-row justify-start items-center'>
         <button>
           <IoMdArrowRoundBack 
@@ -119,26 +84,29 @@ const WorldMapNavbarComponent  = ({ selectAsset, GetSelectAssetName}:Props) => {
                 // Country Map인 경우, World Map 으로
                 alert("대륙으로 이동합니다.")
                 navigate('/explore')
-
               }
             }} 
           />
         </button>
-        <div className='absolute top-[130px] w-fit h-fit flex flex-col justify-start items-start  ml-[30px] pl-[20px]'>
-          {/* border-0 border-l-[4px] border-white border-solid */}
-          {/* <span
-            className='text-[50px] text-white font-PtdExtraBold'
-            onMouseEnter={() => setDoDDiyong(true)}
-            onMouseLeave={() => setDoDDiyong(false)}
-          >
-            {list.country}
-          </span> */}
-          {/* <span className='text-[40px] mt-[2px] text-[rgba(235,235,235,1)] font-PtdExtraLight'>
-            {list.countryEng}
-          </span> */}
-        </div>
+        {(selectAsset) 
+          ?
+          null
+          :
+          <div className='absolute top-[130px] w-fit h-fit flex flex-col justify-start items-start  ml-[30px] pl-[20px]'>
+            <span
+              className='text-[50px] text-white font-PtdExtraBold'
+              onMouseEnter={() => setDoDDiyong(true)}
+              onMouseLeave={() => setDoDDiyong(false)}
+            >
+              {list.country}
+            </span>
+            <span className='text-[40px] mt-[2px] text-[rgba(235,235,235,1)] font-PtdExtraLight'>
+              {list.countryEng}
+            </span>
+          </div>
+        }
       </div>
-      {/* <div className='h-[80px] w-[80%]  outline-white overflow-hidden'>
+      <div className='h-[80px] w-[80%]  outline-white overflow-hidden'>
         <div
           className='h-full w-full flex flex-row justify-center items-center transition-all duration-500 ease-out '
           style={{ marginTop: doDDiyong ? '0px' : '60px' }}
@@ -152,7 +120,7 @@ const WorldMapNavbarComponent  = ({ selectAsset, GetSelectAssetName}:Props) => {
             {list.titlecontent}
           </span>
         </div>
-      </div> */}
+      </div>
       {/* <div className='relative h-full w-[20%]  outline-white flex flex-row justify-end items-center'>
         <img src={logoColoredBlue} alt='colored logo' className='w-[100px]' />
         <div className='absolute top-[80px] -right-[30px] w-[400px] h-[20px]  bg-[#65ADFF]' />
@@ -234,3 +202,47 @@ const WorldMapNavbarComponent  = ({ selectAsset, GetSelectAssetName}:Props) => {
 }
 
 export default WorldMapNavbarComponent;
+
+
+// const menuFunc = () => {
+//   console.log('메뉴');
+// };
+
+// const menuList = [
+//   { title: '메뉴1', menuClick: menuFunc() },
+//   { title: '메뉴2', menuClick: menuFunc() },
+//   { title: '메뉴3', menuClick: menuFunc() },
+//   { title: '메뉴4', menuClick: menuFunc() },
+// ];
+
+      {/* <button
+        className={`z-10 absolute top-[120px] bg-[rgba(0,0,0,0.8)] h-[300px] w-[230px] rounded-r-3xl transition-all duration-1000 ease-in ${
+          clickedLeftMenu ? 'left-0' : '-left-[190px]'
+        }
+        flex flex-row justify-between items-center`}
+        onClick={() => setClickedLeftMenu((prev) => !prev)}
+      >
+        <div className='mr-[10px] bg-[rgba(0,0,0,0.5)] outline-black h-[280px] w-full flex flex-col justify-stretch items-start'>
+          {menuList.map((item, index) => (
+            <button
+              key={index}
+              className={`w-full bg-[rgba(220,220,220,0.2)] hover:bg-[rgba(255,255,255,0.4)] text-gray-300 hover:text-white ${
+                index !== 0
+                  ? 'border-0 border-t-[2px] border-[rgba(240,240,240,0.7)] border-solid'
+                  : ''
+              } 
+              grid place-content-center`}
+              style={{ height: `${280 / menuList.length}px` }}
+              onClick={() => item.menuClick}
+            >
+              <span className='font-PtdMedium text-[30px]'>{item.title}</span>
+            </button>
+          ))}
+        </div>
+        <div className='w-[30px] h-full  mx-[5px] py-[30px] flex flex-col justify-start items-center font-PtdExtraBold text-[20px] text-white'>
+          <span className='text-[18px]'>M</span>
+          <span className='text-[23px]'>E</span>
+          <span>N</span>
+          <span>U</span>
+        </div>
+      </button> */}

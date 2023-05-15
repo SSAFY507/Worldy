@@ -63,7 +63,7 @@ interface Country {
   }
 }
 
-const countryLst: Country = {
+export const countryLst: Country = {
   asia_Korea: {
     KOREAN: '대한민국',
     ENGLISH: 'Korea',
