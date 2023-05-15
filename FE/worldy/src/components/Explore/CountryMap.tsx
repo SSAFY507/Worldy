@@ -22,7 +22,7 @@ import europe_France from '../../assets/lowpoly/Country_America.glb';
 import europe_Italia from '../../assets/lowpoly/Country_America.glb';
 import europe_Spain from '../../assets/lowpoly/Country_America.glb';
 import europe_UK from '../../assets/lowpoly/Country_America.glb';
-import northAmerica_America from '../../assets/lowpoly/Country_America.glb';
+import northAmerica_America from '../../assets/lowpoly/Country_America3.glb';
 import { useNavigate } from 'react-router';
 
 interface Props {
@@ -55,10 +55,10 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName, GetHorborAsse
   const navigate = useNavigate();
 
   // const assetSet = new Set(["paintBox", "historyBox", "quizBox", "foodBox", "personalityBox",  "newsBox", "back"])
-  const assetSet = new Set(["paintBox", "quizBox", "foodBox", "personalityBox",  "newsBox", "back"])
+  const assetSet = new Set(["paintBox", "quizBox", "foodBox", "personalityBox",  "newsBox"])
   const assetObject:AssetsType = {
     paintBox: "🖼틀린 그림 찾기🖼",
-    historyBox: "🧭역사에 대해 알아보자!",
+    // historyBox: "🧭역사에 대해 알아보자!",
     quizBox: "🎁퀴즈 풀고 Level Up!🎁",
     foodBox: "🍜🍛🍣🍻",
     personalityBox: "👴🤴인물을 알아보자!👳‍♂️🎅",
@@ -267,7 +267,7 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName, GetHorborAsse
             } else if (obj.name === 'ground') {
               obj.children.forEach((children) => {
                 children.receiveShadow = true;
-                // children.castShadow =true;
+                // children.castShadow =tru e;
               });
             } else {
               obj.children.forEach((children) => {
@@ -276,7 +276,7 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName, GetHorborAsse
               });
             }
           });
-          obj3d.position.set(0, -0.1, 0.5);
+          obj3d.position.set(0, -0.05, 0.6);
           obj3d.rotation.set(
             THREE.MathUtils.degToRad(item.angle[0]),
             THREE.MathUtils.degToRad(item.angle[1]),
@@ -352,7 +352,8 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName, GetHorborAsse
       window.addEventListener('resize', Resize);
       SetupPicking();
 
-      const cam = SetupCamera(37, 0.1, 25, new THREE.Vector3(-0.11, 0.09, 1.8), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0));
+      const cam = SetupCamera(37, 0.1, 25, new THREE.Vector3(-0.11, 0.12, 1.8), new THREE.Vector3(0, 0.7, 0.2), new THREE.Vector3(0, 0.35 , 0));
+      // const cam = SetupCamera(37, 0.1, 25, new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0));
       camera.current = cam
       scene.current.add(cam)
 

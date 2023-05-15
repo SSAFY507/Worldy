@@ -7,6 +7,7 @@ import CountryFamousFrame from './CountryFamousFrame';
 import CountryNewsDetail from './CountryNewsDetail';
 import CountryQuizFrame from './CountryQuizFrame';
 import CrAnswer from '../../assets/images/CorrectAnswer.png';
+import CustomAxios from '../../API/CustomAxios';
 import WrAnswer from '../../assets/images/WrongAnswer.png';
 import book from '../../assets/images/bookIcon.png';
 import food from '../../assets/images/food.png';
@@ -58,56 +59,121 @@ interface DetailType {
 
 interface Country {
   [key: string]: {
+    id?: string,
     KOREAN: string,
     ENGLISH: string,
   }
 }
 
+interface NewsDataType {
+  id: number,
+  nationName: string,
+  newsTitle: string,
+  newsSummary: string,
+  newsImg: string,
+  newsUrl: string
+};
+// nations = {"대한민국" : 9, "중국" : 7, "일본" : 8, "인도" : 4, "영국" : 19, "프랑스" : 18, "이탈리아" : 14, "스페인" : 12, "미국" : 39, "이집트" : 27}
 export const countryLst: Country = {
   asia_Korea: {
+    id: '9',
     KOREAN: '대한민국',
     ENGLISH: 'Korea',
   },
   asia_China: {
+    id: '7',
     KOREAN: '중국',
     ENGLISH: 'China',
   },
   asia_india: {
+    id: '4',
     KOREAN: '인도',
     ENGLISH: 'India',
   },
   asia_Japen: {
+    id: '8',
     KOREAN: '일본',
     ENGLISH: 'Japen',
   },
   africa_Egypt: {
+    id: '27',
     KOREAN: '이집트',
     ENGLISH: 'Egypt',
   },
   europe_France: {
+    id: '18',
     KOREAN: '프랑스',
     ENGLISH: 'France',
   },
   europe_Italia: {
+    id: '14',
     KOREAN: '이탈리아',
     ENGLISH: 'Italia',
   },
   europe_Spain: {
+    id: '12',
     KOREAN: '스페인',
     ENGLISH: 'Spain',
   },
   europe_UK: {
+    id: '19',
     KOREAN: '영국',
     ENGLISH: 'United Kingdom',
   },
   northAmerica_America: {
+    id: '39',
     KOREAN: '미국',
     ENGLISH: 'United States',
   },
 };
 
+const DOMAIN = process.env.REACT_APP_BASE_URL
 
 const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
+
+  const getLoginToken: string | null = sessionStorage.getItem('token');
+  const [axiosGetData, setAxiosGetData] = useState<NewsDataType | undefined>();
+  const countryId = countryLst[countryName].id
+  /** 뉴스 데이터 받는 함수 */
+  const getNewsList = async () => {
+    try {
+      const response = await CustomAxios({
+        APIName: 'getNewsList',
+        APIType: 'get',
+        UrlQuery: DOMAIN + `/adventure/news/${countryId}`,
+        Token: getLoginToken,
+      });
+      setAxiosGetData(response)
+    } catch (error) {
+      console.log('Error fetching data:', error);
+    }
+  }
+  useEffect(() => {
+
+    if (getLoginToken){
+      switch (selectAsset) {
+        case "newsBox":
+          getNewsList();
+          break;
+        case "quizBox":
+          getNewsList();
+          break;
+        case "paintBox":
+          getNewsList();
+          break;
+        case "foodBox":
+          getNewsList();
+          break;
+        case "personalityBox":
+          getNewsList();
+          break;
+        default:
+          break;
+        }
+    }
+  },[selectAsset])
+
+  console.log(axiosGetData)
 //   ///////////////////////////////
   const myImageList = {
     TutorialBackground: pathTB,
