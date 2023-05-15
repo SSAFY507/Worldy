@@ -10,7 +10,6 @@ import {
 
 import Country from './routes/Country';
 import Explore from './routes/Explore';
-import GameInfo from './routes/GameInfo';
 import IntroPage from './routes/IntroPage';
 import LoginModal from './components/LoginModal';
 import MainPageAfterLogin from './routes/MainPageAfterLogin';
@@ -79,7 +78,7 @@ const AppLayout = () => {
 
   return (
     <div
-      className='hide-scrollbar w-screen h-screen flex flex-col bg-white overflow-hidden'
+      className='hide-scrollbar w-screen h-screen flex flex-col overflow-hidden'
       style={{
         backgroundImage: checkLoginState ? undefined : `url(${pathBI})`,
         backgroundSize: '100%',
@@ -113,7 +112,6 @@ const AppLayout = () => {
             />
           )}
           <Route path='/user/kakao/callback' element={<Callback />} />
-          <Route path='/info' element={<GameInfo />} />
           {/* <Route path='/updates' element={<Updates />} /> */}
           <Route path='/explore' element={<Explore />} />
           <Route path='/explore/:country' element={<Country />} />
