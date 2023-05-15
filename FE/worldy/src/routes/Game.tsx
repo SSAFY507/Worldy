@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { useState, useEffect } from 'react';
-import TestFor3DEdit from '../components/TestFor3DEdit';
-import LoaderPyramid from '../components/Loaders/LoaderPyramid';
-import Test from '../components/game/Test';
-import { useParams } from 'react-router';
+import * as React from "react";
+import { useState, useEffect } from "react";
+import TestFor3DEdit from "../components/TestFor3DEdit";
+import Main from "../components/game/Main";
+import LoaderPyramid from "../components/Loaders/LoaderPyramid";
+import { useParams } from "react-router";
 
 export default function Game() {
   const params = useParams();
@@ -14,12 +14,12 @@ export default function Game() {
     setLoaded(true);
   }, 1000);
   return (
-    <div className='w-screen h-screen'>
+    <div className="w-screen h-screen">
       {loaded ? (
-        <Test />
+        <Main />
       ) : (
-        <div className='w-full h-full bg-white'>
-          <LoaderPyramid text='3D 급하게 조립 중...' />
+        <div className="w-full h-full bg-white">
+          <LoaderPyramid text="3D 급하게 조립 중..." />
         </div>
       )}
     </div>

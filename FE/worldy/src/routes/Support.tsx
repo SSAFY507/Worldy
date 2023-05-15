@@ -6,11 +6,14 @@ import '../styles/SupportStyles.css';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 import SupportModal from '../components/SupportModal';
 import LoaderBlueCircle from '../components/Loaders/LoaderBlueCircle';
+import CustomAxios from '../API/CustomAxios';
+import axios from 'axios';
 
 type SupportItemType = {
   content: string;
   date: string;
-  response: string;
+  category?: string;
+  response?: string;
 };
 
 export default function Support({
@@ -36,22 +39,80 @@ export default function Support({
 
   const [searchText, setSearchText] = useState<string>('');
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleSubmitSearch();
+  async function searchElasticBasic(input: string) {
+    console.log('베이직 엑시오스');
+    console.log('현재 검색어', input);
+
+    try {
+      const response = await axios.post(
+        'https://k8a507.p.ssafy.io/es/_search',
+        // 요청 바디 데이터를 객체 형식으로 전달합니다.
+        {
+          query: {
+            match: {
+              'content.nori': input,
+            },
+          },
+        }
+        // { category: askTypeList[askType].name, content: contentText },
+      );
+      console.log('엘라스틱 결과 : ', response.data.hits.hits);
+      console.log(
+        '엘라스틱 결과 :??? ',
+        response.data.hits.hits[0]
+          ? response.data.hits.hits[0]._source.category
+          : '없음'
+      );
+      spreadElasticSearch(response.data.hits.hits);
+    } catch (error) {
+      console.error(`Error: ${error}`);
     }
+  }
+
+  const handleSearchText = (input: string) => {
+    console.log('인풋 input TExt', input);
+    setSearchText(input);
+    // searchElastic(input);
+    searchElasticBasic(input);
+    setSubjectIndex(5);
   };
 
-  const handleSubmitSearch = () => {
-    console.log(searchText);
+  // const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (e.key === 'Enter') {
+  //     handleSubmitSearch();
+  //   }
+  // };
+
+  // const handleSubmitSearch = () => {
+  //   console.log(searchText);
+  // };
+
+  const spreadElasticSearch = (input: any) => {
+    let tempList: SupportItemType[] = [];
+    for (let i = 0; i < input.length; i++) {
+      const content = input[i]._source.content;
+      const category = input[i]._source.category;
+      const createdTime = input[i]._source.createdTime;
+      tempList.push({
+        content: content,
+        date: createdTime,
+        category: category,
+        response: '담당자가 검토 중인 글입니다...',
+      });
+    }
+    setSearchResults(tempList);
   };
 
   const [subjectIndex, setSubjectIndex] = useState<number>(0);
+  useEffect(() => {
+    subjectIndex !== 5 && setSearchText('');
+  }, [subjectIndex]);
 
   const handleSubjectIndex = (index: number) => {
     setSubjectIndex(index);
     setResState(-1);
   };
+  const [searchResults, setSearchResults] = useState<SupportItemType[]>([]);
 
   const subjectList: SupportItemType[][] = [
     [
@@ -80,17 +141,12 @@ export default function Support({
         date: '2023-04-29',
         response: '아니요, 동일한 명의를 가진 전화번호로만 변경이 가능합니다. ',
       },
-      {
-        content: '질문 1-2',
-        date: '2023-04-29',
-        response:
-          '답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2답변 2',
-      },
     ],
     [{ content: '질문 2-1', date: '2023-04-28', response: '답변 3' }],
     [{ content: '질문 3-1', date: '2023-04-28', response: '답변 3' }],
     [{ content: '질문 4-1', date: '2023-04-28', response: '답변 3' }],
     [{ content: '질문 5-1', date: '2023-04-28', response: '답변 3' }],
+    searchResults,
   ];
 
   const [resState, setResState] = useState<number>(-1);
@@ -270,10 +326,10 @@ export default function Support({
                     type='text'
                     value={searchText}
                     onChange={(e) => {
-                      setSearchText(e.target.value);
+                      handleSearchText(e.target.value);
                     }}
                     placeholder='검색'
-                    onKeyDown={handleKeyPress}
+                    // onKeyDown={handleKeyPress}
                   />
                 </div>
               </div>
@@ -352,8 +408,20 @@ export default function Support({
                   }`}
                   onClick={() => handleSubjectIndex(4)}
                 >
-                  <div className=' px-[30px] py-[5px] w-full h-fit flex flex-row justify-center items-center'>
+                  <div className=' px-[30px] py-[5px] w-full h-fit flex flex-row justify-center items-center border-r-[rgba(164,163,163,0.5)] border-r-[2px]  border-solid'>
                     기타 문의
+                  </div>
+                </button>
+                <button
+                  className={`flex justify-center items-center w-fit h-full   text-[20px]  ${
+                    subjectIndex === 5
+                      ? 'text-[#ff4d45] font-PtdMedium  border-0 border-b-[2px] border-b-[#ff4d45] border-solid'
+                      : 'text-[rgba(147,147,147,0.7)] font-PtdLight'
+                  }`}
+                  onClick={() => handleSubjectIndex(5)}
+                >
+                  <div className=' px-[30px] py-[5px] w-full h-fit flex flex-row justify-center items-center'>
+                    검색 결과
                   </div>
                 </button>
               </div>

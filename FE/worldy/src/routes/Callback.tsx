@@ -20,6 +20,7 @@ export default function Callback(): JSX.Element {
   const [nickname, setNickname] = useState<string>('');
 
   const kakaoLogin = async () => {
+    console.log(`uriToken${urlToken}`);
     try {
       const kakaoLoginResponse = await axios.get(
         `https://k8a507.p.ssafy.io/api/user/kakao/login?code=${urlToken}`

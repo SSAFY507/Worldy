@@ -29,16 +29,15 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
 
   const navList: NavListType[] = [
     { name: '홈', path: '/' },
-    { name: '게임 정보', path: '/info' },
+    // { name: '게임 정보', path: '/info' },
     // { name: '업데이트', path: '/updates' },
     { name: '세계 탐험', path: '/explore' },
-    { name: '모노폴리', path: '/game' },
+    { name: '월디폴리', path: '/game' },
     { name: '고객 지원', path: '/support' },
   ];
 
   const checkLoginState = sessionStorage.getItem('isLoggedIn');
   const dispatch = useDispatch();
-  console.log('checkLoginState', checkLoginState);
 
   const [logoutResult, setLogoutResult] = useState<any>();
 
@@ -58,9 +57,9 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
     }
   };
 
-  useEffect(() => {
-    console.log('로그아웃 결과: ', logoutResult);
-  }, [logoutResult]);
+  // useEffect(() => {
+  //   console.log('로그아웃 결과: ', logoutResult);
+  // }, [logoutResult]);
 
   const logoutClick = async () => {
     await logoutAxios().then(() => {
