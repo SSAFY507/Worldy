@@ -5,16 +5,16 @@
 @layer utilities {
   @keyframes glowing {
     0% {
-      box-shadow: 0 0 8px 2px #fff, 0 0 16px 2px #fff, 0 0 24px 2px #4361ff,
-        0 0 32px 2px #4361ff;
+      box-shadow: 0 0 6px 1px #fff, 0 0 12px 1px #fff, 0 0 15px 2px #4361ff,
+        0 0 20px 2px #4361ff;
     }
     50% {
-      box-shadow: 0 0 8px 5px #fff, 0 0 16px 5px #fff, 0 0 24px 5px #4361ff,
-        0 0 32px 5px #4361ff;
+      box-shadow: 0 0 6px 2px #fff, 0 0 12px 2px #fff, 0 0 15px 5px #4361ff,
+        0 0 20px 5px #4361ff;
     }
     100% {
-      box-shadow: 0 0 8px 2px #fff, 0 0 16px 2px #fff, 0 0 24px 2px #4361ff,
-        0 0 32px 2px #4361ff;
+      box-shadow: 0 0 6px 1px #fff, 0 0 12px 1px #fff, 0 0 15px 2px #4361ff,
+        0 0 20px 2px #4361ff;
     }
   }
 

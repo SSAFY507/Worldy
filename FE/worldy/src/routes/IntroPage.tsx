@@ -13,6 +13,7 @@ import Footer from '../components/Footer';
 import CustomAxios from '../API/CustomAxios';
 import { useDispatch } from 'react-redux';
 import { addRankInfo } from '../_store/slices/loginSlice';
+import LoaderLinear from '../components/Loaders/LoaderLinear';
 
 type MyRankInfo = {
   rank: number;
@@ -111,7 +112,7 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
           // style={{ backgroundColor: 'rgba(27, 27, 27, 0.5)' }}
           className='h-full flex flex-col justify-center items-center relative'
         >
-          <Footer />
+          {/* <Footer /> */}
           {moreInfo && (
             <CSSTransition
               in={popupGreyInfo}
@@ -215,8 +216,8 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
           </div>
         </div>
       ) : (
-        <div className='h-full w-full bg-white'>
-          <LoaderPyramid text='첫 시작을 준비하는 중...' />
+        <div className='w-full h-full bg-white pt-20'>
+          <LoaderLinear />
         </div>
       )}
     </>

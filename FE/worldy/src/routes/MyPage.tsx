@@ -22,6 +22,7 @@ import {
   loginNickName,
   loginProfileImg,
   logout,
+  myRank,
 } from '../_store/slices/loginSlice';
 import { useEffect, useRef, useState } from 'react';
 
@@ -40,6 +41,7 @@ import { useDispatch } from 'react-redux';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
+import SHLoader from '../components/Loaders/SHLoader';
 
 type MyPageMenuType = {
   icon: React.ReactNode;
@@ -125,7 +127,7 @@ export default function MyPage({
   const logoutRef = useRef<HTMLDivElement>(null);
 
   const userNickname: string = sessionStorage.getItem('nickname') || '';
-  const userProfileImg: string | null = sessionStorage.getItem('profileImg');
+  const userProfileImg: string = sessionStorage.getItem('profileImg') || '';
 
   const scrollToContent = (ref: React.RefObject<HTMLDivElement>) => {
     if (containerRef.current && ref.current) {
@@ -344,30 +346,44 @@ export default function MyPage({
   const userLevel = axiosRankInfoList?.myRank.level || '';
   const userExp = axiosRankInfoList?.myRank.exp || 0;
   const userTier = axiosRankInfoList?.myRank.tier || '';
+  const userRank = axiosRankInfoList?.myRank.rank || 0;
 
   const [fillExp, setFillExp] = useState<boolean>(false);
 
   const accountInfoContentComponent = () => {
     return (
       <div className='w-full h-fit  outline-white flex flex-col justify-between items-stretch'>
-        <div className='w-full h-[80px] outline-red-300 flex flex-row justify-start items-center'>
+        {/* <div className='w-[200px] h-[30px] flex flex-row justify-between items-center'>
+          <div className='w-[20%] h-full '>
+            <SiPowerapps size={20} color={setTierColor('Bronze')} />
+          </div>
+          <div className='w-[20%] h-full '>
+            <SiPowerapps size={20} color={setTierColor('Silver')} />
+          </div>
+          <div className='w-[20%] h-full '>
+            <SiPowerapps size={20} color={setTierColor('Gold')} />
+          </div>
+          <div className='w-[20%] h-full '>
+            <SiPowerapps size={20} color={setTierColor('Platinum')} />
+          </div>
+        </div> */}
+        <div className='w-full h-[80px] -translate-y-[4px] outline-red-300 flex flex-row justify-start items-center'>
           <div className='w-[70px] h-[70px] rounded-full overflow-hidden grid place-content-center'>
             <img src={userProfileImg || ''} alt='프로필사진' />
           </div>
           <div className='flex-1 h-full ml-[20px] flex flex-col justify-end items-start pb-[10px]'>
-            <span className='flex flex-row justify-start items-center text-[#B1B1B1] font-PtdMedium text-[23px] mb-[8px]'>
+            <span className='flex flex-row justify-start items-center text-[#B1B1B1] font-PtdRegular text-[20px] mb-[8px]'>
               {userNickname}님은
               <p className='text-white font-PtdBold mx-[10px]'>
                 LV.{userLevel},
               </p>
               <p
-                className={`flex flex-row justify-start items-center mr-[10px] text-[${setRankColor(
-                  userTier
-                )}] font-PtdBold`}
+                className={`flex flex-row justify-start items-center mr-[10px] font-PtdBold`}
+                style={{ color: setTierColor(userTier) }}
               >
                 <SiPowerapps
                   size={20}
-                  color={setRankColor(userTier)}
+                  color={setTierColor(userTier)}
                   className='mr-[7px]'
                 />
                 {userTier}
@@ -379,17 +395,21 @@ export default function MyPage({
             </span>
           </div>
         </div>
-        <div className='w-full h-[80px]  outline-white flex flex-col justify-end items-stretch'>
+        <div className='w-full h-[70px] pb-[5px] outline-white flex flex-col justify-end items-stretch'>
           <div className='w-full h-[20px] flex flex-row justify-end items-center font-PtdRegular'>
             <span className='text-[15px] text-[#5A5A5A] mr-[5px]'>exp</span>
-            <span className='text-[18px]'>{userExp}/100</span>
+            <span className='text-[18px] text-[rgba(220,220,220,1)]'>
+              {userExp}/100
+            </span>
           </div>
           <div className='w-full h-[10px]  outline-red-300 flex flex-row justify-center items-center relative mt-[15px]'>
             <div className='w-full h-[10px] rounded-full bg-[#454545]' />
             <div
-              className={`${
-                fillExp ? `w-[${userExp}]` : 'w-0'
-              } h-[10px] transition-all duration-1000 ease-out bg-[#BDFFFF] absolute top-0 left-0 rounded-full`}
+              className={` h-[10px] outline-white transition-all duration-[1300ms] ease-in-out  absolute top-0 left-0 rounded-full`}
+              style={{
+                backgroundColor: setTierColor(userTier),
+                width: fillExp ? `${userExp}%` : 0,
+              }}
             />
           </div>
         </div>
@@ -820,11 +840,11 @@ export default function MyPage({
 
   ////////////////////////////////////////
 
-  const setRankColor = (input: string): string => {
+  const setTierColor = (input: string): string => {
     if (input === 'Platinum') return '#86FFF8';
-    else if (input === 'Gold') return '#C9B037';
-    else if (input === 'Silver') return '#a4a4a4';
-    else return '#6a3805';
+    else if (input === 'Gold') return '#FFEE95';
+    else if (input === 'Silver') return '#E1FBFF';
+    else return '#EED4BB';
   };
   const rankContent = (): JSX.Element => {
     return (
@@ -832,15 +852,15 @@ export default function MyPage({
         <div
           className={`w-full h-fit  outline-red-300 flex flex-col justify-start items-start transition-all duration-1000 ease-in-out`}
         >
-          <div className='text-[#6A6A6A] font-PtdRegular text-[22px] mx-[15px] '>
+          <div className='text-[#6A6A6A] font-PtdRegular text-[17px] mx-[15px] '>
             <span>
               {userNickname}
               님의 랭킹 정보
             </span>
           </div>
-          <div className='text-[#CBCBCB] font-PtdRegular text-[22px] mx-[15px] mt-[5px]'>
+          <div className='text-[#CBCBCB] font-PtdSemiBOld text-[20px] mx-[15px] mt-[5px]'>
             <span>전체 플레이어 중 </span>
-            <span className='text-emerald-300'>
+            <span style={{ color: setTierColor(userTier) }}>
               {axiosRankInfoList?.myRank.rank}위, 상위{' '}
               {axiosRankInfoList?.myRank.percent}% 이내입니다.
             </span>
@@ -852,29 +872,21 @@ export default function MyPage({
             <div>
               <div
                 className={
-                  'relative flex flex-row justify-between items-center mb-[7px] bg-[rgba(0,0,0,0)] px-[10px] rounded-md w-[490px] h-[45px]'
+                  'relative flex flex-row justify-between items-center mb-[7px] bg-[rgba(0,0,0,0)] px-[10px] rounded-md w-[490px] h-[45px] font-PtdExtraLight text-gray-300 text-[16px] '
                 }
               >
-                <div className='w-[50px] h-full mr-[10px] grid place-content-center border-0 border-b-[2px] border-solid border-gray-500'>
-                  <span className='grid place-content-center font-PtdLight text-[20px] text-gray-300'>
-                    Rank
-                  </span>
+                <div className='w-[50px] h-full mr-[10px] grid place-content-center '>
+                  <span className='grid place-content-center '>Rank</span>
                 </div>
-                <div className='w-[180px] h-full mr-[10px] flex flex-row justify-center items-center border-0 border-b-[2px] border-solid border-gray-500'>
-                  <span className='font-PtdLight text-gray-300 text-[20px] '>
-                    User
-                  </span>
+                <div className='w-[180px] h-full mr-[10px] flex flex-row justify-center items-center '>
+                  <span className=''>User</span>
                 </div>
                 <div className='flex-1' />
-                <div className='w-[80px] h-full mr-[20px] grid place-content-center border-0 border-b-[2px] border-solid border-gray-500'>
-                  <span className='font-PtdLight text-gray-300 text-[20px] '>
-                    Level
-                  </span>
+                <div className='w-[80px] h-full mr-[20px] grid place-content-center '>
+                  <span className=''>Level</span>
                 </div>
-                <div className='w-[50px] h-full  grid place-content-center border-0 border-b-[2px] border-solid border-gray-500'>
-                  <span className='font-PtdLight text-gray-300 text-[20px] '>
-                    Tier
-                  </span>
+                <div className='w-[50px] h-full  grid place-content-center '>
+                  <span className=''>Tier</span>
                 </div>
               </div>
               {axiosRankInfoList?.rankTop10User.map((item, key) => (
@@ -882,7 +894,7 @@ export default function MyPage({
                   key={key}
                   className={`rangking relative flex flex-row justify-between items-center mb-[7px] bg-[rgba(0,0,0,0)] hover:bg-[rgba(180,180,180,0.3)] px-[10px] rounded-md ${
                     item.nickName === userNickname
-                      ? 'glowmyrank z-10  w-[500px] h-[50px] my-[15px] '
+                      ? 'glowmyrank z-10  w-[500px] h-[50px] my-[15px] -translate-x-[5px]'
                       : 'w-[490px] h-[45px]'
                   }`}
                 >
@@ -892,11 +904,11 @@ export default function MyPage({
                     </span>
                   </div>
                   <div className='flex-1 h-fit  outline-white flex justify-between items-center'>
-                    <div className='w-[30px] h-[30px] outline outline-[rgba(220,220,220,0.3)] rounded-full overflow-hidden grid place-content-center  mr-[20px]'>
+                    <div className='w-[25px] h-[25px]  outline-[rgba(220,220,220,0.3)] rounded-full overflow-hidden grid place-content-center  mr-[20px]'>
                       <img src={item.profileImg} alt='프로필 이미지' />
                     </div>
                     <div className='w-[150px] h-fit  outline-red-300 flex flex-row justify-start items-center '>
-                      <span className='font-PtdLight text-white text-[20px] truncate '>
+                      <span className='font-PtdRegular text-white text-[17px] truncate '>
                         {item.nickName}
                       </span>
                     </div>
@@ -919,12 +931,12 @@ export default function MyPage({
                   </div>
                   <div className='flex flex-row  outline-white justify-between items-center w-[120px] h-fit'>
                     <div className='w-[30px] flex-2 grid place-ontent-right mr-[20px]'>
-                      <span className='font-PtdLight text-[20px] text-[#B2B2B2]'>
+                      <span className='font-PtdLight text-[18px] text-[#B2B2B2]'>
                         lv.{item.level}
                       </span>
                     </div>
                     <div className='w-fit h-2/3  outline-white bg-[rgba(62,62,62,0.7)] rounded-[100px] flex flex-row justify-center items-center px-[10px]'>
-                      <SiPowerapps size={22} color={setRankColor(item.tier)} />
+                      <SiPowerapps size={22} color={setTierColor(item.tier)} />
                     </div>
                   </div>
                 </div>
@@ -939,32 +951,33 @@ export default function MyPage({
             </div>
             {axiosRankInfoList && axiosRankInfoList?.myRank.rank > 10 && (
               <div
-                className={`rangking w-[500px] h-[50px] flex flex-row justify-start items-center mt-[10px] mb-[25px] rounded-md bg-[rgba(0,0,0,0.1)] hover:bg-[rgba(180,180,180,0.5)] px-[10px] glowmyrank z-10`}
+                className={`rangking relative flex flex-row justify-between items-center mb-[10px] bg-[rgba(0,0,0,0)] hover:bg-[rgba(180,180,180,0.3)] px-[10px] rounded-md glowmyrank z-10  w-[500px] h-[50px] my-[15px] -translate-x-[5px]`}
               >
-                <div className='relative w-[50px] h-[50px]  grid place-content-center'>
-                  <span className='absolute top-0 left-0 w-[50px] h-[50px] grid place-content-center font-PtdLight text-[20px] text-gray-300'>
-                    {axiosRankInfoList?.myRank.rank}
+                <div className='w-[50px] h-[50px] mr-[20px] grid place-content-center'>
+                  <span className='font-PtdLight text-[20px] text-gray-300'>
+                    {userRank}
                   </span>
                 </div>
-                <div className='w-fit h-fit flex flex-row flex-1 justify-center items-center -ml-[200px]'>
-                  <span className='font-PtdLight text-white text-[20px]'>
-                    {userNickname}
-                  </span>
+                <div className='flex-1 h-fit  outline-white flex justify-between items-center'>
+                  <div className='w-[25px] h-[25px]  outline-[rgba(220,220,220,0.3)] rounded-full overflow-hidden grid place-content-center  mr-[20px]'>
+                    <img src={userProfileImg} alt='프로필 이미지' />
+                  </div>
+                  <div className='w-[150px] h-fit  outline-red-300 flex flex-row justify-start items-center '>
+                    <span className='font-PtdRegular text-white text-[17px] truncate '>
+                      {userNickname}
+                    </span>
+                  </div>
+                  <div className='w-[30px] flex-1 flex-row flex justify-start items-center '></div>
                 </div>
-                <div className='w-[100px] flex-2 grid place-ontent-right'>
-                  <span className='font-PtdLight text-[20px] text-[#B2B2B2]'>
-                    lv.{axiosRankInfoList?.myRank.level}
-                  </span>
-                </div>
-                <div className='w-fit h-2/3 bg-[rgba(62,62,62,0.7)] rounded-[100px] flex flex-row justify-center items-center px-[10px]'>
-                  <SiPowerapps
-                    size={22}
-                    color={setRankColor(
-                      axiosRankInfoList?.myRank.tier
-                        ? axiosRankInfoList.myRank.tier
-                        : 'Bronze'
-                    )}
-                  />
+                <div className='flex flex-row  outline-white justify-between items-center w-[120px] h-fit'>
+                  <div className='w-[30px] flex-2 grid place-ontent-right mr-[20px]'>
+                    <span className='font-PtdLight text-[18px] text-[#B2B2B2]'>
+                      lv.{userLevel}
+                    </span>
+                  </div>
+                  <div className='w-fit h-2/3  outline-white bg-[rgba(62,62,62,0.7)] rounded-[100px] flex flex-row justify-center items-center px-[10px]'>
+                    <SiPowerapps size={22} color={setTierColor(userTier)} />
+                  </div>
                 </div>
               </div>
             )}
@@ -1037,7 +1050,7 @@ export default function MyPage({
 
   return (
     <div
-      className='w-full h-full flex flex-row justify-center items-center overflow-y-clip'
+      className='w-full h-full flex flex-row justify-center items-center overflow-y-clip bg-gray-900'
       style={{ backgroundImage: `url(${pathBG})`, backgroundSize: '100%' }}
     >
       {loadedAll ? (
@@ -1125,7 +1138,7 @@ export default function MyPage({
         </>
       ) : (
         <div className='w-full h-full bg-white'>
-          <LoaderBlueCircle text='정보 모으는 중...' />
+          <SHLoader text='정보 모으는 중...' />
         </div>
       )}
     </div>
