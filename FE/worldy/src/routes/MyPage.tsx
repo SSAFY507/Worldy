@@ -391,7 +391,7 @@ export default function MyPage({
             <div className='w-full h-[10px] rounded-full bg-[#454545]' />
             <div
               className={`${
-                fillExp ? `w-[${70}%]` : 'w-0'
+                fillExp ? `w-[${userExp}%]` : 'w-0'
               } h-[10px] transition-all duration-[1300ms] ease-in-out  absolute top-0 left-0 rounded-full`}
               style={{ backgroundColor: setTierColor(userTier) }}
             />
