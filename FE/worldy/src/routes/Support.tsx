@@ -16,6 +16,13 @@ type SupportItemType = {
   response?: string;
 };
 
+type getHelpItemType = {
+  helpId?: number;
+  category: string;
+  content: string;
+  answer: string | null;
+};
+
 export default function Support({
   qnaModalNumber,
 }: {
@@ -27,6 +34,59 @@ export default function Support({
 
   const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
   const [loadedAll, setLoadedAll] = useState<boolean>(false);
+  const getToken = sessionStorage.getItem('token') || '';
+
+  const [getHelpAllResult, setGetHelpAllResult] = useState<getHelpItemType[]>(
+    []
+  );
+
+  const [sortedHelpResult, setSortedHelpResult] = useState<getHelpItemType[][]>(
+    [[]]
+  );
+  const [modalOn, setModalOn] = useState<boolean>(false);
+  const [modalType, setModalType] = useState<boolean>(false);
+  const sortingHelpResult = () => {
+    const list1: getHelpItemType[] = [];
+    const list2: getHelpItemType[] = [];
+    const list3: getHelpItemType[] = [];
+    if (getHelpAllResult.length !== 0) {
+      for (let i = 0; i < getHelpAllResult.length; i++) {
+        const item = getHelpAllResult[i];
+        if (item.category === '계정/보안') list1.push(item);
+        else if (item.category === '게임문의') list2.push(item);
+        else if (item.category === '기타문의') list3.push(item);
+      }
+    }
+    setSortedHelpResult([list1, list2, list3]);
+  };
+  useEffect(() => {
+    sortingHelpResult();
+  }, [getHelpAllResult]);
+
+  const getAllHelpCustomAxios = async () => {
+    console.log('getAllHelp 커스터엄 토큰 : ', getToken);
+    try {
+      const response = await CustomAxios({
+        APIName: 'getAllHelp',
+        APIType: 'get',
+        UrlQuery: 'https://k8a507.p.ssafy.io/api/help/all',
+        Token: getToken,
+      });
+      setGetHelpAllResult(response);
+      console.log('get All Help모든 데이터 : ' + response);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(() => {
+    getAllHelpCustomAxios();
+  }, []);
+
+  useEffect(() => {
+    console.log(modalOn);
+    getAllHelpCustomAxios();
+  }, [modalOn]);
 
   useEffect(() => {
     if (isLoaded) {
@@ -88,16 +148,14 @@ export default function Support({
   // };
 
   const spreadElasticSearch = (input: any) => {
-    let tempList: SupportItemType[] = [];
+    let tempList: getHelpItemType[] = [];
     for (let i = 0; i < input.length; i++) {
       const content = input[i]._source.content;
       const category = input[i]._source.category;
-      const createdTime = input[i]._source.createdTime;
       tempList.push({
         content: content,
-        date: createdTime,
         category: category,
-        response: '담당자가 검토 중인 글입니다...',
+        answer: '담당자가 검토 중인 글입니다...',
       });
     }
     setSearchResults(tempList);
@@ -112,40 +170,40 @@ export default function Support({
     setSubjectIndex(index);
     setResState(-1);
   };
-  const [searchResults, setSearchResults] = useState<SupportItemType[]>([]);
+  const [searchResults, setSearchResults] = useState<getHelpItemType[]>([]);
 
-  const subjectList: SupportItemType[][] = [
+  const subjectList: getHelpItemType[][] = [
     [
       {
+        category: '자주 묻는 질문',
         content: '따로 계정을 생성할 수는 없나요?',
-        date: '2023-04-30',
-        response:
+        answer:
           '카카오톡 계정을 이용하여 로그인하는 서비스로, 카카오톡을 가입하셔야합니다.',
       },
       {
+        category: '자주 묻는 질문',
         content: '여러 계정을 사용하고싶은데, 방법이 없을까요?',
-        date: '2023-04-29',
-        response:
+        answer:
           '개인정보 보호 및 악성 플레이 사전 방지를 위해 1명당 1개의 계정 사용을 권고드립니다.',
       },
       {
+        category: '자주 묻는 질문',
         content:
           '국내 전화번호 계정을 해외 전화번호 계정으로 변경하려 합니다. 해외 전화번호 변경 후 현재 플레이 중인 아이디를 계속 이용할 수 있나요?',
-        date: '2023-04-29',
-        response:
+        answer:
           '아니요, 이용할 수 없습니다. 해외 전화번호 계정으로 이전 시 데이터는 모두 삭제되며, 복구할 수 없습니다.',
       },
       {
+        category: '자주 묻는 질문',
         content:
           '현재 사용중인 계정의 명의와 다른 명의로 된 전화번호를 사용하고 있습니다. 해당 전화번호로 계정 변경이 가능한가요?',
-        date: '2023-04-29',
-        response: '아니요, 동일한 명의를 가진 전화번호로만 변경이 가능합니다. ',
+        answer: '아니요, 동일한 명의를 가진 전화번호로만 변경이 가능합니다. ',
       },
     ],
-    [{ content: '질문 2-1', date: '2023-04-28', response: '답변 3' }],
-    [{ content: '질문 3-1', date: '2023-04-28', response: '답변 3' }],
-    [{ content: '질문 4-1', date: '2023-04-28', response: '답변 3' }],
-    [{ content: '질문 5-1', date: '2023-04-28', response: '답변 3' }],
+    getHelpAllResult,
+    sortedHelpResult[0],
+    sortedHelpResult[1],
+    sortedHelpResult[2],
     searchResults,
   ];
 
@@ -157,7 +215,7 @@ export default function Support({
     console.log('resState', resState);
   };
 
-  const ItemBox = (item: SupportItemType, index: number) => {
+  const ItemBox = (item: getHelpItemType, index: number) => {
     return (
       <div
       // className={`${
@@ -185,18 +243,7 @@ export default function Support({
               {item.content}
             </div>
             <div className='min-h-1/2 w-1/5 my-[5px]  flex flex-row justify-start items-center text-gray-400 text-[16px] font-PtdLight'>
-              <div className='px-[10px] border-r-[1px] border-r-gray-400 border-solid border-0'>
-                {subjectIndex === 0
-                  ? '자주 묻는 질문'
-                  : subjectIndex === 1
-                  ? '전체'
-                  : subjectIndex === 2
-                  ? '계졍/보안'
-                  : subjectIndex === 3
-                  ? '게임 문의'
-                  : '기타 문의'}
-              </div>
-              <div className='px-[10px]'>{item.date}</div>
+              <div className='px-[10px] '>{item.category}</div>
             </div>
           </div>
           <div
@@ -231,7 +278,11 @@ export default function Support({
         >
           <div className='flex flex-row my-[5px] justify-start items-center text-white text-[20px] p-[10px] min-h-1/2 w-full h-fit leading-6 text-start transit'>
             <span className='text-[26px]'>A. &nbsp;</span>{' '}
-            {resState === index ? item.response : null}
+            {resState === index
+              ? item.answer
+                ? item.answer
+                : '담당자가 검토 중인 글입니다...'
+              : null}
           </div>
           <div className='w-full h-[50px] flex flex-row justify-end items-center'>
             <span className='text-white mx-[20px] text-[15px] flex flex-row justify-center items-center font-PtdLight'>
@@ -249,8 +300,6 @@ export default function Support({
     );
   };
 
-  const [modalOn, setModalOn] = useState<boolean>(false);
-  const [modalType, setModalType] = useState<boolean>(false);
   const handleSupportModal = (type: boolean) => {
     setModalOn(!modalOn);
     setModalType(type);
@@ -397,7 +446,7 @@ export default function Support({
                   onClick={() => handleSubjectIndex(3)}
                 >
                   <div className=' px-[30px] py-[5px] w-full h-fit flex flex-row justify-center items-center border-r-[rgba(164,163,163,0.5)] border-r-[2px]  border-solid'>
-                    게임 문의
+                    게임문의
                   </div>
                 </button>
                 <button
@@ -409,7 +458,7 @@ export default function Support({
                   onClick={() => handleSubjectIndex(4)}
                 >
                   <div className=' px-[30px] py-[5px] w-full h-fit flex flex-row justify-center items-center border-r-[rgba(164,163,163,0.5)] border-r-[2px]  border-solid'>
-                    기타 문의
+                    기타문의
                   </div>
                 </button>
                 <button
@@ -432,7 +481,7 @@ export default function Support({
                   key={index}
                   className=' outline-white  my-[10px] w-full h-fit '
                 >
-                  {ItemBox(item, index)}
+                  {item.category !== '-' && ItemBox(item, index)}
                 </div>
               ))}
               <div className=' h-[50px]'></div>

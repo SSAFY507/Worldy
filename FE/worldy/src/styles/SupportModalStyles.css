@@ -77,3 +77,35 @@
   transition: all 0.2s linear;
   transition-delay: 0.15s;
 }
+
+/* //////////////////////// */
+
+.SWA2-support-title {
+  font-family: 'Ptd-Light';
+  margin-top: 20px;
+  font-size: 5px;
+}
+
+#swal2-title {
+  margin-top: 30px;
+  font-size: 25px;
+}
+
+.SWA2-support-confirmbtn {
+  font-family: 'Ptd-Regular';
+  background-color: rgba(244, 244, 244, 1);
+  margin-bottom: 12px;
+  font-size: 15px;
+  border-radius: 10px 10px 10px 10px;
+  width: 450px;
+  height: 50px;
+  margin-top: 30px;
+}
+.SWA2-support-confirmbtn:hover {
+  background-color: rgba(207, 207, 207, 1);
+}
+
+.swal2-actions {
+  margin-bottom: 30px;
+  width: 100%;
+}
