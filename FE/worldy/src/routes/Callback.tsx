@@ -7,6 +7,7 @@ import { addNickname, addToken, loginState } from '../_store/slices/loginSlice';
 import { login } from '../_store/slices/loginSlice';
 
 import LoaderPyramid from '../components/Loaders/LoaderPyramid';
+import LoaderLinear from '../components/Loaders/LoaderLinear';
 
 export default function Callback(): JSX.Element {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ export default function Callback(): JSX.Element {
       setProfileImg(kakaoLoginResponse.data.profileImg);
       setNickname(kakaoLoginResponse.data.nickName);
     } catch (error) {
-      console.error('카카오 로그인 새로운 api 실패', error);
+      console.error('카카오 로그인 새로운 api 실패 ', error);
     }
   };
 
@@ -56,8 +57,6 @@ export default function Callback(): JSX.Element {
   }, [accessToken]);
 
   return (
-    <div className='w-full h-full bg-white grid place-content-center'>
-      <LoaderPyramid text='로그인 중...' />
-    </div>
+    <div className='w-full h-full bg-white pt-20'>{/* <LoaderLinear /> */}</div>
   );
 }
