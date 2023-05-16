@@ -23,24 +23,36 @@ public class Info {
 
     @ManyToOne
     @JoinColumn(name = "nation_id")
-    Nation nation;
+    private Nation nation;
 
     @Column(name = "category")
     private String category;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "content", length = 2000)
     private String content;
 
-    @Column(name = "img")
-    private String img;
+    @Column(name = "img_url")
+    private String img_url;
+
+    @Column(name = "video_url")
+    private String video_url;
+
+    @Column(name = "insta_url")
+    private String insta_url;
 
     public InfoDto toDto(){
         return InfoDto.builder()
                 .infoId(this.infoId)
                 .nationName(this.nation.getNationName())
                 .category(this.category)
+                .name(this.name)
                 .content(this.content)
-                .img(this.img)
+                .img_url(this.img_url)
+                .video_url(this.video_url)
+                .insta_url(this.insta_url)
                 .build();
     }
 }
