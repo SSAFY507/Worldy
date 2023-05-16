@@ -22,7 +22,6 @@ export default function Create() {
 
   return (
     <div className="w-screen h-screen bg-white">
-      <div>매칭용 임시 룸 id : {matchingId}</div>
       {mode === 0 && (
         <CreateGame
           setMode={setMode}

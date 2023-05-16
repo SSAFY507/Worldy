@@ -21,13 +21,13 @@ export default function GameResult() {
 
   return (
     <>
-      <div className='w-full h-full bg-[rgb(39,32,32)] flex flex-col justify-center items-center'>
-        <div className='w-[500px] h-[50px] text-[50px] flex justify-center items-center text-white '
-        >GAME OVER</div>
+      <div className='w-full h-full flex flex-col justify-center items-center'>
+        <div className='w-[500px] h-[50px] text-[50px] flex justify-center items-center text-black font-PtdSemiBOld'
+        >게임 결과</div>
         <div>
           <div
             className={
-              'relative flex flex-row justify-between items-center mt-[50px] mb-[7px] bg-[rgba(0,0,0,0)] px-[10px] rounded-md w-[490px] h-[45px] font-PtdExtraLight text-gray-300 text-[16px] '
+              'relative flex flex-row justify-between items-center mt-[50px] mb-[7px] bg-[rgba(0,0,0,0)] px-[10px] rounded-md w-[490px] h-[45px] font-PtdExtraLight text-black text-[16px] '
             }
           >
             <div className='w-[50px] h-full mr-[10px] grid place-content-center '>

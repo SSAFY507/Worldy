@@ -5,9 +5,16 @@ export default function Enter() {
 
   return (
     <>
-      <div className='w-full h-full bg-[#FFFDF4] flex flex-col justify-center items-center'>
-        <div id='shbutton' className='w-[500px] h-[50px] text-[24px] flex justify-center items-center'
-        >플레d이어가 입장 중 입니다. 잠시만 기다려주세요.</div>
+      <div className="w-full h-full flex flex-col justify-center items-center bg-[url('../../public/game/game_bg2.png')] bg-cover bg">     
+        <div className='text-[40px] text-white font-PtdSemiBOld flex flex-col justify-center items-center'>
+          <div>플레이어가 입장 중 입니다.</div>
+          <div className='mt-[15px]'>잠시만 기다려주세요.</div>
+          <img
+              className='mt-[30px] w-[100px] object-cover'
+              src={'/game/loading.gif'}
+              alt='WORLDY GAME'
+          />
+        </div>
       </div>
     </>
   );
