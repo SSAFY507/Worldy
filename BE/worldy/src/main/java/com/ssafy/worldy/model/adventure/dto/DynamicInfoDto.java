@@ -17,8 +17,6 @@ public class DynamicInfoDto {
 
     private String exchangeRate;
 
-    private List<NewsDto> newsDtoList;
-
     private String weatherName;
 
     private float temp;

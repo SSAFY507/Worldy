@@ -20,7 +20,7 @@ nations = {"대한민국" : ['Seoul', '서울'], "중국" : ['Beijing', '베이�
         "미국" : ['Washington D.C.', '워싱턴 D.C.'], "이집트" : ['Cairo', '카이로']}
 
 # 날씨 정보
-weather_list = {"Clear": "맑음", "Clouds": "구름", "Haze": "흐림", "Wind": "바람", "Rain": "비", "Snow": "눈", "mist": "안개",
+weather_list = {"Clear": "맑음", "Clouds": "구름", "Haze": "흐림", "Wind": "바람", "Rain": "비", "Snow": "눈", "Mist": "안개",
                 "Thunderstorm": "뇌우", "Drizzle": "이슬비", "Smoke": "스모그", "Dust": "안개", "Fog": "안개", "Sand": "안개", "Ash": "안개",
                 "Squall": "스콜", "Tornado": "토네이도"}
 
@@ -45,7 +45,9 @@ def crawling_weather(nation, nation_id):
     print(wt_temp)
     print("---------------------------------")
 
-    cur.execute(INSERT_WEATHER, (wt_name, str(wt_temp), str(nation_id)))
-    # cur.execute(UPDATE_WEATHER, (wt_name, str(wt_temp), str(nation_id)))
+    # cur.execute(INSERT_WEATHER, (wt_name, str(wt_temp), str(nation_id)))
+    cur.execute(UPDATE_WEATHER, (wt_name, str(wt_temp), str(nation_id)))
+    conn.commit()
+    conn.close()
 
 # crawling_weather("한국", 1)

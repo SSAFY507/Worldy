@@ -13,7 +13,6 @@ import com.ssafy.worldy.util.FastAPIUtil;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
@@ -37,6 +36,8 @@ public class AdventureService {
         List<News> newsList = newsRepo.findAllNewsByNationId(nationId);
 
         for(News n : newsList){
+            if(n.getNewsImg() == null) continue;
+
             newsDtoList.add(n.toDto());
         }
 
@@ -68,8 +69,6 @@ public class AdventureService {
 
     public DynamicInfoDto getDynamicInfoDto(Long nationId){
 
-        List<NewsDto> newsDtoList = getNewsDtoList(nationId);
-        WeatherDto weatherDto = getWeatherDto(nationId);
         ExchangeRateDto exchangeRateDto = getExchangeRateDto(nationId);
 
         // 세계 시간 구해오기
@@ -112,20 +111,27 @@ public class AdventureService {
             if(time < 0) time *= -1;
         }
 
+        // 날씨 가져오기
+        WeatherDto weatherDto = getWeatherDto(nationId);
+
         return DynamicInfoDto.builder()
                 .nationName(exchangeRateDto.getNationName())
                 .exchangeRate(exchangeRateDto.getExchangeRate())
-                .newsDtoList(newsDtoList)
                 .weatherName(weatherDto.getWeatherName())
                 .temp(weatherDto.getTemp())
                 .time(time)
                 .build();
     }
 
-    public InfoDto getInfoDto(Long nationId, String category){
+    public List<InfoDto> getStaticInfoDto(Long nationId, String category){
 
-        Info info = infoRepo.getInfoByNationIdAndCategory(nationId, category);
+        List<Info> infoList = infoRepo.getInfoByNationIdAndCategory(nationId, category);
+        List<InfoDto> infoDtoList = new ArrayList<>();
 
-        return info.toDto();
+        for(Info i : infoList){
+            infoDtoList.add(i.toDto());
+        }
+
+        return infoDtoList;
     }
 }
