@@ -64,11 +64,11 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSele
     }
   }
 
-  // useEffect(() => {
-  //   if(countryName){
-  //     getDatasList();
-  //   }
-  // }, [countryName]);
+  useEffect(() => {
+    if(countryName){
+      getDatasList();
+    }
+  }, [countryName]);
 
   console.log(infoData)
 
@@ -79,11 +79,11 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSele
   };
 
   const infoList = {
-    time: 18,
-    weather: '흐림',
-    temper: 18,
-    amountvia: 0.76,
-    pref: '미국 달러',
+    time: Number(infoData?.time),
+    weather: infoData?.weatherName,
+    temper: infoData?.temp,
+    amountvia: infoData?.exchangeRate,
+    // pref: '미국 달러',
   };
 
   const [clickedLeftMenu, setClickedLeftMenu] = useState<boolean>(false);
@@ -246,7 +246,8 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSele
               </div>
               <div className='w-full h-fit  outline-white flex flex-row justify-start items-center'>
                 <span className='text-white font-PtdSemiBOld text-[24px]'>
-                  {`${infoList.amountvia} ${infoList.pref}`}
+                  {`${infoList.amountvia}`}
+                  {/* {`${infoList.amountvia} ${infoList.pref}`} */}
                 </span>
               </div>
             </div>
