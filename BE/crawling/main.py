@@ -38,10 +38,10 @@ def news_quiz():
 #----------------------- weather crawling -----------------------
 
 
-@sched.scheduled_job('cron', hour='2, 6, 10, 14, 18, 20, 22', minute='50', id='weather_crawling')
-def weather_crawling():
-    for nation in nations.keys():
-        weather_api.crawling_weather(nation, nations[nation])
+# @sched.scheduled_job('cron', hour='2, 6, 10, 14, 18, 20, 22', minute='50', id='weather_crawling')
+# def weather_crawling():
+#     for nation in nations.keys():
+#         weather_api.crawling_weather(nation, nations[nation])
 
 
 #----------------------- sched start -----------------------
@@ -62,4 +62,6 @@ def read_root():
 
 @app.get("/crawling/exchange_rate/{nation_name}")
 def crawling_exchange_rate(nation_name : str):
+    print(nation_name)
+    weather_api.crawling_weather(nation_name, nations[nation_name])
     return exchange_rate.find_exchange_rate(nations.keys(), nation_name)
