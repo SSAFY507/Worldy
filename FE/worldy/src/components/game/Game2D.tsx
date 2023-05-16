@@ -53,15 +53,9 @@ export default function Game2D(props: any) {
     me = player.p4;
   }
 
-<<<<<<< HEAD
-  useEffect(() => {
-    sendData();
-  }, [metaData.turn]);
-=======
   // useEffect(() => {
   //   sendData();
   // }, [metaData.turn]);
->>>>>>> a71c17b689c0ef347beac914a7612f2cbecbed38
 
   useEffect(() => {
     if (metaData.turnOver && !metaData.isDouble) {
