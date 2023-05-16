@@ -36,8 +36,8 @@ public class AdventureController {
         return new ResponseEntity<>(adventureService.getDynamicInfoDto(nationId), HttpStatus.OK);
     }
 
-    @GetMapping("/info/dynamic")
-    public ResponseEntity<InfoDto> getInfo(@RequestParam Long nation, @RequestParam String category){
-        return new ResponseEntity<>(adventureService.getInfoDto(nation, category), HttpStatus.OK);
+    @GetMapping("/info/static")
+    public ResponseEntity<InfoDto> getStaticInfo(@RequestParam Long nationId, @RequestParam String category){
+        return new ResponseEntity<>(adventureService.getStaticInfoDto(nationId, category), HttpStatus.OK);
     }
 }
