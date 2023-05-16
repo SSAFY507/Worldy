@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router';
 
 import LoginModal from '../components/LoginModal';
 
+import LoaderLinear from '../components/Loaders/LoaderLinear';
+
 export default function Game() {
   
   // 로그인 확인
@@ -52,11 +54,11 @@ export default function Game() {
           />
       )}
 
-      {loaded ? (token && (
+      {loaded ? (
         <Main />
-      )) : (
-        <div className="w-full h-full bg-white">
-          <LoaderPyramid text="3D 급하게 조립 중..." />
+      ) : (
+        <div className='w-full h-full bg-white pt-20'>
+          <LoaderLinear />
         </div>
       )}
       

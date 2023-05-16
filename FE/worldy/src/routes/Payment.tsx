@@ -36,9 +36,9 @@ class Payment extends Component<{}, AppState> {
       total_amount: 2200,
       vat_amount: 0,
       tax_free_amount: 0,
-      approval_url: 'http://localhost:3000/paymentsuccess',
-      fail_url: 'http://localhost:3000/paymentfailure',
-      cancel_url: 'http://localhost:3000/',
+      approval_url: 'https://k8a507.p.ssafy.io/paymentsuccess',
+      fail_url: 'https://k8a507.p.ssafy.io/paymentsuccess',
+      cancel_url: 'https://k8a507.p.ssafy.io/paymentsuccess',
     },
   };
 

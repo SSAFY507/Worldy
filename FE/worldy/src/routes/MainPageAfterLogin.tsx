@@ -18,7 +18,7 @@ import thumb2 from '../assets/images/thumb2.png';
 import thumb3 from '../assets/images/thumb3.png';
 import thumb4 from '../assets/images/thumb4.png';
 import thumb5 from '../assets/images/thumb5.png';
-import LoaderLinear from '../components/LoaderLinear';
+import LoaderLinear from '../components/Loaders/LoaderLinear';
 import { useNavigate } from 'react-router';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 
@@ -79,9 +79,13 @@ export default function MainPageAfterLogin({
 
   const navigate = useNavigate();
 
-  const moveToWDPL = () => {};
+  const moveToWDPL = () => {
+    navigate('/monopoly');
+  };
 
-  const moveToWDADV = () => {};
+  const moveToWDADV = () => {
+    navigate('/explore');
+  };
 
   const moveToRank = () => {
     changeMyPageRef('랭킹');
@@ -89,19 +93,6 @@ export default function MainPageAfterLogin({
   };
 
   const [imageList, setImageList] = useState<ImageListType[]>([
-    {
-      headerImage: Carousel1Icon,
-      headerText: '월디폴리',
-      TitleText: '게임으로 경험하는 새로운 세계',
-      contentText:
-        '세상은 넓고 알아야 할 것들은 많습니다. 친구들과 함께 세계를 모험 하면서 당신만의 도시를 건설해보세요. 모노폴리 형식으로 진행되는 게임은 4명의 친구들과 함께 플레이 할 수 있습니다.',
-      buttonText: '게임 시작',
-      image: Carousel1,
-      textBlack: true,
-      thumb: thumb1,
-      buttonClick: () => moveToWDPL(),
-      // loaded: loadC1Bg,
-    },
     {
       headerImage: Carousel2Icon,
       headerText: '월디 어드벤쳐',
@@ -114,6 +105,19 @@ export default function MainPageAfterLogin({
       thumb: thumb2,
       buttonClick: () => moveToWDADV(),
       // loaded: loadC2Bg,
+    },
+    {
+      headerImage: Carousel1Icon,
+      headerText: '월디폴리',
+      TitleText: '게임으로 경험하는 새로운 세계',
+      contentText:
+        '세상은 넓고 알아야 할 것들은 많습니다. 친구들과 함께 세계를 모험 하면서 당신만의 도시를 건설해보세요. 모노폴리 형식으로 진행되는 게임은 4명의 친구들과 함께 플레이 할 수 있습니다.',
+      buttonText: '게임 시작',
+      image: Carousel1,
+      textBlack: true,
+      thumb: thumb1,
+      buttonClick: () => moveToWDPL(),
+      // loaded: loadC1Bg,
     },
     {
       headerImage: Carousel3Icon,

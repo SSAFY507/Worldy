@@ -1,12 +1,18 @@
 import React, { useEffect, useState } from 'react'
 
-import { ReactComponent as One } from "../../assets/images/1.svg"
+import CountryPaintDetailModal from './CountryPaintDetailModal'
+import { ReactComponent as GOne } from "../../assets/images/1.svg"
+import { ReactComponent as GStart } from "../../assets/images/START.svg"
+import { ReactComponent as GThree } from "../../assets/images/3.svg"
+import { ReactComponent as GTwo } from "../../assets/images/2.svg"
+import { ReactComponent as POne } from "../../assets/images/p1.svg"
+import { ReactComponent as PStart } from "../../assets/images/pSTART.svg"
+import { ReactComponent as PThree } from "../../assets/images/p3.svg"
+import { ReactComponent as PTwo } from "../../assets/images/p2.svg"
+import { ReactComponent as PaintTitleIcon } from '../../assets/images/painttitle.svg'
 import QuizModal from '../QuizModal'
 import { ReactComponent as QuizTitleIcon } from "../../assets/images/quiztitle.svg"
 import { ScrappedQuizType } from '../../routes/MyPage'
-import { ReactComponent as Start } from "../../assets/images/START.svg"
-import { ReactComponent as Three } from "../../assets/images/3.svg"
-import { ReactComponent as Two } from "../../assets/images/2.svg"
 
 const tempScrappedQuizList: ScrappedQuizType[] = [
   {
@@ -22,12 +28,11 @@ const tempScrappedQuizList: ScrappedQuizType[] = [
     multiSecond: null, //2번
     multiThird: null, //3번
     multiFourth: null, //4번
-    hint: true, //힌트
+    hint: "",
+    hintType: true, //힌트
     commentary: '일본은 한국보다 실제 시간이 30분 빠릅니다',
     userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
     success: true, //맞춘 문제인가
-    explanation:
-      '한국의 중앙 자오선은 동경 127.5°이며 일본의 중앙 자오선은 동경 135°로 일본이 30분 더 빠릅니다. 그러나 일제의 잔재로, 실제로는 일본 표준 자오선인 동경 135°에 맞춰 표준시를 사용하고 있습니다. 반면 북한은 광복 70주년에 표준시를 다시 30분 늦췄고 한국은 북한과 30분의 시차를 가지는 상황입니다.',
   },
   {
     quizId: 0,
@@ -43,7 +48,8 @@ const tempScrappedQuizList: ScrappedQuizType[] = [
     multiSecond: '명나라', //2번
     multiThird: '하나라', //3번
     multiFourth: '성나라', //4번
-    hint: true, //힌트
+    hint: "",
+    hintType: true, //힌트
     commentary: '힌트 무슨 유형인가', //힌트 유형
     userAnswer: '1', //유저가 적은 정답(맞았으면 null)
     success: false, //맞춘 문제인가
@@ -61,7 +67,8 @@ const tempScrappedQuizList: ScrappedQuizType[] = [
     multiSecond: null, //2번
     multiThird: null, //3번
     multiFourth: null, //4번
-    hint: true, //힌트
+    hint: "",
+    hintType: true, //힌트
     commentary: 'ㅅㅈㄷㅇ', //힌트 유형
     userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
     success: false, //맞춘 문제인가
@@ -79,17 +86,50 @@ const tempScrappedQuizList: ScrappedQuizType[] = [
     multiSecond: null, //2번
     multiThird: null, //3번
     multiFourth: null, //4번
-    hint: false, //힌트
+    hint: "",
+    hintType: false, //힌트
     commentary: '힌트 무슨 유형인가', //힌트 유형
     userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
     success: false, //맞춘 문제인가
   },
 ];
-
-const CountryQuizDetail = () => {
+interface Props {
+  selectAsset: string;
+};
+interface ImgObjectType {
+  [key:string]: JSX.Element[];
+}
+const CountryQuizFrame = ({selectAsset}:Props) => {
   const [counting, setCounting] = useState<number>(-2)
   const [quizModalState, setQuizModalState] = useState<boolean>(false);
   const [selectedQuizId, setSelectedQuizId] = useState<number>(0);
+
+  const imgObject:ImgObjectType = {
+    quizBox:[
+      <QuizTitleIcon />,
+      <GOne />, 
+      <GTwo />, 
+      <GThree />, 
+      <GStart />, 
+      <QuizModal
+        input={tempScrappedQuizList[selectedQuizId]}
+        closeModal={() => setQuizModalState(false)}
+      />
+    ],
+    paintBox:[
+      <PaintTitleIcon />, 
+      <POne />, 
+      <PTwo />, 
+      <PThree />, 
+      <PStart />,
+      <CountryPaintDetailModal
+        input={tempScrappedQuizList[selectedQuizId]}
+        closeModal={() => setQuizModalState(false)}
+      />
+    ],
+  }
+
+  const selectImg:JSX.Element[] = imgObject[selectAsset];
   const handleQuizModal = (select: number) => {
     setSelectedQuizId(select);
     setTimeout(() => {
@@ -101,27 +141,25 @@ const CountryQuizDetail = () => {
     if (counting > -1) {
       setTimeout(() => {
         setCounting((i) => i-1)
-        console.log(counting)
       }, 1000);
     }
   },[counting])
 
   return (
-    <div className="h-full w-1/3 mt-20 flex ">
+    <div className="h-full w-full mt-20 flex  items-center justify-center">
       {(counting > -2)
         ?
         <div className="h-full w-full flex items-center justify-center ">
-          {(counting === 3) ? <div className="absolute"><Three /></div> :null}
-          {(counting === 2) ? <div className="absolute"><Two /></div> :null}
-          {(counting === 1) ? <div className="absolute"><One /></div> :null}
-          {(counting === 0) ? <div className="absolute"><Start /></div> :null}
+          {(counting === 3) ? <div className="absolute">{selectImg[3]}</div> : null}
+          {(counting === 2) ? <div className="absolute">{selectImg[2]}</div> : null}
+          {(counting === 1) ? <div className="absolute">{selectImg[1]}</div> : null}
+          {(counting === 0) ? <div className="absolute">{selectImg[4]}</div> : null}
           {(counting === -1) 
             ?         
-            <div className="absolute h-[1100px]" >
-              <QuizModal
-                input={tempScrappedQuizList[selectedQuizId]}
-                closeModal={() => setQuizModalState(false)}
-              />
+            <div className={
+              `${(selectAsset === "quizBox") ? "absolute h-[1100px] flex" : "h-full w-full flex items-center justify-center"} `} 
+            >
+              {selectImg[5]}
             </div>    
             :
             null
@@ -129,16 +167,19 @@ const CountryQuizDetail = () => {
         </div>
 
       :
-      <div className="h-full w-full flex items-center justify-center" >
+      <div className="h-full w-1/3 flex items-center justify-center" >
         <div className="absolute translate-y-[-120%]">
-          <QuizTitleIcon/>
+          {selectImg[0]}
         </div>
         <div className="h-1/4 w-full flex flex-col shadow-xl ">
-          <div className="h-1/6 w-full bg-[#61C7BB] rounded-t-xl shadow-3xl" />
+          <div className={`h-1/6 w-full  rounded-t-xl shadow-3xl
+            ${(selectAsset === "quizBox") ? "bg-[#61C7BB]" : "bg-[#EACFFF]"}`}
+           />
           <div className="h-5/6 w-full flex flex-col rounded-b-xl bg-white shadow-xl">
             <div className="h-1/2 w-full flex flex-col justify-center items-center pt-10">
               <button
-                className='h-[50px] w-[300px] flex justify-center items-center border-solid border-[1px] bordedr-[#A7A7A7] rounded-3xl shadow-lg text-xl text-[#A7A7A7]'
+                className={`h-[50px] w-[300px] flex justify-center items-center border-solid border-[1px] rounded-3xl shadow-lg text-xl
+                  ${(selectAsset === "quizBox") ? "bordedr-[#61C7BB] text-[#61C7BB]" : "bordedr-[#C5ACE5] text-[#C5ACE5]"}`}
                 onClick={() => {
                   setCounting(3)
                 }}
@@ -146,8 +187,9 @@ const CountryQuizDetail = () => {
                 START
               </button>
             </div>
-            <div className="h-1/3 w-full text-xs opacity-60 font-PtdLight text-center text-[#A7A7A7] pt-5">
-              버튼을 누르면 3초 후 문제가 공개됩니다.
+            <div className={`h-1/3 w-full text-xs opacity-60 font-PtdLight text-center 
+              ${(selectAsset === "quizBox") ? "text-[#61C7BB]" : "text-[#C5ACE5]"} pt-5`}
+            >버튼을 누르면 3초 후 문제가 공개됩니다.
             </div>
           </div>
         </div>
@@ -156,5 +198,4 @@ const CountryQuizDetail = () => {
     </div>
   )
 }
-
-export default CountryQuizDetail;
+export default CountryQuizFrame;

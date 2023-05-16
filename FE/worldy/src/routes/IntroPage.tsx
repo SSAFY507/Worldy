@@ -10,7 +10,20 @@ import LoaderPyramid from '../components/Loaders/LoaderPyramid';
 import { CSSTransition } from 'react-transition-group';
 import '../styles/CSSTransitionStyles.css';
 import Footer from '../components/Footer';
+import CustomAxios from '../API/CustomAxios';
+import { useDispatch } from 'react-redux';
+import { addRankInfo } from '../_store/slices/loginSlice';
+import LoaderLinear from '../components/Loaders/LoaderLinear';
 
+type MyRankInfo = {
+  rank: number;
+  nickName: string;
+  profileImg: string;
+  tier: string;
+  level: number;
+  percent: number;
+  exp: number;
+};
 function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
   const tempClick = () => {
     onLoginClick();
@@ -21,20 +34,44 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
     setMoreInfo(false);
   };
 
-  // const KakaoAppKey = '19dbd953fa840cb821c17969d419e263';
+  const [axiosMyRankInfo, setAxiosMyRankInfo] = useState<MyRankInfo>();
+  const getLoginToken: string | null = sessionStorage.getItem('token');
 
-  // useEffect(() => {
-  //   if (typeof window !== 'undefined') {
-  //     const script = document.createElement('script');
-  //     script.src = 'https://developers.kakao.com/sdk/js/kakao.js';
-  //     script.async = true;
-  //     document.body.appendChild(script);
-  //     script.onload = () => {
-  //       //eslint-disable-next-line
-  //       (window as any).Kakao.init(KakaoAppKey);
-  //     };
-  //   }
-  // }, []);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(
+      addRankInfo({
+        rank: axiosMyRankInfo?.rank || 1,
+        tier: axiosMyRankInfo?.tier || 'Bronze',
+        level: axiosMyRankInfo?.level || 1,
+        exp: axiosMyRankInfo?.exp || 0,
+      })
+    );
+    console.log('경험치 : ' + axiosMyRankInfo?.exp);
+  }, []);
+
+  useEffect(() => {
+    getRankInfoList();
+  }, []);
+
+  const getRankInfoList = async () => {
+    console.log('Session에서의 가져오는 토큰', getLoginToken);
+    try {
+      const response = await CustomAxios({
+        APIName: 'getRankInfoList',
+        APIType: 'get',
+        UrlQuery: `https://k8a507.p.ssafy.io/api/game/ranking`,
+        Token: getLoginToken,
+      });
+      //console.log('닉네임 중복 체크 성공');
+      console.log('랭크 리스트 받은 거: ', response);
+      setAxiosMyRankInfo(response.myRank);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    //console.log('token이 무엇이냐 ', token);
+  };
 
   const myImageList = {
     BackgroundImage: pathBI,
@@ -75,7 +112,7 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
           // style={{ backgroundColor: 'rgba(27, 27, 27, 0.5)' }}
           className='h-full flex flex-col justify-center items-center relative'
         >
-          <Footer />
+          {/* <Footer /> */}
           {moreInfo && (
             <CSSTransition
               in={popupGreyInfo}
@@ -179,8 +216,8 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
           </div>
         </div>
       ) : (
-        <div className='h-full w-full bg-white'>
-          <LoaderPyramid text='첫 시작을 준비하는 중...' />
+        <div className='w-full h-full bg-white pt-20'>
+          <LoaderLinear />
         </div>
       )}
     </>

@@ -20,7 +20,7 @@ import { gsap } from 'gsap';
 import northAmerica from "../../assets/lowpoly/northAmerica.glb";
 import oceania from "../../assets/lowpoly/oceania.glb";
 import southAmerica from "../../assets/lowpoly/southAmerica.glb";
-import useLoadImagesHook from "../../_hooks/useLoadImagesHook";
+import useLoadGlbsHook from "../../_hooks/useLoadGlbsHook";
 import { useNavigate } from "react-router";
 
 export interface CountryType {
@@ -63,26 +63,24 @@ const WorldMap = () => {
   let selectedName2:string = "";
   let clickTimeout:any = null;
   
-  // const myImageList = {
-  //   WorldAfrica: africa,
-  //   WorldAsia: asia,
-  //   WorldEurope: europe,
-  //   WorldNorthAmerica: northAmerica,
-  //   WorldOceania: oceania,
-  //   WorldSouthAmerica: southAmerica,
-  //   WorldBasemap: basemap,
-  //   WorldBackground: bg,
-  // };
+  const myGlbList = {
+    WorldAfrica: africa,
+    WorldAsia: asia,
+    WorldEurope: europe,
+    WorldNorthAmerica: northAmerica,
+    WorldOceania: oceania,
+    WorldSouthAmerica: southAmerica,
+    WorldBasemap: basemap,
+  };
 
-  // const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
+  // const isLoaded = useLoadGlbsHook(myGlbList);
   // const [loadedAll, setLoadedAll] = useState<boolean>(false);
-  // console.log(loadedImages)
   // useEffect(() => {
-  //   console.log(myImageList)
   //   if (isLoaded) {
-  //     setLoadedAll(true);
-  //     console.log(loadedImages);
-  //   }
+  //     setTimeout(() => {
+  //       setLoadedAll(true);
+  //       //console.log(loadedImages);
+  //     }, 1000);    }
   // }, [isLoaded]);
 
   const navigate = useNavigate();
@@ -326,7 +324,6 @@ const WorldMap = () => {
     }
     outlinePassRef.current!.selectedObjects = [];
     divContainer.current!.style.cursor = 'auto';
-
   }
   
   /** 객체 강조 후처리 */
@@ -497,6 +494,13 @@ const WorldMap = () => {
       camera.current = cam
       scene.current.add(cam)
       controls.current =  SetupControls(camera.current!, divContainer.current!, 50, 50, 0, 0);
+
+      const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.3);
+
+      hemiLight.position.set(0, 50, 0);
+      // Add hemisphere light to scene
+      scene.current?.add(hemiLight);
+
       const light = SetupLight(0xffffff, 1.5, new THREE.Vector3(0, 5, 0), new THREE.Vector3(0, 0, 0) );
       scene.current.add(light.target)
       camera.current?.add(light)
@@ -513,26 +517,23 @@ const WorldMap = () => {
   }, []);
 
   return(
-    <div
-      style={{ backgroundColor: 'grey', width: '100%', height: 1000 }}
-      ref={divContainer} 
-    />
+    // <>
+    //   {loadedAll ?  (
+        <div
+        style={{ backgroundColor: 'grey', width: '100%', height: 1000 }}
+        ref={divContainer} 
+        />
+    //   ) : (
+    //     <div className='w-full h-[1000px] bg-white'>
+    //       < LoaderPyramid text='🧳세계 탐험 가보자고!🧳' />
+    //     </div>
+    //   )
+    //   }
+    // </>
   )
 };
 
 
-{/* <>
-{loadedAll ?  (
-  <div
-  style={{ backgroundColor: 'grey', width: '100%', height: 1000 }}
-  ref={divContainer} 
-  />
-) : (
-  <div className='w-full h-[1000px] bg-white'>
-    < LoaderPyramid text='🧳세계 탐험 가보자고!🧳' />
-  </div>
-)
-}
-</> */}
+
 
 export default WorldMap;

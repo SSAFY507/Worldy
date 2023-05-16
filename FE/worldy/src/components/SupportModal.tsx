@@ -8,6 +8,7 @@ import { loginToken, wholeState } from '../_store/slices/loginSlice';
 import { useSelector } from 'react-redux';
 import { useSelect } from '@react-three/drei';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 type askTypeListType = {
   value: number;
@@ -37,8 +38,8 @@ export default function SupportModal({
   const askTypeList: askTypeListType[] = [
     { value: 0, name: '-' },
     { value: 1, name: '계정/보안' },
-    { value: 2, name: '게임 문의' },
-    { value: 3, name: '기타 문의' },
+    { value: 2, name: '게임문의' },
+    { value: 3, name: '기타문의' },
   ];
 
   const [ableWrite, setAbleWrite] = useState<boolean>(type);
@@ -115,19 +116,19 @@ export default function SupportModal({
   }, [contentText]);
 
   const [result, setResult] = useState(null);
-  const token: string | null = sessionStorage.getItem('token');
+  const getToken: string | null = sessionStorage.getItem('token');
   const things = useSelector(wholeState);
 
   useEffect(() => {
-    console.log('토근 왜 안나와', token);
-  }, [token]);
+    console.log('토근 왜 안나와', getToken);
+  }, [getToken]);
 
   useEffect(() => {
     console.log('전부', things);
   }, [things]);
 
   const submitHelpAxios = async () => {
-    console.log('커스터엄 토큰 : ', token);
+    console.log('커스터엄 토큰 : ', getToken);
     try {
       const requestBody = new Map([
         ['category', askTypeList[askType].name],
@@ -140,7 +141,7 @@ export default function SupportModal({
         // UrlQuery: 'https://localhost:9090/api/help/write',
         UrlQuery: 'https://k8a507.p.ssafy.io/api/help/write',
         Body: requestBody,
-        Token: token,
+        Token: getToken,
       });
       setResult(response);
       console.log('리퀘스트 바디', requestBody);
@@ -151,7 +152,7 @@ export default function SupportModal({
 
   // 요청 헤더 및 바디를 포함하는 POST 요청 함수를 정의합니다.
   async function submitHelpAxiosBasic() {
-    console.log('문의 토큰 : ', token);
+    console.log('문의 토큰 : ', getToken);
 
     try {
       const response = await axios.post(
@@ -161,7 +162,7 @@ export default function SupportModal({
         {
           headers: {
             // 요청 헤더 정보를 설정합니다.
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${getToken}`,
           },
         }
       );
@@ -173,9 +174,22 @@ export default function SupportModal({
   }
 
   const submitHelp = () => {
-    submitHelpAxios().then(handleCloseModal);
-    // submitHelpAxios();
+    submitHelpAxios();
+    handleCloseModal();
+    Swal.fire({
+      title: '등록되었습니다.',
+      confirmButtonText: '확인',
+      customClass: {
+        title: 'SWA2-support-title',
+
+        confirmButton: 'btn btn-success SWA2-support-confirmbtn',
+      },
+      buttonsStyling: false,
+    });
   };
+
+  // submitHelpAxios().then(handleCloseModal);
+  // submitHelpAxios();
 
   return (
     <div className='z-30 absolute top-0 left-0 w-full h-full bg-[rgba(255,255,255,0.3)] flex flex-col justify-start items-center py-[5em]'>
