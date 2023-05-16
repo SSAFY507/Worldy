@@ -236,6 +236,7 @@ export default function Main() {
             explanation: quizData.commentary,
           }));
         }
+
         setQuizModalState(true);
       } else if (received.type === "enter") {
         // enter 에 들어온 순서대로 p를 채워나간 후 p4가 바뀌는 순간 player 데이터 전송
@@ -264,9 +265,6 @@ export default function Main() {
             }));
 
             //console.log("유저 1 데이터 받아오기");
-
-            // 추후 주석처리
-            //setGameStart(true);
           }
 
           //TEST
@@ -381,13 +379,13 @@ export default function Main() {
 
           let check = true;
 
-          if (loginUser===received.user1.nickName) {
+          if (loginUser === received.user1.nickName) {
             check = false;
-          } else if (loginUser===received.user2.nickName) {
+          } else if (loginUser === received.user2.nickName) {
             check = false;
-          } else if (loginUser===received.user3.nickName) {
+          } else if (loginUser === received.user3.nickName) {
             check = false;
-          } else if (loginUser===received.user4.nickName) {
+          } else if (loginUser === received.user4.nickName) {
             check = false;
           }
 
@@ -541,6 +539,8 @@ export default function Main() {
     dice: 0,
     turn: 0,
     isDouble: false,
+    itemMsg1: '아이템 메시지1',
+    itemMsg2: '아이템 메시지2',
   });
   const [turnOver, setTurnOver] = useState<boolean>(false);
 
@@ -641,7 +641,7 @@ export default function Main() {
           landmark: 0,
         },
         type: "start",
-        contents: "시작점 입니다. 월급을 받으세요. + 300,000",
+        contents: "시작점입니다. 월급을 받으세요.     + 300,000",
         owner: 0,
         option: 0,
         toll: 0,
@@ -1537,9 +1537,99 @@ export default function Main() {
     ],
   });
 
-  // useEffect(() => {
-  //   sendData();
-  // }, [player])
+
+  // 아이템(보물상자)
+  const [item, setItem] = useState<Item[]>([
+    {
+      id: 0,
+      title: '운수 좋은 날',
+      content: '주사위를 한 번 더 던지세요!',
+    },
+    {
+      id: 1,
+      title: '무인도 불시착',
+      content: '비행기가 고장나서 무인도에 갇혔습니다. 무인도로 가세요.',
+    },
+    {
+      id: 2,
+      title: '자유여행권',
+      content: '이동하고 싶은 곳을 클릭하세요.',
+    },
+    {
+      id: 3,
+      title: '코로나19 확진',
+      content: '코로나에 걸렸습니다. 2턴 간 자가격리에 들어갑니다.',
+    },
+    {
+      id: 4,
+      title: '호텔에 짐을 놓고 왔습니다.',
+      content: '뒤로 2 칸 이동하세요.',
+    },
+    {
+      id: 5,
+      title: '졸음',
+      content: '졸다가 3역을 지나쳤습니다. 앞으로 3 칸 이동',
+    },
+    {
+      id: 6,
+      title: '복권 당첨',
+      content: '100만원을 받으세요!',
+    },
+    {
+      id: 7,
+      title: '세무조사',
+      content: '국세청에서 세무 조사를 시작합니다. 국세청으로 이동하세요.',
+    },
+    {
+      id: 8,
+      title: '주식 투자',
+      content: '투자한 주식이 대박났습니다. 200만원을 받으세요.',
+    },
+    {
+      id: 9,
+      title: '올림픽 티켓 수령',
+      content: '올림픽을 관람하러갑니다.',
+    },
+    {
+      id: 10,
+      title: 'BTS 콘서트',
+      content: '콘서트를 보러 대한민국으로 이동합니다.',
+    },
+    {
+      id: 11,
+      title: '미국 여행',
+      content: '미국으로 이동하세요',
+    },
+    {
+      id: 12,
+      title: '피라미드 대탐험',
+      content: '새로운 피라미드가 발견됐습니다. 이집트로 이동하세요.',
+    },
+    {
+      id: 13,
+      title: '로마의 휴일',
+      content: '휴가를 받았습니다. 이탈리아로 이동하세요.',
+    },
+    {
+      id: 14,
+      title: '과속 벌금',
+      content: '과속은 위험합니다. 벌금 -100만원',
+    },
+    {
+      id: 15,
+      title: '통행 면제권',
+      content: '1회 다른 플레이어의 나라에 무료로 머무를 수 있습니다.',
+    },
+    {
+      id: 16,
+      title: '뒤로 걷기 캠페인',
+      content: '뒤로 3칸 이동하세요.',
+    },
+
+
+
+  ])
+
 
   return (
     <>
@@ -1578,6 +1668,13 @@ export default function Main() {
                 setPlayer={setPlayer}
                 worldMap={worldMap.worldMap}
                 setWorldMap={setWorldMap}
+                item={item}
+                setItem={setItem}
+                closeModal={() => setQuizModalState(false)}
+                quizModalState={quizModalState}
+                roomId={params.id}
+                ws={ws}
+                quiz={quiz}
               ></Game2D>
             )}
             {!mode && (

@@ -38,12 +38,14 @@ export default function Matching(props: any) {
       console.log("응답받은 데이터 >>>>>");
       console.log(received);
 
-      if (received.gameRoom.roomId) {
-        roomId = received.gameRoom.roomId;
-        navigate(`/game/${roomId}`);
-      }
+      // if (received.gameRoom.roomId) {
+      //   roomId = received.gameRoom.roomId;
+
+      //   navigate(`/game/${roomId}`);
+      // }
 
       // roomId = "2386a4ee-355f-4f1d-9b77-118b2cbf99f9";
+      // navigate(`/game/${roomId}`);
 
       // gameData = {
       //   user1: {

@@ -149,3 +149,42 @@ type Item = {
   title: string,
   content: string,
 }
+
+type GameResult = {
+  first: {
+    kakaoId: string,
+    nationList: number[]
+  },
+  second: {
+    kakaoId: string,
+    nationList: number[]
+  },
+  third: {
+    kakaoId: string,
+    nationList: number[]
+  },
+  fourth: {
+    kakaoId: string,
+    nationList: number[]
+  }
+}
+
+
+type GameResultPageDate = {
+  first: {
+    kakaoId: string,
+    nationList: number[]
+  },
+  second: {
+    kakaoId: string,
+    nationList: number[]
+  },
+  third: {
+    kakaoId: string,
+    nationList: number[]
+  },
+  fourth: {
+    kakaoId: string,
+    nationList: number[]
+  }
+}
