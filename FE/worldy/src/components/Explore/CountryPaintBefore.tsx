@@ -14,7 +14,6 @@ const CountryPaintBefore = ({problem, GetSolvedFlag}: Props) => {
   const [third, setThird] = useState<boolean>(false);
   const [checkList, setCheckList] = useState<boolean[]>([])
   useEffect(() => {
-    console.log(111111111111)
     if(checkList.length === 0) {
       let tmpList:boolean[] = []
       for (let i=0; i < problem.answerPointList!.length; i++) {
@@ -54,10 +53,10 @@ const CountryPaintBefore = ({problem, GetSolvedFlag}: Props) => {
                         outline: '5px solid red',
                         width: `${String(Number(e[2]) - Number(e[0]))}px`,
                         height: `${String(Number(e[3]) - Number(e[1]))}px`,
-                        zIndex: 90,
+                        zIndex: 20,
                         position: 'absolute',
-                        left: String(Number(e[0])) +"px",
-                        top: String(Number(e[1])) +"px",
+                        left: String(Number(e[0])+50) +"px",
+                        top: String(Number(e[1])+50) +"px",
                         borderRadius: '100%',
                         visibility: checkList[idx] ? 'visible' : 'hidden',
                       }}
