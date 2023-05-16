@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import CountryPaintDetailModal from './CountryPaintDetailModal'
+import CustomAxios from '../../API/CustomAxios'
 import { ReactComponent as GOne } from "../../assets/images/1.svg"
 import { ReactComponent as GStart } from "../../assets/images/START.svg"
 import { ReactComponent as GThree } from "../../assets/images/3.svg"
@@ -9,11 +10,12 @@ import { ReactComponent as POne } from "../../assets/images/p1.svg"
 import { ReactComponent as PStart } from "../../assets/images/pSTART.svg"
 import { ReactComponent as PThree } from "../../assets/images/p3.svg"
 import { ReactComponent as PTwo } from "../../assets/images/p2.svg"
-import { PaintDataType } from './CountrySpeak'
 import { ReactComponent as PaintTitleIcon } from '../../assets/images/painttitle.svg'
 import QuizModal from '../QuizModal'
 import { ReactComponent as QuizTitleIcon } from "../../assets/images/quiztitle.svg"
 import { ScrappedQuizType } from '../../routes/MyPage'
+import { countryLst } from './CountrySpeak'
+import { useParams } from 'react-router'
 
 const tempScrappedQuizList: ScrappedQuizType[] = [
   {
@@ -95,21 +97,55 @@ const tempScrappedQuizList: ScrappedQuizType[] = [
   },
 ];
 
+
 interface Props {
   selectAsset: string;
-  axiosGetPaintData: PaintDataType | undefined;
 };
+
+export interface PaintDataType {
+  imgNum: number,
+  diffUrl: string,
+  imgTitle: string,
+  imgContent: string,
+  originalUrl: string,
+  answerPointList: string[][]
+};
+
+export interface QuizDataType {
+
+};
+
 
 interface ImgObjectType {
   [key:string]: JSX.Element[];
 };
 
-const CountryQuizFrame = ({selectAsset, axiosGetPaintData}:Props) => {
+const DOMAIN = process.env.REACT_APP_BASE_URL
+
+const CountryQuizFrame = ({selectAsset}:Props) => {
   const [counting, setCounting] = useState<number>(-2)
   const [quizModalState, setQuizModalState] = useState<boolean>(false);
   const [selectedQuizId, setSelectedQuizId] = useState<number>(0);
+  const [axiosGetPaintData, setAxiosGetPaintData] = useState<PaintDataType | undefined>();
+  const [axiosGetQuizData, setAxiosGetQuizData] = useState<QuizDataType[] | undefined>();
 
-  console.log(" 틀림 그림 찾기 데이터 : ", axiosGetPaintData)
+  const params = useParams()
+  const countryName: string = params.country || '';
+
+  const getLoginToken: string | null = sessionStorage.getItem('token');
+  const countryId = countryLst[countryName].id
+
+  /** 게임을 재시작 하는 함수 */
+  const GetRegameFlag = (num:number) => {
+    setCounting(num);
+    if (countryId) {
+      if (selectAsset === "quizBox") {
+        getDatasList("quizBox", "");
+      } else {
+        getDatasList("paintBox", `/quiz/hidden/${countryId}`);
+      }          
+    }
+  };
 
   const imgObject:ImgObjectType = {
     quizBox:[
@@ -130,19 +166,43 @@ const CountryQuizFrame = ({selectAsset, axiosGetPaintData}:Props) => {
       <PThree />, 
       <PStart />,
       <CountryPaintDetailModal
-        input={tempScrappedQuizList[selectedQuizId]}
-        closeModal={() => setQuizModalState(false)}
+        selectAsset={selectAsset}
+        GetRegameFlag={GetRegameFlag}
+        axiosGetPaintData={axiosGetPaintData}
       />
     ],
   }
 
   const selectImg:JSX.Element[] = imgObject[selectAsset];
-  const handleQuizModal = (select: number) => {
-    setSelectedQuizId(select);
-    setTimeout(() => {
-      setQuizModalState(true);
-    }, 100);
-  };
+
+  /** 데이터 받는 함수 */
+  const getDatasList = async (box: string, url:string) => {
+    try {
+      const response = await CustomAxios({
+        APIName: 'getDatasList',
+        APIType: 'get',
+        UrlQuery: DOMAIN + url,
+        Token: getLoginToken,
+      });
+      if (box === "quizBox") {
+          setAxiosGetQuizData(response);
+      } else {
+        setAxiosGetPaintData(response);
+      }          
+    } catch (error) {
+      console.log('Error fetching data:', error);
+    }
+  }
+
+  useEffect(() => {
+    if (countryId) {
+      if (selectAsset === "quizBox") {
+        getDatasList("quizBox", "");
+      } else {
+        getDatasList("paintBox", `/quiz/hidden/${countryId}`);
+      }          
+    }
+  }, [])
 
   useEffect(() => {
     if (counting > -1) {

@@ -58,7 +58,7 @@ interface Country {
     KOREAN: string,
     ENGLISH: string,
   }
-}
+};
 
 export interface NewsDataType {
   id: number,
@@ -69,16 +69,14 @@ export interface NewsDataType {
   newsUrl: string
 };
 
-export interface QuizDataType {
-
-};
-
-export interface PaintDataType {
-  originalUrl: string,
-  diffUrl: string,
-  imgNum: string,
-  answerPointList: string[][]
-};
+// export interface PaintDataType {
+//   imgNum: number,
+//   diffUrl: string,
+//   imgTitle: string,
+//   imgContent: string,
+//   originalUrl: string,
+//   answerPointList: string[][]
+// };
 
 export interface FamousDataType {
   infoId : string,
@@ -154,17 +152,17 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
 
   const getLoginToken: string | null = sessionStorage.getItem('token');
   const [axiosGetNewsData, setAxiosGetNewsData] = useState<NewsDataType[] | undefined>();
-  const [axiosGetQuizData, setAxiosGetQuizData] = useState<QuizDataType[] | undefined>();
-  const [axiosGetPaintData, setAxiosGetPaintData] = useState<PaintDataType | undefined>();
+  // const [axiosGetPaintData, setAxiosGetPaintData] = useState<PaintDataType | undefined>();
   const [axiosGetFamousData, SetAxiosGetFamousData] = useState<FamousDataType[] | undefined>();
+  // const [axiosGetQuizData, setAxiosGetQuizData] = useState<QuizDataType[] | undefined>();
 
   const [checkGetData, setCheckGetData] = useState<boolean>(false)
   const countryId = countryLst[countryName].id
   
   const urlList:UrlListType = {
     newsBox: `/adventure/news/${countryId}`,
-    quizBox: ``,
-    paintBox: `/quiz/hidden/${countryId}`,
+    // quizBox: ``,
+    // paintBox: `/quiz/hidden/${countryId}`,
     foodBox: `/adventure/info/static?nationId=${countryId}&category=food`,
     personalityBox: `/adventure/info/static?nationId=${countryId}&category=people`
   }
@@ -182,12 +180,12 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
         case "newsBox":
           setAxiosGetNewsData(response);
           break;
-        case "quizBox":
-          setAxiosGetQuizData(response);
-          break;
-        case "paintBox":
-          setAxiosGetPaintData(response);
-          break;
+        // case "quizBox":
+        //   setAxiosGetQuizData(response);
+        //   break;
+        // case "paintBox":
+        //   setAxiosGetPaintData(response);
+        //   break;
         case "foodBox":
           SetAxiosGetFamousData(response)
           break;
@@ -203,12 +201,9 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
       console.log('Error fetching data:', error);
     }
   }
-  // `/adventure/news/${countryId}`
-  // getDatasList(`adventure/info/static?nationId=${countryId}&category=food`);
-  // getDatasList(`adventure/info/static?nationId=${countryId}&category=people`);
 
   useEffect(() => {
-    if (getLoginToken){
+    if (getLoginToken && selectAsset === "newsBox"){
       getDatasList(selectAsset, urlList[`${selectAsset}`])
     }
   },[])
@@ -285,7 +280,7 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
       mainIcon: quiz,
     },
     paintBox: {
-      title: "틀림 그림 찾기",
+      title: "틀린 그림 찾기",
       subTitle: "Hidden Catch of AI",
       contents: [`${countryLst[`${countryName}`].KOREAN}의 명소 이미지가 등장합니다.`, "시간 안에 AI가 바꾸어 놓은 부분 중" , "세 가지를 찾아보세요!"],
       icon: paintIcon,
@@ -309,9 +304,8 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
       mainIcon: food,
     }
   }
-  console.log(checkGetData)
  
-  if (checkGetData) {
+  if (checkGetData || selectAsset !== "newsBox") {
     return (
       <div className="w-full h-full flex items-end">
         <div className="z-10 w-1/4 translate-x-10 absolute">
@@ -349,7 +343,7 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
           </div>
           <div className="h-full w-3/4 flex flex-col justify-center items-center">
             {(selectAsset === "newsBox" && axiosGetNewsData) ? <CountryNewsDetail axiosGetNewsData={axiosGetNewsData} /> :null}
-            {(selectAsset === "quizBox" || selectAsset === "paintBox") ? <CountryQuizFrame selectAsset={selectAsset} axiosGetPaintData={axiosGetPaintData}/> : null}
+            {(selectAsset === "quizBox" || selectAsset === "paintBox") ? <CountryQuizFrame selectAsset={selectAsset} /> : null}
             {(selectAsset === "foodBox" || selectAsset === "personalityBox") ? <CountryFamousFrame selectAsset={selectAsset} axiosGetFamousData={axiosGetFamousData}/> :null}
           </div>
         </div>
