@@ -32,6 +32,7 @@ import { useSelector } from "react-redux";
 import PayResult from "./routes/PayResult";
 import Callback from "./routes/Callback";
 import GameResult from "./routes/GameResult";
+import Matching from './components/create/Matching';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -94,6 +95,8 @@ const AppLayout = () => {
   const exploreUrl = location.pathname.substr(0, 8);
   const monopolyUrl = location.pathname.substr(0, 9);
   const gameUrl = location.pathname.substr(0, 5);
+
+
   const [myPageRef, setMyPageRef] = useState<string>('');
 
   const [qnaModal, setQnaModal] = useState<number>(0);
@@ -185,6 +188,7 @@ const AppLayout = () => {
           <Route path="/socket" element={<Socket />} />
           <Route path="/tutorial" element={<Tutorial />} />
           <Route path='/create' element={<Create />} />
+          <Route path='/ready' element={<Matching />} />
           <Route path='/game' element={<Game />} />
           <Route path='/game/:id' element={<Game />} />
           <Route path='/socket' element={<Socket />} />
