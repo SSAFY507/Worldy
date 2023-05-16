@@ -63,7 +63,7 @@ public class RedisPublisher {
     public void publish(WorldMap worldMap) {
 
         log.info("Topic : " + topic.getTopic());
-        log.info("Quiz : " + worldMap.toString());
+        log.info("WorldMap : " + worldMap.toString());
 
         redisTemplate.convertAndSend(topic.getTopic(), worldMap);
     }
@@ -74,7 +74,7 @@ public class RedisPublisher {
     public void publish(EnterPlayerList gameEnterUser) {
 
         log.info("Topic : " + topic.getTopic());
-        log.info("Quiz : " + gameEnterUser.toString());
+        log.info("EnterPlayerList : " + gameEnterUser.toString());
 
         redisTemplate.convertAndSend(topic.getTopic(), gameEnterUser);
     }
@@ -85,7 +85,7 @@ public class RedisPublisher {
     public void publish(MetaData metaData) {
 
         log.info("Topic : " + topic.getTopic());
-        log.info("Quiz : " + metaData.toString());
+        log.info("MetaData : " + metaData.toString());
 
         redisTemplate.convertAndSend(topic.getTopic(), metaData);
     }
