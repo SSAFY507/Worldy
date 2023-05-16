@@ -495,13 +495,13 @@ const WorldMap = () => {
       scene.current.add(cam)
       controls.current =  SetupControls(camera.current!, divContainer.current!, 50, 50, 0, 0);
 
-      const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.3);
+      const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.5);
 
       hemiLight.position.set(0, 50, 0);
       // Add hemisphere light to scene
       scene.current?.add(hemiLight);
 
-      const light = SetupLight(0xffffff, 1.5, new THREE.Vector3(0, 5, 0), new THREE.Vector3(0, 0, 0) );
+      const light = SetupLight("#CCF2F4", 1.5, new THREE.Vector3(0, 10, 6), new THREE.Vector3(0, 0, 0) );
       scene.current.add(light.target)
       camera.current?.add(light)
 

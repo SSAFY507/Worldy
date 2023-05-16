@@ -41,6 +41,7 @@ import { useDispatch } from 'react-redux';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
+import SHLoader from '../components/Loaders/SHLoader';
 
 type MyPageMenuType = {
   icon: React.ReactNode;
@@ -352,6 +353,20 @@ export default function MyPage({
   const accountInfoContentComponent = () => {
     return (
       <div className='w-full h-fit  outline-white flex flex-col justify-between items-stretch'>
+        {/* <div className='w-[200px] h-[30px] flex flex-row justify-between items-center'>
+          <div className='w-[20%] h-full '>
+            <SiPowerapps size={20} color={setTierColor('Bronze')} />
+          </div>
+          <div className='w-[20%] h-full '>
+            <SiPowerapps size={20} color={setTierColor('Silver')} />
+          </div>
+          <div className='w-[20%] h-full '>
+            <SiPowerapps size={20} color={setTierColor('Gold')} />
+          </div>
+          <div className='w-[20%] h-full '>
+            <SiPowerapps size={20} color={setTierColor('Platinum')} />
+          </div>
+        </div> */}
         <div className='w-full h-[80px] -translate-y-[4px] outline-red-300 flex flex-row justify-start items-center'>
           <div className='w-[70px] h-[70px] rounded-full overflow-hidden grid place-content-center'>
             <img src={userProfileImg || ''} alt='프로필사진' />
@@ -390,10 +405,11 @@ export default function MyPage({
           <div className='w-full h-[10px]  outline-red-300 flex flex-row justify-center items-center relative mt-[15px]'>
             <div className='w-full h-[10px] rounded-full bg-[#454545]' />
             <div
-              className={`${
-                fillExp ? `w-[${70}%]` : 'w-0'
-              } h-[10px] transition-all duration-[1300ms] ease-in-out  absolute top-0 left-0 rounded-full`}
-              style={{ backgroundColor: setTierColor(userTier) }}
+              className={` h-[10px] outline-white transition-all duration-[1300ms] ease-in-out  absolute top-0 left-0 rounded-full`}
+              style={{
+                backgroundColor: setTierColor(userTier),
+                width: fillExp ? `${userExp}%` : 0,
+              }}
             />
           </div>
         </div>
@@ -826,9 +842,9 @@ export default function MyPage({
 
   const setTierColor = (input: string): string => {
     if (input === 'Platinum') return '#86FFF8';
-    else if (input === 'Gold') return '#C9B037';
+    else if (input === 'Gold') return '#FFEE95';
     else if (input === 'Silver') return '#E1FBFF';
-    else return '#6a3805';
+    else return '#EED4BB';
   };
   const rankContent = (): JSX.Element => {
     return (
@@ -1034,7 +1050,7 @@ export default function MyPage({
 
   return (
     <div
-      className='w-full h-full flex flex-row justify-center items-center overflow-y-clip'
+      className='w-full h-full flex flex-row justify-center items-center overflow-y-clip bg-gray-900'
       style={{ backgroundImage: `url(${pathBG})`, backgroundSize: '100%' }}
     >
       {loadedAll ? (
@@ -1122,7 +1138,7 @@ export default function MyPage({
         </>
       ) : (
         <div className='w-full h-full bg-white'>
-          <LoaderBlueCircle text='정보 모으는 중...' />
+          <SHLoader text='정보 모으는 중...' />
         </div>
       )}
     </div>

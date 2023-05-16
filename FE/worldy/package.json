@@ -39,6 +39,7 @@
     "sass": "^1.62.1",
     "sockjs-client": "^1.6.1",
     "styled-reset": "^4.4.6",
+    "sweetalert2": "^11.7.5",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },

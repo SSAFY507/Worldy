@@ -8,11 +8,14 @@ type InputType = {
   Token?: string | null;
 };
 
+const DOMAIN = process.env.REACT_APP_BASE_URL
+
 export default async function CustomAxios(input: InputType): Promise<any> {
   console.log('바디 : ', input.Body ? Object.fromEntries(input.Body) : '없음');
   try {
     const config = {
       method: input.APIType,
+      // url: DOMAIN + input.UrlQuery,
       url: input.UrlQuery,
       data: input.Body ? Object.fromEntries(input.Body) : undefined,
       headers: input.Token
