@@ -16,6 +16,8 @@ import { login, logout } from '../_store/slices/loginSlice';
 import CustomAxios from '../API/CustomAxios';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import LoaderLinear from './Loaders/LoaderLinear';
+import SHLoader from './Loaders/SHLoader';
+import LoaderSimpleCircle from './Loaders/LoaderSimpleCircle';
 
 type PointerOutProps = {
   onClose: () => void;
@@ -126,8 +128,8 @@ export default function LoginModal({ onClose }: PointerOutProps) {
             </div>
           </div>
         ) : (
-          <div className='w-full h-full bg-white pt-20'>
-            <LoaderLinear />
+          <div className='w-full h-full bg-white grid place-content-center'>
+            <LoaderSimpleCircle />
           </div>
         )}
       </div>
