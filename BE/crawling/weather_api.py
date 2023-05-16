@@ -47,5 +47,7 @@ def crawling_weather(nation, nation_id):
 
     cur.execute(INSERT_WEATHER, (wt_name, str(wt_temp), str(nation_id)))
     # cur.execute(UPDATE_WEATHER, (wt_name, str(wt_temp), str(nation_id)))
+    conn.commit()
+    conn.close()
 
 # crawling_weather("한국", 1)
