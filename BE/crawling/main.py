@@ -38,7 +38,7 @@ def news_quiz():
 #----------------------- weather crawling -----------------------
 
 
-@sched.scheduled_job('cron', hour='2, 6, 10, 14, 18, 20, 22', minute='35', id='weather_crawling')
+@sched.scheduled_job('cron', hour='2, 6, 10, 14, 18, 20, 22', minute='50', id='weather_crawling')
 def weather_crawling():
     for nation in nations.keys():
         weather_api.crawling_weather(nation, nations[nation])
