@@ -1,6 +1,6 @@
 package com.ssafy.worldy.model.quiz.repo;
 
-import com.ssafy.worldy.model.adventure.entity.HiddenCatch;
+import com.ssafy.worldy.model.quiz.entity.HiddenCatch;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
