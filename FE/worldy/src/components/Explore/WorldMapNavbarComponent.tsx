@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { BsExclamationCircle } from 'react-icons/bs';
 import Cloud from '../../assets/images/Cloud.png';
+import CustomAxios from '../../API/CustomAxios';
 import ExchangeRateIcon from '../../assets/images/ExchangeRateIcon.png';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import Moon from '../../assets/images/Moon.png';
@@ -21,7 +22,17 @@ interface Props {
 
 interface ListType {
   [key: string]: string;
+};
+
+interface InfoType {
+  nationName : string,
+  exchangeRate : string,
+  weatherName : string,
+  temp : string,
+  time : string
 }
+
+const DOMAIN = process.env.REACT_APP_BASE_URL
 
 const switchTrans:ListType = {
   paintBox: "틀림 그림 찾기에 도전해보세요!",
@@ -29,9 +40,37 @@ const switchTrans:ListType = {
   personalityBox: "인물을 알아봐요!",
   newsBox: "소식을 알아봐요!",
   foodBox: "음식을 잘 아시나요?"
-}
+};
 
 const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSelectAssetName}:Props) => {
+  
+  const getLoginToken: string | null = sessionStorage.getItem('token');
+  const countryId = countryLst[countryName].id
+
+  const [infoData, setInfoData] =useState<InfoType>();
+
+  const getDatasList = async () => {
+    try {
+      const response = await CustomAxios({
+        APIName: 'getDatasList',
+        APIType: 'get',
+        UrlQuery: DOMAIN + `/adventure/info/dynamic/${countryId}`,
+        Token: getLoginToken,
+      });
+      setInfoData(response)
+    } 
+    catch (error) {
+      console.log('Error fetching data:', error);
+    }
+  }
+
+  // useEffect(() => {
+  //   if(countryName){
+  //     getDatasList();
+  //   }
+  // }, [countryName]);
+
+  console.log(infoData)
 
   const list:ListType = {
     country: countryLst[`${countryName}`].KOREAN,
