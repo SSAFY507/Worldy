@@ -4,6 +4,7 @@ import TestFor3D from '../components/TestFor3D';
 import TestFor3DEdit from '../components/TestFor3DEdit';
 import LoaderPyramid from '../components/Loaders/LoaderPyramid';
 import WorldyGame from '../components/game/WorldyGame';
+import LoaderLinear from '../components/Loaders/LoaderLinear';
 
 export default function Monopoly() {
   const [loaded, setLoaded] = useState<boolean>(false);
@@ -15,8 +16,8 @@ export default function Monopoly() {
       {loaded ? (
         <WorldyGame />
       ) : (
-        <div className='w-full h-full bg-white'>
-          <LoaderPyramid text='3D 급하게 조립 중...' />
+        <div className='w-full h-full bg-white pt-20'>
+          <LoaderLinear />
         </div>
       )}
     </div>

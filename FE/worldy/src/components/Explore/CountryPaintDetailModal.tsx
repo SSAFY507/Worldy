@@ -21,7 +21,7 @@ export interface ProblemType {
 };
 
 const CountryPaintDetailModal = ({input,closeModal}: {input: ScrappedQuizType; closeModal: () => void}) => {
-  const [solvedFlag, setSolvedFlag] = useState<boolean>(true)
+  const [solvedFlag, setSolvedFlag] = useState<boolean>(false)
 
   const problem:ProblemType = {
     collectImg: answerImg,

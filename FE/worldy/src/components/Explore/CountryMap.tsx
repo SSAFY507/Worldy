@@ -22,13 +22,14 @@ import europe_France from '../../assets/lowpoly/Country_America.glb';
 import europe_Italia from '../../assets/lowpoly/Country_America.glb';
 import europe_Spain from '../../assets/lowpoly/Country_America.glb';
 import europe_UK from '../../assets/lowpoly/Country_America.glb';
-import northAmerica_America from '../../assets/lowpoly/Country_America.glb';
+import northAmerica_America from '../../assets/lowpoly/Country_America3.glb';
 import { useNavigate } from 'react-router';
 
 interface Props {
   countryName: string;
   selectAsset: string;
   GetSelectAssetName: (name:string) => void;
+  GetHorborAsset: (name:string) => void;
 };
 
 interface AssetsType {
@@ -36,7 +37,7 @@ interface AssetsType {
 }
 
 
-const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
+const CountryMap = ({countryName, selectAsset, GetSelectAssetName, GetHorborAsset}:Props) => {
   const divContainer = useRef<HTMLDivElement>(null);
   const renderer = useRef<THREE.WebGLRenderer | null>(null);
   const scene = useRef<THREE.Scene | null>(null);
@@ -54,18 +55,23 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
   const navigate = useNavigate();
 
   // const assetSet = new Set(["paintBox", "historyBox", "quizBox", "foodBox", "personalityBox",  "newsBox", "back"])
-  const assetSet = new Set(["paintBox", "quizBox", "foodBox", "personalityBox",  "newsBox", "back"])
+  const assetSet = new Set(["paintBox", "quizBox", "foodBox", "personalityBox",  "newsBox"])
   const assetObject:AssetsType = {
     paintBox: "🖼틀린 그림 찾기🖼",
-    historyBox: "🧭역사에 대해 알아보자!",
+    // historyBox: "🧭역사에 대해 알아보자!",
     quizBox: "🎁퀴즈 풀고 Level Up!🎁",
     foodBox: "🍜🍛🍣🍻",
     personalityBox: "👴🤴인물을 알아보자!👳‍♂️🎅",
     newsBox: "📰오늘의 뉴스📰"
   }
   let selectedName:string = "";
-  let selectTmp:boolean = false
+  let [selectTmp, setSelectTmp] = useState<boolean>(false)
 
+  useEffect(() => {
+    if (selectTmp) {
+      setSelectTmp(false)
+    }
+  }, [selectTmp])
   /** 마우스 추적 */
   const SetupPicking = () => {
     const raycaster = new THREE.Raycaster();
@@ -127,13 +133,14 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
         1
       );
       divContainer.current!.style.cursor = 'pointer';
-
+      GetHorborAsset(selectedName)
       // 해당하는 에셋 강조 효과
       outlinePassRef.current!.edgeStrength = 25;
       outlinePassRef.current!.selectedObjects = [selectedObject!];
       selectedObjectRef.current = selectedObject!;
       return;
     }
+    GetHorborAsset("")
     selectedName = '';
     outlinePassRef.current!.selectedObjects = [];
     divContainer.current!.style.cursor = 'auto';
@@ -169,7 +176,6 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
   const OnClick = (event:any) => {
     const name:string = selectedName;
     // const moveCountry = name;
-    // console.log(selectTmp)
     if (assetSet.has(name)) {
       if (name === "back") {
         alert("대륙으로 이동합니다")
@@ -179,9 +185,10 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
         if (selectTmp === false) {
           alert(`${assetObject[name]}`)
           GetSelectAssetName(name)
-          selectTmp = true;
+          GetHorborAsset("")
+          setSelectTmp(true)
         } else {
-          selectTmp = false;
+          setSelectTmp(false)
           return
         }
       }
@@ -259,7 +266,7 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
             } else if (obj.name === 'ground') {
               obj.children.forEach((children) => {
                 children.receiveShadow = true;
-                // children.castShadow =true;
+                // children.castShadow =tru e;
               });
             } else {
               obj.children.forEach((children) => {
@@ -268,7 +275,7 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
               });
             }
           });
-          obj3d.position.set(0, -0.1, 0.5);
+          obj3d.position.set(0, -0.05, 0.6);
           obj3d.rotation.set(
             THREE.MathUtils.degToRad(item.angle[0]),
             THREE.MathUtils.degToRad(item.angle[1]),
@@ -344,7 +351,8 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
       window.addEventListener('resize', Resize);
       SetupPicking();
 
-      const cam = SetupCamera(37, 0.1, 25, new THREE.Vector3(-0.11, 0.09, 1.8), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0));
+      const cam = SetupCamera(37, 0.1, 25, new THREE.Vector3(-0.11, 0.12, 1.8), new THREE.Vector3(0, 0.7, 0.2), new THREE.Vector3(0, 0.35 , 0));
+      // const cam = SetupCamera(37, 0.1, 25, new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0));
       camera.current = cam
       scene.current.add(cam)
 

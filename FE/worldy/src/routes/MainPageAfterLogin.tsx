@@ -18,7 +18,7 @@ import thumb2 from '../assets/images/thumb2.png';
 import thumb3 from '../assets/images/thumb3.png';
 import thumb4 from '../assets/images/thumb4.png';
 import thumb5 from '../assets/images/thumb5.png';
-import LoaderLinear from '../components/LoaderLinear';
+import LoaderLinear from '../components/Loaders/LoaderLinear';
 import { useNavigate } from 'react-router';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 
