@@ -31,6 +31,7 @@ import { useSelector } from 'react-redux';
 import PayResult from './routes/PayResult';
 import Callback from './routes/Callback';
 import HelloPage from './components/Loaders/LoaderHello';
+import LoaderHello from './components/Loaders/LoaderHello';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -139,6 +140,7 @@ const AppLayout = () => {
             element={<PayResult input={paymentFailureInput} />}
           /> */}
           <Route path='/payment' element={<Payment />} />
+          <Route path='/hello' element={<LoaderHello />} />
         </Routes>
       </div>
     </div>

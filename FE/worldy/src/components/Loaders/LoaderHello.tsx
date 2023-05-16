@@ -19,19 +19,19 @@ export default function LoaderHello() {
       kor: '미국으로 이동합니다.',
       eng: 'Move to the US.',
       jap: 'アメリカに行きます。',
-      chn: '搬到美国。',
+      chn: '去美国吧。',
     },
     {
       kor: '영국으로 이동합니다.',
       eng: 'Move to the UK.',
       jap: 'イギリスに行きます。',
-      chn: '搬到英国。',
+      chn: '去英国吧。',
     },
     {
       kor: '스페인으로 이동합니다.',
       eng: 'Move to Spain.',
       jap: 'スペインに行きます。',
-      chn: '去西班牙。',
+      chn: '去西班牙吧。',
     },
     {
       kor: '이탈리아로 이동합니다.',
@@ -43,13 +43,13 @@ export default function LoaderHello() {
       kor: '프랑스로 이동합니다.',
       eng: 'Move to France.',
       jap: 'フランスに行きます。',
-      chn: '去法国。',
+      chn: '去法国吧。',
     },
     {
       kor: '이집트로 이동합니다.',
       eng: 'Move to Egypt.',
       jap: 'エジプトに移動します。',
-      chn: '去埃及。',
+      chn: '去埃及吧。',
     },
     {
       kor: '한국으로 이동합니다.',
@@ -72,6 +72,7 @@ export default function LoaderHello() {
   const country: string = window.location.href;
 
   useEffect(() => {
+    console.log(country);
     if (country === '미국') {
       setChoosedCountry(countryList[0]);
     } else if (country === '영국') {
@@ -99,7 +100,7 @@ export default function LoaderHello() {
         backgroundSize: '100%',
       }}
     >
-      <div className='text-white font-PtdBold text-[100px] w-full h-full relative hellos'>
+      <div className='text-white font-PtdBold text-[85px] w-full h-full relative hellos'>
         {/* <button
           className='w-10 h-10 bg-white absolute text-[10px]'
           onClick={() => {
@@ -145,6 +146,7 @@ export default function LoaderHello() {
                 ? 'LB'
                 : 'DD'
             }`}
+            style={{ fontWeight: 'bold' }}
           >
             {choosedCountry.jap}
           </span>
@@ -158,6 +160,7 @@ export default function LoaderHello() {
                 ? 'LB'
                 : 'DD'
             }`}
+            style={{ fontWeight: 'bold' }}
           >
             {choosedCountry.chn}
           </span>

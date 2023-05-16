@@ -17,7 +17,7 @@
 @keyframes HoonsRotateFirst {
   0% {
     rotate: 30deg;
-    transform: translateX(800px) translateY(-100px);
+    transform: translateX(800px) translateY(0px);
     opacity: 0%;
   }
   10% {
@@ -25,7 +25,7 @@
   }
   20% {
     rotate: 0deg;
-    transform: translateX(0px) translateY(0px);
+    transform: translateX(0px) translateY(100px);
     opacity: 100%;
   }
   30% {
@@ -56,12 +56,12 @@
 @keyframes HoonsRotateSecond {
   0% {
     rotate: 30deg;
-    transform: translateX(800px) translateY(-100px);
+    transform: translateX(800px) translateY(-0px);
     opacity: 0%;
   }
   20% {
     rotate: 30deg;
-    transform: translateX(800px) translateY(-100px);
+    transform: translateX(800px) translateY(-0px);
     opacity: 0%;
   }
   30% {
@@ -69,7 +69,7 @@
   }
   40% {
     rotate: 0deg;
-    transform: translateX(0px) translateY(0px);
+    transform: translateX(0px) translateY(100px);
     opacity: 100%;
   }
   50% {
@@ -95,17 +95,17 @@
 @keyframes HoonsRotateThird {
   0% {
     rotate: 30deg;
-    transform: translateX(800px) translateY(-100px);
+    transform: translateX(800px) translateY(-0px);
     opacity: 0%;
   }
   20% {
     rotate: 30deg;
-    transform: translateX(800px) translateY(-100px);
+    transform: translateX(800px) translateY(-0px);
     opacity: 0%;
   }
   40% {
     rotate: 30deg;
-    transform: translateX(800px) translateY(-100px);
+    transform: translateX(800px) translateY(-0px);
     opacity: 0%;
   }
   50% {
@@ -113,7 +113,7 @@
   }
   60% {
     rotate: 0deg;
-    transform: translateX(0px) translateY(0px);
+    transform: translateX(0px) translateY(100px);
     opacity: 100%;
   }
   70% {
@@ -134,22 +134,22 @@
 @keyframes HoonsRotateFourth {
   0% {
     rotate: 30deg;
-    transform: translateX(800px) translateY(-100px);
+    transform: translateX(800px) translateY(-0px);
     opacity: 0%;
   }
   20% {
     rotate: 30deg;
-    transform: translateX(800px) translateY(-100px);
+    transform: translateX(800px) translateY(-0px);
     opacity: 0%;
   }
   40% {
     rotate: 30deg;
-    transform: translateX(800px) translateY(-100px);
+    transform: translateX(800px) translateY(-0px);
     opacity: 0%;
   }
   60% {
     rotate: 30deg;
-    transform: translateX(800px) translateY(-100px);
+    transform: translateX(800px) translateY(-0px);
     opacity: 0%;
   }
   70% {
@@ -157,7 +157,7 @@
   }
   80% {
     rotate: 0deg;
-    transform: translateX(0px) translateY(0px);
+    transform: translateX(0px) translateY(100px);
     opacity: 100%;
   }
   90% {
