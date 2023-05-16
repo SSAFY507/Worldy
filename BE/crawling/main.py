@@ -29,7 +29,7 @@ def crawling_naver():
 #----------------------- news quiz -----------------------
 
 
-@sched.scheduled_job('cron', hour='9', minute='0', id='news_quiz')
+@sched.scheduled_job('cron', hour='14', minute='0', id='news_quiz')
 def news_quiz():
     for nation in nations.keys():
         news_content.find_new_content(nation, nations[nation])

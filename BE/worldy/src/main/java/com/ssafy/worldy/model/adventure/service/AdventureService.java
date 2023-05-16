@@ -37,6 +37,8 @@ public class AdventureService {
         List<News> newsList = newsRepo.findAllNewsByNationId(nationId);
 
         for(News n : newsList){
+            if(n.getNewsImg() == null) continue;
+
             newsDtoList.add(n.toDto());
         }
 
@@ -122,7 +124,7 @@ public class AdventureService {
                 .build();
     }
 
-    public InfoDto getInfoDto(Long nationId, String category){
+    public InfoDto getStaticInfoDto(Long nationId, String category){
 
         Info info = infoRepo.getInfoByNationIdAndCategory(nationId, category);
 
