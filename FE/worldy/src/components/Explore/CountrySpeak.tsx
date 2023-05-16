@@ -60,7 +60,7 @@ interface Country {
   }
 }
 
-interface NewsDataType {
+export interface NewsDataType {
   id: number,
   nationName: string,
   newsTitle: string,
@@ -69,24 +69,31 @@ interface NewsDataType {
   newsUrl: string
 };
 
-interface QuizDataType {
+export interface QuizDataType {
 
 };
 
-interface PaintDataType {
+export interface PaintDataType {
   originalUrl: string,
   diffUrl: string,
   imgNum: string,
   answerPointList: string[][]
 };
 
-interface FoodDataType {
-
+export interface FamousDataType {
+  infoId : string,
+  nationName : string,
+  category : string,
+  img_url : string,
+  video_url : string,
+  insta_url? : string,
+  name : string,
+  content : string
 };
 
-interface PersonalityDataType {
-
-};
+interface UrlListType {
+  [key:string]: string,
+}
 // nations = {"대한민국" : 9, "중국" : 7, "일본" : 8, "인도" : 4, "영국" : 19, "프랑스" : 18, "이탈리아" : 14, "스페인" : 12, "미국" : 39, "이집트" : 27}
 export const countryLst: Country = {
   asia_Korea: {
@@ -146,11 +153,24 @@ const DOMAIN = process.env.REACT_APP_BASE_URL
 const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
 
   const getLoginToken: string | null = sessionStorage.getItem('token');
-  const [axiosGetData, setAxiosGetData] = useState<NewsDataType |QuizDataType| PaintDataType | FoodDataType | PersonalityDataType | undefined>();
+  const [axiosGetNewsData, setAxiosGetNewsData] = useState<NewsDataType[] | undefined>();
+  const [axiosGetQuizData, setAxiosGetQuizData] = useState<QuizDataType[] | undefined>();
+  const [axiosGetPaintData, setAxiosGetPaintData] = useState<PaintDataType | undefined>();
+  const [axiosGetFamousData, SetAxiosGetFamousData] = useState<FamousDataType[] | undefined>();
+
+  const [checkGetData, setCheckGetData] = useState<boolean>(false)
   const countryId = countryLst[countryName].id
+  
+  const urlList:UrlListType = {
+    newsBox: `/adventure/news/${countryId}`,
+    quizBox: ``,
+    paintBox: `/quiz/hidden/${countryId}`,
+    foodBox: `/adventure/info/static?nationId=${countryId}&category=food`,
+    personalityBox: `/adventure/info/static?nationId=${countryId}&category=people`
+  }
 
   /** 데이터 받는 함수 */
-  const getDatasList = async (url:string) => {
+  const getDatasList = async (box: string, url:string) => {
     try {
       const response = await CustomAxios({
         APIName: 'getDatasList',
@@ -158,38 +178,41 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
         UrlQuery: DOMAIN + url,
         Token: getLoginToken,
       });
-      setAxiosGetData(response)
+      switch (box) {
+        case "newsBox":
+          setAxiosGetNewsData(response);
+          break;
+        case "quizBox":
+          setAxiosGetQuizData(response);
+          break;
+        case "paintBox":
+          setAxiosGetPaintData(response);
+          break;
+        case "foodBox":
+          SetAxiosGetFamousData(response)
+          break;
+        case "personalityBox":
+          SetAxiosGetFamousData(response)
+          break;
+        default:
+          break;
+        }        
+      setCheckGetData(true)
+
     } catch (error) {
       console.log('Error fetching data:', error);
     }
   }
+  // `/adventure/news/${countryId}`
+  // getDatasList(`adventure/info/static?nationId=${countryId}&category=food`);
+  // getDatasList(`adventure/info/static?nationId=${countryId}&category=people`);
 
   useEffect(() => {
-
     if (getLoginToken){
-      switch (selectAsset) {
-        case "newsBox":
-          getDatasList(`/adventure/news/${countryId}`);
-          break;
-        case "quizBox":
-          getDatasList(``);
-          break;
-        case "paintBox":
-          getDatasList(``);
-          break;
-        case "foodBox":
-          getDatasList(``);
-          break;
-        case "personalityBox":
-          getDatasList(``);
-          break;
-        default:
-          break;
-        }
+      getDatasList(selectAsset, urlList[`${selectAsset}`])
     }
-  },[selectAsset])
+  },[])
 
-  console.log(axiosGetData)
 
   // const myImageList = {
   //   TutorialBackground: pathTB,
@@ -241,6 +264,9 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
   // ];
 
 
+  // 1분 자기소개, 지원동기, 장단점
+
+
   const ment:SpeakType = {
     newsBox: {
       title: `${countryLst[`${countryName}`].KOREAN} 최신 뉴스`,
@@ -283,8 +309,9 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
       mainIcon: food,
     }
   }
+  console.log(checkGetData)
  
-  if (axiosGetData) {
+  if (checkGetData) {
     return (
       <div className="w-full h-full flex items-end">
         <div className="z-10 w-1/4 translate-x-10 absolute">
@@ -321,10 +348,9 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
             </div>
           </div>
           <div className="h-full w-3/4 flex flex-col justify-center items-center">
-            {(selectAsset === "newsBox") ? <CountryNewsDetail data={axiosGetData}/> :null}
-            {(selectAsset === "quizBox" || selectAsset === "paintBox") ? <CountryQuizFrame selectAsset={selectAsset}/> : null}
-            {(selectAsset === "foodBox" || selectAsset === "personalityBox") ? <CountryFamousFrame selectAsset={selectAsset} /> :null}
-  
+            {(selectAsset === "newsBox" && axiosGetNewsData) ? <CountryNewsDetail axiosGetNewsData={axiosGetNewsData} /> :null}
+            {(selectAsset === "quizBox" || selectAsset === "paintBox") ? <CountryQuizFrame selectAsset={selectAsset} axiosGetPaintData={axiosGetPaintData}/> : null}
+            {(selectAsset === "foodBox" || selectAsset === "personalityBox") ? <CountryFamousFrame selectAsset={selectAsset} axiosGetFamousData={axiosGetFamousData}/> :null}
           </div>
         </div>
       </div>

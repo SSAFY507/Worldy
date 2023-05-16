@@ -8,7 +8,6 @@ interface Props {
 }
 
 // 확인을 누르면 다른 문제를 받아와야 하는 지? 
-//아니면 밖으로 내보내야 하는지 논의 필요
 
 const CountryPaintAfter = ({answer}:Props) => {
 
@@ -34,7 +33,10 @@ const CountryPaintAfter = ({answer}:Props) => {
           <div className='h-2/3 w-full px-10 pt-2 pb-5 text-xs inline-block'>{answer.description}</div>
         </div>
       </div>
-      <div className=' h-12 w-[780px] text-sm text-center font-PtdLight opacity-40 py-3 rounded-xl shadow-lg border-solid border-2 border-gray-200 cursor-pointer'>
+      <div className=' h-12 w-[780px] text-sm text-center font-PtdLight opacity-40 py-3 rounded-xl shadow-lg border-solid border-2 border-gray-200 cursor-pointer'
+        onClick={() =>{
+          
+        }}>
         확인
       </div>
     </div>

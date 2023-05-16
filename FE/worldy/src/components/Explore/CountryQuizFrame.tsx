@@ -9,6 +9,7 @@ import { ReactComponent as POne } from "../../assets/images/p1.svg"
 import { ReactComponent as PStart } from "../../assets/images/pSTART.svg"
 import { ReactComponent as PThree } from "../../assets/images/p3.svg"
 import { ReactComponent as PTwo } from "../../assets/images/p2.svg"
+import { PaintDataType } from './CountrySpeak'
 import { ReactComponent as PaintTitleIcon } from '../../assets/images/painttitle.svg'
 import QuizModal from '../QuizModal'
 import { ReactComponent as QuizTitleIcon } from "../../assets/images/quiztitle.svg"
@@ -93,16 +94,22 @@ const tempScrappedQuizList: ScrappedQuizType[] = [
     success: false, //맞춘 문제인가
   },
 ];
+
 interface Props {
   selectAsset: string;
+  axiosGetPaintData: PaintDataType | undefined;
 };
+
 interface ImgObjectType {
   [key:string]: JSX.Element[];
-}
-const CountryQuizFrame = ({selectAsset}:Props) => {
+};
+
+const CountryQuizFrame = ({selectAsset, axiosGetPaintData}:Props) => {
   const [counting, setCounting] = useState<number>(-2)
   const [quizModalState, setQuizModalState] = useState<boolean>(false);
   const [selectedQuizId, setSelectedQuizId] = useState<number>(0);
+
+  console.log(" 틀림 그림 찾기 데이터 : ", axiosGetPaintData)
 
   const imgObject:ImgObjectType = {
     quizBox:[
