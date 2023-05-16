@@ -161,7 +161,8 @@ const WorldMap = () => {
       // 줌 아웃 상태에서 대륙이 마우스 위에 있으면 줌인
       const targets = raycasterRef.current?.intersectObject(continent);
       if(targets!.length > 0 && selectedObjectRef.current?.userData.flag === false) {
-        ZoomFit(continent, 45, 0.2)
+        // ZoomFit(continent, 45, 0.4)
+        ZoomFit(continent, 45, 0.25)
         selectedObjectRef.current!.userData.flag = true
         return;
       }
@@ -192,6 +193,7 @@ const WorldMap = () => {
       const box = new THREE.Box3().setFromObject(object3d);       // 객체를 감싸고 있는 box
       const sizeBox = box.getSize(new THREE.Vector3()).length();  // 객체의 정육각형 box의 대각선 길이
       const centerBox = box.getCenter(new THREE.Vector3());       // box의 중앙점
+      // const direction = new THREE.Vector3(0, 1, 0);               // 처음에 설정된 벡터
       const direction = new THREE.Vector3(0, 1, 0);               // 처음에 설정된 벡터
       // 처음에 설정된 벡터 (0, 1, 0)을 (1, 0 ,0)방향으로 viewAngle만큼 회전한 객체
       direction.applyAxisAngle(new THREE.Vector3(1, 0, 0), THREE.MathUtils.degToRad(viewAngle));
@@ -392,7 +394,7 @@ const WorldMap = () => {
           })
           
         }
-        obj3d.position.set(1, 0.3, 0)
+        obj3d.position.set(2.4, 0.3, 0)
         // console.log(obj3d.position)
         // scale = (1, 1, 1)
         // console.log(obj3d.scale)
@@ -406,7 +408,7 @@ const WorldMap = () => {
       (glb) => {
         const root = glb.scene;
         // x:0, y:0, z:0
-        root.position.set(1, 0.3, 0);
+        root.position.set(2.4, 0.3, 0);
         scene.current?.add(root)
         root.name = "basemap"
         }
@@ -490,7 +492,7 @@ const WorldMap = () => {
       SetupPicking();
 
 
-      const cam = SetupCamera(37, 0.1, 25, new THREE.Vector3(0, 10, 6), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0));
+      const cam = SetupCamera(37, 0.1, 50, new THREE.Vector3(0, 10, 6), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0));
       camera.current = cam
       scene.current.add(cam)
       controls.current =  SetupControls(camera.current!, divContainer.current!, 50, 50, 0, 0);
