@@ -124,10 +124,15 @@ public class AdventureService {
                 .build();
     }
 
-    public InfoDto getStaticInfoDto(Long nationId, String category){
+    public List<InfoDto> getStaticInfoDto(Long nationId, String category){
 
-        Info info = infoRepo.getInfoByNationIdAndCategory(nationId, category);
+        List<Info> infoList = infoRepo.getInfoByNationIdAndCategory(nationId, category);
+        List<InfoDto> infoDtoList = new ArrayList<>();
 
-        return info.toDto();
+        for(Info i : infoList){
+            infoDtoList.add(i.toDto());
+        }
+
+        return infoDtoList;
     }
 }

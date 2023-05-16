@@ -37,7 +37,7 @@ public class AdventureController {
     }
 
     @GetMapping("/info/static")
-    public ResponseEntity<InfoDto> getStaticInfo(@RequestParam Long nationId, @RequestParam String category){
+    public ResponseEntity<List<InfoDto>> getStaticInfo(@RequestParam Long nationId, @RequestParam String category){
         return new ResponseEntity<>(adventureService.getStaticInfoDto(nationId, category), HttpStatus.OK);
     }
 }
