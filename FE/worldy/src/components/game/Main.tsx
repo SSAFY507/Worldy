@@ -1547,7 +1547,7 @@ export default function Main() {
     {
       id: 3,
       title: '코로나19 확진',
-      content: '코로나에 걸렸습니다. 2턴 간 자가격리에 들어갑니다.',
+      content: '코로나에 걸렸습니다. 3턴 간 자가격리에 들어갑니다.',
     },
     {
       id: 4,
@@ -1557,7 +1557,7 @@ export default function Main() {
     {
       id: 5,
       title: '졸음',
-      content: '졸다가 3역을 지나쳤습니다. 앞으로 3 칸 이동',
+      content: '졸다가 3역을 지나쳤습니다. 앞으로 3칸 이동',
     },
     {
       id: 6,
@@ -1606,8 +1606,8 @@ export default function Main() {
     },
     {
       id: 15,
-      title: '통행 면제권',
-      content: '1회 다른 플레이어의 나라에 무료로 머무를 수 있습니다.',
+      title: '삼성 주가 상승',
+      content: '투자한 삼성 주식이 대박났습니다.     +200만원',
     },
     {
       id: 16,

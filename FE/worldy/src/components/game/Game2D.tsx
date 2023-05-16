@@ -35,6 +35,8 @@ export default function Game2D(props: any) {
   const [selectMode, setSelectMode] = useState<boolean>(false);
   const [activeDice, setActiveDice] = useState<boolean>(false);
   const [itemMove, setItemMove] = useState<number>(0);
+  const [tmpCnt, setTmpCnt] = useState<number>(0);
+  const [tmpTax, setTmpTax] = useState<number>(0);
 
   const navigate = useNavigate();
 
@@ -94,11 +96,30 @@ export default function Game2D(props: any) {
   //   sendData();
   // }, [metaData.turn]);
 
+  // useEffect(() => {
+  //   setMode(8);
+  // }, [])
+
+
+
+
   useEffect(() => {
     if (myTurn) {
       setActiveDice(true);
     }
   }, [myTurn])
+
+
+  useEffect(() => {
+    if (tmpCnt == 0) {
+      setMetaData((prevState: any) => ({
+        ...prevState,
+        itemMsg1: '무인도 탈출 성공!',
+        itemMsg2: '다음턴부터 플레이할 수 있습니다.',
+      }))
+    }
+  }, [tmpCnt])
+
 
 
 
@@ -262,7 +283,7 @@ export default function Game2D(props: any) {
     gameResultAxios();
   }
 
-  function catAssets(p: any) {
+  function calAssets(p: any) {
     let sum = p.game.balance;
 
     for (let nationId of p.game.own) {
@@ -318,10 +339,10 @@ export default function Game2D(props: any) {
   function calRanking() {
 
     // 자산 계산(balance + 땅 + 건물)
-    let p1Assets = catAssets(player.p1);
-    let p2Assets = catAssets(player.p2);
-    let p3Assets = catAssets(player.p3);
-    let p4Assets = catAssets(player.p4);
+    let p1Assets = calAssets(player.p1);
+    let p2Assets = calAssets(player.p2);
+    let p3Assets = calAssets(player.p3);
+    let p4Assets = calAssets(player.p4);
 
     // 유저 정보 저장
     setRankPlayerData((prevState: any) => ({
@@ -389,6 +410,59 @@ export default function Game2D(props: any) {
     console.log(sortPlayerdata);
   }
 
+
+  // 무인도로 바꾸는 함수
+  function goDesert(turn: number) {
+    console.log((turn + 1) + '님 무인도 도착')
+    if (turn === 0) {
+      setPlayer((prevState: any) => ({
+        ...prevState,
+        p1: {
+          ...prevState.p1,
+          game: {
+            ...prevState.p1.game,
+            desert: 3,
+          }
+        }
+      }))
+    } else if (turn === 1) {
+      setPlayer((prevState: any) => ({
+        ...prevState,
+        p2: {
+          ...prevState.p2,
+          game: {
+            ...prevState.p2.game,
+            desert: 3,
+          }
+        }
+      }))
+    } else if (turn === 2) {
+      setPlayer((prevState: any) => ({
+        ...prevState,
+        p3: {
+          ...prevState.p3,
+          game: {
+            ...prevState.p3.game,
+            desert: 3,
+          }
+        }
+      }))
+    } else if (turn === 3) {
+      setPlayer((prevState: any) => ({
+        ...prevState,
+        p4: {
+          ...prevState.p4,
+          game: {
+            ...prevState.p4.game,
+            desert: 3,
+          }
+        }
+      }))
+    }
+  }
+
+
+
   // 주사위 흔드는 함수
   function showDice(dice1: number, dice2: number): void {
     const dicesElement1 = document.querySelectorAll(".dice");
@@ -447,6 +521,138 @@ export default function Game2D(props: any) {
     }));
     showDice(dice1, dice2);
 
+
+    // 무인도일 때
+    if (p.game.desert > 0) {
+      console.log('무인도 카운트:')
+      console.log(p.game.desert);
+
+
+      // 더블 나왔을때 (무인도 탈출)
+      if (isDouble) {
+        setMetaData((prevState: any) => ({
+          ...prevState,
+          itemMsg1: '[더블] 무인도 탈출 성공!',
+          itemMsg2: '다음턴부터 플레이할 수 있습니다.',
+        }))
+        setTmpCnt(0)
+        if (turn === 0) {
+          setPlayer((prevState: any) => ({
+            ...prevState,
+            p1: {
+              ...prevState.p1,
+              game: {
+                ...prevState.p1.game,
+                desert: 0,
+              }
+            }
+          }))
+        } else if (turn === 1) {
+          setPlayer((prevState: any) => ({
+            ...prevState,
+            p2: {
+              ...prevState.p2,
+              game: {
+                ...prevState.p2.game,
+                desert: 0,
+              }
+            }
+          }))
+        } else if (turn === 2) {
+          setPlayer((prevState: any) => ({
+            ...prevState,
+            p3: {
+              ...prevState.p3,
+              game: {
+                ...prevState.p3.game,
+                desert: 0,
+              }
+            }
+          }))
+        } else if (turn === 3) {
+          setPlayer((prevState: any) => ({
+            ...prevState,
+            p4: {
+              ...prevState.p4,
+              game: {
+                ...prevState.p4.game,
+                desert: 0,
+              }
+            }
+          }))
+        }
+      } else {  // 더블 아닐때(카운트 감소)
+
+        setMetaData((prevState: any) => ({
+          ...prevState,
+          itemMsg1: '무인도 탈출 실패',
+          itemMsg2: '남은 횟수',
+        }))
+        if (turn === 0) {
+          setPlayer((prevState: any) => ({
+            ...prevState,
+            p1: {
+              ...prevState.p1,
+              game: {
+                ...prevState.p1.game,
+                desert: (prevState.p1.game.desert - 1),
+              }
+            }
+          }))
+          setTmpCnt(player.p1.game.desert - 1)
+        } else if (turn === 1) {
+          setPlayer((prevState: any) => ({
+            ...prevState,
+            p2: {
+              ...prevState.p2,
+              game: {
+                ...prevState.p2.game,
+                desert: (prevState.p2.game.desert - 1),
+              }
+            }
+          }))
+          setTmpCnt(player.p2.game.desert - 1)
+        } else if (turn === 2) {
+          setPlayer((prevState: any) => ({
+            ...prevState,
+            p3: {
+              ...prevState.p3,
+              game: {
+                ...prevState.p3.game,
+                desert: (prevState.p3.game.desert - 1),
+              }
+            }
+          }))
+          setTmpCnt(player.p3.game.desert - 1)
+        } else if (turn === 3) {
+          setPlayer((prevState: any) => ({
+            ...prevState,
+            p4: {
+              ...prevState.p4,
+              game: {
+                ...prevState.p4.game,
+                desert: (prevState.p4.game.desert - 1),
+              }
+            }
+          }))
+          setTmpCnt(player.p4.game.desert - 1)
+        }
+      }
+
+
+      // 무인도 턴 종료
+
+      setMode(14);
+      setMetaData((prevState: any) => ({
+        ...prevState,
+        turnOver: true,
+      }))
+      return;
+
+
+    }
+
+
     if (myTurn && isDouble) {
       setActiveDice(true);
     } else if (myTurn && !isDouble) {
@@ -454,7 +660,7 @@ export default function Game2D(props: any) {
     }
 
     // 이동위치 반환 함수
-    const newLocation = move((p.playerNum - 1), dice);
+    const newLocation = move((turn), dice);
 
     // 구매 옵션 초기화
     setBuyOption(0);
@@ -528,11 +734,14 @@ export default function Game2D(props: any) {
     } else if (spot.type === "item") {
       setMode(4);
       getItem(turn);
-     // 무인도
+      // 무인도
     } else if (spot.location === 10) {
       setMode(5);
-      // 무인도 구현하기
-      // 특수지역
+      goDesert(turn);
+      // 국세청
+    } else if (spot.location === 37) {
+      setTmpTax(Math.floor((calAssets(p) / 10)));
+      setMode(15);
     } else if (spot.type !== "nation" && spot.location !== 20 && spot.type !== "city") {
       setMode(5);
       // 정거장일 때
@@ -543,6 +752,68 @@ export default function Game2D(props: any) {
       setMode(9);
     }
   }
+
+
+  // 세금 납부 함수
+  function payTax(turn: number) {
+
+    let p;
+    let asset: number;
+    if (turn === 0) {
+      p = player.p1
+      asset = calAssets(p);
+      setPlayer((prevState: any) => ({
+        ...prevState,
+        p1: {
+          ...prevState.p1,
+          game: {
+            ...prevState.p1.game,
+            balance: prevState.p1.game.balance - (asset / 10),
+          }
+        }
+      }))
+    } else if (turn === 1) {
+      p = player.p2
+      asset = calAssets(p);
+      setPlayer((prevState: any) => ({
+        ...prevState,
+        p2: {
+          ...prevState.p2,
+          game: {
+            ...prevState.p2.game,
+            balance: prevState.p2.game.balance - (asset / 10),
+          }
+        }
+      }))
+    } else if (turn === 2) {
+      p = player.p3
+      asset = calAssets(p);
+      setPlayer((prevState: any) => ({
+        ...prevState,
+        p3: {
+          ...prevState.p3,
+          game: {
+            ...prevState.p3.game,
+            balance: prevState.p3.game.balance - (asset / 10),
+          }
+        }
+      }))
+    } else if (turn === 3) {
+      p = player.p4
+      asset = calAssets(p);
+      setPlayer((prevState: any) => ({
+        ...prevState,
+        p4: {
+          ...prevState.p4,
+          game: {
+            ...prevState.p4.game,
+            balance: prevState.p4.game.balance - (asset / 10),
+          }
+        }
+      }))
+    }
+  }
+
 
   // 이동하기 함수
   function move(turn: number, dice: number) {
@@ -557,7 +828,7 @@ export default function Game2D(props: any) {
       p = player.p4
     }
 
-    let result = metaData.currentLocation + dice;
+    let result = p.game.location + dice;
 
     if (result >= 40) {
 
@@ -622,7 +893,9 @@ export default function Game2D(props: any) {
 
   // 원하는 좌표로 이동하는 함수
   function moveDircet(turn: number, location: number) {
+    let p;
     if (turn === 0) {
+      p = player.p1;
       setPlayer((prevState: any) => ({
         ...prevState,
         p1: {
@@ -634,6 +907,7 @@ export default function Game2D(props: any) {
         }
       }))
     } else if (turn === 1) {
+      p = player.p2;
       setPlayer((prevState: any) => ({
         ...prevState,
         p2: {
@@ -645,6 +919,7 @@ export default function Game2D(props: any) {
         }
       }))
     } else if (turn === 2) {
+      p = player.p3;
       setPlayer((prevState: any) => ({
         ...prevState,
         p3: {
@@ -656,6 +931,7 @@ export default function Game2D(props: any) {
         }
       }))
     } else if (turn === 3) {
+      p = player.p4;
       setPlayer((prevState: any) => ({
         ...prevState,
         p4: {
@@ -684,8 +960,14 @@ export default function Game2D(props: any) {
       setMode(4);
     } else if (worldMap[location].type === 'city') { // 특수도시
       setMode(9);
-    } else if (location === 30 || location === 0 || location === 10) { // 올림픽
+    } else if (location === 30 || location === 0) { // 올림픽
       setMode(5)
+    } else if (location === 10) { // 무인도
+      setMode(5)
+      goDesert(turn);
+    } else if (location === 37) { // 국세청
+      setTmpTax(Math.floor((calAssets(p) / 10)));
+      setMode(15);
     }
 
     setSelectMode(false);
@@ -693,8 +975,8 @@ export default function Game2D(props: any) {
 
 
   // 돈 오고가는 함수
-  function getMoney(turn: number, money:number) {
-    if(turn === 0) {
+  function getMoney(turn: number, money: number) {
+    if (turn === 0) {
       setPlayer((prevState: any) => ({
         ...prevState,
         p1: {
@@ -745,7 +1027,7 @@ export default function Game2D(props: any) {
   function getItem(turn: number) {
     console.log('getItem 실행')
     let n = Math.floor(Math.random() * 17);
-    n = 9
+    n = 3
     const i = item[n];
     // const pNum = (turn + 1);
 
@@ -764,13 +1046,16 @@ export default function Game2D(props: any) {
       setActiveDice(true);
     } else if (n === 1) {
       // 무인도 이동
-      moveDircet(turn, 10);
+      setItemMove(10);
+      setMode(13);
     } else if (n === 2) {
       // 원하는 곳으로 이동
       setMode(10);
       setSelectMode(true);
     } else if (n === 3) {
       // 2턴 쉬기
+      setItemMove(10);
+      setMode(13);
     } else if (n === 4) {
       // 뒤로 2칸
       setMode(11);
@@ -816,7 +1101,9 @@ export default function Game2D(props: any) {
       setMode(12);
       getMoney(turn, -100);
     } else if (n === 15) {
-      // 통행 면제권 발급
+      // 200만원 추가
+      setMode(12);
+      getMoney(turn, 200);
     } else if (n === 16) {
       // 뒤로 2칸 이동
       setMode(11);
@@ -1060,12 +1347,12 @@ export default function Game2D(props: any) {
 
 
   // 턴 오버 함수
-  function turnOVer() {
-    setMetaData((prevState: any) => ({
-      ...prevState,
-      turnOVer: true,
-    }))
-  }
+  // function turnOVer() {
+  //   setMetaData((prevState: any) => ({
+  //     ...prevState,
+  //     turnOVer: true,
+  //   }))
+  // }
 
   // 구매하기
   function buy(turn: number, spot: Spot, buyOption: number) {
@@ -1357,7 +1644,7 @@ export default function Game2D(props: any) {
       }));
     }
   }
-  
+
 
   // 플레이어 이동함수
   function movePlayer(turn: number, dis: number) {
@@ -1417,18 +1704,18 @@ export default function Game2D(props: any) {
     // 국가 일때
     if (spot.type === 'nation') {
       // 주인 없을때
-      if(spot.owner === 0) {
+      if (spot.owner === 0) {
 
         setMode(1);
         setBuyOption(0);
 
-      // 내 땅일 때(추가 건설)
+        // 내 땅일 때(추가 건설)
       } else if (spot.owner === (turn + 1)) {
         console.log('추가건설')
         setMode(2);
         setBuildOption(0);
 
-      // 통행료 지불
+        // 통행료 지불
       } else if (spot.owner !== (turn + 1)) {
         console.log('통행료 지불')
         setMode(3);
@@ -1644,24 +1931,20 @@ export default function Game2D(props: any) {
               주사위 : [{metaData.dice1}, {metaData.dice2}]
             </div>
           </div>
-          <div className="w-[320px] h-[840px] mb-[50px]  flex flex-col justify-around items-center">
+          <div className="w-[320px] h-[920px] mb-[50px]  flex flex-col justify-around items-center">
             {pList.map((i, index) => {
               return (
                 <div key={index}>
-                  {i.playerNum === metaData.turn + 1 && (
-                    <div
-                      className={`w-[80px] h-[30px] bg-blue-400 relative left-[-6px] top-[0px] z-[100] text-white text-[12px] border-[10px] border-solid border-blue-400 rounded-[2px] flex justify-center items-center`}
-                    >
-                      Player {i.playerNum} 턴
-                    </div>
-                  )}
                   <div
-                    className={`w-[300px] h-[260px] bg-[#F4F2EC] rounded-[8px] flex flex-col justify-center items-center ${metaData.turn + 1 === i.playerNum
-                      ? "outline outline-[6px] outline-blue-400"
-                      : ""
-                      }`}
+                    className={`w-[300px] h-[290px] bg-[#F4F2EC] rounded-[8px] flex flex-col justify-center items-center 
+                    ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 1 ? "outline outline-[6px] outline-red-400" : ""}
+                    ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 2 ? "outline outline-[6px] outline-green-400" : ""}
+                    ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 3 ? "outline outline-[6px] outline-blue-400" : ""}
+                    ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 4 ? "outline outline-[6px] outline-purple-400" : ""}
+                    
+                    `}
                   >
-                    <div className="w-[250px] h-[210px] bg-[#F4F2EC]">
+                    <div className="w-[250px] h-[240px] bg-[#F4F2EC] mt-[20px]">
                       <div className="flex justify-between">
                         <div className="">플레이어[{i.playerNum}]</div>
                         <div className="">현재 위치</div>
@@ -1681,10 +1964,9 @@ export default function Game2D(props: any) {
                           </div>
                         </div>
                       </div>
-                      <div className="flex flex-col w-full h-[140px] items-between">
+                      <div className="flex flex-col w-full h-[60px] items-between">
                         <div className="">
-                          소유국가[총{3}개]
-                          {/* 소유국가[총{i.game.own.length}개] */}
+                          소유국가[총{i.game.own.length}개]
                         </div>
                         <div className="flex mt-[10px] h-[80px] w-full">
                           <div className="text-[14px]  h-[80px] w-full flex flex-wrap">
@@ -1701,6 +1983,17 @@ export default function Game2D(props: any) {
                           </div>
                         </div>
                       </div>
+                    </div>
+                    <div className={`w-[60px] h-[52px] rounded-full flex justify-center items-center text-white relative top-[-30px] left-[100px]
+                    ${i.playerNum === 1 ? 'bg-red-400' : ''}
+                    ${i.playerNum === 2 ? 'bg-green-400' : ''}
+                    ${i.playerNum === 3 ? 'bg-blue-400' : ''}
+                    ${i.playerNum === 4 ? 'bg-purple-400' : ''}
+                    `}>
+                      {i.name === rankPlayerData.rankPlayer[0].nickName ? '1위' : ''}
+                      {i.name === rankPlayerData.rankPlayer[1].nickName ? '2위' : ''}
+                      {i.name === rankPlayerData.rankPlayer[2].nickName ? '3위' : ''}
+                      {i.name === rankPlayerData.rankPlayer[3].nickName ? '4위' : ''}
                     </div>
                   </div>
                 </div>
@@ -2641,7 +2934,7 @@ export default function Game2D(props: any) {
                     {/* 1. 국가일 때 */}
                     {mode === 0 && (
                       <div className="text-[30px] font-PtdExtraBold">
-                        플레이어 턴 종료
+                        플레이어 {(metaData.turn + 1)}턴
                       </div>
                     )}
                     {mode === 1 && (
@@ -3197,7 +3490,17 @@ export default function Game2D(props: any) {
                     {/* 7. 구매완료*/}
                     {mode === 7 && (
                       <div className="flex flex-col justify-center itmes-center">
-                        <div className="text-[24px] font-PtdBold">구매 및 건설 완료</div>
+                        <div className="text-[24px] font-PtdBold flex justify-center items-center text-center">구매 및 건설 완료</div>
+                        <div className="w-[330px] h-[52px] flex items-end justify-between mt-[40px]">
+                          <div
+                            className="w-full h-[50px] bg-red-500rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-red-600 hover:cursor-pointer"
+                            onClick={() => {
+
+                            }}
+                          >
+                            [{worldMap[newLoaction].name}] 확인
+                          </div>
+                        </div>
                       </div>
                     )}
 
@@ -3294,6 +3597,57 @@ export default function Game2D(props: any) {
                         </div>
                       </div>
                     )}
+                    {/* 14  무인도인 경우 */}
+                    {mode === 14 && (
+                      <div className="flex flex-col justify-center itmes-center">
+                        <p className="text-[30px] font-PtdBold text-center w-full h-[34px]">{metaData.itemMsg1}</p>
+                        <div className="flex">
+                          <span className="text-[24px] text-center w-full h-[30px] mt-[20px]">{metaData.itemMsg2}</span>
+                          {tmpCnt > 0 ?
+                            <span className="text-[28px] text-PtdBold text-center w-full h-[30px] mt-[20px]">{tmpCnt}</span>
+                            : null
+                          }
+                        </div>
+                        <div className="w-[330px] h-[62px] flex items-end justify-between mt-[24px]">
+                          <div
+                            className="w-full h-[50px] bg-red-500 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-red-600 hover:cursor-pointer"
+                            onClick={() => {
+                              setMetaData((prevState: any) => ({
+                                ...prevState,
+                                turnOver: true,
+                              }));
+                              setMode(0);
+                            }}
+                          >
+                            확인
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {/* 15  국세청 세금 */}
+                    {mode === 15 && (
+                      <div className="flex flex-col justify-center itmes-center">
+                        <p className="text-[30px] font-PtdBold text-center w-full h-[34px]">{worldMap[37].title}</p>
+                        <div className="flex">
+                          <span className="text-[24px] text-center w-full h-[30px] mt-[20px]">{worldMap[37].contents}</span>
+                        </div>
+                        <div className="w-[330px] h-[62px] flex items-end justify-between mt-[24px]">
+                          <div
+                            className="w-full h-[50px] bg-red-500 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-red-600 hover:cursor-pointer"
+                            onClick={() => {
+                              payTax(metaData.turn);
+                              setMetaData((prevState: any) => ({
+                                ...prevState,
+                                turnOver: true,
+                              }));
+                              setMode(0);
+                            }}
+                          >
+                            {tmpTax}만원 납부하기
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -3305,16 +3659,25 @@ export default function Game2D(props: any) {
         <div
           className={`w-[20%] h-full flex flex-col justify-center items-start rounded-[4px]`}
         >
-          {myTurn && (
-            <div
-              className={`w-[80px] h-[30px] bg-yellow-400 relative left-[-4px] top-[0px] z-[100] text-white text-[12px] rounded-[4px] flex justify-center items-center`}
-            >
-              당신 차례
-            </div>
-          )}
+
           <div
-            className={`w-[320px] h-[920px] mb-[50px]  flex flex-col justify-around items-center bg-gray-100 rounded-[8px]  ${myTurn ? "outline outline-[6px] outline-yellow-400" : ""
-              }`}
+            className={`w-[70px] h-[50px] relative left-[10px] top-[-12px] z-[100] text-white text-[18px] rounded-full flex justify-center items-center
+              ${me.playerNum === 1 ? 'bg-red-400' : ''}
+              ${me.playerNum === 2 ? 'bg-green-400' : ''}
+              ${me.playerNum === 3 ? 'bg-blue-400' : ''}
+              ${me.playerNum === 4 ? 'bg-purple-400' : ''}
+          `}
+          >
+            1위
+          </div>
+          <div
+            className={`w-[320px] h-[920px] mb-[50px]  flex flex-col justify-around items-center bg-gray-100 rounded-[8px] 
+            ${myTurn && me.playerNum === 1 ? "outline outline-[6px] outline-red-400" : ""}
+            ${myTurn && me.playerNum === 2 ? "outline outline-[6px] outline-green-400" : ""}
+            ${myTurn && me.playerNum === 3 ? "outline outline-[6px] outline-blue-400" : ""}
+            ${myTurn && me.playerNum === 4 ? "outline outline-[6px] outline-purple-400" : ""}
+            
+            `}
           >
             <div className="w-[300px] h-[200px] bg-white rounded-[8px] flex flex-col justify-center items-center">
               <div className="w-[250px] h-[140px]">
