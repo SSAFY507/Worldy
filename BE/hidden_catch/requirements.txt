@@ -11,6 +11,7 @@ idna==3.4
 jmespath==1.0.1
 numpy==1.24.3
 opencv-python==4.7.0.72
+opencv-contrib-python==3.4.1.15
 Pillow==9.5.0
 pydantic==1.10.7
 python-dateutil==2.8.2
