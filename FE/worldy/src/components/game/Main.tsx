@@ -530,6 +530,7 @@ export default function Main() {
     isDouble: false,
     itemMsg1: '아이템 메시지1',
     itemMsg2: '아이템 메시지2',
+    fund: 0,
   });
   const [turnOver, setTurnOver] = useState<boolean>(false);
 
@@ -734,7 +735,7 @@ export default function Main() {
       },
       {
         location: 5,
-        name: "홍콩",
+        name: "멀티캠퍼스",
         price: {
           land: 100,
           villa: 0,
@@ -743,7 +744,7 @@ export default function Main() {
         },
         type: "city",
         landmark: "랜드마크없음",
-        contents: "자유무역도시 홍콩",
+        contents: "SSAFY 교육과정을 통한 연봉 인상  +100만원",
         continent: "아시아",
         owner: 0,
         option: 0,
@@ -969,7 +970,7 @@ export default function Main() {
         },
         type: "city",
         landmark: "크레타섬",
-        contents: "그리스 로마 문화의 시작 지중해",
+        contents: "그리스 로마 문화의 시작 지중해      + 50만원",
         continent: "유럽",
         owner: 0,
         option: 0,
@@ -1195,7 +1196,7 @@ export default function Main() {
         },
         type: "city",
         landmark: "오아시스",
-        contents: "뜨거운 모래의 사막, 사하라",
+        contents: "뜨거운 모래의 사막, 사하라    -50만원",
         continent: "아프리카&오세아니아",
         owner: 0,
         option: 0,
@@ -1309,7 +1310,7 @@ export default function Main() {
           landmark: 0,
         },
         type: "olympic",
-        contents: "하나된 세계 올림픽으로!",
+        contents: "하나된 세계 올림픽으로! 세금으로 모인 기부금을 수령하세요",
         owner: 0,
         option: 0,
         toll: 0,
