@@ -2,6 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 
 def find_exchange_rate(nations, nation):
+    if nation == '대한민국':
+        return {'대한민국' : "0"}
+    
     address = 'https://finance.naver.com'
     addition = '/marketindex/?tabSel=exchange#tab_section'
 
