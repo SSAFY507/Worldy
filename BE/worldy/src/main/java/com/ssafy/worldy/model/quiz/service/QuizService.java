@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -86,6 +87,7 @@ public class QuizService {
         quizLikeRepo.save(quizLikeInsertDto.toEntity(quiz,user,quizRecord,nation));
     }
 
+    @Transactional
     public void insertQuizRecord(QuizRecordInsertDto quizRecordInsertDto){
 
         Quiz quiz = quizRepo.findById(quizRecordInsertDto.getQuizId()).get();
@@ -100,6 +102,17 @@ public class QuizService {
         user.updateExp(point);
 
         quizRecordRepo.save(quizRecordInsertDto.toEntity(user, quiz));
+
+        //만약 스크랩을 했다면
+        if(quizRecordInsertDto.isScrap()) {
+            Long nationId = quiz.getNation().getNationId();
+
+            insertQuizLike(QuizLikeInsertDto.builder()
+                    .quizId(quiz.getQuizId())
+                    .userId(user.getUserId())
+                    .nationId(nationId)
+                    .build());
+        }
     }
 
     public HiddenCatchDto getHiddenCatch(Long nationId){
