@@ -22,6 +22,8 @@ public class HiddenCatchDto {
     private List<List<String>> answerPointList; // 정답 좌표
 
     private String imgTitle; // 이미지 이름
+
+    private String imgSubTitle; // 이미지 영어 이름
     
     private String imgContent; // 이미지 정보
 }
