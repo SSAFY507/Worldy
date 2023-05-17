@@ -135,6 +135,7 @@ public class User {
                 .nickName(this.nickName)
                 .profileImg(this.profileImg)
                 .mmr(this.mmr)
+                .tier(this.tier)
                 .level(this.level).build();
     }
 }
