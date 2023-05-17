@@ -10,7 +10,6 @@ import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router";
 import { log } from "console";
 import Enter from "./Enter";
-import GameRestartLoading from "./GameRestartLoading";
 
 // 소켓 연결
 let socket;
@@ -82,9 +81,48 @@ export default function Main() {
 
   // 게임 시작 체크
   const [gameStart, setGameStart] = useState<boolean>(false);
+  const [gameWait, setGameWait] = useState<boolean>(false);
 
-  // 게임 유저가 재입장했을 경우 체크
-  //const [gameLoading, setGameLoading] = useState<boolean>(false);
+  const [user1Check, setUser1Check] = useState<boolean>(false);
+  const [user2Check, setUser2Check] = useState<boolean>(false);
+  const [user3Check, setUser3Check] = useState<boolean>(false);
+  const [user4Check, setUser4Check] = useState<boolean>(false);
+
+  const [user1, setUser1] = useState<User>({
+    kakaoId: '',
+    nickName: '',
+    profileImg: '',
+    mmr : 0,
+    level : 0,
+    tier : '',
+  });
+
+  const [user2, setUser2] = useState<User>({
+    kakaoId: '',
+    nickName: '',
+    profileImg: '',
+    mmr : 0,
+    level : 0,
+    tier : '',
+  });
+
+  const [user3, setUser3] = useState<User>({
+    kakaoId: '',
+    nickName: '',
+    profileImg: '',
+    mmr : 0,
+    level : 0,
+    tier : '',
+  });
+
+  const [user4, setUser4] = useState<User>({
+    kakaoId: '',
+    nickName: '',
+    profileImg: '',
+    mmr : 0,
+    level : 0,
+    tier : '',
+  });
 
   useEffect(() => {
     // 소켓 연결
@@ -101,7 +139,6 @@ export default function Main() {
       const received = JSON.parse(event.body);
 
       if (received.type === "player") {
-
         setPlayer((prevState: any) => ({
           ...prevState,
           p1: {
@@ -181,7 +218,6 @@ export default function Main() {
           ...prevState,
           worldMap: received.worldMap,
         }));
-
       } else if (received.type === "metaData") {
         console.log("메타 데이터 받음");
         console.log(received);
@@ -266,116 +302,153 @@ export default function Main() {
               roomId: received.roomId,
             }));
 
+            setUser1((prevState: any) => ({
+              kakaoId: received.user1.kakaoId,
+              nickName: received.user1.nickName,
+              profileImg:  received.user1.profileImg,
+              mmr : received.user1.mmr,
+              level : received.user1.level,
+              tier : received.user1.tier,
+            }))
+            setUser1Check(true);
+
             //console.log("유저 1 데이터 받아오기");
           }
 
-          //TEST
-          if (received.user1) {
-            setPlayer((prevState: any) => ({
-              ...prevState,
-              roomId: received.roomId,
-              p2: {
-                ...prevState.p2,
-                playerId: '2756798359',
-                name: '설히',
-              }
-            }))
-          }
-          if (received.user1) {
-            setPlayer((prevState: any) => ({
-              ...prevState,
-              roomId: received.roomId,
-              p3: {
-                ...prevState.p3,
-                playerId: '2762535269',
-                name: '성훈',
-              }
-            }))
-          }
-          if (received.user1) {
-            setPlayer((prevState: any) => ({
-              ...prevState,
-              roomId: received.roomId,
-              p4: {
-                ...prevState.p4,
-                playerId: '2772224261',
-                name: 'bellek',
-              }
-            }))
-
-            //  추후 주석 처리
-            setGameStart(true);
-          }
-
-          // 원본
-          // if (received.user2) {
+          // TEST
+          // if (received.user1) {
           //   setPlayer((prevState: any) => ({
           //     ...prevState,
           //     roomId: received.roomId,
           //     p2: {
           //       ...prevState.p2,
-          //       playerId: received.user2.kakaoId,
-          //       name: received.user2.nickName,
+          //       playerId: "2756798359",
+          //       name: "설히",
           //     },
           //   }));
-
-          //   setMetaData((prevState: any) => ({
-          //     ...prevState,
-          //     roomId: received.roomId,
-          //   }));
-
-          //   setWorldMap((prevState: any) => ({
-          //     ...prevState,
-          //     roomId: received.roomId,
-          //   }));
           // }
-          // if (received.user3) {
+          // if (received.user1) {
           //   setPlayer((prevState: any) => ({
           //     ...prevState,
           //     roomId: received.roomId,
           //     p3: {
           //       ...prevState.p3,
-          //       playerId: received.user3.kakaoId,
-          //       name: received.user3.nickName,
+          //       playerId: "2762535269",
+          //       name: "성훈",
           //     },
           //   }));
-
-          //   setMetaData((prevState: any) => ({
-          //     ...prevState,
-          //     roomId: received.roomId,
-          //   }));
-
-          //   setWorldMap((prevState: any) => ({
-          //     ...prevState,
-          //     roomId: received.roomId,
-          //   }));
           // }
-          // if (received.user4) {
-
-          //   setGameLoading(true);
-
+          // if (received.user1) {
           //   setPlayer((prevState: any) => ({
           //     ...prevState,
           //     roomId: received.roomId,
           //     p4: {
           //       ...prevState.p4,
-          //       playerId: received.user4.kakaoId,
-          //       name: received.user4.nickName,
+          //       playerId: "2772224261",
+          //       name: "히히",
           //     },
           //   }));
-
-          //   setMetaData((prevState: any) => ({
-          //     ...prevState,
-          //     roomId: received.roomId,
-          //   }));
-
-          //   setWorldMap((prevState: any) => ({
-          //     ...prevState,
-          //     roomId: received.roomId,
-          //   }));
-
           //   setGameStart(true);
           // }
+
+          // 원본
+          if (received.user2) {
+            setPlayer((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+              p2: {
+                ...prevState.p2,
+                playerId: received.user2.kakaoId,
+                name: received.user2.nickName,
+              },
+            }));
+
+            setMetaData((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setWorldMap((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setUser2((prevState: any) => ({
+              kakaoId: received.user2.kakaoId,
+              nickName: received.user2.nickName,
+              profileImg:  received.user2.profileImg,
+              mmr : received.user2.mmr,
+              level : received.user2.level,
+              tier : received.user2.tier,
+            }))
+
+            setUser2Check(true);
+          }
+          if (received.user3) {
+            setPlayer((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+              p3: {
+                ...prevState.p3,
+                playerId: received.user3.kakaoId,
+                name: received.user3.nickName,
+              },
+            }));
+
+            setMetaData((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setWorldMap((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setUser3((prevState: any) => ({
+              kakaoId: received.user3.kakaoId,
+              nickName: received.user3.nickName,
+              profileImg:  received.user3.profileImg,
+              mmr : received.user3.mmr,
+              level : received.user3.level,
+              tier : received.user3.tier,
+            }))
+            
+            setUser3Check(true);
+          }
+          if (received.user4) {
+            setPlayer((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+              p4: {
+                ...prevState.p4,
+                playerId: received.user4.kakaoId,
+                name: received.user4.nickName,
+              },
+            }));
+
+            setMetaData((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setWorldMap((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setUser4((prevState: any) => ({
+              kakaoId: received.user4.kakaoId,
+              nickName: received.user4.nickName,
+              profileImg:  received.user4.profileImg,
+              mmr : received.user4.mmr,
+              level : received.user4.level,
+              tier : received.user4.tier,
+            }))
+          
+            setUser4Check(true);
+          }
+
         } else if (received.cnt >= 5) {
           // console.log('유저 확인');
 
@@ -391,11 +464,149 @@ export default function Main() {
             check = false;
           }
 
-          setGameStart(!check); // 게임 페이지로 이동 -> 초기에는 기본 세팅으로 playerdata 한 번이라도 전송되면 게임 진행 중인 세팅 값으로 변환
+          if(!check) {
+            setPlayer((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+              p1: {
+                ...prevState.p1,
+                playerId: received.user1.kakaoId,
+                name: received.user1.nickName,
+              },
+            }));
+  
+            setMetaData((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+  
+            setWorldMap((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+  
+            setUser1((prevState: any) => ({
+              kakaoId: received.user1.kakaoId,
+              nickName: received.user1.nickName,
+              profileImg:  received.user1.profileImg,
+              mmr : received.user1.mmr,
+              level : received.user1.level,
+              tier : received.user1.tier,
+            }))
+            setUser1Check(true);
+  
+  
+            setPlayer((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+              p2: {
+                ...prevState.p2,
+                playerId: received.user2.kakaoId,
+                name: received.user2.nickName,
+              },
+            }));
+  
+            setMetaData((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+  
+            setWorldMap((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+  
+            setUser2((prevState: any) => ({
+              kakaoId: received.user2.kakaoId,
+              nickName: received.user2.nickName,
+              profileImg:  received.user2.profileImg,
+              mmr : received.user2.mmr,
+              level : received.user2.level,
+              tier : received.user2.tier,
+            }))
+  
+            setUser2Check(true);
+        
+            setPlayer((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+              p3: {
+                ...prevState.p3,
+                playerId: received.user3.kakaoId,
+                name: received.user3.nickName,
+              },
+            }));
+  
+            setMetaData((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+  
+            setWorldMap((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+  
+            setUser3((prevState: any) => ({
+              kakaoId: received.user3.kakaoId,
+              nickName: received.user3.nickName,
+              profileImg:  received.user3.profileImg,
+              mmr : received.user3.mmr,
+              level : received.user3.level,
+              tier : received.user3.tier,
+            }))
+            
+            setUser3Check(true);
+    
+            setPlayer((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+              p4: {
+                ...prevState.p4,
+                playerId: received.user4.kakaoId,
+                name: received.user4.nickName,
+              },
+            }));
+  
+            setMetaData((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+  
+            setWorldMap((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+  
+            setUser4((prevState: any) => ({
+              kakaoId: received.user4.kakaoId,
+              nickName: received.user4.nickName,
+              profileImg:  received.user4.profileImg,
+              mmr : received.user4.mmr,
+              level : received.user4.level,
+              tier : received.user4.tier,
+            }))
+          
+            setUser4Check(true);
+            setGameStart(!check);
+          }
+          
           setUserCheck(check);
         }
       }
     });
+  }
+
+  if(user4Check) {
+    setTimeout(function() {
+      setGameWait(true);
+    }, 1000);
+  }
+
+  if(gameWait) {
+    setTimeout(function() {
+      setGameStart(true);
+    }, 3000);
   }
 
   // 게임 방이 가득차면 redirect
@@ -543,8 +754,6 @@ export default function Main() {
     isDouble: false,
     itemMsg1: '아이템 메시지1',
     itemMsg2: '아이템 메시지2',
-    circuit: 0,
-    fund: 0,
   });
   const [turnOver, setTurnOver] = useState<boolean>(false);
 
@@ -749,7 +958,7 @@ export default function Main() {
       },
       {
         location: 5,
-        name: "멀티캠퍼스",
+        name: "홍콩",
         price: {
           land: 100,
           villa: 0,
@@ -758,7 +967,7 @@ export default function Main() {
         },
         type: "city",
         landmark: "랜드마크없음",
-        contents: "SSAFY 교육과정을 통한 연봉 인상  +100만원",
+        contents: "자유무역도시 홍콩",
         continent: "아시아",
         owner: 0,
         option: 0,
@@ -984,7 +1193,7 @@ export default function Main() {
         },
         type: "city",
         landmark: "크레타섬",
-        contents: "그리스 로마 문화의 시작 지중해      + 50만원",
+        contents: "그리스 로마 문화의 시작 지중해",
         continent: "유럽",
         owner: 0,
         option: 0,
@@ -1210,7 +1419,7 @@ export default function Main() {
         },
         type: "city",
         landmark: "오아시스",
-        contents: "뜨거운 모래의 사막, 사하라    -50만원",
+        contents: "뜨거운 모래의 사막, 사하라",
         continent: "아프리카&오세아니아",
         owner: 0,
         option: 0,
@@ -1324,7 +1533,7 @@ export default function Main() {
           landmark: 0,
         },
         type: "olympic",
-        contents: "하나된 세계 올림픽으로! 세금으로 모인 기부금을 수령하세요",
+        contents: "하나된 세계 올림픽으로!",
         owner: 0,
         option: 0,
         toll: 0,
@@ -1562,7 +1771,7 @@ export default function Main() {
     {
       id: 3,
       title: '코로나19 확진',
-      content: '코로나에 걸렸습니다. 3턴 간 자가격리에 들어갑니다.',
+      content: '코로나에 걸렸습니다. 2턴 간 자가격리에 들어갑니다.',
     },
     {
       id: 4,
@@ -1572,7 +1781,7 @@ export default function Main() {
     {
       id: 5,
       title: '졸음',
-      content: '졸다가 3역을 지나쳤습니다. 앞으로 3칸 이동',
+      content: '졸다가 3역을 지나쳤습니다. 앞으로 3 칸 이동',
     },
     {
       id: 6,
@@ -1621,13 +1830,13 @@ export default function Main() {
     },
     {
       id: 15,
-      title: '삼성 주가 상승',
-      content: '투자한 삼성 주식이 대박났습니다.     +200만원',
+      title: '통행 면제권',
+      content: '1회 다른 플레이어의 나라에 무료로 머무를 수 있습니다.',
     },
     {
       id: 16,
       title: '뒤로 걷기 캠페인',
-      content: '뒤로 2칸 이동하세요.',
+      content: '뒤로 3칸 이동하세요.',
     },
 
 
@@ -1651,13 +1860,21 @@ export default function Main() {
             </div>
           </div>
         </div>)}
-        {!gameStart && <Enter></Enter>}
 
-        {/* {gameStart && !gameLoading && (
-          <div>
-            <GameRestartLoading/>
-          </div>
-        )} */}
+        {!gameStart && 
+          <Enter 
+            user1Check = {user1Check}
+            user2Check = {user2Check}
+            user3Check = {user3Check}
+            user4Check = {user4Check}
+            user1 = {user1}
+            user2 = {user2}
+            user3 = {user3}
+            user4 = {user4}
+
+            gameWait = {gameWait}
+          ></Enter>
+        }
 
         {gameStart && (
           <div>
