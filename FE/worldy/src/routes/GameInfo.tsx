@@ -13,51 +13,52 @@ import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 import LoaderBlueCircle from '../components/Loaders/LoaderBlueCircle';
 import tempPath from '../assets/images/Carousel5.png';
 import pathBg from '../assets/images/GameInfoBackground.png';
+import SHLoader from '../components/Loaders/SHLoader';
 
 export default function GameInfo() {
-  const myImageList = {
-    pathBG: pathBg,
-  };
+  // const myImageList = {
+  //   pathBG: pathBg,
+  // };
 
-  const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
-  const [loadedAll, setLoadedAll] = useState<boolean>(false);
+  // const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
+  // const [loadedAll, setLoadedAll] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (isLoaded) {
-      setTimeout(() => {
-        setLoadedAll(true);
-      }, 1000);
-    }
-  }, [isLoaded]);
+  // useEffect(() => {
+  //   if (isLoaded) {
+  //     setTimeout(() => {
+  //       setLoadedAll(true);
+  //     }, 1000);
+  //   }
+  // }, [isLoaded]);
 
-  const [leftW, setLeftW] = useState<string>('90%');
-  const [rightW, setRightW] = useState<string>('10%');
+  // const [leftW, setLeftW] = useState<string>('90%');
+  // const [rightW, setRightW] = useState<string>('10%');
 
-  const [leftBigger, setLeftBigger] = useState<boolean>(true);
+  // const [leftBigger, setLeftBigger] = useState<boolean>(true);
 
-  const reverseSize = () => {
-    if (leftBigger) {
-      setLeftW('10%');
-      setRightW('90%');
-    } else {
-      setRightW('10%');
-      setLeftW('90%');
-    }
-    setLeftBigger((prevState) => !prevState);
-  };
+  // const reverseSize = () => {
+  //   if (leftBigger) {
+  //     setLeftW('10%');
+  //     setRightW('90%');
+  //   } else {
+  //     setRightW('10%');
+  //     setLeftW('90%');
+  //   }
+  //   setLeftBigger((prevState) => !prevState);
+  // };
 
-  useEffect(() => {
-    console.log(leftBigger);
-  }, []);
+  // useEffect(() => {
+  //   console.log(leftBigger);
+  // }, []);
 
-  const [hoverButton, setHoverButton] = useState<boolean>(false);
+  // const [hoverButton, setHoverButton] = useState<boolean>(false);
 
   return (
     <div
       className='h-full w-full bg-white flex justify-center items-center '
-      style={{ backgroundImage: `url(${pathBg})`, backgroundSize: '100%' }}
+      // style={{ backgroundImage: `url(${pathBg})`, backgroundSize: '100%' }}
     >
-      {loadedAll ? (
+      {/* {loadedAll ? (
         <div className='w-[90%] h-[90%] outline outline-gray-300 flex overflow-hidden rounded-tl-[30px] rounded-br-[30px] max-h-[800px] opacity-60'>
           <div
             className={`flex h-[100%] w-[100%] LRPage ${
@@ -133,9 +134,9 @@ export default function GameInfo() {
         </div>
       ) : (
         <div className='w-full h-full bg-white'>
-          <LoaderBlueCircle text='어떤 게임인지 궁금하신가요?' />
+          <SHLoader text='어떤 게임인지 궁금하신가요?' />
         </div>
-      )}
+      )} */}
     </div>
   );
 }

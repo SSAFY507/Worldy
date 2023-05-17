@@ -15,6 +15,9 @@ import { addToken, loginState } from '../_store/slices/loginSlice';
 import { login, logout } from '../_store/slices/loginSlice';
 import CustomAxios from '../API/CustomAxios';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import LoaderLinear from './Loaders/LoaderLinear';
+import SHLoader from './Loaders/SHLoader';
+import LoaderSimpleCircle from './Loaders/LoaderSimpleCircle';
 
 type PointerOutProps = {
   onClose: () => void;
@@ -133,8 +136,8 @@ export default function LoginModal({ onClose }: PointerOutProps) {
             </div>
           </div>
         ) : (
-          <div className='w-full h-full flex flex-row justify-center items-center'>
-            <LoaderPyramid text='첫 인사 생각 중...' />
+          <div className='w-full h-full bg-white grid place-content-center'>
+            <LoaderSimpleCircle />
           </div>
         )}
       </div>

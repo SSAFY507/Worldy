@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 import LoaderPyramid from '../components/Loaders/LoaderPyramid';
 import SocketTest from '../components/game/SocketTest';
+import LoaderLinear from '../components/Loaders/LoaderLinear';
 
 export default function Socket() {
   const [loaded, setLoaded] = useState<boolean>(false);
@@ -13,8 +14,8 @@ export default function Socket() {
       {loaded ? (
         <SocketTest />
       ) : (
-        <div className='w-full h-full bg-white'>
-          <LoaderPyramid text='3D 급하게 조립 중...' />
+        <div className='w-full h-full bg-white pt-20'>
+          <LoaderLinear />
         </div>
       )}
     </div>

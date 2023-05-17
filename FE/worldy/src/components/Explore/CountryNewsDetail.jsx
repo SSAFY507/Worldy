@@ -22,7 +22,7 @@ const Card = props => (
         cursor: "pointer",
       }}
     />
-    <div className="pr-[1rem] pb-[0.5rem] pl-[1rem] bg-white rounded-b-3xl flex flex-col items-center" style={{ flex:"0.6", width:"100%"}}>
+    <div className="pr-[1rem] pb-[0.5rem] pl-[1rem] bg-white rounded-b-3xl flex flex-col items-center font-PtdExtraBold" style={{ flex:"0.6", width:"100%"}}>
       <div className="flex text-4xl font-extrabold pt-10 pb-10 pl-20 pr-20 font-PtdRegular">{props.title}</div>
       <p className="h-1/2 pl-10 pr-10 pb-10 inline-block whitespace-normal font-PtdRegular">{props.content}</p>
 
@@ -91,16 +91,16 @@ const CountryNewsDetail = props => {
         return (
           <Card
             key={idx}
-            title={item.title.length <= 15 ? item.title : item.title.substr(0, 15) + "..."}
-            content={
-              item.summary
-                ? item.summary.length <= 30
-                  ? item.summary
-                  : item.summary.substr(0, 30) + "..."
-                : null
-            }
-            src={item.thumbnailLink || item.thumbnail}
-            link={item.link || item.url}
+            title={item.newsTitle.length <= 10 ? item.newsTitle : item.newsTitle.substr(0, 10) + "..."}
+            content={item.newsSummary}
+              // item.newsSummary
+              //   ? item.newsSummary.length <= 100
+              //     ? item.newsSummary
+              //     : item.newsSummary.substr(0, 100) + "..."
+              //   : null
+            // }
+            src={item.newsImg}
+            link={item.newsUrl}
           />
         );
       })}
