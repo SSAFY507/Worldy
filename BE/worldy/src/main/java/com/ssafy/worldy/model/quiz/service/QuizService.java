@@ -4,12 +4,10 @@ import com.ssafy.worldy.model.quiz.entity.HiddenCatch;
 import com.ssafy.worldy.model.adventure.entity.Nation;
 import com.ssafy.worldy.model.adventure.repo.NationRepo;
 import com.ssafy.worldy.model.quiz.dto.*;
+import com.ssafy.worldy.model.quiz.entity.MultiAnswer;
 import com.ssafy.worldy.model.quiz.entity.Quiz;
 import com.ssafy.worldy.model.quiz.entity.QuizRecord;
-import com.ssafy.worldy.model.quiz.repo.HiddenCatchRepo;
-import com.ssafy.worldy.model.quiz.repo.QuizLikeRepo;
-import com.ssafy.worldy.model.quiz.repo.QuizRecordRepo;
-import com.ssafy.worldy.model.quiz.repo.QuizRepo;
+import com.ssafy.worldy.model.quiz.repo.*;
 import com.ssafy.worldy.model.user.entity.User;
 import com.ssafy.worldy.model.user.repo.UserRepo;
 import com.ssafy.worldy.util.FastAPIUtil;
@@ -34,6 +32,7 @@ public class QuizService {
     private final QuizRecordRepo quizRecordRepo;
     private final QuizLikeRepo quizLikeRepo;
     private final HiddenCatchRepo hiddenCatchRepo;
+    private final MultiAnswerRepo multiAnswerRepo;
     @Value("${fastapi.hidden-catch.url}")
     private String requestUrl;
 
@@ -47,7 +46,23 @@ public class QuizService {
 
         // 퀴즈를 고르는 기준이 필요! 지금은 그냥 랜덤으로
         Quiz quiz = quizRepo.findRandQuizByNationId(nationId);
-        return quiz.toDto();
+
+        List<MultiAnswerDto> multiAnswerList = null;
+
+        // 퀴즈 타입이 객관식이면 객관식 보기 조회
+        if(quiz.getQuizType().equals("multi")) {
+            multiAnswerList = new ArrayList<>();
+
+            List<MultiAnswer> multiAnswers = multiAnswerRepo.findByQuiz(quiz);
+            for (MultiAnswer multiAnswer : multiAnswers) {
+                multiAnswerList.add(multiAnswer.toMultiAnswerDto());
+            }
+        }
+
+        QuizDto quizDto = quiz.toDto();
+        quizDto.setMultiAnswerList(multiAnswerList);
+
+        return quizDto;
     }
 
     public void insertQuiz(QuizInsertDto quizInsertDto){
