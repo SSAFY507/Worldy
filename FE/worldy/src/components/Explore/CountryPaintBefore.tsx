@@ -90,13 +90,13 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
                     }}
                   />
                   <area
-                    alt='틀린 영역'
+                    alt='정답 영역'
                     href=''
                     key={idx}
                     shape='rect'
                     coords={`${e[0]}, ${e[1]}, ${e[2]}, ${e[3]}`}
-                    style={{ cursor: 'poiter' }}
-                    className='z-30'
+                    style={{ cursor: 'pointer' }}
+                    className='z-30 absolute'
                     onClick={(e) => {
                       e.preventDefault();
                       clickArea(idx);
