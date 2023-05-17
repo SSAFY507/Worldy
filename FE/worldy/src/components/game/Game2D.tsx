@@ -60,6 +60,20 @@ export default function Game2D(props: any) {
   });
   const [gameResultSet, setGameResultSet] = useState<boolean>(false)
 
+  useEffect(() => {
+    if (worldMap[metaData.currentLocation].type === 'nation') {
+
+      setTimeout(() => {
+        ws.send(
+          `/pub/game/quiz/kakao/${roomId}/${metaData.currentLocation}`,
+          {},
+          JSON.stringify(null)
+        );
+      }, 1000);
+    }
+  }, [metaData.currentLocation])
+
+
   const ws = props.ws;
 
   const closeModal = props.closeModal;
@@ -342,7 +356,7 @@ export default function Game2D(props: any) {
   });
 
   // 게임 종료 후 페이지 이동
-  if(gameFinish&&gameResultSet) {
+  if (gameFinish && gameResultSet) {
     navigate('/game/result', { state: rankPlayerData });
   }
 
@@ -749,6 +763,8 @@ export default function Game2D(props: any) {
       setMode(5);
       goDesert(turn);
       // 국세청
+    } else if (spot.location === 30) {
+      setMode(16);
     } else if (spot.location === 37) {
       setTmpTax(Math.floor((calAssets(p) / 10)));
       setMode(15);
@@ -978,6 +994,7 @@ export default function Game2D(props: any) {
       currentLocation: location,
     }))
 
+
     // 도착지 주인 없을 때
     if (worldMap[location].owner === 0 && worldMap[location].type === 'nation') {
       setMode(1);
@@ -990,7 +1007,7 @@ export default function Game2D(props: any) {
     } else if (worldMap[location].type === 'city') { // 특수도시
       setMode(9);
     } else if (location === 30 || location === 0) { // 올림픽
-      setMode(5)
+      setMode(16)
     } else if (location === 10) { // 무인도
       setMode(5)
       goDesert(turn);
@@ -1056,7 +1073,7 @@ export default function Game2D(props: any) {
   function getItem(turn: number) {
     console.log('getItem 실행')
     let n = Math.floor(Math.random() * 17);
-    n = 3
+    // n = 7
     const i = item[n];
     // const pNum = (turn + 1);
 
@@ -1099,8 +1116,8 @@ export default function Game2D(props: any) {
       getMoney(turn, 100);
     } else if (n === 7) {
       // 국세청으로 이동
-      setItemMove(37);
       setMode(13);
+      setItemMove(37);
     } else if (n === 8) {
       // 200만원 획득
       setMode(12);
@@ -1931,6 +1948,13 @@ export default function Game2D(props: any) {
   return (
     <>
 
+      {/* 더블 모달 */}
+      {metaData.isDouble ?
+        <div className="w-[200px] h-[200px] absolute top-[120px] left-[860px] z-[50]">
+          <img src="/game/double.png" alt="" />
+        </div>
+        : null}
+
       {/* 퀴즈 모달 */}
       {quizModalState && (
         <div className="shadow-md shadow-black w-fit h-fit">
@@ -1943,9 +1967,9 @@ export default function Game2D(props: any) {
           }`}
       >
         {/* 왼쪽영역 */}
-        <div className="w-[20%] h-full flex flex-col justify-center items-end">
+        <div className="w-[20%] h-full flex flex-col justify-start items-end mb-[60px]">
           {/* 메타 데이터 영역 */}
-          <div className="mt-[30px] mb-[30px] w-[300px] h-[180px] rounded-[4px] flex flex-col justify-center items-center bg-gray-200 text-[20px]">
+          {/* <div className="mt-[30px] mb-[30px] w-[300px] h-[180px] rounded-[4px] flex flex-col justify-center items-center bg-gray-200 text-[20px]">
             <div>현재 턴 : {metaData.turn + 1}</div>
             <div>턴 오버 : {metaData.turnOver ? "true" : "false"}</div>
             <div>더 블 : {metaData.isDouble ? "더블" : "더블아님"}</div>
@@ -1953,7 +1977,7 @@ export default function Game2D(props: any) {
             <div>
               주사위 : [{metaData.dice1}, {metaData.dice2}]
             </div>
-          </div>
+          </div> */}
           <div className="w-[320px] h-[920px] mb-[50px]  flex flex-col justify-around items-center">
             {pList.map((i, index) => {
               return (
@@ -2007,11 +2031,11 @@ export default function Game2D(props: any) {
                         </div>
                       </div>
                     </div>
-                    <div className={`w-[60px] h-[52px] rounded-full flex justify-center items-center text-white relative top-[-30px] left-[100px]
-                    ${i.playerNum === 1 ? 'bg-red-400' : ''}
-                    ${i.playerNum === 2 ? 'bg-green-400' : ''}
-                    ${i.playerNum === 3 ? 'bg-blue-400' : ''}
-                    ${i.playerNum === 4 ? 'bg-purple-400' : ''}
+                    <div className={`w-[50px] h-[28px] rounded-full flex justify-center items-center text-white relative top-[-30px] left-[100px]
+                    ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 1 ? 'bg-red-400' : ''}
+                    ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 2 ? 'bg-green-400' : ''}
+                    ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 3 ? 'bg-blue-400' : ''}
+                    ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 4 ? 'bg-purple-400' : ''}
                     `}>
                       {i.name === rankPlayerData.rankPlayer[0].nickName ? '1위' : ''}
                       {i.name === rankPlayerData.rankPlayer[1].nickName ? '2위' : ''}
@@ -2302,16 +2326,16 @@ export default function Game2D(props: any) {
                             ${metaData.turn === 3 ? 'outline-purple-400' : ''} 
                             `}>
                               {metaData.turn === 0 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p1_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[16px] left-[84px] rotate-90" src="/game/p1_point.gif"></img>
                                 : null}
                               {metaData.turn === 1 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p2_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[16px] left-[84px] rotate-90" src="/game/p2_point.gif"></img>
                                 : null}
                               {metaData.turn === 2 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p3_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[16px] left-[84px] rotate-90" src="/game/p3_point.gif"></img>
                                 : null}
                               {metaData.turn === 3 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p4_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[16px] left-[84px] rotate-90" src="/game/p4_point.gif"></img>
                                 : null}
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
@@ -2379,16 +2403,16 @@ export default function Game2D(props: any) {
                             ${metaData.turn === 3 ? 'outline-purple-400' : ''} 
                             `}>
                               {metaData.turn === 0 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p1_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[16px] left-[84px] rotate-90" src="/game/p1_point.gif"></img>
                                 : null}
                               {metaData.turn === 1 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p2_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[16px] left-[84px] rotate-90" src="/game/p2_point.gif"></img>
                                 : null}
                               {metaData.turn === 2 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p3_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[16px] left-[84px] rotate-90" src="/game/p3_point.gif"></img>
                                 : null}
                               {metaData.turn === 3 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p4_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[16px] left-[84px] rotate-90" src="/game/p4_point.gif"></img>
                                 : null}
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
@@ -2431,16 +2455,16 @@ export default function Game2D(props: any) {
                             ${metaData.turn === 3 ? 'outline-purple-400' : ''} 
                             `}>
                               {metaData.turn === 0 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p1_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[16px] left-[84px] rotate-90" src="/game/p1_point.gif"></img>
                                 : null}
                               {metaData.turn === 1 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p2_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[16px] left-[84px] rotate-90" src="/game/p2_point.gif"></img>
                                 : null}
                               {metaData.turn === 2 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p3_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[16px] left-[84px] rotate-90" src="/game/p3_point.gif"></img>
                                 : null}
                               {metaData.turn === 3 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p4_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[16px] left-[84px] rotate-90" src="/game/p4_point.gif"></img>
                                 : null}
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
@@ -2800,16 +2824,16 @@ export default function Game2D(props: any) {
                             ${metaData.turn === 3 ? 'outline-purple-400' : ''} 
                             `}>
                               {metaData.turn === 0 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p1_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p1_point.gif"></img>
                                 : null}
                               {metaData.turn === 1 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p2_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p2_point.gif"></img>
                                 : null}
                               {metaData.turn === 2 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p3_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p3_point.gif"></img>
                                 : null}
                               {metaData.turn === 3 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p4_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p4_point.gif"></img>
                                 : null}
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
@@ -2877,16 +2901,16 @@ export default function Game2D(props: any) {
                             ${metaData.turn === 3 ? 'outline-purple-400' : ''} 
                             `}>
                               {metaData.turn === 0 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p1_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p1_point.gif"></img>
                                 : null}
                               {metaData.turn === 1 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p2_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p2_point.gif"></img>
                                 : null}
                               {metaData.turn === 2 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p3_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p3_point.gif"></img>
                                 : null}
                               {metaData.turn === 3 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p4_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p4_point.gif"></img>
                                 : null}
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
@@ -2929,45 +2953,49 @@ export default function Game2D(props: any) {
                             ${metaData.turn === 3 ? 'outline-purple-400' : ''} 
                             `}>
                               {metaData.turn === 0 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p1_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p1_point.gif"></img>
                                 : null}
                               {metaData.turn === 1 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p2_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p2_point.gif"></img>
                                 : null}
                               {metaData.turn === 2 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p3_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p3_point.gif"></img>
                                 : null}
                               {metaData.turn === 3 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p4_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p4_point.gif"></img>
                                 : null}
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
                             </div> : null}
-                            <div className="w-[82px] h-[82px] rounded-[2px] flex justify-around items-center flex-wrap text-[10px]">
-                              <img
-                                src="/game/f30.png"
-                                className="w-[82px] h-[82px] object-fill absolute z-[1] blur-[2px]"
-                              ></img>
-                              {i.location === player.p1.game.location && (
-                                <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p1.name.substr(0, 2)}
-                                </div>
-                              )}
-                              {i.location === player.p2.game.location && (
-                                <div className="w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p2.name.substr(0, 2)}
-                                </div>
-                              )}
-                              {i.location === player.p3.game.location && (
-                                <div className="w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p3.name.substr(0, 2)}
-                                </div>
-                              )}
-                              {i.location === player.p4.game.location && (
-                                <div className="w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px] z-[10]">
-                                  {player.p4.name.substr(0, 2)}
-                                </div>
-                              )}
+                            <div className="w-[82px] h-[82px] rounded-[2px] flex flex-col justify-around items-around flex-wrap text-[10px]">
+                              <div className="w-[82px] h-[82px] bg-white absolute z-[1] flex flex-col justify-start items-center flex-wrap">
+                                <img
+                                  src="/game/f30.png"
+                                  className="w-[42px] h-[26px] object-cover relative z-[2]"
+                                ></img>
+                                <div className="w-full h-[16px] text-[14px] text-center">{metaData.fund}만원</div>
+                                {i.location === player.p1.game.location && (
+                                  <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px] z-[10]">
+                                    {player.p1.name.substr(0, 2)}
+                                  </div>
+                                )}
+                                {i.location === player.p2.game.location && (
+                                  <div className="w-[30px] h-[16px] rounded-[8px] bg-green-500 flex justify-center items-center text-white text-[10px] z-[10]">
+                                    {player.p2.name.substr(0, 2)}
+                                  </div>
+                                )}
+                                {i.location === player.p3.game.location && (
+                                  <div className="w-[30px] h-[16px] rounded-[8px] bg-blue-500 flex justify-center items-center text-white text-[10px] z-[10]">
+                                    {player.p3.name.substr(0, 2)}
+                                  </div>
+                                )}
+                                {i.location === player.p4.game.location && (
+                                  <div className="w-[30px] h-[16px] rounded-[8px] bg-purple-500 flex justify-center items-center text-white text-[10px] z-[10]">
+                                    {player.p4.name.substr(0, 2)}
+                                  </div>
+                                )}
+
+                              </div>
                             </div>
                           </div>
                         )}
@@ -2982,16 +3010,16 @@ export default function Game2D(props: any) {
                             ${metaData.turn === 3 ? 'outline-purple-400' : ''} 
                             `}>
                               {metaData.turn === 0 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p1_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p1_point.gif"></img>
                                 : null}
                               {metaData.turn === 1 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p2_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p2_point.gif"></img>
                                 : null}
                               {metaData.turn === 2 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p3_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p3_point.gif"></img>
                                 : null}
                               {metaData.turn === 3 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p4_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p4_point.gif"></img>
                                 : null}
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
@@ -3035,16 +3063,16 @@ export default function Game2D(props: any) {
                             ${metaData.turn === 3 ? 'outline-purple-400' : ''} 
                             `}>
                               {metaData.turn === 0 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p1_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p1_point.gif"></img>
                                 : null}
                               {metaData.turn === 1 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p2_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p2_point.gif"></img>
                                 : null}
                               {metaData.turn === 2 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p3_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p3_point.gif"></img>
                                 : null}
                               {metaData.turn === 3 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p4_point.gif"></img>
+                                <img className="w-[60px] h-[60px] relative top-[20px] left-[-50px] rotate-[-90deg]" src="/game/p4_point.gif"></img>
                                 : null}
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
@@ -3117,10 +3145,8 @@ export default function Game2D(props: any) {
                     turnOver: true,
                   }));
                   setMode(0);
-                  console.log("sendData하기전 메타데이터 확인>>>> ");
-                  console.log(metaData);
-                  sendData();
                   calRanking();
+                  sendData();
                 }}
               >
                 턴 종료
@@ -3130,9 +3156,8 @@ export default function Game2D(props: any) {
                 id="shbutton"
                 className="w-[200px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px] absolute left-[400px] top-[290px]"
                 onClick={() => {
-                  const user = "kakao";
                   ws.send(
-                    `/pub/game/quiz/${user}/${roomId}/${metaData.currentLocation}`,
+                    `/pub/game/quiz/kakao/${roomId}/${metaData.currentLocation}`,
                     {},
                     JSON.stringify(null)
                   );
@@ -3143,7 +3168,7 @@ export default function Game2D(props: any) {
 
               <div
                 id="shbutton"
-                className="w-[200px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px] absolute left-[400px] top-[360px]"
+                className="w-[200px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px] absolute left-[900px] bottom-[-80px] z-[80000]"
                 onClick={() => {
                   // 종료 API 요청
                   finishGame();
@@ -3412,6 +3437,7 @@ export default function Game2D(props: any) {
                                 turnOver: true,
                               }));
                               setMode(0);
+                              sendData();
                             }}
                           >
                             Skip
@@ -3637,6 +3663,7 @@ export default function Game2D(props: any) {
                                       turnOver: true,
                                     }));
                                     setMode(0);
+                                    sendData();
                                   }}
                                 >
                                   Skip
@@ -3660,6 +3687,7 @@ export default function Game2D(props: any) {
                                       turnOver: true,
                                     }));
                                     setMode(0);
+                                    sendData();
                                   }}
                                 >
                                   확인
@@ -3734,6 +3762,7 @@ export default function Game2D(props: any) {
                               turnOver: true,
                             }));
                             setMode(0);
+                            sendData();
                           }}
                         >
                           통행료 {worldMap[metaData.currentLocation].toll} 만원
@@ -3764,6 +3793,7 @@ export default function Game2D(props: any) {
                                 turnOver: true,
                               }));
                               setMode(0);
+                              sendData();
                             }}
                           >
                             확인
@@ -3802,6 +3832,7 @@ export default function Game2D(props: any) {
                                 turnOver: true,
                               }));
                               setMode(0);
+                              sendData();
                             }}
                           >
                             턴 종료
@@ -3830,6 +3861,7 @@ export default function Game2D(props: any) {
                                 turnOver: true,
                               }));
                               setMode(0);
+                              sendData();
                             }}
                           >
                             확인
@@ -3864,6 +3896,7 @@ export default function Game2D(props: any) {
                             className="w-full h-[60px] bg-red-500 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-red-600 hover:cursor-pointer"
                             onClick={() => {
                               movePlayer(metaData.turn, itemMove);
+                              sendData();
                             }}
                           >
                             이동하기
@@ -3885,6 +3918,7 @@ export default function Game2D(props: any) {
                                 turnOver: true,
                               }));
                               setMode(0);
+                              sendData();
                             }}
                           >
                             확인
@@ -3892,6 +3926,7 @@ export default function Game2D(props: any) {
                         </div>
                       </div>
                     )}
+                    {/* 보물상자 국세청 이동 */}
                     {mode === 13 && (
                       <div className="flex flex-col justify-center itmes-center">
                         <p className="text-[30px] font-PtdBold text-center w-full h-[34px]">{metaData.itemMsg1}</p>
@@ -3928,6 +3963,7 @@ export default function Game2D(props: any) {
                                 turnOver: true,
                               }));
                               setMode(0);
+                              sendData();
                             }}
                           >
                             확인
@@ -3952,9 +3988,36 @@ export default function Game2D(props: any) {
                                 turnOver: true,
                               }));
                               setMode(0);
+                              sendData();
                             }}
                           >
                             {tmpTax}만원 납부하기
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {/* 16  올림픽 */}
+                    {mode === 16 && (
+                      <div className="flex flex-col justify-center itmes-center">
+                        <p className="text-[30px] font-PtdBold text-center w-full h-[34px]">{worldMap[30].title}</p>
+                        <div className="flex">
+                          <span className="text-[24px] text-center w-full h-[30px] mt-[20px]">세금으로 쌓인 기금을 수령하세요.</span>
+                        </div>
+                        <div className="w-[330px] h-[62px] flex items-end justify-between mt-[24px]">
+                          <div
+                            className="w-full h-[50px] bg-red-500 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-red-600 hover:cursor-pointer"
+                            onClick={() => {
+                              getMoney(metaData.turn, metaData.fund)
+                              setMetaData((prevState: any) => ({
+                                ...prevState,
+                                turnOver: true,
+                                fund: 0,
+                              }));
+                              setMode(0);
+                              sendData();
+                            }}
+                          >
+                            [{metaData.fund} 만원] 수령하기
                           </div>
                         </div>
                       </div>
@@ -3971,16 +4034,22 @@ export default function Game2D(props: any) {
           className={`w-[20%] h-full flex flex-col justify-center items-start rounded-[4px]`}
         >
 
-          <div
-            className={`w-[70px] h-[50px] relative left-[10px] top-[-12px] z-[100] text-white text-[18px] rounded-full flex justify-center items-center
+          {rankPlayerData.rankPlayer[0].nickName ?
+            <div
+              className={`w-[50px] h-[28px] relative left-[10px] top-[-12px] z-[100] text-white text-[16px] rounded-full flex justify-center items-center
               ${me.playerNum === 1 ? 'bg-red-400' : ''}
               ${me.playerNum === 2 ? 'bg-green-400' : ''}
               ${me.playerNum === 3 ? 'bg-blue-400' : ''}
               ${me.playerNum === 4 ? 'bg-purple-400' : ''}
           `}
-          >
-            1위
-          </div>
+            >
+              {rankPlayerData.rankPlayer[0].nickName === me.name ? '1위' : ''}
+              {rankPlayerData.rankPlayer[1].nickName === me.name ? '2위' : ''}
+              {rankPlayerData.rankPlayer[2].nickName === me.name ? '3위' : ''}
+              {rankPlayerData.rankPlayer[3].nickName === me.name ? '4위' : ''}
+            </div>
+
+            : null}
           <div
             className={`w-[320px] h-[920px] mb-[50px]  flex flex-col justify-around items-center bg-gray-100 rounded-[8px] 
             ${myTurn && me.playerNum === 1 ? "outline outline-[6px] outline-red-400" : ""}
