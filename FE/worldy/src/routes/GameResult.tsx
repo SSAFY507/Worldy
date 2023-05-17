@@ -1,19 +1,102 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { useLocation } from "react-router";
+import { SiPowerapps } from 'react-icons/si';
+import { RiVipCrownFill } from 'react-icons/ri';
 
 export default function GameResult() {
   const location = useLocation();
   const gameResult = location.state;
   console.log(location);
-  console.log(location.state);
+  console.log(location.state.rankPlayer);
+
+  const setTierColor = (input: string): string => {
+    if (input === 'Platinum') return '#86FFF8';
+    else if (input === 'Gold') return '#FFEE95';
+    else if (input === 'Silver') return '#E1FBFF';
+    else return '#EED4BB';
+  };
+
+  const userNickname: string = sessionStorage.getItem('nickname') || '';
+
   return (
     <>
-      <div className='w-full h-full bg-[#FFFDF4] flex flex-col justify-center items-center'>
-        <div id='shbutton' className='w-[500px] h-[50px] text-[24px] flex justify-center items-center'
-        >게임 종료</div>
-        <div>gameResult</div>
+      <div className='w-full h-full flex flex-col justify-center items-center'>
+        <div className='w-[500px] h-[50px] text-[50px] flex justify-center items-center text-black font-PtdSemiBOld'
+        >게임 결과</div>
+        <div>
+          <div
+            className={
+              'relative flex flex-row justify-between items-center mt-[50px] mb-[7px] bg-[rgba(0,0,0,0)] px-[10px] rounded-md w-[490px] h-[45px] font-PtdExtraLight text-black text-[16px] '
+            }
+          >
+            <div className='w-[50px] h-full mr-[10px] grid place-content-center '>
+              <span className='grid place-content-center '>Rank</span>
+            </div>
+            <div className='w-[180px] h-full mr-[10px] flex flex-row justify-center items-center '>
+              <span className=''>Player</span>
+            </div>
+            <div className='flex-1' />
+            <div className='w-[80px] h-full mr-[20px] grid place-content-center '>
+              <span className=''>Amount</span>
+            </div>
+            <div className='w-[50px] h-full  grid place-content-center '>
+              <span className=''>Nation</span>
+            </div>
+          </div>
+          {location.state?.rankPlayer.map((item: any, key: any) => (
+            <div
+              key={key}
+              className={`rangking relative flex flex-row justify-between items-center mb-[7px] bg-[rgba(0,0,0,0)] hover:bg-[rgba(180,180,180,0.3)] px-[10px] rounded-md ${item.nickName === userNickname
+                ? 'glowmyrank z-10  w-[500px] h-[50px] my-[15px] -translate-x-[5px]'
+                : 'w-[490px] h-[45px]'
+                }`}
+            >
+              <div className='w-[50px] h-[50px] mr-[20px] grid place-content-center'>
+                <span className='font-PtdLight text-[20px] text-gray-300'>
+                  {key + 1}
+                </span>
+              </div>
+              <div className='flex-1 h-fit  outline-white flex justify-between items-center'>
+                <div className='w-[25px] h-[25px]  outline-[rgba(220,220,220,0.3)] rounded-full overflow-hidden grid place-content-center  mr-[20px]'>
+                  <img src={item.profileImg} alt='프로필 이미지' />
+                </div>
+                <div className='w-[150px] h-fit  outline-red-300 flex flex-row justify-start items-center '>
+                  <span className='font-PtdRegular text-white text-[17px] truncate '>
+                    {item.nickName}
+                  </span>
+                </div>
+                <div className='w-[30px] flex-1 flex-row flex justify-start items-center '>
+                  <RiVipCrownFill
+                    className={`${key === 0
+                      ? 'text-[#D1C68F]'
+                      : key === 1
+                        ? 'text-[#a4a4a4]'
+                        : key === 2
+                          ? 'text-[#837D63]'
+                          : 'opacity-0'
+                      }
+                        shadow-lg
+                        w-[15px] h-[15px]
+                        `}
+                  />
+                </div>
+              </div>
+              <div className='flex flex-row  outline-white justify-between items-center w-[140px] h-fit'>
+                <div className='w-[90px] flex-2 grid place-ontent-right mr-[20px]'>
+                  <span className='font-PtdLight text-[18px] text-[#B2B2B2]'>
+                    {item.assets} 만원
+                  </span>
+                </div>
+                <div className='w-fit h-2/3  outline-white bg-[rgba(62,62,62,0.7)] rounded-[100px] flex flex-row justify-center items-center px-[10px]'>
+                  <SiPowerapps size={22} color={setTierColor(item.tier)} />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
+
     </>
   );
 }
