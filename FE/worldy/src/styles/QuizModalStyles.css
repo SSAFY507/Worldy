@@ -70,6 +70,13 @@
     0 0 9px 3px rgba(195, 233, 255, 0.2);
 }
 
+.gameclickedOXBlue {
+  background-color: #58e5d5;
+  color: #dbf8f4;
+  box-shadow: inset 0 0 20px rgba(195, 233, 255, 0.6),
+    0 0 9px 3px rgba(195, 233, 255, 0.2);
+}
+
 .clickedOXBlue:before {
   transform: translateX(250px);
 }
@@ -92,6 +99,13 @@
   /* color: var(--green); */
   /* box-shadow: inset 0 0 10px rgba(27, 253, 230, 0.4),
     0 0 9px 3px rgba(27, 253, 156, 0.1); */
+}
+
+.gameclickedOXRed {
+  background-color: #ff5c5c;
+  color: #dbf8f4;
+  box-shadow: inset 0 0 20px rgba(195, 233, 255, 0.6),
+    0 0 9px 3px rgba(195, 233, 255, 0.2);
 }
 
 .beforeOXRed:before {
@@ -330,6 +344,11 @@
   color: #dbf8f4;
   box-shadow: inset 0 0 20px rgba(0, 237, 209, 0.6),
     0 0 9px 3px rgba(0, 200, 209, 0.2);
+}
+
+.gameclickedmulti {
+  background-color: #58e5d5;
+  color: #dbf8f4;
 }
 
 .clickedmulti:before {

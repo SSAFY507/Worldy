@@ -27,11 +27,11 @@ export type ScrappedQuizType = {
   multiSecond: string | null; //2번
   multiThird: string | null; //3번
   multiFourth: string | null; //4번
-  hint: boolean; //힌트
-  commentary: string; //힌트 유형
+  hint: string;
+  hintType: boolean; //힌트
   userAnswer: string | null; //유저가 적은 정답(맞았으면 null)
   success: boolean; //맞춘 문제인가
-  explanation?: string;
+  commentary: string;
 };
 
 export default function Main() {
@@ -64,16 +64,16 @@ export default function Main() {
     category: "",
     image: "",
     content: "",
-    answer: "",
+    answer: '',
     multiFirst: null, //1번
     multiSecond: null, //2번
     multiThird: null, //3번
     multiFourth: null, //4번
-    hint: true, //힌트
-    commentary: "",
+    hint : "",
+    hintType: true, //힌트
     userAnswer: "", //유저가 적은 정답(맞았으면 null)
     success: true, //맞춘 문제인가
-    explanation: "",
+    commentary: "",
   });
 
   // 게임 포화상태 체크
@@ -237,7 +237,7 @@ export default function Main() {
         console.log("quizData");
         console.log(quizData);
 
-        if (quizData.multiAnswerList) {
+        if (quizData.multiAnswerList!==null) {
           setQuiz((prevState: any) => ({
             ...prevState,
             quizId: quizData.quizId,
@@ -252,9 +252,9 @@ export default function Main() {
             multiSecond: quizData.multiAnswerList[1].answer,
             multiThird: quizData.multiAnswerList[2].answer,
             multiFourth: quizData.multiAnswerList[3].answer,
-            hint: quizData.hintType,
-            commentary: quizData.hint,
-            explanation: quizData.commentary,
+            hint: quizData.hint,
+            hintType: quizData.hintType,
+            commentary: quizData.commentary,
           }));
         } else {
           setQuiz((prevState: any) => ({
@@ -267,9 +267,9 @@ export default function Main() {
             image: quizData.image,
             content: quizData.content,
             answer: quizData.answer,
-            hint: quizData.hintType,
-            commentary: quizData.hint,
-            explanation: quizData.commentary,
+            hint: quizData.hint,
+            hintType: quizData.hintType,
+            commentary: quizData.commentary,
           }));
         }
 
