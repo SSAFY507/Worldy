@@ -76,7 +76,7 @@ export default function Matching(props: any) {
       animateDice(dice2, dice);
     });
   }
-  
+
   function animateDice(randomNumber: number, dice: any) {
     if (dice.id === `dice-${randomNumber}`) {
       setTimeout(function () {
@@ -90,7 +90,7 @@ export default function Matching(props: any) {
   const [timerOut, setTimerOut] = useState<boolean>(false);
 
   // 첫 시작때만 시간 셋팅
-  if(startTime) {
+  if (startTime) {
     getRandom();
     setStartTime(false);
   }
@@ -101,7 +101,7 @@ export default function Matching(props: any) {
 
   useEffect(() => {
     const intervalId: NodeJS.Timeout = setInterval(() => {
-        setTimecount((prevTime) => {
+      setTimecount((prevTime) => {
         const newTime = prevTime - 1;
         return newTime;
       });
@@ -115,62 +115,62 @@ export default function Matching(props: any) {
 
   return (
     <>
-      <div className="w-full h-full flex flex-col justify-center items-center bg-[url('../../public/game/game_bg2.png')] bg-cover bg">     
-      <div className="flex flex-col items-center justify-center h-[700px] mt-[-100px]" >
-        <img className='w-[200px] object-cover top-[-300px]'
-          src={pathLC}
-          alt='WORLDY GAME'
+      <div className="w-full h-full flex flex-col justify-center items-center bg-[url('../../public/game/game_bg2.png')] bg-cover bg">
+        <div className="flex flex-col items-center justify-center h-[700px] mt-[-100px]" >
+          <img className='w-[200px] object-cover top-[-300px]'
+            src={pathLC}
+            alt='WORLDY GAME'
           />
-        <div className="h-[50px] flex flex-col items-center justify-center mt-[30px]">
-        {timecount>=0?(<div className="font-PtdSemiBOld text-[40px] text-white">
-          대전 상대를 찾는 중 입니다.
-        </div>):(
-          <div className="flex flex-col justify-center items-center">
-          <div className="font-PtdSemiBOld text-[35px] text-white">
-          대전 상대가 부족합니다.
+          <div className="h-[50px] flex flex-col items-center justify-center mt-[30px]">
+            {timecount >= 0 ? (<div className="font-PtdSemiBOld text-[40px] text-white">
+              대전 상대를 찾는 중 입니다.
+            </div>) : (
+              <div className="flex flex-col justify-center items-center">
+                <div className="font-PtdSemiBOld text-[35px] text-white">
+                  대전 상대가 부족합니다.
+                </div>
+                <div className="font-PtdSemiBOld text-[35px] mt-[10px] text-white">
+                  잠시만 기다려주세요.
+                </div>
+              </div>
+            )}
           </div>
-          <div className="font-PtdSemiBOld text-[35px] mt-[10px] text-white">
-          잠시만 기다려주세요. 
-          </div>
-          </div>
-          )}
-          </div>
-          {timecount>=0? ( <div className="text-white mt-[40px] font-PtdLight text-[20px]">예상 대기 시간</div>):
-          (
-            <div className="text-white mt-[40px] font-PtdLight text-[20px]">예상 대기 시간 초과</div>
-          )}
-         
+          {timecount >= 0 ? (<div className="text-white mt-[40px] font-PtdLight text-[20px]">예상 대기 시간</div>) :
+            (
+              <div className="text-white mt-[40px] font-PtdLight text-[20px]">예상 대기 시간 초과</div>
+            )}
+
           <img
-              className='mt-[10px] w-[150px] object-cover'
-              src={'/game/loading.gif'}
-              alt='WORLDY GAME'
+            className='mt-[10px] w-[150px] object-cover'
+            src={'/game/loading.gif'}
+            alt='WORLDY GAME'
           />
           <div className="text-white relative top-[-90px] font-PtdLight text-[25px]">{timecount}초</div>
-          <button 
-              className="flex flex-col justify-center items-center w-[180px] h-[70px] mt-[150px] bg-white/50 hover:bg-[#FA5B54] 
-              font-PtdSemiBOld text-[25px] rounded-[6px] text-white"  
-              onClick={() => {
-                Swal.fire({
-                  title: '게임 매칭을 취소하시겠습니까?',
-                  icon: 'warning',
-                  iconColor: '#FA5B54',
-                  showCancelButton: true,
-                  confirmButtonColor: '#FA5B54',
-                  cancelButtonColor: '#999999',
-                  confirmButtonText: 'YES',
-                  cancelButtonText: 'NO'
-                }).then((result : any ) => {
-                  if (result.isConfirmed) {
-                    ws.disconnect();
-                    navigate('/');
-                  }
-                })
-              }}  
-            >
+          <button
+            className="flex flex-col justify-center items-center w-[180px] h-[70px] mt-[150px] bg-white/50 hover:bg-[#FA5B54] 
+              font-PtdSemiBOld text-[25px] rounded-[6px] text-white"
+            onClick={() => {
+              Swal.fire({
+                title: '게임 매칭을 취소하시겠습니까?',
+                icon: 'warning',
+                iconColor: '#FA5B54',
+                showCancelButton: true,
+                confirmButtonColor: '#FA5B54',
+                cancelButtonColor: '#999999',
+                confirmButtonText: 'YES',
+                cancelButtonText: 'NO'
+              }).then((result: any) => {
+                if (result.isConfirmed) {
+                  ws.disconnect();
+                  navigate('/');
+                }
+              })
+            }}
+          >
             매칭 취소
-            </button>
-      </div>
-    
+          </button>
+        </div>
+
       </div>
     </>
   );
