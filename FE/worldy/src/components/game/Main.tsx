@@ -92,36 +92,36 @@ export default function Main() {
     kakaoId: '',
     nickName: '',
     profileImg: '',
-    mmr : 0,
-    level : 0,
-    tier : '',
+    mmr: 0,
+    level: 0,
+    tier: '',
   });
 
   const [user2, setUser2] = useState<User>({
     kakaoId: '',
     nickName: '',
     profileImg: '',
-    mmr : 0,
-    level : 0,
-    tier : '',
+    mmr: 0,
+    level: 0,
+    tier: '',
   });
 
   const [user3, setUser3] = useState<User>({
     kakaoId: '',
     nickName: '',
     profileImg: '',
-    mmr : 0,
-    level : 0,
-    tier : '',
+    mmr: 0,
+    level: 0,
+    tier: '',
   });
 
   const [user4, setUser4] = useState<User>({
     kakaoId: '',
     nickName: '',
     profileImg: '',
-    mmr : 0,
-    level : 0,
-    tier : '',
+    mmr: 0,
+    level: 0,
+    tier: '',
   });
 
   useEffect(() => {
@@ -305,10 +305,10 @@ export default function Main() {
             setUser1((prevState: any) => ({
               kakaoId: received.user1.kakaoId,
               nickName: received.user1.nickName,
-              profileImg:  received.user1.profileImg,
-              mmr : received.user1.mmr,
-              level : received.user1.level,
-              tier : received.user1.tier,
+              profileImg: received.user1.profileImg,
+              mmr: received.user1.mmr,
+              level: received.user1.level,
+              tier: received.user1.tier,
             }))
             setUser1Check(true);
 
@@ -376,10 +376,10 @@ export default function Main() {
             setUser2((prevState: any) => ({
               kakaoId: received.user2.kakaoId,
               nickName: received.user2.nickName,
-              profileImg:  received.user2.profileImg,
-              mmr : received.user2.mmr,
-              level : received.user2.level,
-              tier : received.user2.tier,
+              profileImg: received.user2.profileImg,
+              mmr: received.user2.mmr,
+              level: received.user2.level,
+              tier: received.user2.tier,
             }))
 
             setUser2Check(true);
@@ -408,12 +408,12 @@ export default function Main() {
             setUser3((prevState: any) => ({
               kakaoId: received.user3.kakaoId,
               nickName: received.user3.nickName,
-              profileImg:  received.user3.profileImg,
-              mmr : received.user3.mmr,
-              level : received.user3.level,
-              tier : received.user3.tier,
+              profileImg: received.user3.profileImg,
+              mmr: received.user3.mmr,
+              level: received.user3.level,
+              tier: received.user3.tier,
             }))
-            
+
             setUser3Check(true);
           }
           if (received.user4) {
@@ -440,12 +440,12 @@ export default function Main() {
             setUser4((prevState: any) => ({
               kakaoId: received.user4.kakaoId,
               nickName: received.user4.nickName,
-              profileImg:  received.user4.profileImg,
-              mmr : received.user4.mmr,
-              level : received.user4.level,
-              tier : received.user4.tier,
+              profileImg: received.user4.profileImg,
+              mmr: received.user4.mmr,
+              level: received.user4.level,
+              tier: received.user4.tier,
             }))
-          
+
             setUser4Check(true);
           }
 
@@ -464,7 +464,7 @@ export default function Main() {
             check = false;
           }
 
-          if(!check) {
+          if (!check) {
             setPlayer((prevState: any) => ({
               ...prevState,
               roomId: received.roomId,
@@ -474,28 +474,28 @@ export default function Main() {
                 name: received.user1.nickName,
               },
             }));
-  
+
             setMetaData((prevState: any) => ({
               ...prevState,
               roomId: received.roomId,
             }));
-  
+
             setWorldMap((prevState: any) => ({
               ...prevState,
               roomId: received.roomId,
             }));
-  
+
             setUser1((prevState: any) => ({
               kakaoId: received.user1.kakaoId,
               nickName: received.user1.nickName,
-              profileImg:  received.user1.profileImg,
-              mmr : received.user1.mmr,
-              level : received.user1.level,
-              tier : received.user1.tier,
+              profileImg: received.user1.profileImg,
+              mmr: received.user1.mmr,
+              level: received.user1.level,
+              tier: received.user1.tier,
             }))
             setUser1Check(true);
-  
-  
+
+
             setPlayer((prevState: any) => ({
               ...prevState,
               roomId: received.roomId,
@@ -505,28 +505,28 @@ export default function Main() {
                 name: received.user2.nickName,
               },
             }));
-  
+
             setMetaData((prevState: any) => ({
               ...prevState,
               roomId: received.roomId,
             }));
-  
+
             setWorldMap((prevState: any) => ({
               ...prevState,
               roomId: received.roomId,
             }));
-  
+
             setUser2((prevState: any) => ({
               kakaoId: received.user2.kakaoId,
               nickName: received.user2.nickName,
-              profileImg:  received.user2.profileImg,
-              mmr : received.user2.mmr,
-              level : received.user2.level,
-              tier : received.user2.tier,
+              profileImg: received.user2.profileImg,
+              mmr: received.user2.mmr,
+              level: received.user2.level,
+              tier: received.user2.tier,
             }))
-  
+
             setUser2Check(true);
-        
+
             setPlayer((prevState: any) => ({
               ...prevState,
               roomId: received.roomId,
@@ -536,28 +536,28 @@ export default function Main() {
                 name: received.user3.nickName,
               },
             }));
-  
+
             setMetaData((prevState: any) => ({
               ...prevState,
               roomId: received.roomId,
             }));
-  
+
             setWorldMap((prevState: any) => ({
               ...prevState,
               roomId: received.roomId,
             }));
-  
+
             setUser3((prevState: any) => ({
               kakaoId: received.user3.kakaoId,
               nickName: received.user3.nickName,
-              profileImg:  received.user3.profileImg,
-              mmr : received.user3.mmr,
-              level : received.user3.level,
-              tier : received.user3.tier,
+              profileImg: received.user3.profileImg,
+              mmr: received.user3.mmr,
+              level: received.user3.level,
+              tier: received.user3.tier,
             }))
-            
+
             setUser3Check(true);
-    
+
             setPlayer((prevState: any) => ({
               ...prevState,
               roomId: received.roomId,
@@ -567,44 +567,44 @@ export default function Main() {
                 name: received.user4.nickName,
               },
             }));
-  
+
             setMetaData((prevState: any) => ({
               ...prevState,
               roomId: received.roomId,
             }));
-  
+
             setWorldMap((prevState: any) => ({
               ...prevState,
               roomId: received.roomId,
             }));
-  
+
             setUser4((prevState: any) => ({
               kakaoId: received.user4.kakaoId,
               nickName: received.user4.nickName,
-              profileImg:  received.user4.profileImg,
-              mmr : received.user4.mmr,
-              level : received.user4.level,
-              tier : received.user4.tier,
+              profileImg: received.user4.profileImg,
+              mmr: received.user4.mmr,
+              level: received.user4.level,
+              tier: received.user4.tier,
             }))
-          
+
             setUser4Check(true);
             setGameStart(!check);
           }
-          
+
           setUserCheck(check);
         }
       }
     });
   }
 
-  if(user4Check) {
-    setTimeout(function() {
+  if (user4Check) {
+    setTimeout(function () {
       setGameWait(true);
     }, 1000);
   }
 
-  if(gameWait) {
-    setTimeout(function() {
+  if (gameWait) {
+    setTimeout(function () {
       setGameStart(true);
     }, 3000);
   }
@@ -1861,18 +1861,18 @@ export default function Main() {
           </div>
         </div>)}
 
-        {!gameStart && 
-          <Enter 
-            user1Check = {user1Check}
-            user2Check = {user2Check}
-            user3Check = {user3Check}
-            user4Check = {user4Check}
-            user1 = {user1}
-            user2 = {user2}
-            user3 = {user3}
-            user4 = {user4}
+        {!gameStart &&
+          <Enter
+            user1Check={user1Check}
+            user2Check={user2Check}
+            user3Check={user3Check}
+            user4Check={user4Check}
+            user1={user1}
+            user2={user2}
+            user3={user3}
+            user4={user4}
 
-            gameWait = {gameWait}
+            gameWait={gameWait}
           ></Enter>
         }
 

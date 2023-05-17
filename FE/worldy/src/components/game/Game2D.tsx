@@ -60,18 +60,18 @@ export default function Game2D(props: any) {
   });
   const [gameResultSet, setGameResultSet] = useState<boolean>(false)
 
-  useEffect(() => {
-    if (worldMap[metaData.currentLocation].type === 'nation') {
+  // useEffect(() => {
+  // if (worldMap[metaData.currentLocation].type === 'nation') {
 
-      setTimeout(() => {
-        ws.send(
-          `/pub/game/quiz/kakao/${roomId}/${metaData.currentLocation}`,
-          {},
-          JSON.stringify(null)
-        );
-      }, 1000);
-    }
-  }, [metaData.currentLocation])
+  //   setTimeout(() => {
+  //     ws.send(
+  //       `/pub/game/quiz/kakao/${roomId}/${metaData.currentLocation}`,
+  //       {},
+  //       JSON.stringify(null)
+  //     );
+  //   }, 1000);
+  // }
+  // }, [metaData.currentLocation])
 
 
   const ws = props.ws;
@@ -744,6 +744,15 @@ export default function Game2D(props: any) {
 
     // 국가 일때
     if (spot.type === "nation") {
+      // 퀴즈 요청
+      setTimeout(() => {
+        ws.send(
+          `/pub/game/quiz/kakao/${roomId}/${metaData.currentLocation}`,
+          {},
+          JSON.stringify(null)
+        );
+      }, 1000);
+
       // 1) 주인 없음
       if (spot.owner === 0) {
         setMode(1);
