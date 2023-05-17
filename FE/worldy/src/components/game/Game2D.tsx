@@ -3199,7 +3199,7 @@ export default function Game2D(props: any) {
 
               <div
                 id="shbutton"
-                className="w-[200px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px] absolute left-[900px] bottom-[-80px] z-[80000]"
+                className="w-[140px] h-[40px] rounded-[4px] flex justify-center items-center text-white text-[16px] absolute left-[950px] bottom-[-150px] z-[80000]"
                 onClick={() => {
                   // 종료 API 요청
                   finishGame();
