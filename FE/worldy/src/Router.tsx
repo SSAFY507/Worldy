@@ -8,31 +8,33 @@ import {
   useNavigate,
 } from 'react-router-dom';
 
-import Country from "./routes/Country";
-import Explore from "./routes/Explore";
 import GameInfo from "./routes/GameInfo";
-import IntroPage from "./routes/IntroPage";
-import LoginModal from "./components/LoginModal";
-import MainPageAfterLogin from "./routes/MainPageAfterLogin";
-import Monopoly from "./routes/Monopoly";
-import MyPage from "./routes/MyPage";
-import Navbar from "./components/Nvabar";
-import Socket from "./routes/Socket";
-import Support from "./routes/Support";
-import pathBI from "./assets/images/MainPageBackground.png";
-import Tutorial from "./routes/Tutorial";
 //import Updates from "./routes/Updates";
 import { useState, useRef, useEffect } from "react";
 import Game from "./routes/Game";
 import Payment from "./routes/Payment";
 import Create from "./routes/Create";
 import PaySuccess from "./routes/PayResult";
-import { loginState } from "./_store/slices/loginSlice";
-import { useSelector } from "react-redux";
-import PayResult from "./routes/PayResult";
 import Callback from "./routes/Callback";
 import GameResult from "./routes/GameResult";
 import Matching from './components/create/Matching';
+import Country from './routes/Country';
+import Explore from './routes/Explore';
+import HelloPage from './components/Loaders/LoaderHello';
+import IntroPage from './routes/IntroPage';
+import LoaderHello from './components/Loaders/LoaderHello';
+import LoginModal from './components/LoginModal';
+import MainPageAfterLogin from './routes/MainPageAfterLogin';
+import Monopoly from './routes/Monopoly';
+import MyPage from './routes/MyPage';
+import Navbar from './components/Nvabar';
+import PayResult from './routes/PayResult';
+import Socket from './routes/Socket';
+import Support from './routes/Support';
+import Tutorial from './routes/Tutorial';
+import { loginState } from './_store/slices/loginSlice';
+import pathBI from './assets/images/MainPageBackground.png';
+import { useSelector } from 'react-redux';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -92,7 +94,7 @@ const AppLayout = () => {
     }
   };
 
-  const exploreUrl = location.pathname.substr(0, 8);
+  const exploreUrl = location.pathname.substr(0, 9);
   const monopolyUrl = location.pathname.substr(0, 9);
   const gameUrl = location.pathname.substr(0, 5);
 
@@ -142,7 +144,7 @@ const AppLayout = () => {
         {location.pathname !== '/tutorial' &&
           location.pathname !== '/user/kakao/callback' &&
           exploreUrl !== '/payment' &&
-          exploreUrl !== '/explore' &&
+          exploreUrl !== '/explore/' &&
           monopolyUrl !== '/monopoly' &&
           gameUrl !== '/game' && <Navbar onLoginClick={handleLoginModal} />}
         {showLoginModal && <LoginModal onClose={closeLoginModal} />}

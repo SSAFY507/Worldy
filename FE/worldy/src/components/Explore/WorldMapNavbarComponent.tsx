@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { BsExclamationCircle } from 'react-icons/bs';
 import Cloud from '../../assets/images/Cloud.png';
+import CustomAxios from '../../API/CustomAxios';
 import ExchangeRateIcon from '../../assets/images/ExchangeRateIcon.png';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import Moon from '../../assets/images/Moon.png';
@@ -21,7 +22,17 @@ interface Props {
 
 interface ListType {
   [key: string]: string;
+};
+
+interface InfoType {
+  nationName : string,
+  exchangeRate : string,
+  weatherName : string,
+  temp : string,
+  time : number
 }
+
+const DOMAIN = process.env.REACT_APP_BASE_URL
 
 const switchTrans:ListType = {
   paintBox: "틀림 그림 찾기에 도전해보세요!",
@@ -29,9 +40,38 @@ const switchTrans:ListType = {
   personalityBox: "인물을 알아봐요!",
   newsBox: "소식을 알아봐요!",
   foodBox: "음식을 잘 아시나요?"
-}
+};
 
 const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSelectAssetName}:Props) => {
+  
+  const getLoginToken: string | null = sessionStorage.getItem('token');
+  const countryId = countryLst[countryName].id
+
+  const [infoData, setInfoData] =useState<InfoType>();
+
+  const getDatasList = async () => {
+    try {
+      const response = await CustomAxios({
+        APIName: 'getDatasList',
+        APIType: 'get',
+        UrlQuery: DOMAIN + `/adventure/info/dynamic/${countryId}`,
+        Token: getLoginToken,
+      });
+      setInfoData(response)
+      
+    } 
+    catch (error) {
+      console.log('Error fetching data:', error);
+    }
+  }
+
+  useEffect(() => {
+    if(countryName){
+      getDatasList();
+    }
+  }, [countryName]);
+
+  console.log(infoData,"")
 
   const list:ListType = {
     country: countryLst[`${countryName}`].KOREAN,
@@ -40,11 +80,11 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSele
   };
 
   const infoList = {
-    time: 18,
-    weather: '흐림',
-    temper: 18,
-    amountvia: 0.76,
-    pref: '미국 달러',
+    time: Number(infoData?.time),
+    weather: infoData?.weatherName,
+    temper: infoData?.temp,
+    amountvia: infoData?.exchangeRate,
+    // pref: '미국 달러',
   };
 
   const [clickedLeftMenu, setClickedLeftMenu] = useState<boolean>(false);
@@ -67,14 +107,14 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSele
     setTimeAPM(
       infoList.time === 12
         ? '12PM'
-        : infoList.time === 24
+        : infoList.time === 0
         ? '0AM'
         : infoList.time > 12
         ? `${infoList.time - 12}PM`
         : `${infoList.time}AM`
     );
-  },[]);
-
+  },[infoData]);
+  console.log(timeAPM)
   const [doDDiyong, setDoDDiyong] = useState<boolean>(false);
   
   useEffect(() => {
@@ -207,7 +247,8 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSele
               </div>
               <div className='w-full h-fit  outline-white flex flex-row justify-start items-center'>
                 <span className='text-white font-PtdSemiBOld text-[24px]'>
-                  {`${infoList.amountvia} ${infoList.pref}`}
+                  {`${infoList.amountvia}`}
+                  {/* {`${infoList.amountvia} ${infoList.pref}`} */}
                 </span>
               </div>
             </div>
