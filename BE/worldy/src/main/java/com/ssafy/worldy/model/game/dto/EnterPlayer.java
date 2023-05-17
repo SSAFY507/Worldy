@@ -18,4 +18,5 @@ public class EnterPlayer {
     private String profileImg;
     private int mmr;
     private int level;
+    private String tier;
 }
