@@ -63,6 +63,9 @@ public class QuizService {
         QuizDto quizDto = quiz.toDto();
         quizDto.setMultiAnswerList(multiAnswerList);
 
+        log.info("==================================================");
+        log.info(quizDto.toString());
+
         List<QuizDto> quizDtoList = new ArrayList<>();
         quizDtoList.add(quizDto);
 
@@ -91,7 +94,7 @@ public class QuizService {
     public void insertQuizRecord(QuizRecordInsertDto quizRecordInsertDto){
 
         Quiz quiz = quizRepo.findById(quizRecordInsertDto.getQuizId()).get();
-        User user = userRepo.findById(quizRecordInsertDto.getUserId()).get();
+        User user = userRepo.findByNickName(quizRecordInsertDto.getUserNickname()).get();
 
         int point = 0;
 
