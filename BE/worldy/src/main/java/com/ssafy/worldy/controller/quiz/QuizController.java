@@ -86,9 +86,9 @@ public class QuizController {
      * - 틀린 그림 찾기  성공시 경험치 20점 제공
      ***/
     @PostMapping("/hidden/success")
-    public ResponseEntity<String> getHiddenCatch(@RequestBody Map<String, Long> user){
+    public ResponseEntity<String> getHiddenCatch(@RequestBody Map<String, String> user){
 
-        quizService.successHiddenCatch(user.get("userId"));
+        quizService.successHiddenCatch(user.get("userNickName"));
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
 }

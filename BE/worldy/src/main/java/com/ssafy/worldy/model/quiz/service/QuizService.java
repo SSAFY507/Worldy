@@ -167,9 +167,9 @@ public class QuizService {
                 .build();
     }
 
-    public void successHiddenCatch(Long userId){
+    public void successHiddenCatch(String userNickName){
 
-        User user = userRepo.findById(userId).get();
+        User user = userRepo.findByNickName(userNickName).get();
         user.updateExp(20);
 
         userRepo.save(user);
