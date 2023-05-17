@@ -1,6 +1,7 @@
+import React, { useState } from 'react'
+
 import { FamousDataType } from './CountrySpeak';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
 import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 import { faYoutube } from '@fortawesome/free-brands-svg-icons';
 import food from '../../assets/images/foodImg.png'
@@ -79,43 +80,56 @@ const foodData: FamousType =
 
 const CountryFamousFrame = ({selectAsset, axiosGetFamousData}:Props) => {
   console.log(" 음식, 인물 데이터 : ", axiosGetFamousData)
+  const [first, setFirst] = useState<boolean>(false);
+  const [second, setSecond] = useState<boolean>(false);
+  const [third, setThird] = useState<boolean>(false);
+
   return (
-    <div className=' h-3/4 w-[540px] flex flex-col justify-center items-center rounded-3xl bg-[rgba(255,255,255,0.6)] shadow-xl mt-20 pt-12'>
-      <div className='h-1/4 w-full flex justify-center'>
-        <img className={`h-[160px] w-[160px] ${(selectAsset === "foodBox")?" rounded-full":"rounded-xl" } `} src={(selectAsset === "foodBox") ? foodData.img :personData.img} alt="famous" />
-      </div>
-      <div className='h-1/6 w-full flex flex-col justify-center items-center'>
-        <div className='h-1/3 w-full text-center text-3xl font-PtdExtraBold '>{(selectAsset === "foodBox") ? foodData.title :personData.title}</div>
-        <div className='h-1/3 w-full text-center text-lg font-PtdSemiBOld opacity-40 '>{(selectAsset === "foodBox") ? foodData.subTitle :personData.subTitle}</div>
-      </div>
-      <div className='h-1/3 w-full text-center text-lg font-PtdRegular inline-block px-14 pt-3 pb-5 opacity-70'>{(selectAsset === "foodBox") ? foodData.discription :personData.discription}</div>
-      <div className='h-1/6 w-full flex justify-center items-center'>
-        {(selectAsset === "foodBox")
-         ?
-         <div 
+    <div className='h-full w-[540px] flex flex-col justify-center items-center'>
+      <div className=' h-3/4 w-full flex flex-col justify-center items-center rounded-3xl bg-[rgba(255,255,255,0.6)] shadow-xl'>
+        <div className='h-1/4 w-full flex justify-center'>
+          <img className={`h-[160px] w-[160px] ${(selectAsset === "foodBox")?" rounded-full":"rounded-xl" } `} src={(selectAsset === "foodBox") ? foodData.img :personData.img} alt="famous" />
+        </div>
+        <div className='h-1/6 w-full flex flex-col justify-center items-center'>
+          <div className='h-1/3 w-full text-center text-3xl font-PtdExtraBold '>{(selectAsset === "foodBox") ? foodData.title :personData.title}</div>
+          <div className='h-1/3 w-full text-center text-lg font-PtdSemiBOld opacity-40 '>{(selectAsset === "foodBox") ? foodData.subTitle :personData.subTitle}</div>
+        </div>
+        <div className='h-1/3 w-full text-center text-lg font-PtdRegular inline-block px-14 pt-3 pb-5 opacity-70'>{(selectAsset === "foodBox") ? foodData.discription :personData.discription}</div>
+        <div className='h-1/6 w-full flex justify-center items-center'>
+          {(selectAsset === "foodBox")
+          ?
+          <div 
           className='h-7 opacity-40 cursor-pointer underline'
           onClick={() => {
             window.open(foodData.recipeUrl)
-          }}
-          >레시피 확인하기 {""} ↗</div>  
-         : 
-        <div className='w-1/6 h-1/2 flex flex-row justify-between items-center' >
-          <FontAwesomeIcon 
-            className=' h-7 opacity-70 cursor-pointer' 
-            icon={faInstagram} 
-            onClick={() => {
-              window.open(personData.instagramUrl)
             }}
-          />
-          <FontAwesomeIcon 
-            className=' h-7 opacity-70 cursor-pointer' 
-            icon={faYoutube} 
-            onClick={() => {
-              window.open(personData.youtubeUrl)
-            }}
-          />
+            >레시피 확인하기 {""} ↗</div>  
+          : 
+          <div className='w-1/6 h-1/2 flex flex-row justify-between items-center' >
+            <FontAwesomeIcon 
+              className=' h-7 opacity-70 cursor-pointer' 
+              icon={faInstagram} 
+              onClick={() => {
+                window.open(personData.instagramUrl)
+              }}
+              />
+            <FontAwesomeIcon 
+              className=' h-7 opacity-70 cursor-pointer' 
+              icon={faYoutube} 
+              onClick={() => {
+                window.open(personData.youtubeUrl)
+              }}
+            />
+          </div>
+          }
         </div>
-        }
+      </div>
+      <div className='h-[48px] w-full flex felx-row justify-center py-3'>
+        <div className='flex flex-row justify-between'>
+          <div className={`${(first ? " bg-green-400" : "bg-gray-200")} h-full w-1/2 text-center font-PtdMedium text-white py-1 rounded`}>1</div>
+          <div className={`${(second ? "bg-green-400" : "bg-gray-200")} h-full w-1/2 text-center font-PtdMedium text-white py-1 rounded`}>2</div>
+          <div className={`${(third ? "bg-green-400" : "bg-gray-200")} h-full w-1/2 text-center font-PtdMedium text-white py-1 rounded`}>3</div>
+        </div>
       </div>
     </div>
   )

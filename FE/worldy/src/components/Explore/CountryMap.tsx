@@ -16,14 +16,24 @@ import asia_India from '../../assets/lowpoly/Country_America.glb';
 import asia_Japen from '../../assets/lowpoly/Country_America.glb';
 import asia_Korea from '../../assets/lowpoly/Country_America.glb';
 import back from '../../assets/lowpoly/back.glb';
-import bg from '../../assets/images/WorldBackgrorund.jpg';
+import bg from '../../assets/images/WorldBackground.jpg'
 import { current } from '@reduxjs/toolkit';
 import europe_France from '../../assets/lowpoly/Country_America.glb';
 import europe_Italia from '../../assets/lowpoly/Country_America.glb';
 import europe_Spain from '../../assets/lowpoly/Country_America.glb';
 import europe_UK from '../../assets/lowpoly/Country_America.glb';
-import northAmerica_America from '../../assets/lowpoly/Country_America4.glb';
+import northAmerica_America from '../../assets/lowpoly/Country_America.glb';
 import { useNavigate } from 'react-router';
+
+// import bg from '../../assets/images/WorldBackground.jpg';
+
+
+
+
+
+
+
+
 
 interface Props {
   countryName: string;
@@ -260,7 +270,7 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName, GetHorborAsse
             if (assetSet.has(obj.name)) {
               obj.children.forEach((children) => {
                 children.name = obj.name;
-                children.receiveShadow = true;
+                // children.receiveShadow = true;
                 children.castShadow = true;
               });
             } else if (obj.name === 'ground') {
@@ -275,7 +285,7 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName, GetHorborAsse
               });
             }
           });
-          obj3d.position.set(0, -0.05, 0.6);
+          obj3d.position.set(0, -0.15, 0.6);
           obj3d.rotation.set(
             THREE.MathUtils.degToRad(item.angle[0]),
             THREE.MathUtils.degToRad(item.angle[1]),
@@ -350,8 +360,8 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName, GetHorborAsse
 
       window.addEventListener('resize', Resize);
       SetupPicking();
-
-      const cam = SetupCamera(37, 0.1, 25, new THREE.Vector3(-0.11, 0.12, 1.8), new THREE.Vector3(0, 0.7, 0.2), new THREE.Vector3(0, 0.35 , 0));
+      const cam = SetupCamera(37, 0.05, 25, new THREE.Vector3(-0.11, 0.12, 1.9), new THREE.Vector3(0, 0.7, 0.2), new THREE.Vector3(0, 0.15 , 0));
+      // const cam = SetupCamera(37, 0.1, 25, new THREE.Vector3(-0.11, 0.12, 1.8), new THREE.Vector3(0, 0.7, 0.2), new THREE.Vector3(0, 0.35 , 0));
       // const cam = SetupCamera(37, 0.1, 25, new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0));
       camera.current = cam
       scene.current.add(cam)
