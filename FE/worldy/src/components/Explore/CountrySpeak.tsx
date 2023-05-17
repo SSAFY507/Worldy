@@ -78,16 +78,16 @@ export interface NewsDataType {
 //   answerPointList: string[][]
 // };
 
-export interface FamousDataType {
-  infoId : string,
-  nationName : string,
-  category : string,
-  img_url : string,
-  video_url : string,
-  insta_url? : string,
-  name : string,
-  content : string
-};
+// export interface FamoussDataType {
+//   infoId : string,
+//   nationName : string,
+//   category : string,
+//   img_url : string,
+//   video_url : string,
+//   insta_url? : string,
+//   name : string,
+//   content : string
+// };
 
 interface UrlListType {
   [key:string]: string,
