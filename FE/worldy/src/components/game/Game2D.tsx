@@ -119,6 +119,11 @@ export default function Game2D(props: any) {
   //   setMode(8);
   // }, [])
 
+  useEffect(() => {
+    if (metaData.curcuit >= 16) {
+      finishGame();
+    }
+  }, [metaData.curcuit])
 
 
 
@@ -149,6 +154,7 @@ export default function Game2D(props: any) {
         ...prevState,
         turn: (prevState.turn + 1) % 4,
         turnOver: false,
+        curcuit: prevState.curcuit + 1,
       }));
     } else if (metaData.turnOver && metaData.isDouble) {
       setMetaData((prevState: any) => ({
@@ -335,8 +341,8 @@ export default function Game2D(props: any) {
         playNum: 0,
         nickName: '',
         own: [],
-        tier:'',
-        profileImg:''
+        tier: '',
+        profileImg: ''
       },
       {
         kakaoId: '',
@@ -344,8 +350,8 @@ export default function Game2D(props: any) {
         playNum: 0,
         nickName: '',
         own: [],
-        tier:'',
-        profileImg:''
+        tier: '',
+        profileImg: ''
       },
       {
         kakaoId: '',
@@ -353,8 +359,8 @@ export default function Game2D(props: any) {
         playNum: 0,
         nickName: '',
         own: [],
-        tier:'',
-        profileImg:''
+        tier: '',
+        profileImg: ''
       },
       {
         kakaoId: '',
@@ -362,8 +368,8 @@ export default function Game2D(props: any) {
         playNum: 0,
         nickName: '',
         own: [],
-        tier:'',
-        profileImg:''
+        tier: '',
+        profileImg: ''
       }
     ]
   });
@@ -392,32 +398,32 @@ export default function Game2D(props: any) {
             playNum: 1,
             nickName: player.p1.name,
             own: player.p1.game.own,
-            tier:user1.tier,
-            profileImg:user1.profileImg
+            tier: user1.tier,
+            profileImg: user1.profileImg
           } : key === 1 ? {
             kakaoId: player.p2.playerId,
             assets: p2Assets,
             playNum: 2,
             nickName: player.p2.name,
             own: player.p2.game.own,
-            tier:user2.tier,
-            profileImg:user2.profileImg
+            tier: user2.tier,
+            profileImg: user2.profileImg
           } : key === 2 ? {
             kakaoId: player.p3.playerId,
             assets: p3Assets,
             playNum: 3,
             nickName: player.p3.name,
             own: player.p3.game.own,
-            tier:user3.tier,
-            profileImg:user3.profileImg
+            tier: user3.tier,
+            profileImg: user3.profileImg
           } : {
             kakaoId: player.p4.playerId,
             assets: p4Assets,
             playNum: 4,
             nickName: player.p4.name,
             own: player.p4.game.own,
-            tier:user4.tier,
-            profileImg:user4.profileImg
+            tier: user4.tier,
+            profileImg: user4.profileImg
           }
         ))
       ]
