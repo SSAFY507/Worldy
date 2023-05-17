@@ -106,6 +106,7 @@ export interface PaintDataType {
   imgNum: number,
   diffUrl: string,
   imgTitle: string,
+  imgSubTitle: string,
   imgContent: string,
   originalUrl: string,
   answerPointList: string[][]
