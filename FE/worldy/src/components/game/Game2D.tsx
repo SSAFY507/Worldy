@@ -1920,12 +1920,6 @@ export default function Game2D(props: any) {
 
   return (
     <>
-      <div>=================================</div>
-      <div>1등 : {rankPlayerData.rankPlayer[0].nickName}</div>
-      <div>2등 : {rankPlayerData.rankPlayer[1].nickName}</div>
-      <div>3등 : {rankPlayerData.rankPlayer[2].nickName}</div>
-      <div>4등 : {rankPlayerData.rankPlayer[3].nickName}</div>
-      <div>=================================</div>
 
       {/* 퀴즈 모달 */}
       {quizModalState && (
