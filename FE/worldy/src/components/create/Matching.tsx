@@ -178,7 +178,11 @@ export default function Matching(props: any) {
           </div>
           )}
           </div>
-          <div className="text-white mt-[40px] font-PtdLight text-[20px]">예상 대기 시간</div>
+          {timecount>=0? ( <div className="text-white mt-[40px] font-PtdLight text-[20px]">예상 대기 시간</div>):
+          (
+            <div className="text-white mt-[40px] font-PtdLight text-[20px]">예상 대기 시간 초과</div>
+          )}
+         
           <img
               className='mt-[10px] w-[150px] object-cover'
               src={'/game/loading.gif'}
