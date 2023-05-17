@@ -606,7 +606,7 @@ export default function Main() {
   if (gameWait) {
     setTimeout(function () {
       setGameStart(true);
-    }, 3000);
+    }, 4000);
   }
 
   // 게임 방이 가득차면 redirect
@@ -1895,6 +1895,10 @@ export default function Main() {
                 roomId={params.id}
                 ws={ws}
                 quiz={quiz}
+                user1={user1}
+                user2={user2}
+                user3={user3}
+                user4={user4}
               ></Game2D>
             )}
             {!mode && (

@@ -50,6 +50,9 @@ export default function QuizModal({
 }) {
   console.log(input);
 
+  const userName: string | null = sessionStorage.getItem('nickname');
+
+
   const size: number = 200;
 
   const textSize: number = 200 / (input.content.length / 20);
@@ -190,7 +193,7 @@ export default function QuizModal({
                 className={`${
                   submitAnswer === 'O' ? 'clickedOXBlue' : 'bg-[#F2F2F2]'
                 } beforeOXBlue w-[200px] h-[120px] mr-[20px] rounded-md shadow-md flex flex-row justify-center items-center`}
-                onClick={() => handleSubmitAnswer('O')}
+                onClick={() => handleSubmitAnswer('o')}
               >
                 <span className='text-[24px] font-PtdMedium'>O</span>
               </button>
@@ -198,7 +201,7 @@ export default function QuizModal({
                 className={`${
                   submitAnswer === 'X' ? 'clickedOXRed' : 'bg-[#F2F2F2]'
                 } beforeOXRed w-[200px] h-[120px] ml-[20px]  rounded-md shadow-md flex flex-row justify-center items-center`}
-                onClick={() => handleSubmitAnswer('X')}
+                onClick={() => handleSubmitAnswer('x')}
               >
                 <span className='text-[24px] font-PtdMedium'>X</span>
               </button>
@@ -649,7 +652,7 @@ export default function QuizModal({
             </div>
           </div>
           <div className='w-full flex-1 outline-black flex flex-row justify-start items-center font-PtdRegular text-[#ACACAC]'>
-            <span>'닉네임 값 없다야'님이 입력한 답은 "{submitAnswer}"</span>
+            <span>"{userName}"님이 입력한 답은 "{submitAnswer}"</span>
           </div>
         </div>
         <div className='relative bg-[#F5F5F5] w-full h-[300px]  outline-blue-500'>

@@ -30,7 +30,7 @@ const CountryPaintAfter = ({answer, result, GetSolvedFlag}:Props) => {
             <div className='h-2/5 w-full text-center text-3xl opacity-50 font-PtdExtraBold'>{answer.title}</div>
             <div className='h-1/5 w-full text-center text-xs opacity-50 font-PtdRegular'>{answer.subTitle}</div>
           </div>
-          <div className='h-2/3 w-full px-10 pb-5 text-xs inline-block font-PtdLight'>{answer.description}</div>
+          <div className='h-2/3 w-full px-10 pb-5 text-xs inline-block font-PtdLight overflow-auto'>{answer.description}</div>
         </div>
       </div>
       <div className=' h-12 w-[780px] text-sm text-center font-PtdLight opacity-40 py-3 rounded-xl shadow-lg border-solid border-2 border-gray-200 cursor-pointer'
