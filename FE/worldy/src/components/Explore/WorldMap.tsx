@@ -14,7 +14,7 @@ import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import africa from "../../assets/lowpoly/africa.glb";
 import asia from "../../assets/lowpoly/asia.glb";
 import basemap from "../../assets/lowpoly/basemap.glb";
-import bg from "../../assets/images/WorldBackgrorund.jpg"
+import bg from '../../assets/images/WorldBackground.jpg'
 import europe from "../../assets/lowpoly/europe.glb";
 import { gsap } from 'gsap';
 import northAmerica from "../../assets/lowpoly/northAmerica.glb";
