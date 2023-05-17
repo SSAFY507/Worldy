@@ -63,6 +63,8 @@ public class QuizService {
         QuizDto quizDto = quiz.toDto();
         quizDto.setMultiAnswerList(multiAnswerList);
 
+        log.info(quizDto.toString());
+
         List<QuizDto> quizDtoList = new ArrayList<>();
         quizDtoList.add(quizDto);
 
