@@ -119,7 +119,16 @@ public class QuizService {
                 .imgNum(imgNum)
                 .answerPointList(answerPointList)
                 .imgTitle(hiddenCatch.getImgTitle())
+                .imgSubTitle(hiddenCatch.getImgSubTitle())
                 .imgContent(hiddenCatch.getImgContent())
                 .build();
+    }
+
+    public void successHiddenCatch(Long userId){
+
+        User user = userRepo.findById(userId).get();
+        user.updateExp(20);
+
+        userRepo.save(user);
     }
 }
