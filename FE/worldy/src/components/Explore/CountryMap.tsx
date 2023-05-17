@@ -15,7 +15,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
-import africa_Egypt from '../../assets/lowpoly/Country_America.glb';
+import africa_Egypt from '../../assets/lowpoly/Country_Egypt.glb';
 import asia_China from '../../assets/lowpoly/Country_America.glb';
 import asia_India from '../../assets/lowpoly/Country_America.glb';
 import asia_Japen from '../../assets/lowpoly/Country_America.glb';
