@@ -102,16 +102,25 @@ public class QuizService {
         user.updateExp(point);
 
         quizRecordRepo.save(quizRecordInsertDto.toEntity(user, quiz));
+        log.info(quizRecordInsertDto.toString());
+
+        log.info("======================");
 
         //만약 스크랩을 했다면
         if(quizRecordInsertDto.isScrap()) {
             Long nationId = quiz.getNation().getNationId();
 
-            insertQuizLike(QuizLikeInsertDto.builder()
+            QuizLikeInsertDto quizLikeInsertDto = QuizLikeInsertDto.builder()
                     .quizId(quiz.getQuizId())
                     .userId(user.getUserId())
                     .nationId(nationId)
-                    .build());
+                    .build();
+
+            QuizRecord quizRecord = quizRecordRepo.findByQuizIdAndUserId(quiz.getQuizId(), user.getUserId()).get();
+            Nation nation = nationRepo.findById(quizLikeInsertDto.getNationId()).get();
+
+            log.info(quizLikeInsertDto.toString());
+            quizLikeRepo.save(quizLikeInsertDto.toEntity(quiz, user, quizRecord, nation));
         }
     }
 
