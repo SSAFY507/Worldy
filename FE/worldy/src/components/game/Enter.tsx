@@ -16,9 +16,6 @@ export default function Enter(props : any ) {
 
   const gameWait = props.gameWait;
 
-  console.log(user1);
-  console.log(user1Check);
-
   const setTierColor = (input: string): string => {
     if (input === 'Platinum') return '#86FFF8';
     else if (input === 'Gold') return '#FFEE95';
