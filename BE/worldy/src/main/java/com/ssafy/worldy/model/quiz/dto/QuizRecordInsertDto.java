@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class QuizRecordInsertDto {
 
-    private String userNickname;
+    private String userNickName;
     private Long quizId;
     private boolean success;
     private String userAnswer;
