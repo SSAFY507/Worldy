@@ -754,6 +754,8 @@ export default function Main() {
     isDouble: false,
     itemMsg1: '아이템 메시지1',
     itemMsg2: '아이템 메시지2',
+    fund: 0,
+    curcuit: 0,
   });
   const [turnOver, setTurnOver] = useState<boolean>(false);
 
@@ -1902,7 +1904,27 @@ export default function Main() {
               ></Game2D>
             )}
             {!mode && (
-              <Game3D worldMap={worldMap} setWorldMap={setWorldMap}></Game3D>
+              <Game3D
+                sendData={sendData}
+                loginUser={loginUser}
+                metaData={metaData}
+                setMetaData={setMetaData}
+                player={player}
+                setPlayer={setPlayer}
+                worldMap={worldMap.worldMap}
+                setWorldMap={setWorldMap}
+                item={item}
+                setItem={setItem}
+                closeModal={() => setQuizModalState(false)}
+                quizModalState={quizModalState}
+                roomId={params.id}
+                ws={ws}
+                quiz={quiz}
+                user1={user1}
+                user2={user2}
+                user3={user3}
+                user4={user4}
+              ></Game3D>
             )}
           </div>
         )}

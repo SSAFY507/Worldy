@@ -40,7 +40,7 @@ interface Props {
 
 interface SpeakType {
   [key: string]: DetailType;
-}
+};
 
 interface DetailType {
   title: string,
@@ -49,8 +49,7 @@ interface DetailType {
   icon: string,
   npcImg: string,
   mainIcon: string,
-
-}
+};
 
 interface Country {
   [key: string]: {
@@ -69,29 +68,6 @@ export interface NewsDataType {
   newsUrl: string
 };
 
-// export interface PaintDataType {
-//   imgNum: number,
-//   diffUrl: string,
-//   imgTitle: string,
-//   imgContent: string,
-//   originalUrl: string,
-//   answerPointList: string[][]
-// };
-
-// export interface FamoussDataType {
-//   infoId : string,
-//   nationName : string,
-//   category : string,
-//   img_url : string,
-//   video_url : string,
-//   insta_url? : string,
-//   name : string,
-//   content : string
-// };
-
-interface UrlListType {
-  [key:string]: string,
-}
 // nations = {"대한민국" : 9, "중국" : 7, "일본" : 8, "인도" : 4, "영국" : 19, "프랑스" : 18, "이탈리아" : 14, "스페인" : 12, "미국" : 39, "이집트" : 27}
 export const countryLst: Country = {
   asia_Korea: {
@@ -152,23 +128,12 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
 
   const getLoginToken: string | null = sessionStorage.getItem('token');
   const [axiosGetNewsData, setAxiosGetNewsData] = useState<NewsDataType[] | undefined>();
-  // const [axiosGetPaintData, setAxiosGetPaintData] = useState<PaintDataType | undefined>();
-  // const [axiosGetFamousData, SetAxiosGetFamousData] = useState<FamousDataType[] | undefined>();
-  // const [axiosGetQuizData, setAxiosGetQuizData] = useState<QuizDataType[] | undefined>();
 
   const [checkGetData, setCheckGetData] = useState<boolean>(false)
   const countryId = countryLst[countryName].id
   
-  const urlList:UrlListType = {
-    newsBox: `/adventure/news/${countryId}`,
-    // quizBox: ``,
-    // paintBox: `/quiz/hidden/${countryId}`,
-    // foodBox: `/adventure/info/static?nationId=${countryId}&category=food`,
-    // personalityBox: `/adventure/info/static?nationId=${countryId}&category=people`
-  }
-
   /** 데이터 받는 함수 */
-  const getDatasList = async (box: string, url:string) => {
+  const getDatasList = async (url:string) => {
     try {
       const response = await CustomAxios({
         APIName: 'getDatasList',
@@ -186,7 +151,7 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
 
   useEffect(() => {
     if (getLoginToken && selectAsset === "newsBox"){
-      getDatasList(selectAsset, urlList[`${selectAsset}`])
+      getDatasList(`/adventure/news/${countryId}`)
     }
   },[])
 
