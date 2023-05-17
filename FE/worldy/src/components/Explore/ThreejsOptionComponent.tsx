@@ -118,6 +118,7 @@ export const SetupControls = (camera:THREE.PerspectiveCamera, divContainer:HTMLD
   const controls = new OrbitControls(camera, divContainer);
   controls.target.set(0, 0, 0)
   controls.enableDamping = true;        // 부드럽게 돌아가
+  controls.enableZoom = false;
   // 위아래 카메라 제한
   controls.minPolarAngle = THREE.MathUtils.degToRad(polorMin);   // 0도 부터
   controls.maxPolarAngle = THREE.MathUtils.degToRad(polorMax);  // 60도 까지 회전 가능
