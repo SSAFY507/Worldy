@@ -18,6 +18,7 @@ public class QuizRecordInsertDto {
     private Long quizId;
     private boolean success;
     private String userAnswer;
+    private boolean scrap;
 
     public QuizRecord toEntity(User user, Quiz quiz){
         return QuizRecord.builder()
