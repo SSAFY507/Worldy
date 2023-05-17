@@ -530,6 +530,8 @@ export default function Main() {
     isDouble: false,
     itemMsg1: '아이템 메시지1',
     itemMsg2: '아이템 메시지2',
+    circuit: 0,
+
   });
   const [turnOver, setTurnOver] = useState<boolean>(false);
 
