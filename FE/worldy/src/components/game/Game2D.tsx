@@ -745,13 +745,14 @@ export default function Game2D(props: any) {
     // 국가 일때
     if (spot.type === "nation") {
       // 퀴즈 요청
+      console.log('퀴즈 요청()')
       setTimeout(() => {
         ws.send(
-          `/pub/game/quiz/kakao/${roomId}/${metaData.currentLocation}`,
+          `/pub/game/quiz/kakao/${roomId}/${newLocation}`,
           {},
           JSON.stringify(null)
         );
-      }, 1000);
+      }, 1500);
 
       // 1) 주인 없음
       if (spot.owner === 0) {
@@ -3161,7 +3162,7 @@ export default function Game2D(props: any) {
                 턴 종료
               </div>
 
-              <div
+              {/* <div
                 id="shbutton"
                 className="w-[200px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px] absolute left-[400px] top-[290px]"
                 onClick={() => {
@@ -3173,7 +3174,7 @@ export default function Game2D(props: any) {
                 }}
               >
                 퀴즈 요청
-              </div>
+              </div> */}
 
               <div
                 id="shbutton"
