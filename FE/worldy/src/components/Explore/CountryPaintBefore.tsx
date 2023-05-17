@@ -41,30 +41,38 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
   return (
     <div className=' h-[372px] w-full flex flex-col justify-center items-center'>
       <div className='h-[276px] w-[780px] flex flex-row justify-between relative'>
-        {warn && (
-          <div className='absolute top-0 left-0 h-[276px] w-[388px] bg-[rgba(0,0,0,0.2)] grid place-content-center rounded-2xl z-[30]'>
-            <span className='font-PtdMedium text-[30px] text-center text-white'>
-              오른쪽 이미지에서
-              <br />
-              선택해주세요
-            </span>
-          </div>
-        )}
-        <img
-          className='h-full w-[388px] rounded-2xl bg-gray-500 bg-center cursor-default'
-          src={problem.collectImg}
-          alt='original'
+        <div
+          className='relative w-[388px] h-[276px]'
           onMouseEnter={() => setWarn(true)}
           onMouseLeave={() => setWarn(false)}
-        />
-        <img
-          className='h-full w-[388px] rounded-2xl bg-gray-500 bg-center cursor-pointer'
-          src={problem.quizImg}
-          alt='different'
-          useMap='#image-map'
-        />
-        <div>
-          <map name='image-map' id='image-map' className='relative'>
+        >
+          {warn && (
+            <div className='absolute top-0 left-0 h-[276px] w-[388px] bg-[rgba(0,0,0,0.2)] grid place-content-center rounded-2xl z-[30]'>
+              <span className='font-PtdMedium text-[30px] text-center text-white'>
+                오른쪽 이미지에서
+                <br />
+                선택해주세요
+              </span>
+            </div>
+          )}
+          <img
+            className=' absolute top-0 left-0 h-[276px] w-[388px] rounded-2xl bg-gray-500 bg-center cursor-default'
+            src={problem.collectImg}
+            alt='original'
+          />
+        </div>
+        <div className='relative w-[388px] h-[276px]'>
+          <img
+            className='absolute top-0 left-0 h-[276px] w-[388px] rounded-2xl bg-gray-500 bg-center cursor-pointer z-[5]'
+            src={problem.quizImg}
+            alt='different'
+            useMap='#image-map'
+          />
+          <map
+            name='image-map'
+            id='image-map'
+            className='absolute top-0 left-0 h-[276px] w-[388px] z-[10] '
+          >
             {problem.answerPointList!.map((e, idx) => {
               return (
                 <>
