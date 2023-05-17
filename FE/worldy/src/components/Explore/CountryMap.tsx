@@ -19,7 +19,7 @@ import back from '../../assets/lowpoly/back.glb';
 import bg from '../../assets/images/WorldBackground.jpg'
 import { current } from '@reduxjs/toolkit';
 import europe_France from '../../assets/lowpoly/Country_America.glb';
-import europe_Italia from '../../assets/lowpoly/Country_America.glb';
+import europe_Italia from '../../assets/lowpoly/Country_Italia.glb';
 import europe_Spain from '../../assets/lowpoly/Country_Spain.glb';
 import europe_UK from '../../assets/lowpoly/Country_UK.glb';
 import northAmerica_America from '../../assets/lowpoly/Country_America.glb';
