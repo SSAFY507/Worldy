@@ -14,10 +14,11 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class QuizRecordInsertDto {
 
-    private Long userId;
+    private String userNickName;
     private Long quizId;
     private boolean success;
     private String userAnswer;
+    private boolean scrap;
 
     public QuizRecord toEntity(User user, Quiz quiz){
         return QuizRecord.builder()

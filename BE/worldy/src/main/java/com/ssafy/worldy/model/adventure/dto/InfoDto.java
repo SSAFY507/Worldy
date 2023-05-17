@@ -21,9 +21,11 @@ public class InfoDto {
 
     private String content;
 
-    private String img_url;
+    private String imgUrl;
 
-    private String video_url;
+    private String videoUrl;
 
-    private String insta_url;
+    private String instaUrl;
+
+    private String subName;
 }

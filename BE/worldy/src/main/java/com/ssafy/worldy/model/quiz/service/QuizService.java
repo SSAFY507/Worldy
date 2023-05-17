@@ -4,12 +4,10 @@ import com.ssafy.worldy.model.quiz.entity.HiddenCatch;
 import com.ssafy.worldy.model.adventure.entity.Nation;
 import com.ssafy.worldy.model.adventure.repo.NationRepo;
 import com.ssafy.worldy.model.quiz.dto.*;
+import com.ssafy.worldy.model.quiz.entity.MultiAnswer;
 import com.ssafy.worldy.model.quiz.entity.Quiz;
 import com.ssafy.worldy.model.quiz.entity.QuizRecord;
-import com.ssafy.worldy.model.quiz.repo.HiddenCatchRepo;
-import com.ssafy.worldy.model.quiz.repo.QuizLikeRepo;
-import com.ssafy.worldy.model.quiz.repo.QuizRecordRepo;
-import com.ssafy.worldy.model.quiz.repo.QuizRepo;
+import com.ssafy.worldy.model.quiz.repo.*;
 import com.ssafy.worldy.model.user.entity.User;
 import com.ssafy.worldy.model.user.repo.UserRepo;
 import com.ssafy.worldy.util.FastAPIUtil;
@@ -18,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +33,7 @@ public class QuizService {
     private final QuizRecordRepo quizRecordRepo;
     private final QuizLikeRepo quizLikeRepo;
     private final HiddenCatchRepo hiddenCatchRepo;
+    private final MultiAnswerRepo multiAnswerRepo;
     @Value("${fastapi.hidden-catch.url}")
     private String requestUrl;
 
@@ -43,11 +43,33 @@ public class QuizService {
         return newsQuiz.toNewsQuizDto();
     }
 
-    public QuizDto getNationQuizDto(Long nationId){
+    public List<QuizDto> getNationQuizDto(Long nationId){
 
         // 퀴즈를 고르는 기준이 필요! 지금은 그냥 랜덤으로
         Quiz quiz = quizRepo.findRandQuizByNationId(nationId);
-        return quiz.toDto();
+
+        List<MultiAnswerDto> multiAnswerList = null;
+
+        // 퀴즈 타입이 객관식이면 객관식 보기 조회
+        if(quiz.getQuizType().equals("multi")) {
+            multiAnswerList = new ArrayList<>();
+
+            List<MultiAnswer> multiAnswers = multiAnswerRepo.findByQuiz(quiz);
+            for (MultiAnswer multiAnswer : multiAnswers) {
+                multiAnswerList.add(multiAnswer.toMultiAnswerDto());
+            }
+        }
+
+        QuizDto quizDto = quiz.toDto();
+        quizDto.setMultiAnswerList(multiAnswerList);
+
+        log.info("==================================================");
+        log.info(quizDto.toString());
+
+        List<QuizDto> quizDtoList = new ArrayList<>();
+        quizDtoList.add(quizDto);
+
+        return quizDtoList;
     }
 
     public void insertQuiz(QuizInsertDto quizInsertDto){
@@ -68,10 +90,12 @@ public class QuizService {
         quizLikeRepo.save(quizLikeInsertDto.toEntity(quiz,user,quizRecord,nation));
     }
 
+    @Transactional
     public void insertQuizRecord(QuizRecordInsertDto quizRecordInsertDto){
 
+        log.info(quizRecordInsertDto.toString());
         Quiz quiz = quizRepo.findById(quizRecordInsertDto.getQuizId()).get();
-        User user = userRepo.findById(quizRecordInsertDto.getUserId()).get();
+        User user = userRepo.findByNickName(quizRecordInsertDto.getUserNickName()).get();
 
         int point = 0;
 
@@ -82,6 +106,26 @@ public class QuizService {
         user.updateExp(point);
 
         quizRecordRepo.save(quizRecordInsertDto.toEntity(user, quiz));
+        log.info(quizRecordInsertDto.toString());
+
+        log.info("======================");
+
+        //만약 스크랩을 했다면
+        if(quizRecordInsertDto.isScrap()) {
+            Long nationId = quiz.getNation().getNationId();
+
+            QuizLikeInsertDto quizLikeInsertDto = QuizLikeInsertDto.builder()
+                    .quizId(quiz.getQuizId())
+                    .userId(user.getUserId())
+                    .nationId(nationId)
+                    .build();
+
+            QuizRecord quizRecord = quizRecordRepo.findByQuizIdAndUserId(quiz.getQuizId(), user.getUserId()).get();
+            Nation nation = nationRepo.findById(quizLikeInsertDto.getNationId()).get();
+
+            log.info(quizLikeInsertDto.toString());
+            quizLikeRepo.save(quizLikeInsertDto.toEntity(quiz, user, quizRecord, nation));
+        }
     }
 
     public HiddenCatchDto getHiddenCatch(Long nationId){
@@ -124,9 +168,9 @@ public class QuizService {
                 .build();
     }
 
-    public void successHiddenCatch(Long userId){
+    public void successHiddenCatch(String userNickName){
 
-        User user = userRepo.findById(userId).get();
+        User user = userRepo.findByNickName(userNickName).get();
         user.updateExp(20);
 
         userRepo.save(user);
