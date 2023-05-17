@@ -41,54 +41,62 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
   return (
     <div className=' h-[372px] w-full flex flex-col justify-center items-center'>
       <div className='h-[276px] w-[780px] flex flex-row justify-between relative'>
-        {warn && (
-          <div className='absolute top-0 left-0 h-[276px] w-[388px] bg-[rgba(0,0,0,0.2)] grid place-content-center'>
-            <span className='font-PtdMedium text-[30px] text-center text-white'>
-              오른쪽 이미지에서
-              <br />
-              선택해주세요
-            </span>
-          </div>
-        )}
-        <img
-          className='h-full w-[388px] rounded-2xl bg-gray-500 bg-cover bg-center cursor-default'
-          src={problem.collectImg}
-          alt='original'
+        <div
+          className='relative w-[388px] h-[276px]'
           onMouseEnter={() => setWarn(true)}
           onMouseLeave={() => setWarn(false)}
-        />
-        <img
-          className='h-full w-[388px] rounded-2xl bg-gray-500 bg-cover bg-center cursor-pointer'
-          src={problem.quizImg}
-          alt='different'
-          useMap='#image-map'
-        />
-        <div>
-          <map name='image-map' id='image-map'>
+        >
+          {warn && (
+            <div className='absolute top-0 left-0 h-[276px] w-[388px] bg-[rgba(0,0,0,0.2)] grid place-content-center rounded-2xl z-[30]'>
+              <span className='font-PtdMedium text-[30px] text-center text-white'>
+                오른쪽 이미지에서
+                <br />
+                선택해주세요
+              </span>
+            </div>
+          )}
+          <img
+            className=' absolute top-0 left-0 h-[276px] w-[388px] rounded-2xl bg-gray-500 bg-center cursor-default'
+            src={problem.collectImg}
+            alt='original'
+          />
+        </div>
+        <div className='relative w-[388px] h-[276px]'>
+          <img
+            className='absolute top-0 left-0 h-[276px] w-[388px] rounded-2xl bg-gray-500 bg-center cursor-pointer '
+            src={problem.quizImg}
+            alt='different'
+            useMap='#image-map'
+          />
+          <map
+            name='image-map'
+            id='image-map'
+            className='absolute top-0 left-0 h-[276px] w-[388px] '
+          >
             {problem.answerPointList!.map((e, idx) => {
               return (
                 <>
                   <div
-                    className=''
+                    className='z-20'
                     style={{
                       outline: '5px solid red',
                       width: `${String(Number(e[2]) - Number(e[0]))}px`,
                       height: `${String(Number(e[3]) - Number(e[1]))}px`,
-                      zIndex: 20,
                       position: 'absolute',
-                      left: String(Number(e[0]) + 50) + 'px',
-                      top: String(Number(e[1]) + 50) + 'px',
+                      left: String(Number(e[0])) + 'px',
+                      top: String(Number(e[1])) + 'px',
                       borderRadius: '100%',
                       visibility: checkList[idx] ? 'visible' : 'hidden',
                     }}
                   />
                   <area
-                    alt='틀린 영역'
+                    alt='정답 영역'
                     href=''
                     key={idx}
                     shape='rect'
                     coords={`${e[0]}, ${e[1]}, ${e[2]}, ${e[3]}`}
-                    style={{ cursor: 'default' }}
+                    style={{ cursor: 'pointer' }}
+                    className='z-30 absolute'
                     onClick={(e) => {
                       e.preventDefault();
                       clickArea(idx);
