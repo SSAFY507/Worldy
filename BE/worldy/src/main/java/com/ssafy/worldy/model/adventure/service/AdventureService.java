@@ -36,7 +36,7 @@ public class AdventureService {
         List<News> newsList = newsRepo.findAllNewsByNationId(nationId);
 
         for(News n : newsList){
-            if(n.getNewsImg() == null) continue;
+            if(n.getNewsImg() == "None") continue;
 
             newsDtoList.add(n.toDto());
         }
