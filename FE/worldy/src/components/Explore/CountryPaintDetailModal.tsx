@@ -38,7 +38,7 @@ const CountryPaintDetailModal = ({selectAsset, axiosGetPaintData, GetRegameFlag}
   const answer:AnswerType = {
     img: axiosGetPaintData?.originalUrl,
     title: axiosGetPaintData?.imgTitle,
-    subTitle: "Eiffel Tower",
+    subTitle: axiosGetPaintData?.imgSubTitle,
     description: axiosGetPaintData?.imgContent
   }
 

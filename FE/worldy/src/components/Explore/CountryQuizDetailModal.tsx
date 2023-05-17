@@ -1,67 +1,84 @@
-import '../styles/QuizModalStyles.css';
-
-import * as React from 'react';
-
-import {
-  AiOutlineBulb,
-  AiOutlineClose,
-  AiOutlineCloseCircle,
-  AiOutlineExclamationCircle,
-} from 'react-icons/ai';
-import { BsBookmark, BsBookmarkFill, BsBoxArrowUpRight } from 'react-icons/bs';
-import { TbCategory2, TbWorld } from 'react-icons/tb';
+import { AiOutlineClose, AiOutlineExclamationCircle } from 'react-icons/ai';
+import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import { useEffect, useRef, useState } from 'react';
 
-import { BiImage } from 'react-icons/bi';
+import CustomAxios from '../../API/CustomAxios';
 import { IoIosPhotos } from 'react-icons/io';
-import { JsxElement } from 'typescript';
-import QuizBlueText from '../assets/images/QuizBlueText.png';
-import ResultBlueText from '../assets/images/ResultBlueText.png';
-import tempImage1 from '../assets/images/thumb2.png';
-import tempImage2 from '../assets/images/Carousel5.png';
-import tempImage3 from '../assets/images/JoshCurious.png';
+import QuizBlueText from '../../assets/images/QuizBlueText.png';
+import { QuizDataType } from './CountryQuizFrame';
+import ResultBlueText from '../../assets/images/ResultBlueText.png';
+import tempImage1 from '../../assets/images/thumb2.png';
 
-type ScrappedQuizType = {
-  quizId: number; //퀴즈 id
-  nationName: string; //국가명
-  level: number; //퀴즈 수준
-  quizType: string; //퀴즈 유형
-  category: string; //카테고리
-  image: string; //이미지
-  content: string; //문제
-  answer: string; //정답
-  multiFirst: string | null; //1번
-  multiSecond: string | null; //2번
-  multiThird: string | null; //3번
-  multiFourth: string | null; //4번
-  hint: string;
-  hintType: boolean; //힌트
-  userAnswer: string | null; //유저가 적은 정답(맞았으면 null)
-  success: boolean; //맞춘 문제인가
-  commentary: string;
+interface Props {
+  selectAsset: string,
+  axiosGetQuizData: QuizDataType[] | undefined,
+  GetRegameFlag: (num:number) => void
 };
 
-export default function QuizModal({
-  input,
-  closeModal,
-}: {
-  input: ScrappedQuizType;
-  closeModal: () => void;
-}) {
-  console.log(input);
+interface RequestBodyType {
+  [key:string]: number | boolean | string
+}
 
+const DOMAIN = process.env.REACT_APP_BASE_URL
+
+const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:Props) => {
   const userName: string | null = sessionStorage.getItem('nickname');
+  const getLoginToken: string | null = sessionStorage.getItem('token');
+  const userId: string | null = sessionStorage.getItem('id');
+  console.log('userId', userId);
 
 
+  const input = axiosGetQuizData![0]
+  const multiList = axiosGetQuizData![0].multiAnswerList!
   const size: number = 200;
-
   const textSize: number = 200 / (input.content.length / 20);
-  //몇줄?
-
-  const [submitAnswer, setSubmitAnswer] = useState<string>('');
-
   const blankBoxSize: number = 400 / input.answer.length;
+  
+  const [submitAnswer, setSubmitAnswer] = useState<string>('');
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const [hintState, setHintState] = useState<boolean>(false);
+  const [blankInputAnswer, setBlankInputAnswer] = useState<string[]>(
+    new Array(input.answer.length).fill('')
+    );
+  const [scrapped, setScrapped] = useState<boolean>(true);
+  const [flipped, setFlipped] = useState<boolean>(false);
+  const [correctState, setCorrectState] = useState<boolean | null>(null);
+  const [hintImageState, setHintImageState] = useState<boolean>(false);
+  const [submitCheck, setSubmitCheck] = useState<boolean>(false);
+  const [showBack, setShowBack] = useState<boolean>(false);
+
+  // "userId" : "유저 아이디", - Long
+  // "quizId" : "퀴즈 아이디", - Long
+  // "success" : "성공 여부", - boolean
+  // "userAnswer" : "유저가 쓴 답" - String
+  // "scrap" : "스크랩 여부" - boolean
+
+  /** 데이터 보내는 함수 */
+  const postDatasList = async (result:any) => {
+    if (!userId || input.quizId || !result || submitAnswer || scrapped) return
+    try {
+      const requestBody = new Map([
+        ["userId", Number(userId)],
+        ["quizId", Number(input.quizId)],
+        ["success", result],
+        ["userAnswer", submitAnswer],
+        ["scrap", scrapped]
+      ])
+
+      const response = await CustomAxios({
+        APIName: 'postDatasList',
+        APIType: 'post',
+        UrlQuery: DOMAIN + '/quiz/record',
+        Body: requestBody,
+        Token: getLoginToken,
+      });
+      console.log(requestBody)
+      console.log(response);
+    } catch (error) {
+      console.log('Error fetching data:', error);
+    }
+  }
+
   const handleComposition = (
     event: React.CompositionEvent<HTMLInputElement>
   ) => {
@@ -97,10 +114,6 @@ export default function QuizModal({
     }
   };
 
-  const [blankInputAnswer, setBlankInputAnswer] = useState<string[]>(
-    new Array(input.answer.length).fill('')
-  );
-
   const handleBlankAnswer = ({
     e,
     i,
@@ -119,6 +132,23 @@ export default function QuizModal({
       }
       setSubmitAnswer(tempString);
     }
+  };
+
+  const handleSubmitAnswer = (input: string) => {
+    if (submitAnswer === input) setSubmitAnswer('');
+    else setSubmitAnswer(input);
+  };
+
+  const handleSubmitMultiAnswer = (input: number) => {
+    const submitted = input.toString();
+    if (submitAnswer === submitted) setSubmitAnswer('');
+    else setSubmitAnswer(submitted);
+  };
+
+  const handleHint = () => {
+    setHintState(!hintState);
+    console.log('잉');
+    console.log('input.hint', input.hint);
   };
 
   const blankBoxComponent = () => {
@@ -148,23 +178,6 @@ export default function QuizModal({
       );
     }
     return tempCompList;
-  };
-
-  useEffect(() => {
-    if (input.quizType === 'blank') {
-      blankBoxComponent();
-    }
-  }, []);
-
-  const handleSubmitAnswer = (input: string) => {
-    if (submitAnswer === input) setSubmitAnswer('');
-    else setSubmitAnswer(input);
-  };
-
-  const handleSubmitMultiAnswer = (input: number) => {
-    const submitted = input.toString();
-    if (submitAnswer === submitted) setSubmitAnswer('');
-    else setSubmitAnswer(submitted);
   };
 
   const contentOX = (): JSX.Element => {
@@ -211,12 +224,12 @@ export default function QuizModal({
       </>
     );
   };
-
+  
   const contentMulti = (): JSX.Element => {
-    const firstA = input.multiFirst ? input.multiFirst : '';
-    const secondA = input.multiSecond ? input.multiSecond : '';
-    const thirdA = input.multiThird ? input.multiThird : '';
-    const fourthA = input.multiFourth ? input.multiFourth : '';
+    const firstA = multiList[0].answer ? multiList[0].answer : '';
+    const secondA = multiList[1].answer ? multiList[1].answer : '';
+    const thirdA = multiList[2].answer ? multiList[2].answer : '';
+    const fourthA = multiList[3].answer ? multiList[3].answer : '';
 
     const firstASize = 200 / firstA.length;
     const secondASize = 200 / secondA.length;
@@ -230,19 +243,19 @@ export default function QuizModal({
 
     const prevInputList: prevInputType[] = [
       {
-        multiAnswerText: input.multiFirst ? input.multiFirst : '',
+        multiAnswerText: multiList[0].answer ? multiList[0].answer : '',
         multiAnswerTextSize: firstASize,
       },
       {
-        multiAnswerText: input.multiSecond ? input.multiSecond : '',
+        multiAnswerText: multiList[1].answer ? multiList[1].answer : '',
         multiAnswerTextSize: secondASize,
       },
       {
-        multiAnswerText: input.multiThird ? input.multiThird : '',
+        multiAnswerText: multiList[2].answer ? multiList[2].answer : '',
         multiAnswerTextSize: thirdASize,
       },
       {
-        multiAnswerText: input.multiFourth ? input.multiFourth : '',
+        multiAnswerText: multiList[3].answer ? multiList[3].answer : '',
         multiAnswerTextSize: fourthASize,
       },
     ];
@@ -336,13 +349,6 @@ export default function QuizModal({
     else return contentBlank();
   };
 
-  const [hintState, setHintState] = useState<boolean>(false);
-  const handleHint = () => {
-    setHintState(!hintState);
-    console.log('잉');
-    console.log('input.hint', input.hint);
-  };
-
   const quizHintContent = (): JSX.Element => {
     return (
       <div className='flex flex-row justify-center items-center'>
@@ -367,10 +373,9 @@ export default function QuizModal({
     );
   };
 
-  const [scrapped, setScrapped] = useState<boolean>(true);
-
   const scrapThisQuiz = () => {
     setScrapped(!scrapped);
+
   };
 
   const quizScrap = (): JSX.Element => {
@@ -399,7 +404,7 @@ export default function QuizModal({
     return (
       <div className='w-fit h-full flex flex-row justify-end items-center text-[#ACACAC] font-PtdLight'>
         <span className='w-fit h-[40%] px-[10px] flex flex-row justify-center items-center border-0 border-r-[2px] border-[#ACACAC] border-solid'>
-          {input.nationName}
+          {input.nation.nationName}
         </span>
         <span className='w-fit h-[40%] px-[10px] flex flex-row justify-center items-center border-0 border-r-[2px] border-[#ACACAC] border-solid'>
           LV. {input.level}
@@ -411,8 +416,6 @@ export default function QuizModal({
     );
   };
 
-  const [flipped, setFlipped] = useState<boolean>(false);
-  const [correctState, setCorrectState] = useState<boolean | null>(null);
   const submitAndFlip = () => {
     if (submitCheck) {
       setFlipped(true);
@@ -421,14 +424,6 @@ export default function QuizModal({
       setSubmitCheck(true);
     }
   };
-
-  const [beforeSubmitAnswer, setBeforeSubmitAnswer] = useState<string>('');
-
-  useEffect(() => {
-    if (submitAnswer === '' || submitAnswer !== beforeSubmitAnswer)
-      setSubmitCheck(false);
-    setBeforeSubmitAnswer(submitAnswer);
-  }, [submitAnswer]);
 
   const submitButton = (): JSX.Element => {
     return (
@@ -447,12 +442,18 @@ export default function QuizModal({
       </button>
     );
   };
+
+  /** 확인 누르면 모달 닫기 */
   const closeButton = (): JSX.Element => {
     return (
       <button
         className='w-[500px] h-[60px] rounded-md font-PtdLight text-[25px] bg-white text-black'
-        onClick={closeModal}
-      >
+        onClick={() => {
+          alert("다른 문제 풀러 이동합니다.")
+          GetRegameFlag(-2)
+          postDatasList(correctState)
+        }
+      }>
         확인
       </button>
     );
@@ -476,19 +477,6 @@ export default function QuizModal({
       </div>
     );
   };
-
-  const [hintImageState, setHintImageState] = useState<boolean>(false);
-
-  const [submitCheck, setSubmitCheck] = useState<boolean>(false);
-
-  const [showBack, setShowBack] = useState<boolean>(false);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setShowBack(true);
-      console.log('보기');
-    }, 1700);
-  }, [flipped]);
 
   const frontContainer = (): JSX.Element => {
     return (
@@ -540,7 +528,7 @@ export default function QuizModal({
                 <AiOutlineClose
                   size={25}
                   color='#BFBFBF'
-                  onClick={closeModal}
+                  // onClick={closeModal}
                   className='cursor-pointer'
                 />
               </div>
@@ -598,7 +586,7 @@ export default function QuizModal({
                 <AiOutlineClose
                   size={30}
                   color='gray'
-                  onClick={closeModal}
+                  // onClick={closeModal}
                   className='cursor-pointer'
                 />
               </div>
@@ -652,7 +640,7 @@ export default function QuizModal({
             </div>
           </div>
           <div className='w-full flex-1 outline-black flex flex-row justify-start items-center font-PtdRegular text-[#ACACAC]'>
-            <span>"{userName}"님이 입력한 답은 "{submitAnswer}"</span>
+            <span>'{userName}'님이 입력한 답은 "{submitAnswer}"</span>
           </div>
         </div>
         <div className='relative bg-[#F5F5F5] w-full h-[300px]  outline-blue-500'>
@@ -671,6 +659,21 @@ export default function QuizModal({
     );
   };
 
+
+  useEffect(() => {
+    if (input.quizType === 'blank') {
+      blankBoxComponent();
+    }
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowBack(true);
+      console.log('보기');
+    }, 1700);
+  }, [flipped]);
+
+
   return (
     <div
       className={` z-50 absolute top-[15%] left-1/2 -translate-x-1/2 -translate-y-1/2 outline-white
@@ -683,6 +686,8 @@ export default function QuizModal({
         {frontContainer()}
         {backContainer()}
       </div>
-    </div>
-  );
+    </div>  
+  )
 }
+
+export default CountryQuizDetailModal;

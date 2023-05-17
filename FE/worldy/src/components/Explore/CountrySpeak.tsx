@@ -78,16 +78,16 @@ export interface NewsDataType {
 //   answerPointList: string[][]
 // };
 
-export interface FamousDataType {
-  infoId : string,
-  nationName : string,
-  category : string,
-  img_url : string,
-  video_url : string,
-  insta_url? : string,
-  name : string,
-  content : string
-};
+// export interface FamoussDataType {
+//   infoId : string,
+//   nationName : string,
+//   category : string,
+//   img_url : string,
+//   video_url : string,
+//   insta_url? : string,
+//   name : string,
+//   content : string
+// };
 
 interface UrlListType {
   [key:string]: string,
@@ -153,7 +153,7 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
   const getLoginToken: string | null = sessionStorage.getItem('token');
   const [axiosGetNewsData, setAxiosGetNewsData] = useState<NewsDataType[] | undefined>();
   // const [axiosGetPaintData, setAxiosGetPaintData] = useState<PaintDataType | undefined>();
-  const [axiosGetFamousData, SetAxiosGetFamousData] = useState<FamousDataType[] | undefined>();
+  // const [axiosGetFamousData, SetAxiosGetFamousData] = useState<FamousDataType[] | undefined>();
   // const [axiosGetQuizData, setAxiosGetQuizData] = useState<QuizDataType[] | undefined>();
 
   const [checkGetData, setCheckGetData] = useState<boolean>(false)
@@ -163,8 +163,8 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
     newsBox: `/adventure/news/${countryId}`,
     // quizBox: ``,
     // paintBox: `/quiz/hidden/${countryId}`,
-    foodBox: `/adventure/info/static?nationId=${countryId}&category=food`,
-    personalityBox: `/adventure/info/static?nationId=${countryId}&category=people`
+    // foodBox: `/adventure/info/static?nationId=${countryId}&category=food`,
+    // personalityBox: `/adventure/info/static?nationId=${countryId}&category=people`
   }
 
   /** 데이터 받는 함수 */
@@ -176,25 +176,7 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
         UrlQuery: DOMAIN + url,
         Token: getLoginToken,
       });
-      switch (box) {
-        case "newsBox":
-          setAxiosGetNewsData(response);
-          break;
-        // case "quizBox":
-        //   setAxiosGetQuizData(response);
-        //   break;
-        // case "paintBox":
-        //   setAxiosGetPaintData(response);
-        //   break;
-        case "foodBox":
-          SetAxiosGetFamousData(response)
-          break;
-        case "personalityBox":
-          SetAxiosGetFamousData(response)
-          break;
-        default:
-          break;
-        }        
+      setAxiosGetNewsData(response);
       setCheckGetData(true)
 
     } catch (error) {
@@ -344,7 +326,7 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
           <div className="h-full w-3/4 flex flex-col justify-center items-center">
             {(selectAsset === "newsBox" && axiosGetNewsData) ? <CountryNewsDetail axiosGetNewsData={axiosGetNewsData} /> :null}
             {(selectAsset === "quizBox" || selectAsset === "paintBox") ? <CountryQuizFrame selectAsset={selectAsset} /> : null}
-            {(selectAsset === "foodBox" || selectAsset === "personalityBox") ? <CountryFamousFrame selectAsset={selectAsset} axiosGetFamousData={axiosGetFamousData}/> :null}
+            {(selectAsset === "foodBox" || selectAsset === "personalityBox") ? <CountryFamousFrame selectAsset={selectAsset} countryName={countryName} /> :null}
           </div>
         </div>
       </div>
