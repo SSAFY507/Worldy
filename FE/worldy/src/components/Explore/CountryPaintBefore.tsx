@@ -42,7 +42,7 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
     <div className=' h-[372px] w-full flex flex-col justify-center items-center'>
       <div className='h-[276px] w-[780px] flex flex-row justify-between relative'>
         {warn && (
-          <div className='absolute top-0 left-0 h-[276px] w-[388px] bg-[rgba(0,0,0,0.2)] grid place-content-center rounded-2xl'>
+          <div className='absolute top-0 left-0 h-[276px] w-[388px] bg-[rgba(0,0,0,0.2)] grid place-content-center rounded-2xl z-[30]'>
             <span className='font-PtdMedium text-[30px] text-center text-white'>
               오른쪽 이미지에서
               <br />
@@ -64,7 +64,7 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
           useMap='#image-map'
         />
         <div>
-          <map name='image-map' id='image-map'>
+          <map name='image-map' id='image-map' className='relative'>
             {problem.answerPointList!.map((e, idx) => {
               return (
                 <>
@@ -75,6 +75,7 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
                       width: `${String(Number(e[2]) - Number(e[0]))}px`,
                       height: `${String(Number(e[3]) - Number(e[1]))}px`,
                       zIndex: 20,
+                      position: 'absolute',
                       left: String(Number(e[0])) + 'px',
                       top: String(Number(e[1])) + 'px',
                       borderRadius: '100%',
