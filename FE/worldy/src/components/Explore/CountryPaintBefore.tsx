@@ -1,18 +1,25 @@
 import { useEffect, useState } from 'react';
 
+import CustomAxios from '../../API/CustomAxios';
 import { ReactComponent as Info } from '../../assets/images/Info.svg';
 import { ProblemType } from './CountryPaintDetailModal';
 
 interface Props {
   problem: ProblemType,
   GetSolvedFlag: (flag:boolean, sol:boolean) => void,
-}
+};
+
+const DOMAIN = process.env.REACT_APP_BASE_URL
 
 const CountryPaintBefore = ({problem, GetSolvedFlag}: Props) => {
+  const getLoginToken: string | null = sessionStorage.getItem('token');
+  const userNickName: string | null = sessionStorage.getItem('nickname');
+
   const [first, setFirst] = useState<boolean>(false);
   const [second, setSecond] = useState<boolean>(false);
   const [third, setThird] = useState<boolean>(false);
   const [checkList, setCheckList] = useState<boolean[]>([])
+
   useEffect(() => {
     if(checkList.length === 0) {
       let tmpList:boolean[] = []
@@ -32,7 +39,7 @@ const CountryPaintBefore = ({problem, GetSolvedFlag}: Props) => {
   return (
     <div className=' h-[372px] w-full flex flex-col justify-center items-center'>
       <div className='h-[276px] w-[780px] flex flex-row justify-between'>
-        <img className='h-full w-[388px] rounded-2xl bg-gray-500 bg-cover bg-center'
+        <img className='h-full w-[388px] rounded-2xl bg-gray-500 bg-cover bg-center hover:'
           src={problem.collectImg}
           alt='original'
         />
@@ -88,6 +95,17 @@ const CountryPaintBefore = ({problem, GetSolvedFlag}: Props) => {
                             setThird(true)
                             alert("틀린 그림 맞추기 성공! 😲  (exp: + 20)");
                             GetSolvedFlag(true, true)
+                            const requestBody = new Map([
+                              ["userNickName", userNickName],
+                            ])
+                            const response = CustomAxios({
+                              APIName: 'success',
+                              APIType: 'post',
+                              UrlQuery: DOMAIN + '/quiz/hidden/success',
+                              Body: requestBody,
+                              Token: getLoginToken,
+                            });
+                            console.log(response)
                             break
                           default:
                             break
