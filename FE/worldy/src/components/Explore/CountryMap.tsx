@@ -1,7 +1,12 @@
 import * as THREE from 'three';
 
-import { SetAnimation, SetupCamera, SetupControls, SetupLight } from "./ThreejsOptionComponent";
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  SetAnimation,
+  SetupCamera,
+  SetupControls,
+  SetupLight,
+} from './ThreejsOptionComponent';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
@@ -16,9 +21,9 @@ import asia_India from '../../assets/lowpoly/Country_America.glb';
 import asia_Japen from '../../assets/lowpoly/Country_America.glb';
 import asia_Korea from '../../assets/lowpoly/Country_America.glb';
 import back from '../../assets/lowpoly/back.glb';
-import bg from '../../assets/images/WorldBackground.jpg'
+import bg from '../../assets/images/WorldBackground.jpg';
 import { current } from '@reduxjs/toolkit';
-import europe_France from '../../assets/lowpoly/Country_America.glb';
+import europe_France from '../../assets/lowpoly/Country_France.glb';
 import europe_Italia from '../../assets/lowpoly/Country_Italia.glb';
 import europe_Spain from '../../assets/lowpoly/Country_Spain.glb';
 import europe_UK from '../../assets/lowpoly/Country_UK.glb';
@@ -27,27 +32,23 @@ import { useNavigate } from 'react-router';
 
 // import bg from '../../assets/images/WorldBackground.jpg';
 
-
-
-
-
-
-
-
-
 interface Props {
   countryName: string;
   selectAsset: string;
-  GetSelectAssetName: (name:string) => void;
-  GetHorborAsset: (name:string) => void;
-};
+  GetSelectAssetName: (name: string) => void;
+  GetHorborAsset: (name: string) => void;
+}
 
 interface AssetsType {
   [key: string]: string;
 }
 
-
-const CountryMap = ({countryName, selectAsset, GetSelectAssetName, GetHorborAsset}:Props) => {
+const CountryMap = ({
+  countryName,
+  selectAsset,
+  GetSelectAssetName,
+  GetHorborAsset,
+}: Props) => {
   const divContainer = useRef<HTMLDivElement>(null);
   const renderer = useRef<THREE.WebGLRenderer | null>(null);
   const scene = useRef<THREE.Scene | null>(null);
@@ -65,23 +66,29 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName, GetHorborAsse
   const navigate = useNavigate();
 
   // const assetSet = new Set(["paintBox", "historyBox", "quizBox", "foodBox", "personalityBox",  "newsBox", "back"])
-  const assetSet = new Set(["paintBox", "quizBox", "foodBox", "personalityBox",  "newsBox"])
-  const assetObject:AssetsType = {
-    paintBox: "🖼틀린 그림 찾기🖼",
+  const assetSet = new Set([
+    'paintBox',
+    'quizBox',
+    'foodBox',
+    'personalityBox',
+    'newsBox',
+  ]);
+  const assetObject: AssetsType = {
+    paintBox: '🖼틀린 그림 찾기🖼',
     // historyBox: "🧭역사에 대해 알아보자!",
-    quizBox: "🎁퀴즈 풀고 Level Up!🎁",
-    foodBox: "🍜🍛🍣🍻",
-    personalityBox: "👴🤴인물을 알아보자!👳‍♂️🎅",
-    newsBox: "📰오늘의 뉴스📰"
-  }
-  let selectedName:string = "";
-  let [selectTmp, setSelectTmp] = useState<boolean>(false)
+    quizBox: '🎁퀴즈 풀고 Level Up!🎁',
+    foodBox: '🍜🍛🍣🍻',
+    personalityBox: '👴🤴인물을 알아보자!👳‍♂️🎅',
+    newsBox: '📰오늘의 뉴스📰',
+  };
+  let selectedName: string = '';
+  let [selectTmp, setSelectTmp] = useState<boolean>(false);
 
   useEffect(() => {
     if (selectTmp) {
-      setSelectTmp(false)
+      setSelectTmp(false);
     }
-  }, [selectTmp])
+  }, [selectTmp]);
   /** 마우스 추적 */
   const SetupPicking = () => {
     const raycaster = new THREE.Raycaster();
@@ -118,7 +125,7 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName, GetHorborAsse
   /** 강조할 대륙 객체 추적 */
   const OnPointerMove = (event: PointerEvent) => {
     if (event.isPrimary === false) return;
-     
+
     // 마우스 위치 추적하고 대륙 객체 저장
     const assets: THREE.Object3D[] = FindObject(event)!;
     let selectedObject: THREE.Object3D;
@@ -143,14 +150,14 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName, GetHorborAsse
         1
       );
       divContainer.current!.style.cursor = 'pointer';
-      GetHorborAsset(selectedName)
+      GetHorborAsset(selectedName);
       // 해당하는 에셋 강조 효과
       outlinePassRef.current!.edgeStrength = 25;
       outlinePassRef.current!.selectedObjects = [selectedObject!];
       selectedObjectRef.current = selectedObject!;
       return;
     }
-    GetHorborAsset("")
+    GetHorborAsset('');
     selectedName = '';
     outlinePassRef.current!.selectedObjects = [];
     divContainer.current!.style.cursor = 'auto';
@@ -183,23 +190,22 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName, GetHorborAsse
   };
 
   /** 마우스 한번 클릭 */
-  const OnClick = (event:any) => {
-    const name:string = selectedName;
+  const OnClick = (event: any) => {
+    const name: string = selectedName;
     // const moveCountry = name;
     if (assetSet.has(name)) {
-      if (name === "back") {
-        alert("대륙으로 이동합니다")
-        navigate("/explore")
-      }
-      else {
+      if (name === 'back') {
+        alert('대륙으로 이동합니다');
+        navigate('/explore');
+      } else {
         if (selectTmp === false) {
-          alert(`${assetObject[name]}`)
-          GetSelectAssetName(name)
-          GetHorborAsset("")
-          setSelectTmp(true)
+          alert(`${assetObject[name]}`);
+          GetSelectAssetName(name);
+          GetHorborAsset('');
+          setSelectTmp(true);
         } else {
-          setSelectTmp(false)
-          return
+          setSelectTmp(false);
+          return;
         }
       }
     } else {
@@ -360,11 +366,18 @@ const CountryMap = ({countryName, selectAsset, GetSelectAssetName, GetHorborAsse
 
       window.addEventListener('resize', Resize);
       SetupPicking();
-      const cam = SetupCamera(37, 0.05, 25, new THREE.Vector3(-0.11, 0.12, 1.9), new THREE.Vector3(0, 0.7, 0.2), new THREE.Vector3(0, 0.15 , 0));
+      const cam = SetupCamera(
+        37,
+        0.05,
+        25,
+        new THREE.Vector3(-0.11, 0.12, 1.9),
+        new THREE.Vector3(0, 0.7, 0.2),
+        new THREE.Vector3(0, 0.15, 0)
+      );
       // const cam = SetupCamera(37, 0.1, 25, new THREE.Vector3(-0.11, 0.12, 1.8), new THREE.Vector3(0, 0.7, 0.2), new THREE.Vector3(0, 0.35 , 0));
       // const cam = SetupCamera(37, 0.1, 25, new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0));
-      camera.current = cam
-      scene.current.add(cam)
+      camera.current = cam;
+      scene.current.add(cam);
 
       // Add lights
       const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.5);

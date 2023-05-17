@@ -65,8 +65,8 @@ class Payment extends Component<{}, AppState> {
         data: { next_redirect_pc_url, tid },
       } = response;
 
-      console.log(next_redirect_pc_url);
-      console.log(tid);
+      //console.log(next_redirect_pc_url);
+      //console.log(tid);
       // 응답 data로 state 갱신
       window.localStorage.setItem('tid', tid);
       this.setState({ next_redirect_pc_url, tid });

@@ -21,12 +21,12 @@ export default function Callback(): JSX.Element {
   const [nickname, setNickname] = useState<string>('');
 
   const kakaoLogin = async () => {
-    console.log(`uriToken${urlToken}`);
+    //console.log(`uriToken${urlToken}`);
     try {
       const kakaoLoginResponse = await axios.get(
         `https://k8a507.p.ssafy.io/api/user/kakao/login?code=${urlToken}`
       );
-      console.log('전부', kakaoLoginResponse.data);
+      //console.log('전부', kakaoLoginResponse.data);
       setAccessToken(kakaoLoginResponse.data.tokenDto.accessToken);
       setProfileImg(kakaoLoginResponse.data.profileImg);
       setNickname(kakaoLoginResponse.data.nickName);
@@ -47,7 +47,7 @@ export default function Callback(): JSX.Element {
     if (accessToken !== '') {
       dispatch(login({ profileImg: profileImg }));
       dispatch(addToken(accessToken));
-      console.log('토큰 추가 후 홈페이지로 이동', accessToken);
+      //console.log('토큰 추가 후 홈페이지로 이동', accessToken);
       if (nickname === '' || nickname === null) navigate('/tutorial');
       else {
         dispatch(addNickname(nickname));

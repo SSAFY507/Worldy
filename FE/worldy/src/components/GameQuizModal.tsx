@@ -1,25 +1,19 @@
 import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import {
-  AiOutlineBulb,
-  AiOutlineClose,
-  AiOutlineCloseCircle,
   AiOutlineExclamationCircle,
 } from 'react-icons/ai';
 import QuizBlueText from '../assets/images/QuizBlueText.png';
 import ResultBlueText from '../assets/images/ResultBlueText.png';
 import { JsxElement } from 'typescript';
-
 import '../styles/QuizModalStyles.css';
-import { TbCategory2, TbWorld } from 'react-icons/tb';
+
 import { BsBookmark, BsBookmarkFill, BsBoxArrowUpRight } from 'react-icons/bs';
-import { BiImage } from 'react-icons/bi';
 
 import tempImage1 from '../assets/images/thumb2.png';
-import tempImage2 from '../assets/images/Carousel5.png';
-import tempImage3 from '../assets/images/JoshCurious.png';
+
 import { IoIosPhotos } from 'react-icons/io';
-import { keyboardKey } from '@testing-library/user-event';
+
 
 
 type ScrappedQuizType = {
@@ -35,11 +29,11 @@ type ScrappedQuizType = {
   multiSecond: string | null; //2번
   multiThird: string | null; //3번
   multiFourth: string | null; //4번
-  hint: boolean; //힌트
-  commentary: string; //힌트 유형
+  hint: string;
+  hintType: boolean; //힌트
   userAnswer: string | null; //유저가 적은 정답(맞았으면 null)
   success: boolean; //맞춘 문제인가
-  explanation?: string;
+  commentary: string;
 };
 
 export default function GameQuizModal({
@@ -49,7 +43,10 @@ export default function GameQuizModal({
   input: ScrappedQuizType;
   closeModal: () => void;
 }) {
-//   console.log(input);
+
+
+  const userName: string | null = sessionStorage.getItem('nickname');
+
 
   const size: number = 200;
 
@@ -58,12 +55,12 @@ export default function GameQuizModal({
 
   const [submitAnswer, setSubmitAnswer] = useState<string>('');
 
-  const blankBoxSize: number = 400 / input.answer.length;
+  const blankBoxSize: number = 400 / input.answer.length > 200? 200 :400 / input.answer.length ;
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const handleComposition = (
     event: React.CompositionEvent<HTMLInputElement>
   ) => {
-    console.log('composition');
+    //console.log('composition');
     if (event.type === 'compositionend') {
       const target = event.target as HTMLInputElement;
       const index = inputRefs.current.indexOf(target);
@@ -82,7 +79,7 @@ export default function GameQuizModal({
   const handleInput = (event: React.FormEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
     const index = inputRefs.current.indexOf(target);
-    console.log('input');
+    //console.log('input');
     if (
       index !== -1 &&
       index < blankBoxSize - 1 &&
@@ -109,7 +106,7 @@ export default function GameQuizModal({
     const tempStringList: string[] = [...blankInputAnswer];
     tempStringList[i] = e.target.value;
     setBlankInputAnswer(tempStringList);
-    console.log('tempStringList', tempStringList);
+    //console.log('tempStringList', tempStringList);
     if (tempStringList.length === input.answer.length) {
       var tempString = '';
       for (let i = 0; i < tempStringList.length; i++) {
@@ -147,8 +144,9 @@ export default function GameQuizModal({
           onCompositionEnd={handleComposition}
           value={blankInputAnswer[i]}
           onChange={(e) => handleBlankAnswer({ e, i })}
-          placeholder={hintState ? `${input.commentary.charAt(i)}` : ''}
-          onKeyDown={(e)=>handleEnter(e)}
+          placeholder={hintState ? `${input.hint.charAt(i)}` : ''}
+          onKeyDown={(e)=>{
+            i === input.answer.length-1 && handleEnter(e)}}
         />
       );
     }
@@ -166,11 +164,16 @@ export default function GameQuizModal({
     else setSubmitAnswer(input);
   };
 
+  const handleSubmitMultiAnswer = (input: string) => {
+    if (submitAnswer === input) setSubmitAnswer('');
+    else setSubmitAnswer(input);
+  };
+
   const contentOX = (): JSX.Element => {
     return (
       <>
         <div
-          className={`w-full h-full flex flex-col justify-center items-center p-[30px] text-black transition-all duration-3000 ease-in `}
+          className={`w-full h-full flex flex-col justify-center items-center p-[30px] text-black transition-all duration-3000 ease-in`}
         >
           {hintState ? (
             <>
@@ -182,7 +185,7 @@ export default function GameQuizModal({
               </div>
               <div className='w-full h-[150px] px-[50px] text-center'>
                 <span className='text-gray-700 font-PtdSemiBOld text-[25px] leading-[32px]'>
-                  {input.commentary}
+                  {input.hint}
                 </span>
               </div>
             </>
@@ -190,17 +193,17 @@ export default function GameQuizModal({
             <div className='outline-black flex flex-row justify-between items-center'>
               <button
                 className={`${
-                  submitAnswer === 'O' ? 'clickedOXBlue' : ''
-                } beforeOXBlue w-[200px] h-[120px] mr-[20px] rounded-md shadow-md bg-[#F2F2F2] flex flex-row justify-center items-center`}
-                onClick={() => handleSubmitAnswer('O')}
+                  submitAnswer === 'o' ? 'gameclickedOXBlue' : 'bg-[#F2F2F2]'
+                } beforeOXBlue w-[200px] h-[120px] mr-[20px] rounded-md shadow-md flex flex-row justify-center items-center`}
+                onClick={() => handleSubmitAnswer('o')}
               >
                 <span className='text-[24px] font-PtdMedium'>O</span>
               </button>
               <button
                 className={`${
-                  submitAnswer === 'X' ? 'clickedOXRed' : ''
-                } beforeOXRed w-[200px] h-[120px] ml-[20px]  rounded-md shadow-md bg-[#F2F2F2] flex flex-row justify-center items-center`}
-                onClick={() => handleSubmitAnswer('X')}
+                  submitAnswer === 'x' ? 'gameclickedOXRed' : 'bg-[#F2F2F2]'
+                } beforeOXRed w-[200px] h-[120px] ml-[20px]  rounded-md shadow-md flex flex-row justify-center items-center`}
+                onClick={() => handleSubmitAnswer('x')}
               >
                 <span className='text-[24px] font-PtdMedium'>X</span>
               </button>
@@ -257,9 +260,9 @@ export default function GameQuizModal({
         <div key={key}>
           <button
             className={`${
-              submitAnswer === prevInput.multiAnswerText ? 'clickedmulti' : ''
-            } beforemulti w-[200px] h-[80px] mx-[10px] rounded-md shadow-md bg-[#F2F2F2] flex flex-row justify-center items-center`}
-            onClick={() => handleSubmitAnswer(prevInput.multiAnswerText)}
+              submitAnswer === prevInput.multiAnswerText ? 'gameclickedmulti' : 'bg-[#F2F2F2]'
+            } beforemulti w-[200px] h-[80px] mx-[10px] rounded-md shadow-md  flex flex-row justify-center items-center`}
+            onClick={() => handleSubmitMultiAnswer(prevInput.multiAnswerText)}
           >
             <span
               className='w-full h-full flex flex-row justify-center items-center'
@@ -295,7 +298,7 @@ export default function GameQuizModal({
               </div>
               <div className='w-full h-[150px] px-[50px] text-center'>
                 <span className='text-gray-700 font-PtdSemiBOld text-[25px] leading-[32px]'>
-                  {input.commentary}
+                  {input.hint}
                 </span>
               </div>
             </>
@@ -338,14 +341,14 @@ export default function GameQuizModal({
   const [hintState, setHintState] = useState<boolean>(false);
   const handleHint = () => {
     setHintState(!hintState);
-    console.log('잉');
-    console.log('input.commentary', input.commentary);
+    //console.log('잉');
+    //console.log('input.hint', input.hint);
   };
 
   const quizHintContent = (): JSX.Element => {
     return (
       <div className='flex flex-row justify-center items-center'>
-        {input.hint ? (
+        {input.hintType ? (
           <>
             <label className='uiverse-switch'>
               <input type='checkbox' onClick={handleHint} />
@@ -467,7 +470,7 @@ export default function GameQuizModal({
         </span>
         <div className='w-full h-fit flex flex-col justify-start items-center text-center overflow-y-scroll on-scrollbar-quizmodal'>
           <span className='text-[20px] leading-[26px] font-PtdRegular text-start text-[#767676]'>
-            {input.explanation}
+            {input.commentary}
           </span>
         </div>
       </div>
@@ -483,7 +486,7 @@ export default function GameQuizModal({
   useEffect(() => {
     setTimeout(() => {
       setShowBack(true);
-      console.log('보기');
+      //console.log('보기');
     }, 1500);
   }, [flipped]);
 
@@ -510,12 +513,12 @@ export default function GameQuizModal({
 
   useEffect(()=>{
     if(timerOut){
-        console.log('setFlipped')
+        //console.log('setFlipped')
         setFlipped(true)
     }
   },[timerOut])
 
-  const fromtContainer = (): JSX.Element => {
+  const frontContainer = (): JSX.Element => {
     return (
       <div
         className={`frontcontainer transition-all duration-[500ms] ease-in-out ${
@@ -652,17 +655,17 @@ export default function GameQuizModal({
             <div
               className={`${
                 correctState === true
-                  ? 'gamecorrectanswer text-[#80ffe6]'
+                  ? 'gamecorrectanswer'
                   : correctState === false
-                  ? 'gameincorrectanswer'
+                  ? 'gameincorrectanswer '
                   : ''
               } w-full h-full grid place-content-center font-PtdBold text-[20px] `}
             >
-              A. {input.quizType === 'multi'? `${input.answer === '1'? input.multiFirst : input.answer === '2'? input.multiSecond : input.answer === '3'? input.multiThird : input.multiFourth}`: input.answer }
+              A. {input.answer}
             </div>
           </div>
           <div className='w-full flex-1 outline-black flex flex-row justify-start items-center font-PtdRegular text-[#ACACAC]'>
-            <span>'닉네임 값 없다야'님이 입력한 답은 "{submitAnswer !== ""? submitAnswer : '없음'}"</span>
+            <span>"{userName}"님이 입력한 답은 "{submitAnswer}"</span>
           </div>
         </div>
         <div className='relative bg-[#F5F5F5] w-full h-[300px]  outline-blue-500'>
@@ -683,14 +686,14 @@ export default function GameQuizModal({
 
   return (
     <div
-      className={` z-50 absolute top-[15%] left-1/2 -translate-x-1/2 -translate-y-1/2 
+      className={` z-50 absolute top-[15%] left-1/2 -translate-x-1/2 -translate-y-1/2 outline-white
       flex flex-col justify-start items-center
       ${!flipped ? 'cardcontainer' : 'cardcontainer-flipped'}
      `}
       style={{ width: `${size * 3}px`, height: 'fit' }}
     >
-      <div className='cardcontainer-inner w-full h-full '>
-        {fromtContainer()}
+      <div className='cardcontainer-inner w-full h-full'>
+        {frontContainer()}
         {backContainer()}
       </div>
     </div>
