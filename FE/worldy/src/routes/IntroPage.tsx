@@ -131,7 +131,7 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
                     떠나보세요.
                   </span>
                   <a
-                    href='/info'
+                    href='/mypage'
                     className='text-blue-500 mx-4 underline underline-offset-4'
                   >
                     * 더 알아보기
