@@ -82,6 +82,14 @@ type NewPlayer = {
   },
 }
 
+type User = {
+  kakaoId: string,
+  nickName: string,
+  profileImg: string,
+  mmr : number,
+  level : number,
+  tier : string,
+}
 
 type Price = {
   land: number,
