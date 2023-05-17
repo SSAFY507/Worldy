@@ -42,7 +42,7 @@ public class QuizService {
         return newsQuiz.toNewsQuizDto();
     }
 
-    public QuizDto getNationQuizDto(Long nationId){
+    public List<QuizDto> getNationQuizDto(Long nationId){
 
         // 퀴즈를 고르는 기준이 필요! 지금은 그냥 랜덤으로
         Quiz quiz = quizRepo.findRandQuizByNationId(nationId);
@@ -62,7 +62,10 @@ public class QuizService {
         QuizDto quizDto = quiz.toDto();
         quizDto.setMultiAnswerList(multiAnswerList);
 
-        return quizDto;
+        List<QuizDto> quizDtoList = new ArrayList<>();
+        quizDtoList.add(quizDto);
+
+        return quizDtoList;
     }
 
     public void insertQuiz(QuizInsertDto quizInsertDto){
