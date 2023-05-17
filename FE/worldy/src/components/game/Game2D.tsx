@@ -120,6 +120,8 @@ export default function Game2D(props: any) {
   // }, [])
 
   useEffect(() => {
+    console.log('metaData.curcuit : ')
+    console.log(metaData.curcuit)
     if (metaData.curcuit >= 16) {
       finishGame();
     }
