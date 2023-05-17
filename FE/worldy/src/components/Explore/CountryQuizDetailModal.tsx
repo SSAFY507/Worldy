@@ -22,10 +22,8 @@ interface RequestBodyType {
 const DOMAIN = process.env.REACT_APP_BASE_URL
 
 const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:Props) => {
-  const userName: string | null = sessionStorage.getItem('nickname');
+  const userNickName: string | null = sessionStorage.getItem('nickname');
   const getLoginToken: string | null = sessionStorage.getItem('token');
-  const userId: string | null = sessionStorage.getItem('id');
-  console.log('userId', userId);
 
 
   const input = axiosGetQuizData![0]
@@ -55,10 +53,14 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
 
   /** 데이터 보내는 함수 */
   const postDatasList = async (result:any) => {
-    if (!userId || input.quizId || !result || submitAnswer || scrapped) return
+    console.log("userNickName", userNickName)
+    console.log("input.quizId", input.quizId )
+    console.log("result", result )
+    console.log("submitAnswer", submitAnswer )
+    console.log("scrapped", scrapped )
     try {
       const requestBody = new Map([
-        ["userId", Number(userId)],
+        ["userNickName", userNickName],
         ["quizId", Number(input.quizId)],
         ["success", result],
         ["userAnswer", submitAnswer],
@@ -72,7 +74,7 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
         Body: requestBody,
         Token: getLoginToken,
       });
-      console.log(requestBody)
+      GetRegameFlag(-2);
       console.log(response);
     } catch (error) {
       console.log('Error fetching data:', error);
@@ -450,7 +452,6 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
         className='w-[500px] h-[60px] rounded-md font-PtdLight text-[25px] bg-white text-black'
         onClick={() => {
           alert("다른 문제 풀러 이동합니다.")
-          GetRegameFlag(-2)
           postDatasList(correctState)
         }
       }>
@@ -656,7 +657,7 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
             </div>
           </div>
           <div className='w-full flex-1 outline-black flex flex-row justify-start items-center font-PtdRegular text-[#ACACAC]'>
-            <span>'{userName}'님이 입력한 답은 "{submitAnswer}"</span>
+            <span>'{userNickName}'님이 입력한 답은 "{submitAnswer}"</span>
           </div>
         </div>
         <div className='relative bg-[#F5F5F5] w-full h-[300px]  outline-blue-500'>
