@@ -29,7 +29,7 @@ interface InfoType {
   exchangeRate : string,
   weatherName : string,
   temp : string,
-  time : string
+  time : number
 }
 
 const DOMAIN = process.env.REACT_APP_BASE_URL
@@ -58,6 +58,7 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSele
         Token: getLoginToken,
       });
       setInfoData(response)
+      
     } 
     catch (error) {
       console.log('Error fetching data:', error);
@@ -70,7 +71,7 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSele
     }
   }, [countryName]);
 
-  console.log(infoData)
+  console.log(infoData,"")
 
   const list:ListType = {
     country: countryLst[`${countryName}`].KOREAN,
@@ -106,14 +107,14 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSele
     setTimeAPM(
       infoList.time === 12
         ? '12PM'
-        : infoList.time === 24
+        : infoList.time === 0
         ? '0AM'
         : infoList.time > 12
         ? `${infoList.time - 12}PM`
         : `${infoList.time}AM`
     );
-  },[]);
-
+  },[infoData]);
+  console.log(timeAPM)
   const [doDDiyong, setDoDDiyong] = useState<boolean>(false);
   
   useEffect(() => {
