@@ -21,7 +21,7 @@ import { current } from '@reduxjs/toolkit';
 import europe_France from '../../assets/lowpoly/Country_America.glb';
 import europe_Italia from '../../assets/lowpoly/Country_America.glb';
 import europe_Spain from '../../assets/lowpoly/Country_America.glb';
-import europe_UK from '../../assets/lowpoly/Country_America.glb';
+import europe_UK from '../../assets/lowpoly/Country_UK.glb';
 import northAmerica_America from '../../assets/lowpoly/Country_America.glb';
 import { useNavigate } from 'react-router';
 
