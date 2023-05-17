@@ -268,36 +268,36 @@ export default function Main() {
           }
 
           //TEST
-          if(received.user1){
-            setPlayer((prevState:any) => ({
+          if (received.user1) {
+            setPlayer((prevState: any) => ({
               ...prevState,
               roomId: received.roomId,
-              p2 : {
+              p2: {
                 ...prevState.p2,
-                playerId : '2756798359',
-                name:'설히',
+                playerId: '2756798359',
+                name: '설히',
               }
             }))
           }
-          if(received.user1){
-            setPlayer((prevState:any) => ({
+          if (received.user1) {
+            setPlayer((prevState: any) => ({
               ...prevState,
               roomId: received.roomId,
-              p3 : {
+              p3: {
                 ...prevState.p3,
-                playerId : '2762535269',
-                name:'성훈',
+                playerId: '2762535269',
+                name: '성훈',
               }
             }))
           }
-          if(received.user1){
-            setPlayer((prevState:any) => ({
+          if (received.user1) {
+            setPlayer((prevState: any) => ({
               ...prevState,
               roomId: received.roomId,
-              p4 : {
+              p4: {
                 ...prevState.p4,
-                playerId : '2772224261',
-                name:'bellek',
+                playerId: '2772224261',
+                name: 'bellek',
               }
             }))
 
@@ -542,7 +542,7 @@ export default function Main() {
     itemMsg1: '아이템 메시지1',
     itemMsg2: '아이템 메시지2',
     circuit: 0,
-
+    fund: 0,
   });
   const [turnOver, setTurnOver] = useState<boolean>(false);
 
@@ -747,7 +747,7 @@ export default function Main() {
       },
       {
         location: 5,
-        name: "홍콩",
+        name: "멀티캠퍼스",
         price: {
           land: 100,
           villa: 0,
@@ -756,7 +756,7 @@ export default function Main() {
         },
         type: "city",
         landmark: "랜드마크없음",
-        contents: "자유무역도시 홍콩",
+        contents: "SSAFY 교육과정을 통한 연봉 인상  +100만원",
         continent: "아시아",
         owner: 0,
         option: 0,
@@ -982,7 +982,7 @@ export default function Main() {
         },
         type: "city",
         landmark: "크레타섬",
-        contents: "그리스 로마 문화의 시작 지중해",
+        contents: "그리스 로마 문화의 시작 지중해      + 50만원",
         continent: "유럽",
         owner: 0,
         option: 0,
@@ -1208,7 +1208,7 @@ export default function Main() {
         },
         type: "city",
         landmark: "오아시스",
-        contents: "뜨거운 모래의 사막, 사하라",
+        contents: "뜨거운 모래의 사막, 사하라    -50만원",
         continent: "아프리카&오세아니아",
         owner: 0,
         option: 0,
@@ -1322,7 +1322,7 @@ export default function Main() {
           landmark: 0,
         },
         type: "olympic",
-        contents: "하나된 세계 올림픽으로!",
+        contents: "하나된 세계 올림픽으로! 세금으로 모인 기부금을 수령하세요",
         owner: 0,
         option: 0,
         toll: 0,
@@ -1658,7 +1658,7 @@ export default function Main() {
           </div>
         )} */}
 
-        {gameStart &&  (
+        {gameStart && (
           <div>
             {mode && (
               <Game2D
