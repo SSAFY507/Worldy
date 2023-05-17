@@ -24,6 +24,11 @@ export default function Game2D(props: any) {
   const worldMap = props.worldMap;
   const setWorldMap = props.setWorldMap;
 
+  const user1 = props.user1;
+  const user2 = props.user2;
+  const user3 = props.user3;
+  const user4 = props.user4;
+
   const loginUser = props.loginUser;
   const [myTurn, setMyTurn] = useState<boolean>(false);
   const [mode, setMode] = useState<number>(8);
@@ -329,28 +334,36 @@ export default function Game2D(props: any) {
         assets: 0,
         playNum: 0,
         nickName: '',
-        own: []
+        own: [],
+        tier:'',
+        profileImg:''
       },
       {
         kakaoId: '',
         assets: 0,
         playNum: 0,
         nickName: '',
-        own: []
+        own: [],
+        tier:'',
+        profileImg:''
       },
       {
         kakaoId: '',
         assets: 0,
         playNum: 0,
         nickName: '',
-        own: []
+        own: [],
+        tier:'',
+        profileImg:''
       },
       {
         kakaoId: '',
         assets: 0,
         playNum: 0,
         nickName: '',
-        own: []
+        own: [],
+        tier:'',
+        profileImg:''
       }
     ]
   });
@@ -378,25 +391,33 @@ export default function Game2D(props: any) {
             assets: p1Assets,
             playNum: 1,
             nickName: player.p1.name,
-            own: player.p1.game.own
+            own: player.p1.game.own,
+            tier:user1.tier,
+            profileImg:user1.profileImg
           } : key === 1 ? {
             kakaoId: player.p2.playerId,
             assets: p2Assets,
             playNum: 2,
             nickName: player.p2.name,
-            own: player.p2.game.own
+            own: player.p2.game.own,
+            tier:user2.tier,
+            profileImg:user2.profileImg
           } : key === 2 ? {
             kakaoId: player.p3.playerId,
             assets: p3Assets,
             playNum: 3,
             nickName: player.p3.name,
-            own: player.p3.game.own
+            own: player.p3.game.own,
+            tier:user3.tier,
+            profileImg:user3.profileImg
           } : {
             kakaoId: player.p4.playerId,
             assets: p4Assets,
             playNum: 4,
             nickName: player.p4.name,
-            own: player.p4.game.own
+            own: player.p4.game.own,
+            tier:user4.tier,
+            profileImg:user4.profileImg
           }
         ))
       ]

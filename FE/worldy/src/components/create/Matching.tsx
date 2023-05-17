@@ -6,12 +6,15 @@ import { useEffect, useState } from "react";
 import "../game/dice2.css";
 import Dice from "../game/Dice";
 import pathLC from '../../assets/images/LogoColored.png';
+import Swal from 'sweetalert2'
 
 let socket: any;
 let ws: any;
 
 export default function Matching(props: any) {
   const matchingId = props.matchingId;
+
+  const Swal = require('sweetalert2')
 
   console.log("matching id check>>>>>>");
   console.log(matchingId);
@@ -44,48 +47,9 @@ export default function Matching(props: any) {
       if (received.gameRoom.roomId) {
         roomId = received.gameRoom.roomId;
 
+        ws.disconnect();
         navigate(`/game/${roomId}`);
       }
-
-      // roomId = "2386a4ee-355f-4f1d-9b77-118b2cbf99f9";
-      // navigate(`/game/${roomId}`);
-
-      // gameData = {
-      //   user1: {
-      //     kakaoId: "2757389101",
-      //     roomId: "waiting-2757389101",
-      //     mmr: 1587,
-      //     level: 0,
-      //     startWaitingTime: "2023-05-03 17:08:28:28",
-      //   },
-      //   user2: {
-      //     kakaoId: "2756798359",
-      //     roomId: "waiting-2756798359",
-      //     mmr: 1314,
-      //     level: 0,
-      //     startWaitingTime: "2023-05-03 17:08:30:79",
-      //   },
-      //   user3: {
-      //     kakaoId: "2762535269",
-      //     roomId: "waiting-2762535269",
-      //     mmr: 1185,
-      //     level: 0,
-      //     startWaitingTime: "2023-05-03 17:08:34:43",
-      //   },
-      //   user4: {
-      //     kakaoId: "2772224261",
-      //     roomId: "waiting-2772224261",
-      //     mmr: 1464,
-      //     level: 0,
-      //     startWaitingTime: "2023-05-03 17:08:39:66",
-      //   },
-      //   gameRoom: {
-      //     roomId: "82f2141c-f63f-4f53-bf3d-c20b3ef9adda",
-      //   },
-      // };
-
-      // roomId 방으로 이동
-      // ws.disconnect();
     });
   }
 
@@ -149,13 +113,6 @@ export default function Matching(props: any) {
     };
   }, []);
 
-  // useEffect(()=>{
-  //   if(timerOut){
-  //       console.log('setFlipped')
-  //       setFlipped(true)
-  //   }
-  // },[timerOut])
-
   return (
     <>
       <div className="w-full h-full flex flex-col justify-center items-center bg-[url('../../public/game/game_bg2.png')] bg-cover bg">     
@@ -189,22 +146,29 @@ export default function Matching(props: any) {
               alt='WORLDY GAME'
           />
           <div className="text-white relative top-[-90px] font-PtdLight text-[25px]">{timecount}초</div>
-
-
-      {/* <div className="w-[380px] h-[320px] rounded-[8px] bg-white/50 shadow-lg mt-[50px]">
-       
-        <Dice></Dice>
-        <div
-        className={`w-[380px] h-[60px] mt-[40px] rounded-[4px] flex justify-center items-center text-white text-[20px] bg-red-500 hover:cursor-pointer hover:bg-red-600`}
-        onClick={() => {
-          startDice()
-        }}
-        >
-        주사위 던지기
-        </div>
-      </div> */}
-
-        
+          <button 
+              className="flex flex-col justify-center items-center w-[180px] h-[70px] mt-[150px] bg-white/50 hover:bg-[#FA5B54] 
+              font-PtdSemiBOld text-[25px] rounded-[6px] text-white"  
+              onClick={() => {
+                Swal.fire({
+                  title: '게임 매칭을 취소하시겠습니까?',
+                  icon: 'warning',
+                  iconColor: '#FA5B54',
+                  showCancelButton: true,
+                  confirmButtonColor: '#FA5B54',
+                  cancelButtonColor: '#999999',
+                  confirmButtonText: 'YES',
+                  cancelButtonText: 'NO'
+                }).then((result : any ) => {
+                  if (result.isConfirmed) {
+                    ws.disconnect();
+                    navigate('/');
+                  }
+                })
+              }}  
+            >
+            매칭 취소
+            </button>
       </div>
     
       </div>

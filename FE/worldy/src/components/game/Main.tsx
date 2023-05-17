@@ -1895,6 +1895,10 @@ export default function Main() {
                 roomId={params.id}
                 ws={ws}
                 quiz={quiz}
+                user1={user1}
+                user2={user2}
+                user3={user3}
+                user4={user4}
               ></Game2D>
             )}
             {!mode && (
