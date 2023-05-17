@@ -48,7 +48,7 @@ export default function QuizModal({
   input: ScrappedQuizType;
   closeModal: () => void;
 }) {
-  console.log(input);
+  //console.log(input);
 
   const userName: string | null = sessionStorage.getItem('nickname');
 
@@ -65,7 +65,7 @@ export default function QuizModal({
   const handleComposition = (
     event: React.CompositionEvent<HTMLInputElement>
   ) => {
-    console.log('composition');
+    //console.log('composition');
     if (event.type === 'compositionend') {
       const target = event.target as HTMLInputElement;
       const index = inputRefs.current.indexOf(target);
@@ -84,7 +84,7 @@ export default function QuizModal({
   const handleInput = (event: React.FormEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
     const index = inputRefs.current.indexOf(target);
-    console.log('input');
+    //console.log('input');
     if (
       index !== -1 &&
       index < blankBoxSize - 1 &&
@@ -111,7 +111,7 @@ export default function QuizModal({
     const tempStringList: string[] = [...blankInputAnswer];
     tempStringList[i] = e.target.value;
     setBlankInputAnswer(tempStringList);
-    console.log('tempStringList', tempStringList);
+    //console.log('tempStringList', tempStringList);
     if (tempStringList.length === input.answer.length) {
       var tempString = '';
       for (let i = 0; i < tempStringList.length; i++) {
@@ -339,8 +339,8 @@ export default function QuizModal({
   const [hintState, setHintState] = useState<boolean>(false);
   const handleHint = () => {
     setHintState(!hintState);
-    console.log('잉');
-    console.log('input.hint', input.hint);
+    //console.log('잉');
+    //console.log('input.hint', input.hint);
   };
 
   const quizHintContent = (): JSX.Element => {
@@ -486,7 +486,7 @@ export default function QuizModal({
   useEffect(() => {
     setTimeout(() => {
       setShowBack(true);
-      console.log('보기');
+      //console.log('보기');
     }, 1700);
   }, [flipped]);
 

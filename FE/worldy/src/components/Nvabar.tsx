@@ -43,7 +43,7 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
 
   const logoutAxios = async () => {
     const loginToken = sessionStorage.getItem('token');
-    console.log('로그아웃 시 토큰 : ', loginToken);
+    //console.log('로그아웃 시 토큰 : ', loginToken);
     try {
       const response = await CustomAxios({
         APIName: 'logout',

@@ -19,9 +19,8 @@ import Callback from './routes/Callback';
 
 import Country from './routes/Country';
 import Explore from './routes/Explore';
-import HelloPage from './components/Loaders/LoaderHello';
+// import HelloPage from './components/Loaders/LoaderHello';
 import IntroPage from './routes/IntroPage';
-import LoaderHello from './components/Loaders/LoaderHello';
 import LoginModal from './components/LoginModal';
 import MainPageAfterLogin from './routes/MainPageAfterLogin';
 import Monopoly from './routes/Monopoly';
@@ -48,7 +47,7 @@ const AppLayout = () => {
   //네브바에서 무료 플레이 버튼 누르면 모달 토글
   const handleLoginModal = () => {
     setShowLoginModal(!showLoginModal);
-    console.log(showLoginModal);
+    //console.log(showLoginModal);
   };
 
   const closeLoginModal = () => {
@@ -67,7 +66,7 @@ const AppLayout = () => {
   const [firstLoginState, setFirstLoginState] = useState<boolean>(false);
 
   const handleFirstLogin = (firstLogin: boolean) => {
-    console.log('LoginModal로부터 넘어온 firstLogin', firstLogin);
+    //console.log('LoginModal로부터 넘어온 firstLogin', firstLogin);
     if (firstLogin) {
       navigate('/tutorial');
     } else {
@@ -114,7 +113,7 @@ const AppLayout = () => {
       if (checkLoginState && (checkNickname === '' || checkNickname === null)) {
         //로그인돼있는데 닉네임 없으면 tutorial
         navigate('/tutorial');
-        console.log('닉네임 설정해주세요 (tutorial로 이동)');
+        //console.log('닉네임 설정해주세요 (tutorial로 이동)');
       } else if (!checkLoginState) {
         const gameId = sessionStorage.getItem('gameId');
 
@@ -125,7 +124,7 @@ const AppLayout = () => {
           navigate('/'); //로그인 안돼있으면 홈으로
         }
 
-        console.log('로그인 해주세요(Home으로 이동)');
+        //console.log('로그인 해주세요(Home으로 이동)');
       }
   }, []);
 

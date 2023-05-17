@@ -8,8 +8,6 @@ import pathLC from '../assets/images/LogoColored.png';
 export default function GameResult() {
   const location = useLocation();
   const gameResult = location.state;
-  console.log(location);
-  console.log(location.state.rankPlayer);
 
   const setTierColor = (input: string): string => {
     if (input === 'Platinum') return '#86FFF8';

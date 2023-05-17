@@ -21,7 +21,7 @@ const useLoadGlbsHook = (inputGlbList: GlbListType) => {
 
       const promises = Object.entries(inputGlbList).map(
         async ([key, path]) => {
-          console.log(key, path)
+          //console.log(key, path)
           const loader = new GLTFLoader();
           const glb: GLTF = await new Promise((resolve, reject) => {
             loader.load(path, resolve, undefined, reject);
@@ -32,7 +32,7 @@ const useLoadGlbsHook = (inputGlbList: GlbListType) => {
       const loadedGlbs = await Promise.all(promises);
       const glbObject = Object.fromEntries(loadedGlbs);
       
-      console.log(glbObject)
+      //console.log(glbObject)
       setLoadedGlbs(glbObject);
       setIsLoaded(true);
     };

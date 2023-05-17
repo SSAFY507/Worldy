@@ -48,7 +48,7 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
         exp: axiosMyRankInfo?.exp || 0,
       })
     );
-    console.log('경험치 : ' + axiosMyRankInfo?.exp);
+    //console.log('경험치 : ' + axiosMyRankInfo?.exp);
   }, []);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
   }, []);
 
   const getRankInfoList = async () => {
-    console.log('Session에서의 가져오는 토큰', getLoginToken);
+    //console.log('Session에서의 가져오는 토큰', getLoginToken);
     try {
       const response = await CustomAxios({
         APIName: 'getRankInfoList',
@@ -65,10 +65,10 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
         Token: getLoginToken,
       });
       //console.log('닉네임 중복 체크 성공');
-      console.log('랭크 리스트 받은 거: ', response);
+      //console.log('랭크 리스트 받은 거: ', response);
       setAxiosMyRankInfo(response.myRank);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      //console.error('Error fetching data:', error);
     }
     //console.log('token이 무엇이냐 ', token);
   };

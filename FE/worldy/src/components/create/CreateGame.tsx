@@ -46,9 +46,9 @@ export default function CreateGame(props: any) {
                     },
                   })
                   .then((response) => {
-                    console.log(response.data);
+                    //console.log(response.data);
                     setMatchingId(response.data.roomId);
-                    console.log(response.data.roomId);
+                    //console.log(response.data.roomId);
                   });
               }}
               onMouseEnter={()=>{hoverTemp(true)}}

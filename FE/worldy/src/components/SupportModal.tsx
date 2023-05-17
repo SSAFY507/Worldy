@@ -120,15 +120,15 @@ export default function SupportModal({
   const things = useSelector(wholeState);
 
   useEffect(() => {
-    console.log('토근 왜 안나와', getToken);
+    //console.log('토근 왜 안나와', getToken);
   }, [getToken]);
 
   useEffect(() => {
-    console.log('전부', things);
+    //console.log('전부', things);
   }, [things]);
 
   const submitHelpAxios = async () => {
-    console.log('커스터엄 토큰 : ', getToken);
+    //console.log('커스터엄 토큰 : ', getToken);
     try {
       const requestBody = new Map([
         ['category', askTypeList[askType].name],
@@ -144,7 +144,7 @@ export default function SupportModal({
         Token: getToken,
       });
       setResult(response);
-      console.log('리퀘스트 바디', requestBody);
+      //console.log('리퀘스트 바디', requestBody);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -152,7 +152,7 @@ export default function SupportModal({
 
   // 요청 헤더 및 바디를 포함하는 POST 요청 함수를 정의합니다.
   async function submitHelpAxiosBasic() {
-    console.log('문의 토큰 : ', getToken);
+    //console.log('문의 토큰 : ', getToken);
 
     try {
       const response = await axios.post(
@@ -166,8 +166,8 @@ export default function SupportModal({
           },
         }
       );
-      console.log(response.data);
-      console.log('문으 ㅣ전송 성공');
+      //console.log(response.data);
+      //console.log('문으 ㅣ전송 성공');
     } catch (error) {
       console.error(`Error: ${error}`);
     }
