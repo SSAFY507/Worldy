@@ -93,8 +93,9 @@ public class QuizService {
     @Transactional
     public void insertQuizRecord(QuizRecordInsertDto quizRecordInsertDto){
 
+        log.info(quizRecordInsertDto.toString());
         Quiz quiz = quizRepo.findById(quizRecordInsertDto.getQuizId()).get();
-        User user = userRepo.findByNickName(quizRecordInsertDto.getUserNickname()).get();
+        User user = userRepo.findByNickName(quizRecordInsertDto.getUserNickName()).get();
 
         int point = 0;
 
