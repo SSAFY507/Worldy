@@ -55,7 +55,7 @@ export default function GameQuizModal({
 
   const [submitAnswer, setSubmitAnswer] = useState<string>('');
 
-  const blankBoxSize: number = 400 / input.answer.length;
+  const blankBoxSize: number = 400 / input.answer.length > 200? 200 :400 / input.answer.length ;
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const handleComposition = (
     event: React.CompositionEvent<HTMLInputElement>
