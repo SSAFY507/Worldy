@@ -2,6 +2,7 @@ import { AiOutlineClose, AiOutlineExclamationCircle } from 'react-icons/ai';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import { useEffect, useRef, useState } from 'react';
 
+import CustomAxios from '../../API/CustomAxios';
 import { IoIosPhotos } from 'react-icons/io';
 import QuizBlueText from '../../assets/images/QuizBlueText.png';
 import { QuizDataType } from './CountryQuizFrame';
@@ -14,8 +15,18 @@ interface Props {
   GetRegameFlag: (num:number) => void
 };
 
+interface RequestBodyType {
+  [key:string]: number | boolean | string
+}
+
+const DOMAIN = process.env.REACT_APP_BASE_URL
+
 const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:Props) => {
   const userName: string | null = sessionStorage.getItem('nickname');
+  const getLoginToken: string | null = sessionStorage.getItem('token');
+  const userId: string | null = sessionStorage.getItem('id');
+  console.log('userId', userId);
+
 
   const input = axiosGetQuizData![0]
   const multiList = axiosGetQuizData![0].multiAnswerList!
@@ -35,7 +46,38 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
   const [hintImageState, setHintImageState] = useState<boolean>(false);
   const [submitCheck, setSubmitCheck] = useState<boolean>(false);
   const [showBack, setShowBack] = useState<boolean>(false);
-    
+
+  // "userId" : "유저 아이디", - Long
+  // "quizId" : "퀴즈 아이디", - Long
+  // "success" : "성공 여부", - boolean
+  // "userAnswer" : "유저가 쓴 답" - String
+  // "scrap" : "스크랩 여부" - boolean
+
+  /** 데이터 보내는 함수 */
+  const postDatasList = async (result:any) => {
+    if (!userId || input.quizId || !result || submitAnswer || scrapped) return
+    try {
+      const requestBody = new Map([
+        ["userId", Number(userId)],
+        ["quizId", Number(input.quizId)],
+        ["success", result],
+        ["userAnswer", submitAnswer],
+        ["scrap", scrapped]
+      ])
+
+      const response = await CustomAxios({
+        APIName: 'postDatasList',
+        APIType: 'post',
+        UrlQuery: DOMAIN + '/quiz/record',
+        Body: requestBody,
+        Token: getLoginToken,
+      });
+      console.log(requestBody)
+      console.log(response);
+    } catch (error) {
+      console.log('Error fetching data:', error);
+    }
+  }
 
   const handleComposition = (
     event: React.CompositionEvent<HTMLInputElement>
@@ -333,6 +375,7 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
 
   const scrapThisQuiz = () => {
     setScrapped(!scrapped);
+
   };
 
   const quizScrap = (): JSX.Element => {
@@ -408,6 +451,7 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
         onClick={() => {
           alert("다른 문제 풀러 이동합니다.")
           GetRegameFlag(-2)
+          postDatasList(correctState)
         }
       }>
         확인
