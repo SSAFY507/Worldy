@@ -478,7 +478,7 @@ const WorldMap = () => {
       const ren = new THREE.WebGLRenderer({ antialias: true });
       ren.setPixelRatio(window.devicePixelRatio);
 
-      ren.shadowMap.enabled = true;
+      // ren.shadowMap.enabled = true;
       ren.domElement.style.touchAction = "none";
       divContainer.current.appendChild(ren.domElement);
 
@@ -497,15 +497,51 @@ const WorldMap = () => {
       scene.current.add(cam)
       controls.current =  SetupControls(camera.current!, divContainer.current!, 50, 50, 0, 0);
 
-      const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.5);
+      // const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.4);
 
-      hemiLight.position.set(0, 50, 0);
-      // Add hemisphere light to scene
-      scene.current?.add(hemiLight);
+      // hemiLight.position.set(-20, 50, 0);
+      // // Add hemisphere light to scene
+      // scene.current?.add(hemiLight);
 
-      const light = SetupLight("#CCF2F4", 1.5, new THREE.Vector3(0, 10, 6), new THREE.Vector3(0, 0, 0) );
+      const light = SetupLight("#0xffffff", 0.5, new THREE.Vector3(-2, 10, 6), new THREE.Vector3(0, 0, 0) );
+      const light2 = SetupLight("#0xffffff", 0.5, new THREE.Vector3(-2, 10, -6), new THREE.Vector3(0, 0, 0) );
+      const light3 = SetupLight("#0xffffff", 0.5, new THREE.Vector3(-2, -10, 6), new THREE.Vector3(0, 0, 0) );
+      const light4 = SetupLight("#0xffffff", 0.5, new THREE.Vector3(-2, -10, -6), new THREE.Vector3(0, 0, 0) );
+      
+      const light5 = SetupLight("#0xffffff", 0.5, new THREE.Vector3(2, 10, 6), new THREE.Vector3(0, 0, 0) );
+      const light6 = SetupLight("#0xffffff", 0.5, new THREE.Vector3(2, 10, -6), new THREE.Vector3(0, 0, 0) );
+      const light7 = SetupLight("#0xffffff", 0.5, new THREE.Vector3(2, -10, 6), new THREE.Vector3(0, 0, 0) );
+      const light8= SetupLight("#0xffffff", 0.5, new THREE.Vector3(2, -10, -6), new THREE.Vector3(0, 0, 0) );
+
+
+      const right = SetupLight("#0xffffff", 0.1, new THREE.Vector3(-2, 2, 6), new THREE.Vector3(0, 0, 0) );
+      const right2 = SetupLight("#0xffffff", 0.1, new THREE.Vector3(-2, 2, -6), new THREE.Vector3(0, 0, 0) );
+      const right3 = SetupLight("#0xffffff", 0.1, new THREE.Vector3(-2, -2, 6), new THREE.Vector3(0, 0, 0) );
+      const right4= SetupLight("#0xffffff", 0.1, new THREE.Vector3(-2, -2, -6), new THREE.Vector3(0, 0, 0) );
+      
+      const right5 = SetupLight("#0xffffff", 0.1, new THREE.Vector3(2, 2, 6), new THREE.Vector3(0, 0, 0) );
+      const right6 = SetupLight("#0xffffff", 0.1, new THREE.Vector3(2, 2, -6), new THREE.Vector3(0, 0, 0) );
+      const right7 = SetupLight("#0xffffff", 0.1, new THREE.Vector3(2, -2, 6), new THREE.Vector3(0, 0, 0) );
+      const right8= SetupLight("#0xffffff", 0.1, new THREE.Vector3(2, -2, -6), new THREE.Vector3(0, 0, 0) );
+
       scene.current.add(light.target)
-      camera.current?.add(light)
+      scene.current?.add(light)
+      scene.current?.add(light2)
+      scene.current?.add(light3)
+      scene.current?.add(light4)
+      scene.current?.add(light5)
+      scene.current?.add(light6)
+      scene.current?.add(light7)
+      scene.current?.add(light8)
+
+      scene.current?.add(right)
+      scene.current?.add(right2)
+      scene.current?.add(right3)
+      scene.current?.add(right4)
+      scene.current?.add(right5)
+      scene.current?.add(right6)
+      scene.current?.add(right7)
+      scene.current?.add(right8)
 
       Background();
       SetupModel();
@@ -522,8 +558,9 @@ const WorldMap = () => {
     // <>
     //   {loadedAll ?  (
         <div
-        style={{ backgroundColor: 'grey', width: '100%', height: 1000 }}
-        ref={divContainer} 
+          className=""
+          style={{ backgroundColor: 'grey', width: '100%', height: 1000 }}
+          ref={divContainer} 
         />
     //   ) : (
     //     <div className='w-full h-[1000px] bg-white'>

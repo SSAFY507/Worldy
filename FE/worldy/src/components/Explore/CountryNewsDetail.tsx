@@ -30,7 +30,7 @@ const Card = (props:CardProps) => (
     <div
       className="rounded-t-3xl "
       style={{
-        flex: "0.4",
+        height: "300px",
         width: "100%",
         backgroundImage: `url(${props.src})`,
         backgroundSize: "cover",
@@ -38,21 +38,11 @@ const Card = (props:CardProps) => (
         cursor: "pointer",
       }}
     />
-    <div className="pr-[1rem] pb-[0.5rem] pl-[1rem] bg-white rounded-b-3xl flex flex-col items-center font-PtdExtraBold" style={{ flex:"0.6", width:"100%"}}>
-      <div className="flex text-4xl font-extrabold pt-10 pb-10 pl-20 pr-20 font-PtdRegular">{props.title}</div>
-      <p className="h-1/2 pl-10 pr-10 pb-10 inline-block whitespace-normal font-PtdRegular">{props.content}</p>
-
-      {/* {props.content ? (
-        props.content.length < 500 ? (
-          <div className="flex-4 pl-10 pr-10 pb-10 inline-block whitespace-nowrap " >{props.content}</div>
-          ) 
-          : null
-          // (
-          //   <div className="flex-4 pl-10 pr-10 pb-10 inline-block whitespace-normal">{props.content.substr(0, 500) + "..."}</div>
-          //   )
-            ) : null} */}
+    <div className="h-[400px] pr-[1rem] pb-[0.5rem] pl-[1rem] bg-white rounded-b-3xl flex flex-col items-center" style={{ flex:"0.6", width:"100%"}}>
+      <div className="h-[130px] text-3xl text-center py-5 pl-20 pr-20 font-PtdExtraBold inline-block ">{props.title}</div>
+      <p className="h-[250px] text-xl opacity-50 pl-10 pr-10 text-center inline-block whitespace-normal font-PtdRegular overflow-auto">{props.content}</p>
       <div 
-        className="flex flex-row pt-10 pb-10 justify-between items-center " 
+        className="h-[100px] flex flex-row pt-5 pb-10 justify-between items-center " 
         onClick={event => {
           // event.preventDefault();
           window.open(props.link)
@@ -107,7 +97,7 @@ const CountryNewsDetail = ({axiosGetNewsData}:CountryNewsDetailProps) => {
         return (
           <Card
             key={idx}
-            title={item.newsTitle.length <= 10 ? item.newsTitle : item.newsTitle.substr(0, 10) + "..."}
+            title={item.newsTitle.length <= 30 ? item.newsTitle : item.newsTitle.substr(0, 30) + "..."}
             content={item.newsSummary}
               // item.newsSummary
               //   ? item.newsSummary.length <= 100
