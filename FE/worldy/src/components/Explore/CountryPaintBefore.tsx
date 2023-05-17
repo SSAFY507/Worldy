@@ -63,7 +63,7 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
         </div>
         <div className='relative w-[388px] h-[276px]'>
           <img
-            className='absolute top-0 left-0 h-[276px] w-[388px] rounded-2xl bg-gray-500 bg-center cursor-pointer z-[5]'
+            className='absolute top-0 left-0 h-[276px] w-[388px] rounded-2xl bg-gray-500 bg-center cursor-pointer '
             src={problem.quizImg}
             alt='different'
             useMap='#image-map'
@@ -71,13 +71,13 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
           <map
             name='image-map'
             id='image-map'
-            className='absolute top-0 left-0 h-[276px] w-[388px] z-[10] '
+            className='absolute top-0 left-0 h-[276px] w-[388px] '
           >
             {problem.answerPointList!.map((e, idx) => {
               return (
                 <>
                   <div
-                    className=''
+                    className='z-20'
                     style={{
                       outline: '5px solid red',
                       width: `${String(Number(e[2]) - Number(e[0]))}px`,
@@ -90,12 +90,13 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
                     }}
                   />
                   <area
-                    alt='틀린 영역'
+                    alt='정답 영역'
                     href=''
                     key={idx}
                     shape='rect'
                     coords={`${e[0]}, ${e[1]}, ${e[2]}, ${e[3]}`}
-                    style={{ cursor: 'poiter' }}
+                    style={{ cursor: 'pointer' }}
+                    className='z-30 absolute'
                     onClick={(e) => {
                       e.preventDefault();
                       clickArea(idx);
