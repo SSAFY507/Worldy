@@ -23,33 +23,55 @@ export default function Enter(props : any ) {
     else return '#EED4BB';
   };
 
-  const [timecount, setTimecount] = useState<number>(-1);
+  const [start, setStart] = useState<boolean>(false);
 
-  useEffect(() => {
-    console.log('useEffect11')
-    if (user4Check ) {
-      setTimecount(3)
-    }
-  }, [user4Check]);
+  if(gameWait) {
+    setTimeout(function () {
+      setStart(true);
+    }, 3000);
+  }
 
-  useEffect(()=>{
-    if(user4Check){
-      const letTimeFlow = setInterval(()=>{
-        setTimecount((prev) => prev-1)
-      },1000 )
+  // useEffect(() => {
+  //   console.log('useEffect11')
+  //   if (user4Check ) {
+  //     setTimecount(3)
+  //   }
+  // }, [user4Check]);
+
+  // useEffect(()=>{
+  //   if(user4Check){
+  //     const letTimeFlow = setInterval(()=>{
+  //       setTimecount((prev) => prev-1)
+  //     },1000 )
 
       
-      if(timecount === 0) clearInterval(letTimeFlow)
-      return ()=> {clearInterval(letTimeFlow)}
-    }
-  },[timecount])
+  //     if(timecount === 0) clearInterval(letTimeFlow)
+  //     return ()=> {clearInterval(letTimeFlow)}
+  //   }
+  // },[timecount])
 
   return (
     <>
-      { gameWait &&(
-      <div className=' top-[50%] left-[50%] translate-y-[-50%] translate-x-[-50%] absolute w-[200px] h-[50px] font-PtdSemiBOld text-[200px] text-[#FF4D45] z-[1]'>
+      { gameWait && !start && (
+      <div className=' top-[45%] left-[50%] translate-y-[-50%] translate-x-[-50%] absolute w-[250px] h-[50px] font-PtdSemiBOld text-[200px] text-[#FF4D45] z-[1]'>
         <div className='flex flex-col justify-center items-center'>
-          <div>{timecount}</div>
+         
+          <img
+              className='mt-[10px] w-[1000px] object-cover'
+              src={'/game/timer.gif'}
+              alt='WORLDY GAME'
+          />
+        </div>
+      </div>)}
+      { start && (
+      <div className=' top-[45%] left-[50%] translate-y-[-50%] translate-x-[-50%] absolute w-[550px] h-[50px] font-PtdSemiBOld text-[200px] text-[#FF4D45] z-[1]'>
+        <div className='flex flex-col justify-center items-center'>
+         
+          <img
+              className='mt-[10px] w-[1000px] object-cover'
+              src={'/game/start.gif'}
+              alt='WORLDY GAME'
+          />
         </div>
       </div>)}
       

@@ -606,7 +606,7 @@ export default function Main() {
   if (gameWait) {
     setTimeout(function () {
       setGameStart(true);
-    }, 3000);
+    }, 4000);
   }
 
   // 게임 방이 가득차면 redirect
