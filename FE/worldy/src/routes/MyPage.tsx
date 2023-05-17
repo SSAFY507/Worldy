@@ -265,7 +265,7 @@ export default function MyPage({
             <div
               className='absolute top-0 left-0 h-[10px] bg-blue-300'
               style={{ width: `${axiosRankInfoList?.myRank.exp}%` }}
-            ></div>
+            ></div>zzzz
           </div>
         </div>
       </div>

@@ -4,11 +4,14 @@ import LoaderPyramid from "../components/Loaders/LoaderPyramid";
 import CreateGame from "../components/create/CreateGame";
 import Matching from "../components/create/Matching";
 import Waiting from "../components/create/Waiting";
+import { useNavigate } from 'react-router';
 
 export default function Create() {
   const [mode, setMode] = useState<number>(0);
   const [matchingId, setMatchingId] = useState<string>("");
   const [roomId, setRoomId] = useState<string>("");
+
+  const navigate = useNavigate();
 
   const [loaded, setLoaded] = useState<boolean>(false);
   setTimeout(() => {
@@ -20,9 +23,16 @@ export default function Create() {
     console.log(matchingId);
   }, [matchingId]);
 
+  // if(mode === 1){
+  //   moveMatching();
+  // } 
+
+  // function moveMatching() {
+  //   navigate('/ready',{ state: {id:matchingId} })
+  // }
+
   return (
     <div className="w-screen h-screen bg-white">
-      <div>매칭용 임시 룸 id : {matchingId}</div>
       {mode === 0 && (
         <CreateGame
           setMode={setMode}

@@ -274,14 +274,19 @@ export default function Game2D(props: any) {
           })
           .then((response) => {
             // 게임 결과 페이지 이동
-            navigate('/game/result', { state: rankPlayerData });
+            //navigate('/game/result', { state: rankPlayerData });
+            setGameFinish(true)
           });
       });
   }
   // 게임 결과 세팅 후 실행
   if (gameResultSet) {
+    console.log("데이터 axios");
+    console.log(gameResult);
     gameResultAxios();
   }
+
+  const [gameFinish, setGameFinish] = useState<boolean>(false)
 
   function calAssets(p: any) {
     let sum = p.game.balance;
@@ -336,6 +341,11 @@ export default function Game2D(props: any) {
     ]
   });
 
+  // 게임 종료 후 페이지 이동
+  if(gameFinish&&gameResultSet) {
+    navigate('/game/result', { state: rankPlayerData });
+  }
+
   function calRanking() {
 
     // 자산 계산(balance + 땅 + 건물)
@@ -360,19 +370,19 @@ export default function Game2D(props: any) {
             assets: p2Assets,
             playNum: 2,
             nickName: player.p2.name,
-            own: player.p1.game.own
+            own: player.p2.game.own
           } : key === 2 ? {
             kakaoId: player.p3.playerId,
             assets: p3Assets,
             playNum: 3,
             nickName: player.p3.name,
-            own: player.p1.game.own
+            own: player.p3.game.own
           } : {
             kakaoId: player.p4.playerId,
             assets: p4Assets,
             playNum: 4,
             nickName: player.p4.name,
-            own: player.p1.game.own
+            own: player.p4.game.own
           }
         ))
       ]

@@ -7,13 +7,18 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
 
-import Callback from './routes/Callback';
+import GameInfo from "./routes/GameInfo";
+//import Updates from "./routes/Updates";
+import { useState, useRef, useEffect } from "react";
+import Game from "./routes/Game";
+import Payment from "./routes/Payment";
+import Create from "./routes/Create";
+import PaySuccess from "./routes/PayResult";
+import Callback from "./routes/Callback";
+
 import Country from './routes/Country';
-import Create from './routes/Create';
 import Explore from './routes/Explore';
-import Game from './routes/Game';
 import HelloPage from './components/Loaders/LoaderHello';
 import IntroPage from './routes/IntroPage';
 import LoaderHello from './components/Loaders/LoaderHello';
@@ -23,8 +28,6 @@ import Monopoly from './routes/Monopoly';
 import MyPage from './routes/MyPage';
 import Navbar from './components/Nvabar';
 import PayResult from './routes/PayResult';
-import PaySuccess from './routes/PayResult';
-import Payment from './routes/Payment';
 import Socket from './routes/Socket';
 import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
@@ -92,7 +95,7 @@ const AppLayout = () => {
     }
   };
 
-  const exploreUrl = location.pathname.substr(0, 8);
+  const exploreUrl = location.pathname.substr(0, 9);
   const monopolyUrl = location.pathname.substr(0, 9);
   const gameUrl = location.pathname.substr(0, 5);
 
