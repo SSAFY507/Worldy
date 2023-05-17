@@ -204,7 +204,7 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
             <div className='outline-black flex flex-row justify-between items-center'>
               <button
                 className={`${
-                  submitAnswer === 'O' ? 'clickedOXBlue' : 'bg-[#F2F2F2]'
+                  submitAnswer === 'o' ? 'clickedOXBlue' : 'bg-[#F2F2F2]'
                 } beforeOXBlue w-[200px] h-[120px] mr-[20px] rounded-md shadow-md flex flex-row justify-center items-center`}
                 onClick={() => handleSubmitAnswer('o')}
               >
@@ -212,7 +212,7 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
               </button>
               <button
                 className={`${
-                  submitAnswer === 'X' ? 'clickedOXRed' : 'bg-[#F2F2F2]'
+                  submitAnswer === 'x' ? 'clickedOXRed' : 'bg-[#F2F2F2]'
                 } beforeOXRed w-[200px] h-[120px] ml-[20px]  rounded-md shadow-md flex flex-row justify-center items-center`}
                 onClick={() => handleSubmitAnswer('x')}
               >
@@ -528,7 +528,10 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
                 <AiOutlineClose
                   size={25}
                   color='#BFBFBF'
-                  // onClick={closeModal}
+                  onClick={() => {
+                    alert("다른 문제 풀러 이동합니다.")
+                    GetRegameFlag(-2)
+                  }}
                   className='cursor-pointer'
                 />
               </div>
@@ -586,7 +589,10 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
                 <AiOutlineClose
                   size={30}
                   color='gray'
-                  // onClick={closeModal}
+                  onClick={() => {
+                    alert("다른 문제 풀러 이동합니다.")
+                    GetRegameFlag(-2)
+                  }}
                   className='cursor-pointer'
                 />
               </div>
@@ -594,17 +600,27 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
           </div>
         </div>
         <div className='w-full h-[200px] bg-[#eaeaea]  outline-red-500 flex flex-col justify-start items-start pt-[5px] px-[50px]'>
-          <span
-            className={`w-full flex flex-row justify-start items-center text-[18px] font-PtdBold mb-[10px] ${
-              correctState ? 'text-[#009B3E]' : 'text-[#E81C1C]'
-            }`}
-          >
-            {correctState === true
-              ? '정답입니다'
-              : correctState === false
-              ? '오답입니다'
-              : 'null결과'}
-          </span>
+          <div className='w-full flex flex-row justify-between'>
+            <span
+              className={`w-full flex flex-row justify-start items-center text-[18px] font-PtdBold mb-[10px] ${
+                correctState ? 'text-[#009B3E]' : 'text-[#E81C1C]'
+              }`}
+            >
+              {correctState === true
+                ? '정답입니다'
+                : correctState === false
+                ? '오답입니다'
+                : 'null결과'}
+            </span>
+            <span 
+              className='w-full flex flex-row justify-end items-center text-[18px] font-PtdBold mb-[10px] opacity-40' >
+              {correctState === true
+                ? 'exp +20'
+                : correctState === false
+                ? 'exp + 0'
+                : 'null결과'}
+            </span>
+          </div>
           <div className='w-full h-[70px] flex flex-row justify-start items-center outline-yellow-500 overflow-y-scroll on-scrollbar-quizmodal'>
             <span
               className='font-PtdSemiBOld text-center py-[15px] h-fit max-h-full'
