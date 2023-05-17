@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 def find_exchange_rate(nations, nation):
     if nation == '대한민국':
-        return {'대한민국' : "1"}
+        return {'대한민국' : "1000"}
     
     address = 'https://finance.naver.com'
     addition = '/marketindex/?tabSel=exchange#tab_section'
@@ -35,4 +35,11 @@ def find_exchange_rate(nations, nation):
             rate_list[name[0]] = info
 
     print(rate_list)
-    return {nation : rate_list[nation]}
+    rate = rate_list[nation]
+    rate = rate.replace(",", "")
+    
+    rate = 1000.0 / float(rate)
+    if nation == '일본':
+        rate = rate * 100
+
+    return {nation : str(round(rate, 2))}
