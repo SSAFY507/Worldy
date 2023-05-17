@@ -14,7 +14,9 @@ import Country from './routes/Country';
 import Create from './routes/Create';
 import Explore from './routes/Explore';
 import Game from './routes/Game';
+import HelloPage from './components/Loaders/LoaderHello';
 import IntroPage from './routes/IntroPage';
+import LoaderHello from './components/Loaders/LoaderHello';
 import LoginModal from './components/LoginModal';
 import MainPageAfterLogin from './routes/MainPageAfterLogin';
 import Monopoly from './routes/Monopoly';
@@ -29,10 +31,6 @@ import Tutorial from './routes/Tutorial';
 import { loginState } from './_store/slices/loginSlice';
 import pathBI from './assets/images/MainPageBackground.png';
 import { useSelector } from 'react-redux';
-import PayResult from './routes/PayResult';
-import Callback from './routes/Callback';
-import HelloPage from './components/Loaders/LoaderHello';
-import LoaderHello from './components/Loaders/LoaderHello';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
