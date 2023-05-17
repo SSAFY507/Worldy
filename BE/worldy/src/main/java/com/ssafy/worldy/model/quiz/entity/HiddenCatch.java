@@ -1,5 +1,6 @@
-package com.ssafy.worldy.model.adventure.entity;
+package com.ssafy.worldy.model.quiz.entity;
 
+import com.ssafy.worldy.model.adventure.entity.Nation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

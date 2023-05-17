@@ -17,7 +17,13 @@ public class InfoDto {
 
     private String category;
 
+    private String name;
+
     private String content;
 
-    private String img;
+    private String img_url;
+
+    private String video_url;
+
+    private String insta_url;
 }

@@ -531,7 +531,15 @@ export default function Tutorial() {
 
   const navigate = useNavigate();
   const navigateHome = () => {
-    navigate('/');
+    const gameId = sessionStorage.getItem('gameId');
+    
+    // 헤더 확인해서 roomId 있으면 
+    if(gameId) {
+      sessionStorage.removeItem('gameId');
+      navigate(`/game/${gameId}`);
+    } else {
+      navigate('/');
+    }
   };
 
   const showQuiz = (

@@ -1,6 +1,6 @@
 package com.ssafy.worldy.model.quiz.service;
 
-import com.ssafy.worldy.model.adventure.entity.HiddenCatch;
+import com.ssafy.worldy.model.quiz.entity.HiddenCatch;
 import com.ssafy.worldy.model.adventure.entity.Nation;
 import com.ssafy.worldy.model.adventure.repo.NationRepo;
 import com.ssafy.worldy.model.quiz.dto.*;

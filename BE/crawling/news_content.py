@@ -85,8 +85,15 @@ def find_new_content(nation, nation_id):
             try:
                 quiz = news_quiz.chatgpt_quiz(content)
                 print(quiz)
+
+                # 정답이 한글이 아니라면 패스
+                if quiz["hint"] == "":
+                    continue
+
+                # 정답 공백 제거
+                quiz["answer"] = quiz["answer"].replace(" ", "")
                 
-                news_link = "\n\n\n 출처 : " + driver.current_url
+                news_link = "\n\n\n출처 : " + driver.current_url
                 cur.execute(INSERT_QUIZ, (str(nation_id), "gpt", "blank", "aff", "3", quiz["quiz"], quiz["answer"], quiz["hint"], news_link))
 
                 conn.commit() 

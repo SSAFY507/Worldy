@@ -51,7 +51,14 @@ export default function Callback(): JSX.Element {
       if (nickname === '' || nickname === null) navigate('/tutorial');
       else {
         dispatch(addNickname(nickname));
-        navigate('/');
+        const gameId = sessionStorage.getItem('gameId');
+    
+        // 헤더 확인해서 roomId 있으면 
+        if(gameId) {
+          navigate(`/game/${gameId}`); // 게임 uri로 입장 후 로그인 안돼있으면
+        } else {
+          navigate('/'); //로그인 안돼있으면 홈으로
+        } 
       }
     }
   }, [accessToken]);

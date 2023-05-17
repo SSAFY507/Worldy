@@ -4,7 +4,7 @@ import requests
 
 
 # 이미지 크기 조정
-def normalize_size(src, dst, ref, width = 600, height = 800):
+def normalize_size(src, dst, ref, width = 388, height = 276):
     
     w = src.shape[1]
     h = src.shape[0]
@@ -38,7 +38,7 @@ def get_morphological_edge(src):
 # 윤곽선을 구분
 def get_contours(edge, imgContour):
     contours, hierarchy =cv2.findContours(edge, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-    min_area = 600
+    min_area = 388
     max_area = edge.shape[0] * edge.shape[1] / 8
 
     ptsCandidate = []
@@ -102,16 +102,16 @@ def quiz(ptsCandidate, approxCandidate, num, imgMask, ref):
 
 
 # 이미지 정렬 - 빼도 괜찮을 수 있음
-def centering_image(src, dst, ref, width = 600, height = 800):
+def centering_image(src, dst, ref, width = 388, height = 276):
     w = src.shape[1]
     h = src.shape[0]
 
     rate = h/w
     dst_rate = height / width
 
-    src_output = np.zeros((800, 600, 3), dtype = np.uint8)
-    ref_output = np.zeros((800, 600, 3), dtype = np.uint8)
-    dst_output = np.zeros((800, 600, 3), dtype = np.uint8)
+    src_output = np.zeros((276, 388, 3), dtype = np.uint8)
+    ref_output = np.zeros((276, 388, 3), dtype = np.uint8)
+    dst_output = np.zeros((276, 388, 3), dtype = np.uint8)
 
     x = (width +1 - w) // 2           
     y = (height+1 - h) // 2            
@@ -131,7 +131,7 @@ def centering_image(src, dst, ref, width = 600, height = 800):
     return src_output, dst_output,  ref_output, t
 
 def create_hidden_catch(nation_id, img_num):
-    response = requests.get("http://k8a507.p.ssafy.io:8000/model/" + str(nation_id) + "/" + str(img_num))
+    response = requests.get("http://k8a507.p.ssafy.io:2760/model/" + str(nation_id) + "/" + str(img_num))
     
     return response
 

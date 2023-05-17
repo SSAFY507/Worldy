@@ -31,6 +31,8 @@ import Tutorial from './routes/Tutorial';
 import { loginState } from './_store/slices/loginSlice';
 import pathBI from './assets/images/MainPageBackground.png';
 import { useSelector } from 'react-redux';
+import GameResult from './routes/GameResult';
+import Matching from './components/create/Matching';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -51,9 +53,50 @@ const AppLayout = () => {
 
   //페이지 이동 Route용으로 <Route><Route> => <Routes><Route>로 변경했습니다.
 
-  const exploreUrl = location.pathname.substr(0, 9);
+  // useEffect(() => {
+  //   if (login) setImageBackgroundImage(new Image());
+  // }, [login]);
+
+  //페이지 이동 Route용으로 <Route><Route> => <Routes><Route>로 변경했습니다.
+
+  //카카오 로그인 눌렀을 때, 첫 로그인이면 Tutorial로, 아니면 Mainpage로
+  const [firstLoginState, setFirstLoginState] = useState<boolean>(false);
+
+  const handleFirstLogin = (firstLogin: boolean) => {
+    console.log('LoginModal로부터 넘어온 firstLogin', firstLogin);
+    if (firstLogin) {
+      navigate('/tutorial');
+    } else {
+      const gameId = sessionStorage.getItem('gameId');
+
+      // 헤더 확인해서 roomId 있으면
+      if (gameId) {
+        navigate(`/game/${gameId}`);
+      } else {
+        navigate('/');
+      }
+    }
+    closeLoginModal();
+  };
+
+
+  const endTutorial = () => {
+
+    const gameId = sessionStorage.getItem('gameId');
+
+    // 헤더 확인해서 roomId 있으면
+    if (gameId) {
+      navigate(`/game/${gameId}`);
+    } else {
+      navigate('/');
+    }
+  };
+
+  const exploreUrl = location.pathname.substr(0, 8);
   const monopolyUrl = location.pathname.substr(0, 9);
   const gameUrl = location.pathname.substr(0, 5);
+
+
   const [myPageRef, setMyPageRef] = useState<string>('');
 
   const [qnaModal, setQnaModal] = useState<number>(0);
@@ -72,8 +115,18 @@ const AppLayout = () => {
         navigate('/tutorial');
         console.log('닉네임 설정해주세요 (tutorial로 이동)');
       } else if (!checkLoginState) {
-        navigate('/'); //로그인 안돼있으면 홈으로
-        console.log('로그인 해주세요(Home으로 이동)');
+
+        const gameId = sessionStorage.getItem('gameId');
+
+        // 헤더 확인해서 roomId 있으면 
+        if (gameId) {
+          navigate(`/game/${gameId}`); // 게임 uri로 입장 후 로그인 안돼있으면
+        } else {
+          navigate('/'); //로그인 안돼있으면 홈으로
+        }
+
+        console.log("로그인 해주세요(Home으로 이동)");
+
       }
   }, []);
 
@@ -128,18 +181,25 @@ const AppLayout = () => {
               <MyPage setRef={myPageRef} handleQnaModal={handleQnaModal} />
             }
           />
+          <Route path="/create" element={<Create />} />
+          <Route path="/game" element={<Game />} />
+          <Route path="/game/:id" element={<Game />} />
+          <Route path="/game/result" element={<GameResult />} />
+          <Route path="/socket" element={<Socket />} />
+          <Route path="/tutorial" element={<Tutorial />} />
           <Route path='/create' element={<Create />} />
+          <Route path='/ready' element={<Matching />} />
           <Route path='/game' element={<Game />} />
           <Route path='/game/:id' element={<Game />} />
           <Route path='/socket' element={<Socket />} />
           <Route path='/tutorial' element={<Tutorial />} />
           <Route path='/paymentsuccess' element={<PayResult />} />
           {/* <Route
+>>>>>>> 539095da14296f795892706a9a49530355d10bbe
             path="/paymentfailure"
             element={<PayResult input={paymentFailureInput} />}
           /> */}
           <Route path='/payment' element={<Payment />} />
-          <Route path='/hello' element={<LoaderHello />} />
         </Routes>
       </div>
     </div>
