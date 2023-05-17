@@ -10,6 +10,7 @@ import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router";
 import { log } from "console";
 import Enter from "./Enter";
+import GameRestartLoading from "./GameRestartLoading";
 
 // 소켓 연결
 let socket;
@@ -82,6 +83,9 @@ export default function Main() {
   // 게임 시작 체크
   const [gameStart, setGameStart] = useState<boolean>(false);
 
+  // 게임 유저가 재입장했을 경우 체크
+  //const [gameLoading, setGameLoading] = useState<boolean>(false);
+
   useEffect(() => {
     // 소켓 연결
     socket = new SockJS("https://k8a507.p.ssafy.io/api/stomp/game");
@@ -97,6 +101,7 @@ export default function Main() {
       const received = JSON.parse(event.body);
 
       if (received.type === "player") {
+
         setPlayer((prevState: any) => ({
           ...prevState,
           p1: {
@@ -176,6 +181,7 @@ export default function Main() {
           ...prevState,
           worldMap: received.worldMap,
         }));
+
       } else if (received.type === "metaData") {
         console.log("메타 데이터 받음");
         console.log(received);
@@ -261,39 +267,41 @@ export default function Main() {
             //console.log("유저 1 데이터 받아오기");
           }
 
-          // TEST
-          if (received.user1) {
-            setPlayer((prevState: any) => ({
+          //TEST
+          if(received.user1){
+            setPlayer((prevState:any) => ({
               ...prevState,
               roomId: received.roomId,
-              p2: {
+              p2 : {
                 ...prevState.p2,
-                playerId: "2756798359",
-                name: "설히",
-              },
-            }));
+                playerId : '2756798359',
+                name:'설히',
+              }
+            }))
           }
-          if (received.user1) {
-            setPlayer((prevState: any) => ({
+          if(received.user1){
+            setPlayer((prevState:any) => ({
               ...prevState,
               roomId: received.roomId,
-              p3: {
+              p3 : {
                 ...prevState.p3,
-                playerId: "2762535269",
-                name: "성훈",
-              },
-            }));
+                playerId : '2762535269',
+                name:'성훈',
+              }
+            }))
           }
-          if (received.user1) {
-            setPlayer((prevState: any) => ({
+          if(received.user1){
+            setPlayer((prevState:any) => ({
               ...prevState,
               roomId: received.roomId,
-              p4: {
+              p4 : {
                 ...prevState.p4,
-                playerId: "2772224261",
-                name: "히히",
-              },
-            }));
+                playerId : '2772224261',
+                name:'bellek',
+              }
+            }))
+
+            //  추후 주석 처리
             setGameStart(true);
           }
 
@@ -341,6 +349,9 @@ export default function Main() {
           //   }));
           // }
           // if (received.user4) {
+
+          //   setGameLoading(true);
+
           //   setPlayer((prevState: any) => ({
           //     ...prevState,
           //     roomId: received.roomId,
@@ -378,7 +389,7 @@ export default function Main() {
             check = false;
           }
 
-          // setGameStart(!check);
+          setGameStart(!check); // 게임 페이지로 이동 -> 초기에는 기본 세팅으로 playerdata 한 번이라도 전송되면 게임 진행 중인 세팅 값으로 변환
           setUserCheck(check);
         }
       }
@@ -1641,7 +1652,13 @@ export default function Main() {
         </div>
         {!gameStart && <Enter></Enter>}
 
-        {gameStart && (
+        {/* {gameStart && !gameLoading && (
+          <div>
+            <GameRestartLoading/>
+          </div>
+        )} */}
+
+        {gameStart &&  (
           <div>
             {mode && (
               <Game2D
