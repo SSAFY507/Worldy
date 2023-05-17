@@ -28,6 +28,9 @@ public class HiddenCatch {
     @Column(name = "img_title")
     private String imgTitle;
 
+    @Column(name = "img_sub_title")
+    private String imgSubTitle;
+
     @Column(name = "img_content", length = 500)
     private String imgContent;
 
