@@ -7,35 +7,63 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom';
+import { useEffect, useRef, useState } from "react";
 
-import GameInfo from "./routes/GameInfo";
-//import Updates from "./routes/Updates";
-import { useState, useRef, useEffect } from "react";
-import Game from "./routes/Game";
-import Payment from "./routes/Payment";
-import Create from "./routes/Create";
-import PaySuccess from "./routes/PayResult";
 import Callback from "./routes/Callback";
-
 import Country from './routes/Country';
+import Create from "./routes/Create";
 import Explore from './routes/Explore';
+import Game from "./routes/Game";
+import Game3DItem from './components/game/game3D/Game3DItem';
+import GameInfo from "./routes/GameInfo";
+import GameResult from './routes/GameResult';
 import HelloPage from './components/Loaders/LoaderHello';
 import IntroPage from './routes/IntroPage';
 import LoaderHello from './components/Loaders/LoaderHello';
 import LoginModal from './components/LoginModal';
 import MainPageAfterLogin from './routes/MainPageAfterLogin';
+import Matching from './components/create/Matching';
 import Monopoly from './routes/Monopoly';
 import MyPage from './routes/MyPage';
 import Navbar from './components/Nvabar';
 import PayResult from './routes/PayResult';
+import PaySuccess from "./routes/PayResult";
+import Payment from "./routes/Payment";
 import Socket from './routes/Socket';
 import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
 import { loginState } from './_store/slices/loginSlice';
 import pathBI from './assets/images/MainPageBackground.png';
 import { useSelector } from 'react-redux';
-import GameResult from './routes/GameResult';
-import Matching from './components/create/Matching';
+
+//import Updates from "./routes/Updates";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -203,6 +231,7 @@ const AppLayout = () => {
             element={<PayResult input={paymentFailureInput} />}
           /> */}
           <Route path='/payment' element={<Payment />} />
+          <Route path='/game3D' element={<Game3DItem />} />
         </Routes>
       </div>
     </div>
