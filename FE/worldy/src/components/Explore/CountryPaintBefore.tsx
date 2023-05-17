@@ -42,7 +42,7 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
     <div className=' h-[372px] w-full flex flex-col justify-center items-center'>
       <div className='h-[276px] w-[780px] flex flex-row justify-between relative'>
         {warn && (
-          <div className='absolute top-0 left-0 h-[276px] w-[388px] bg-[rgba(0,0,0,0.2)] grid place-content-center'>
+          <div className='absolute top-0 left-0 h-[276px] w-[388px] bg-[rgba(0,0,0,0.2)] grid place-content-center rounded-2xl'>
             <span className='font-PtdMedium text-[30px] text-center text-white'>
               오른쪽 이미지에서
               <br />
@@ -51,14 +51,14 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
           </div>
         )}
         <img
-          className='h-full w-[388px] rounded-2xl bg-gray-500 bg-cover bg-center cursor-default'
+          className='h-full w-[388px] rounded-2xl bg-gray-500 bg-center cursor-default'
           src={problem.collectImg}
           alt='original'
           onMouseEnter={() => setWarn(true)}
           onMouseLeave={() => setWarn(false)}
         />
         <img
-          className='h-full w-[388px] rounded-2xl bg-gray-500 bg-cover bg-center cursor-pointer'
+          className='h-full w-[388px] rounded-2xl bg-gray-500 bg-center cursor-pointer'
           src={problem.quizImg}
           alt='different'
           useMap='#image-map'
@@ -76,8 +76,8 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
                       height: `${String(Number(e[3]) - Number(e[1]))}px`,
                       zIndex: 20,
                       position: 'absolute',
-                      left: String(Number(e[0]) + 50) + 'px',
-                      top: String(Number(e[1]) + 50) + 'px',
+                      left: String(Number(e[0])) + 'px',
+                      top: String(Number(e[1])) + 'px',
                       borderRadius: '100%',
                       visibility: checkList[idx] ? 'visible' : 'hidden',
                     }}
