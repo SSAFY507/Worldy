@@ -82,7 +82,6 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
                       outline: '5px solid red',
                       width: `${String(Number(e[2]) - Number(e[0]))}px`,
                       height: `${String(Number(e[3]) - Number(e[1]))}px`,
-                      zIndex: 20,
                       position: 'absolute',
                       left: String(Number(e[0])) + 'px',
                       top: String(Number(e[1])) + 'px',
