@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -31,7 +32,7 @@ public class QuizController {
      * - 해당 나라의 퀴즈를 랜덤으로 응답
      ***/
     @GetMapping("/nation/{nationId}")
-    public ResponseEntity<QuizDto> getNationQuiz(@PathVariable Long nationId){
+    public ResponseEntity<List<QuizDto>> getNationQuiz(@PathVariable Long nationId){
 
         return new ResponseEntity<>(quizService.getNationQuizDto(nationId), HttpStatus.OK);
     }
