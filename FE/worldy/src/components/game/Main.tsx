@@ -243,7 +243,7 @@ export default function Main() {
         if (received.cnt <= 4) {
           console.log("4이하 룸아이디 세팅");
           console.log(received);
-          
+
 
           if (received.user1) {
             setPlayer((prevState: any) => ({
@@ -1638,7 +1638,7 @@ export default function Main() {
   return (
     <>
       <div className="w-screen h-screen bg-[#FFFDF4]">
-      {gameStart&&(<div className="w-full bg-[#FFFDF4] flex items-start justify-around fixed-top z-50">
+        {gameStart && (<div className="w-full bg-[#FFFDF4] flex items-start justify-around fixed-top z-50">
           <div className="w-full h-[60px] flex items-end justify-end">
             {/* <img className='w-[100px] h-[54px] flex items-end mt-[20px] ml-[60px] object-cover' src='/game/LogoColored.png' alt='로고이미지'></img> */}
             <div

@@ -31,6 +31,9 @@
 
 }
 
+#transformY {
+  transform: rotateY(180deg);
+}
 
 /* buttons */
 #shbutton {
