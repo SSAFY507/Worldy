@@ -4,8 +4,7 @@
 }
 .CQF-Start {
   position: absolute;
-  height: 400px;
-  animation: popupStart 1100ms ease-out;
+  animation: popupCount 1100ms ease-out;
 }
 
 @keyframes popupCount {
@@ -14,7 +13,7 @@
     opacity: 10%;
   }
   90% {
-    height: 400px;
+    height: 300px;
     opacity: 100%;
   }
   91% {

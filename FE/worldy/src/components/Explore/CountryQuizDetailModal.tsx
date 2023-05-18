@@ -605,7 +605,14 @@ const CountryQuizDetailModal = ({
                   color='gray'
                   onClick={() => {
                     // alert("다른 문제 풀러 이동합니다.")
-                    Swal.fire('새로운 문제로 이동합니다.').then(function () {
+                    Swal.fire({
+                      title: '새로운 문제로 이동합니다.',
+                      confirmButtonText: '확인',
+                      buttonsStyling: false,
+                      customClass: {
+                        confirmButton: 'swal2-confirm',
+                      },
+                    }).then(function () {
                       GetRegameFlag(-2);
                     });
                     // GetRegameFlag(-2)
