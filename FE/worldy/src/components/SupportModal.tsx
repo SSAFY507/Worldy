@@ -22,6 +22,8 @@ export default function SupportModal({
   type: boolean;
   handleCloseModal: () => void;
 }) {
+  const DOMAIN = process.env.REACT_APP_BASE_URL;
+  const DOMAIN_S = process.env.REACT_APP_BASE_URL_SHORTER;
   const modalSize: number = 16;
 
   const [contentType, setContentType] = useState<number>();
@@ -75,10 +77,11 @@ export default function SupportModal({
             whiteSpace: 'pre-wrap', // 자동 줄바꿈을 활성화합니다
             wordWrap: 'break-word', // 단어가 너비를 넘어갈 경우 줄바꿈을 적용합니다
           }}
-          placeholder={`${ableWrite
-            ? '문의 내용을 입력해주세요. (10~500자 내외)'
-            : '위의 항목을 모두 채워주세요.'
-            }`}
+          placeholder={`${
+            ableWrite
+              ? '문의 내용을 입력해주세요. (10~500자 내외)'
+              : '위의 항목을 모두 채워주세요.'
+          }`}
           maxLength={500}
         />
         <div className=' h-[1.5em] w-full font-PtdMedium px-[0.2em] text-gray-400 flex justify-end items-center text-[1.2em]'>
@@ -120,15 +123,15 @@ export default function SupportModal({
   const things = useSelector(wholeState);
 
   useEffect(() => {
-    console.log('토근 왜 안나와', getToken);
+    //console.log('토근 왜 안나와', getToken);
   }, [getToken]);
 
   useEffect(() => {
-    console.log('전부', things);
+    //console.log('전부', things);
   }, [things]);
 
   const submitHelpAxios = async () => {
-    console.log('커스터엄 토큰 : ', getToken);
+    //console.log('커스터엄 토큰 : ', getToken);
     try {
       const requestBody = new Map([
         ['category', askTypeList[askType].name],
@@ -139,12 +142,12 @@ export default function SupportModal({
         APIName: 'writeHelp',
         APIType: 'post',
         // UrlQuery: 'https://localhost:9090/api/help/write',
-        UrlQuery: 'https://k8a507.p.ssafy.io/api/help/write',
+        UrlQuery: DOMAIN + '/help/write',
         Body: requestBody,
         Token: getToken,
       });
       setResult(response);
-      console.log('리퀘스트 바디', requestBody);
+      //console.log('리퀘스트 바디', requestBody);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -152,11 +155,11 @@ export default function SupportModal({
 
   // 요청 헤더 및 바디를 포함하는 POST 요청 함수를 정의합니다.
   async function submitHelpAxiosBasic() {
-    console.log('문의 토큰 : ', getToken);
+    //console.log('문의 토큰 : ', getToken);
 
     try {
       const response = await axios.post(
-        'https://k8a507.p.ssafy.io/api/help/write',
+        DOMAIN + '/help/write',
         // 요청 바디 데이터를 객체 형식으로 전달합니다.
         { category: askTypeList[askType].name, content: contentText },
         {
@@ -166,8 +169,8 @@ export default function SupportModal({
           },
         }
       );
-      console.log(response.data);
-      console.log('문으 ㅣ전송 성공');
+      //console.log(response.data);
+      //console.log('문으 ㅣ전송 성공');
     } catch (error) {
       console.error(`Error: ${error}`);
     }
@@ -273,10 +276,11 @@ export default function SupportModal({
         <div className='w-full h-[3em] pt-[.5em]  flex flex-row justify-between items-center'>
           <button
             onClick={submitHelp}
-            className={`rounded-[4px] w-[47%] h-[60px]  outline-[rgba(255,255,255,0.6)] outline-1  font-PtdRegular ${submittable
-              ? 'hover:bg-[rgb(255,18,5)] bg-buttonRed outline-[rgba(255,255,255,0.6)] text-white'
-              : 'bg-[rgba(125,125,125,0.2)] outline-[rgba(121,121,121,0.6)] text-gray-400 text-[18px]'
-              }`}
+            className={`rounded-[4px] w-[47%] h-[60px]  outline-[rgba(255,255,255,0.6)] outline-1  font-PtdRegular ${
+              submittable
+                ? 'hover:bg-[rgb(255,18,5)] bg-buttonRed outline-[rgba(255,255,255,0.6)] text-white'
+                : 'bg-[rgba(125,125,125,0.2)] outline-[rgba(121,121,121,0.6)] text-gray-400 text-[18px]'
+            }`}
             disabled={!submittable}
           >
             확인

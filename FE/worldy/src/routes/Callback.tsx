@@ -10,6 +10,9 @@ import LoaderPyramid from '../components/Loaders/LoaderPyramid';
 import LoaderLinear from '../components/Loaders/LoaderLinear';
 
 export default function Callback(): JSX.Element {
+  const DOMAIN = process.env.REACT_APP_BASE_URL;
+  const DOMAIN_S = process.env.REACT_APP_BASE_URL_SHORTER;
+
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
@@ -21,12 +24,12 @@ export default function Callback(): JSX.Element {
   const [nickname, setNickname] = useState<string>('');
 
   const kakaoLogin = async () => {
-    console.log(`uriToken${urlToken}`);
+    //console.log(`uriToken${urlToken}`);
     try {
       const kakaoLoginResponse = await axios.get(
-        `https://k8a507.p.ssafy.io/api/user/kakao/login?code=${urlToken}`
+        DOMAIN + `/user/kakao/login?code=${urlToken}`
       );
-      console.log('전부', kakaoLoginResponse.data);
+      //console.log('전부', kakaoLoginResponse.data);
       setAccessToken(kakaoLoginResponse.data.tokenDto.accessToken);
       setProfileImg(kakaoLoginResponse.data.profileImg);
       setNickname(kakaoLoginResponse.data.nickName);
@@ -47,18 +50,18 @@ export default function Callback(): JSX.Element {
     if (accessToken !== '') {
       dispatch(login({ profileImg: profileImg }));
       dispatch(addToken(accessToken));
-      console.log('토큰 추가 후 홈페이지로 이동', accessToken);
+      //console.log('토큰 추가 후 홈페이지로 이동', accessToken);
       if (nickname === '' || nickname === null) navigate('/tutorial');
       else {
         dispatch(addNickname(nickname));
         const gameId = sessionStorage.getItem('gameId');
-    
-        // 헤더 확인해서 roomId 있으면 
-        if(gameId) {
+
+        // 헤더 확인해서 roomId 있으면
+        if (gameId) {
           navigate(`/game/${gameId}`); // 게임 uri로 입장 후 로그인 안돼있으면
         } else {
           navigate('/'); //로그인 안돼있으면 홈으로
-        } 
+        }
       }
     }
   }, [accessToken]);

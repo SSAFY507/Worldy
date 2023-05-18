@@ -34,44 +34,44 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
     setMoreInfo(false);
   };
 
-  const [axiosMyRankInfo, setAxiosMyRankInfo] = useState<MyRankInfo>();
-  const getLoginToken: string | null = sessionStorage.getItem('token');
+  // const [axiosMyRankInfo, setAxiosMyRankInfo] = useState<MyRankInfo>();
+  // const getLoginToken: string | null = sessionStorage.getItem('token');
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(
-      addRankInfo({
-        rank: axiosMyRankInfo?.rank || 1,
-        tier: axiosMyRankInfo?.tier || 'Bronze',
-        level: axiosMyRankInfo?.level || 1,
-        exp: axiosMyRankInfo?.exp || 0,
-      })
-    );
-    console.log('경험치 : ' + axiosMyRankInfo?.exp);
-  }, []);
+  // useEffect(() => {
+  //   dispatch(
+  //     addRankInfo({
+  //       rank: axiosMyRankInfo?.rank || 1,
+  //       tier: axiosMyRankInfo?.tier || 'Bronze',
+  //       level: axiosMyRankInfo?.level || 1,
+  //       exp: axiosMyRankInfo?.exp || 0,
+  //     })
+  //   );
+  //   //console.log('경험치 : ' + axiosMyRankInfo?.exp);
+  // }, []);
 
-  useEffect(() => {
-    getRankInfoList();
-  }, []);
+  // useEffect(() => {
+  //   getRankInfoList();
+  // }, []);
 
-  const getRankInfoList = async () => {
-    console.log('Session에서의 가져오는 토큰', getLoginToken);
-    try {
-      const response = await CustomAxios({
-        APIName: 'getRankInfoList',
-        APIType: 'get',
-        UrlQuery: `https://k8a507.p.ssafy.io/api/game/ranking`,
-        Token: getLoginToken,
-      });
-      //console.log('닉네임 중복 체크 성공');
-      console.log('랭크 리스트 받은 거: ', response);
-      setAxiosMyRankInfo(response.myRank);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-    //console.log('token이 무엇이냐 ', token);
-  };
+  // const getRankInfoList = async () => {
+  //   //console.log('Session에서의 가져오는 토큰', getLoginToken);
+  //   try {
+  //     const response = await CustomAxios({
+  //       APIName: 'getRankInfoList',
+  //       APIType: 'get',
+  //       UrlQuery: DOMAIN + `/game/ranking`,
+  //       Token: getLoginToken,
+  //     });
+  //     //console.log('닉네임 중복 체크 성공');
+  //     //console.log('랭크 리스트 받은 거: ', response);
+  //     setAxiosMyRankInfo(response.myRank);
+  //   } catch (error) {
+  //     //console.error('Error fetching data:', error);
+  //   }
+  //   //console.log('token이 무엇이냐 ', token);
+  // };
 
   const myImageList = {
     BackgroundImage: pathBI,

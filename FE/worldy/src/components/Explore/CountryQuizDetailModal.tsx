@@ -39,7 +39,7 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
   const [blankInputAnswer, setBlankInputAnswer] = useState<string[]>(
     new Array(input.answer.length).fill('')
     );
-  const [scrapped, setScrapped] = useState<boolean>(true);
+  const [scrapped, setScrapped] = useState<boolean>(false);
   const [flipped, setFlipped] = useState<boolean>(false);
   const [correctState, setCorrectState] = useState<boolean | null>(null);
   const [hintImageState, setHintImageState] = useState<boolean>(false);
