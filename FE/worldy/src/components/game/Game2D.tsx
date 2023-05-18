@@ -2026,7 +2026,7 @@ export default function Game2D(props: any) {
               return (
                 <div key={index}>
                   <div
-                    className={`w-[300px] h-[290px] bg-[#F4F2EC] rounded-[8px] flex flex-col justify-center items-center 
+                    className={`w-[336px] h-[238px] bg-white rounded-[8px] flex flex-col justify-center items-center  shadow-[0_3px_10px_rgb(0,0,0,0.2)]
                     ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 1 ? "outline outline-[6px] outline-red-400" : ""}
                     ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 2 ? "outline outline-[6px] outline-green-400" : ""}
                     ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 3 ? "outline outline-[6px] outline-blue-400" : ""}
@@ -2035,11 +2035,12 @@ export default function Game2D(props: any) {
                     `}
                   >
                     <div className="w-[250px] h-[240px] mt-[20px]">
-                      <div className="flex justify-between">
-                        <div className="text-[12px]">플레이어[{i.playerNum}]</div>
-                        <div className="text-[12px]">[{worldMap[i.game.location].name}]</div>
-                      </div>
-                      <div className="flex items-center h-[60px] mt-[10px] mb-[10px] border-solid border-gray-400 border-b-[1px]">
+                    <div className="flex justify-between items-center text-[#C0C0C0]">
+                      <div className="text-[12px]">플레이어</div>
+                      <div className="text-[12px]">현재 위치</div>
+                    </div>
+                    <div className="flex items-center justify-between h-[60px] mt-[10px] mb-[10px] border-solid border-[#E9E9E9] border-b-[1px]">
+                  
                         {i.playerNum === 1 ? <img src={user1.profileImg} className="w-[50px] h-[50px] rounded-full object-cover"></img> : null}
                         {i.playerNum === 2 ? <img src={user2.profileImg} className="w-[50px] h-[50px] rounded-full object-cover"></img> : null}
                         {i.playerNum === 3 ? <img src={user3.profileImg} className="w-[50px] h-[50px] rounded-full object-cover"></img> : null}
@@ -2056,17 +2057,20 @@ export default function Game2D(props: any) {
                           {i.name === rankPlayerData.rankPlayer[2].nickName ? '3위' : ''}
                           {i.name === rankPlayerData.rankPlayer[3].nickName ? '4위' : ''}
                         </div>
+                        <div className="flex items-center justify-end text-[20px] font-PtdBold ml-[6px] w-[80px]">
+                          <div>{worldMap[i.game.location].name}</div>
+                        </div>
+               
                       </div>
-                      <div className="flex flex-col w-full h-[60px] items-between">
-                        <div className="">보유자산</div>
-                        <div className="flex mt-[10px]">
-                          <div className="text-[20px]">
-                            {i.game.balance} 만원
-                          </div>
+                      <div className="flex flex-col w-full h-[40px] items-between">
+                        <div className="text-[12px] text-[#C0C0C0] mt-[10px]">보유자산</div>
+                        <div className="flex mt-[10px] justify-between text-[20px] font-PtdBold ">
+                          <div className="">{priceToString(me.game.balance)}</div>
+                          <div className="">만원</div>
                         </div>
                       </div>
-                      <div className="flex flex-col w-full h-[60px] items-between">
-                        <div className="">
+                      <div className="flex flex-col w-full h-[60px] items-between mt-[20px]">
+                        <div className="text-[12px] text-[#C0C0C0] mt-[10px]">
                           소유국가[총{i.game.own.length}개]
                         </div>
                         <div className="flex mt-[10px] h-[80px] w-full">
@@ -3212,6 +3216,29 @@ export default function Game2D(props: any) {
               >
                 턴 종료
               </div> */}
+
+              <div
+                className="bg-white w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-gray-300 text-[20px] absolute top-[1360px]"
+                onClick={() => {
+                  setMetaData((prevState: any) => ({
+                    ...prevState,
+                    turnOver: true,
+                  }));
+                  setMode(0);
+                  calRanking();
+                  sendData();
+                }}
+              >
+                턴 종료
+              </div>
+              <div
+                className="bg-white w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-gray-300 text-[20px] absolute top-[1290px]"
+                onClick={() => {
+                  playerTurn(metaData.turn);
+                }}
+              >
+                다른 사람 주사위
+              </div>
 
               {/* <div
                 id="shbutton"
