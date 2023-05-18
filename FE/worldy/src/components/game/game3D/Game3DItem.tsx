@@ -950,7 +950,7 @@ const Game3DItem =() => {
   const [rolledDice, setRolledDice] = useState<number>(0);
   const [playerMovedCount, setPlayerMovedCount] = useState<number>(0);
   const [count, setCount] = useState<number>(0);
-  const dist = 15;
+  const dist = 1;
 
 
  /** 주사위 굴리는 함수 */
@@ -981,7 +981,7 @@ const Game3DItem =() => {
       //   prevDir = presentDir;
       // }
       console.log('presentDir', presentDir);
-      await movePlayerDir(presentDir);
+      await movePlayerDir(presentDir, player3Loc.current);
       console.log('playerLoc', player0Loc.current);
     }
     // rotateCamera(presentDir);
@@ -989,43 +989,43 @@ const Game3DItem =() => {
   };
 
   /** 플레이어 움직임 함수 */
-  const movePlayerDir = (dir: number): Promise<void> => {
-    console.log('현재', player0Loc.current);
+  const movePlayerDir = (dir: number, player:any): Promise<void> => {
+    console.log('현재', player);
     return new Promise((resolve) => {
-      //   const newPosition: localPosition = player0Loc.current;
+      //   const newPosition: localPosition = player;
       const newX =
-        player0Loc.current!.x +
+        player!.x +
         (dir === 0 ? -dist / 2 : dir === 2 ? dist / 2 : 0);
-      const newY = player0Loc.current!.y + 3;
+      const newY = player!.y + 3;
       const newZ =
-        player0Loc.current!.z +
+        player!.z +
         (dir === 3 ? dist / 2 : dir === 1 ? -dist / 2 : 0);
       console.log('newX : ' + newX);
       console.log('newY : ' + newY);
       console.log('newZ : ' + newZ);
-      gsap.to(player0Loc.current!, {
+      gsap.to(player!, {
         duration: 0.2,
         ease: 'power0.inOut',
         x: newX,
         y: newY,
         z: newZ,
         onUpdate: () => {
-          player0Loc.current!.set(
-            player0Loc.current!.x,
-            player0Loc.current!.y,
-            player0Loc.current!.z
+          player!.set(
+            player!.x,
+            player!.y,
+            player!.z
           );
         },
         onComplete: () => {
-          console.log('점프', player0Loc.current!);
+          console.log('점프', player!);
           const newnewX =
-            player0Loc.current!.x +
+            player!.x +
             (dir === 0 ? -dist / 2 : dir === 2 ? dist / 2 : 0);
-          const newnewY = player0Loc.current!.y - 3;
+          const newnewY = player!.y - 3;
           const newnewZ =
-            player0Loc.current!.z +
+            player!.z +
             (dir === 3 ? dist / 2 : dir === 1 ? -dist / 2 : 0);
-          gsap.to(player0Loc.current!, {
+          gsap.to(player!, {
             delay: 0.01,
             duration: 0.2,
             ease: 'power0.out',
@@ -1034,14 +1034,14 @@ const Game3DItem =() => {
             y: newnewY,
             z: newnewZ,
             onUpdate: () => {
-              player0Loc.current!.set(
-                player0Loc.current!.x,
-                player0Loc.current!.y,
-                player0Loc.current!.z
+              player!.set(
+                player!.x,
+                player!.y,
+                player!.z
               );
             },
             onComplete: () => {
-              console.log('착지', player0Loc.current);
+              console.log('착지', player);
               resolve();
             },
           });
@@ -1135,11 +1135,11 @@ const Game3DItem =() => {
     items.forEach((item, idx) => {
       gltfLoader.load(item.url, (glb) =>{
         const obj3d = glb.scene;
-        obj3d.position.set(0, 0, 0);
+        // obj3d.position.set(0, 0, 0);
         obj3d.scale.set(1, 1, 1);
         switch (idx) {
           case 0:
-            player0Loc.current = obj3d.position
+            player0Loc.current = obj3d.position 
             break
           case 1:
             player1Loc.current = obj3d.position
