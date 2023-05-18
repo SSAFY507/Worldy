@@ -1959,7 +1959,7 @@ export default function Game3D(props: any) {
 
   return (
   <div className='w-screen h-screen  bg-[#FFFDF4] flex flex-col justify-center items-center'>
-    <Game3DItem metaData={metaData} player={player} diceData={diceData} getPlayerTurn={getPlayerTurn} />
+    <Game3DItem metaData={metaData} player={player} worldMap={worldMap} diceData={diceData} getPlayerTurn={getPlayerTurn} />
   </div>
   )
 }
