@@ -30,10 +30,16 @@ interface playerContainter {
 }
 
 interface Props {
-  playerInfo :PlayerInfoType
+  // playerInfo :PlayerInfoType
+  metaData: MetadataType
+  diceData: number
+  player: NewPlayer
+  getPlayerTurn: (data:any) => void
 }
+// player는 4명의 플레이어 데이터
 
-const Game3DItem = ({playerInfo}: Props) => {
+const Game3DItem = ({diceData, metaData, player, getPlayerTurn}: Props) => {
+  const playerInfo = { playerIndex: metaData.turn,  currentIndex: metaData.currentLocation}
 
   const arch = new Set(
     ["호주", "영국", "칠레", "페루", "브라질",
@@ -979,24 +985,30 @@ const Game3DItem = ({playerInfo}: Props) => {
   const dist = 1;
 
 
-  const getArch = (counting: number) => {
-    let tmpTurn = playerTurn;
-    alert(`${turn} 번째 턴. ${playerTurn}번째 플레이어가 주사위를 던집니다.`)
-    alert("작은 건물을 구매하시겠습니까?")
-    scene.current?.children[5].children.forEach((obj, idx) => {
-      console.log(counting)
-      if(worldMap.worldMap[counting].name + "_소" === obj.name)
-        obj.visible = true
-    })
-    setPlayerTurn((tmpTurn + 1) % 4)
-    setTurn(turn + 1)
-  }
+  // const getArch = (counting: number) => {
+  //   let tmpTurn = playerTurn;
+  //   alert(`${turn} 번째 턴. ${playerTurn}번째 플레이어가 주사위를 던집니다.`)
+  //   alert("작은 건물을 구매하시겠습니까?")
+  //   scene.current?.children[5].children.forEach((obj, idx) => {
+  //     console.log(counting)
+  //     if(worldMap.worldMap[counting].name + "_소" === obj.name)
+  //       obj.visible = true
+  //   })
+  //   setPlayerTurn((tmpTurn + 1) % 4)
+  //   setTurn(turn + 1)
+  // }
 
   useEffect(() => {
     setPlayerMovedCount(playerInfo.currentIndex)
     setPlayerTurn(playerInfo.playerIndex)
-    setTurn(playerInfo.turn)
+    // setTurn(playerInfo.turn)
   }, [])
+
+  useEffect(() => {
+    if (diceData) {
+      moveCounted(diceData)
+    }
+  }, [diceData])
 
   // useEffect(() => {
   //   if (turn > -1) {
@@ -1016,7 +1028,7 @@ const Game3DItem = ({playerInfo}: Props) => {
  /** 주사위 굴리는 함수 */
   const getRandomInt = () => {
     const newDice = Math.floor(Math.random() * (13 - 1) + 1);
-    setRolledDice(newDice);
+    // setRolledDice(newDice);
     moveCounted(newDice);
   };
 
@@ -1046,7 +1058,7 @@ const Game3DItem = ({playerInfo}: Props) => {
     }
     // rotateCamera(presentDir);
     setPlayerMovedCount((playerMovedCount + count) % 40);
-    getArch((playerMovedCount + count) % 40);
+    // getArch((playerMovedCount + count) % 40);
   };
 
   /** 플레이어 움직임 함수 */
@@ -1174,10 +1186,10 @@ const Game3DItem = ({playerInfo}: Props) => {
       scene.current?.add(obj3d)
     })
     const items = [
-      {url: pawn_0},
-      {url: pawn_1},
-      {url: pawn_2},
-      {url: pawn_3},
+      {url: pawn_0, location: player.p1.game.location},
+      {url: pawn_1, location: player.p2.game.location},
+      {url: pawn_2, location: player.p3.game.location},
+      {url: pawn_3, location: player.p4.game.location},
     ]
 
     items.forEach((item, idx) => {
@@ -1257,8 +1269,9 @@ const Game3DItem = ({playerInfo}: Props) => {
         <div className='w-full  flex flex-row justify-start items-center h-20'>
           <div className='mx-10'>
             <button id='tempButton' onClick={() => {
-                console.log(playerTurn)
-                getRandomInt()
+                getPlayerTurn(metaData.turn)
+                // console.log(playerTurn)
+                // getRandomInt()
               }}>
               <span
                 id='tempButtonText'

@@ -196,3 +196,18 @@ type GameResultPageDate = {
     nationList: number[]
   }
 }
+
+type MetadataType = {
+  roomId: string,
+  type: string,
+  currentLocation: number,
+  dice1: number,
+  dice2: number,
+  dice: number,
+  turn: number,
+  isDouble: boolean,
+  itemMsg1: string,
+  itemMsg2: string,
+  fund: number,
+  curcuit: number,
+}

@@ -542,7 +542,9 @@ export default function Game3D(props: any) {
     // 이거 3D용 주사위 추가
     //////////////////////////////////////////////////////////////////////////////
     showDice(dice1, dice2);
-
+    setDiceData(dice)
+    // setRolledDice(dice);
+    // moveCounted(dice);
     //////////////////////////////////////////////////////////////////////////////
 
 
@@ -1941,8 +1943,13 @@ export default function Game3D(props: any) {
   }
 
 
+  // const [ playerData, setPlayerData ] = useState<Object>(metaData)
+  const [diceData, setDiceData] = useState<number>(0)
 
-
+  const getPlayerTurn = (turn:any) => {
+    playerTurn(turn)
+  }
+  console.log(metaData)
 // export default function Game3D(props: any) {
   const playerInfo:PlayerInfoType = {
     playerIndex: 1,
@@ -1952,7 +1959,7 @@ export default function Game3D(props: any) {
 
   return (
   <div className='w-screen h-screen  bg-[#FFFDF4] flex flex-col justify-center items-center'>
-    <Game3DItem playerInfo={playerInfo} />
+    <Game3DItem metaData={metaData} player={player} diceData={diceData} getPlayerTurn={getPlayerTurn} />
   </div>
   )
 }
