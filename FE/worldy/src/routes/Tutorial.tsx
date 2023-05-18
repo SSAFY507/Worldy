@@ -738,12 +738,13 @@ export default function Tutorial() {
     <>
       {loadedAll ? (
         <div
-          className=' w-screen h-full'
+          className=' w-screen h-full relative'
           style={{
             backgroundImage: `url(${loadedImages['TutorialBackground']})`,
             backgroundSize: '100%',
           }}
         >
+          <div className='absolute top-0 left-0 h-20 w-screen bg-black' />
           <div className='w-full h-full relative'>
             <div className='z-20 absolute w-1/4 h-full flex flex-row justify-end items-end'>
               <img
