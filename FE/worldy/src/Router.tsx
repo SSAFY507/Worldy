@@ -201,8 +201,8 @@ const AppLayout = () => {
             element={<PayResult input={paymentFailureInput} />}
           /> */}
           <Route path='/payment' element={<Payment />} />
-          <Route path='/hoons' element={<WorldMapTutorial />} />
-          <Route path='/3dgame' element={<Game3DItem />} />
+          {/* <Route path='/hoons' element={<WorldMapTutorial />} />
+          <Route path='/3dgame' element={<Game3DItem />} /> */}
           <Route path='/hello' element={<LoaderHello input={'asia_Korea'} />} />
         </Routes>
       </div>
