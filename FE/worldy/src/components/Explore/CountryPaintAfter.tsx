@@ -73,7 +73,7 @@ const CountryPaintAfter = ({ answer, result, GetSolvedFlag }: Props) => {
           // GetSolvedFlag(false, true)
         }}
       >
-        한 문제 더 풀기!
+        한 문제 더
       </div>
     </div>
   );

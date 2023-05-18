@@ -590,7 +590,7 @@ const CountryQuizDetailModal = ({
             </div>
           </div>
         </div>
-        <div className='w-full h-[200px] bg-[#F5F5F5]  outline-red-500 flex flex-row justify-center items-center pt-[10px] pb-[20px] px-[50px] overflow-y-scroll on-scrollbar-quizmodal'>
+        <div className='w-full h-[200px] bg-[#F5F5F5] flex flex-row justify-center items-center pt-[10px] pb-[20px] px-[50px] overflow-y-scroll on-scrollbar-quizmodal'>
           <span
             className='font-PtdRegular text-center text-gray-700'
             style={{
@@ -669,7 +669,7 @@ const CountryQuizDetailModal = ({
             </div>
           </div>
         </div>
-        <div className='w-full h-[200px] bg-[#eaeaea]  outline-red-500 flex flex-col justify-start items-start pt-[5px] px-[50px]'>
+        <div className='w-full h-[200px] bg-[#eaeaea] flex flex-col justify-start items-start pt-[5px] px-[50px]'>
           <div className='w-full flex flex-row justify-between'>
             <span
               className={`w-full flex flex-row justify-start items-center text-[18px] font-PtdBold mb-[10px] ${

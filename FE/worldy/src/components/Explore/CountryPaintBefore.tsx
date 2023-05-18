@@ -57,7 +57,7 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
       } else if (remainTime !== -10) {
         setFailed(true);
         Swal.fire({
-          title: failed ? '해설 확인하기🤔' : '시간 초과! 😢',
+          title: failed ? '해설을 확인합니다.' : '시간을 초과했습니다.',
           confirmButtonText: '확인',
           buttonsStyling: false,
           customClass: {
@@ -96,10 +96,8 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
           >
             {warn && (
               <div className='absolute top-0 left-0 h-[276px] w-[388px] bg-[rgba(0,0,0,0.2)] grid place-content-center rounded-2xl z-[30]'>
-                <span className='font-PtdMedium text-[30px] text-center text-white'>
-                  오른쪽 이미지에서
-                  <br />
-                  선택해주세요
+                <span className='font-PtdBold text-[25px] text-center text-white'>
+                  우측에서 선택해주세요.
                 </span>
               </div>
             )}
@@ -167,7 +165,7 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
                               setThird(true);
                               // alert('틀린 그림 맞추기 성공! 😲  (exp: + 20)');
                               Swal.fire({
-                                title: '틀린 그림 맞추기 성공! 😲  (exp: + 20)',
+                                title: '틀린 그림 맞추기에 성공했습니다.',
                                 confirmButtonText: '확인',
                                 buttonsStyling: false,
                                 customClass: {
@@ -249,7 +247,7 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
           onClick={() => {
             // alert('틀린 그림 맞추기 실패! 😢');
             Swal.fire({
-              title: !failed ? '문제 포기...!😢' : '해설 확인하기🤔',
+              title: !failed ? '문제를 포기합니다.' : '해설을 확인합니다.',
               confirmButtonText: '확인',
               buttonsStyling: false,
               customClass: {
