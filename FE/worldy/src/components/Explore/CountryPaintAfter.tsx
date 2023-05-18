@@ -1,5 +1,6 @@
 import { AnswerType } from './CountryPaintDetailModal';
 import { ReactComponent as Exp } from '../../assets/images/exp.svg';
+import Swal from "sweetalert2";
 
 interface Props {
   answer: AnswerType,
@@ -35,8 +36,12 @@ const CountryPaintAfter = ({answer, result, GetSolvedFlag}:Props) => {
       </div>
       <div className=' h-12 w-[780px] text-sm text-center font-PtdLight opacity-40 py-3 rounded-xl shadow-lg border-solid border-2 border-gray-200 cursor-pointer'
         onClick={() =>{
-          alert("다른 문제 풀러 이동합니다.");
-          GetSolvedFlag(false, true)
+          // alert("다른 문제 풀러 이동합니다.");
+          Swal.fire("다른 문제 풀러 이동합니다.")
+          .then(function(){
+            GetSolvedFlag(false, true)
+          });
+          // GetSolvedFlag(false, true)
         }}>
         한 문제 더 풀기!
       </div>
