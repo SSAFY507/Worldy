@@ -14,7 +14,7 @@ import Country from './routes/Country';
 import Create from './routes/Create';
 import Explore from './routes/Explore';
 import Game from './routes/Game';
-import Game3DItem from './components/game/game3D/Game3DItem';
+// import Game3DItem from './components/game/game3D/Game3DItem';
 import GameInfo from './routes/GameInfo';
 import GameResult from './routes/GameResult';
 import IntroPage from './routes/IntroPage';
@@ -30,7 +30,7 @@ import Payment from './routes/Payment';
 import Socket from './routes/Socket';
 import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
-import WorldMapTutorial from './components/Explore/WorldMapTutorial';
+// import WorldMapTutorial from './components/Explore/WorldMapTutorial';
 import { loginState } from './_store/slices/loginSlice';
 import pathBI from './assets/images/MainPageBackground.png';
 import { useSelector } from 'react-redux';
@@ -201,8 +201,8 @@ const AppLayout = () => {
             element={<PayResult input={paymentFailureInput} />}
           /> */}
           <Route path='/payment' element={<Payment />} />
-          <Route path='/hoons' element={<WorldMapTutorial />} />
-          <Route path='/3dgame' element={<Game3DItem />} />
+          {/* <Route path='/hoons' element={<WorldMapTutorial />} />
+          <Route path='/3dgame' element={<Game3DItem />} /> */}
           <Route path='/hello' element={<LoaderHello input={'asia_Korea'} />} />
         </Routes>
       </div>
