@@ -29,7 +29,9 @@ import europe_Spain from '../../assets/lowpoly/Country_Spain.glb';
 import europe_UK from '../../assets/lowpoly/Country_UK.glb';
 import northAmerica_America from '../../assets/lowpoly/Country_America.glb';
 import { useNavigate } from 'react-router';
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2';
+
+import '../../styles/SweetAlertStyles.css';
 
 // import bg from '../../assets/images/WorldBackground.jpg';
 
@@ -75,12 +77,12 @@ const CountryMap = ({
     'newsBox',
   ]);
   const assetObject: AssetsType = {
-    paintBox: '🖼 틀린 그림 찾기 🖼',
+    paintBox: '틀린 그림 찾기로 이동합니다.',
     // historyBox: "🧭역사에 대해 알아보자!",
-    quizBox: '🎁 퀴즈 풀고 Level Up! 🎁',
-    foodBox: '🍜🍛 음식 🍣🍻',
-    personalityBox: '👴🤴 인물을 알아보자! 👳‍♂️🎅',
-    newsBox: '📰 오늘의 뉴스 📰',
+    quizBox: '퀴즈로 이동합니다.',
+    foodBox: '음식으로 이동합니다.',
+    personalityBox: '인물로 이동합니다.',
+    newsBox: '오늘의 뉴스로 이동합니다.',
   };
   let selectedName: string = '';
   let [selectTmp, setSelectTmp] = useState<boolean>(false);
@@ -197,20 +199,32 @@ const CountryMap = ({
     if (assetSet.has(name)) {
       if (name === 'back') {
         // alert('대륙으로 이동합니다');
-        Swal.fire('대륙으로 이동합니다.')
-          .then(function(){
-            navigate('/explore');
-          });
+        Swal.fire({
+          title: '대륙으로 이동합니다.',
+          confirmButtonText: '확인',
+          buttonsStyling: false,
+          customClass: {
+            confirmButton: 'swal2-confirm',
+          },
+        }).then(function () {
+          navigate('/explore');
+        });
         // navigate('/explore');
       } else {
         if (selectTmp === false) {
           // alert(`${assetObject[name]}`);
-          Swal.fire(`${assetObject[name]}`)
-            .then(function(){
-              GetSelectAssetName(name);
-              GetHorborAsset('');
-              setSelectTmp(true);
-            });
+          Swal.fire({
+            title: `${assetObject[name]}`,
+            confirmButtonText: '확인',
+            buttonsStyling: false,
+            customClass: {
+              confirmButton: 'swal2-confirm',
+            },
+          }).then(function () {
+            GetSelectAssetName(name);
+            GetHorborAsset('');
+            setSelectTmp(true);
+          });
           // GetSelectAssetName(name);
           // GetHorborAsset('');
           // setSelectTmp(true);

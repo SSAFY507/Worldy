@@ -3040,7 +3040,7 @@ export default function Game3D(props: any) {
           </div>
 
         </div>
-        <Game3DItem metaData={metaData} player={player} diceData={diceData} getPlayerTurn={getPlayerTurn} />
+        <Game3DItem metaData={metaData} player={player} worldMap={worldMap} diceData={diceData} getPlayerTurn={getPlayerTurn} />
       </div>
     </>
   )

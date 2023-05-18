@@ -629,10 +629,10 @@ export default function GameQuizModal({
             }`}
           >
             {correctState === true
-              ? '정답입니다'
+              ? '정답입니다.'
               : correctState === false
-              ? '오답입니다'
-              : '시간 초과입니다'}
+              ? '오답입니다.'
+              : '시간 초과입니다.'}
           </span>
           <div className='w-full h-[70px] flex flex-row justify-start items-center outline-yellow-500 overflow-y-scroll on-scrollbar-quizmodal'>
             <span

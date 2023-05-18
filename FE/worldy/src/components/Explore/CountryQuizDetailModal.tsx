@@ -11,6 +11,7 @@ import tempImage1 from '../../assets/images/thumb2.png';
 import Swal from 'sweetalert2';
 
 import '../../styles/QuizModalStyles.css';
+import '../../styles/SweetAlertStyles.css';
 
 interface Props {
   selectAsset: string;
@@ -459,7 +460,14 @@ const CountryQuizDetailModal = ({
         className='w-[500px] h-[60px] rounded-md font-PtdLight text-[25px] bg-white text-black'
         onClick={() => {
           // alert("다른 문제 풀러 이동합니다.")
-          Swal.fire('새로운 문제로 이동합니다.').then(function () {
+          Swal.fire({
+            title: '새로운 문제로 이동합니다.',
+            confirmButtonText: '확인',
+            buttonsStyling: false,
+            customClass: {
+              confirmButton: 'swal2-confirm',
+            },
+          }).then(function () {
             postDatasList(correctState);
           });
           // postDatasList(correctState)
@@ -488,6 +496,29 @@ const CountryQuizDetailModal = ({
       </div>
     );
   };
+
+  const [remainTime, setRemainTime] = useState<number>(0);
+
+  useEffect(() => {
+    const timeCount = setInterval(() => {
+      if (remainTime > 0) {
+        setRemainTime(remainTime - 1);
+      } else {
+        setFlipped(true);
+        setSubmitAnswer('시간초과');
+        setCorrectState(false);
+        clearInterval(timeCount);
+      }
+    }, 100);
+
+    return () => {
+      clearInterval(timeCount);
+    };
+  }, [remainTime]);
+
+  useEffect(() => {
+    setRemainTime(200);
+  }, []);
 
   const frontContainer = (): JSX.Element => {
     return (
@@ -541,7 +572,14 @@ const CountryQuizDetailModal = ({
                   color='#BFBFBF'
                   onClick={() => {
                     // alert("다른 문제 풀러 이동합니다.")
-                    Swal.fire('새로운 문제로 이동합니다.').then(function () {
+                    Swal.fire({
+                      title: '새로운 문제로 이동합니다.',
+                      confirmButtonText: '확인',
+                      buttonsStyling: false,
+                      customClass: {
+                        confirmButton: 'swal2-confirm',
+                      },
+                    }).then(function () {
                       GetRegameFlag(-2);
                     });
                     // GetRegameFlag(-2)
@@ -552,7 +590,7 @@ const CountryQuizDetailModal = ({
             </div>
           </div>
         </div>
-        <div className='w-full h-[200px] bg-[#F5F5F5]  outline-red-500 flex flex-row justify-center items-center pt-[10px] pb-[20px] px-[50px] overflow-y-scroll on-scrollbar-quizmodal'>
+        <div className='w-full h-[200px] bg-[#F5F5F5] flex flex-row justify-center items-center pt-[10px] pb-[20px] px-[50px] overflow-y-scroll on-scrollbar-quizmodal'>
           <span
             className='font-PtdRegular text-center text-gray-700'
             style={{
@@ -565,7 +603,15 @@ const CountryQuizDetailModal = ({
             Q. {input.content}
           </span>
         </div>
-        <div className='w-full h-[10px] bg-[#E0E0E0]'></div>
+        <div
+          className='w-full h-[10px] bg-[#cbcbcb] relative '
+          id='timecounter'
+        >
+          <div
+            className={`absolute top-0 right-0 h-[10px] bg-[#77cfc5] rounded-l-3xl`}
+            style={{ width: `${remainTime / 2}%` }}
+          />
+        </div>
         <div className='relative bg-[#E0E0E0] w-full h-[300px]  outline-blue-500'>
           {quizContent()}
         </div>
@@ -605,7 +651,14 @@ const CountryQuizDetailModal = ({
                   color='gray'
                   onClick={() => {
                     // alert("다른 문제 풀러 이동합니다.")
-                    Swal.fire('새로운 문제로 이동합니다.').then(function () {
+                    Swal.fire({
+                      title: '새로운 문제로 이동합니다.',
+                      confirmButtonText: '확인',
+                      buttonsStyling: false,
+                      customClass: {
+                        confirmButton: 'swal2-confirm',
+                      },
+                    }).then(function () {
                       GetRegameFlag(-2);
                     });
                     // GetRegameFlag(-2)
@@ -616,7 +669,7 @@ const CountryQuizDetailModal = ({
             </div>
           </div>
         </div>
-        <div className='w-full h-[200px] bg-[#eaeaea]  outline-red-500 flex flex-col justify-start items-start pt-[5px] px-[50px]'>
+        <div className='w-full h-[200px] bg-[#eaeaea] flex flex-col justify-start items-start pt-[5px] px-[50px]'>
           <div className='w-full flex flex-row justify-between'>
             <span
               className={`w-full flex flex-row justify-start items-center text-[18px] font-PtdBold mb-[10px] ${

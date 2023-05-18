@@ -303,7 +303,7 @@ const CountryQuizFrame = ({ selectAsset }: Props) => {
         </div>
       ) : (
         <div className='h-full w-1/3 flex items-center justify-center '>
-          <div className='h-1/4 w-full flex flex-col shadow-xl  outline-black'>
+          <div className='h-1/4 w-full flex flex-col shadow-xl rounded-xl outline-black'>
             <div
               className={`h-1/6 w-full  rounded-t-xl shadow-3xl flex flex-col justify-end items-center
                ${selectAsset === 'quizBox' ? 'bg-[#61C7BB]' : 'bg-[#EACFFF]'}`}
@@ -316,7 +316,7 @@ const CountryQuizFrame = ({ selectAsset }: Props) => {
                 )}
               </div>
             </div>
-            <div className='h-5/6 w-full flex flex-col rounded-b-xl bg-white shadow-xl'>
+            <div className='h-5/6 w-full flex flex-col rounded-b-xl bg-white shadow-xl overflow-clip'>
               <div className='h-1/2 w-full flex flex-col justify-center items-center pt-10'>
                 <button
                   className={`h-[50px] w-[300px] flex justify-center items-center border-solid border-[1px] rounded-3xl shadow-lg text-xl

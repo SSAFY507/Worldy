@@ -1,0 +1,13 @@
+.swal2-confirm {
+  margin-top: 20px;
+  border-radius: 50px;
+  font-size: 16px;
+  width: 100px;
+  height: 40px;
+  background-color: rgba(200, 200, 200, 1) !important;
+  color: white;
+}
+
+.swal2-confirm:hover {
+  background-color: rgba(174, 174, 174, 1) !important;
+}
