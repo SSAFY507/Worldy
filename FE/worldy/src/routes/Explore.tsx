@@ -12,12 +12,12 @@ const Explore = () => {
   useEffect(() => {
     setTimeout(() => {
       setDoneLoader(true);
-    }, 4000);
+    }, 3000);
   }, []);
 
   return (
     <div className='relative'>
-      {doneLoader && (
+      {!doneLoader && (
         <div className='w-screen h-screen bg-gray-800 grid place-content-center pb-[80px]'>
           <LoaderCompass />
         </div>
