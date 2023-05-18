@@ -1264,9 +1264,20 @@ const Game3DItem = ({diceData, metaData, player, getPlayerTurn}: Props) => {
   }, []);
 
   return (
-    <div className='flex flex-col w-full h-full justify-start items-center'>
-     
-        <div className='w-full  flex flex-row justify-start items-center h-20'>
+    <div className='absolute flex flex-col w-full h-full justify-start items-center'>
+ 
+      <div
+      className=''
+        style={{ backgroundColor: 'grey', width: '100%', height: 1000 }}
+        ref={divContainer} 
+      />
+    </div>
+  )
+}
+
+export default Game3DItem;
+
+ {/* <div className='w-full  flex flex-row justify-start items-center h-20'>
           <div className='mx-10'>
             <button id='tempButton' onClick={() => {
                 getPlayerTurn(metaData.turn)
@@ -1312,14 +1323,4 @@ const Game3DItem = ({diceData, metaData, player, getPlayerTurn}: Props) => {
               돌리기
             </button>
           </div> */}
-        </div>
-      <div
-      className=''
-        style={{ backgroundColor: 'grey', width: '100%', height: 1000 }}
-        ref={divContainer} 
-      />
-    </div>
-  )
-}
-
-export default Game3DItem;
+          // </div>
