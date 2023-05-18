@@ -15,8 +15,8 @@ import { useEffect, useRef, useState } from 'react';
 import { BiImage } from 'react-icons/bi';
 import { IoIosPhotos } from 'react-icons/io';
 import { JsxElement } from 'typescript';
-import QuizBlueText from '../assets/images/QuizBlueText.png';
-import ResultBlueText from '../assets/images/ResultBlueText.png';
+import QuizBlueText from '../assets/images/QuizBlue.png';
+import ResultBlueText from '../assets/images/ResultBlue.png';
 import tempImage1 from '../assets/images/thumb2.png';
 import tempImage2 from '../assets/images/Carousel5.png';
 import tempImage3 from '../assets/images/JoshCurious.png';
@@ -257,8 +257,10 @@ export default function QuizModal({
         <div key={key}>
           <button
             className={`${
-              submitAnswer === prevInput.multiAnswerText ? 'clickedmulti' : ''
-            } beforemulti w-[200px] h-[80px] mx-[10px] rounded-md shadow-md bg-[#F2F2F2] flex flex-row justify-center items-center`}
+              submitAnswer === (key + 1).toString()
+                ? 'clickedmulti'
+                : 'bg-[#F2F2F2]'
+            } beforemulti w-[200px] h-[80px] font-PtdRegular mx-[10px] rounded-md shadow-md  flex flex-row justify-center items-center`}
             onClick={() => handleSubmitMultiAnswer(key + 1)}
           >
             <span

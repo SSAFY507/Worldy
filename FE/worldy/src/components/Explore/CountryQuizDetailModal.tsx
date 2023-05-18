@@ -4,41 +4,46 @@ import { useEffect, useRef, useState } from 'react';
 
 import CustomAxios from '../../API/CustomAxios';
 import { IoIosPhotos } from 'react-icons/io';
-import QuizBlueText from '../../assets/images/QuizBlueText.png';
+import QuizBlueText from '../../assets/images/QuizBlue.png';
 import { QuizDataType } from './CountryQuizFrame';
-import ResultBlueText from '../../assets/images/ResultBlueText.png';
+import ResultBlueText from '../../assets/images/ResultBlue.png';
 import tempImage1 from '../../assets/images/thumb2.png';
-import Swal from "sweetalert2";
+import Swal from 'sweetalert2';
+
+import '../../styles/QuizModalStyles.css';
 
 interface Props {
-  selectAsset: string,
-  axiosGetQuizData: QuizDataType[] | undefined,
-  GetRegameFlag: (num:number) => void
-};
-
-interface RequestBodyType {
-  [key:string]: number | boolean | string
+  selectAsset: string;
+  axiosGetQuizData: QuizDataType[] | undefined;
+  GetRegameFlag: (num: number) => void;
 }
 
-const DOMAIN = process.env.REACT_APP_BASE_URL
+interface RequestBodyType {
+  [key: string]: number | boolean | string;
+}
 
-const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:Props) => {
+const DOMAIN = process.env.REACT_APP_BASE_URL;
+
+const CountryQuizDetailModal = ({
+  selectAsset,
+  axiosGetQuizData,
+  GetRegameFlag,
+}: Props) => {
   const userNickName: string | null = sessionStorage.getItem('nickname');
   const getLoginToken: string | null = sessionStorage.getItem('token');
 
-
-  const input = axiosGetQuizData![0]
-  const multiList = axiosGetQuizData![0].multiAnswerList!
+  const input = axiosGetQuizData![0];
+  const multiList = axiosGetQuizData![0].multiAnswerList!;
   const size: number = 200;
   const textSize: number = 200 / (input.content.length / 20);
   const blankBoxSize: number = 400 / input.answer.length;
-  
+
   const [submitAnswer, setSubmitAnswer] = useState<string>('');
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [hintState, setHintState] = useState<boolean>(false);
   const [blankInputAnswer, setBlankInputAnswer] = useState<string[]>(
     new Array(input.answer.length).fill('')
-    );
+  );
   const [scrapped, setScrapped] = useState<boolean>(false);
   const [flipped, setFlipped] = useState<boolean>(false);
   const [correctState, setCorrectState] = useState<boolean | null>(null);
@@ -53,20 +58,20 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
   // "scrap" : "스크랩 여부" - boolean
 
   /** 데이터 보내는 함수 */
-  const postDatasList = async (result:any) => {
-    console.log("userNickName", userNickName)
-    console.log("input.quizId", input.quizId )
-    console.log("result", result )
-    console.log("submitAnswer", submitAnswer )
-    console.log("scrapped", scrapped )
+  const postDatasList = async (result: any) => {
+    console.log('userNickName', userNickName);
+    console.log('input.quizId', input.quizId);
+    console.log('result', result);
+    console.log('submitAnswer', submitAnswer);
+    console.log('scrapped', scrapped);
     try {
       const requestBody = new Map([
-        ["userNickName", userNickName],
-        ["quizId", Number(input.quizId)],
-        ["success", result],
-        ["userAnswer", submitAnswer],
-        ["scrap", scrapped]
-      ])
+        ['userNickName', userNickName],
+        ['quizId', Number(input.quizId)],
+        ['success', result],
+        ['userAnswer', submitAnswer],
+        ['scrap', scrapped],
+      ]);
 
       const response = await CustomAxios({
         APIName: 'postDatasList',
@@ -80,7 +85,7 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
     } catch (error) {
       console.log('Error fetching data:', error);
     }
-  }
+  };
 
   const handleComposition = (
     event: React.CompositionEvent<HTMLInputElement>
@@ -227,7 +232,7 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
       </>
     );
   };
-  
+
   const contentMulti = (): JSX.Element => {
     const firstA = multiList[0].answer ? multiList[0].answer : '';
     const secondA = multiList[1].answer ? multiList[1].answer : '';
@@ -274,8 +279,10 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
         <div key={key}>
           <button
             className={`${
-              submitAnswer === prevInput.multiAnswerText ? 'clickedmulti' : ''
-            } beforemulti w-[200px] h-[80px] mx-[10px] rounded-md shadow-md bg-[#F2F2F2] flex flex-row justify-center items-center`}
+              submitAnswer === (key + 1).toString()
+                ? 'clickedmulti'
+                : 'bg-[#F2F2F2]'
+            } beforemulti w-[200px] h-[80px] font-PtdRegular mx-[10px] rounded-md shadow-md  flex flex-row justify-center items-center`}
             onClick={() => handleSubmitMultiAnswer(key + 1)}
           >
             <span
@@ -378,7 +385,6 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
 
   const scrapThisQuiz = () => {
     setScrapped(!scrapped);
-
   };
 
   const quizScrap = (): JSX.Element => {
@@ -453,13 +459,12 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
         className='w-[500px] h-[60px] rounded-md font-PtdLight text-[25px] bg-white text-black'
         onClick={() => {
           // alert("다른 문제 풀러 이동합니다.")
-          Swal.fire("다른 문제 풀러 이동합니다.")
-            .then(function(){
-              postDatasList(correctState)
-            });
+          Swal.fire('새로운 문제로 이동합니다.').then(function () {
+            postDatasList(correctState);
+          });
           // postDatasList(correctState)
-        }
-      }>
+        }}
+      >
         확인
       </button>
     );
@@ -536,10 +541,9 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
                   color='#BFBFBF'
                   onClick={() => {
                     // alert("다른 문제 풀러 이동합니다.")
-                    Swal.fire("다른 문제 풀러 이동합니다.")
-                      .then(function(){
-                        GetRegameFlag(-2)
-                      });
+                    Swal.fire('새로운 문제로 이동합니다.').then(function () {
+                      GetRegameFlag(-2);
+                    });
                     // GetRegameFlag(-2)
                   }}
                   className='cursor-pointer'
@@ -601,10 +605,9 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
                   color='gray'
                   onClick={() => {
                     // alert("다른 문제 풀러 이동합니다.")
-                    Swal.fire("다른 문제 풀러 이동합니다.")
-                      .then(function(){
-                        GetRegameFlag(-2)
-                      });
+                    Swal.fire('새로운 문제로 이동합니다.').then(function () {
+                      GetRegameFlag(-2);
+                    });
                     // GetRegameFlag(-2)
                   }}
                   className='cursor-pointer'
@@ -626,8 +629,7 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
                 ? '오답입니다'
                 : 'null결과'}
             </span>
-            <span 
-              className='w-full flex flex-row justify-end items-center text-[18px] font-PtdBold mb-[10px] opacity-40' >
+            <span className='w-full flex flex-row justify-end items-center text-[18px] font-PtdBold mb-[10px] opacity-40'>
               {correctState === true
                 ? 'exp +20'
                 : correctState === false
@@ -670,7 +672,9 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
             </div>
           </div>
           <div className='w-full flex-1 outline-black flex flex-row justify-start items-center font-PtdRegular text-[#ACACAC]'>
-            <span>'{userNickName}'님이 입력한 답은 "{submitAnswer}"</span>
+            <span>
+              '{userNickName}'님이 입력한 답은 "{submitAnswer}"
+            </span>
           </div>
         </div>
         <div className='relative bg-[#F5F5F5] w-full h-[300px]  outline-blue-500'>
@@ -689,7 +693,6 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
     );
   };
 
-
   useEffect(() => {
     if (input.quizType === 'blank') {
       blankBoxComponent();
@@ -703,7 +706,6 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
     }, 1700);
   }, [flipped]);
 
-
   return (
     <div
       className={` z-50 absolute top-[15%] left-1/2 -translate-x-1/2 -translate-y-1/2 outline-white
@@ -716,8 +718,8 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
         {frontContainer()}
         {backContainer()}
       </div>
-    </div>  
-  )
-}
+    </div>
+  );
+};
 
 export default CountryQuizDetailModal;
