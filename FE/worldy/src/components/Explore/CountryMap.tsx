@@ -15,11 +15,11 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
-import africa_Egypt from '../../assets/lowpoly/Country_America.glb';
+import africa_Egypt from '../../assets/lowpoly/Country_Egypt.glb';
 import asia_China from '../../assets/lowpoly/Country_America.glb';
 import asia_India from '../../assets/lowpoly/Country_America.glb';
 import asia_Japen from '../../assets/lowpoly/Country_America.glb';
-import asia_Korea from '../../assets/lowpoly/Country_America.glb';
+import asia_Korea from '../../assets/lowpoly/Country_Korea.glb';
 import back from '../../assets/lowpoly/back.glb';
 import bg from '../../assets/images/WorldBackground.jpg';
 import { current } from '@reduxjs/toolkit';
@@ -29,6 +29,7 @@ import europe_Spain from '../../assets/lowpoly/Country_Spain.glb';
 import europe_UK from '../../assets/lowpoly/Country_UK.glb';
 import northAmerica_America from '../../assets/lowpoly/Country_America.glb';
 import { useNavigate } from 'react-router';
+import Swal from "sweetalert2";
 
 // import bg from '../../assets/images/WorldBackground.jpg';
 
@@ -195,14 +196,24 @@ const CountryMap = ({
     // const moveCountry = name;
     if (assetSet.has(name)) {
       if (name === 'back') {
-        alert('대륙으로 이동합니다');
-        navigate('/explore');
+        // alert('대륙으로 이동합니다');
+        Swal.fire('대륙으로 이동합니다')
+          .then(function(){
+            navigate('/explore');
+          });
+        // navigate('/explore');
       } else {
         if (selectTmp === false) {
-          alert(`${assetObject[name]}`);
-          GetSelectAssetName(name);
-          GetHorborAsset('');
-          setSelectTmp(true);
+          // alert(`${assetObject[name]}`);
+          Swal.fire(`${assetObject[name]}`)
+            .then(function(){
+              GetSelectAssetName(name);
+              GetHorborAsset('');
+              setSelectTmp(true);
+            });
+          // GetSelectAssetName(name);
+          // GetHorborAsset('');
+          // setSelectTmp(true);
         } else {
           setSelectTmp(false);
           return;

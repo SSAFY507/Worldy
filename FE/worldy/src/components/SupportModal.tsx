@@ -22,6 +22,8 @@ export default function SupportModal({
   type: boolean;
   handleCloseModal: () => void;
 }) {
+  const DOMAIN = process.env.REACT_APP_BASE_URL;
+  const DOMAIN_S = process.env.REACT_APP_BASE_URL_SHORTER;
   const modalSize: number = 16;
 
   const [contentType, setContentType] = useState<number>();
@@ -75,10 +77,11 @@ export default function SupportModal({
             whiteSpace: 'pre-wrap', // 자동 줄바꿈을 활성화합니다
             wordWrap: 'break-word', // 단어가 너비를 넘어갈 경우 줄바꿈을 적용합니다
           }}
-          placeholder={`${ableWrite
-            ? '문의 내용을 입력해주세요. (10~500자 내외)'
-            : '위의 항목을 모두 채워주세요.'
-            }`}
+          placeholder={`${
+            ableWrite
+              ? '문의 내용을 입력해주세요. (10~500자 내외)'
+              : '위의 항목을 모두 채워주세요.'
+          }`}
           maxLength={500}
         />
         <div className=' h-[1.5em] w-full font-PtdMedium px-[0.2em] text-gray-400 flex justify-end items-center text-[1.2em]'>
@@ -139,7 +142,7 @@ export default function SupportModal({
         APIName: 'writeHelp',
         APIType: 'post',
         // UrlQuery: 'https://localhost:9090/api/help/write',
-        UrlQuery: 'https://k8a507.p.ssafy.io/api/help/write',
+        UrlQuery: DOMAIN + '/help/write',
         Body: requestBody,
         Token: getToken,
       });
@@ -156,7 +159,7 @@ export default function SupportModal({
 
     try {
       const response = await axios.post(
-        'https://k8a507.p.ssafy.io/api/help/write',
+        DOMAIN + '/help/write',
         // 요청 바디 데이터를 객체 형식으로 전달합니다.
         { category: askTypeList[askType].name, content: contentText },
         {
@@ -273,10 +276,11 @@ export default function SupportModal({
         <div className='w-full h-[3em] pt-[.5em]  flex flex-row justify-between items-center'>
           <button
             onClick={submitHelp}
-            className={`rounded-[4px] w-[47%] h-[60px]  outline-[rgba(255,255,255,0.6)] outline-1  font-PtdRegular ${submittable
-              ? 'hover:bg-[rgb(255,18,5)] bg-buttonRed outline-[rgba(255,255,255,0.6)] text-white'
-              : 'bg-[rgba(125,125,125,0.2)] outline-[rgba(121,121,121,0.6)] text-gray-400 text-[18px]'
-              }`}
+            className={`rounded-[4px] w-[47%] h-[60px]  outline-[rgba(255,255,255,0.6)] outline-1  font-PtdRegular ${
+              submittable
+                ? 'hover:bg-[rgb(255,18,5)] bg-buttonRed outline-[rgba(255,255,255,0.6)] text-white'
+                : 'bg-[rgba(125,125,125,0.2)] outline-[rgba(121,121,121,0.6)] text-gray-400 text-[18px]'
+            }`}
             disabled={!submittable}
           >
             확인

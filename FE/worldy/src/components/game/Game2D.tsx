@@ -4,7 +4,7 @@ import Dice from "./Dice";
 import GameQuizModal from "../GameQuizModal";
 import axios from 'axios';
 import { useNavigate } from 'react-router';
-
+import Swal from "sweetalert2";
 
 
 export default function Game2D(props: any) {
@@ -1444,23 +1444,39 @@ export default function Game2D(props: any) {
     // 잔액이 있는지 확인
     if (turn === 0) {
       if (player.p1.game.balance - totalPrice < 0) {
-        alert("잔액이 부족합니다.");
-        return;
+        // alert("잔액이 부족합니다.");
+        Swal.fire('잔액이 부족합니다.')
+          .then(function(){
+            return;
+          });
+        // return;
       }
     } else if (turn === 1) {
       if (player.p2.game.balance - totalPrice < 0) {
-        alert("잔액이 부족합니다.");
-        return;
+        // alert("잔액이 부족합니다.");
+        Swal.fire('잔액이 부족합니다.')
+          .then(function(){
+            return;
+          });
+        // return;
       }
     } else if (turn === 2) {
       if (player.p3.game.balance - totalPrice < 0) {
-        alert("잔액이 부족합니다.");
-        return;
+        // alert("잔액이 부족합니다.");
+        Swal.fire('잔액이 부족합니다.')
+          .then(function(){
+            return;
+          });
+        // return;
       }
     } else if (turn === 3) {
       if (player.p4.game.balance - totalPrice < 0) {
-        alert("잔액이 부족합니다.");
-        return;
+        // alert("잔액이 부족합니다.");
+        Swal.fire('잔액이 부족합니다.')
+          .then(function(){
+            return;
+          });
+        // return;
       }
     }
 
@@ -1853,23 +1869,39 @@ export default function Game2D(props: any) {
     // 잔액이 있는지 확인
     if (turn === 0) {
       if (player.p1.game.balance - buildPrice < 0) {
-        alert("잔액이 부족합니다.");
-        return;
+        // alert("잔액이 부족합니다.");
+        Swal.fire('잔액이 부족합니다.')
+          .then(function(){
+            return;
+          });
+        // return;
       }
     } else if (turn === 1) {
       if (player.p2.game.balance - buildPrice < 0) {
-        alert("잔액이 부족합니다.");
-        return;
+        // alert("잔액이 부족합니다.");
+        Swal.fire('잔액이 부족합니다.')
+          .then(function(){
+            return;
+          });
+        // return;
       }
     } else if (turn === 2) {
       if (player.p3.game.balance - buildPrice < 0) {
-        alert("잔액이 부족합니다.");
-        return;
+        // alert("잔액이 부족합니다.");
+        Swal.fire('잔액이 부족합니다.')
+          .then(function(){
+            return;
+          });
+        // return;
       }
     } else if (turn === 3) {
       if (player.p4.game.balance - buildPrice < 0) {
-        alert("잔액이 부족합니다.");
-        return;
+        // alert("잔액이 부족합니다.");
+        Swal.fire('잔액이 부족합니다.')
+          .then(function(){
+            return;
+          });
+        // return;
       }
     }
 

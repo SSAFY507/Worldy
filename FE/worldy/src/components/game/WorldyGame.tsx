@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import './dice.css'
-
+import Swal from "sweetalert2";
 
 
 
@@ -1772,8 +1772,12 @@ export default function WorldyGame() {
           )
         );
       } else {
-        alert('금액이 모자랍니다.')
-        return
+        // alert('금액이 모자랍니다.')
+        Swal.fire('금액이 모자랍니다.')
+          .then(function(){
+            return;
+          });
+        // return
       }
     } else if (option === 2) {
       if (balance - (spot.price.land + spot.price.villa) > 0) {
@@ -1794,8 +1798,12 @@ export default function WorldyGame() {
         );
 
       } else {
-        alert('금액이 모자랍니다.')
-        return
+        // alert('금액이 모자랍니다.')
+        Swal.fire('금액이 모자랍니다.')
+          .then(function(){
+            return;
+          });
+        // return
       }
     } else if (option === 3) {
       if (balance - (spot.price.land + spot.price.hotel) > 0) {
@@ -1816,8 +1824,12 @@ export default function WorldyGame() {
         );
 
       } else {
-        alert('금액이 모자랍니다.')
-        return
+        // alert('금액이 모자랍니다.')
+        Swal.fire('금액이 모자랍니다.')
+          .then(function(){
+            return;
+          });
+        // return
       }
     } else if (option === 4) {
       if (worldMap[nation].owner === p.playerNum) {
@@ -1839,11 +1851,19 @@ export default function WorldyGame() {
           );
 
         } else {
-          alert('금액이 모자랍니다.')
+          // alert('금액이 모자랍니다.')
+          Swal.fire('금액이 모자랍니다.')
+            .then(function(){
+              return;
+            });
         }
       } else {
-        alert('랜드마크는 다음번 방문했을 때 건설 가능합니다.')
-        return
+        // alert('랜드마크는 다음번 방문했을 때 건설 가능합니다.')
+        Swal.fire('랜드마크는 다음번 방문했을 때 건설 가능합니다.')
+          .then(function(){
+            return;
+          });
+        // return
       }
     }
 

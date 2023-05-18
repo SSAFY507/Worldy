@@ -155,7 +155,6 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
     }
   },[])
 
-
   // const myImageList = {
   //   TutorialBackground: pathTB,
   //   BtgAttention: pathBA,
@@ -205,15 +204,11 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
   //   },
   // ];
 
-
-  // 1분 자기소개, 지원동기, 장단점
-
-
   const ment:SpeakType = {
     newsBox: {
       title: `${countryLst[`${countryName}`].KOREAN} 최신 뉴스`,
       subTitle: `${countryLst[`${countryName}`].ENGLISH} Latest News`,
-      contents: [`${countryLst[`${countryName}`].KOREAN}의 최신 뉴스를 제공합니다.`, "하루에 한 번, 매일 아침 업데이트 되는", `${countryLst[countryName].KOREAN}의 새로운 소식을 만나보세요`],
+      contents: [`${countryLst[`${countryName}`].KOREAN}의 최신 뉴스를 제공합니다.`, "하루에 한 번, 매일 아침 업데이트 되는", `${countryLst[countryName].KOREAN}의 새로운 소식을 만나보세요.`],
       icon: newsIcon,
       npcImg: pathBA,
       mainIcon: book,
@@ -255,7 +250,7 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
   if (checkGetData || selectAsset !== "newsBox") {
     return (
       <div className="w-full h-full flex items-end">
-        <div className="z-10 w-1/4 translate-x-10 absolute">
+        <div className="z-10 w-1/4 translate-x-10 translate-y-20 absolute">
           <img
             className="h-[50%]"
             src={ment[`${selectAsset}`].icon}
@@ -270,20 +265,20 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
           />
         </div>
         <div className="w-full h-full flex flex-row items-end bg-[rgba(255,255,255,0.4)]">
-          <div className="h-full w-1/4 flex flex-col bg-[rgba(0,0,0,0.3)] ">
-            <div className="h-2/3 flex flex-col justify-center text-white p-20">
+          <div className="h-full w-1/4 flex flex-col bg-[rgba(0,0,0,0.3)] shadow-2xl shadow-[rgba(0,0,0,0.3)]">
+            <div className="h-2/3 flex flex-col justify-center text-white pl-[62px] pt-[30px]">
               <div className="h-1/2 flex flex-col">
                 <div className="flex flex-col pb-10">
                   <div className='text-3xl pb-5'>
-                    <img className="h-10 " src={ment[`${selectAsset}`].mainIcon} alt=""/>
+                    <img className="h-7 pl-0.5" src={ment[`${selectAsset}`].mainIcon} alt=""/>
                   </div>
-                  <div className='text-4xl font-PtdExtraBold'>{ment[`${selectAsset}`].title}</div>
+                  <div className='text-[40px] font-PtdBold tracking-wide'>{ment[`${selectAsset}`].title}</div>
                   <div className='text-2xl font-PtdLight'>{ment[`${selectAsset}`].subTitle}</div>
                 </div>
-                <div className="h-1/2">
-                  <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[0]}</div>
-                  <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[1]}</div>
-                  <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[2]}</div>
+                <div className="h-1/2 text-gray-200">
+                  <div className="text-lg font-PtdLight">{ment[`${selectAsset}`].contents[0]}</div>
+                  <div className="text-lg font-PtdLight">{ment[`${selectAsset}`].contents[1]}</div>
+                  <div className="text-lg font-PtdLight">{ment[`${selectAsset}`].contents[2]}</div>
                 </div>
               </div>
             </div>

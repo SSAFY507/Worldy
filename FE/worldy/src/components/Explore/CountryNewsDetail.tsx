@@ -28,7 +28,7 @@ const MAX_VISIBILITY = 1;
 const Card = (props:CardProps) => (
   <div className="flex flex-col w-[550px] h-[700px] rounded-3xl decoration-[#9ca3af] text-justify ease-out duration-300 justify-end shadow-2xl" >
     <div
-      className="rounded-t-3xl "
+      className="rounded-t-3xl"
       style={{
         height: "300px",
         width: "100%",
@@ -38,11 +38,11 @@ const Card = (props:CardProps) => (
         cursor: "pointer",
       }}
     />
-    <div className="h-[400px] pr-[1rem] pb-[0.5rem] pl-[1rem] bg-white rounded-b-3xl flex flex-col items-center" style={{ flex:"0.6", width:"100%"}}>
-      <div className="h-[130px] text-3xl text-center py-5 pl-20 pr-20 font-PtdExtraBold inline-block ">{props.title}</div>
-      <p className="h-[250px] text-xl opacity-50 pl-10 pr-10 text-center inline-block whitespace-normal font-PtdRegular overflow-auto">{props.content}</p>
+    <div className="h-[400px] pr-[1rem] pb-[2.0rem] pl-[1rem] bg-white rounded-b-3xl flex flex-col items-center" style={{ flex:"0.6", width:"100%"}}>
+      <div className="h-[200px] text-3xl text-center py-10 pl-20 pr-20 font-PtdExtraBold inline-block ">{props.title}</div>
+      <p className="h-[200px] text-xl opacity-50 pl-10 pr-10 text-center inline-block whitespace-normal font-PtdRegular overflow-auto">{props.content}</p>
       <div 
-        className="h-[100px] flex flex-row pt-5 pb-10 justify-between items-center " 
+        className="h-[100px] flex flex-row pt-5 justify-between items-center " 
         onClick={event => {
           // event.preventDefault();
           window.open(props.link)
