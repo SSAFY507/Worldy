@@ -125,12 +125,16 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
                     <div
                       className='z-20 cursor-pointer'
                       style={{
-                        outline: '5px solid rgba(255,0,0,0.7)',
-                        width: `${String(Number(e[2]) - Number(e[0]))}px`,
-                        height: `${String(Number(e[3]) - Number(e[1]))}px`,
+                        outline: '5px solid rgba(241, 155, 255, 1)',
+                        // width: `${String(Number(e[2]) - Number(e[0]))}px`,
+                        // height: `${String(Number(e[3]) - Number(e[1]))}px`,
                         position: 'absolute',
-                        left: String(Number(e[0])) + 'px',
-                        top: String(Number(e[1])) + 'px',
+                        // left: String(Number(e[0])) + 'px',
+                        // top: String(Number(e[1])) + 'px',
+                        width: `37px`,
+                        height: `37px`,
+                        left: String(Number(e[0]) + ((Number(e[2]) - Number(e[0])) / 2) - 5) + 'px',
+                        top: String(Number(e[1]) + ((Number(e[3]) - Number(e[1])) / 2) - 5) + 'px',
                         borderRadius: '100%',
                         visibility:
                           checkList[idx] || failed ? 'visible' : 'hidden',
@@ -214,21 +218,21 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
           <div className='h-full w-[100px] flex flex-row justify-between'>
             <div
               className={`${
-                first ? ' bg-green-400' : 'bg-gray-200'
+                first ? 'bg-[#E8C2FF]' : 'bg-gray-200'
               } h-full w-1/4 text-center font-PtdMedium text-white py-1 rounded`}
             >
               1
             </div>
             <div
               className={`${
-                second ? 'bg-green-400' : 'bg-gray-200'
+                second ? 'bg-[#E8C2FF]' : 'bg-gray-200'
               } h-full w-1/4 text-center font-PtdMedium text-white py-1 rounded`}
             >
               2
             </div>
             <div
               className={`${
-                third ? 'bg-green-400' : 'bg-gray-200'
+                third ? 'bg-[#E8C2FF]' : 'bg-gray-200'
               } h-full w-1/4 text-center font-PtdMedium text-white py-1 rounded`}
             >
               3
