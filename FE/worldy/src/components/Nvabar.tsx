@@ -196,7 +196,7 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
               <a href='/'>
                 <img
                   src={WorldySoftLogo}
-                  className='h-[40px]'
+                  className='h-[45px]'
                   alt='Worldy Soft Comp'
                 />
               </a>
