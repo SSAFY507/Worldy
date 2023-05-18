@@ -149,8 +149,8 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
   useEffect(() => {
     setPlayerMovedCount(playerInfo.currentIndex)
     setPlayerTurn(playerInfo.playerIndex)
-    // setTurn(playerInfo.turn)
-  }, [])
+    requestAnimationFrame(render);
+  }, [diceData])
 
   useEffect(() => {
     if (diceData) {
@@ -468,26 +468,6 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
               </span>
             </button>
           </div>
-          {/* <div id='input-container' className='mx-10'>
-            <input
-              id='tempInput'
-              type='number'
-              value={count}
-              max={3}
-              min={1}
-              onChange={handleCount}
-            />
-            <button
-              id='invite-btn'
-              onClick={() => {
-                console.log("마우스 오버")
-                console.log(count);
-                moveCounted(count);
-              }}
-            >
-              돌리기
-            </button>
-          </div> */}
         </div>
       <div
       className=''
