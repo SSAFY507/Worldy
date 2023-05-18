@@ -42,9 +42,9 @@ const Country = () => {
           endLoader ? 'hidden' : 'visible'
         }`}
       >
-        <div className='h-20 w-full grid place-content-center font-PtdBold text-[30px] bg-black text-white'>
-          입국 절차 밟는 중...
-        </div>
+        <div className='h-20 w-full grid place-content-center font-PtdBold text-[30px] bg-black'></div>
+        {/* <div className='absolute h-20 w-full top-0 left-0 bg-black z-20' />
+          <div className='absolute top-20 left-0 bg-black z-50'> */}
         <LoaderHello input={pathNation} />
       </div>
       {/* // ) : ( */}
