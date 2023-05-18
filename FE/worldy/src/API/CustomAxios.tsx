@@ -11,7 +11,7 @@ type InputType = {
 const DOMAIN = process.env.REACT_APP_BASE_URL
 
 export default async function CustomAxios(input: InputType): Promise<any> {
-  console.log('바디 : ', input.Body ? Object.fromEntries(input.Body) : '없음');
+  //console.log('바디 : ', input.Body ? Object.fromEntries(input.Body) : '없음');
   try {
     const config = {
       method: input.APIType,
@@ -24,13 +24,13 @@ export default async function CustomAxios(input: InputType): Promise<any> {
     };
 
     const { data } = await axios(config);
-    console.log(`${input.APIName} API 성공`, data);
+    //console.log(`${input.APIName} API 성공`, data);
     return data;
   } catch (e) {
-    console.log(
-      `${input.APIType.toUpperCase()} 타입의 API 에러`,
-      input.APIName ? input.APIName : '(이름 명시X)'
-    );
+    // console.log(
+    //   `${input.APIType.toUpperCase()} 타입의 API 에러`,
+    //   input.APIName ? input.APIName : '(이름 명시X)'
+    // );
     console.error(e);
     throw e;
   }

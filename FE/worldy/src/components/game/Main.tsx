@@ -7,25 +7,125 @@ import Game3D from "./Game3D";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
 import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router";
+import { log } from "console";
+import Enter from "./Enter";
 
 // 소켓 연결
 let socket;
 let ws: any;
+export type ScrappedQuizType = {
+  quizId: number; //퀴즈 id
+  nationName: string; //국가명
+  level: number; //퀴즈 수준
+  quizType: string; //퀴즈 유형
+  category: string; //카테고리
+  image: string; //이미지
+  content: string; //문제
+  answer: string; //정답
+  multiFirst: string | null; //1번
+  multiSecond: string | null; //2번
+  multiThird: string | null; //3번
+  multiFourth: string | null; //4번
+  hint: string;
+  hintType: boolean; //힌트
+  userAnswer: string | null; //유저가 적은 정답(맞았으면 null)
+  success: boolean; //맞춘 문제인가
+  commentary: string;
+};
 
 export default function Main() {
   let roomData: any = null;
   const params = useParams();
   const location = useLocation();
-  const loginUser = "2762535269";
+  const loginUser = sessionStorage.getItem("nickname");
 
-  roomData = location.state.value;
+  let received: any;
+
+  const navigate = useNavigate();
 
   const accessToken = sessionStorage.getItem("token");
   let headers = { Authorization: `Bearer ${accessToken}` };
-  console.log("방 번호");
-  console.log(params.id);
+
+  // socket receivedData
+  let receivedData: any;
+
+  // quizData
+  let quizData: any;
+
+  // quiz modal 선언하기 위한 변수
+  const [quizModalState, setQuizModalState] = useState<boolean>(false);
+  // quizData 선언하기 위한 변수
+  const [quiz, setQuiz] = useState<ScrappedQuizType>({
+    quizId: 0,
+    nationName: "",
+    level: 0,
+    quizType: "",
+    category: "",
+    image: "",
+    content: "",
+    answer: '',
+    multiFirst: null, //1번
+    multiSecond: null, //2번
+    multiThird: null, //3번
+    multiFourth: null, //4번
+    hint : "",
+    hintType: true, //힌트
+    userAnswer: "", //유저가 적은 정답(맞았으면 null)
+    success: true, //맞춘 문제인가
+    commentary: "",
+  });
+
+  // 게임 포화상태 체크
+  const [userCheck, setUserCheck] = useState<boolean>(false);
+
+  // 게임 시작 체크
+  const [gameStart, setGameStart] = useState<boolean>(false);
+  const [gameWait, setGameWait] = useState<boolean>(false);
+
+  const [user1Check, setUser1Check] = useState<boolean>(false);
+  const [user2Check, setUser2Check] = useState<boolean>(false);
+  const [user3Check, setUser3Check] = useState<boolean>(false);
+  const [user4Check, setUser4Check] = useState<boolean>(false);
+
+  const [user1, setUser1] = useState<User>({
+    kakaoId: '',
+    nickName: '',
+    profileImg: '',
+    mmr: 0,
+    level: 0,
+    tier: '',
+  });
+
+  const [user2, setUser2] = useState<User>({
+    kakaoId: '',
+    nickName: '',
+    profileImg: '',
+    mmr: 0,
+    level: 0,
+    tier: '',
+  });
+
+  const [user3, setUser3] = useState<User>({
+    kakaoId: '',
+    nickName: '',
+    profileImg: '',
+    mmr: 0,
+    level: 0,
+    tier: '',
+  });
+
+  const [user4, setUser4] = useState<User>({
+    kakaoId: '',
+    nickName: '',
+    profileImg: '',
+    mmr: 0,
+    level: 0,
+    tier: '',
+  });
 
   useEffect(() => {
+    // 소켓 연결
     socket = new SockJS("https://k8a507.p.ssafy.io/api/stomp/game");
     ws = Stomp.over(socket);
     ws.connect(headers, (frame: any) => {
@@ -37,8 +137,7 @@ export default function Main() {
   function subscribe() {
     ws.subscribe(`/sub/${params.id}`, (event: any) => {
       const received = JSON.parse(event.body);
-      console.log("sendData한 후 응답>>>");
-      console.log(received);
+
       if (received.type === "player") {
         setPlayer((prevState: any) => ({
           ...prevState,
@@ -111,91 +210,552 @@ export default function Main() {
             },
           },
         }));
+      } else if (received.type === "worldmap") {
+        console.log("worldMap 데이터 받음");
+        console.log(received);
+        console.log("worldMap 데이터 받음");
+        setWorldMap((prevState: any) => ({
+          ...prevState,
+          worldMap: received.worldMap,
+        }));
+      } else if (received.type === "metaData") {
+        console.log("메타 데이터 받음");
+        console.log(received);
+        console.log("메타 데이터 받음");
+        setMetaData((prevState: any) => ({
+          ...prevState,
+          currentLocation: received.currentLocation,
+          dice1: received.dice1,
+          dice2: received.dice2,
+          dice: received.dice,
+          isDouble: received.isDouble,
+          turn: received.turn,
+        }));
+      } else if (received.type === "quiz") {
+        quizData = received.quizDto;
+
+        console.log("quizData");
+        console.log(quizData);
+
+        if (quizData.multiAnswerList!==null) {
+          setQuiz((prevState: any) => ({
+            ...prevState,
+            quizId: quizData.quizId,
+            nationName: quizData.nation.nationName,
+            level: quizData.level,
+            quizType: quizData.quizType,
+            category: quizData.catetory,
+            image: quizData.image,
+            content: quizData.content,
+            answer: quizData.answer,
+            multiFirst: quizData.multiAnswerList[0].answer,
+            multiSecond: quizData.multiAnswerList[1].answer,
+            multiThird: quizData.multiAnswerList[2].answer,
+            multiFourth: quizData.multiAnswerList[3].answer,
+            hint: quizData.hint,
+            hintType: quizData.hintType,
+            commentary: quizData.commentary,
+          }));
+        } else {
+          setQuiz((prevState: any) => ({
+            ...prevState,
+            quizId: quizData.quizId,
+            nationName: quizData.nation.nationName,
+            level: quizData.level,
+            quizType: quizData.quizType,
+            category: quizData.catetory,
+            image: quizData.image,
+            content: quizData.content,
+            answer: quizData.answer,
+            hint: quizData.hint,
+            hintType: quizData.hintType,
+            commentary: quizData.commentary,
+          }));
+        }
+
+        setQuizModalState(true);
+      } else if (received.type === "enter") {
+        // enter 에 들어온 순서대로 p를 채워나간 후 p4가 바뀌는 순간 player 데이터 전송
+        if (received.cnt <= 4) {
+          console.log("4이하 룸아이디 세팅");
+          console.log(received);
+
+
+          if (received.user1) {
+            setPlayer((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+              p1: {
+                ...prevState.p1,
+                playerId: received.user1.kakaoId,
+                name: received.user1.nickName,
+              },
+            }));
+
+            setMetaData((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setWorldMap((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setUser1((prevState: any) => ({
+              kakaoId: received.user1.kakaoId,
+              nickName: received.user1.nickName,
+              profileImg: received.user1.profileImg,
+              mmr: received.user1.mmr,
+              level: received.user1.level,
+              tier: received.user1.tier,
+            }))
+            setUser1Check(true);
+
+            //console.log("유저 1 데이터 받아오기");
+          }
+
+          // TEST
+          // if (received.user1) {
+          //   setPlayer((prevState: any) => ({
+          //     ...prevState,
+          //     roomId: received.roomId,
+          //     p2: {
+          //       ...prevState.p2,
+          //       playerId: "2756798359",
+          //       name: "설히",
+          //     },
+          //   }));
+          // }
+          // if (received.user1) {
+          //   setPlayer((prevState: any) => ({
+          //     ...prevState,
+          //     roomId: received.roomId,
+          //     p3: {
+          //       ...prevState.p3,
+          //       playerId: "2762535269",
+          //       name: "성훈",
+          //     },
+          //   }));
+          // }
+          // if (received.user1) {
+          //   setPlayer((prevState: any) => ({
+          //     ...prevState,
+          //     roomId: received.roomId,
+          //     p4: {
+          //       ...prevState.p4,
+          //       playerId: "2772224261",
+          //       name: "히히",
+          //     },
+          //   }));
+          //   setGameStart(true);
+          // }
+
+          // 원본
+          if (received.user2) {
+            setPlayer((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+              p2: {
+                ...prevState.p2,
+                playerId: received.user2.kakaoId,
+                name: received.user2.nickName,
+              },
+            }));
+
+            setMetaData((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setWorldMap((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setUser2((prevState: any) => ({
+              kakaoId: received.user2.kakaoId,
+              nickName: received.user2.nickName,
+              profileImg: received.user2.profileImg,
+              mmr: received.user2.mmr,
+              level: received.user2.level,
+              tier: received.user2.tier,
+            }))
+
+            setUser2Check(true);
+          }
+          if (received.user3) {
+            setPlayer((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+              p3: {
+                ...prevState.p3,
+                playerId: received.user3.kakaoId,
+                name: received.user3.nickName,
+              },
+            }));
+
+            setMetaData((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setWorldMap((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setUser3((prevState: any) => ({
+              kakaoId: received.user3.kakaoId,
+              nickName: received.user3.nickName,
+              profileImg: received.user3.profileImg,
+              mmr: received.user3.mmr,
+              level: received.user3.level,
+              tier: received.user3.tier,
+            }))
+
+            setUser3Check(true);
+          }
+          if (received.user4) {
+            setPlayer((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+              p4: {
+                ...prevState.p4,
+                playerId: received.user4.kakaoId,
+                name: received.user4.nickName,
+              },
+            }));
+
+            setMetaData((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setWorldMap((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setUser4((prevState: any) => ({
+              kakaoId: received.user4.kakaoId,
+              nickName: received.user4.nickName,
+              profileImg: received.user4.profileImg,
+              mmr: received.user4.mmr,
+              level: received.user4.level,
+              tier: received.user4.tier,
+            }))
+
+            setUser4Check(true);
+          }
+
+        } else if (received.cnt >= 5) {
+          // console.log('유저 확인');
+
+          let check = true;
+
+          if (loginUser === received.user1.nickName) {
+            check = false;
+          } else if (loginUser === received.user2.nickName) {
+            check = false;
+          } else if (loginUser === received.user3.nickName) {
+            check = false;
+          } else if (loginUser === received.user4.nickName) {
+            check = false;
+          }
+
+          if (!check) {
+            setPlayer((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+              p1: {
+                ...prevState.p1,
+                playerId: received.user1.kakaoId,
+                name: received.user1.nickName,
+              },
+            }));
+
+            setMetaData((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setWorldMap((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setUser1((prevState: any) => ({
+              kakaoId: received.user1.kakaoId,
+              nickName: received.user1.nickName,
+              profileImg: received.user1.profileImg,
+              mmr: received.user1.mmr,
+              level: received.user1.level,
+              tier: received.user1.tier,
+            }))
+            setUser1Check(true);
+
+
+            setPlayer((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+              p2: {
+                ...prevState.p2,
+                playerId: received.user2.kakaoId,
+                name: received.user2.nickName,
+              },
+            }));
+
+            setMetaData((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setWorldMap((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setUser2((prevState: any) => ({
+              kakaoId: received.user2.kakaoId,
+              nickName: received.user2.nickName,
+              profileImg: received.user2.profileImg,
+              mmr: received.user2.mmr,
+              level: received.user2.level,
+              tier: received.user2.tier,
+            }))
+
+            setUser2Check(true);
+
+            setPlayer((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+              p3: {
+                ...prevState.p3,
+                playerId: received.user3.kakaoId,
+                name: received.user3.nickName,
+              },
+            }));
+
+            setMetaData((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setWorldMap((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setUser3((prevState: any) => ({
+              kakaoId: received.user3.kakaoId,
+              nickName: received.user3.nickName,
+              profileImg: received.user3.profileImg,
+              mmr: received.user3.mmr,
+              level: received.user3.level,
+              tier: received.user3.tier,
+            }))
+
+            setUser3Check(true);
+
+            setPlayer((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+              p4: {
+                ...prevState.p4,
+                playerId: received.user4.kakaoId,
+                name: received.user4.nickName,
+              },
+            }));
+
+            setMetaData((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setWorldMap((prevState: any) => ({
+              ...prevState,
+              roomId: received.roomId,
+            }));
+
+            setUser4((prevState: any) => ({
+              kakaoId: received.user4.kakaoId,
+              nickName: received.user4.nickName,
+              profileImg: received.user4.profileImg,
+              mmr: received.user4.mmr,
+              level: received.user4.level,
+              tier: received.user4.tier,
+            }))
+
+            setUser4Check(true);
+            setGameStart(!check);
+          }
+
+          setUserCheck(check);
+        }
       }
     });
+  }
+
+  if (user4Check) {
+    setTimeout(function () {
+      setGameWait(true);
+    }, 1000);
+  }
+
+  if (gameWait) {
+    setTimeout(function () {
+      setGameStart(true);
+    }, 4000);
+  }
+
+  // 게임 방이 가득차면 redirect
+  if (userCheck) {
+    navigate("/");
   }
 
   function sendData() {
     //websockt emit
-    const data = player;
-    console.log("보낼 데이터 >>");
-    console.log(data);
+    const platyerData = player;
+    const worldMapData = worldMap;
+    const meta = metaData;
 
     console.log("소켓으로 데이터 전송 >>>");
-    ws.send("/pub/game/player", {}, JSON.stringify(data));
-    // ws.send("/pub/game/map", {}, JSON.stringify(data));
-    // ws.send("/pub/game/player", {}, JSON.stringify(data));
+    ws.send("/pub/game/player", {}, JSON.stringify(platyerData));
+    ws.send("/pub/game/map", {}, JSON.stringify(worldMapData));
+    ws.send("/pub/game/meta", {}, JSON.stringify(meta));
   }
 
-  // 참여한 플레이어 데이터 세팅하기
-  function setGameData() {
-    console.log("최초 방 정보 세팅할 떄");
-    console.log(params.id);
-    let _p1 = roomData.user1;
-    let _p2 = roomData.user2;
-    let _p3 = roomData.user3;
-    let _p4 = roomData.user4;
-    let myId = "";
-    let myNum = 0;
-    const ps = [_p1, _p2, _p3, _p4];
+  // // 참여한 플레이어 데이터 세팅하기
+  // function setGameData() {
+  //   console.log("최초 방 정보 세팅할 떄");
+  //   console.log(params.id);
+  //   let _p1 = roomData.user1;
+  //   let _p2 = roomData.user2;
+  //   let _p3 = roomData.user3;
+  //   let _p4 = roomData.user4;
+  //   let myId = "";
+  //   let myNum = 0;
+  //   const ps = [_p1, _p2, _p3, _p4];
 
-    ps.forEach((e, index) => {
-      if (e.kakaoId === loginUser) {
-        myId = e.kakaoId;
-        myNum = index + 1;
-      }
-    });
+  //   ps.forEach((e, index) => {
+  //     if (e.kakaoId === loginUser) {
+  //       myId = e.kakaoId;
+  //       myNum = index + 1;
+  //     }
+  //   });
 
-    setPlayer((prevState: any) => ({
-      ...prevState,
-      roomId: params.id,
-      type: "player",
-      p1: {
-        ...prevState.p1,
-        playerId: _p1.kakaoId,
-        name: "설희",
-        game: {
-          ...prevState.p1.game,
-        },
-      },
-      p2: {
-        ...prevState.p2,
-        playerId: _p2.kakaoId,
-        name: "성훈",
-        game: {
-          ...prevState.p2.game,
-        },
-      },
-      p3: {
-        ...prevState.p3,
-        playerId: _p3.kakaoId,
-        name: "미희",
-        game: {
-          ...prevState.p3.game,
-        },
-      },
-      p4: {
-        ...prevState.p4,
-        playerId: _p4.kakaoId,
-        name: "원규",
-        game: {
-          ...prevState.p4.game,
-        },
-      },
-    }));
-  }
+  //   setPlayer((prevState: any) => ({
+  //     ...prevState,
+  //     roomId: params.id,
+  //     type: "player",
+  //     p1: {
+  //       ...prevState.p1,
+  //       playerId: _p1.kakaoId,
+  //       name: "설희",
+  //       game: {
+  //         ...prevState.p1.game,
+  //       },
+  //     },
+  //     p2: {
+  //       ...prevState.p2,
+  //       playerId: _p2.kakaoId,
+  //       name: "성훈",
+  //       game: {
+  //         ...prevState.p2.game,
+  //       },
+  //     },
+  //     p3: {
+  //       ...prevState.p3,
+  //       playerId: _p3.kakaoId,
+  //       name: "미희",
+  //       game: {
+  //         ...prevState.p3.game,
+  //       },
+  //     },
+  //     p4: {
+  //       ...prevState.p4,
+  //       playerId: _p4.kakaoId,
+  //       name: "원규",
+  //       game: {
+  //         ...prevState.p4.game,
+  //       },
+  //     },
+  //   }));
+  // }
+
+  // // 참여한 플레이어 데이터 세팅하기
+  // function setGameData() {
+
+  //   let _p1 = roomData.user1;
+  //   let _p2 = roomData.user2;
+  //   let _p3 = roomData.user3;
+  //   let _p4 = roomData.user4;
+  //   let myId = '';
+  //   let myNum = 0;
+  //   const ps = [_p1, _p2, _p3, _p4];
+
+  //   ps.forEach((e, index) => {
+  //     if (e.kakaoId === loginUser) {
+  //       myId = e.kakaoId;
+  //       myNum = index + 1;
+  //     }
+  //   });
+
+  //   setPlayer((prevState: any) => ({
+  //     ...prevState,
+  //     p1: {
+  //       ...prevState.p1,
+  //       playerId: _p1.kakaoId,
+  //       name: '설희',
+  //       game: {
+  //         ...prevState.p1.game,
+  //       }
+  //     },
+  //     p2: {
+  //       ...prevState.p2,
+  //       playerId: _p2.kakaoId,
+  //       name: '성훈',
+  //       game: {
+  //         ...prevState.p2.game,
+  //       }
+  //     },
+  //     p3: {
+  //       ...prevState.p3,
+  //       playerId: _p3.kakaoId,
+  //       name: '미희',
+  //       game: {
+  //         ...prevState.p3.game,
+  //       }
+  //     },
+  //     p4: {
+  //       ...prevState.p4,
+  //       playerId: _p4.kakaoId,
+  //       name: '원규',
+  //       game: {
+  //         ...prevState.p4.game,
+  //       }
+  //     },
+  //   }))
+  // }
 
   const [contents, setContents] = useState<String>("");
   const [mode, setMode] = useState<boolean>(true);
   const [start, setStart] = useState<boolean>(false);
   const [data, setData] = useState<Object[]>();
   const [metaData, setMetaData] = useState<Object>({
+    roomId: "",
+    type: "metaData",
     currentLocation: 0,
     dice1: 0,
     dice2: 0,
     dice: 0,
     turn: 0,
     isDouble: false,
+    itemMsg1: '아이템 메시지1',
+    itemMsg2: '아이템 메시지2',
+    fund: 0,
+    curcuit: 0,
   });
   const [turnOver, setTurnOver] = useState<boolean>(false);
 
@@ -296,7 +856,7 @@ export default function Main() {
           landmark: 0,
         },
         type: "start",
-        contents: "시작점 입니다. 월급을 받으세요. + 300,000",
+        contents: "시작점입니다. 월급을 받으세요.     + 300,000",
         owner: 0,
         option: 0,
         toll: 0,
@@ -1192,14 +1752,104 @@ export default function Main() {
     ],
   });
 
-  // useEffect(() => {
-  //   sendData();
-  // }, [player])
+
+  // 아이템(보물상자)
+  const [item, setItem] = useState<Item[]>([
+    {
+      id: 0,
+      title: '운수 좋은 날',
+      content: '주사위를 한 번 더 던지세요!',
+    },
+    {
+      id: 1,
+      title: '무인도 불시착',
+      content: '비행기가 고장나서 무인도에 갇혔습니다. 무인도로 가세요.',
+    },
+    {
+      id: 2,
+      title: '자유여행권',
+      content: '이동하고 싶은 곳을 클릭하세요.',
+    },
+    {
+      id: 3,
+      title: '코로나19 확진',
+      content: '코로나에 걸렸습니다. 2턴 간 자가격리에 들어갑니다.',
+    },
+    {
+      id: 4,
+      title: '호텔에 짐을 놓고 왔습니다.',
+      content: '뒤로 2 칸 이동하세요.',
+    },
+    {
+      id: 5,
+      title: '졸음',
+      content: '졸다가 3역을 지나쳤습니다. 앞으로 3 칸 이동',
+    },
+    {
+      id: 6,
+      title: '복권 당첨',
+      content: '100만원을 받으세요!',
+    },
+    {
+      id: 7,
+      title: '세무조사',
+      content: '국세청에서 세무 조사를 시작합니다. 국세청으로 이동하세요.',
+    },
+    {
+      id: 8,
+      title: '주식 투자',
+      content: '투자한 주식이 대박났습니다. 200만원을 받으세요.',
+    },
+    {
+      id: 9,
+      title: '올림픽 티켓 수령',
+      content: '올림픽을 관람하러갑니다.',
+    },
+    {
+      id: 10,
+      title: 'BTS 콘서트',
+      content: '콘서트를 보러 대한민국으로 이동합니다.',
+    },
+    {
+      id: 11,
+      title: '미국 여행',
+      content: '미국으로 이동하세요',
+    },
+    {
+      id: 12,
+      title: '피라미드 대탐험',
+      content: '새로운 피라미드가 발견됐습니다. 이집트로 이동하세요.',
+    },
+    {
+      id: 13,
+      title: '로마의 휴일',
+      content: '휴가를 받았습니다. 이탈리아로 이동하세요.',
+    },
+    {
+      id: 14,
+      title: '과속 벌금',
+      content: '과속은 위험합니다. 벌금 -100만원',
+    },
+    {
+      id: 15,
+      title: '통행 면제권',
+      content: '1회 다른 플레이어의 나라에 무료로 머무를 수 있습니다.',
+    },
+    {
+      id: 16,
+      title: '뒤로 걷기 캠페인',
+      content: '뒤로 3칸 이동하세요.',
+    },
+
+
+
+  ])
+
 
   return (
     <>
       <div className="w-screen h-screen bg-[#FFFDF4]">
-        <div className="w-full bg-[#FFFDF4] flex items-start justify-around fixed-top z-50">
+        {gameStart && (<div className="w-full bg-[#FFFDF4] flex items-start justify-around fixed-top z-50">
           <div className="w-full h-[60px] flex items-end justify-end">
             {/* <img className='w-[100px] h-[54px] flex items-end mt-[20px] ml-[60px] object-cover' src='/game/LogoColored.png' alt='로고이미지'></img> */}
             <div
@@ -1211,23 +1861,24 @@ export default function Main() {
               3D 모드
             </div>
           </div>
-        </div>
-        {!start && (
-          <div className="w-full h-full bg-[#FFFDF4] flex flex-col justify-center items-center">
-            <div
-              id="shbutton"
-              className="w-[200px] h-[50px] text-[24px] flex justify-center items-center"
-              onClick={(e) => {
-                e.preventDefault();
-                setStart(true);
-                setGameData();
-              }}
-            >
-              게임 시작하기
-            </div>
-          </div>
-        )}
-        {start && (
+        </div>)}
+
+        {!gameStart &&
+          <Enter
+            user1Check={user1Check}
+            user2Check={user2Check}
+            user3Check={user3Check}
+            user4Check={user4Check}
+            user1={user1}
+            user2={user2}
+            user3={user3}
+            user4={user4}
+
+            gameWait={gameWait}
+          ></Enter>
+        }
+
+        {gameStart && (
           <div>
             {mode && (
               <Game2D
@@ -1239,20 +1890,44 @@ export default function Main() {
                 setPlayer={setPlayer}
                 worldMap={worldMap.worldMap}
                 setWorldMap={setWorldMap}
+                item={item}
+                setItem={setItem}
+                closeModal={() => setQuizModalState(false)}
+                quizModalState={quizModalState}
+                roomId={params.id}
+                ws={ws}
+                quiz={quiz}
+                user1={user1}
+                user2={user2}
+                user3={user3}
+                user4={user4}
               ></Game2D>
             )}
             {!mode && (
-              <Game3D worldMap={worldMap} setWorldMap={setWorldMap}></Game3D>
+              <Game3D
+                sendData={sendData}
+                loginUser={loginUser}
+                metaData={metaData}
+                setMetaData={setMetaData}
+                player={player}
+                setPlayer={setPlayer}
+                worldMap={worldMap.worldMap}
+                setWorldMap={setWorldMap}
+                item={item}
+                setItem={setItem}
+                closeModal={() => setQuizModalState(false)}
+                quizModalState={quizModalState}
+                roomId={params.id}
+                ws={ws}
+                quiz={quiz}
+                user1={user1}
+                user2={user2}
+                user3={user3}
+                user4={user4}
+              ></Game3D>
             )}
           </div>
         )}
-
-        {/* <div>소켓 테스트용</div>
-      <div className='flex flex-col'>
-        <button className='w-[120px] h-[50px] mt-[20px] shbutton' onClick={sendMsg}>소켓 데이터 전송</button>
-        <button className='w-[120px] h-[50px] mt-[20px] shbutton' onClick={sendEmoticon}>이모티콘 전송</button>
-        <button className='w-[120px] h-[50px] mt-[20px] shbutton'onClick={requestQuiz}>퀴즈 요청</button>
-      </div> */}
       </div>
     </>
   );

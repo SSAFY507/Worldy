@@ -82,6 +82,14 @@ type NewPlayer = {
   },
 }
 
+type User = {
+  kakaoId: string,
+  nickName: string,
+  profileImg: string,
+  mmr : number,
+  level : number,
+  tier : string,
+}
 
 type Price = {
   land: number,
@@ -148,4 +156,43 @@ type Item = {
   id: number,
   title: string,
   content: string,
+}
+
+type GameResult = {
+  first: {
+    kakaoId: string,
+    nationList: number[]
+  },
+  second: {
+    kakaoId: string,
+    nationList: number[]
+  },
+  third: {
+    kakaoId: string,
+    nationList: number[]
+  },
+  fourth: {
+    kakaoId: string,
+    nationList: number[]
+  }
+}
+
+
+type GameResultPageDate = {
+  first: {
+    kakaoId: string,
+    nationList: number[]
+  },
+  second: {
+    kakaoId: string,
+    nationList: number[]
+  },
+  third: {
+    kakaoId: string,
+    nationList: number[]
+  },
+  fourth: {
+    kakaoId: string,
+    nationList: number[]
+  }
 }

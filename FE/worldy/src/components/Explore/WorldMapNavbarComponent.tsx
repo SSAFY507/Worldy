@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { BsExclamationCircle } from 'react-icons/bs';
 import Cloud from '../../assets/images/Cloud.png';
+import CustomAxios from '../../API/CustomAxios';
 import ExchangeRateIcon from '../../assets/images/ExchangeRateIcon.png';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import Moon from '../../assets/images/Moon.png';
@@ -21,7 +22,17 @@ interface Props {
 
 interface ListType {
   [key: string]: string;
+};
+
+interface InfoType {
+  nationName : string,
+  exchangeRate : string,
+  weatherName : string,
+  temp : string,
+  time : number
 }
+
+const DOMAIN = process.env.REACT_APP_BASE_URL
 
 const switchTrans:ListType = {
   paintBox: "틀림 그림 찾기에 도전해보세요!",
@@ -29,9 +40,38 @@ const switchTrans:ListType = {
   personalityBox: "인물을 알아봐요!",
   newsBox: "소식을 알아봐요!",
   foodBox: "음식을 잘 아시나요?"
-}
+};
 
 const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSelectAssetName}:Props) => {
+  
+  const getLoginToken: string | null = sessionStorage.getItem('token');
+  const countryId = countryLst[countryName].id
+
+  const [infoData, setInfoData] =useState<InfoType>();
+
+  const getDatasList = async () => {
+    try {
+      const response = await CustomAxios({
+        APIName: 'getDatasList',
+        APIType: 'get',
+        UrlQuery: DOMAIN + `/adventure/info/dynamic/${countryId}`,
+        Token: getLoginToken,
+      });
+      setInfoData(response)
+      
+    } 
+    catch (error) {
+      console.log('Error fetching data:', error);
+    }
+  }
+
+  useEffect(() => {
+    if(countryName){
+      getDatasList();
+    }
+  }, [countryName]);
+
+  console.log(infoData,"")
 
   const list:ListType = {
     country: countryLst[`${countryName}`].KOREAN,
@@ -40,11 +80,11 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSele
   };
 
   const infoList = {
-    time: 18,
-    weather: '흐림',
-    temper: 18,
-    amountvia: 0.76,
-    pref: '미국 달러',
+    time: Number(infoData?.time),
+    weather: infoData?.weatherName,
+    temper: infoData?.temp,
+    amountvia: infoData?.exchangeRate,
+    // pref: '미국 달러',
   };
 
   const [clickedLeftMenu, setClickedLeftMenu] = useState<boolean>(false);
@@ -67,14 +107,14 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSele
     setTimeAPM(
       infoList.time === 12
         ? '12PM'
-        : infoList.time === 24
+        : infoList.time === 0
         ? '0AM'
         : infoList.time > 12
         ? `${infoList.time - 12}PM`
         : `${infoList.time}AM`
     );
-  },[]);
-
+  },[infoData]);
+  console.log(timeAPM)
   const [doDDiyong, setDoDDiyong] = useState<boolean>(false);
   
   useEffect(() => {
@@ -111,13 +151,13 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSele
           ?
           null
           :
-          <div className='absolute top-[130px] w-fit h-fit flex flex-col justify-start items-start  ml-[30px] pl-[20px]'>
+          <div className='absolute top-[150px] w-[500px] flex flex-nowrap h-fit flex flex-col justify-start items-start  ml-[20px] pl-[20px]'>
             <span
               className='text-[50px] text-white font-PtdExtraBold'
             >
               {list.country}
             </span>
-            <span className='text-[40px] mt-[2px] text-[rgba(235,235,235,1)] font-PtdExtraLight'>
+            <span className='text-[50px] mt-[2px] flex flex-row text-[rgba(255,255,255,0.5)] font-PtdExtraBold'>
               {list.countryEng}
             </span>
           </div>
@@ -142,15 +182,15 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSele
         ?
         null
         :
-        <div className='absolute top-[100px] -right-[30px] w-[400px] h-[280px] p-[40px] outline-white flex flex-col justify-between items-center'>
+        <div className='absolute top-[110px] -right-[20px] w-[400px] h-[280px] p-[40px] outline-white flex flex-col justify-between items-center'>
           <div
-            className='w-[300px] h-[50px] px-[20px] rounded-full shadow-lg shadow-[rgba(82,82,82,0.2)] flex flex-row justify-start items-center'
+            className='w-[300px] h-[50px] px-[20px] rounded-[5px] shadow-lg shadow-[rgba(82,82,82,0.2)] flex flex-row justify-start items-center hover:bg-[rgba(255,255,255,1)]'
             style={{
               backgroundImage:
-                'linear-gradient(to bottom right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 60%,  rgba(255, 255, 255, 0.2) 100%)',
+                'linear-gradient(to bottom right, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.5) 60%,  rgba(255, 255, 255, 0.5) 100%)',
             }}
           >
-            <div className='w-[40px] h-[40px] mr-[20px]  outline-white grid place-content-center'>
+            <div className='w-[25px] h-[25px] ml-[10px] mr-[50px]  outline-white grid place-content-center'>
               <img src={Moon} alt='시간대 아이콘' className='w-[30px]' />
             </div>
             <div className='w-[60px] h-[40px] ml-[20px] outline-black flex flex-row justify-start items-center'>
@@ -163,15 +203,15 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSele
                 {timeAPM}
               </span>
             </div>
-          </div>
+            </div>
           <div
-            className='w-[300px] h-[50px] px-[20px]  rounded-full shadow-lg shadow-[rgba(82,82,82,0.2)] flex flex-row justify-start items-center'
+            className='w-[300px] h-[50px] px-[20px] rounded-[5px] shadow-lg shadow-[rgba(82,82,82,0.2)] flex flex-row justify-start items-center hover:bg-[rgba(255,255,255,1)]'
             style={{
               backgroundImage:
-                'linear-gradient(to bottom right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 60%,  rgba(255, 255, 255, 0.2) 100%)',
+                'linear-gradient(to bottom right, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.5) 60%,  rgba(255, 255, 255, 0.5) 100%)',
             }}
           >
-            <div className='w-[40px] h-[40px] mr-[20px]  outline-white grid place-content-center'>
+            <div className='w-[25px] h-[25px] mr-[50px] ml-[10px]  outline-white grid place-content-center'>
               <img src={Cloud} alt='날씨 아이콘' className='w-[30px]' />
             </div>
             <div className='w-[60px] h-[40px] ml-[20px]  outline-black flex flex-row justify-start items-center'>
@@ -186,13 +226,13 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSele
             </div>
           </div>
           <div
-            className='w-[300px] h-[80px] pl-[20px] rounded-full shadow-lg shadow-[rgba(82,82,82,0.2)] flex flex-row justify-start items-center'
+            className='w-[300px] h-[80px] pl-[20px] rounded-[5px] shadow-lg shadow-[rgba(82,82,82,0.2)] flex flex-row justify-start items-center hover:bg-[rgba(0,0,0,0.7)]'
             style={{
               backgroundImage:
-                'linear-gradient(to bottom right, rgba(0, 0, 0, 0.5) 0%,  rgba(0, 0, 0, 0.25) 100%)',
+                'linear-gradient(to bottom right, rgba(0, 0, 0, 0.2) 0%,  rgba(0, 0, 0, 0.2) 100%)',
             }}
           >
-            <div className='w-[40px] h-[40px] mr-[20px] outline-white grid place-content-center'>
+            <div className='w-[25px] h-[25px] mr-[30px] ml-[10px] outline-white grid place-content-center'>
               <img
                 src={ExchangeRateIcon}
                 alt='환율 아이콘'
@@ -207,7 +247,8 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSele
               </div>
               <div className='w-full h-fit  outline-white flex flex-row justify-start items-center'>
                 <span className='text-white font-PtdSemiBOld text-[24px]'>
-                  {`${infoList.amountvia} ${infoList.pref}`}
+                  {`${infoList.amountvia}`}
+                  {/* {`${infoList.amountvia} ${infoList.pref}`} */}
                 </span>
               </div>
             </div>

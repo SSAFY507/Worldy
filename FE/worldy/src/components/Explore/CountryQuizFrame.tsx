@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 
 import CountryPaintDetailModal from './CountryPaintDetailModal'
+import CountryQuizDetailModal from './CountryQuizDetailModal'
+import CustomAxios from '../../API/CustomAxios'
 import { ReactComponent as GOne } from "../../assets/images/1.svg"
 import { ReactComponent as GStart } from "../../assets/images/START.svg"
 import { ReactComponent as GThree } from "../../assets/images/3.svg"
@@ -13,96 +15,160 @@ import { ReactComponent as PaintTitleIcon } from '../../assets/images/painttitle
 import QuizModal from '../QuizModal'
 import { ReactComponent as QuizTitleIcon } from "../../assets/images/quiztitle.svg"
 import { ScrappedQuizType } from '../../routes/MyPage'
+import { countryLst } from './CountrySpeak'
+import { useParams } from 'react-router'
 
-const tempScrappedQuizList: ScrappedQuizType[] = [
-  {
-    quizId: 0,
-    nationName: '대한민국',
-    level: 1,
-    quizType: 'ox',
-    category: 'cul',
-    image: '',
-    content: '일본의 모든 도시는 한국의 모든 도시와 표준시가 1시간 차이난다.',
-    answer: 'O',
-    multiFirst: null, //1번
-    multiSecond: null, //2번
-    multiThird: null, //3번
-    multiFourth: null, //4번
-    hint: "",
-    hintType: true, //힌트
-    commentary: '일본은 한국보다 실제 시간이 30분 빠릅니다',
-    userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
-    success: true, //맞춘 문제인가
-  },
-  {
-    quizId: 0,
-    nationName: '중국',
-    level: 2,
-    quizType: 'multi',
-    category: 'cul',
-    image: '',
-    content:
-      '중국의 역사는 매우 오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요..',
-    answer: '하나라',
-    multiFirst: '진나라진나라진나라', //1번
-    multiSecond: '명나라', //2번
-    multiThird: '하나라', //3번
-    multiFourth: '성나라', //4번
-    hint: "",
-    hintType: true, //힌트
-    commentary: '힌트 무슨 유형인가', //힌트 유형
-    userAnswer: '1', //유저가 적은 정답(맞았으면 null)
-    success: false, //맞춘 문제인가
-  },
-  {
-    quizId: 0,
-    nationName: '대한민국',
-    level: 1,
-    quizType: 'blank',
-    category: 'cul',
-    image: '',
-    content: '세종대왕.',
-    answer: '세종대왕',
-    multiFirst: null, //1번
-    multiSecond: null, //2번
-    multiThird: null, //3번
-    multiFourth: null, //4번
-    hint: "",
-    hintType: true, //힌트
-    commentary: 'ㅅㅈㄷㅇ', //힌트 유형
-    userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
-    success: false, //맞춘 문제인가
-  },
-  {
-    quizId: 0,
-    nationName: '대한민국',
-    level: 1,
-    quizType: 'ox',
-    category: 'cul',
-    image: '',
-    content: '대한민국에서 쓰이는 언어는 한극어이다.',
-    answer: 'X',
-    multiFirst: null, //1번
-    multiSecond: null, //2번
-    multiThird: null, //3번
-    multiFourth: null, //4번
-    hint: "",
-    hintType: false, //힌트
-    commentary: '힌트 무슨 유형인가', //힌트 유형
-    userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
-    success: false, //맞춘 문제인가
-  },
-];
+// const tempScrappedQuizList: ScrappedQuizType[] = [
+//   {
+//     quizId: 0,
+//     nationName: '대한민국',
+//     level: 1,
+//     quizType: 'ox',
+//     category: 'cul',
+//     image: '',
+//     content: '일본의 모든 도시는 한국의 모든 도시와 표준시가 1시간 차이난다.',
+//     answer: 'O',
+//     multiFirst: null, //1번
+//     multiSecond: null, //2번
+//     multiThird: null, //3번
+//     multiFourth: null, //4번
+//     hint: "",
+//     hintType: true, //힌트
+//     commentary: '일본은 한국보다 실제 시간이 30분 빠릅니다',
+//     userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
+//     success: true, //맞춘 문제인가
+//   },
+//   {
+//     quizId: 0,
+//     nationName: '중국',
+//     level: 2,
+//     quizType: 'multi',
+//     category: 'cul',
+//     image: '',
+//     content:
+//       '중국의 역사는 매우 오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요오래되고 복잡하며 다양한 왕조들이 국가를 지배하였습니다. 아래 왕조들 중 가장 오래된 왕조를 선택하세요..',
+//     answer: '하나라',
+//     multiFirst: '진나라진나라진나라', //1번
+//     multiSecond: '명나라', //2번
+//     multiThird: '하나라', //3번
+//     multiFourth: '성나라', //4번
+//     hint: "",
+//     hintType: true, //힌트
+//     commentary: '힌트 무슨 유형인가', //힌트 유형
+//     userAnswer: '1', //유저가 적은 정답(맞았으면 null)
+//     success: false, //맞춘 문제인가
+//   },
+//   {
+//     quizId: 0,
+//     nationName: '대한민국',
+//     level: 1,
+//     quizType: 'blank',
+//     category: 'cul',
+//     image: '',
+//     content: '세종대왕.',
+//     answer: '세종대왕',
+//     multiFirst: null, //1번
+//     multiSecond: null, //2번
+//     multiThird: null, //3번
+//     multiFourth: null, //4번
+//     hint: "",
+//     hintType: true, //힌트
+//     commentary: 'ㅅㅈㄷㅇ', //힌트 유형
+//     userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
+//     success: false, //맞춘 문제인가
+//   },
+//   {
+//     quizId: 0,
+//     nationName: '대한민국',
+//     level: 1,
+//     quizType: 'ox',
+//     category: 'cul',
+//     image: '',
+//     content: '대한민국에서 쓰이는 언어는 한극어이다.',
+//     answer: 'X',
+//     multiFirst: null, //1번
+//     multiSecond: null, //2번
+//     multiThird: null, //3번
+//     multiFourth: null, //4번
+//     hint: "",
+//     hintType: false, //힌트
+//     commentary: '힌트 무슨 유형인가', //힌트 유형
+//     userAnswer: 'O', //유저가 적은 정답(맞았으면 null)
+//     success: false, //맞춘 문제인가
+//   },
+// ];
+
+
 interface Props {
   selectAsset: string;
 };
+
+export interface PaintDataType {
+  imgNum: number,
+  diffUrl: string,
+  imgTitle: string,
+  imgSubTitle: string,
+  imgContent: string,
+  originalUrl: string,
+  answerPointList: string[][]
+};
+
+export interface QuizDataType {
+    quizId: number,
+    nation: {
+        ationId: number,
+        nationName: string
+    },
+    publisherType: string,
+    quizType: string,
+    category: string,
+    level: number,
+    image: string,
+    content: string,
+    answer: string,
+    hint: string,
+    hintType: boolean,
+    commentary: string,
+    report: number,
+    multiAnswerList: {
+      multiAnswerId: number,
+      quizDto: any,
+      answer: string,
+      num: number,
+    }[]| null
+};
+
+
 interface ImgObjectType {
   [key:string]: JSX.Element[];
-}
+};
+
+const DOMAIN = process.env.REACT_APP_BASE_URL
+
 const CountryQuizFrame = ({selectAsset}:Props) => {
   const [counting, setCounting] = useState<number>(-2)
   const [quizModalState, setQuizModalState] = useState<boolean>(false);
   const [selectedQuizId, setSelectedQuizId] = useState<number>(0);
+  const [axiosGetPaintData, setAxiosGetPaintData] = useState<PaintDataType | undefined>();
+  const [axiosGetQuizData, setAxiosGetQuizData] = useState<QuizDataType[] | undefined>();
+
+  const params = useParams();
+  const countryName: string = params.country || '';
+
+  const getLoginToken: string | null = sessionStorage.getItem('token');
+  const countryId = countryLst[countryName].id;
+
+  /** 게임을 재시작 하는 함수 */
+  const GetRegameFlag = (num:number) => {
+    setCounting(num);
+    if (countryId) {
+      if (selectAsset === "quizBox") {
+        getDatasList("quizBox", `/quiz/nation/${countryId}`);
+      } else {
+        getDatasList("paintBox", `/quiz/hidden/${countryId}`);
+      }          
+    }
+  };
 
   const imgObject:ImgObjectType = {
     quizBox:[
@@ -110,11 +176,16 @@ const CountryQuizFrame = ({selectAsset}:Props) => {
       <GOne />, 
       <GTwo />, 
       <GThree />, 
-      <GStart />, 
-      <QuizModal
-        input={tempScrappedQuizList[selectedQuizId]}
-        closeModal={() => setQuizModalState(false)}
-      />
+      <GStart />,
+      <CountryQuizDetailModal 
+        selectAsset={selectAsset}
+        GetRegameFlag={GetRegameFlag}
+        axiosGetQuizData={axiosGetQuizData}
+      /> 
+      // <QuizModal
+      //   input={tempScrappedQuizList[selectedQuizId]}
+      //   closeModal={() => setQuizModalState(false)}
+      // />
     ],
     paintBox:[
       <PaintTitleIcon />, 
@@ -123,19 +194,43 @@ const CountryQuizFrame = ({selectAsset}:Props) => {
       <PThree />, 
       <PStart />,
       <CountryPaintDetailModal
-        input={tempScrappedQuizList[selectedQuizId]}
-        closeModal={() => setQuizModalState(false)}
+        selectAsset={selectAsset}
+        GetRegameFlag={GetRegameFlag}
+        axiosGetPaintData={axiosGetPaintData}
       />
     ],
   }
 
   const selectImg:JSX.Element[] = imgObject[selectAsset];
-  const handleQuizModal = (select: number) => {
-    setSelectedQuizId(select);
-    setTimeout(() => {
-      setQuizModalState(true);
-    }, 100);
-  };
+
+  /** 데이터 받는 함수 */
+  const getDatasList = async (box: string, url:string) => {
+    try {
+      const response = await CustomAxios({
+        APIName: 'getDatasList',
+        APIType: 'get',
+        UrlQuery: DOMAIN + url,
+        Token: getLoginToken,
+      });
+      if (box === "quizBox") {
+          setAxiosGetQuizData(response);
+      } else {
+        setAxiosGetPaintData(response);
+      }          
+    } catch (error) {
+      console.log('Error fetching data:', error);
+    }
+  }
+
+  useEffect(() => {
+    if (countryId) {
+      if (selectAsset === "quizBox") {
+        getDatasList("quizBox", `/quiz/nation/${countryId}`);
+      } else {
+        getDatasList("paintBox", `/quiz/hidden/${countryId}`);
+      }          
+    }
+  }, [])
 
   useEffect(() => {
     if (counting > -1) {
@@ -154,7 +249,7 @@ const CountryQuizFrame = ({selectAsset}:Props) => {
           {(counting === 2) ? <div className="absolute">{selectImg[2]}</div> : null}
           {(counting === 1) ? <div className="absolute">{selectImg[1]}</div> : null}
           {(counting === 0) ? <div className="absolute">{selectImg[4]}</div> : null}
-          {(counting === -1) 
+          {(counting === -1 && (axiosGetPaintData || axiosGetQuizData) ) 
             ?         
             <div className={
               `${(selectAsset === "quizBox") ? "absolute h-[1100px] flex" : "h-full w-full flex items-center justify-center"} `} 

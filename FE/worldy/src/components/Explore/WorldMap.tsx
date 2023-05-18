@@ -14,7 +14,7 @@ import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import africa from "../../assets/lowpoly/africa.glb";
 import asia from "../../assets/lowpoly/asia.glb";
 import basemap from "../../assets/lowpoly/basemap.glb";
-import bg from "../../assets/images/WorldBackgrorund.jpg"
+import bg from '../../assets/images/WorldBackground.jpg'
 import europe from "../../assets/lowpoly/europe.glb";
 import { gsap } from 'gsap';
 import northAmerica from "../../assets/lowpoly/northAmerica.glb";
@@ -161,7 +161,8 @@ const WorldMap = () => {
       // 줌 아웃 상태에서 대륙이 마우스 위에 있으면 줌인
       const targets = raycasterRef.current?.intersectObject(continent);
       if(targets!.length > 0 && selectedObjectRef.current?.userData.flag === false) {
-        ZoomFit(continent, 45, 0.2)
+        // ZoomFit(continent, 45, 0.4)
+        ZoomFit(continent, 45, 0.25)
         selectedObjectRef.current!.userData.flag = true
         return;
       }
@@ -192,6 +193,7 @@ const WorldMap = () => {
       const box = new THREE.Box3().setFromObject(object3d);       // 객체를 감싸고 있는 box
       const sizeBox = box.getSize(new THREE.Vector3()).length();  // 객체의 정육각형 box의 대각선 길이
       const centerBox = box.getCenter(new THREE.Vector3());       // box의 중앙점
+      // const direction = new THREE.Vector3(0, 1, 0);               // 처음에 설정된 벡터
       const direction = new THREE.Vector3(0, 1, 0);               // 처음에 설정된 벡터
       // 처음에 설정된 벡터 (0, 1, 0)을 (1, 0 ,0)방향으로 viewAngle만큼 회전한 객체
       direction.applyAxisAngle(new THREE.Vector3(1, 0, 0), THREE.MathUtils.degToRad(viewAngle));
@@ -392,7 +394,7 @@ const WorldMap = () => {
           })
           
         }
-        obj3d.position.set(1, 0.3, 0)
+        obj3d.position.set(2.4, 0.3, 0)
         // console.log(obj3d.position)
         // scale = (1, 1, 1)
         // console.log(obj3d.scale)
@@ -406,7 +408,7 @@ const WorldMap = () => {
       (glb) => {
         const root = glb.scene;
         // x:0, y:0, z:0
-        root.position.set(1, 0.3, 0);
+        root.position.set(2.4, 0.3, 0);
         scene.current?.add(root)
         root.name = "basemap"
         }
@@ -476,7 +478,7 @@ const WorldMap = () => {
       const ren = new THREE.WebGLRenderer({ antialias: true });
       ren.setPixelRatio(window.devicePixelRatio);
 
-      ren.shadowMap.enabled = true;
+      // ren.shadowMap.enabled = true;
       ren.domElement.style.touchAction = "none";
       divContainer.current.appendChild(ren.domElement);
 
@@ -490,20 +492,56 @@ const WorldMap = () => {
       SetupPicking();
 
 
-      const cam = SetupCamera(37, 0.1, 25, new THREE.Vector3(0, 10, 6), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0));
+      const cam = SetupCamera(37, 0.1, 50, new THREE.Vector3(0, 10, 6), new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0));
       camera.current = cam
       scene.current.add(cam)
       controls.current =  SetupControls(camera.current!, divContainer.current!, 50, 50, 0, 0);
 
-      const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.5);
+      // const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.4);
 
-      hemiLight.position.set(0, 50, 0);
-      // Add hemisphere light to scene
-      scene.current?.add(hemiLight);
+      // hemiLight.position.set(-20, 50, 0);
+      // // Add hemisphere light to scene
+      // scene.current?.add(hemiLight);
 
-      const light = SetupLight("#CCF2F4", 1.5, new THREE.Vector3(0, 10, 6), new THREE.Vector3(0, 0, 0) );
+      const light = SetupLight("#0xffffff", 0.5, new THREE.Vector3(-2, 10, 6), new THREE.Vector3(0, 0, 0) );
+      const light2 = SetupLight("#0xffffff", 0.5, new THREE.Vector3(-2, 10, -6), new THREE.Vector3(0, 0, 0) );
+      const light3 = SetupLight("#0xffffff", 0.5, new THREE.Vector3(-2, -10, 6), new THREE.Vector3(0, 0, 0) );
+      const light4 = SetupLight("#0xffffff", 0.5, new THREE.Vector3(-2, -10, -6), new THREE.Vector3(0, 0, 0) );
+      
+      const light5 = SetupLight("#0xffffff", 0.5, new THREE.Vector3(2, 10, 6), new THREE.Vector3(0, 0, 0) );
+      const light6 = SetupLight("#0xffffff", 0.5, new THREE.Vector3(2, 10, -6), new THREE.Vector3(0, 0, 0) );
+      const light7 = SetupLight("#0xffffff", 0.5, new THREE.Vector3(2, -10, 6), new THREE.Vector3(0, 0, 0) );
+      const light8= SetupLight("#0xffffff", 0.5, new THREE.Vector3(2, -10, -6), new THREE.Vector3(0, 0, 0) );
+
+
+      const right = SetupLight("#0xffffff", 0.1, new THREE.Vector3(-2, 2, 6), new THREE.Vector3(0, 0, 0) );
+      const right2 = SetupLight("#0xffffff", 0.1, new THREE.Vector3(-2, 2, -6), new THREE.Vector3(0, 0, 0) );
+      const right3 = SetupLight("#0xffffff", 0.1, new THREE.Vector3(-2, -2, 6), new THREE.Vector3(0, 0, 0) );
+      const right4= SetupLight("#0xffffff", 0.1, new THREE.Vector3(-2, -2, -6), new THREE.Vector3(0, 0, 0) );
+      
+      const right5 = SetupLight("#0xffffff", 0.1, new THREE.Vector3(2, 2, 6), new THREE.Vector3(0, 0, 0) );
+      const right6 = SetupLight("#0xffffff", 0.1, new THREE.Vector3(2, 2, -6), new THREE.Vector3(0, 0, 0) );
+      const right7 = SetupLight("#0xffffff", 0.1, new THREE.Vector3(2, -2, 6), new THREE.Vector3(0, 0, 0) );
+      const right8= SetupLight("#0xffffff", 0.1, new THREE.Vector3(2, -2, -6), new THREE.Vector3(0, 0, 0) );
+
       scene.current.add(light.target)
-      camera.current?.add(light)
+      scene.current?.add(light)
+      scene.current?.add(light2)
+      scene.current?.add(light3)
+      scene.current?.add(light4)
+      scene.current?.add(light5)
+      scene.current?.add(light6)
+      scene.current?.add(light7)
+      scene.current?.add(light8)
+
+      scene.current?.add(right)
+      scene.current?.add(right2)
+      scene.current?.add(right3)
+      scene.current?.add(right4)
+      scene.current?.add(right5)
+      scene.current?.add(right6)
+      scene.current?.add(right7)
+      scene.current?.add(right8)
 
       Background();
       SetupModel();
@@ -520,8 +558,9 @@ const WorldMap = () => {
     // <>
     //   {loadedAll ?  (
         <div
-        style={{ backgroundColor: 'grey', width: '100%', height: 1000 }}
-        ref={divContainer} 
+          className=""
+          style={{ backgroundColor: 'grey', width: '100%', height: 1000 }}
+          ref={divContainer} 
         />
     //   ) : (
     //     <div className='w-full h-[1000px] bg-white'>

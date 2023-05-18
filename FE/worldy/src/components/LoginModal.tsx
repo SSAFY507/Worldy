@@ -42,6 +42,13 @@ export default function LoginModal({ onClose }: PointerOutProps) {
 
   const firstLogin: boolean = true;
 
+  // const clickKakaoLogin = () => {
+  //   //게임 시작 눌렀을 때 처음 로그인이면 튜토리얼로, 아니면 메인페이지로
+  //   onClickKakaoLogin(firstLogin);
+
+    
+  // };
+
   ////////////////////카카오 로그인 버튼 관련
 
   const checkLoginState = sessionStorage.getItem('isLoggedIn');
@@ -76,7 +83,7 @@ export default function LoginModal({ onClose }: PointerOutProps) {
       >
         {loadedAll ? (
           <div>
-            <div id='XbuttonFrame' className='flex flex-row justify-end'>
+            { !sessionStorage.getItem('gameId') ? (<div id='XbuttonFrame' className='flex flex-row justify-end'>
               <button onClick={onClose}>
                 <div>
                   <svg
@@ -92,7 +99,8 @@ export default function LoginModal({ onClose }: PointerOutProps) {
                   </svg>
                 </div>
               </button>
-            </div>
+            </div>) : 
+            <div className='mt-[9%]'/>}
             <div className='h-full my-4 flex flex-col justify-between px-12'>
               <div className=' w-full h-24 flex flex-row justify-center items-center px-[10px] '>
                 <div className=' w-[90px] h-[90px] '>

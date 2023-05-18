@@ -265,7 +265,7 @@ export default function MyPage({
             <div
               className='absolute top-0 left-0 h-[10px] bg-blue-300'
               style={{ width: `${axiosRankInfoList?.myRank.exp}%` }}
-            ></div>
+            ></div>zzzz
           </div>
         </div>
       </div>
@@ -321,7 +321,7 @@ export default function MyPage({
   const [axiosRankInfoList, setAxiosRankInfoList] = useState<RankListType>();
 
   const getRankInfoList = async () => {
-    console.log('Session에서의 가져오는 토큰', getLoginToken);
+    //console.log('Session에서의 가져오는 토큰', getLoginToken);
     try {
       const response = await CustomAxios({
         APIName: 'getRankInfoList',
@@ -330,16 +330,16 @@ export default function MyPage({
         Token: getLoginToken,
       });
       //console.log('닉네임 중복 체크 성공');
-      console.log('랭크 리스트 받은 거: ', response);
+      //console.log('랭크 리스트 받은 거: ', response);
       setAxiosRankInfoList(response);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      // console.error('Error fetching data:', error);
     }
     //console.log('token이 무엇이냐 ', token);
   };
 
   useEffect(() => {
-    console.log('랭크 받앙오기');
+    //console.log('랭크 받앙오기');
     getRankInfoList();
   }, []);
 
@@ -501,7 +501,7 @@ export default function MyPage({
     type: string;
     value: string;
   }) => {
-    console.log('const 5');
+    //console.log('const 5');
     const inputvalue =
       value === '상'
         ? '3'
@@ -520,7 +520,7 @@ export default function MyPage({
     else if (inputvalue !== '전체') {
       //내부 선택이 있으면 타입 분류 및 카테고리 분류
       var tempList: ScrappedQuizType[] = [];
-      console.log(`선택한 타입 : ${type} => 카테고리 : ${inputvalue}`);
+      //console.log(`선택한 타입 : ${type} => 카테고리 : ${inputvalue}`);
       for (let i = 0; i < axiosScrappedQuizList.length; i++) {
         if (type === '나라별') {
           if (axiosScrappedQuizList[i].nationName === inputvalue)
@@ -675,7 +675,7 @@ export default function MyPage({
   };
 
   const getScrappedQuizListAxios = async () => {
-    console.log('Session에서의 가져오는 토큰', getLoginToken);
+    //console.log('Session에서의 가져오는 토큰', getLoginToken);
     try {
       const response = await CustomAxios({
         APIName: 'getScrappedQuiz',
@@ -684,7 +684,7 @@ export default function MyPage({
         Token: getLoginToken,
       });
       //console.log('닉네임 중복 체크 성공');
-      console.log('퀴즈 스크랩 받은 거 : ', response[0].quizId);
+      //console.log('퀴즈 스크랩 받은 거 : ', response[0].quizId);
       setAxiosScrappedQuizList(response);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -1002,7 +1002,7 @@ export default function MyPage({
 
   const logoutAxios = async () => {
     const loginToken = sessionStorage.getItem('token');
-    console.log('로그아웃 시 토큰 : ', loginToken);
+    //console.log('로그아웃 시 토큰 : ', loginToken);
     try {
       const response = await CustomAxios({
         APIName: 'logout',
@@ -1024,7 +1024,7 @@ export default function MyPage({
   };
 
   useEffect(() => {
-    console.log('로그아웃 결과: ', logoutResult);
+    //console.log('로그아웃 결과: ', logoutResult);
   }, [logoutResult]);
 
   const [iconColor, setIconColor] = useState<string>('#E6E6E6');

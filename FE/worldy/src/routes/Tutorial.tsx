@@ -88,7 +88,7 @@ export default function Tutorial() {
   }, []);
 
   const getRankInfoList = async () => {
-    console.log('Session에서의 가져오는 토큰', getLoginToken);
+    // console.log('Session에서의 가져오는 토큰', getLoginToken);
     try {
       const response = await CustomAxios({
         APIName: 'getRankInfoList',
@@ -97,10 +97,10 @@ export default function Tutorial() {
         Token: getLoginToken,
       });
       //console.log('닉네임 중복 체크 성공');
-      console.log('랭크 리스트 받은 거: ', response);
+      // console.log('랭크 리스트 받은 거: ', response);
       setAxiosMyRankInfo(response.myRank);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      // console.error('Error fetching data:', error);
     }
     //console.log('token이 무엇이냐 ', token);
   };
@@ -181,7 +181,7 @@ export default function Tutorial() {
   }, [checkNicknameResult]);
 
   const checkNicknameAxios = async () => {
-    console.log('Session에서의 가져오는 토큰', getLoginToken);
+    // console.log('Session에서의 가져오는 토큰', getLoginToken);
     try {
       const response = await CustomAxios({
         APIName: 'checkNickName',
@@ -192,7 +192,7 @@ export default function Tutorial() {
       //console.log('닉네임 중복 체크 성공');
       setCheckNicknameResult(response);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      // console.error('Error fetching data:', error);
     }
     //console.log('token이 무엇이냐 ', token);
   };
@@ -225,7 +225,7 @@ export default function Tutorial() {
 
       setSubmitNicknameResult(response);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      // console.error('Error fetching data:', error);
     }
   };
 
@@ -531,7 +531,15 @@ export default function Tutorial() {
 
   const navigate = useNavigate();
   const navigateHome = () => {
-    navigate('/');
+    const gameId = sessionStorage.getItem('gameId');
+    
+    // 헤더 확인해서 roomId 있으면 
+    if(gameId) {
+      sessionStorage.removeItem('gameId');
+      navigate(`/game/${gameId}`);
+    } else {
+      navigate('/');
+    }
   };
 
   const showQuiz = (
