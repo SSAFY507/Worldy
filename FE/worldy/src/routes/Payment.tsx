@@ -20,7 +20,8 @@ interface AppState {
     cancel_url: string;
   };
 }
-
+const DOMAIN = process.env.REACT_APP_BASE_URL;
+const DOMAIN_S = process.env.REACT_APP_BASE_URL_SHORTER;
 class Payment extends Component<{}, AppState> {
   state: AppState = {
     // 응답에서 가져올 값들
@@ -36,19 +37,25 @@ class Payment extends Component<{}, AppState> {
       total_amount: 2200,
       vat_amount: 0,
       tax_free_amount: 0,
-      approval_url: 'https://k8a507.p.ssafy.io/paymentsuccess',
-      fail_url: 'https://k8a507.p.ssafy.io/paymentsuccess',
-      cancel_url: 'https://k8a507.p.ssafy.io/paymentsuccess',
+      approval_url: DOMAIN_S + '/paymentsuccess',
+      fail_url: DOMAIN_S + '/',
+      cancel_url: DOMAIN_S + '/',
     },
   };
 
   componentDidMount() {
     const adminKey = 'c6f82fc3b98485b2394889a33664e793';
 
+    const DOMAIN = process.env.REACT_APP_BASE_URL;
+    const DOMAIN_S = process.env.REACT_APP_BASE_URL_SHORTER;
+    const KAKAO_DOMAIN = process.env.REACT_KAKAO_BASE_URL + '/';
+
+    console.log('zkzkdh', process.env.REACT_KAKAO_BASE_URL);
     const { params } = this.state;
     axios({
       // 프록시에 카카오 도메인을 설정했으므로 결제 준비 url만 주자
-      baseURL: 'https://kapi.kakao.com',
+      baseURL: KAKAO_DOMAIN,
+
       url: '/v1/payment/ready',
       // 결제 준비 API는 POST 메소드라고 한다.
       method: 'POST',

@@ -44,8 +44,10 @@ class PayResultClass extends React.Component<PayResultClassProps> {
     const { params } = this.state;
     const adminKey = 'c6f82fc3b98485b2394889a33664e793';
 
+    const KAKAO_DOMAIN = process.env.REACT_KAKAO_BASE_URL;
+
     axios({
-      baseURL: 'https://kapi.kakao.com',
+      baseURL: KAKAO_DOMAIN,
 
       url: '/v1/payment/approve',
       method: 'POST',

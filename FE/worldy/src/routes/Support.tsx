@@ -32,7 +32,8 @@ export default function Support({
   const myImageList = {
     pathBgpath: pathBg,
   };
-
+  const DOMAIN = process.env.REACT_APP_BASE_URL;
+  const DOMAIN_S = process.env.REACT_APP_BASE_URL_SHORTER;
   const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
   const [loadedAll, setLoadedAll] = useState<boolean>(false);
   const getToken = sessionStorage.getItem('token') || '';
@@ -70,7 +71,7 @@ export default function Support({
       const response = await CustomAxios({
         APIName: 'getAllHelp',
         APIType: 'get',
-        UrlQuery: 'https://k8a507.p.ssafy.io/api/help/all',
+        UrlQuery: DOMAIN + '/help/all',
         Token: getToken,
       });
       setGetHelpAllResult(response);
@@ -106,7 +107,7 @@ export default function Support({
 
     try {
       const response = await axios.post(
-        'https://k8a507.p.ssafy.io/es/_search',
+        DOMAIN_S + '/es/_search',
         // 요청 바디 데이터를 객체 형식으로 전달합니다.
         {
           query: {
