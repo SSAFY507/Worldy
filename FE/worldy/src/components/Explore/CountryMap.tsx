@@ -19,7 +19,7 @@ import africa_Egypt from '../../assets/lowpoly/Country_Egypt.glb';
 import asia_China from '../../assets/lowpoly/Country_America.glb';
 import asia_India from '../../assets/lowpoly/Country_America.glb';
 import asia_Japen from '../../assets/lowpoly/Country_America.glb';
-import asia_Korea from '../../assets/lowpoly/Country_America.glb';
+import asia_Korea from '../../assets/lowpoly/Country_Korea.glb';
 import back from '../../assets/lowpoly/back.glb';
 import bg from '../../assets/images/WorldBackground.jpg';
 import { current } from '@reduxjs/toolkit';
