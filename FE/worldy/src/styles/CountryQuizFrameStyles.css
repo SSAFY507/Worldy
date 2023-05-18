@@ -1,9 +1,11 @@
 .CQF-Counting {
   position: absolute;
+  opacity: 0%;
   animation: popupCount 1200ms linear;
 }
 .CQF-Start {
   position: absolute;
+  opacity: 0%;
   animation: popupCount 1100ms ease-out;
 }
 
