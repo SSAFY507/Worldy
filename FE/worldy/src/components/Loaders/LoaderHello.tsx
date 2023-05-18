@@ -11,8 +11,57 @@ type CountryWordList = {
   chn: string;
 };
 
-export default function LoaderHello() {
+export default function LoaderHello({ input }: { input: string }) {
   const [moveNav, setMoveNav] = useState<number>(1);
+
+  /* asia_Korea: "대한민국",
+    asia_China: "중국",
+    asia_india: "인도",
+    asia_Japen: "일본",
+    africa_Egypt: "이집트",
+    europe_France: "프랑스",
+    europe_Italia: "이탈리아",
+    europe_Spain: "스페인",
+    europe_UK: "영국",
+    northAmerica_America: "미국", */
+
+  const [index, setIndex] = useState<number>(0);
+  useEffect(() => {
+    switch (input) {
+      case 'northAmerica_America': {
+        setIndex(0);
+        break;
+      }
+      case 'europe_UK': {
+        setIndex(1);
+        break;
+      }
+      case 'europe_Spain': {
+        setIndex(2);
+        break;
+      }
+      case 'europe_Italia': {
+        setIndex(3);
+        break;
+      }
+      case 'europe_France': {
+        setIndex(4);
+        break;
+      }
+      case 'africa_Egypt': {
+        setIndex(5);
+        break;
+      }
+      case 'asia_Korea': {
+        setIndex(6);
+        break;
+      }
+      case 'asia_Japen': {
+        setIndex(7);
+        break;
+      }
+    }
+  }, []);
 
   const countryList: CountryWordList[] = [
     {
@@ -66,7 +115,7 @@ export default function LoaderHello() {
   ];
 
   const [choosedCountry, setChoosedCountry] = useState<CountryWordList>(
-    countryList[0]
+    countryList[index]
   );
 
   const country: string = window.location.href;

@@ -21,6 +21,9 @@ import thumb5 from '../assets/images/thumb5.png';
 import LoaderLinear from '../components/Loaders/LoaderLinear';
 import { useNavigate } from 'react-router';
 import useLoadImagesHook from '../_hooks/useLoadImagesHook';
+import { useDispatch } from 'react-redux';
+import { addRankInfo } from '../_store/slices/loginSlice';
+import CustomAxios from '../API/CustomAxios';
 
 type ImageListType = {
   headerImage: string;
@@ -35,11 +38,24 @@ type ImageListType = {
   // loaded: boolean;
 };
 
+type MyRankInfo = {
+  rank: number;
+  nickName: string;
+  profileImg: string;
+  tier: string;
+  level: number;
+  percent: number;
+  exp: number;
+};
+
 export default function MainPageAfterLogin({
   changeMyPageRef,
 }: {
   changeMyPageRef: (value: string) => void;
 }) {
+  const DOMAIN = process.env.REACT_APP_BASE_URL;
+  const DOMAIN_S = process.env.REACT_APP_BASE_URL_SHORTER;
+
   const myImageList = {
     Carousel1Icon: Carousel1Icon,
     Carousel2Icon: Carousel2Icon,
@@ -158,6 +174,46 @@ export default function MainPageAfterLogin({
       // loaded: loadC5Bg,
     },
   ]);
+
+  const [axiosMyRankInfo, setAxiosMyRankInfo] = useState<MyRankInfo>();
+  const getLoginToken: string | null = sessionStorage.getItem('token');
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(
+      addRankInfo({
+        rank: axiosMyRankInfo?.rank || 1,
+        tier: axiosMyRankInfo?.tier || 'Bronze',
+        level: axiosMyRankInfo?.level || 1,
+        exp: axiosMyRankInfo?.exp || 0,
+      })
+    );
+    //console.log('경험치 : ' + axiosMyRankInfo?.exp);
+  }, []);
+
+  useEffect(() => {
+    getRankInfoList();
+  }, []);
+
+  const getRankInfoList = async () => {
+    //console.log('Session에서의 가져오는 토큰', getLoginToken);
+    try {
+      const response = await CustomAxios({
+        APIName: 'getRankInfoList',
+        APIType: 'get',
+        UrlQuery: DOMAIN + `/game/ranking`,
+        Token: getLoginToken,
+      });
+      //console.log('닉네임 중복 체크 성공');
+      //console.log('랭크 리스트 받은 거: ', response);
+      setAxiosMyRankInfo(response.myRank);
+    } catch (error) {
+      //console.error('Error fetching data:', error);
+    }
+    //console.log('token이 무엇이냐 ', token);
+  };
+
   return (
     <div className='w-full h-full relative flex flex-col justify-center items-stretch bg-[#fafaf5]'>
       <div className='h-full outline-black flex flex-row items-center justify-center z-30'>

@@ -54,6 +54,9 @@ type MyRankInfo = {
 };
 
 export default function Tutorial() {
+  const DOMAIN = process.env.REACT_APP_BASE_URL;
+  const DOMAIN_S = process.env.REACT_APP_BASE_URL_SHORTER;
+
   ///////////////////////////////
   const myImageList = {
     TutorialBackground: pathTB,
@@ -93,7 +96,7 @@ export default function Tutorial() {
       const response = await CustomAxios({
         APIName: 'getRankInfoList',
         APIType: 'get',
-        UrlQuery: `https://k8a507.p.ssafy.io/api/game/ranking`,
+        UrlQuery: DOMAIN + `/game/ranking`,
         Token: getLoginToken,
       });
       //console.log('닉네임 중복 체크 성공');
@@ -186,7 +189,7 @@ export default function Tutorial() {
       const response = await CustomAxios({
         APIName: 'checkNickName',
         APIType: 'get',
-        UrlQuery: `https://k8a507.p.ssafy.io/api/user/check/${nickName}`,
+        UrlQuery: DOMAIN + `/user/check/${nickName}`,
         Token: getLoginToken,
       });
       //console.log('닉네임 중복 체크 성공');
@@ -205,7 +208,7 @@ export default function Tutorial() {
   //       },
   //     };
   //     const checkNicknameResponse = await axios.get(
-  //       `https://k8a507.p.ssafy.io/api/user/check/${nickName}`,
+  //       DOMAIN + `/user/check/${nickName}`,
   //       config
   //     );
   //     console.log('checknickname 결과', checkNicknameResponse);
@@ -219,7 +222,7 @@ export default function Tutorial() {
       const response = await CustomAxios({
         APIName: 'submitNickName',
         APIType: 'put',
-        UrlQuery: `https://k8a507.p.ssafy.io/api/user/nickname/${nickName}`,
+        UrlQuery: DOMAIN + `/user/nickname/${nickName}`,
         Token: getLoginToken,
       });
 
@@ -532,9 +535,9 @@ export default function Tutorial() {
   const navigate = useNavigate();
   const navigateHome = () => {
     const gameId = sessionStorage.getItem('gameId');
-    
-    // 헤더 확인해서 roomId 있으면 
-    if(gameId) {
+
+    // 헤더 확인해서 roomId 있으면
+    if (gameId) {
       sessionStorage.removeItem('gameId');
       navigate(`/game/${gameId}`);
     } else {

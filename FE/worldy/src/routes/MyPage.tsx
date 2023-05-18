@@ -98,6 +98,9 @@ export default function MyPage({
   setRef: string;
   handleQnaModal: (input: number) => void;
 }) {
+  const DOMAIN = process.env.REACT_APP_BASE_URL;
+  const DOMAIN_S = process.env.REACT_APP_BASE_URL_SHORTER;
+
   const myImageList = {
     pathBG: pathBG,
   };
@@ -265,7 +268,8 @@ export default function MyPage({
             <div
               className='absolute top-0 left-0 h-[10px] bg-blue-300'
               style={{ width: `${axiosRankInfoList?.myRank.exp}%` }}
-            ></div>zzzz
+            ></div>
+            zzzz
           </div>
         </div>
       </div>
@@ -326,7 +330,7 @@ export default function MyPage({
       const response = await CustomAxios({
         APIName: 'getRankInfoList',
         APIType: 'get',
-        UrlQuery: `https://k8a507.p.ssafy.io/api/game/ranking`,
+        UrlQuery: DOMAIN + `/game/ranking`,
         Token: getLoginToken,
       });
       //console.log('닉네임 중복 체크 성공');
@@ -680,7 +684,7 @@ export default function MyPage({
       const response = await CustomAxios({
         APIName: 'getScrappedQuiz',
         APIType: 'get',
-        UrlQuery: `https://k8a507.p.ssafy.io/api/user/scrap/all`,
+        UrlQuery: DOMAIN + `/user/scrap/all`,
         Token: getLoginToken,
       });
       //console.log('닉네임 중복 체크 성공');
@@ -1007,7 +1011,7 @@ export default function MyPage({
       const response = await CustomAxios({
         APIName: 'logout',
         APIType: 'get',
-        UrlQuery: 'https://k8a507.p.ssafy.io/api/user/logout',
+        UrlQuery: DOMAIN + '/user/logout',
         Token: loginToken,
       });
       setLogoutResult(response);

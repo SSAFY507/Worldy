@@ -8,6 +8,7 @@ import QuizBlueText from '../../assets/images/QuizBlueText.png';
 import { QuizDataType } from './CountryQuizFrame';
 import ResultBlueText from '../../assets/images/ResultBlueText.png';
 import tempImage1 from '../../assets/images/thumb2.png';
+import Swal from "sweetalert2";
 
 interface Props {
   selectAsset: string,
@@ -451,8 +452,12 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
       <button
         className='w-[500px] h-[60px] rounded-md font-PtdLight text-[25px] bg-white text-black'
         onClick={() => {
-          alert("다른 문제 풀러 이동합니다.")
-          postDatasList(correctState)
+          // alert("다른 문제 풀러 이동합니다.")
+          Swal.fire("다른 문제 풀러 이동합니다.")
+            .then(function(){
+              postDatasList(correctState)
+            });
+          // postDatasList(correctState)
         }
       }>
         확인
@@ -530,8 +535,12 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
                   size={25}
                   color='#BFBFBF'
                   onClick={() => {
-                    alert("다른 문제 풀러 이동합니다.")
-                    GetRegameFlag(-2)
+                    // alert("다른 문제 풀러 이동합니다.")
+                    Swal.fire("다른 문제 풀러 이동합니다.")
+                      .then(function(){
+                        GetRegameFlag(-2)
+                      });
+                    // GetRegameFlag(-2)
                   }}
                   className='cursor-pointer'
                 />
@@ -591,8 +600,12 @@ const CountryQuizDetailModal = ({selectAsset, axiosGetQuizData, GetRegameFlag}:P
                   size={30}
                   color='gray'
                   onClick={() => {
-                    alert("다른 문제 풀러 이동합니다.")
-                    GetRegameFlag(-2)
+                    // alert("다른 문제 풀러 이동합니다.")
+                    Swal.fire("다른 문제 풀러 이동합니다.")
+                      .then(function(){
+                        GetRegameFlag(-2)
+                      });
+                    // GetRegameFlag(-2)
                   }}
                   className='cursor-pointer'
                 />
