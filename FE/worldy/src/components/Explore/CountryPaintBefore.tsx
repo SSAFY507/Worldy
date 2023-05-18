@@ -71,7 +71,7 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
           <map
             name='image-map'
             id='image-map'
-            className='absolute top-0 left-0 h-[276px] w-[388px] '
+            className='top-0 left-0 h-[276px] w-[388px] relative bg-[rgba(255,255,255,0.3)]'
           >
             {problem.answerPointList!.map((e, idx) => {
               return (
