@@ -42,7 +42,8 @@ class PayResultClass extends React.Component<PayResultClassProps> {
 
   componentDidMount() {
     const { params } = this.state;
-    const adminKey = 'c6f82fc3b98485b2394889a33664e793';
+    const adminKey = process.env.REACT_APP_KAKAO_KEY;
+    // const adminKey = 'c6f82fc3b98485b2394889a33664e793';
 
     const KAKAO_DOMAIN = process.env.REACT_KAKAO_BASE_URL;
 
