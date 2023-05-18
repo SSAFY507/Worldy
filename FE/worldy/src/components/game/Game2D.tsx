@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import Dice from "./Dice";
 import GameQuizModal from "../GameQuizModal";
+import Swal from "sweetalert2";
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 
@@ -1444,23 +1445,39 @@ export default function Game2D(props: any) {
     // 잔액이 있는지 확인
     if (turn === 0) {
       if (player.p1.game.balance - totalPrice < 0) {
-        alert("잔액이 부족합니다.");
-        return;
+        // alert("잔액이 부족합니다.");
+        Swal.fire('잔액이 부족합니다.')
+          .then(function(){
+            return;
+          });
+        // return;
       }
     } else if (turn === 1) {
       if (player.p2.game.balance - totalPrice < 0) {
-        alert("잔액이 부족합니다.");
-        return;
+        // alert("잔액이 부족합니다.");
+        Swal.fire('잔액이 부족합니다.')
+          .then(function(){
+            return;
+          });
+        // return;
       }
     } else if (turn === 2) {
       if (player.p3.game.balance - totalPrice < 0) {
-        alert("잔액이 부족합니다.");
-        return;
+        // alert("잔액이 부족합니다.");
+        Swal.fire('잔액이 부족합니다.')
+          .then(function(){
+            return;
+          });
+        // return;
       }
     } else if (turn === 3) {
       if (player.p4.game.balance - totalPrice < 0) {
-        alert("잔액이 부족합니다.");
-        return;
+        // alert("잔액이 부족합니다.");
+        Swal.fire('잔액이 부족합니다.')
+          .then(function(){
+            return;
+          });
+        // return;
       }
     }
 
@@ -1853,23 +1870,39 @@ export default function Game2D(props: any) {
     // 잔액이 있는지 확인
     if (turn === 0) {
       if (player.p1.game.balance - buildPrice < 0) {
-        alert("잔액이 부족합니다.");
-        return;
+        // alert("잔액이 부족합니다.");
+        Swal.fire('잔액이 부족합니다.')
+          .then(function(){
+            return;
+          });
+        // return;
       }
     } else if (turn === 1) {
       if (player.p2.game.balance - buildPrice < 0) {
-        alert("잔액이 부족합니다.");
-        return;
+        // alert("잔액이 부족합니다.");
+        Swal.fire('잔액이 부족합니다.')
+          .then(function(){
+            return;
+          });
+        // return;
       }
     } else if (turn === 2) {
       if (player.p3.game.balance - buildPrice < 0) {
-        alert("잔액이 부족합니다.");
-        return;
+        // alert("잔액이 부족합니다.");
+        Swal.fire('잔액이 부족합니다.')
+          .then(function(){
+            return;
+          });
+        // return;
       }
     } else if (turn === 3) {
       if (player.p4.game.balance - buildPrice < 0) {
-        alert("잔액이 부족합니다.");
-        return;
+        // alert("잔액이 부족합니다.");
+        Swal.fire('잔액이 부족합니다.')
+          .then(function(){
+            return;
+          });
+        // return;
       }
     }
 
@@ -1984,6 +2017,10 @@ export default function Game2D(props: any) {
     setMode(7);
   }
 
+  function priceToString(price:any) {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
   return (
     <>
 
@@ -2022,7 +2059,7 @@ export default function Game2D(props: any) {
               return (
                 <div key={index}>
                   <div
-                    className={`w-[300px] h-[290px] bg-[#F4F2EC] rounded-[8px] flex flex-col justify-center items-center 
+                    className={`w-[336px] h-[238px] bg-white rounded-[8px] flex flex-col justify-center items-center  shadow-[0_3px_10px_rgb(0,0,0,0.2)]
                     ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 1 ? "outline outline-[6px] outline-red-400" : ""}
                     ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 2 ? "outline outline-[6px] outline-green-400" : ""}
                     ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 3 ? "outline outline-[6px] outline-blue-400" : ""}
@@ -2031,11 +2068,12 @@ export default function Game2D(props: any) {
                     `}
                   >
                     <div className="w-[250px] h-[240px] mt-[20px]">
-                      <div className="flex justify-between">
-                        <div className="text-[12px]">플레이어[{i.playerNum}]</div>
-                        <div className="text-[12px]">[{worldMap[i.game.location].name}]</div>
-                      </div>
-                      <div className="flex items-center h-[60px] mt-[10px] mb-[10px] border-solid border-gray-400 border-b-[1px]">
+                    <div className="flex justify-between items-center text-[#C0C0C0]">
+                      <div className="text-[12px]">플레이어</div>
+                      <div className="text-[12px]">현재 위치</div>
+                    </div>
+                    <div className="flex items-center justify-between h-[60px] mt-[10px] mb-[10px] border-solid border-[#E9E9E9] border-b-[1px]">
+                  
                         {i.playerNum === 1 ? <img src={user1.profileImg} className="w-[50px] h-[50px] rounded-full object-cover"></img> : null}
                         {i.playerNum === 2 ? <img src={user2.profileImg} className="w-[50px] h-[50px] rounded-full object-cover"></img> : null}
                         {i.playerNum === 3 ? <img src={user3.profileImg} className="w-[50px] h-[50px] rounded-full object-cover"></img> : null}
@@ -2052,17 +2090,20 @@ export default function Game2D(props: any) {
                           {i.name === rankPlayerData.rankPlayer[2].nickName ? '3위' : ''}
                           {i.name === rankPlayerData.rankPlayer[3].nickName ? '4위' : ''}
                         </div>
+                        <div className="flex items-center justify-end text-[20px] font-PtdBold ml-[6px] w-[80px]">
+                          <div>{worldMap[i.game.location].name}</div>
+                        </div>
+               
                       </div>
-                      <div className="flex flex-col w-full h-[60px] items-between">
-                        <div className="">보유자산</div>
-                        <div className="flex mt-[10px]">
-                          <div className="text-[20px]">
-                            {i.game.balance} 만원
-                          </div>
+                      <div className="flex flex-col w-full h-[40px] items-between">
+                        <div className="text-[12px] text-[#C0C0C0] mt-[10px]">보유자산</div>
+                        <div className="flex mt-[10px] justify-between text-[20px] font-PtdBold ">
+                          <div className="">{priceToString(me.game.balance)}</div>
+                          <div className="">만원</div>
                         </div>
                       </div>
-                      <div className="flex flex-col w-full h-[60px] items-between">
-                        <div className="">
+                      <div className="flex flex-col w-full h-[60px] items-between mt-[20px]">
+                        <div className="text-[12px] text-[#C0C0C0] mt-[10px]">
                           소유국가[총{i.game.own.length}개]
                         </div>
                         <div className="flex mt-[10px] h-[80px] w-full">
@@ -2130,7 +2171,7 @@ export default function Game2D(props: any) {
 
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
                             </div> : null}
-                            <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
+                            <div className="textNameRed w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold">
                               {i.name}
                             </div>
                             <div
@@ -2208,7 +2249,7 @@ export default function Game2D(props: any) {
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
                             </div> : null}
-                            <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center font-PtdExtraBold ">
+                            <div className="textNameBlack w-[90px] h-[30px] text-white rounded-[2px] flex justify-center items-center font-PtdExtraBold ">
                               {i.name}
                             </div>
                             <div className="w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white">
@@ -2238,8 +2279,8 @@ export default function Game2D(props: any) {
                       {i.type === "start" &&
                         i.location >= 0 &&
                         i.location < 10 && (
-                          <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-500">
-                            {metaData.currentLocation === i.location ? <div className={`w-[92px] h-[92px] rounded-[6px] outline outline-[4px]  outline-dashed absolute z-[9000]
+                          <div className="w-[90px] h-[90px] rounded-[15px] flex flex-col justify-center items-center bg-[#1F93FF]">
+                            {metaData.currentLocation === i.location ? <div className={`w-[92px] h-[92px] rounded-[10px] outline outline-[4px]  outline-dashed absolute z-[9000]
                             ${metaData.turn === 0 ? 'outline-red-400' : ''} 
                             ${metaData.turn === 1 ? 'outline-green-400' : ''} 
                             ${metaData.turn === 2 ? 'outline-blue-400' : ''} 
@@ -2255,16 +2296,15 @@ export default function Game2D(props: any) {
                                 <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p3_point.gif"></img>
                                 : null}
                               {metaData.turn === 3 ?
-                                <img className="w-[60px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p4_point.gif"></img>
+                                <img className="w-[59.5px] h-[60px] relative top-[-60px] left-[16px]" src="/game/p4_point.gif"></img>
                                 : null}
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
                             </div> : null}
-                            <div className="w-[82px] h-[82px] rounded-[2px] flex justify-around items-center flex-wrap text-[10px]">
-                              <img
-                                src="/game/f0.png"
-                                className="w-[82px] h-[82px] object-cover absolute z-[1] blur-[2px]"
-                              ></img>
+                            <div className="start relative mt-[-13px] w-[90px] h-[30px] rounded-[2px] flex justify-center text-white font-PtdExtraBold ">
+                              START
+                            </div>
+                            <div className="w-[80px] h-[78px] mt-[-15px] rounded-[10px] flex flex-col justify-center items-center bg-white">
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px] z-[10]">
                                   {player.p1.name.substr(0, 2)}
@@ -2291,7 +2331,7 @@ export default function Game2D(props: any) {
                       {i.type === "item" &&
                         i.location >= 0 &&
                         i.location < 10 && (
-                          <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-yellow-400">
+                          <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-[#3CDCFF]">
                             {metaData.currentLocation === i.location ? <div className={`w-[92px] h-[92px] rounded-[6px] outline outline-[4px]  outline-dashed absolute z-[9000]
                             ${metaData.turn === 0 ? 'outline-red-400' : ''} 
                             ${metaData.turn === 1 ? 'outline-green-400' : ''} 
@@ -2313,10 +2353,14 @@ export default function Game2D(props: any) {
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
                             </div> : null}
-                            <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
+                            <div className="textItem w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
                               {i.name}
                             </div>
                             <div className="w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white">
+                              <img
+                                src="/game/item.png"
+                                className="w-[50px] object-cover absolute z-[1]"
+                              ></img>
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]">
                                   {player.p1.name.substr(0, 2)}
@@ -2380,7 +2424,7 @@ export default function Game2D(props: any) {
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
                             </div> : null}
-                            <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
+                            <div className="textNameGreen w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
                               {i.name}
                             </div>
                             <div
@@ -2457,7 +2501,7 @@ export default function Game2D(props: any) {
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
                             </div> : null}
-                            <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center font-PtdExtraBold ">
+                            <div className="textNameBlack text-white w-[90px] h-[30px] rounded-[2px] flex justify-center items-center font-PtdExtraBold ">
                               {i.name}
                             </div>
                             <div className="w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white">
@@ -2487,7 +2531,7 @@ export default function Game2D(props: any) {
                       {i.type === "desert" &&
                         i.location >= 10 &&
                         i.location < 20 && (
-                          <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-500">
+                          <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-[#BFE259]">
                             {metaData.currentLocation === i.location ? <div className={`w-[92px] h-[92px] rounded-[6px] outline outline-[4px]  outline-dashed absolute z-[9000]
                             ${metaData.turn === 0 ? 'outline-red-400' : ''} 
                             ${metaData.turn === 1 ? 'outline-green-400' : ''} 
@@ -2509,10 +2553,14 @@ export default function Game2D(props: any) {
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
                             </div> : null}
-                            <div className="w-[82px] h-[82px] rounded-[2px] flex justify-around items-center flex-wrap text-[10px]">
+
+                            <div className="textDesert text-white w-[90px] h-[30px] rounded-[2px] flex justify-center items-center font-PtdExtraBold ">
+                              무인도
+                            </div>
+                            <div className="w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white">
                               <img
-                                src="/game/f10.png"
-                                className="w-[82px] h-[82px] object-cover absolute z-[1] blur-[2px]"
+                                src="/game/desert.png"
+                                className="w-[50px] object-cover absolute z-[1]"
                               ></img>
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px] z-[10]">
@@ -2540,7 +2588,7 @@ export default function Game2D(props: any) {
                       {i.type === "item" &&
                         i.location >= 10 &&
                         i.location < 20 && (
-                          <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-yellow-400">
+                          <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-[#3CDCFF]">
                             {metaData.currentLocation === i.location ? <div className={`w-[92px] h-[92px] rounded-[6px] outline outline-[4px]  outline-dashed absolute z-[9000]
                             ${metaData.turn === 0 ? 'outline-red-400' : ''} 
                             ${metaData.turn === 1 ? 'outline-green-400' : ''} 
@@ -2562,10 +2610,14 @@ export default function Game2D(props: any) {
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
                             </div> : null}
-                            <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
+                            <div className="textItem w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
                               {i.name}
                             </div>
                             <div className="w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white">
+                              <img
+                                src="/game/item.png"
+                                className="w-[52px] object-cover absolute z-[1]"
+                              ></img>
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]">
                                   {player.p1.name.substr(0, 2)}
@@ -2607,7 +2659,7 @@ export default function Game2D(props: any) {
                       {i.type === "nation" &&
                         i.location >= 20 &&
                         i.location < 30 && (
-                          <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-400">
+                          <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-[#FDE047]">
                             {metaData.currentLocation === i.location ? <div className={`w-[92px] h-[92px] rounded-[6px] outline outline-[4px]  outline-dashed absolute z-[9000]
                             ${metaData.turn === 0 ? 'outline-red-400' : ''} 
                             ${metaData.turn === 1 ? 'outline-green-400' : ''} 
@@ -2629,7 +2681,7 @@ export default function Game2D(props: any) {
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
                             </div> : null}
-                            <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
+                            <div className="textNameYellow w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
                               {i.name}
                             </div>
                             <div
@@ -2706,7 +2758,7 @@ export default function Game2D(props: any) {
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
                             </div> : null}
-                            <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center font-PtdExtraBold ">
+                            <div className="textNameBlack text-white w-[90px] h-[30px] rounded-[2px] flex justify-center items-center font-PtdExtraBold ">
                               {i.name}
                             </div>
                             <div className="w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white">
@@ -2736,7 +2788,7 @@ export default function Game2D(props: any) {
                       {i.type === "port" &&
                         i.location >= 20 &&
                         i.location < 30 && (
-                          <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-500">
+                          <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-gray-200">
                             {metaData.currentLocation === i.location ? <div className={`w-[92px] h-[92px] rounded-[6px] outline outline-[4px]  outline-dashed absolute z-[9000]
                             ${metaData.turn === 0 ? 'outline-red-400' : ''} 
                             ${metaData.turn === 1 ? 'outline-green-400' : ''} 
@@ -2758,11 +2810,10 @@ export default function Game2D(props: any) {
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
                             </div> : null}
-                            <div className="w-[82px] h-[82px] rounded-[2px] flex justify-around items-center flex-wrap text-[10px]">
-                              <img
-                                src="/game/f20.png"
-                                className="w-[82px] h-[82px] object-cover absolute z-[1] blur-[2px]"
-                              ></img>
+                            <div className="textNameBlack text-white w-[90px] h-[30px] rounded-[2px] flex justify-center items-center font-PtdExtraBold ">
+                              정거장
+                            </div>
+                            <div className="w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white">
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px] z-[10]">
                                   {player.p1.name.substr(0, 2)}
@@ -2789,7 +2840,7 @@ export default function Game2D(props: any) {
                       {i.type === "item" &&
                         i.location >= 20 &&
                         i.location < 30 && (
-                          <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-yellow-400">
+                          <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-[#3CDCFF]">
                             {metaData.currentLocation === i.location ? <div className={`w-[92px] h-[92px] rounded-[6px] outline outline-[4px]  outline-dashed absolute z-[9000]
                             ${metaData.turn === 0 ? 'outline-red-400' : ''} 
                             ${metaData.turn === 1 ? 'outline-green-400' : ''} 
@@ -2811,10 +2862,14 @@ export default function Game2D(props: any) {
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
                             </div> : null}
-                            <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
+                            <div className="textItem w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
                               {i.name}
                             </div>
                             <div className="w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white">
+                             <img
+                                src="/game/item.png"
+                                className="w-[50px] object-cover absolute z-[1]"
+                              ></img>
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]">
                                   {player.p1.name.substr(0, 2)}
@@ -2878,7 +2933,7 @@ export default function Game2D(props: any) {
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
                             </div> : null}
-                            <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
+                            <div className="textNamePurple w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
                               {i.name}
                             </div>
                             <div
@@ -2955,7 +3010,7 @@ export default function Game2D(props: any) {
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
                             </div> : null}
-                            <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center font-PtdExtraBold ">
+                            <div className="textNameBlack text-white w-[90px] h-[30px] rounded-[2px] flex justify-center items-center font-PtdExtraBold ">
                               {i.name}
                             </div>
                             <div className="w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white">
@@ -2985,7 +3040,7 @@ export default function Game2D(props: any) {
                       {i.type === "olympic" &&
                         i.location >= 30 &&
                         i.location < 40 && (
-                          <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-500">
+                          <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-[#D96BFF]">
                             {metaData.currentLocation === i.location ? <div className={`w-[92px] h-[92px] rounded-[6px] outline outline-[4px]  outline-dashed absolute z-[9000]
                             ${metaData.turn === 0 ? 'outline-red-400' : ''} 
                             ${metaData.turn === 1 ? 'outline-green-400' : ''} 
@@ -3007,8 +3062,10 @@ export default function Game2D(props: any) {
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
                             </div> : null}
-                            <div className="w-[82px] h-[82px] rounded-[2px] flex flex-col justify-around items-around flex-wrap text-[10px]">
-                              <div className="w-[82px] h-[82px] bg-white absolute z-[1] flex flex-col justify-start items-center flex-wrap">
+                            <div className="olympic w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
+                              올림픽
+                            </div>
+                            <div className="w-[84px] h-[54px] rounded-[2px] flex flex-col justify-center items-center bg-white">
                                 <img
                                   src="/game/f30.png"
                                   className="w-[42px] h-[26px] object-cover relative z-[2]"
@@ -3034,15 +3091,13 @@ export default function Game2D(props: any) {
                                     {player.p4.name.substr(0, 2)}
                                   </div>
                                 )}
-
-                              </div>
                             </div>
                           </div>
                         )}
                       {i.type === "tax" &&
                         i.location >= 30 &&
                         i.location < 40 && (
-                          <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-blue-500">
+                          <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-[#8A96FF]">
                             {metaData.currentLocation === i.location ? <div className={`w-[92px] h-[92px] rounded-[6px] outline outline-[4px]  outline-dashed absolute z-[9000]
                             ${metaData.turn === 0 ? 'outline-red-400' : ''} 
                             ${metaData.turn === 1 ? 'outline-green-400' : ''} 
@@ -3064,11 +3119,10 @@ export default function Game2D(props: any) {
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
                             </div> : null}
-                            <div className="w-[82px] h-[82px] rounded-[2px] flex justify-around items-center flex-wrap text-[10px]">
-                              <img
-                                src="/game/f37.png"
-                                className="w-[82px] h-[82px] object-cover absolute z-[1] blur-[2px]"
-                              ></img>
+                            <div className="tax w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
+                              국세청
+                            </div>
+                            <div className="w-[84px] h-[54px] rounded-[2px] flex flex-col justify-center items-center bg-white">
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px] z-[10]">
                                   {player.p1.name.substr(0, 2)}
@@ -3095,7 +3149,7 @@ export default function Game2D(props: any) {
                       {i.type === "item" &&
                         i.location >= 30 &&
                         i.location < 40 && (
-                          <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-yellow-400">
+                          <div className="w-[90px] h-[90px] rounded-[4px] flex flex-col justify-center items-center bg-[#3CDCFF]">
                             {metaData.currentLocation === i.location ? <div className={`w-[92px] h-[92px] rounded-[6px] outline outline-[4px]  outline-dashed absolute z-[9000]
                             ${metaData.turn === 0 ? 'outline-red-400' : ''} 
                             ${metaData.turn === 1 ? 'outline-green-400' : ''} 
@@ -3117,10 +3171,14 @@ export default function Game2D(props: any) {
                             </div> : null}
                             {selectMode && newLoaction === i.location ? <div className="w-[92px] h-[92px] rounded-[6px] outline outline-[4px] outline-red-500 outline-dashed absolute z-[9000]">
                             </div> : null}
-                            <div className="w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
+                            <div className="textNameItem w-[90px] h-[30px] rounded-[2px] flex justify-center items-center text-white font-PtdExtraBold ">
                               {i.name}
                             </div>
                             <div className="w-[84px] h-[54px] rounded-[2px] flex justify-center items-center bg-white">
+                              <img
+                                src="/game/item.png"
+                                className="w-[52px] object-cover absolute z-[1]"
+                              ></img>
                               {i.location === player.p1.game.location && (
                                 <div className="w-[30px] h-[16px] rounded-[8px] bg-red-500 flex justify-center items-center text-white text-[10px]">
                                   {player.p1.name.substr(0, 2)}
@@ -3192,6 +3250,29 @@ export default function Game2D(props: any) {
                 턴 종료
               </div> */}
 
+              <div
+                className="bg-white w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-gray-300 text-[20px] absolute top-[1360px]"
+                onClick={() => {
+                  setMetaData((prevState: any) => ({
+                    ...prevState,
+                    turnOver: true,
+                  }));
+                  setMode(0);
+                  calRanking();
+                  sendData();
+                }}
+              >
+                턴 종료
+              </div>
+              <div
+                className="bg-white w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-gray-300 text-[20px] absolute top-[1290px]"
+                onClick={() => {
+                  playerTurn(metaData.turn);
+                }}
+              >
+                다른 사람 주사위
+              </div>
+
               {/* <div
                 id="shbutton"
                 className="w-[200px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px] absolute left-[400px] top-[290px]"
@@ -3246,7 +3327,7 @@ export default function Game2D(props: any) {
                       {worldMap[metaData.currentLocation].owner === 0 &&
                         worldMap[metaData.currentLocation].type !== "nation" &&
                         worldMap[metaData.currentLocation].type === "item" && (
-                          <div className="flex w-[64px] h-[28px] justify-center items-center bg-yellow-400 rounded-[4px] absolute right-[30px] text-white text-[12px]">
+                          <div className="flex w-[64px] h-[28px] justify-center items-center bg-[#3CDCFF] rounded-[4px] absolute right-[30px] text-white text-[12px]">
                             보물상자
                           </div>
                         )}
@@ -4065,7 +4146,7 @@ export default function Game2D(props: any) {
           className={`w-[20%] h-full flex flex-col justify-start items-start rounded-[4px]`}
         >
           <div
-            className={`w-[320px] h-[920px] mb-[40px]  flex flex-col justify-around items-center bg-gray-100 rounded-[8px] 
+            className={`w-[387px] h-[908px] mb-[40px]  flex flex-col justify-around items-center bg-gray-100/70 rounded-[24px] 
             ${myTurn && me.playerNum === 1 ? "outline outline-[6px] outline-red-400" : ""}
             ${myTurn && me.playerNum === 2 ? "outline outline-[6px] outline-green-400" : ""}
             ${myTurn && me.playerNum === 3 ? "outline outline-[6px] outline-blue-400" : ""}
@@ -4073,16 +4154,20 @@ export default function Game2D(props: any) {
             
             `}
           >
-            <div className="w-[300px] h-[200px] bg-white rounded-[8px] flex flex-col justify-center items-center">
+            <div className="w-[336px] h-[181px] bg-white rounded-[11px] flex flex-col justify-center items-center shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
               <div className="w-[250px] h-[140px]">
-                <div className="flex justify-between items-center">
-                  <div className="text-[12px]">플레이어 [{me.playerNum}]</div>
+                <div className="flex justify-between items-center text-[#C0C0C0]">
+                  <div className="text-[12px]">내 정보</div>
+                  <div className="text-[12px]">현재 위치</div>
                   {/* <div className="text-[12px]">[{worldMap[me.game.location].name}]</div> */}
                 </div>
-                <div className="flex items-center justify-between h-[70px] mt-[10px] mb-[10px] border-solid border-gray-400 border-b-[1px]">
+                <div className="flex items-center justify-between h-[70px] mt-[10px] mb-[10px] border-solid border-[#E9E9E9] border-b-[1px]">
                   <div className="flex items-center">
                     <img src={`${profileImg}`} alt="" className="w-[50px] h-[50px] rounded-full" />
                     <div className="text-[30px] font-PtdBold ml-[6px] w-[120px]">{me.name}</div>
+                    <div className="flex items-center justify-end text-[20px] font-PtdBold ml-[6px] w-[80px]">
+                      <div>{worldMap[me.game.location].name}</div>
+                    </div>
                   </div>
                   {rankPlayerData.rankPlayer[0].nickName ?
                     <div
@@ -4102,15 +4187,19 @@ export default function Game2D(props: any) {
                     : null}
                 </div>
                 <div className="flex flex-col w-full h-[40px] items-between">
-                  <div className="">보유자산</div>
-                  <div className="flex mt-[10px]">
-                    <div className="text-[20px]">{me.game.balance} 만원</div>
+                  <div className="text-[12px] text-[#C0C0C0]">보유자산</div>
+                  <div className="flex mt-[10px] justify-between text-[25px] font-PtdBold ">
+                    <div className="">{priceToString(me.game.balance)}</div>
+                    <div className="">만원</div>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="w-[300px] h-[680px] bg-white rounded-[8px] flex flex-col justify-center items-center">
-              <div className="w-[260px] h-[640px]">
+            <div className="w-[336px] h-[609px] bg-white rounded-[8px] flex flex-col justify-center items-center shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
+              <div className="w-[260px] h-[570px] justify-center items-center">
+                <div className="flex items-center flex-start text-[#C0C0C0]">
+                    <div className="text-[12px] mb-[20px]">소유 자산</div>
+                </div>
                 {me.game.own.map((e: number, index: number) => {
                   return (
                     <div

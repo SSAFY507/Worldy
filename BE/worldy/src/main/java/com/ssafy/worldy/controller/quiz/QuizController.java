@@ -7,6 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/quiz")
@@ -29,7 +32,7 @@ public class QuizController {
      * - 해당 나라의 퀴즈를 랜덤으로 응답
      ***/
     @GetMapping("/nation/{nationId}")
-    public ResponseEntity<QuizDto> getNationQuiz(@PathVariable Long nationId){
+    public ResponseEntity<List<QuizDto>> getNationQuiz(@PathVariable Long nationId){
 
         return new ResponseEntity<>(quizService.getNationQuizDto(nationId), HttpStatus.OK);
     }
@@ -68,13 +71,24 @@ public class QuizController {
     }
 
     /***
-     * [ 퀴즈 결과 ]
-     * - 유저가 푼 퀴즈의 결과 저장
+     * [ 틀린 그림 찾기 ]
+     * - 나라별 랜드마크 사진으로 틀린 그림 찾기
      ***/
     @GetMapping("/hidden/{nationId}")
     public ResponseEntity<HiddenCatchDto> getHiddenCatch(@PathVariable Long nationId){
 
         HiddenCatchDto hiddenCatchDto = quizService.getHiddenCatch(nationId);
         return new ResponseEntity<>(hiddenCatchDto, HttpStatus.OK);
+    }
+
+    /***
+     * [ 틀린 그림 찾기 성공 ]
+     * - 틀린 그림 찾기  성공시 경험치 20점 제공
+     ***/
+    @PostMapping("/hidden/success")
+    public ResponseEntity<String> getHiddenCatch(@RequestBody Map<String, String> user){
+
+        quizService.successHiddenCatch(user.get("userNickName"));
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 }

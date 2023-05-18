@@ -11,6 +11,7 @@ import Moon from '../../assets/images/Moon.png';
 import { countryLst } from './CountrySpeak';
 import logoColoredBlue from '../../assets/images/LogoColoredBlue.png';
 import { useNavigate } from 'react-router';
+import Swal from "sweetalert2";
 
 interface Props {
   hoborAsset: string;
@@ -138,11 +139,22 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSele
                 // detail page인 경우, Country Map 으로
                 GetSelectAssetName("");
                 selectAsset = "";
-                alert("나라로 이동합니다.");
+                // alert("나라로 이동합니다.");
+                Swal.fire("나라로 이동합니다.");
               } else {  
                 // Country Map인 경우, World Map 으로
-                alert("대륙으로 이동합니다.");
-                navigate('/explore');
+                // alert('대륙으로 이동합니다');
+                Swal.fire('대륙으로 이동합니다.')
+                .then(function(){
+                  navigate('/explore');
+                });
+                // navigate('/explore');
+
+                // Swal.fire({icon: 'error',
+                //   title: '결제실패',
+                //   text: msg,	}).then(function(){
+                //   location.href='home';
+                //   })
               }
             }} 
           />

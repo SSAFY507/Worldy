@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import Callback from './routes/Callback';
 import Country from './routes/Country';
-import Create from "./routes/Create";
+import Create from './routes/Create';
 import Explore from './routes/Explore';
 import Game from './routes/Game';
 import Game3D from './components/game/Game3D';
@@ -19,6 +19,7 @@ import Game3DItem from './components/game/game3D/Game3DItem';
 import GameInfo from './routes/GameInfo';
 import GameResult from './routes/GameResult';
 import IntroPage from './routes/IntroPage';
+import LoaderHello from './components/Loaders/LoaderHello';
 import LoginModal from './components/LoginModal';
 import MainPageAfterLogin from './routes/MainPageAfterLogin';
 import Matching from './components/create/Matching';
@@ -26,8 +27,8 @@ import Monopoly from './routes/Monopoly';
 import MyPage from './routes/MyPage';
 import Navbar from './components/Nvabar';
 import PayResult from './routes/PayResult';
-import PaySuccess from "./routes/PayResult";
-import Payment from "./routes/Payment";
+import PaySuccess from './routes/PayResult';
+import Payment from './routes/Payment';
 import Socket from './routes/Socket';
 import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
@@ -38,31 +39,7 @@ import { useSelector } from 'react-redux';
 
 //import Updates from "./routes/Updates";
 
-
-
-
-
-
 // import HelloPage from './components/Loaders/LoaderHello';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -227,6 +204,7 @@ const AppLayout = () => {
           <Route path='/payment' element={<Payment />} />
           <Route path='/hoons' element={<WorldMapTutorial />} />
           <Route path='/3dgame' element={<Game3D />} />
+          <Route path='/hello' element={<LoaderHello input={'asia_Korea'} />} />
         </Routes>
       </div>
     </div>

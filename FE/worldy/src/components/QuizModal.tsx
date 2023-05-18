@@ -15,8 +15,8 @@ import { useEffect, useRef, useState } from 'react';
 import { BiImage } from 'react-icons/bi';
 import { IoIosPhotos } from 'react-icons/io';
 import { JsxElement } from 'typescript';
-import QuizBlueText from '../assets/images/QuizBlueText.png';
-import ResultBlueText from '../assets/images/ResultBlueText.png';
+import QuizBlueText from '../assets/images/QuizBlue.png';
+import ResultBlueText from '../assets/images/ResultBlue.png';
 import tempImage1 from '../assets/images/thumb2.png';
 import tempImage2 from '../assets/images/Carousel5.png';
 import tempImage3 from '../assets/images/JoshCurious.png';
@@ -51,7 +51,6 @@ export default function QuizModal({
   //console.log(input);
 
   const userName: string | null = sessionStorage.getItem('nickname');
-
 
   const size: number = 200;
 
@@ -258,8 +257,10 @@ export default function QuizModal({
         <div key={key}>
           <button
             className={`${
-              submitAnswer === prevInput.multiAnswerText ? 'clickedmulti' : ''
-            } beforemulti w-[200px] h-[80px] mx-[10px] rounded-md shadow-md bg-[#F2F2F2] flex flex-row justify-center items-center`}
+              submitAnswer === (key + 1).toString()
+                ? 'clickedmulti'
+                : 'bg-[#F2F2F2]'
+            } beforemulti w-[200px] h-[80px] font-PtdRegular mx-[10px] rounded-md shadow-md  flex flex-row justify-center items-center`}
             onClick={() => handleSubmitMultiAnswer(key + 1)}
           >
             <span
@@ -323,7 +324,11 @@ export default function QuizModal({
             </div>
           )}
         </div>
-        <div className='w-[500px] h-[150px]  outline-green-300 flex flex-row justify-between items-center'>
+        <div
+          className={`w-[500px] h-[150px]  outline-green-300 flex flex-row ${
+            input.answer.length === 1 ? 'justify-center' : 'justify-between'
+          } items-center`}
+        >
           {blankBoxComponent()}
         </div>
       </div>
@@ -652,7 +657,9 @@ export default function QuizModal({
             </div>
           </div>
           <div className='w-full flex-1 outline-black flex flex-row justify-start items-center font-PtdRegular text-[#ACACAC]'>
-            <span>"{userName}"님이 입력한 답은 "{submitAnswer}"</span>
+            <span>
+              "{userName}"님이 입력한 답은 "{submitAnswer}"
+            </span>
           </div>
         </div>
         <div className='relative bg-[#F5F5F5] w-full h-[300px]  outline-blue-500'>

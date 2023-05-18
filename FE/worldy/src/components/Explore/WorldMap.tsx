@@ -22,6 +22,7 @@ import oceania from "../../assets/lowpoly/oceania.glb";
 import southAmerica from "../../assets/lowpoly/southAmerica.glb";
 import useLoadGlbsHook from "../../_hooks/useLoadGlbsHook";
 import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 export interface CountryType {
   [key: string]: string;
@@ -131,10 +132,22 @@ const WorldMap = () => {
     if (!clickTimeout && selectedObjectRef.current!.userData.flag) {
       clickTimeout = setTimeout(() => {
         if (name) {
-          alert(`${name}으(로) 이동합니다.`)
-          navigate(`/explore/${moveCountry}`)
+          // alert(`${name}으(로) 이동합니다.`)
+          if (`${name}` === "미국" || `${name}` === "영국" || `${name}` === "스페인" || `${name}` === "한국") {
+            Swal.fire(`${name}으로 이동합니다.`).then(function(){
+              navigate(`/explore/${moveCountry}`)
+            });
+          } else {
+            Swal.fire(`${name}로 이동합니다.`).then(function(){
+              navigate(`/explore/${moveCountry}`)
+            });
+          }
         } else {
-          alert(`오픈 예정입니다!😉`)
+          // alert(`오픈 예정입니다!😉`)
+          Swal.fire(`오픈 예정입니다.`)
+            // .then(function(){
+            //   navigate(`/explore/${moveCountry}`)
+            // });
         }
         // 클릭 이벤트 처리
         console.log("click");
