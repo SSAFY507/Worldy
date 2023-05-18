@@ -31,7 +31,7 @@ const Country = () => {
   useEffect(() => {
     setTimeout(() => {
       setEndLoader(true);
-    }, 7000);
+    }, 8000);
   }, []);
 
   return (

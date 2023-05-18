@@ -80,7 +80,7 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
                   <div
                     className='z-20'
                     style={{
-                      outline: '5px solid red',
+                      outline: '5px solid rgba(255,0,0,0.7)',
                       width: `${String(Number(e[2]) - Number(e[0]))}px`,
                       height: `${String(Number(e[3]) - Number(e[1]))}px`,
                       position: 'absolute',
@@ -117,21 +117,22 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
                         case 3:
                           setThird(true);
                           // alert('틀린 그림 맞추기 성공! 😲  (exp: + 20)');
-                          Swal.fire('틀린 그림 맞추기 성공! 😲  (exp: + 20)')
-                            .then(function(){
-                              GetSolvedFlag(true, true);
-                              const requestBody = new Map([
-                                ['userNickName', userNickName],
-                              ]);
-                              const response = CustomAxios({
-                                APIName: 'success',
-                                APIType: 'post',
-                                UrlQuery: DOMAIN + '/quiz/hidden/success',
-                                Body: requestBody,
-                                Token: getLoginToken,
-                              });
-                              console.log(response);
+                          Swal.fire(
+                            '틀린 그림 맞추기 성공! 😲  (exp: + 20)'
+                          ).then(function () {
+                            GetSolvedFlag(true, true);
+                            const requestBody = new Map([
+                              ['userNickName', userNickName],
+                            ]);
+                            const response = CustomAxios({
+                              APIName: 'success',
+                              APIType: 'post',
+                              UrlQuery: DOMAIN + '/quiz/hidden/success',
+                              Body: requestBody,
+                              Token: getLoginToken,
                             });
+                            console.log(response);
+                          });
                           // GetSolvedFlag(true, true);
                           // const requestBody = new Map([
                           //   ['userNickName', userNickName],
@@ -193,10 +194,9 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
         hover:bg-[#ead3fc] hover:opacity-80'
         onClick={() => {
           // alert('틀린 그림 맞추기 실패! 😢');
-          Swal.fire("틀린 그림 맞추기 실패! 😢")
-            .then(function(){
-              GetSolvedFlag(true, false);
-            });
+          Swal.fire('틀린 그림 맞추기 실패! 😢').then(function () {
+            GetSolvedFlag(true, false);
+          });
           // GetSolvedFlag(true, false);
         }}
       >
