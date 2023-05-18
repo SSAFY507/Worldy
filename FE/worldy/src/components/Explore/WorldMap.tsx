@@ -152,7 +152,7 @@ const WorldMap = () => {
             `${name}` === '미국' ||
             `${name}` === '영국' ||
             `${name}` === '스페인' ||
-            `${name}` === '한국'
+            `${name}` === '대한민국'
           ) {
             Swal.fire({
               title: `${name}으로 이동합니다.`,
@@ -179,7 +179,7 @@ const WorldMap = () => {
         } else {
           // alert(`오픈 예정입니다!😉`)
           Swal.fire({
-            title: '오픈 예정입니다!😉',
+            title: '오픈 예정입니다.',
             confirmButtonText: '확인',
             buttonsStyling: false,
             customClass: {
