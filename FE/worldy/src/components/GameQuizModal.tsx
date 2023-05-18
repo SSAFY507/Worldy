@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
-import {
-  AiOutlineExclamationCircle,
-} from 'react-icons/ai';
+import { AiOutlineExclamationCircle } from 'react-icons/ai';
 import QuizBlueText from '../assets/images/QuizBlueText.png';
 import ResultBlueText from '../assets/images/ResultBlueText.png';
 import { JsxElement } from 'typescript';
@@ -13,8 +11,6 @@ import { BsBookmark, BsBookmarkFill, BsBoxArrowUpRight } from 'react-icons/bs';
 import tempImage1 from '../assets/images/thumb2.png';
 
 import { IoIosPhotos } from 'react-icons/io';
-
-
 
 type ScrappedQuizType = {
   quizId: number; //퀴즈 id
@@ -43,10 +39,7 @@ export default function GameQuizModal({
   input: ScrappedQuizType;
   closeModal: () => void;
 }) {
-
-
   const userName: string | null = sessionStorage.getItem('nickname');
-
 
   const size: number = 200;
 
@@ -55,7 +48,8 @@ export default function GameQuizModal({
 
   const [submitAnswer, setSubmitAnswer] = useState<string>('');
 
-  const blankBoxSize: number = 400 / input.answer.length > 200? 200 :400 / input.answer.length ;
+  const blankBoxSize: number =
+    400 / input.answer.length > 200 ? 200 : 400 / input.answer.length;
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const handleComposition = (
     event: React.CompositionEvent<HTMLInputElement>
@@ -116,12 +110,12 @@ export default function GameQuizModal({
     }
   };
 
-  const handleEnter = (e : React.KeyboardEvent<HTMLInputElement>)=>{
-    if(e.key === 'Enter'){
-        submitAndFlip()
+  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      submitAndFlip();
     }
-  }
-  
+  };
+
   const blankBoxComponent = () => {
     const tempCompList: JSX.Element[] = [];
     for (let i = 0; i < input.answer.length; i++) {
@@ -145,8 +139,9 @@ export default function GameQuizModal({
           value={blankInputAnswer[i]}
           onChange={(e) => handleBlankAnswer({ e, i })}
           placeholder={hintState ? `${input.hint.charAt(i)}` : ''}
-          onKeyDown={(e)=>{
-            i === input.answer.length-1 && handleEnter(e)}}
+          onKeyDown={(e) => {
+            i === input.answer.length - 1 && handleEnter(e);
+          }}
         />
       );
     }
@@ -260,9 +255,11 @@ export default function GameQuizModal({
         <div key={key}>
           <button
             className={`${
-              submitAnswer === prevInput.multiAnswerText ? 'gameclickedmulti' : 'bg-[#F2F2F2]'
+              submitAnswer === prevInput.multiAnswerText
+                ? 'gameclickedmulti'
+                : 'bg-[#F2F2F2]'
             } beforemulti w-[200px] h-[80px] mx-[10px] rounded-md shadow-md  flex flex-row justify-center items-center`}
-            onClick={() => handleSubmitMultiAnswer(prevInput.multiAnswerText)}
+            onClick={() => handleSubmitMultiAnswer((key + 1).toString())}
           >
             <span
               className='w-full h-full flex flex-row justify-center items-center'
@@ -437,7 +434,7 @@ export default function GameQuizModal({
       <button
         className={`w-[500px] h-[60px] rounded-md font-PtdLight text-[25px] ${
           submitAnswer
-            ?  'bg-[#61C7BB] text-white'
+            ? 'bg-[#61C7BB] text-white'
             : 'bg-[#D4D4D4] text-[#9F9F9F]'
         }`}
         disabled={!submitAnswer}
@@ -495,10 +492,10 @@ export default function GameQuizModal({
   const [timerOut, setTimerOut] = useState<boolean>(false);
   useEffect(() => {
     const intervalId: NodeJS.Timeout = setInterval(() => {
-        setTimecount((prevTime) => {
+      setTimecount((prevTime) => {
         const newTime = prevTime + 0.01;
         if (newTime > limitTime) {
-          clearInterval(intervalId)
+          clearInterval(intervalId);
           setTimerOut(true);
         }
         return newTime;
@@ -511,12 +508,12 @@ export default function GameQuizModal({
     };
   }, []);
 
-  useEffect(()=>{
-    if(timerOut){
-        //console.log('setFlipped')
-        setFlipped(true)
+  useEffect(() => {
+    if (timerOut) {
+      //console.log('setFlipped')
+      setFlipped(true);
     }
-  },[timerOut])
+  }, [timerOut]);
 
   const frontContainer = (): JSX.Element => {
     return (
@@ -564,7 +561,6 @@ export default function GameQuizModal({
                   </div>
                 )}
               </div>
-              
             </div>
           </div>
         </div>
@@ -582,7 +578,10 @@ export default function GameQuizModal({
           </span>
         </div>
         <div className='w-full h-[10px] bg-[#61C7BB] relative flex flex-row justify-end items-center'>
-            <div className='absolute top-0 left-0 h-[10px] max-w-full bg-[#E0E0E0]' style={{width: `${timecount*100/limitTime}%`}}></div>
+          <div
+            className='absolute top-0 left-0 h-[10px] max-w-full bg-[#E0E0E0]'
+            style={{ width: `${(timecount * 100) / limitTime}%` }}
+          ></div>
         </div>
         <div className='relative bg-[#E0E0E0] w-full h-[300px]  outline-blue-500'>
           {quizContent()}
@@ -645,11 +644,7 @@ export default function GameQuizModal({
           </div>
           <div
             className={` w-full h-[50px] mt-[10px] rounded-[10px] overflow-hidden                                            ${
-              correctState === true
-                ? ''
-                : correctState === false
-                ? ''
-                : ''
+              correctState === true ? '' : correctState === false ? '' : ''
             }`}
           >
             <div
@@ -665,7 +660,9 @@ export default function GameQuizModal({
             </div>
           </div>
           <div className='w-full flex-1 outline-black flex flex-row justify-start items-center font-PtdRegular text-[#ACACAC]'>
-            <span>"{userName}"님이 입력한 답은 "{submitAnswer}"</span>
+            <span>
+              "{userName}"님이 입력한 답은 "{submitAnswer}"
+            </span>
           </div>
         </div>
         <div className='relative bg-[#F5F5F5] w-full h-[300px]  outline-blue-500'>
