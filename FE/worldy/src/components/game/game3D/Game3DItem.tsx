@@ -34,11 +34,70 @@ interface Props {
   metaData: MetadataType
   diceData: number
   player: NewPlayer
+  worldMap: Spot[]
   getPlayerTurn: (data:any) => void
 }
+
+interface ArchType {
+  [key:string]:string|boolean
+}
+
 // player는 4명의 플레이어 데이터
 
-const Game3DItem = ({diceData, metaData, player, getPlayerTurn}: Props) => {
+const mapAxis = [
+  {name: "시작", axis:[0, 0, 0]},
+  {name: "태국", axis:[-1, 0, 0]},
+  {name: "싱가포르", axis:[-2, 0, 0]},
+  {name: "보물상자1", axis:[-3, 0, 0]},
+  {name: "인도", axis:[-4, 0, 0]},
+  {name: "독도", axis:[-5, 0, 0]},
+  {name: "사우디", axis:[-6, 0, 0]},
+  {name: "중국", axis:[-7, 0, 0]},
+  {name: "일본", axis:[-8, 0, 0]},
+  {name: "대한민국", axis:[-9, 0, 0]},
+
+  {name: "무인도", axis:[-10, 0, 0]},
+  {name: "헝가리", axis:[-9.5, 1, 0]},
+  {name: "스페인", axis:[-9.5, 2, 0]},
+  {name: "보물상자2", axis:[-9.5, 3, 0]},
+  {name: "이탈리아", axis:[-9.5, 4, 0]},
+  {name: "지중해", axis:[-9.5, 5, 0]},
+  {name: "스위스", axis:[-9.5, 6, 0]},
+  {name: "독일", axis:[-9.5, 7, 0]},
+  {name: "프랑스", axis:[-9.5, 8, 0]},
+  {name: "영국", axis:[-9.5, 9, 0]},
+
+  {name: "정거장", axis:[-9.5, 9.5, 0]},
+  {name: "가나", axis:[-9, 9.5, 0]},
+  {name: "소말리아", axis:[-8, 9.5, 0]},
+  {name: "보물상자3", axis:[-7, 9.5, 0]},
+  {name: "모로코", axis:[-6, 9.5, 0]},
+  {name: "사하라", axis:[-5, 9.5, 0]},
+  {name: "남아공", axis:[-4, 9.5, 0]},
+  {name: "이집트", axis:[-3, 9.5, 0]},
+  {name: "호주", axis:[-2, 9.5, 0]},
+  {name: "뉴질랜드", axis:[-1, 9.5, 0]},
+
+  {name: "올림픽", axis:[0, 9.5, 0]},
+  {name: "칠레", axis:[-0.5, 9, 0]},
+  {name: "페루", axis:[-0.5, 8, 0]},
+  {name: "보물상자4", axis:[-0.5, 7, 0]},
+  {name: "브라질", axis:[-0.5, 6, 0]},
+  {name: "하와이", axis:[-0.5, 5, 0]},
+  {name: "멕시코", axis:[-0.5, 4, 0]},
+  {name: "국세청", axis:[-0.5, 3, 0]},
+  {name: "캐나다", axis:[-0.5, 2, 0]},
+  {name: "미국", axis:[-0.5, 1, 0]},
+
+]
+
+const checkArch:ArchType = {
+  소: "villa",
+  중: "hotel",
+  대: "landmark"
+}
+
+const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props) => {
   const playerInfo = { playerIndex: metaData.turn,  currentIndex: metaData.currentLocation}
 
   const arch = new Set(
@@ -48,917 +107,6 @@ const Game3DItem = ({diceData, metaData, player, getPlayerTurn}: Props) => {
       "이집트", "남아공", "모로코", "소말리아", "가나", 
       "프랑스", "독일", "스위스", "이탈리아", "스페인", 
       "헝가리", "태국"])
-
-  // 월드맵(지도)
-  const [worldMap, setWorldMap] = useState<any>({
-    roomId: "",
-    type: "worldmap",
-    worldMap: [
-      {
-        location: 0,
-        name: "시작",
-        price: {
-          land: 0,
-          villa: 0,
-          hotel: 0,
-          landmark: 0,
-        },
-        type: "start",
-        contents: "시작점입니다. 월급을 받으세요.     + 300,000",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 1,
-        name: "태국",
-        price: {
-          land: 50,
-          villa: 20,
-          hotel: 50,
-          landmark: 100,
-        },
-        type: "nation",
-        landmark: "카오산 로드",
-        contents: "태국의 수도는 방콕. 어쩌구 저쩌구",
-        continent: "아시아",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 2,
-        name: "싱가포르",
-        price: {
-          land: 50,
-          villa: 20,
-          hotel: 50,
-          landmark: 100,
-        },
-        type: "nation",
-        landmark: "싱가포르 무역센터",
-        contents: "싱가포르의 수도는 싱가폴 도시 국가이다.",
-        continent: "아시아",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 3,
-        name: "보물상자",
-        price: {
-          land: 0,
-          villa: 0,
-          hotel: 0,
-          landmark: 0,
-        },
-        type: "item",
-        contents: "보물상자를 발견했습니다.",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 4,
-        name: "인도",
-        price: {
-          land: 80,
-          villa: 50,
-          hotel: 70,
-          landmark: 120,
-        },
-        type: "nation",
-        landmark: "타지마할",
-        contents:
-          "인도의 수도는 뉴델리. 세상에서 가장 많은 인구를 보유하고있다.",
-        continent: "아시아",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 5,
-        name: "홍콩",
-        price: {
-          land: 100,
-          villa: 0,
-          hotel: 0,
-          landmark: 0,
-        },
-        type: "city",
-        landmark: "랜드마크없음",
-        contents: "자유무역도시 홍콩",
-        continent: "아시아",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 6,
-        name: "사우디",
-        price: {
-          land: 90,
-          villa: 70,
-          hotel: 100,
-          landmark: 130,
-        },
-        type: "nation",
-        landmark: "사우디 이슬람 모스크",
-        contents: "사우디 아라비아는 석유가 많이 난다. 저쩌구",
-        continent: "아시아",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 7,
-        name: "중국",
-        price: {
-          land: 100,
-          villa: 80,
-          hotel: 120,
-          landmark: 150,
-        },
-        type: "nation",
-        landmark: "만리장성",
-        contents: "중국의 수도는 베이징. 어쩌구 저쩌구",
-        continent: "아시아",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 8,
-        name: "일본",
-        price: {
-          land: 100,
-          villa: 80,
-          hotel: 120,
-          landmark: 150,
-        },
-        type: "nation",
-        landmark: "후지산",
-        contents: "일본의 수도는 후지산. 어쩌구 저쩌구",
-        continent: "아시아",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 9,
-        name: "대한민국",
-        price: {
-          land: 100,
-          villa: 100,
-          hotel: 130,
-          landmark: 170,
-        },
-        type: "nation",
-        landmark: "경복궁",
-        contents: "한국의 수도는 서울. BTS, 봉준호, 손흥민, Jay Park",
-        continent: "아시아",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 10,
-        name: "무인도",
-        price: {
-          land: 0,
-          villa: 0,
-          hotel: 0,
-          landmark: 0,
-        },
-        type: "desert",
-        contents: "무인도에 불시착했습니다. 3턴 쉬세요.",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 11,
-        name: "헝가리",
-        price: {
-          land: 70,
-          villa: 50,
-          hotel: 80,
-          landmark: 100,
-        },
-        type: "nation",
-        landmark: "헝가리 모스크",
-        contents: "헝가리 수도는 부다페스트. 큰 도시",
-        continent: "유럽",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 12,
-        name: "스페인",
-        price: {
-          land: 80,
-          villa: 80,
-          hotel: 100,
-          landmark: 130,
-        },
-        type: "nation",
-        landmark: "가우디 대성당",
-        contents: "스페인는 열정의 나라,어쩌구 저쩌구",
-        continent: "유럽",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 13,
-        name: "보물상자",
-        price: {
-          land: 0,
-          villa: 0,
-          hotel: 0,
-          landmark: 0,
-        },
-        type: "item",
-        contents: "보물상자를 발견했습니다.",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 14,
-        name: "이탈리아",
-        price: {
-          land: 80,
-          villa: 80,
-          hotel: 120,
-          landmark: 150,
-        },
-        type: "nation",
-        landmark: "바티칸 대성당",
-        contents: "이탈리아의 수도는 로마. 로마에 가면 로마의 법을 따르라",
-        continent: "유럽",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 15,
-        name: "지중해",
-        price: {
-          land: 100,
-          villa: 0,
-          hotel: 0,
-          landmark: 0,
-        },
-        type: "city",
-        landmark: "크레타섬",
-        contents: "그리스 로마 문화의 시작 지중해",
-        continent: "유럽",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 16,
-        name: "스위스",
-        price: {
-          land: 100,
-          villa: 100,
-          hotel: 130,
-          landmark: 170,
-        },
-        type: "nation",
-        landmark: "알프스 산맥",
-        contents: "스위스의 수도는 베른. 스위스는 중립국",
-        continent: "유럽",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 17,
-        name: "독일",
-        price: {
-          land: 100,
-          villa: 100,
-          hotel: 130,
-          landmark: 170,
-        },
-        type: "nation",
-        landmark: "베를린 장벽",
-        contents: "독일의 수도는 베를린. 벤츠의 나라",
-        continent: "유럽",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 18,
-        name: "프랑스",
-        price: {
-          land: 120,
-          villa: 120,
-          hotel: 150,
-          landmark: 200,
-        },
-        type: "nation",
-        landmark: "에펠탑",
-        contents: "프랑스의 수도는 파리. 낭만의 도시",
-        continent: "유럽",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 19,
-        name: "영국",
-        price: {
-          land: 120,
-          villa: 120,
-          hotel: 150,
-          landmark: 200,
-        },
-        type: "nation",
-        landmark: "빅반",
-        contents: "영국의 수도는 런던. 태양이 지지 않는 나라",
-        continent: "유럽",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 20,
-        name: "정거장",
-        price: {
-          land: 0,
-          villa: 0,
-          hotel: 0,
-          landmark: 0,
-        },
-        type: "port",
-        contents: "특가 항공권 당첨! 원하는 곳으로 이동합니다.",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 21,
-        name: "가나",
-        price: {
-          land: 50,
-          villa: 50,
-          hotel: 70,
-          landmark: 100,
-        },
-        type: "nation",
-        landmark: "가나 초콜릿",
-        contents: "가나는 초콜릿이 유명하다.",
-        continent: "아프리카",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 22,
-        name: "소말리아",
-        price: {
-          land: 50,
-          villa: 50,
-          hotel: 70,
-          landmark: 100,
-        },
-        type: "nation",
-        landmark: "소말리아 모스크",
-        contents: "소말리아 수도는 리비아. 해적을 조심하라",
-        continent: "아프리카",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 23,
-        name: "보물상자",
-        price: {
-          land: 0,
-          villa: 0,
-          hotel: 0,
-          landmark: 0,
-        },
-        type: "item",
-        contents: "보물상자를 발견했습니다.",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 24,
-        name: "모르코",
-        price: {
-          land: 80,
-          villa: 80,
-          hotel: 100,
-          landmark: 130,
-        },
-        type: "nation",
-        landmark: "모르코 모스코",
-        contents: "모르코의 수도는 모르코. 좋은 나라입니다",
-        continent: "아프리카&오세아니아",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 25,
-        name: "사하라",
-        price: {
-          land: 100,
-          villa: 0,
-          hotel: 0,
-          landmark: 0,
-        },
-        type: "city",
-        landmark: "오아시스",
-        contents: "뜨거운 모래의 사막, 사하라",
-        continent: "아프리카&오세아니아",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 26,
-        name: "남아공",
-        price: {
-          land: 80,
-          villa: 80,
-          hotel: 120,
-          landmark: 150,
-        },
-        type: "nation",
-        landmark: "남아공 월드컵 경기장",
-        contents: "남어공의 수도는 키예프. 어쩔티비",
-        continent: "아프리카&오세아니아",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 27,
-        name: "이집트",
-        price: {
-          land: 100,
-          villa: 100,
-          hotel: 140,
-          landmark: 170,
-        },
-        type: "nation",
-        landmark: "쿠푸왕의 대피라미드",
-        contents: "이집트의 수도는 카이로. 이집트는 문명의 시작",
-        continent: "아프리카&오세아니아",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 28,
-        name: "호주",
-        price: {
-          land: 120,
-          villa: 120,
-          hotel: 150,
-          landmark: 180,
-        },
-        type: "nation",
-        landmark: "오페라 하우스",
-        contents: "호주의 수도는 어디일까요",
-        continent: "아프리카&오세아니아",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 29,
-        name: "뉴질랜드",
-        price: {
-          land: 120,
-          villa: 120,
-          hotel: 150,
-          landmark: 180,
-        },
-        type: "nation",
-        landmark: "빌헬름 협곡",
-        contents: "뉴질랜드의 수도는 키위. 로마에 가면 로마의 법을 따르라",
-        continent: "아프리카&오세아니아",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 30,
-        name: "올림픽",
-        price: {
-          land: 0,
-          villa: 0,
-          hotel: 0,
-          landmark: 0,
-        },
-        type: "olympic",
-        contents: "하나된 세계 올림픽으로!",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 31,
-        name: "칠레",
-        price: {
-          land: 80,
-          villa: 80,
-          hotel: 120,
-          landmark: 150,
-        },
-        type: "nation",
-        landmark: "칠레 대성당",
-        contents: "세상에서 가장 긴 나라 칠레",
-        continent: "아메리카",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 32,
-        name: "페루",
-        price: {
-          land: 80,
-          villa: 80,
-          hotel: 120,
-          landmark: 150,
-        },
-        type: "nation",
-        landmark: "마추픽추",
-        contents: "잉카 문명의 고대 제국 페루",
-        continent: "아메리카",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 33,
-        name: "보물상자",
-        price: {
-          land: 0,
-          villa: 0,
-          hotel: 0,
-          landmark: 0,
-        },
-        type: "item",
-        contents: "보물상자를 발견했습니다.",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 34,
-        name: "브라질",
-        price: {
-          land: 100,
-          villa: 100,
-          hotel: 140,
-          landmark: 180,
-        },
-        type: "nation",
-        landmark: "리우데자네이루 거대 예수상",
-        contents: "삼바의 나라 브라질",
-        continent: "아메리카",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 35,
-        name: "파나마",
-        price: {
-          land: 100,
-          villa: 0,
-          hotel: 0,
-          landmark: 180,
-        },
-        type: "city",
-        landmark: "파나마운하",
-        contents: "아메리카 대륙의 좁은 해협, 파나마",
-        continent: "아메리카",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 36,
-        name: "멕시코",
-        price: {
-          land: 100,
-          villa: 100,
-          hotel: 150,
-          landmark: 180,
-        },
-        type: "nation",
-        landmark: "차첸이트사",
-        contents: "멕시코의 수도는 멕시코시티. 로마에 가면 로마의 법을 따르라",
-        continent: "유럽",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 37,
-        name: "국세청",
-        price: {
-          land: 0,
-          villa: 0,
-          hotel: 0,
-          landmark: 0,
-        },
-        type: "tax",
-        contents: "탈세는 위법입니다. 가진 재산의 10%를 세금으로 납부하세요",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 38,
-        name: "캐나다",
-        price: {
-          land: 120,
-          villa: 120,
-          hotel: 150,
-          landmark: 200,
-        },
-        type: "nation",
-        landmark: "캐나다 대성당",
-        contents: "캐나다의 수도는 오타와",
-        continent: "아메리카",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-      {
-        location: 39,
-        name: "미국",
-        price: {
-          land: 120,
-          villa: 120,
-          hotel: 150,
-          landmark: 200,
-        },
-        type: "nation",
-        landmark: "자유의 여신상",
-        contents: "미국의 수도는 워싱턴D.C 자유의 나라",
-        continent: "아메리카",
-        owner: 0,
-        option: 0,
-        toll: 0,
-        build: {
-          land: false,
-          villa: false,
-          hotel: false,
-          landmark: false,
-        },
-      },
-    ],
-  });
 
   const divContainer = useRef<HTMLDivElement>(null);
   const renderer = useRef<THREE.WebGLRenderer | null>(null);
@@ -1001,8 +149,8 @@ const Game3DItem = ({diceData, metaData, player, getPlayerTurn}: Props) => {
   useEffect(() => {
     setPlayerMovedCount(playerInfo.currentIndex)
     setPlayerTurn(playerInfo.playerIndex)
-    // setTurn(playerInfo.turn)
-  }, [])
+    requestAnimationFrame(render);
+  }, [diceData])
 
   useEffect(() => {
     if (diceData) {
@@ -1068,11 +216,11 @@ const Game3DItem = ({diceData, metaData, player, getPlayerTurn}: Props) => {
       //   const newPosition: localPosition = player;
       const newX =
         playerLoc.current!.x +
-        (dir === 0 ? -dist / 2 : dir === 2 ? dist / 2 : 0);
+        (dir === 0 ? -dist / 2 : (dir === 2 ? dist / 2 : 0));
       const newY = playerLoc.current!.y + 0.5;
       const newZ =
         playerLoc.current!.z +
-        (dir === 3 ? dist / 2 : dir === 1 ? -dist / 2 : 0);
+        (dir === 3 ? dist / 2 : (dir === 1 ? -dist / 2 : 0));
       console.log('newX : ' + newX);
       console.log('newY : ' + newY);
       console.log('newZ : ' + newZ);
@@ -1168,14 +316,41 @@ const Game3DItem = ({diceData, metaData, player, getPlayerTurn}: Props) => {
   /** 모델 커스텀 함수 */
   const SetupModel = () => {
     const gltfLoader = new GLTFLoader();
+
+    const isArch = [...player.p1.game.own, ...player.p2.game.own, ...player.p3.game.own, ...player.p4.game.own]
+    const isArchSet = new Set()
+    isArch.forEach ((number, idx) => {
+      isArchSet.add(mapAxis[number].name)
+    })
+    
     gltfLoader.load(WorldyMap, (glb) => {
       const obj3d = glb.scene;
-      console.log(obj3d)
       obj3d.children.forEach((obj, idx) =>{
         // name이 6글자 이하인 객체들에 대해서 '_'가 존재하는 객체 
         if (obj.name.length <7 && obj.name.includes('_')){
-          obj.name.slice(0, obj.name.indexOf('_'))
           obj.visible = false
+          // 건물이 있는 나라를 찾고
+          if (isArchSet.has(obj.name.slice(0, obj.name.indexOf('_')))){
+            // 해당 건물의 종류를 찾아 
+            isArch.forEach((number, idx2) => {
+              if (worldMap[number].name === obj.name.slice(0, obj.name.indexOf('_'))) {
+                //해당 객체의 크기
+                const tmp = obj.name.slice(obj.name.indexOf('_')+1, obj.name.indexOf('_')+2)
+                //해당 객체의 크기에 따른 건물 이름
+                const name = checkArch[`${tmp}`]
+                // 해당 객체
+                const a:ArchType = worldMap[number].build
+                if (a[`${name}`]) {
+                  obj.visible = true
+                }
+              }
+            })
+          }
+          
+          // if (mapAxis[]) {
+          //   obj.visible = false
+          // }
+          
         }
       })
       obj3d.name = "worldMap";
@@ -1198,7 +373,8 @@ const Game3DItem = ({diceData, metaData, player, getPlayerTurn}: Props) => {
         // obj3d.position.set(0, 0, 0);
         obj3d.scale.set(1, 1, 1);
         console.log(obj3d.position)
-        if (idx === playerInfo.playerIndex){
+        obj3d.position.set(mapAxis[item.location].axis[0], obj3d.position.y-0.1, -mapAxis[item.location].axis[1])
+        if (playerInfo.playerIndex === idx) {
           playerLoc.current = obj3d.position
         }
         scene.current?.add(obj3d)
@@ -1292,26 +468,6 @@ const Game3DItem = ({diceData, metaData, player, getPlayerTurn}: Props) => {
               </span>
             </button>
           </div>
-          {/* <div id='input-container' className='mx-10'>
-            <input
-              id='tempInput'
-              type='number'
-              value={count}
-              max={3}
-              min={1}
-              onChange={handleCount}
-            />
-            <button
-              id='invite-btn'
-              onClick={() => {
-                console.log("마우스 오버")
-                console.log(count);
-                moveCounted(count);
-              }}
-            >
-              돌리기
-            </button>
-          </div> */}
         </div>
       <div
       className=''
