@@ -84,6 +84,11 @@ export default function GameResult() {
                         `}
                   />
                 </div>
+                <div className='w-[150px] h-fit  outline-red-300 flex flex-row justify-start items-center '>
+                  <span className='font-PtdRegular text-white text-[15px] truncate '>
+                    {key === 0 ? '+ 40EXP' : key === 1 ? '+ 30EXP' : key === 0 ? '+ 25EXP' : '+ 20EXP'}
+                  </span>
+                </div>
               </div>
               <div className='flex flex-row  outline-white justify-between items-center w-[140px] h-fit'>
                 <div className='w-[100px] flex-2 grid place-ontent-right mr-[20px]'>

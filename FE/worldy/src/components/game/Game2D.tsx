@@ -379,6 +379,7 @@ export default function Game2D(props: any) {
 
   // 게임 종료 후 페이지 이동
   if (gameFinish && gameResultSet) {
+    
     navigate('/game/result', { state: rankPlayerData });
   }
 
@@ -2059,18 +2060,24 @@ export default function Game2D(props: any) {
               return (
                 <div key={index}>
                   <div
-                    className={`w-[350px] h-[238px] bg-white rounded-[8px] flex flex-col justify-center items-center  shadow-[0_3px_10px_rgb(0,0,0,0.2)]
-                    ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 1 ? "outline outline-[6px] outline-red-400" : ""}
-                    ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 2 ? "outline outline-[6px] outline-green-400" : ""}
-                    ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 3 ? "outline outline-[6px] outline-blue-400" : ""}
-                    ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 4 ? "outline outline-[6px] outline-purple-400" : ""}
-                    
+                    className={`w-[350px] h-[238px] rounded-[8px] flex flex-col justify-center items-center shadow-[0_3px_10px_rgb(0,0,0,0.2)]
+                    ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 1 ? "bg-red-200/30" 
+                      : (metaData.turn + 1 === i.playerNum) && i.playerNum === 2 ? "bg-green-200/30"
+                      : (metaData.turn + 1 === i.playerNum) && i.playerNum === 3 ? "bg-blue-200/30" 
+                      : (metaData.turn + 1 === i.playerNum) && i.playerNum === 4 ? "bg-purple-200/30" : "bg-white "
+                     }
                     `}
                   >
                     <div className="w-[280px] h-[240px] mt-[20px]">
-                    <div className="flex justify-between items-center text-[#C0C0C0]">
+                    <div className={`flex justify-between items-center text-[#C0C0C0]
+                    `}>
                       <div className="text-[12px]">플레이어</div>
-                      <div className="text-[12px]">현재 위치</div>
+                      <div className={`text-[15px] font-PtdBold
+                        ${i.playerNum === 1 ? 'text-red-400' : ''}
+                        ${i.playerNum === 2 ? 'text-green-400' : ''}
+                        ${i.playerNum === 3 ? 'text-blue-400' : ''}
+                        ${i.playerNum === 4 ? 'text-purple-400' : ''}`
+                        }>{worldMap[i.game.location].name}</div>
                     </div>
                     <div className="flex items-center justify-between h-[60px] mt-[10px] mb-[10px] border-solid border-[#E9E9E9] border-b-[1px]">
                   
@@ -2090,13 +2097,14 @@ export default function Game2D(props: any) {
                           {i.name === rankPlayerData.rankPlayer[2].nickName ? '3위' : ''}
                           {i.name === rankPlayerData.rankPlayer[3].nickName ? '4위' : ''}
                         </div>
-                        <div className="flex items-center justify-end text-[20px] font-PtdBold ml-[6px] w-[80px]">
+                        {/* <div className="flex items-center justify-end text-[20px] font-PtdBold ml-[6px] w-[80px]">
                           <div>{worldMap[i.game.location].name}</div>
-                        </div>
+                        </div> */}
                
                       </div>
                       <div className="flex flex-col w-full h-[40px] items-between">
-                        <div className="text-[12px] text-[#C0C0C0] mt-[10px]">보유자산</div>
+                        <div className={`text-[12px] mt-[10px] text-[#C0C0C0]
+                        `}>보유자산</div>
                         <div className="flex mt-[10px] justify text-[20px] font-PtdBold ">
                           <div className="w-[40px]">
                            <img src='/game/coin.png' className="h-[35px] mt-[-9px] object-cover"></img> 
@@ -2108,7 +2116,8 @@ export default function Game2D(props: any) {
                         </div>
                       </div>
                       <div className="flex flex-col w-full h-[60px] items-between mt-[20px]">
-                        <div className="text-[12px] text-[#C0C0C0] mt-[10px]">
+                        <div className={`text-[12px] mt-[10px] text-[#C0C0C0]
+                        `}>
                           소유국가[총{i.game.own.length}개]
                         </div>
                         <div className="flex mt-[10px] h-[80px] w-full">
@@ -2137,8 +2146,8 @@ export default function Game2D(props: any) {
         {/* 가운데 영역 */}
         <div className="w-[60%] h-full flex justify-center items-center mb-[20px]">
           <div className="w-[1010px] h-[1010px] rounded-[4px] mb-[50px] flex justify-center items-center relative left-[180px]">
-            <div className="w-[1100px] h-[1100px] rounded-[12px] bg-[url('../../public/game/gameBG.png')] flex justify-center items-center">
-              <img src="/game/enter2.png" alt="img" className="w-[630px] objec-cover absolute top-[340px] left-[185px] opacity-20" />
+            <div className="w-[1100px] h-[1100px] rounded-[12px] bg-[url('../../public/game/gameBG2.png')] flex justify-center items-center">
+              {/* <img src="/game/enter2.png" alt="img" className="w-[630px] objec-cover absolute top-[340px] left-[185px] opacity-20" /> */}
               {/* 0~ 10 */}
               <div className="w-[990px] h-[90px] rounded-[10px] z-[1] flex relative top-[-450px] left-[496px]">
                 {worldMap.map((i: Spot, index: number) => {
@@ -4151,28 +4160,32 @@ export default function Game2D(props: any) {
           className={`w-[20%] h-full flex flex-col justify-start items-start rounded-[4px]`}
         >
           <div
-            className={`w-[387px] h-[908px] mb-[40px]  flex flex-col justify-around items-center bg-gray-100/70 rounded-[24px] 
-            ${myTurn && me.playerNum === 1 ? "outline outline-[6px] outline-red-400" : ""}
-            ${myTurn && me.playerNum === 2 ? "outline outline-[6px] outline-green-400" : ""}
-            ${myTurn && me.playerNum === 3 ? "outline outline-[6px] outline-blue-400" : ""}
-            ${myTurn && me.playerNum === 4 ? "outline outline-[6px] outline-purple-400" : ""}
-            
+            className={`w-[387px] h-[908px] mb-[40px]  flex flex-col justify-around items-center rounded-[24px] 
+            ${myTurn && me.playerNum === 1 ? "bg-red-200/30" 
+              : myTurn && me.playerNum === 2 ? "bg-green-200/30"
+              : myTurn && me.playerNum === 3 ? "bg-blue-200/30" 
+                :myTurn && me.playerNum === 4 ? "bg-purple-200/30" : "bg-gray-100/70"
+              }
             `}
-          >
+            >
             <div className="w-[336px] h-[181px] bg-white rounded-[11px] flex flex-col justify-center items-center shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
               <div className="w-[250px] h-[140px]">
                 <div className="flex justify-between items-center text-[#C0C0C0]">
-                  <div className="text-[12px]">내 정보</div>
-                  <div className="text-[12px]">현재 위치</div>
-                  {/* <div className="text-[12px]">[{worldMap[me.game.location].name}]</div> */}
+                      <div className="text-[12px]">내 정보</div>
+                      <div className={`text-[15px] font-PtdBold
+                        ${me.playerNum === 1 ? 'text-red-400' : ''}
+                        ${me.playerNum === 2 ? 'text-green-400' : ''}
+                        ${me.playerNum === 3 ? 'text-blue-400' : ''}
+                        ${me.playerNum === 4 ? 'text-purple-400' : ''}`
+                        }>{worldMap[me.game.location].name}</div>
                 </div>
                 <div className="flex items-center justify-between h-[70px] mt-[10px] mb-[10px] border-solid border-[#E9E9E9] border-b-[1px]">
                   <div className="flex items-center">
                     <img src={`${profileImg}`} alt="" className="w-[50px] h-[50px] rounded-full" />
                     <div className="text-[30px] font-PtdBold ml-[6px] w-[120px]">{me.name}</div>
-                    <div className="flex items-center justify-end text-[20px] font-PtdBold ml-[6px] w-[80px]">
+                    {/* <div className="flex items-center justify-end text-[20px] font-PtdBold ml-[6px] w-[80px]">
                       <div>{worldMap[me.game.location].name}</div>
-                    </div>
+                    </div> */}
                   </div>
                   {rankPlayerData.rankPlayer[0].nickName ?
                     <div
