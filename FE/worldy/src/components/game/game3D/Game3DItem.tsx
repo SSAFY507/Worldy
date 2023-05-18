@@ -7,6 +7,7 @@ import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
+import { PlayerInfoType } from '../Game3D';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
 import WorldyMap from '../../../assets/lowpoly/WorldyPolyMap3.glb';
@@ -23,18 +24,24 @@ type MeshButtonProps = {
   color?: THREE.ColorRepresentation;
 };
 
+interface playerContainter {
+  playerLoc: THREE.Vector3 | null,
+  playerIndex: number | null,
+}
 
-const Game3DItem =() => {
-  const divContainer = useRef<HTMLDivElement>(null);
-  const renderer = useRef<THREE.WebGLRenderer | null>(null);
-  const scene = useRef<THREE.Scene | null>(null);
-  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
-  const controls = useRef<OrbitControls |null>(null);
+interface Props {
+  playerInfo :PlayerInfoType
+}
 
-  const player0Loc = useRef<THREE.Vector3>();
-  const player1Loc = useRef<THREE.Vector3>();
-  const player2Loc = useRef<THREE.Vector3>();
-  const player3Loc = useRef<THREE.Vector3>();
+const Game3DItem = ({playerInfo}: Props) => {
+
+  const arch = new Set(
+    ["호주", "영국", "칠레", "페루", "브라질",
+      "멕시코", "캐나다", "미국", "싱가포르", "중국",
+      "일본", "대한민국", "인도", "사우디", "뉴질랜드", 
+      "이집트", "남아공", "모르코", "소말리아", "가나", 
+      "프랑스", "독일", "스위스", "이탈리아", "스페인", 
+      "헝가리", "태국"])
 
   // 월드맵(지도)
   const [worldMap, setWorldMap] = useState<any>({
@@ -947,11 +954,64 @@ const Game3DItem =() => {
     ],
   });
 
+  const divContainer = useRef<HTMLDivElement>(null);
+  const renderer = useRef<THREE.WebGLRenderer | null>(null);
+  const scene = useRef<THREE.Scene | null>(null);
+  const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
+  const controls = useRef<OrbitControls |null>(null);
+
+  const playerLoc = useRef<THREE.Vector3 | null>(null);
+  // const player1Loc = useRef<THREE.Vector3 | null>(null);
+  // const player2Loc = useRef<THREE.Vector3 | null>(null);
+  // const player3Loc = useRef<THREE.Vector3 | null>(null);
+
+  // const [player0Index, setPlayer0Index] = useState<number>(0);
+  // const [player1Index, setPlayer1Index] = useState<number>(0);
+  // const [player2Index, setPlayer2Index] = useState<number>(0);
+  // const [player3Index, setPlayer3Index] = useState<number>(0);
+
+  const [turn, setTurn] = useState<number>(0);
   const [rolledDice, setRolledDice] = useState<number>(0);
   const [playerMovedCount, setPlayerMovedCount] = useState<number>(0);
   const [count, setCount] = useState<number>(0);
+  const [playerTurn, setPlayerTurn] = useState<number>(0)
+
   const dist = 1;
 
+
+  const getArch = (counting: number) => {
+    let tmpTurn = playerTurn;
+    alert(`${turn} 번째 턴. ${playerTurn}번째 플레이어가 주사위를 던집니다.`)
+    alert("작은 건물을 구매하시겠습니까?")
+    scene.current?.children[5].children.forEach((obj, idx) => {
+      console.log(counting)
+      if(worldMap.worldMap[counting].name + "_소" === obj.name)
+        obj.visible = true
+    })
+    setPlayerTurn((tmpTurn + 1) % 4)
+    setTurn(turn + 1)
+  }
+
+  useEffect(() => {
+    setPlayerMovedCount(playerInfo.currentIndex)
+    setPlayerTurn(playerInfo.playerIndex)
+    setTurn(playerInfo.turn)
+  }, [])
+
+  // useEffect(() => {
+  //   if (turn > -1) {
+  //     let tmpTurn = playerTurn;
+  //     alert(`${turn} 번째 턴. ${playerTurn}번째 플레이어가 주사위를 던집니다.`)
+  //     alert("작은 건물을 구매하시겠습니까?")
+  //     scene.current?.children[5].children.forEach((obj, idx) => {
+  //       if(worldMap.worldMap[tmpTurn].name + "_소" === obj.name)
+  //         obj.visible = true
+  //     })
+  //     setPlayerTurn((tmpTurn + 1) % 4)
+  //   }
+  //   setTurn(turn + 1)
+
+  // },[playerMovedCount])
 
  /** 주사위 굴리는 함수 */
   const getRandomInt = () => {
@@ -973,7 +1033,7 @@ const Game3DItem =() => {
     // var prevDir: number = -1;
     var presentDir = 0;
     for (let i = 1; i <= count; i++) {
-      presentDir = Math.floor((playerMovedCount - 1 + i) / 11);
+      presentDir = Math.floor((playerMovedCount - 1 + i) / 10);
       if (presentDir === 4) presentDir = 0;
       // if (prevDir === -1) prevDir = presentDir;
       // else if (prevDir !== presentDir) {
@@ -981,51 +1041,52 @@ const Game3DItem =() => {
       //   prevDir = presentDir;
       // }
       console.log('presentDir', presentDir);
-      await movePlayerDir(presentDir, player3Loc.current);
-      console.log('playerLoc', player0Loc.current);
+      await movePlayerDir(presentDir);
+      // console.log('playerLoc', player0Loc.current);
     }
     // rotateCamera(presentDir);
-    setPlayerMovedCount(playerMovedCount + count);
+    setPlayerMovedCount((playerMovedCount + count) % 40);
+    getArch((playerMovedCount + count) % 40);
   };
 
   /** 플레이어 움직임 함수 */
-  const movePlayerDir = (dir: number, player:any): Promise<void> => {
-    console.log('현재', player);
+  const movePlayerDir = (dir: number): Promise<void> => {
+    console.log('현재', playerLoc.current);
     return new Promise((resolve) => {
       //   const newPosition: localPosition = player;
       const newX =
-        player!.x +
+        playerLoc.current!.x +
         (dir === 0 ? -dist / 2 : dir === 2 ? dist / 2 : 0);
-      const newY = player!.y + 3;
+      const newY = playerLoc.current!.y + 0.5;
       const newZ =
-        player!.z +
+        playerLoc.current!.z +
         (dir === 3 ? dist / 2 : dir === 1 ? -dist / 2 : 0);
       console.log('newX : ' + newX);
       console.log('newY : ' + newY);
       console.log('newZ : ' + newZ);
-      gsap.to(player!, {
+      gsap.to(playerLoc.current!, {
         duration: 0.2,
         ease: 'power0.inOut',
         x: newX,
         y: newY,
         z: newZ,
         onUpdate: () => {
-          player!.set(
-            player!.x,
-            player!.y,
-            player!.z
+          playerLoc.current!.set(
+            playerLoc.current!.x,
+            playerLoc.current!.y,
+            playerLoc.current!.z
           );
         },
         onComplete: () => {
-          console.log('점프', player!);
+          console.log('점프', playerLoc.current!);
           const newnewX =
-            player!.x +
+            playerLoc.current!.x +
             (dir === 0 ? -dist / 2 : dir === 2 ? dist / 2 : 0);
-          const newnewY = player!.y - 3;
+          const newnewY = playerLoc.current!.y - 0.5;
           const newnewZ =
-            player!.z +
+            playerLoc.current!.z +
             (dir === 3 ? dist / 2 : dir === 1 ? -dist / 2 : 0);
-          gsap.to(player!, {
+          gsap.to(playerLoc.current!, {
             delay: 0.01,
             duration: 0.2,
             ease: 'power0.out',
@@ -1034,14 +1095,14 @@ const Game3DItem =() => {
             y: newnewY,
             z: newnewZ,
             onUpdate: () => {
-              player!.set(
-                player!.x,
-                player!.y,
-                player!.z
+              playerLoc.current!.set(
+                playerLoc.current!.x,
+                playerLoc.current!.y,
+                playerLoc.current!.z
               );
             },
             onComplete: () => {
-              console.log('착지', player);
+              console.log('착지', playerLoc.current);
               resolve();
             },
           });
@@ -1074,25 +1135,6 @@ const Game3DItem =() => {
   //   });
   // };
 
-  const addMeshButton = ({
-    position,
-    scale,
-    color,
-    transparent = false,
-  }: MeshButtonProps) => {
-    const geometry = new THREE.BoxGeometry(...scale);
-    const material = new THREE.MeshStandardMaterial({
-      color: color,
-      transparent: transparent,
-      opacity: transparent ? 0 : 1,
-    });
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(position.x, position.y, position.z);
-    // scene.add(mesh);
-
-    return mesh;
-  };
-
   /** 카메라 커스텀 함수 */
   const SetupCamera = () => {
     const width = divContainer.current?.clientWidth || 0;
@@ -1117,13 +1159,19 @@ const Game3DItem =() => {
     gltfLoader.load(WorldyMap, (glb) => {
       const obj3d = glb.scene;
       console.log(obj3d)
-      
+      obj3d.children.forEach((obj, idx) =>{
+        // name이 6글자 이하인 객체들에 대해서 '_'가 존재하는 객체 
+        if (obj.name.length <7 && obj.name.includes('_')){
+          obj.name.slice(0, obj.name.indexOf('_'))
+          obj.visible = false
+        }
+      })
       obj3d.name = "worldMap";
 
       obj3d.position.set(0, 0, 0);
       obj3d.scale.set(1, 1, 1);
 
-      scene.current?.add(glb.scene)
+      scene.current?.add(obj3d)
     })
     const items = [
       {url: pawn_0},
@@ -1137,23 +1185,11 @@ const Game3DItem =() => {
         const obj3d = glb.scene;
         // obj3d.position.set(0, 0, 0);
         obj3d.scale.set(1, 1, 1);
-        switch (idx) {
-          case 0:
-            player0Loc.current = obj3d.position 
-            break
-          case 1:
-            player1Loc.current = obj3d.position
-            break
-          case 2:
-            player2Loc.current = obj3d.position
-            break
-          case 3:
-            player3Loc.current = obj3d.position
-            break
-          default:
-            break
+        console.log(obj3d.position)
+        if (idx === playerInfo.playerIndex){
+          playerLoc.current = obj3d.position
         }
-        scene.current?.add(glb.scene)
+        scene.current?.add(obj3d)
       })
 
     })
@@ -1220,7 +1256,10 @@ const Game3DItem =() => {
      
         <div className='w-full  flex flex-row justify-start items-center h-20'>
           <div className='mx-10'>
-            <button id='tempButton' onClick={getRandomInt}>
+            <button id='tempButton' onClick={() => {
+                console.log(playerTurn)
+                getRandomInt()
+              }}>
               <span
                 id='tempButtonText'
                 className='flex items-center justify-center flex-row'
@@ -1240,11 +1279,13 @@ const Game3DItem =() => {
               </span>
             </button>
           </div>
-          <div id='input-container' className='mx-10'>
+          {/* <div id='input-container' className='mx-10'>
             <input
               id='tempInput'
               type='number'
               value={count}
+              max={3}
+              min={1}
               onChange={handleCount}
             />
             <button
@@ -1257,7 +1298,7 @@ const Game3DItem =() => {
             >
               돌리기
             </button>
-          </div>
+          </div> */}
         </div>
       <div
       className=''
