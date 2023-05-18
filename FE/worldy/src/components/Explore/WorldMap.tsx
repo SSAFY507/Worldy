@@ -133,14 +133,18 @@ const WorldMap = () => {
       clickTimeout = setTimeout(() => {
         if (name) {
           // alert(`${name}으(로) 이동합니다.`)
-          Swal.fire(`${name}으(로) 이동합니다.`)
-            .then(function(){
+          if (`${name}` === "미국" || `${name}` === "영국" || `${name}` === "스페인" || `${name}` === "한국") {
+            Swal.fire(`${name}으로 이동합니다.`).then(function(){
               navigate(`/explore/${moveCountry}`)
             });
-          // navigate(`/explore/${moveCountry}`)
+          } else {
+            Swal.fire(`${name}로 이동합니다.`).then(function(){
+              navigate(`/explore/${moveCountry}`)
+            });
+          }
         } else {
           // alert(`오픈 예정입니다!😉`)
-          Swal.fire(`오픈 예정입니다!😉`)
+          Swal.fire(`오픈 예정입니다.`)
             // .then(function(){
             //   navigate(`/explore/${moveCountry}`)
             // });

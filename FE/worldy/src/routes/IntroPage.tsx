@@ -130,12 +130,18 @@ function IntroPage({ onLoginClick }: { onLoginClick: () => void }) {
                     Worldy Games 에 오신 것을 환영합니다. 지금 당장 모험을
                     떠나보세요.
                   </span>
-                  <a
+                  {/* <a
                     href='/mypage'
                     className='text-blue-500 mx-4 underline underline-offset-4'
                   >
                     * 더 알아보기
-                  </a>
+                  </a> */}
+                  <button
+                    className='text-blue-500 mx-4 underline underline-offset-4'
+                    onClick={closeMoreInfo}
+                  >
+                    * 그만 보기
+                  </button>
                 </div>
                 <div className='flex flex-row justify-end items-center w-1/4 px-10'>
                   <button onClick={closeMoreInfo}>

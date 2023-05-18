@@ -14,50 +14,40 @@ type CountryWordList = {
 export default function LoaderHello({ input }: { input: string }) {
   const [moveNav, setMoveNav] = useState<number>(1);
 
-  /* asia_Korea: "대한민국",
-    asia_China: "중국",
-    asia_india: "인도",
-    asia_Japen: "일본",
-    africa_Egypt: "이집트",
-    europe_France: "프랑스",
-    europe_Italia: "이탈리아",
-    europe_Spain: "스페인",
-    europe_UK: "영국",
-    northAmerica_America: "미국", */
-
   const [index, setIndex] = useState<number>(0);
   useEffect(() => {
+    console.log('inpit : ' , input)
     switch (input) {
       case 'northAmerica_America': {
-        setIndex(0);
+        setChoosedCountry(countryList[0]);
         break;
       }
       case 'europe_UK': {
-        setIndex(1);
+        setChoosedCountry(countryList[1]);
         break;
       }
       case 'europe_Spain': {
-        setIndex(2);
+        setChoosedCountry(countryList[2]);
         break;
       }
       case 'europe_Italia': {
-        setIndex(3);
+        setChoosedCountry(countryList[3]);
         break;
       }
       case 'europe_France': {
-        setIndex(4);
+        setChoosedCountry(countryList[4]);
         break;
       }
       case 'africa_Egypt': {
-        setIndex(5);
+        setChoosedCountry(countryList[5]);
         break;
       }
       case 'asia_Korea': {
-        setIndex(6);
+        setChoosedCountry(countryList[6]);
         break;
       }
       case 'asia_Japen': {
-        setIndex(7);
+        setChoosedCountry(countryList[7]);
         break;
       }
     }
@@ -117,29 +107,6 @@ export default function LoaderHello({ input }: { input: string }) {
   const [choosedCountry, setChoosedCountry] = useState<CountryWordList>(
     countryList[index]
   );
-
-  const country: string = window.location.href;
-
-  useEffect(() => {
-    console.log(country);
-    if (country === '미국') {
-      setChoosedCountry(countryList[0]);
-    } else if (country === '영국') {
-      setChoosedCountry(countryList[1]);
-    } else if (country === '스페인') {
-      setChoosedCountry(countryList[2]);
-    } else if (country === '이탈리아') {
-      setChoosedCountry(countryList[3]);
-    } else if (country === '프랑스') {
-      setChoosedCountry(countryList[4]);
-    } else if (country === '이집트') {
-      setChoosedCountry(countryList[5]);
-    } else if (country === '한국') {
-      setChoosedCountry(countryList[6]);
-    } else {
-      setChoosedCountry(countryList[7]);
-    }
-  }, []);
 
   return (
     <div
