@@ -78,7 +78,7 @@ const CountryMap = ({
     paintBox: '🖼 틀린 그림 찾기 🖼',
     // historyBox: "🧭역사에 대해 알아보자!",
     quizBox: '🎁 퀴즈 풀고 Level Up! 🎁',
-    foodBox: '🍜🍛🍣🍻',
+    foodBox: '🍜🍛 음식 🍣🍻',
     personalityBox: '👴🤴 인물을 알아보자! 👳‍♂️🎅',
     newsBox: '📰 오늘의 뉴스 📰',
   };
