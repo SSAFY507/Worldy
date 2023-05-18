@@ -110,13 +110,13 @@ const CountryFamousFrame = ({selectAsset, countryName}:Props) => {
         </div>
         <div className='h-[48px] w-[100px] flex felx-row justify-center py-3 mt-8'>
           <div className='flex flex-row '>
-            <div className={`${(select === 0 ? " bg-green-400" : "bg-gray-200")} h-full w-[25px] text-center font-PtdMedium text-white py-1 rounded-full cursor-pointer`}
+            <div className={`${(select === 0 ? "bg-[rgba(0,0,0,0.2)]" : "bg-[rgba(229,231,235,0.2)]")} h-full w-[25px] text-center font-PtdMedium text-white py-1 rounded-full cursor-pointer`}
               onClick={() => {checkContent(0)}}
             >1</div>
-            <div className={`${(select === 1? "bg-green-400" : "bg-gray-200")} h-full w-[25px] text-center font-PtdMedium text-white py-1 mx-1 rounded-full cursor-pointer`}
+            <div className={`${(select === 1? "bg-[rgba(0,0,0,0.2)]" : "bg-[rgba(229,231,235,0.2)]")} h-full w-[25px] text-center font-PtdMedium text-white py-1 mx-1 rounded-full cursor-pointer`}
               onClick={() => checkContent(1)}
               >2</div>
-            <div className={`${(select === 2 ? "bg-green-400" : "bg-gray-200")} h-full w-[25px] text-center font-PtdMedium text-white py-1 rounded-full cursor-pointer`}
+            <div className={`${(select === 2 ? "bg-[rgba(0,0,0,0.2)]" : "bg-[rgba(229,231,235,0.2)]")} h-full w-[25px] text-center font-PtdMedium text-white py-1 rounded-full cursor-pointer`}
               onClick={() => checkContent(2)}
             >3</div>
           </div>
