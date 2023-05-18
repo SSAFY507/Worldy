@@ -173,7 +173,8 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
         </div>
       </div>
       <div
-        className=' h-12 w-[780px] text-sm text-center font-PtdLight opacity-40 py-3 rounded-xl shadow-lg border-solid border-2 border-gray-200 cursor-pointer'
+        className=' h-12 w-[780px] text-[30px]] text-center grid place-content-center font-PtdLight opacity-40 py-3 rounded-xl shadow-lg border-solid border-2 border-gray-200 cursor-pointer
+        hover:bg-[#ead3fc] hover:opacity-80'
         onClick={() => {
           alert('틀린 그림 맞추기 실패! 😢');
           GetSolvedFlag(true, false);
