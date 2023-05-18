@@ -19,4 +19,6 @@ public class MetaData {
     private boolean isDouble;
     private String itemMsg1;
     private String itemMsg2;
+    private int circuit;
+    private int fund;
 }

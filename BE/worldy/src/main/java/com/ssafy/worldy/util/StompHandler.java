@@ -96,45 +96,51 @@ public class StompHandler implements ChannelInterceptor {
                 accessor.getSessionAttributes().put("socketType", "game");
 
                 if(!roomId.equals("null")) {
-                    log.info("roomId : " + roomId);
-                    log.info(String.valueOf(gameRoomRepo.playerCnt(roomId)));
-                    gameRoomRepo.enterGameRoom(kakaoId,roomId); // 게임방에 플레이어 cnt 증가
 
-                    int cnt = (int)gameRoomRepo.playerCnt(roomId);
-                    log.info("현재 인원 수 : " +  cnt);
-
-                    // 방에 입장한 유저 데이터 전송
+                    // 요청 전 방에 입장한 유저 데이터 전송
                     List<String> player = gameRoomRepo.findGameRoom(roomId);
-                    EnterPlayerList enterPlayerList = EnterPlayerList.builder().roomId(roomId).type("enter").cnt(cnt).build();
 
                     boolean check = true;
 
-                    // 카카오 아이디가 이미 방에 입장해있으면 전송 금지
-//                    for(int i=0;i<player.size();i++) {
-//                        if(kakaoId.equals(player.get(i))) {
-//                            check = false;
-//                            break;
-//                        }
-//                    }
-
-                    if(check) {
-                        for (int i = 0; i < player.size(); i++) {
-                            if (i == 0) {
-                                User user = userRepo.findByKakaoId(player.get(i)).orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
-                                enterPlayerList.setUser1(user.toEnterPlayer());
-                            } else if (i == 1) {
-                                User user = userRepo.findByKakaoId(player.get(i)).orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
-                                enterPlayerList.setUser2(user.toEnterPlayer());
-                            } else if (i == 2) {
-                                User user = userRepo.findByKakaoId(player.get(i)).orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
-                                enterPlayerList.setUser3(user.toEnterPlayer());
-                            } else if (i == 3) {
-                                User user = userRepo.findByKakaoId(player.get(i)).orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
-                                enterPlayerList.setUser4(user.toEnterPlayer());
-                            } else break;
+                    if(player!=null) {
+                        // 카카오 아이디가 이미 방에 입장해있으면 전송 금지
+                        for(int i=0;i<player.size();i++) {
+                            if(kakaoId.equals(player.get(i))) {
+                                check = false;
+                                break;
+                            }
                         }
-                        redisPublisher.publish(enterPlayerList);
                     }
+
+                    // 방에 없는 사람이면
+                    if(check) {
+                        gameRoomRepo.enterGameRoom(kakaoId,roomId); // 게임방에 플레이어 cnt 증가
+                    }
+
+                    // 요청 후 방에 입장한 유저 데이터 전송
+                    player = gameRoomRepo.findGameRoom(roomId);
+
+                    int cnt = (int)gameRoomRepo.playerCnt(roomId);
+                    log.info("roomId : " + roomId + " 현재 인원 수 : " +  cnt);
+
+                    EnterPlayerList enterPlayerList = EnterPlayerList.builder().roomId(roomId).type("enter").cnt(cnt).build();
+
+                    for (int i = 0; i < player.size(); i++) {
+                        if (i == 0) {
+                            User user = userRepo.findByKakaoId(player.get(i)).orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
+                            enterPlayerList.setUser1(user.toEnterPlayer());
+                        } else if (i == 1) {
+                            User user = userRepo.findByKakaoId(player.get(i)).orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
+                            enterPlayerList.setUser2(user.toEnterPlayer());
+                        } else if (i == 2) {
+                            User user = userRepo.findByKakaoId(player.get(i)).orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
+                            enterPlayerList.setUser3(user.toEnterPlayer());
+                        } else if (i == 3) {
+                            User user = userRepo.findByKakaoId(player.get(i)).orElseThrow(() -> new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
+                            enterPlayerList.setUser4(user.toEnterPlayer());
+                        } else break;
+                    }
+                    redisPublisher.publish(enterPlayerList);
                 }
             }
 

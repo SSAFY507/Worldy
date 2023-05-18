@@ -74,7 +74,7 @@ def chatgpt_quiz(text):
         model=model,
         messages=messages
     )
-    word = response['choices'][0]['message']['content']
+    word = response['choices'][0]['message']['content'].replace(" ", "")
 
     origin = [summary, word]
     return make_quiz_and_answer(origin)

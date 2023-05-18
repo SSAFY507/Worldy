@@ -35,7 +35,7 @@ def find_news(nation):
         try:
             send_img = send.select_one("a.dsc_thumb").find("img").get("data-lazysrc")
         except:
-            send_img = None
+            send_img = "None"
 
         send_title = send.select_one("a.news_tit").text
         send_txt = send.select_one("a.api_txt_lines.dsc_txt_wrap").text

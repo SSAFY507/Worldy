@@ -35,13 +35,16 @@ public class Info {
     private String content;
 
     @Column(name = "img_url")
-    private String img_url;
+    private String imgUrl;
 
     @Column(name = "video_url")
-    private String video_url;
+    private String videoUrl;
 
     @Column(name = "insta_url")
-    private String insta_url;
+    private String instaUrl;
+
+    @Column(name = "sub_name")
+    private String subName;
 
     public InfoDto toDto(){
         return InfoDto.builder()
@@ -50,9 +53,10 @@ public class Info {
                 .category(this.category)
                 .name(this.name)
                 .content(this.content)
-                .img_url(this.img_url)
-                .video_url(this.video_url)
-                .insta_url(this.insta_url)
+                .imgUrl(this.imgUrl)
+                .videoUrl(this.videoUrl)
+                .instaUrl(this.instaUrl)
+                .subName(this.subName)
                 .build();
     }
 }
