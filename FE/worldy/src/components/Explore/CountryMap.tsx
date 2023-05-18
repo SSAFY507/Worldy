@@ -77,12 +77,12 @@ const CountryMap = ({
     'newsBox',
   ]);
   const assetObject: AssetsType = {
-    paintBox: '🖼 틀린 그림 찾기 🖼',
+    paintBox: '틀린 그림 찾기로 이동합니다.',
     // historyBox: "🧭역사에 대해 알아보자!",
-    quizBox: '🎁 퀴즈 풀고 Level Up! 🎁',
-    foodBox: '🍜🍛 음식 🍣🍻',
-    personalityBox: '👴🤴 인물을 알아보자! 👳‍♂️🎅',
-    newsBox: '📰 오늘의 뉴스 📰',
+    quizBox: '퀴즈로 이동합니다.',
+    foodBox: '음식으로 이동합니다.',
+    personalityBox: '인물로 이동합니다.',
+    newsBox: '오늘의 뉴스로 이동합니다.',
   };
   let selectedName: string = '';
   let [selectTmp, setSelectTmp] = useState<boolean>(false);
