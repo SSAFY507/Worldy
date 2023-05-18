@@ -52,7 +52,6 @@ export default function QuizModal({
 
   const userName: string | null = sessionStorage.getItem('nickname');
 
-
   const size: number = 200;
 
   const textSize: number = 200 / (input.content.length / 20);
@@ -323,7 +322,11 @@ export default function QuizModal({
             </div>
           )}
         </div>
-        <div className='w-[500px] h-[150px]  outline-green-300 flex flex-row justify-between items-center'>
+        <div
+          className={`w-[500px] h-[150px]  outline-green-300 flex flex-row ${
+            input.answer.length === 1 ? 'justify-center' : 'justify-between'
+          } items-center`}
+        >
           {blankBoxComponent()}
         </div>
       </div>
@@ -652,7 +655,9 @@ export default function QuizModal({
             </div>
           </div>
           <div className='w-full flex-1 outline-black flex flex-row justify-start items-center font-PtdRegular text-[#ACACAC]'>
-            <span>"{userName}"님이 입력한 답은 "{submitAnswer}"</span>
+            <span>
+              "{userName}"님이 입력한 답은 "{submitAnswer}"
+            </span>
           </div>
         </div>
         <div className='relative bg-[#F5F5F5] w-full h-[300px]  outline-blue-500'>
