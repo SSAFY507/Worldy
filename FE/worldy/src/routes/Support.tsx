@@ -65,7 +65,7 @@ export default function Support({
   }, [getHelpAllResult]);
 
   const getAllHelpCustomAxios = async () => {
-    console.log('getAllHelp 커스터엄 토큰 : ', getToken);
+    //console.log('getAllHelp 커스터엄 토큰 : ', getToken);
     try {
       const response = await CustomAxios({
         APIName: 'getAllHelp',
@@ -74,7 +74,7 @@ export default function Support({
         Token: getToken,
       });
       setGetHelpAllResult(response);
-      console.log('get All Help모든 데이터 : ' + response);
+      //console.log('get All Help모든 데이터 : ' + response);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -85,7 +85,7 @@ export default function Support({
   }, []);
 
   useEffect(() => {
-    console.log(modalOn);
+    //console.log(modalOn);
     getAllHelpCustomAxios();
   }, [modalOn]);
 
@@ -93,7 +93,7 @@ export default function Support({
     if (isLoaded) {
       setTimeout(() => {
         setLoadedAll(true);
-        console.log(loadedImages);
+        //console.log(loadedImages);
       }, 1000);
     }
   }, [isLoaded]);
@@ -101,8 +101,8 @@ export default function Support({
   const [searchText, setSearchText] = useState<string>('');
 
   async function searchElasticBasic(input: string) {
-    console.log('베이직 엑시오스');
-    console.log('현재 검색어', input);
+    //console.log('베이직 엑시오스');
+    //console.log('현재 검색어', input);
 
     try {
       const response = await axios.post(
@@ -117,13 +117,13 @@ export default function Support({
         }
         // { category: askTypeList[askType].name, content: contentText },
       );
-      console.log('엘라스틱 결과 : ', response.data.hits.hits);
-      console.log(
-        '엘라스틱 결과 :??? ',
-        response.data.hits.hits[0]
-          ? response.data.hits.hits[0]._source.category
-          : '없음'
-      );
+      //console.log('엘라스틱 결과 : ', response.data.hits.hits);
+      // console.log(
+      //   '엘라스틱 결과 :??? ',
+      //   response.data.hits.hits[0]
+      //     ? response.data.hits.hits[0]._source.category
+      //     : '없음'
+      // );
       spreadElasticSearch(response.data.hits.hits);
     } catch (error) {
       console.error(`Error: ${error}`);
@@ -131,7 +131,7 @@ export default function Support({
   }
 
   const handleSearchText = (input: string) => {
-    console.log('인풋 input TExt', input);
+    //console.log('인풋 input TExt', input);
     setSearchText(input);
     // searchElastic(input);
     searchElasticBasic(input);
@@ -212,8 +212,8 @@ export default function Support({
 
   const openResponse = (index: number) => {
     index === resState ? setResState(-1) : setResState(index);
-    console.log('index', index);
-    console.log('resState', resState);
+    //console.log('index', index);
+    //console.log('resState', resState);
   };
 
   const ItemBox = (item: getHelpItemType, index: number) => {

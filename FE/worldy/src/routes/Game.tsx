@@ -21,7 +21,7 @@ export default function Game() {
   };
 
   const handleFirstLogin = (firstLogin: boolean) => {
-    console.log(firstLogin);
+    //console.log(firstLogin);
   }
 
   useEffect(() => {

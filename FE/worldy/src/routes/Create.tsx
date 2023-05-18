@@ -19,8 +19,8 @@ export default function Create() {
   }, 1000);
 
   useEffect(() => {
-    console.log("matching Id 변경 감지");
-    console.log(matchingId);
+    //console.log("matching Id 변경 감지");
+    //console.log(matchingId);
   }, [matchingId]);
 
   // if(mode === 1){

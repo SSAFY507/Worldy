@@ -7,27 +7,24 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom';
-
-import GameInfo from "./routes/GameInfo";
+import GameInfo from './routes/GameInfo';
 //import Updates from "./routes/Updates";
-import { useState, useRef, useEffect } from "react";
-import Game from "./routes/Game";
-import Payment from "./routes/Payment";
-import Create from "./routes/Create";
-import PaySuccess from "./routes/PayResult";
-import Callback from "./routes/Callback";
-
+import { useState, useRef, useEffect } from 'react';
+import Game from './routes/Game';
+import Callback from './routes/Callback';
 import Country from './routes/Country';
+import Create from "./routes/Create";
 import Explore from './routes/Explore';
-import HelloPage from './components/Loaders/LoaderHello';
+// import HelloPage from './components/Loaders/LoaderHello';
 import IntroPage from './routes/IntroPage';
-import LoaderHello from './components/Loaders/LoaderHello';
 import LoginModal from './components/LoginModal';
 import MainPageAfterLogin from './routes/MainPageAfterLogin';
 import Monopoly from './routes/Monopoly';
 import MyPage from './routes/MyPage';
 import Navbar from './components/Nvabar';
 import PayResult from './routes/PayResult';
+import PaySuccess from "./routes/PayResult";
+import Payment from "./routes/Payment";
 import Socket from './routes/Socket';
 import Support from './routes/Support';
 import Tutorial from './routes/Tutorial';
@@ -36,6 +33,7 @@ import pathBI from './assets/images/MainPageBackground.png';
 import { useSelector } from 'react-redux';
 import GameResult from './routes/GameResult';
 import Matching from './components/create/Matching';
+import WorldMapTutorial from './components/Explore/WorldMapTutorial';
 
 const AppLayout = () => {
   //Navbar 분기를 위해 useLocation써서 특정 페이지에는 navBar 주지 않습니다.
@@ -47,7 +45,7 @@ const AppLayout = () => {
   //네브바에서 무료 플레이 버튼 누르면 모달 토글
   const handleLoginModal = () => {
     setShowLoginModal(!showLoginModal);
-    console.log(showLoginModal);
+    //console.log(showLoginModal);
   };
 
   const closeLoginModal = () => {
@@ -66,7 +64,7 @@ const AppLayout = () => {
   const [firstLoginState, setFirstLoginState] = useState<boolean>(false);
 
   const handleFirstLogin = (firstLogin: boolean) => {
-    console.log('LoginModal로부터 넘어온 firstLogin', firstLogin);
+    //console.log('LoginModal로부터 넘어온 firstLogin', firstLogin);
     if (firstLogin) {
       navigate('/tutorial');
     } else {
@@ -82,9 +80,7 @@ const AppLayout = () => {
     closeLoginModal();
   };
 
-
   const endTutorial = () => {
-
     const gameId = sessionStorage.getItem('gameId');
 
     // 헤더 확인해서 roomId 있으면
@@ -98,7 +94,6 @@ const AppLayout = () => {
   const exploreUrl = location.pathname.substr(0, 9);
   const monopolyUrl = location.pathname.substr(0, 9);
   const gameUrl = location.pathname.substr(0, 5);
-
 
   const [myPageRef, setMyPageRef] = useState<string>('');
 
@@ -116,20 +111,18 @@ const AppLayout = () => {
       if (checkLoginState && (checkNickname === '' || checkNickname === null)) {
         //로그인돼있는데 닉네임 없으면 tutorial
         navigate('/tutorial');
-        console.log('닉네임 설정해주세요 (tutorial로 이동)');
+        //console.log('닉네임 설정해주세요 (tutorial로 이동)');
       } else if (!checkLoginState) {
-
         const gameId = sessionStorage.getItem('gameId');
 
-        // 헤더 확인해서 roomId 있으면 
+        // 헤더 확인해서 roomId 있으면
         if (gameId) {
           navigate(`/game/${gameId}`); // 게임 uri로 입장 후 로그인 안돼있으면
         } else {
           navigate('/'); //로그인 안돼있으면 홈으로
         }
 
-        console.log("로그인 해주세요(Home으로 이동)");
-
+        //console.log('로그인 해주세요(Home으로 이동)');
       }
   }, []);
 
@@ -184,12 +177,12 @@ const AppLayout = () => {
               <MyPage setRef={myPageRef} handleQnaModal={handleQnaModal} />
             }
           />
-          <Route path="/create" element={<Create />} />
-          <Route path="/game" element={<Game />} />
-          <Route path="/game/:id" element={<Game />} />
-          <Route path="/game/result" element={<GameResult />} />
-          <Route path="/socket" element={<Socket />} />
-          <Route path="/tutorial" element={<Tutorial />} />
+          <Route path='/create' element={<Create />} />
+          <Route path='/game' element={<Game />} />
+          <Route path='/game/:id' element={<Game />} />
+          <Route path='/game/result' element={<GameResult />} />
+          <Route path='/socket' element={<Socket />} />
+          <Route path='/tutorial' element={<Tutorial />} />
           <Route path='/create' element={<Create />} />
           <Route path='/ready' element={<Matching />} />
           <Route path='/game' element={<Game />} />
@@ -203,6 +196,7 @@ const AppLayout = () => {
             element={<PayResult input={paymentFailureInput} />}
           /> */}
           <Route path='/payment' element={<Payment />} />
+          <Route path='/hoons' element={<WorldMapTutorial />} />
         </Routes>
       </div>
     </div>

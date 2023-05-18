@@ -119,6 +119,13 @@ export default function Game2D(props: any) {
   //   setMode(8);
   // }, [])
 
+  useEffect(() => {
+    console.log('metaData.curcuit : ')
+    console.log(metaData.curcuit)
+    if (metaData.curcuit >= 16) {
+      finishGame();
+    }
+  }, [metaData.curcuit])
 
 
 
@@ -149,6 +156,7 @@ export default function Game2D(props: any) {
         ...prevState,
         turn: (prevState.turn + 1) % 4,
         turnOver: false,
+        curcuit: prevState.curcuit + 1,
       }));
     } else if (metaData.turnOver && metaData.isDouble) {
       setMetaData((prevState: any) => ({
@@ -335,8 +343,8 @@ export default function Game2D(props: any) {
         playNum: 0,
         nickName: '',
         own: [],
-        tier:'',
-        profileImg:''
+        tier: '',
+        profileImg: ''
       },
       {
         kakaoId: '',
@@ -344,8 +352,8 @@ export default function Game2D(props: any) {
         playNum: 0,
         nickName: '',
         own: [],
-        tier:'',
-        profileImg:''
+        tier: '',
+        profileImg: ''
       },
       {
         kakaoId: '',
@@ -353,8 +361,8 @@ export default function Game2D(props: any) {
         playNum: 0,
         nickName: '',
         own: [],
-        tier:'',
-        profileImg:''
+        tier: '',
+        profileImg: ''
       },
       {
         kakaoId: '',
@@ -362,8 +370,8 @@ export default function Game2D(props: any) {
         playNum: 0,
         nickName: '',
         own: [],
-        tier:'',
-        profileImg:''
+        tier: '',
+        profileImg: ''
       }
     ]
   });
@@ -392,32 +400,32 @@ export default function Game2D(props: any) {
             playNum: 1,
             nickName: player.p1.name,
             own: player.p1.game.own,
-            tier:user1.tier,
-            profileImg:user1.profileImg
+            tier: user1.tier,
+            profileImg: user1.profileImg
           } : key === 1 ? {
             kakaoId: player.p2.playerId,
             assets: p2Assets,
             playNum: 2,
             nickName: player.p2.name,
             own: player.p2.game.own,
-            tier:user2.tier,
-            profileImg:user2.profileImg
+            tier: user2.tier,
+            profileImg: user2.profileImg
           } : key === 2 ? {
             kakaoId: player.p3.playerId,
             assets: p3Assets,
             playNum: 3,
             nickName: player.p3.name,
             own: player.p3.game.own,
-            tier:user3.tier,
-            profileImg:user3.profileImg
+            tier: user3.tier,
+            profileImg: user3.profileImg
           } : {
             kakaoId: player.p4.playerId,
             assets: p4Assets,
             playNum: 4,
             nickName: player.p4.name,
             own: player.p4.game.own,
-            tier:user4.tier,
-            profileImg:user4.profileImg
+            tier: user4.tier,
+            profileImg: user4.profileImg
           }
         ))
       ]
@@ -2022,16 +2030,27 @@ export default function Game2D(props: any) {
                     
                     `}
                   >
-                    <div className="w-[250px] h-[240px] bg-[#F4F2EC] mt-[20px]">
+                    <div className="w-[250px] h-[240px] mt-[20px]">
                       <div className="flex justify-between">
-                        <div className="">플레이어[{i.playerNum}]</div>
-                        <div className="">현재 위치</div>
+                        <div className="text-[12px]">플레이어[{i.playerNum}]</div>
+                        <div className="text-[12px]">[{worldMap[i.game.location].name}]</div>
                       </div>
-                      <div className="flex justify-between h-[34px] mt-[10px] mb-[10px] border-solid border-gray-400 border-b-[1px]">
-                        <div className="text-[22px]">{i.name}</div>
-                        <div className="text-[22px]">
-                          [{worldMap[i.game.location].name}]
-                          {/* [{worldMap[i.game.location].name}] */}
+                      <div className="flex items-center h-[60px] mt-[10px] mb-[10px] border-solid border-gray-400 border-b-[1px]">
+                        {i.playerNum === 1 ? <img src={user1.profileImg} className="w-[50px] h-[50px] rounded-full object-cover"></img> : null}
+                        {i.playerNum === 2 ? <img src={user2.profileImg} className="w-[50px] h-[50px] rounded-full object-cover"></img> : null}
+                        {i.playerNum === 3 ? <img src={user3.profileImg} className="w-[50px] h-[50px] rounded-full object-cover"></img> : null}
+                        {i.playerNum === 4 ? <img src={user4.profileImg} className="w-[50px] h-[50px] rounded-full object-cover"></img> : null}
+                        <div className="text-[30px] font-PtdBold ml-[10px] w-[130px]">{i.name}</div>
+                        <div className={`text-[14px] text-white flex justify-center items-center w-[50px] h-[30px] rounded-full ml-[10px]
+                        ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 1 ? 'bg-red-400' : ''}
+                        ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 2 ? 'bg-green-400' : ''}
+                        ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 3 ? 'bg-blue-400' : ''}
+                        ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 4 ? 'bg-purple-400' : ''}
+                        `}>
+                          {i.name === rankPlayerData.rankPlayer[0].nickName ? '1위' : ''}
+                          {i.name === rankPlayerData.rankPlayer[1].nickName ? '2위' : ''}
+                          {i.name === rankPlayerData.rankPlayer[2].nickName ? '3위' : ''}
+                          {i.name === rankPlayerData.rankPlayer[3].nickName ? '4위' : ''}
                         </div>
                       </div>
                       <div className="flex flex-col w-full h-[60px] items-between">
@@ -2062,17 +2081,6 @@ export default function Game2D(props: any) {
                         </div>
                       </div>
                     </div>
-                    <div className={`w-[50px] h-[28px] rounded-full flex justify-center items-center text-white relative top-[-30px] left-[100px]
-                    ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 1 ? 'bg-red-400' : ''}
-                    ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 2 ? 'bg-green-400' : ''}
-                    ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 3 ? 'bg-blue-400' : ''}
-                    ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 4 ? 'bg-purple-400' : ''}
-                    `}>
-                      {i.name === rankPlayerData.rankPlayer[0].nickName ? '1위' : ''}
-                      {i.name === rankPlayerData.rankPlayer[1].nickName ? '2위' : ''}
-                      {i.name === rankPlayerData.rankPlayer[2].nickName ? '3위' : ''}
-                      {i.name === rankPlayerData.rankPlayer[3].nickName ? '4위' : ''}
-                    </div>
                   </div>
                 </div>
               );
@@ -2082,14 +2090,15 @@ export default function Game2D(props: any) {
 
         {/* 가운데 영역 */}
         <div className="w-[60%] h-full flex justify-center items-center mb-[20px]">
-          <div className="w-[1010px] h-[1010px] bg-[#F4F2EC] rounded-[20px] mb-[50px] flex justify-center items-center relative left-[180px]">
-            <div className="w-[990px] h-[990px] bg-green-100 rounded-[14px] flex justify-center items-center">
+          <div className="w-[1010px] h-[1010px] rounded-[4px] mb-[50px] flex justify-center items-center relative left-[180px]">
+            <div className="w-[990px] h-[990px] rounded-[12px] bg-[url('../../public/game/board.png')] flex justify-center items-center">
+              <img src="/game/enter2.png" alt="img" className="w-[280px] objec-cover absolute top-[390px] left-[340px] opacity-20" />
               {/* 0~ 10 */}
               <div className="w-[990px] h-[90px] rounded-[10px] z-[1] flex relative top-[-450px] left-[496px]">
                 {worldMap.map((i: Spot, index: number) => {
                   return (
                     <div key={index}
-                      className={selectMode ? 'hover:cursor-pointer hover:bg-red-200 hover:opacity-75' : ''}
+                      className={selectMode ? 'hover:cursor-pointer hover:bg-red-200 hover:opacity-15' : ''}
                       onClick={() => {
                         console.log(index)
                         setNewLocation(index);
@@ -3142,7 +3151,7 @@ export default function Game2D(props: any) {
             </div>
           </div>
           <div className="w-[380px] h-[780px] flex flex-col justify-start items-center relative top-[-20px] left-[-510px]">
-            <div className="w-[380px] h-[280px] rounded-[8px] bg-white shadow-lg">
+            <div className="w-[380px] h-[260px] rounded-[8px] bg-white shadow-lg">
               {/* 주사위 영역 */}
               <Dice></Dice>
               <div
@@ -3157,7 +3166,7 @@ export default function Game2D(props: any) {
                 주사위 던지기
               </div>
 
-              <div
+              {/* <div
                 id="shbutton"
                 className="w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px] absolute top-[290px]"
                 onClick={() => {
@@ -3181,7 +3190,7 @@ export default function Game2D(props: any) {
                 }}
               >
                 턴 종료
-              </div>
+              </div> */}
 
               {/* <div
                 id="shbutton"
@@ -3197,16 +3206,7 @@ export default function Game2D(props: any) {
                 퀴즈 요청
               </div> */}
 
-              <div
-                id="shbutton"
-                className="w-[140px] h-[40px] rounded-[4px] flex justify-center items-center text-white text-[16px] absolute left-[950px] bottom-[-150px] z-[80000]"
-                onClick={() => {
-                  // 종료 API 요청
-                  finishGame();
-                }}
-              >
-                게임 종료
-              </div>
+
 
               {/* 콘솔창 영역 */}
               <div
@@ -4062,27 +4062,10 @@ export default function Game2D(props: any) {
 
         {/* 오른쪽 영역 */}
         <div
-          className={`w-[20%] h-full flex flex-col justify-center items-start rounded-[4px]`}
+          className={`w-[20%] h-full flex flex-col justify-start items-start rounded-[4px]`}
         >
-
-          {rankPlayerData.rankPlayer[0].nickName ?
-            <div
-              className={`w-[50px] h-[28px] relative left-[10px] top-[-12px] z-[100] text-white text-[16px] rounded-full flex justify-center items-center
-              ${me.playerNum === 1 ? 'bg-red-400' : ''}
-              ${me.playerNum === 2 ? 'bg-green-400' : ''}
-              ${me.playerNum === 3 ? 'bg-blue-400' : ''}
-              ${me.playerNum === 4 ? 'bg-purple-400' : ''}
-          `}
-            >
-              {rankPlayerData.rankPlayer[0].nickName === me.name ? '1위' : ''}
-              {rankPlayerData.rankPlayer[1].nickName === me.name ? '2위' : ''}
-              {rankPlayerData.rankPlayer[2].nickName === me.name ? '3위' : ''}
-              {rankPlayerData.rankPlayer[3].nickName === me.name ? '4위' : ''}
-            </div>
-
-            : null}
           <div
-            className={`w-[320px] h-[920px] mb-[50px]  flex flex-col justify-around items-center bg-gray-100 rounded-[8px] 
+            className={`w-[320px] h-[920px] mb-[40px]  flex flex-col justify-around items-center bg-gray-100 rounded-[8px] 
             ${myTurn && me.playerNum === 1 ? "outline outline-[6px] outline-red-400" : ""}
             ${myTurn && me.playerNum === 2 ? "outline outline-[6px] outline-green-400" : ""}
             ${myTurn && me.playerNum === 3 ? "outline outline-[6px] outline-blue-400" : ""}
@@ -4093,17 +4076,30 @@ export default function Game2D(props: any) {
             <div className="w-[300px] h-[200px] bg-white rounded-[8px] flex flex-col justify-center items-center">
               <div className="w-[250px] h-[140px]">
                 <div className="flex justify-between items-center">
-                  <div className="">플레이어 [{me.playerNum}]</div>
-                  <div className="">현재 위치</div>
+                  <div className="text-[12px]">플레이어 [{me.playerNum}]</div>
+                  {/* <div className="text-[12px]">[{worldMap[me.game.location].name}]</div> */}
                 </div>
                 <div className="flex items-center justify-between h-[70px] mt-[10px] mb-[10px] border-solid border-gray-400 border-b-[1px]">
                   <div className="flex items-center">
                     <img src={`${profileImg}`} alt="" className="w-[50px] h-[50px] rounded-full" />
-                    <div className="text-[22px] ml-[6px]">{me.name}</div>
+                    <div className="text-[30px] font-PtdBold ml-[6px] w-[120px]">{me.name}</div>
                   </div>
-                  <div className="text-[22px]">
-                    [{worldMap[me.game.location].name}]
-                  </div>
+                  {rankPlayerData.rankPlayer[0].nickName ?
+                    <div
+                      className={`w-[50px] h-[28px] text-white text-[16px] rounded-full flex justify-center items-center
+                      ${me.playerNum === 1 ? 'bg-red-400' : ''}
+                      ${me.playerNum === 2 ? 'bg-green-400' : ''}
+                      ${me.playerNum === 3 ? 'bg-blue-400' : ''}
+                      ${me.playerNum === 4 ? 'bg-purple-400' : ''}
+                      `}
+                    >
+                      {rankPlayerData.rankPlayer[0].nickName === me.name ? '1위' : ''}
+                      {rankPlayerData.rankPlayer[1].nickName === me.name ? '2위' : ''}
+                      {rankPlayerData.rankPlayer[2].nickName === me.name ? '3위' : ''}
+                      {rankPlayerData.rankPlayer[3].nickName === me.name ? '4위' : ''}
+                    </div>
+
+                    : null}
                 </div>
                 <div className="flex flex-col w-full h-[40px] items-between">
                   <div className="">보유자산</div>
@@ -4156,6 +4152,16 @@ export default function Game2D(props: any) {
                 })}
               </div>
             </div>
+          </div>
+          <div
+            id="shbutton"
+            className="w-[140px] h-[40px] rounded-[4px] flex justify-center items-center text-white text-[16px] z-[80000]"
+            onClick={() => {
+              // 종료 API 요청
+              finishGame();
+            }}
+          >
+            게임 종료
           </div>
         </div>
       </div>
