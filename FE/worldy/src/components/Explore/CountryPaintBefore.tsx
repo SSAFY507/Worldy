@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import CustomAxios from '../../API/CustomAxios';
 import { ReactComponent as Info } from '../../assets/images/Info.svg';
 import { ProblemType } from './CountryPaintDetailModal';
+import Swal from 'sweetalert2';
 
 interface Props {
   problem: ProblemType;
@@ -71,7 +72,7 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
           <map
             name='image-map'
             id='image-map'
-            className='absolute top-0 left-0 h-[276px] w-[388px] '
+            className='top-0 left-0 h-[276px] w-[388px] relative bg-[rgba(255,255,255,0.3)]'
           >
             {problem.answerPointList!.map((e, idx) => {
               return (
@@ -115,19 +116,34 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
                           break;
                         case 3:
                           setThird(true);
-                          alert('틀린 그림 맞추기 성공! 😲  (exp: + 20)');
-                          GetSolvedFlag(true, true);
-                          const requestBody = new Map([
-                            ['userNickName', userNickName],
-                          ]);
-                          const response = CustomAxios({
-                            APIName: 'success',
-                            APIType: 'post',
-                            UrlQuery: DOMAIN + '/quiz/hidden/success',
-                            Body: requestBody,
-                            Token: getLoginToken,
-                          });
-                          console.log(response);
+                          // alert('틀린 그림 맞추기 성공! 😲  (exp: + 20)');
+                          Swal.fire('틀린 그림 맞추기 성공! 😲  (exp: + 20)')
+                            .then(function(){
+                              GetSolvedFlag(true, true);
+                              const requestBody = new Map([
+                                ['userNickName', userNickName],
+                              ]);
+                              const response = CustomAxios({
+                                APIName: 'success',
+                                APIType: 'post',
+                                UrlQuery: DOMAIN + '/quiz/hidden/success',
+                                Body: requestBody,
+                                Token: getLoginToken,
+                              });
+                              console.log(response);
+                            });
+                          // GetSolvedFlag(true, true);
+                          // const requestBody = new Map([
+                          //   ['userNickName', userNickName],
+                          // ]);
+                          // const response = CustomAxios({
+                          //   APIName: 'success',
+                          //   APIType: 'post',
+                          //   UrlQuery: DOMAIN + '/quiz/hidden/success',
+                          //   Body: requestBody,
+                          //   Token: getLoginToken,
+                          // });
+                          // console.log(response);
                           break;
                         default:
                           break;
@@ -175,8 +191,12 @@ const CountryPaintBefore = ({ problem, GetSolvedFlag }: Props) => {
       <div
         className=' h-12 w-[780px] text-sm text-center font-PtdLight opacity-40 py-3 rounded-xl shadow-lg border-solid border-2 border-gray-200 cursor-pointer'
         onClick={() => {
-          alert('틀린 그림 맞추기 실패! 😢');
-          GetSolvedFlag(true, false);
+          // alert('틀린 그림 맞추기 실패! 😢');
+          Swal.fire("틀린 그림 맞추기 실패! 😢")
+            .then(function(){
+              GetSolvedFlag(true, false);
+            });
+          // GetSolvedFlag(true, false);
         }}
       >
         포기하기
