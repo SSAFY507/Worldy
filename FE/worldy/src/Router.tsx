@@ -7,17 +7,11 @@ import {
   useLocation,
   useNavigate,
 } from 'react-router-dom';
-import { useEffect, useRef, useState } from "react";
-
 import GameInfo from './routes/GameInfo';
 //import Updates from "./routes/Updates";
 import { useState, useRef, useEffect } from 'react';
 import Game from './routes/Game';
-import Payment from './routes/Payment';
-import Create from './routes/Create';
-import PaySuccess from './routes/PayResult';
 import Callback from './routes/Callback';
-
 import Country from './routes/Country';
 import Create from "./routes/Create";
 import Explore from './routes/Explore';
@@ -25,7 +19,6 @@ import Explore from './routes/Explore';
 import IntroPage from './routes/IntroPage';
 import LoginModal from './components/LoginModal';
 import MainPageAfterLogin from './routes/MainPageAfterLogin';
-import Matching from './components/create/Matching';
 import Monopoly from './routes/Monopoly';
 import MyPage from './routes/MyPage';
 import Navbar from './components/Nvabar';
