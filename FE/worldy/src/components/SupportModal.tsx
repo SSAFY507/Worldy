@@ -10,6 +10,8 @@ import { useSelect } from '@react-three/drei';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
+import '../styles/SweetAlertStyles.css';
+
 type askTypeListType = {
   value: number;
   name: string;
@@ -182,12 +184,10 @@ export default function SupportModal({
     Swal.fire({
       title: '등록되었습니다.',
       confirmButtonText: '확인',
-      customClass: {
-        title: 'SWA2-support-title',
-
-        confirmButton: 'btn btn-success SWA2-support-confirmbtn',
-      },
       buttonsStyling: false,
+      customClass: {
+        confirmButton: 'swal2-confirm',
+      },
     });
   };
 

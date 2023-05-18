@@ -680,12 +680,13 @@ export default function MyPage({
 
   const getScrappedQuizListAxios = async () => {
     //console.log('Session에서의 가져오는 토큰', getLoginToken);
+    const loginToken = sessionStorage.getItem('token');
     try {
       const response = await CustomAxios({
         APIName: 'getScrappedQuiz',
         APIType: 'get',
-        UrlQuery: DOMAIN + `/user/scrap/all`,
-        Token: getLoginToken,
+        UrlQuery: DOMAIN + '/user/scrap/all',
+        Token: loginToken,
       });
       //console.log('닉네임 중복 체크 성공');
       //console.log('퀴즈 스크랩 받은 거 : ', response[0].quizId);

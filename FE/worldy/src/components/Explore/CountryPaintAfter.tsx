@@ -2,6 +2,8 @@ import { AnswerType } from './CountryPaintDetailModal';
 import { ReactComponent as Exp } from '../../assets/images/exp.svg';
 import Swal from 'sweetalert2';
 
+import '../../styles/SweetAlertStyles.css';
+
 interface Props {
   answer: AnswerType;
   result: boolean;
@@ -58,7 +60,14 @@ const CountryPaintAfter = ({ answer, result, GetSolvedFlag }: Props) => {
         className=' h-12 w-[780px] text-sm text-center font-PtdLight opacity-40 py-3 rounded-xl shadow-lg border-solid border-2 border-gray-200 cursor-pointer'
         onClick={() => {
           // alert("다른 문제 풀러 이동합니다.");
-          Swal.fire('새로운 문제로 이동합니다.').then(function () {
+          Swal.fire({
+            title: '새로운 문제로 이동합니다.',
+            confirmButtonText: '확인',
+            buttonsStyling: false,
+            customClass: {
+              confirmButton: 'swal2-confirm',
+            },
+          }).then(function () {
             GetSolvedFlag(false, true);
           });
           // GetSolvedFlag(false, true)
