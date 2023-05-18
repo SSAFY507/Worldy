@@ -144,7 +144,7 @@ const WorldMapNavbarComponent  = ({countryName, selectAsset, hoborAsset, GetSele
               } else {  
                 // Country Map인 경우, World Map 으로
                 // alert('대륙으로 이동합니다');
-                Swal.fire('대륙으로 이동합니다')
+                Swal.fire('대륙으로 이동합니다.')
                 .then(function(){
                   navigate('/explore');
                 });

@@ -75,12 +75,12 @@ const CountryMap = ({
     'newsBox',
   ]);
   const assetObject: AssetsType = {
-    paintBox: '🖼틀린 그림 찾기🖼',
+    paintBox: '🖼 틀린 그림 찾기 🖼',
     // historyBox: "🧭역사에 대해 알아보자!",
-    quizBox: '🎁퀴즈 풀고 Level Up!🎁',
+    quizBox: '🎁 퀴즈 풀고 Level Up! 🎁',
     foodBox: '🍜🍛🍣🍻',
-    personalityBox: '👴🤴인물을 알아보자!👳‍♂️🎅',
-    newsBox: '📰오늘의 뉴스📰',
+    personalityBox: '👴🤴 인물을 알아보자! 👳‍♂️🎅',
+    newsBox: '📰 오늘의 뉴스 📰',
   };
   let selectedName: string = '';
   let [selectTmp, setSelectTmp] = useState<boolean>(false);
@@ -197,7 +197,7 @@ const CountryMap = ({
     if (assetSet.has(name)) {
       if (name === 'back') {
         // alert('대륙으로 이동합니다');
-        Swal.fire('대륙으로 이동합니다')
+        Swal.fire('대륙으로 이동합니다.')
           .then(function(){
             navigate('/explore');
           });
@@ -220,7 +220,7 @@ const CountryMap = ({
         }
       }
     } else {
-      // alert(`오픈 예정입니다!😉`)
+      // alert(`오픈 예정입니다.`)
     }
     // 클릭 이벤트 처리
     console.log('click');
