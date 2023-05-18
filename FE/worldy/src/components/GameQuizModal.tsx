@@ -322,7 +322,12 @@ export default function GameQuizModal({
             </div>
           )}
         </div>
-        <div className='w-[500px] h-[150px]  outline-green-300 flex flex-row justify-between items-center'>
+        {/* <div className='w-[500px] h-[150px]  outline-green-300 flex flex-row justify-between items-center'> */}
+        <div
+          className={`w-[500px] h-[150px]  outline-green-300 flex flex-row ${
+            input.answer.length === 1 ? 'justify-center' : 'justify-between'
+          } items-center`}
+        >
           {blankBoxComponent()}
         </div>
       </div>
