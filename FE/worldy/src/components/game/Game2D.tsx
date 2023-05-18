@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
 import "./dice.css";
+
+import React, { useEffect, useState } from "react";
+
 import Dice from "./Dice";
 import GameQuizModal from "../GameQuizModal";
 import axios from 'axios';
 import { useNavigate } from 'react-router';
-
-
 
 export default function Game2D(props: any) {
   const sendData = props.sendData;
@@ -564,7 +564,7 @@ export default function Game2D(props: any) {
     if (dice1 === dice2) {
       isDouble = true;
     }
-
+    
     setMetaData((prevState: any) => ({
       ...prevState,
       dice1: dice1,

@@ -14,6 +14,7 @@ import Country from './routes/Country';
 import Create from "./routes/Create";
 import Explore from './routes/Explore';
 import Game from './routes/Game';
+import Game3D from './components/game/Game3D';
 import Game3DItem from './components/game/game3D/Game3DItem';
 import GameInfo from './routes/GameInfo';
 import GameResult from './routes/GameResult';
@@ -225,7 +226,7 @@ const AppLayout = () => {
           /> */}
           <Route path='/payment' element={<Payment />} />
           <Route path='/hoons' element={<WorldMapTutorial />} />
-          <Route path='/3dgame' element={<Game3DItem />} />
+          <Route path='/3dgame' element={<Game3D />} />
         </Routes>
       </div>
     </div>
