@@ -2058,7 +2058,7 @@ export default function Game2D(props: any) {
               return (
                 <div key={index}>
                   <div
-                    className={`w-[336px] h-[238px] bg-white rounded-[8px] flex flex-col justify-center items-center  shadow-[0_3px_10px_rgb(0,0,0,0.2)]
+                    className={`w-[350px] h-[238px] bg-white rounded-[8px] flex flex-col justify-center items-center  shadow-[0_3px_10px_rgb(0,0,0,0.2)]
                     ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 1 ? "outline outline-[6px] outline-red-400" : ""}
                     ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 2 ? "outline outline-[6px] outline-green-400" : ""}
                     ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 3 ? "outline outline-[6px] outline-blue-400" : ""}
@@ -2066,7 +2066,7 @@ export default function Game2D(props: any) {
                     
                     `}
                   >
-                    <div className="w-[250px] h-[240px] mt-[20px]">
+                    <div className="w-[280px] h-[240px] mt-[20px]">
                     <div className="flex justify-between items-center text-[#C0C0C0]">
                       <div className="text-[12px]">플레이어</div>
                       <div className="text-[12px]">현재 위치</div>
@@ -2096,9 +2096,14 @@ export default function Game2D(props: any) {
                       </div>
                       <div className="flex flex-col w-full h-[40px] items-between">
                         <div className="text-[12px] text-[#C0C0C0] mt-[10px]">보유자산</div>
-                        <div className="flex mt-[10px] justify-between text-[20px] font-PtdBold ">
-                          <div className="">{priceToString(me.game.balance)}</div>
-                          <div className="">만원</div>
+                        <div className="flex mt-[10px] justify text-[20px] font-PtdBold ">
+                          <div className="w-[40px]">
+                           <img src='/game/coin.png' className="h-[35px] mt-[-9px] object-cover"></img> 
+                           </div>
+                          <div className="">{priceToString(i.game.balance)}</div>  
+                          <div className="flex justify-end w-[200px]">
+                            <div className="">만원</div>
+                          </div>
                         </div>
                       </div>
                       <div className="flex flex-col w-full h-[60px] items-between mt-[20px]">
@@ -2131,8 +2136,8 @@ export default function Game2D(props: any) {
         {/* 가운데 영역 */}
         <div className="w-[60%] h-full flex justify-center items-center mb-[20px]">
           <div className="w-[1010px] h-[1010px] rounded-[4px] mb-[50px] flex justify-center items-center relative left-[180px]">
-            <div className="w-[990px] h-[990px] rounded-[12px] bg-[url('../../public/game/board.png')] flex justify-center items-center">
-              <img src="/game/enter2.png" alt="img" className="w-[280px] objec-cover absolute top-[390px] left-[340px] opacity-20" />
+            <div className="w-[1100px] h-[1100px] rounded-[12px] bg-[url('../../public/game/gameBG.png')] flex justify-center items-center">
+              <img src="/game/enter2.png" alt="img" className="w-[630px] objec-cover absolute top-[340px] left-[185px] opacity-20" />
               {/* 0~ 10 */}
               <div className="w-[990px] h-[90px] rounded-[10px] z-[1] flex relative top-[-450px] left-[496px]">
                 {worldMap.map((i: Spot, index: number) => {
@@ -4188,8 +4193,11 @@ export default function Game2D(props: any) {
                 <div className="flex flex-col w-full h-[40px] items-between">
                   <div className="text-[12px] text-[#C0C0C0]">보유자산</div>
                   <div className="flex mt-[10px] justify-between text-[25px] font-PtdBold ">
-                    <div className="">{priceToString(me.game.balance)}</div>
+                    <img src='/game/coin.png' className="h-[35px] mt-[-7px] object-cover"></img> 
+                    <div className="ml-[5px]">{priceToString(me.game.balance)}</div>
+                    <div className="flex justify-end w-[200px]">
                     <div className="">만원</div>
+                  </div>
                   </div>
                 </div>
               </div>

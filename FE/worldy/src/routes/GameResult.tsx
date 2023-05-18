@@ -86,8 +86,8 @@ export default function GameResult() {
                 </div>
               </div>
               <div className='flex flex-row  outline-white justify-between items-center w-[140px] h-fit'>
-                <div className='w-[90px] flex-2 grid place-ontent-right mr-[20px]'>
-                  <span className='font-PtdLight text-[20px] text-white'>
+                <div className='w-[100px] flex-2 grid place-ontent-right mr-[20px]'>
+                  <span className='font-PtdLight text-[15px] text-white'>
                     {item.assets} 만원
                   </span>
                 </div>
