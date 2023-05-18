@@ -308,10 +308,6 @@ const CountryQuizFrame = ({ selectAsset }: Props) => {
               className={`h-1/6 w-full  rounded-t-xl shadow-3xl flex flex-col justify-end items-center
                ${selectAsset === 'quizBox' ? 'bg-[#61C7BB]' : 'bg-[#EACFFF]'}`}
             >
-              {/* <div
-              className={`h-1/6 w-full  rounded-t-xl shadow-3xl flex flex-col justify-end items-center
-              bg-[#EACFFF]`}
-            > */}
               <div className='w-[200px]  outline-red-300 mb-[10px]'>
                 {selectAsset === 'quizBox' ? (
                   <img src={QuizTextB} alt='QuizTextPurple' />
@@ -333,14 +329,6 @@ const CountryQuizFrame = ({ selectAsset }: Props) => {
                     setCounting(3);
                   }}
                 >
-                  {/* <button
-                  className={`h-[50px] w-[300px] flex justify-center items-center border-solid border-[1px] rounded-3xl shadow-lg text-xl
-                      bordedr-[#C5ACE5] text-[#C5ACE5]
-                  `}
-                  onClick={() => {
-                    setCounting(3);
-                  }}
-                > */}
                   START
                 </button>
               </div>
@@ -350,10 +338,6 @@ const CountryQuizFrame = ({ selectAsset }: Props) => {
                 selectAsset === 'quizBox' ? 'text-[#61C7BB]' : 'text-[#C5ACE5]'
               } pt-[30px]`}
               >
-                {/* <div
-                className={`h-1/3 w-full text-[15px] opacity-70 font-PtdLight text-center text-[#b893e8]
-              pt-[30px]`}
-              > */}
                 버튼을 누르면 3초 후 문제가 공개됩니다.
               </div>
             </div>
