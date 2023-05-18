@@ -740,7 +740,7 @@ export default function Main() {
   // }
 
   const [contents, setContents] = useState<String>("");
-  const [mode, setMode] = useState<boolean>(true);
+  const [mode, setMode] = useState<boolean>(false);
   const [start, setStart] = useState<boolean>(false);
   const [data, setData] = useState<Object[]>();
   const [metaData, setMetaData] = useState<Object>({
@@ -1849,19 +1849,27 @@ export default function Main() {
   return (
     <>
       <div className="w-screen h-screen bg-[#FFFDF4]">
-        {gameStart && (<div className="w-full bg-[#FFFDF4] flex items-start justify-around fixed-top z-50">
-          <div className="w-full h-[60px] flex items-end justify-end">
-            {/* <img className='w-[100px] h-[54px] flex items-end mt-[20px] ml-[60px] object-cover' src='/game/LogoColored.png' alt='로고이미지'></img> */}
+        {gameStart && mode && (
+          <div
+            className="w-[100px] h-[40px] rounded-[4px] ml-[40px] mt-[20px] flex justify-center items-center rounded-full  text-[18px] hover:text-white hover:cursor-pointer hover:bg-[#8DC2E8] outline outline-[4px] hover:outline-[0px] bg-white text-[#8DC2E8] shadow-[0_3px_10px_rgb(0,0,0,0.2)]"
+            onClick={() => {
+              setMode(!mode);
+            }}
+          >
+            3D 모드
+          </div>
+        )}
+
+        {gameStart && !mode && (
             <div
-              className="w-[100px] h-[40px] rounded-[4px] mr-[120px] flex justify-center items-center rounded-full bg-blue-400 text-[18px] text-white hover:cursor-pointer hover:bg-blue-500"
+              className="w-[100px] h-[40px] rounded-[4px] ml-[40px] mt-[20px] flex justify-center items-center rounded-full  text-[18px] hover:text-white hover:cursor-pointer hover:bg-[#FF7777] outline outline-[4px] hover:outline-[0px] bg-white text-[#FF7777] shadow-[0_3px_10px_rgb(0,0,0,0.2)]"
               onClick={() => {
                 setMode(!mode);
               }}
             >
-              3D 모드
+              2D 모드
             </div>
-          </div>
-        </div>)}
+         )}
 
         {!gameStart &&
           <Enter

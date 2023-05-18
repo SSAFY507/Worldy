@@ -1958,8 +1958,1090 @@ export default function Game3D(props: any) {
   }
 
   return (
-  <div className='w-screen h-screen  bg-[#FFFDF4] flex flex-col justify-center items-center'>
-    <Game3DItem metaData={metaData} player={player} worldMap={worldMap} diceData={diceData} getPlayerTurn={getPlayerTurn} />
-  </div>
+    <>
+      {/* 더블 모달 */}
+      {metaData.isDouble ?
+      <div className="w-[200px] h-[200px] absolute top-[120px] left-[860px] z-[50]">
+        <img src="/game/double.png" alt="" />
+      </div>
+      : null}
+
+      {/* 퀴즈 모달 */}
+      {quizModalState && (
+        <div className="shadow-md shadow-black w-fit h-fit">
+          <GameQuizModal input={quiz} closeModal={() => closeModal(false)} />
+        </div>
+      )}
+      
+      <div className={`w-full h-full items-center ${quizModalState ? "blur-sm " : "" }`}>
+        <div className="w-full h-full flex justify-between absolute">
+          {/* 왼쪽영역 */}
+          <div className="w-[20%] h-[1000px] flex flex-col justify-start items-end z-50">
+            <div className="w-[220px] h-[950px] mb-[50px]  flex flex-col justify-around items-center">
+              {pList.map((i, index) => {
+                return (
+                  <div key={index}>
+                    <div
+                      className={`w-[350px] h-[180px] rounded-[8px] flex flex-col justify-center items-center shadow-[0_3px_10px_rgb(0,0,0,0.2)]
+                      ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 1 ? "bg-red-200/30" 
+                        : (metaData.turn + 1 === i.playerNum) && i.playerNum === 2 ? "bg-green-200/30"
+                        : (metaData.turn + 1 === i.playerNum) && i.playerNum === 3 ? "bg-blue-200/30" 
+                        : (metaData.turn + 1 === i.playerNum) && i.playerNum === 4 ? "bg-purple-200/30" : "bg-white "
+                      }
+                      `}
+                    >
+                      <div className="w-[280px] h-[160px]">
+                      <div className={`flex justify-between items-center text-[#C0C0C0]
+                      `}>
+                        <div className="text-[12px]">플레이어</div>
+                        <div className={`text-[15px] font-PtdBold
+                          ${i.playerNum === 1 ? 'text-red-400' : ''}
+                          ${i.playerNum === 2 ? 'text-green-400' : ''}
+                          ${i.playerNum === 3 ? 'text-blue-400' : ''}
+                          ${i.playerNum === 4 ? 'text-purple-400' : ''}`
+                          }>{worldMap[i.game.location].name}</div>
+                      </div>
+                      <div className="flex items-center justify-between h-[50px] mb-[10px] border-solid border-[#E9E9E9] border-b-[1px]">
+                    
+                          {i.playerNum === 1 ? <img src={user1.profileImg} className="w-[40px] h-[40px] rounded-full object-cover"></img> : null}
+                          {i.playerNum === 2 ? <img src={user2.profileImg} className="w-[40px] h-[40px] rounded-full object-cover"></img> : null}
+                          {i.playerNum === 3 ? <img src={user3.profileImg} className="w-[40px] h-[40px] rounded-full object-cover"></img> : null}
+                          {i.playerNum === 4 ? <img src={user4.profileImg} className="w-[40px] h-[40px] rounded-full object-cover"></img> : null}
+                          <div className="text-[20px] font-PtdBold ml-[-7px] w-[130px]">{i.name}</div>
+                          <div className={`text-[14px] text-white flex justify-center items-center w-[50px] h-[30px] rounded-full ml-[10px]
+                          ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 1 ? 'bg-red-400' : ''}
+                          ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 2 ? 'bg-green-400' : ''}
+                          ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 3 ? 'bg-blue-400' : ''}
+                          ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 4 ? 'bg-purple-400' : ''}
+                          `}>
+                            {i.name === rankPlayerData.rankPlayer[0].nickName ? '1위' : ''}
+                            {i.name === rankPlayerData.rankPlayer[1].nickName ? '2위' : ''}
+                            {i.name === rankPlayerData.rankPlayer[2].nickName ? '3위' : ''}
+                            {i.name === rankPlayerData.rankPlayer[3].nickName ? '4위' : ''}
+                          </div>
+                          {/* <div className="flex items-center justify-end text-[20px] font-PtdBold ml-[6px] w-[80px]">
+                            <div>{worldMap[i.game.location].name}</div>
+                          </div> */}
+                
+                        </div>
+                        <div className="flex flex-col w-full h-[40px] items-between">
+                          <div className={`text-[12px] text-[#C0C0C0]
+                          `}>보유자산</div>
+                          <div className="flex mt-[10px] justify text-[20px] font-PtdBold ">
+                            <div className="w-[40px]">
+                            <img src='/game/coin.png' className="h-[35px] mt-[-9px] object-cover"></img> 
+                            </div>
+                            <div className="">{priceToString(i.game.balance)}</div>  
+                            <div className="flex justify-end w-[200px]">
+                              <div className="">만원</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex flex-col w-full h-[60px] items-between mt-[10px]">
+                          <div className={`text-[12px] text-[#C0C0C0]
+                          `}>
+                            소유국가[총{i.game.own.length}개]
+                          </div>
+                          <div className="flex mt-[5px] h-[80px] w-full">
+                            <div className="text-[14px]  h-[80px] w-full flex flex-wrap">
+                              {i.game.own.map((e, index) => {
+                                return (
+                                  <div key={index} className="flex flex-wrap">
+                                    <img
+                                      className="w-[30px] h-[20px] bg-red-200 mr-[4px]"
+                                      src={`/game/f${e}.png`}
+                                    ></img>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {/**카드 */}
+            {/* 가운데 영역 */}
+            <div className="w-[220px] h-[340px] mb-[50px]  flex flex-col justify-around items-center">
+            <div className="flex flex-col w-[380px] justify-center items-center z-50">
+              {/* 주사위 영역 */}
+                  {/* 콘솔창 영역 */}
+                  <div
+                    className={`w-[380px] h-[340px] bg-white rounded-[8px] mt-[5px] shadow-lg relative flex justify-center items-center
+                    ${myTurn && me.playerNum === 1 ? "outline outline-[6px] outline-red-400" : ""}
+                    ${myTurn && me.playerNum === 2 ? "outline outline-[6px] outline-green-400" : ""}
+                    ${myTurn && me.playerNum === 3 ? "outline outline-[6px] outline-blue-400" : ""}
+                    ${myTurn && me.playerNum === 4 ? "outline outline-[6px] outline-purple-400" : ""}
+                    `}
+                  >
+                    <div className="w-[340px] h-[300px] flex flex-col items-center">
+                      <div className="w-full h-[80px] flex flex-col items-center">
+                        <div className="">
+                          [{worldMap[metaData.currentLocation].location}][
+                          {worldMap[metaData.currentLocation].continent
+                            ? worldMap[metaData.currentLocation].continent
+                            : "특수지역"}
+                          ]
+                        </div>
+                        <div className="w-full h-[80px] flex items-center justify-center border-0 border-b-[1px] border-solid border-gray-400">
+                          <img
+                            src={`/game/f${metaData.currentLocation}.png`}
+                            alt="이미지"
+                            className="w-[50px] h-[32px] rounded-[4px] object-cover absolute left-[30px]"
+                          ></img>
+                          <div className="text-[36px] font-PtdExtraBold ">
+                            {worldMap[metaData.currentLocation].name}
+                          </div>
+                          {worldMap[metaData.currentLocation].owner === 0 &&
+                            worldMap[metaData.currentLocation].type ===
+                            "nation" && (
+                              <div className="flex w-[64px] h-[28px] justify-center items-center bg-green-600 rounded-[4px] absolute right-[30px] text-white text-[12px]">
+                                구입가능
+                              </div>
+                            )}
+                          {worldMap[metaData.currentLocation].owner === 0 &&
+                            worldMap[metaData.currentLocation].type !== "nation" &&
+                            worldMap[metaData.currentLocation].type === "item" && (
+                              <div className="flex w-[64px] h-[28px] justify-center items-center bg-[#3CDCFF] rounded-[4px] absolute right-[30px] text-white text-[12px]">
+                                보물상자
+                              </div>
+                            )}
+                          {worldMap[metaData.currentLocation].owner === 0 &&
+                            worldMap[metaData.currentLocation].type !== "nation" &&
+                            worldMap[metaData.currentLocation].type !== "item" && (
+                              <div className="flex w-[64px] h-[28px] justify-center items-center bg-purple-600 rounded-[4px] absolute right-[30px] text-white text-[12px]">
+                                특수지역
+                              </div>
+                            )}
+                          {worldMap[metaData.currentLocation].owner === 1 &&
+                            worldMap[metaData.currentLocation].type ===
+                            "nation" && (
+                              <div className="flex w-[64px] h-[28px] justify-center items-center bg-red-500 rounded-[4px] absolute right-[30px] text-white text-[12px]">
+                                {player.p1.name.substr(0, 2)} 소유
+                              </div>
+                            )}
+                          {worldMap[metaData.currentLocation].owner === 2 &&
+                            worldMap[metaData.currentLocation].type ===
+                            "nation" && (
+                              <div className="flex w-[64px] h-[28px] justify-center items-center bg-green-500 rounded-[4px] absolute right-[30px] text-white text-[12px]">
+                                {player.p2.name.substr(0, 2)} 소유
+                              </div>
+                            )}
+                          {worldMap[metaData.currentLocation].owner === 3 &&
+                            worldMap[metaData.currentLocation].type ===
+                            "nation" && (
+                              <div className="flex w-[64px] h-[28px] justify-center items-center bg-blue-500 rounded-[4px] absolute right-[30px] text-white text-[12px]">
+                                {player.p3.name.substr(0, 2)} 소유
+                              </div>
+                            )}
+                          {worldMap[metaData.currentLocation].owner === 4 &&
+                            worldMap[metaData.currentLocation].type ===
+                            "nation" && (
+                              <div className="flex w-[64px] h-[28px] justify-center items-center bg-purple-500 rounded-[4px] absolute right-[30px] text-white text-[12px]">
+                                {player.p4.name.substr(0, 2)} 소유
+                              </div>
+                            )}
+                        </div>
+                      </div>
+                      <div className="w-full h-[220px] mt-[6px] flex justify-center items-center">
+                        {/* mode에 따라 갈아끼울 영역 */}
+                        {/* 1. 국가일 때 */}
+                        {mode === 0 && (
+                          <div className="text-[30px] font-PtdExtraBold">
+                            플레이어 {(metaData.turn + 1)}턴
+                          </div>
+                        )}
+                        {mode === 1 && (
+                          <div>
+                            <div className="w-full h-[120px] flex items-center justify-between border-0 border-b-[1px] border-solid border-gray-400 pb-[6px]">
+                              {/* 땅만 */}
+                              <div
+                                onClick={() => {
+                                  setBuyOption(0);
+                                  setTotalPrice(
+                                    worldMap[metaData.currentLocation].price.land
+                                  );
+                                }}
+                                className={`w-[70px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px] hover:bg-gray-200 hover:cursor-pointer ${buyOption === 0 ? "bg-gray-300" : ""
+                                  }`}
+                              >
+                                <img
+                                  className="w-[20px] h-[20px] object-fit mt-[10px]"
+                                  src="/game/land.png"
+                                  alt="이미지"
+                                ></img>
+                                <div className="text-[16px] mt-[12px] font-PtdExtraBold">
+                                  땅
+                                </div>
+                                <div className="flex flex-col justify-center items-center">
+                                  <p className="text-[16px] font-Ptd">
+                                    {worldMap[metaData.currentLocation].price.land}
+                                  </p>
+                                  <p className="text-[8px]">만원</p>
+                                </div>
+                              </div>
+                              {/* 별장 */}
+                              <div
+                                onClick={() => {
+                                  setBuyOption(1);
+                                  setTotalPrice(
+                                    worldMap[metaData.currentLocation].price.land +
+                                    worldMap[metaData.currentLocation].price.villa
+                                  );
+                                }}
+                                className={`w-[70px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px] hover:bg-gray-200 hover:cursor-pointer ${buyOption === 1 ? "bg-gray-300" : ""
+                                  }`}
+                              >
+                                <img
+                                  className="w-[26px] h-[26px] object-fit mt-[10px]"
+                                  src="/game/villa.png"
+                                  alt="이미지"
+                                ></img>
+                                <div className="text-[16] mt-[12px] font-PtdExtraBold">
+                                  별장
+                                </div>
+                                <div className="flex flex-col justify-center items-center">
+                                  <p className="text-[16px] font-Ptd">
+                                    {worldMap[metaData.currentLocation].price.villa}
+                                  </p>
+                                  <p className="text-[8px]">만원</p>
+                                </div>
+                              </div>
+                              {/* 호텔 */}
+                              <div
+                                onClick={() => {
+                                  setBuyOption(2);
+                                  setTotalPrice(
+                                    worldMap[metaData.currentLocation].price.land +
+                                    worldMap[metaData.currentLocation].price.hotel
+                                  );
+                                }}
+                                className={`w-[70px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px] hover:bg-gray-200 hover:cursor-pointer ${buyOption === 2 ? "bg-gray-300" : ""
+                                  }`}
+                              >
+                                <img
+                                  className="w-[22px] h-[22px] object-fit mt-[10px]"
+                                  src="/game/hotel.png"
+                                  alt="이미지"
+                                ></img>
+                                <div className="text-[16px] mt-[12px] font-PtdExtraBold">
+                                  호텔
+                                </div>
+                                <div className="flex flex-col justify-center items-center">
+                                  <p className="text-[16px] font-Ptd">
+                                    {worldMap[metaData.currentLocation].price.hotel}
+                                  </p>
+                                  <p className="text-[8px]">만원</p>
+                                </div>
+                              </div>
+                              {/* 랜드마크 */}
+                              <div
+                                onClick={() => {
+                                  setBuyOption(3);
+                                  setTotalPrice(
+                                    worldMap[metaData.currentLocation].price
+                                      .landmark
+                                  );
+                                }}
+                                className={`w-[70px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px] hover:bg-gray-200 hover:cursor-pointer ${worldMap[metaData.currentLocation].owner ===
+                                  metaData.turn + 1
+                                  ? ""
+                                  : "pointer-events-none"
+                                  }  ${buyOption === 3 ? "bg-gray-300" : ""}`}
+                              >
+                                <img
+                                  className="w-[24px] h-[28px] object-fit mt-[10px]"
+                                  src={`${worldMap[metaData.currentLocation].owner ===
+                                    metaData.turn + 1
+                                    ? "/game/landmark.png"
+                                    : "/game/landmark_gray.png"
+                                    }`}
+                                  alt="이미지"
+                                ></img>
+                                <div
+                                  className={`text-[16px] mt-[12px] font-PtdExtraBold ${worldMap[metaData.currentLocation].owner ===
+                                    metaData.turn + 1
+                                    ? ""
+                                    : "text-gray-300"
+                                    }`}
+                                >
+                                  랜드마크
+                                </div>
+                                <div className="flex flex-col justify-center items-center">
+                                  <p
+                                    className={`text-[16px] font-Ptd ${worldMap[metaData.currentLocation].owner ===
+                                      metaData.turn + 1
+                                      ? ""
+                                      : "text-gray-300"
+                                      }`}
+                                  >
+                                    {
+                                      worldMap[metaData.currentLocation].price
+                                        .landmark
+                                    }
+                                  </p>
+                                  <p
+                                    className={`text-[8px] ${worldMap[metaData.currentLocation].owner ===
+                                      metaData.turn + 1
+                                      ? ""
+                                      : "text-gray-300"
+                                      }`}
+                                  >
+                                    만원
+                                  </p>
+                                </div>
+                              </div>
+                            </div>
+                            {/* 총 가격 영역 */}
+                            <div className="w-full h-[40px] flex justify-end items-end">
+                              <span className="text-[20px]">
+                                총 가격 :&nbsp;&nbsp;
+                              </span>
+                              <span className="text-[32px] font-PtdExtraBold">
+                                {totalPrice}&nbsp;
+                              </span>
+                              <span className="text-[18px]">만원</span>
+                            </div>
+                            {/* 버튼 영역 */}
+                            <div className="w-[330px] h-[52px] flex items-end justify-between">
+                              <div
+                                className="w-[154px] h-[46px] bg-blue-400 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-blue-500 hover:cursor-pointer"
+                                onClick={() => {
+                                  buy(
+                                    metaData.turn,
+                                    worldMap[metaData.currentLocation],
+                                    buyOption
+                                  );
+                                }}
+                              >
+                                구입하기
+                              </div>
+                              <div
+                                className="w-[154px] h-[46px] bg-gray-400 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-gray-500 hover:cursor-pointer"
+                                onClick={() => {
+                                  setMetaData((prevState: any) => ({
+                                    ...prevState,
+                                    turnOver: true,
+                                  }));
+                                  setMode(0);
+                                  sendData();
+                                }}
+                              >
+                                Skip
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 2. 내 소유지일 때 */}
+                        {mode === 2 && (
+                          <div>
+                            <div className="w-full h-[120px] flex items-center justify-between border-0 border-b-[1px] border-solid border-gray-400 pb-[6px]">
+                              {/* 별장 건설 */}
+                              {worldMap[metaData.currentLocation].build.villa && (
+                                <div
+                                  className={`w-[94px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px]`}
+                                >
+                                  <img
+                                    className="w-[26px] h-[26px] object-fit mt-[10px]"
+                                    src="/game/villa_gray.png"
+                                    alt="이미지"
+                                  ></img>
+                                  <div className="text-[16] mt-[12px] font-PtdExtraBold text-[#C2C2C2]">
+                                    별장
+                                  </div>
+                                  <div className="text-[16] mt-[12px] font-Ptd text-[#C2C2C2]">
+                                    건설완료
+                                  </div>
+                                </div>
+                              )}
+                              {!worldMap[metaData.currentLocation].build.villa && (
+                                <div
+                                  onClick={() => {
+                                    setBuildOption(0);
+                                    setBuildPrice(
+                                      worldMap[metaData.currentLocation].price.villa
+                                    );
+                                  }}
+                                  className={`w-[94px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px] hover:bg-gray-200 hover:cursor-pointer ${buildOption === 0 ? "bg-gray-300" : ""
+                                    }`}
+                                >
+                                  <img
+                                    className="w-[26px] h-[26px] object-fit mt-[10px]"
+                                    src="/game/villa.png"
+                                    alt="이미지"
+                                  ></img>
+                                  <div className="text-[16] mt-[12px] font-PtdExtraBold">
+                                    별장
+                                  </div>
+                                  <div className="flex flex-col justify-center items-center">
+                                    <p className="text-[16px] font-Ptd">
+                                      {
+                                        worldMap[metaData.currentLocation].price
+                                          .villa
+                                      }
+                                    </p>
+                                    <p className="text-[8px]">만원</p>
+                                  </div>
+                                </div>
+                              )}
+                              {/* 호텔 건설 */}
+                              {worldMap[metaData.currentLocation].build.hotel && (
+                                <div
+                                  className={`w-[94px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px]`}
+                                >
+                                  <img
+                                    className="w-[26px] h-[26px] object-fit mt-[10px]"
+                                    src="/game/hotel_gray.png"
+                                    alt="이미지"
+                                  ></img>
+                                  <div className="text-[16] mt-[12px] font-PtdExtraBold text-[#C2C2C2]">
+                                    호텔
+                                  </div>
+                                  <div className="text-[16] mt-[12px] font-Ptd text-[#C2C2C2]">
+                                    건설완료
+                                  </div>
+                                </div>
+                              )}
+                              {!worldMap[metaData.currentLocation].build.hotel && (
+                                <div
+                                  onClick={() => {
+                                    setBuildOption(1);
+                                    setBuildPrice(
+                                      worldMap[metaData.currentLocation].price.hotel
+                                    );
+                                  }}
+                                  className={`w-[94px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px] hover:bg-gray-200 hover:cursor-pointer ${buildOption === 1 ? "bg-gray-300" : ""
+                                    }`}
+                                >
+                                  <img
+                                    className="w-[22px] h-[22px] object-fit mt-[10px]"
+                                    src="/game/hotel.png"
+                                    alt="이미지"
+                                  ></img>
+                                  <div className="text-[16px] mt-[12px] font-PtdExtraBold">
+                                    호텔
+                                  </div>
+                                  <div className="flex flex-col justify-center items-center">
+                                    <p className="text-[16px] font-Ptd">
+                                      {
+                                        worldMap[metaData.currentLocation].price
+                                          .hotel
+                                      }
+                                    </p>
+                                    <p className="text-[8px]">만원</p>
+                                  </div>
+                                </div>
+                              )}
+                              {/* 랜드마크 건설*/}
+                              {worldMap[metaData.currentLocation].build
+                                .landmark && (
+                                  <div
+                                    className={`w-[94px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px]`}
+                                  >
+                                    <img
+                                      className="w-[26px] h-[26px] object-fit mt-[10px]"
+                                      src="/game/villa_gray.png"
+                                      alt="이미지"
+                                    ></img>
+                                    <div className="text-[16] mt-[12px] font-PtdExtraBold text-[#C2C2C2]">
+                                      랜드마크
+                                    </div>
+                                    <div className="text-[16] mt-[12px] font-Ptd text-[#C2C2C2]">
+                                      건설완료
+                                    </div>
+                                  </div>
+                                )}
+                              {!worldMap[metaData.currentLocation].build
+                                .landmark && (
+                                  <div
+                                    onClick={() => {
+                                      setBuildOption(2);
+                                      setBuildPrice(
+                                        worldMap[metaData.currentLocation].price
+                                          .landmark
+                                      );
+                                    }}
+                                    className={`w-[94px] h-[110px] bg-gray-100 flex flex-col justify-center items-center rounded-[8px] hover:bg-gray-200 hover:cursor-pointer ${worldMap[metaData.currentLocation].owner ===
+                                      metaData.turn + 1
+                                      ? ""
+                                      : "pointer-events-none"
+                                      }  ${buildOption === 2 ? "bg-gray-300" : ""}`}
+                                  >
+                                    <img
+                                      className="w-[24px] h-[28px] object-fit mt-[10px]"
+                                      src={`${worldMap[metaData.currentLocation].owner ===
+                                        metaData.turn + 1
+                                        ? "/game/landmark.png"
+                                        : "/game/landmark_gray.png"
+                                        }`}
+                                      alt="이미지"
+                                    ></img>
+                                    <div
+                                      className={`text-[16px] mt-[12px] font-PtdExtraBold ${worldMap[metaData.currentLocation].owner ===
+                                        metaData.turn + 1
+                                        ? ""
+                                        : "text-gray-300"
+                                        }`}
+                                    >
+                                      랜드마크
+                                    </div>
+                                    <div className="flex flex-col justify-center items-center">
+                                      <p
+                                        className={`text-[16px] font-Ptd ${worldMap[metaData.currentLocation].owner ===
+                                          metaData.turn + 1
+                                          ? ""
+                                          : "text-gray-300"
+                                          }`}
+                                      >
+                                        {
+                                          worldMap[metaData.currentLocation].price
+                                            .landmark
+                                        }
+                                      </p>
+                                      <p
+                                        className={`text-[8px] ${worldMap[metaData.currentLocation].owner ===
+                                          metaData.turn + 1
+                                          ? ""
+                                          : "text-gray-300"
+                                          }`}
+                                      >
+                                        만원
+                                      </p>
+                                    </div>
+                                  </div>
+                                )}
+                            </div>
+                            {/* 총 가격 영역 */}
+                            {!(
+                              worldMap[metaData.currentLocation].build.villa &&
+                              worldMap[metaData.currentLocation].build.hotel &&
+                              worldMap[metaData.currentLocation].build.landmark
+                            ) && (
+                                <div>
+                                  <div className="w-full h-[40px] flex justify-end items-end">
+                                    <span className="text-[20px]">
+                                      총 가격 :&nbsp;&nbsp;
+                                    </span>
+                                    <span className="text-[32px] font-PtdExtraBold">
+                                      {buildPrice}&nbsp;
+                                    </span>
+                                    <span className="text-[18px]">만원</span>
+                                  </div>
+                                  {/* 버튼 영역 */}
+                                  <div className="w-[330px] h-[52px] flex items-end justify-between">
+                                    <div
+                                      className="w-[154px] h-[46px] bg-blue-400 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-blue-500 hover:cursor-pointer"
+                                      onClick={() => {
+                                        build(
+                                          metaData.turn,
+                                          worldMap[metaData.currentLocation],
+                                          buildOption
+                                        );
+                                      }}
+                                    >
+                                      건설하기
+                                    </div>
+                                    <div
+                                      className="w-[154px] h-[46px] bg-gray-400 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-gray-500 hover:cursor-pointer"
+                                      onClick={() => {
+                                        setMetaData((prevState: any) => ({
+                                          ...prevState,
+                                          turnOver: true,
+                                        }));
+                                        setMode(0);
+                                        sendData();
+                                      }}
+                                    >
+                                      Skip
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                            {worldMap[metaData.currentLocation].build.villa &&
+                              worldMap[metaData.currentLocation].build.hotel &&
+                              worldMap[metaData.currentLocation].build.landmark && (
+                                <div>
+                                  <div className="w-full h-[40px] flex justify-center items-center">
+                                    이미 모든 건물을 건설하셨습니다.
+                                  </div>
+                                  <div className="w-[330px] h-[52px] flex items-end justify-between">
+                                    <div
+                                      className="w-full h-[46px] bg-gray-400 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-gray-500 hover:cursor-pointer"
+                                      onClick={() => {
+                                        setMetaData((prevState: any) => ({
+                                          ...prevState,
+                                          turnOver: true,
+                                        }));
+                                        setMode(0);
+                                        sendData();
+                                      }}
+                                    >
+                                      확인
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                          </div>
+                        )}
+
+                        {/* 3. 통행료 지불 */}
+                        {mode === 3 && (
+                          <div className="w-full flex flex-col justify-center itmes-center">
+                            <div className="w-full h-[40px] text-[20px] font-PtdBold flex justify-center items-center">
+                              통행료를 지불하세요
+                            </div>
+                            <div className="w-full h-[100px] flex justify-center items-center">
+                              {worldMap[metaData.currentLocation].build.land && (
+                                <div className="w-[70px] h-[90px] rounded-[8px] bg-gray-200 flex flex-col justify-center items-center mr-[12px] ml-[12px]">
+                                  <img
+                                    src="/game/land.png"
+                                    alt=""
+                                    className="w-[34px] h-[34px] object-cover"
+                                  />
+                                  <div className="mt-[10px]">대지</div>
+                                </div>
+                              )}
+                              {worldMap[metaData.currentLocation].build.villa && (
+                                <div className="w-[70px] h-[90px] rounded-[8px] bg-gray-200 flex flex-col justify-center items-center mr-[12px] ml-[12px]">
+                                  <img
+                                    src="/game/villa.png"
+                                    alt=""
+                                    className="w-[34px] h-[34px] object-cover"
+                                  />
+                                  <div className="mt-[10px]">별장</div>
+                                </div>
+                              )}
+                              {worldMap[metaData.currentLocation].build.hotel && (
+                                <div className="w-[70px] h-[90px] rounded-[8px] bg-gray-200 flex flex-col justify-center items-center mr-[12px] ml-[12px]">
+                                  <img
+                                    src="/game/hotel.png"
+                                    alt=""
+                                    className="w-[34px] h-[34px] object-cover"
+                                  />
+                                  <div className="mt-[10px]">호텔</div>
+                                </div>
+                              )}
+                              {worldMap[metaData.currentLocation].build
+                                .landmark && (
+                                  <div className="w-[70px] h-[90px] rounded-[8px] bg-gray-200 flex flex-col justify-center items-center mr-[12px] ml-[12px]">
+                                    <img
+                                      src="/game/landmark.png"
+                                      alt=""
+                                      className="w-[34px] h-[34px] object-cover"
+                                    />
+                                    <div className="mt-[10px]">랜드마크</div>
+                                  </div>
+                                )}
+                            </div>
+                            <div
+                              id="shbutton"
+                              className="w-full h-[60px] flex justify-center rounded-[6px] items-center text-[16px] mt-[10px]"
+                              onClick={() => {
+                                console.log("통행료 지불");
+                                payToll(
+                                  metaData.turn,
+                                  worldMap[metaData.currentLocation]
+                                );
+
+                                setMetaData((prevState: any) => ({
+                                  ...prevState,
+                                  turnOver: true,
+                                }));
+                                setMode(0);
+                                sendData();
+                              }}
+                            >
+                              통행료 {worldMap[metaData.currentLocation].toll} 만원
+                              지불하기
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 4. 보물상자 */}
+                        {mode === 4 && (
+                          <div className="flex flex-col justify-center itmes-center">
+                            <p className="text-[30px] font-PtdBold text-center">{metaData.itemMsg1}</p>
+                            <p className="text-[24px] mt-[20px] text-center">{metaData.itemMsg2}</p>
+
+                          </div>
+                        )}
+
+                        {/* 5. 특수지역*/}
+                        {mode === 5 && (
+                          <div className="flex flex-col justify-center itmes-center">
+                            <p className="text-[24px] text-center w-full h-[120px]">{worldMap[metaData.currentLocation].contents}</p>
+                            <div className="w-[330px] h-[52px] flex items-end justify-between">
+                              <div
+                                className="w-full h-[60px] bg-red-500 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-red-600 hover:cursor-pointer"
+                                onClick={() => {
+                                  setMetaData((prevState: any) => ({
+                                    ...prevState,
+                                    turnOver: true,
+                                  }));
+                                  setMode(0);
+                                  sendData();
+                                }}
+                              >
+                                확인
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 6. 자유이동*/}
+                        {mode === 6 && (
+                          <div className="flex flex-col justify-center itmes-center">
+                            <p className="text-[24px] text-center w-full h-[120px]">{worldMap[metaData.currentLocation].contents}</p>
+                            <div className="w-[330px] h-[60px] flex items-end justify-between">
+                              <div
+                                className="w-full h-[60px] bg-red-500 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-red-600 hover:cursor-pointer"
+                                onClick={() => {
+                                  moveDircet(metaData.turn, newLoaction);
+                                  setSelectMode(false);
+                                }}
+                              >
+                                [{worldMap[newLoaction].name}] 이동하기
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {/* 7. 구매완료*/}
+                        {mode === 7 && (
+                          <div className="flex flex-col justify-center itmes-center">
+                            <div className="text-[24px] font-PtdBold flex justify-center items-center text-center">구매 및 건설 완료</div>
+                            <div className="w-[330px] h-[52px] flex items-end justify-between mt-[40px]">
+                              <div
+                                className="w-full h-[60px] bg-red-500 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-red-600 hover:cursor-pointer"
+                                onClick={() => {
+                                  setMetaData((prevState: any) => ({
+                                    ...prevState,
+                                    turnOver: true,
+                                  }));
+                                  setMode(0);
+                                  sendData();
+                                }}
+                              >
+                                턴 종료
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 8. 맨 첫 시작*/}
+                        {mode === 8 && (
+                          <div className="flex flex-col justify-center itmes-center">
+                            <div className="text-[24px] font-PtdBold">게임 스타트! 주사위를 던지세요</div>
+                          </div>
+                        )}
+                        {/* 9. city일 떄*/}
+                        {mode === 9 && (
+                          <div className="flex flex-col justify-center itmes-center">
+                            <p className="text-[24px] text-center w-full h-[120px]">{worldMap[metaData.currentLocation].contents}</p>
+                            <div className="w-[330px] h-[52px] flex items-end justify-between">
+                              <div
+                                className="w-full h-[60px] bg-red-500 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-red-600 hover:cursor-pointer"
+                                onClick={() => {
+                                  getMoney(metaData.turn, tmpTax)
+                                  setMetaData((prevState: any) => ({
+                                    ...prevState,
+                                    turnOver: true,
+                                  }));
+                                  setMode(0);
+                                  sendData();
+                                }}
+                              >
+                                확인
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {/* 10. 보물상자 자유이동일 떄*/}
+                        {mode === 10 && (
+                          <div className="flex flex-col justify-center itmes-center">
+                            <p className="text-[30px] font-PtdBold text-center w-full h-[34px]">{metaData.itemMsg1}</p>
+                            <p className="text-[24px] text-center w-full h-[30px] mt-[20px]">{metaData.itemMsg2}</p>
+                            <div className="w-[330px] h-[62px] flex items-end justify-between mt-[24px]">
+                              <div
+                                className="w-full h-[50px] bg-red-500 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-red-600 hover:cursor-pointer"
+                                onClick={() => {
+                                  moveDircet(metaData.turn, newLoaction);
+                                }}
+                              >
+                                [{worldMap[newLoaction].name}] 이동
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {/* 11. 보물상자 몇칸이동일 떄*/}
+                        {mode === 11 && (
+                          <div className="flex flex-col justify-center itmes-center">
+                            <p className="text-[30px] font-PtdBold text-center w-full h-[34px]">{metaData.itemMsg1}</p>
+                            <p className="text-[24px] text-center w-full h-[30px] mt-[20px]">{metaData.itemMsg2}</p>
+                            <div className="w-[330px] h-[62px] flex items-end justify-between mt-[24px]">
+                              <div
+                                className="w-full h-[60px] bg-red-500 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-red-600 hover:cursor-pointer"
+                                onClick={() => {
+                                  movePlayer(metaData.turn, itemMove);
+                                  sendData();
+                                }}
+                              >
+                                이동하기
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {/* 12. 보물상자 돈 입금/출금*/}
+                        {mode === 12 && (
+                          <div className="flex flex-col justify-center itmes-center">
+                            <p className="text-[30px] font-PtdBold text-center w-full h-[34px]">{metaData.itemMsg1}</p>
+                            <p className="text-[24px] text-center w-full h-[30px] mt-[20px]">{metaData.itemMsg2}</p>
+                            <div className="w-[330px] h-[62px] flex items-end justify-between mt-[24px]">
+                              <div
+                                className="w-full h-[50px] bg-red-500 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-red-600 hover:cursor-pointer"
+                                onClick={() => {
+                                  setMetaData((prevState: any) => ({
+                                    ...prevState,
+                                    turnOver: true,
+                                  }));
+                                  setMode(0);
+                                  sendData();
+                                }}
+                              >
+                                확인
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {/* 보물상자 국세청 이동 */}
+                        {mode === 13 && (
+                          <div className="flex flex-col justify-center itmes-center">
+                            <p className="text-[30px] font-PtdBold text-center w-full h-[34px]">{metaData.itemMsg1}</p>
+                            <p className="text-[24px] text-center w-full h-[30px] mt-[20px]">{metaData.itemMsg2}</p>
+                            <div className="w-[330px] h-[62px] flex items-end justify-between mt-[24px]">
+                              <div
+                                className="w-full h-[50px] bg-red-500 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-red-600 hover:cursor-pointer"
+                                onClick={() => {
+                                  moveDircet(metaData.turn, itemMove);
+                                }}
+                              >
+                                이동하기
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {/* 14  무인도인 경우 */}
+                        {mode === 14 && (
+                          <div className="flex flex-col justify-center itmes-center">
+                            <p className="text-[30px] font-PtdBold text-center w-full h-[34px]">{metaData.itemMsg1}</p>
+                            <div className="flex">
+                              <span className="text-[24px] text-center w-full h-[30px] mt-[20px]">{metaData.itemMsg2}</span>
+                              {tmpCnt > 0 ?
+                                <span className="text-[28px] text-PtdBold text-center w-full h-[30px] mt-[20px]">{tmpCnt}</span>
+                                : null
+                              }
+                            </div>
+                            <div className="w-[330px] h-[62px] flex items-end justify-between mt-[24px]">
+                              <div
+                                className="w-full h-[50px] bg-red-500 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-red-600 hover:cursor-pointer"
+                                onClick={() => {
+                                  setMetaData((prevState: any) => ({
+                                    ...prevState,
+                                    turnOver: true,
+                                  }));
+                                  setMode(0);
+                                  sendData();
+                                }}
+                              >
+                                확인
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {/* 15  국세청 세금 */}
+                        {mode === 15 && (
+                          <div className="flex flex-col justify-center itmes-center">
+                            <p className="text-[30px] font-PtdBold text-center w-full h-[34px]">{worldMap[37].title}</p>
+                            <div className="flex">
+                              <span className="text-[24px] text-center w-full h-[30px] mt-[20px]">{worldMap[37].contents}</span>
+                            </div>
+                            <div className="w-[330px] h-[62px] flex items-end justify-between mt-[24px]">
+                              <div
+                                className="w-full h-[50px] bg-red-500 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-red-600 hover:cursor-pointer"
+                                onClick={() => {
+                                  payTax(metaData.turn);
+                                  setMetaData((prevState: any) => ({
+                                    ...prevState,
+                                    turnOver: true,
+                                  }));
+                                  setMode(0);
+                                  sendData();
+                                }}
+                              >
+                                {tmpTax}만원 납부하기
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {/* 16  올림픽 */}
+                        {mode === 16 && (
+                          <div className="flex flex-col justify-center itmes-center">
+                            <p className="text-[30px] font-PtdBold text-center w-full h-[34px]">{worldMap[30].title}</p>
+                            <div className="flex">
+                              <span className="text-[24px] text-center w-full h-[30px] mt-[20px]">세금으로 쌓인 기금을 수령하세요.</span>
+                            </div>
+                            <div className="w-[330px] h-[62px] flex items-end justify-between mt-[24px]">
+                              <div
+                                className="w-full h-[50px] bg-red-500 rounded-[6px] flex justify-center items-center text-white text-[20px] hover:bg-red-600 hover:cursor-pointer"
+                                onClick={() => {
+                                  getMoney(metaData.turn, metaData.fund)
+                                  setMetaData((prevState: any) => ({
+                                    ...prevState,
+                                    turnOver: true,
+                                    fund: 0,
+                                  }));
+                                  setMode(0);
+                                  sendData();
+                                }}
+                              >
+                                [{metaData.fund} 만원] 수령하기
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+            </div>
+            </div>
+
+          </div>
+
+        
+          {/* 오른쪽 영역 */}
+          <div className={`w-[20%] h-[750px] flex flex-col justify-start items-start rounded-[4px] z-50`}>
+            <div
+              className={`w-[387px] h-[908px] mb-[50px]  flex flex-col justify-around items-center rounded-[24px] 
+              ${myTurn && me.playerNum === 1 ? "bg-red-200/30" 
+                : myTurn && me.playerNum === 2 ? "bg-green-200/30"
+                : myTurn && me.playerNum === 3 ? "bg-blue-200/30" 
+                  :myTurn && me.playerNum === 4 ? "bg-purple-200/30" : "bg-gray-100/70"
+                }
+              `}
+              >
+              <div className="w-[336px] h-[181px] bg-white rounded-[11px] flex flex-col justify-center items-center shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
+                <div className="w-[250px] h-[140px]">
+                  <div className="flex justify-between items-center text-[#C0C0C0]">
+                        <div className="text-[12px]">내 정보</div>
+                        <div className={`text-[15px] font-PtdBold ml-[10px]
+                          ${me.playerNum === 1 ? 'text-red-400' : ''}
+                          ${me.playerNum === 2 ? 'text-green-400' : ''}
+                          ${me.playerNum === 3 ? 'text-blue-400' : ''}
+                          ${me.playerNum === 4 ? 'text-purple-400' : ''}`
+                          }>{worldMap[me.game.location].name}</div>
+                  </div>
+                  <div className="flex items-center justify-between h-[70px] mb-[10px] border-solid border-[#E9E9E9] border-b-[1px]">
+                    <div className="flex items-center">
+                      <img src={`${profileImg}`} alt="" className="w-[50px] h-[50px] rounded-full" />
+                      <div className="text-[30px] font-PtdBold ml-[15px] w-[120px]">{me.name}</div>
+                      {/* <div className="flex items-center justify-end text-[20px] font-PtdBold ml-[6px] w-[80px]">
+                        <div>{worldMap[me.game.location].name}</div>
+                      </div> */}
+                    </div>
+                    {rankPlayerData.rankPlayer[0].nickName ?
+                      <div
+                        className={`w-[50px] h-[28px] text-white text-[16px] rounded-full flex justify-center items-center
+                        ${me.playerNum === 1 ? 'bg-red-400' : ''}
+                        ${me.playerNum === 2 ? 'bg-green-400' : ''}
+                        ${me.playerNum === 3 ? 'bg-blue-400' : ''}
+                        ${me.playerNum === 4 ? 'bg-purple-400' : ''}
+                        `}
+                      >
+                        {rankPlayerData.rankPlayer[0].nickName === me.name ? '1위' : ''}
+                        {rankPlayerData.rankPlayer[1].nickName === me.name ? '2위' : ''}
+                        {rankPlayerData.rankPlayer[2].nickName === me.name ? '3위' : ''}
+                        {rankPlayerData.rankPlayer[3].nickName === me.name ? '4위' : ''}
+                      </div>
+
+                      : null}
+                  </div>
+                  <div className="flex flex-col w-full h-[40px] items-between">
+                    <div className="text-[12px] text-[#C0C0C0]">보유자산</div>
+                    <div className="flex mt-[10px] justify-between text-[25px] font-PtdBold ">
+                      <img src='/game/coin.png' className="h-[35px] mt-[-7px] object-cover"></img> 
+                      <div className="ml-[5px]">{priceToString(me.game.balance)}</div>
+                      <div className="flex justify-end w-[200px]">
+                      <div className="">만원</div>
+                    </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="w-[336px] h-[400px] bg-white rounded-[8px] mb-[10px] flex flex-col justify-center items-center shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
+                <div className="w-[260px] h-[570px] justify-center items-center">
+                  <div className="flex items-center flex-start text-[#C0C0C0]">
+                      <div className="text-[12px] mb-[10px] mt-[20px]">소유 자산</div>
+                  </div>
+                  {me.game.own.map((e: number, index: number) => {
+                    return (
+                      <div
+                        key={index}
+                        className="h-[60px] flex flex-col items-center justify-start"
+                      >
+                        <div className="w-full h-[60px] bg-gray-100 rounded-[6px] flex items-center mb-[10px]">
+                          <img
+                            className="w-[36px] h-[24px] flex justify-center items-center bg-purple-400 ml-[14px]"
+                            src={`/game/f${e}.png`}
+                            alt="국기"
+                          ></img>
+                          <div className="w-[80px] h-[26px] flex justify-start text-[18px] font-PtdBold items-center ml-[10px]">
+                            {worldMap[e].name}
+                          </div>
+                          <div className="w-[100px] h-[30px] flex justify-end items-center mr-[14px]">
+                            {worldMap[e].build.villa && (
+                              <img
+                                className="w-[26px] h-[26px] object-fit ml-[10px]"
+                                src="/game/villa.png"
+                              ></img>
+                            )}
+                            {worldMap[e].build.hotel && (
+                              <img
+                                className="w-[24px] h-[24px] object-fit ml-[10px]"
+                                src="/game/hotel.png"
+                              ></img>
+                            )}
+                            {worldMap[e].build.landmark && (
+                              <img
+                                className="w-[26px] h-[30px] object-fit ml-[10px]"
+                                src="/game/landmark.png"
+                              ></img>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+            <div
+              id="shbutton"
+              className="w-[140px] h-[40px] rounded-[4px] flex justify-center items-center text-white text-[16px] z-[80000]"
+              onClick={() => {
+                // 종료 API 요청
+                finishGame();
+              }}
+            >
+              게임 종료
+            </div>
+          </div>
+
+        </div>
+        <Game3DItem metaData={metaData} player={player} worldMap={worldMap} diceData={diceData} getPlayerTurn={getPlayerTurn} />
+      </div>
+    </>
   )
 }
