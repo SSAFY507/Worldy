@@ -12,7 +12,7 @@ const Explore = () => {
   useEffect(() => {
     setTimeout(() => {
       setDoneLoader(true);
-    }, 4000);
+    }, 3000);
   }, []);
 
   return (
