@@ -1,12 +1,13 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
-import TestFor3DEdit from '../components/TestFor3DEdit';
+
+import { useEffect, useState } from 'react';
+
+import LoaderLinear from '../components/Loaders/LoaderLinear';
+import LoaderPyramid from '../components/Loaders/LoaderPyramid';
+import LoginModal from '../components/LoginModal';
 import Main from '../components/game/Main';
 import { useNavigate } from 'react-router';
-import LoginModal from '../components/LoginModal';
-import LoaderPyramid from '../components/Loaders/LoaderPyramid';
 import { useParams } from 'react-router';
-import LoaderLinear from '../components/Loaders/LoaderLinear';
 
 export default function Game() {
 
