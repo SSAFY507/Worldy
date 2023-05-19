@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
-import KakaoLoginButton from '../assets/images/KakaoLoginButton.png';
-import { useSearchParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { addRankInfo } from '../_store/slices/loginSlice';
+
+import { useEffect, useState } from 'react';
+
 import CustomAxios from '../API/CustomAxios';
+import KakaoLoginButton from '../assets/images/KakaoLoginButton.png';
+import { addRankInfo } from '../_store/slices/loginSlice';
+import { useDispatch } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 
 type KakaoLoginProps = {
   onSuccess: (response: any) => void;
@@ -19,8 +21,8 @@ export default function KakaoLogin() {
 
     window.Kakao.Auth.authorize({
       // 최종 배포이후에는 localhost가 아닌 j8a707 url로 요청해야함
-      // redirectUri: DOMAIN_S + '/user/kakao/callback',
-      redirectUri: 'http://localhost:3000/user/kakao/callback',
+      redirectUri: DOMAIN_S + '/user/kakao/callback',
+      // redirectUri: 'http://localhost:3000/user/kakao/callback',
     });
   };
 
