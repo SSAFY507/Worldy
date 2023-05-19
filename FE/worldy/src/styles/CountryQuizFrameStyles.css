@@ -1,0 +1,54 @@
+.CQF-Counting {
+  position: absolute;
+  opacity: 0%;
+  animation: popupCount 1200ms linear;
+}
+.CQF-Start {
+  position: absolute;
+  opacity: 0%;
+  animation: popupCount 1100ms ease-out;
+}
+
+@keyframes popupCount {
+  0% {
+    height: 50px;
+    opacity: 10%;
+  }
+  90% {
+    height: 300px;
+    opacity: 100%;
+  }
+  91% {
+    opacity: 0%;
+  }
+  100% {
+    opacity: 0%;
+  }
+}
+@keyframes popupStart {
+  0% {
+    height: 400px;
+  }
+  25% {
+    transform: translateY(20px) rotateX(50deg);
+    height: 300px;
+  }
+  60% {
+    transform: translateY(20px) rotateX(50deg);
+    height: 300px;
+  }
+  90% {
+    height: 450px;
+    transform: translateX(30px) translateY(-30px) rotate(10deg);
+  }
+  98% {
+    height: 450px;
+    transform: translateX(30px) translateY(-30px) rotate(10deg);
+    opacity: 100%;
+  }
+  100% {
+    height: 450px;
+    transform: translateX(30px) translateY(-30px) rotate(10deg);
+    opacity: 0%;
+  }
+}

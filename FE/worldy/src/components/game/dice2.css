@@ -1,0 +1,289 @@
+/* *,
+::after,
+::before {
+  border: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  list-style: none;
+} */
+
+:root {
+  --primary-color: #1e2a3a;
+  --secondary-color: #607890;
+  --accent-color: #f9bc60;
+  --background-color: #f5f5f5;
+}
+
+/* main */
+.container {
+  display: flex;
+  justify-content: space-around;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* DICES */
+.dice-container {
+  width: 100px;
+  height: 100px;
+
+}
+
+
+/* buttons */
+#shbutton {
+  background-color: rgb(255, 77, 69);
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+}
+
+#shbutton:hover {
+  background-color: rgb(230, 60, 50);
+  color: white;
+}
+
+.roll-button {
+  font-size: 24px;
+  width: 320px;
+  height: 50px;
+  position: relative;
+  top: -230px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.dice {
+  display: none;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  height: 100px;
+  position: relative;
+  width: 100px;
+  background-color: aliceblue;
+  margin-bottom: 4rem;
+}
+
+.dice .dot {
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  height: 20px;
+  position: absolute;
+  width: 20px;
+}
+.dice2 {
+  display: none;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  background-color: aliceblue;
+  height: 100px;
+  position: relative;
+  width: 100px;
+  margin-bottom: 4rem;
+}
+
+.dice2 .dot {
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  height: 20px;
+  position: absolute;
+  width: 20px;
+}
+
+/* placing bigger dice dots */
+.dice-one .dot,
+.dice-five .dot:nth-child(4) {
+  top: 40px;
+  left: 40px;
+}
+
+.dice-two .dot:first-child,
+.dice-three .dot:first-child,
+.dice-four .dot:first-child,
+.dice-five .dot:first-child,
+.dice-six .dot:first-child {
+  top: 10px;
+  left: 10px;
+}
+
+.dice-two .dot:last-child,
+.dice-three .dot:last-child,
+.dice-four .dot:last-child,
+.dice-five .dot:last-child,
+.dice-six .dot:last-child {
+  top: 70px;
+  left: 70px;
+}
+
+.dice-three .dot:nth-child(2) {
+  top: 40px;
+  left: 40px;
+}
+
+.dice-four .dot:nth-child(2),
+.dice-five .dot:nth-child(2),
+.dice-six .dot:nth-child(2) {
+  top: 10px;
+  right: 10px;
+}
+
+.dice-four .dot:nth-child(3),
+.dice-five .dot:nth-child(3),
+.dice-six .dot:nth-child(3) {
+  top: 70px;
+  right: 70px;
+}
+
+.dice-six .dot:nth-child(4) {
+  top: 40px;
+  left: 10px;
+}
+
+.dice-six .dot:nth-child(5) {
+  top: 40px;
+  left: 70px;
+}
+
+/* palcing history dice dots */
+.history-item .dice .dot {
+  height: 10px;
+  width: 10px;
+}
+
+.history-item .dice-one .dot,
+.history-item .dice-five .dot:nth-child(4) {
+  top: 20px;
+  left: 20px;
+}
+
+.history-item .dice-two .dot:first-child,
+.history-item .dice-three .dot:first-child,
+.history-item .dice-four .dot:first-child,
+.history-item .dice-five .dot:first-child,
+.history-item .dice-six .dot:first-child {
+  top: 5px;
+  left: 5px;
+}
+
+.history-item .dice-two .dot:last-child,
+.history-item .dice-three .dot:last-child,
+.history-item .dice-four .dot:last-child,
+.history-item .dice-five .dot:last-child,
+.history-item .dice-six .dot:last-child {
+  top: 35px;
+  left: 33px;
+}
+
+.history-item .dice-three .dot:nth-child(2) {
+  top: 20px;
+  left: 20px;
+}
+
+.history-item .dice-four .dot:nth-child(2),
+.history-item .dice-five .dot:nth-child(2),
+.history-item .dice-six .dot:nth-child(2) {
+  top: 5px;
+  right: 5px;
+}
+
+.history-item .dice-four .dot:nth-child(3),
+.history-item .dice-five .dot:nth-child(3),
+.history-item .dice-six .dot:nth-child(3) {
+  top: 35px;
+  right: 33px;
+}
+
+.history-item .dice-six .dot:nth-child(4) {
+  top: 20px;
+  left: 5px;
+}
+
+.history-item .dice-six .dot:nth-child(5) {
+  top: 20px;
+  left: 33px;
+}
+
+.active {
+  animation: dice-roll 1s;
+  display: block;
+}
+
+.hide {
+  display: none;
+}
+
+/* HISTORY */
+.history {
+  /* box-shadow: rgba(0, 0, 0, 0.35) 0px 2px 7px; */
+  text-align: center;
+  width: 100%;
+  border: 1px solid var(--primary-color);
+  border-radius: 5px;
+  padding: 1rem 1.5rem;
+}
+
+.history-header {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.history-header.switch-display {
+  justify-content: space-between;
+}
+
+.history-item {
+  font-size: 1.8rem;
+  padding: 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  border-bottom: 0.1px solid var(--primary-color);
+}
+
+.history-item:first-of-type {
+  margin-top: 2rem;
+}
+
+.history-item:last-of-type {
+  border: none;
+}
+
+.history-item .dice {
+  margin-bottom: 0;
+  width: 50px;
+  height: 50px;
+  box-shadow: none;
+  border-radius: 2px;
+  border: 1px solid var(--primary-color);
+}
+
+/* animation */
+@keyframes dice-roll {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translate3d(-20%, 0%, 0);
+  }
+
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translate3d(20%, -5%, 0);
+  }
+}

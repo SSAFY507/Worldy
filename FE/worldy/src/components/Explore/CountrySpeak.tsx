@@ -40,7 +40,7 @@ interface Props {
 
 interface SpeakType {
   [key: string]: DetailType;
-}
+};
 
 interface DetailType {
   title: string,
@@ -49,8 +49,7 @@ interface DetailType {
   icon: string,
   npcImg: string,
   mainIcon: string,
-
-}
+};
 
 interface Country {
   [key: string]: {
@@ -58,9 +57,9 @@ interface Country {
     KOREAN: string,
     ENGLISH: string,
   }
-}
+};
 
-interface NewsDataType {
+export interface NewsDataType {
   id: number,
   nationName: string,
   newsTitle: string,
@@ -69,24 +68,6 @@ interface NewsDataType {
   newsUrl: string
 };
 
-interface QuizDataType {
-
-};
-
-interface PaintDataType {
-  originalUrl: string,
-  diffUrl: string,
-  imgNum: string,
-  answerPointList: string[][]
-};
-
-interface FoodDataType {
-
-};
-
-interface PersonalityDataType {
-
-};
 // nations = {"대한민국" : 9, "중국" : 7, "일본" : 8, "인도" : 4, "영국" : 19, "프랑스" : 18, "이탈리아" : 14, "스페인" : 12, "미국" : 39, "이집트" : 27}
 export const countryLst: Country = {
   asia_Korea: {
@@ -146,9 +127,11 @@ const DOMAIN = process.env.REACT_APP_BASE_URL
 const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => {
 
   const getLoginToken: string | null = sessionStorage.getItem('token');
-  const [axiosGetData, setAxiosGetData] = useState<NewsDataType |QuizDataType| PaintDataType | FoodDataType | PersonalityDataType | undefined>();
-  const countryId = countryLst[countryName].id
+  const [axiosGetNewsData, setAxiosGetNewsData] = useState<NewsDataType[] | undefined>();
 
+  const [checkGetData, setCheckGetData] = useState<boolean>(false)
+  const countryId = countryLst[countryName].id
+  
   /** 데이터 받는 함수 */
   const getDatasList = async (url:string) => {
     try {
@@ -158,38 +141,19 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
         UrlQuery: DOMAIN + url,
         Token: getLoginToken,
       });
-      setAxiosGetData(response)
+      setAxiosGetNewsData(response);
+      setCheckGetData(true)
+
     } catch (error) {
       console.log('Error fetching data:', error);
     }
   }
 
   useEffect(() => {
-
-    if (getLoginToken){
-      switch (selectAsset) {
-        case "newsBox":
-          getDatasList(`/adventure/news/${countryId}`);
-          break;
-        case "quizBox":
-          getDatasList(``);
-          break;
-        case "paintBox":
-          getDatasList(``);
-          break;
-        case "foodBox":
-          getDatasList(``);
-          break;
-        case "personalityBox":
-          getDatasList(``);
-          break;
-        default:
-          break;
-        }
+    if (getLoginToken && selectAsset === "newsBox"){
+      getDatasList(`/adventure/news/${countryId}`)
     }
-  },[selectAsset])
-
-  console.log(axiosGetData)
+  },[])
 
   // const myImageList = {
   //   TutorialBackground: pathTB,
@@ -240,12 +204,11 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
   //   },
   // ];
 
-
   const ment:SpeakType = {
     newsBox: {
       title: `${countryLst[`${countryName}`].KOREAN} 최신 뉴스`,
       subTitle: `${countryLst[`${countryName}`].ENGLISH} Latest News`,
-      contents: [`${countryLst[`${countryName}`].KOREAN}의 최신 뉴스를 제공합니다.`, "하루에 한 번, 매일 아침 업데이트 되는", `${countryLst[countryName].KOREAN}의 새로운 소식을 만나보세요`],
+      contents: [`${countryLst[`${countryName}`].KOREAN}의 최신 뉴스를 제공합니다.`, "하루에 한 번, 매일 아침 업데이트 되는", `${countryLst[countryName].KOREAN}의 새로운 소식을 만나보세요.`],
       icon: newsIcon,
       npcImg: pathBA,
       mainIcon: book,
@@ -259,7 +222,7 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
       mainIcon: quiz,
     },
     paintBox: {
-      title: "틀림 그림 찾기",
+      title: "틀린 그림 찾기",
       subTitle: "Hidden Catch of AI",
       contents: [`${countryLst[`${countryName}`].KOREAN}의 명소 이미지가 등장합니다.`, "시간 안에 AI가 바꾸어 놓은 부분 중" , "세 가지를 찾아보세요!"],
       icon: paintIcon,
@@ -284,10 +247,10 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
     }
   }
  
-  if (axiosGetData) {
+  if (checkGetData || selectAsset !== "newsBox") {
     return (
       <div className="w-full h-full flex items-end">
-        <div className="z-10 w-1/4 translate-x-10 absolute">
+        <div className="z-10 w-1/4 translate-x-10 translate-y-20 absolute">
           <img
             className="h-[50%]"
             src={ment[`${selectAsset}`].icon}
@@ -302,29 +265,28 @@ const CountrySpeak  = ({countryName, selectAsset, GetSelectAssetName}:Props) => 
           />
         </div>
         <div className="w-full h-full flex flex-row items-end bg-[rgba(255,255,255,0.4)]">
-          <div className="h-full w-1/4 flex flex-col bg-[rgba(0,0,0,0.3)] ">
-            <div className="h-2/3 flex flex-col justify-center text-white p-20">
+          <div className="h-full w-1/4 flex flex-col bg-[rgba(0,0,0,0.3)] shadow-2xl shadow-[rgba(0,0,0,0.3)]">
+            <div className="h-2/3 flex flex-col justify-center text-white pl-[62px] pt-[30px]">
               <div className="h-1/2 flex flex-col">
                 <div className="flex flex-col pb-10">
                   <div className='text-3xl pb-5'>
-                    <img className="h-10 " src={ment[`${selectAsset}`].mainIcon} alt=""/>
+                    <img className="h-7 pl-0.5" src={ment[`${selectAsset}`].mainIcon} alt=""/>
                   </div>
-                  <div className='text-4xl font-PtdExtraBold'>{ment[`${selectAsset}`].title}</div>
+                  <div className='text-[40px] font-PtdBold tracking-wide'>{ment[`${selectAsset}`].title}</div>
                   <div className='text-2xl font-PtdLight'>{ment[`${selectAsset}`].subTitle}</div>
                 </div>
-                <div className="h-1/2">
-                  <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[0]}</div>
-                  <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[1]}</div>
-                  <div className="pb-1 font-PtdLight">{ment[`${selectAsset}`].contents[2]}</div>
+                <div className="h-1/2 text-gray-200">
+                  <div className="text-lg font-PtdLight">{ment[`${selectAsset}`].contents[0]}</div>
+                  <div className="text-lg font-PtdLight">{ment[`${selectAsset}`].contents[1]}</div>
+                  <div className="text-lg font-PtdLight">{ment[`${selectAsset}`].contents[2]}</div>
                 </div>
               </div>
             </div>
           </div>
           <div className="h-full w-3/4 flex flex-col justify-center items-center">
-            {(selectAsset === "newsBox") ? <CountryNewsDetail data={axiosGetData}/> :null}
-            {(selectAsset === "quizBox" || selectAsset === "paintBox") ? <CountryQuizFrame selectAsset={selectAsset}/> : null}
-            {(selectAsset === "foodBox" || selectAsset === "personalityBox") ? <CountryFamousFrame selectAsset={selectAsset} /> :null}
-  
+            {(selectAsset === "newsBox" && axiosGetNewsData) ? <CountryNewsDetail axiosGetNewsData={axiosGetNewsData} /> :null}
+            {(selectAsset === "quizBox" || selectAsset === "paintBox") ? <CountryQuizFrame selectAsset={selectAsset} /> : null}
+            {(selectAsset === "foodBox" || selectAsset === "personalityBox") ? <CountryFamousFrame selectAsset={selectAsset} countryName={countryName} /> :null}
           </div>
         </div>
       </div>

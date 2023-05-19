@@ -11,8 +11,47 @@ type CountryWordList = {
   chn: string;
 };
 
-export default function LoaderHello() {
+export default function LoaderHello({ input }: { input: string }) {
   const [moveNav, setMoveNav] = useState<number>(1);
+
+  const [index, setIndex] = useState<number>(0);
+  useEffect(() => {
+    console.log('inpit : ' , input)
+    switch (input) {
+      case 'northAmerica_America': {
+        setChoosedCountry(countryList[0]);
+        break;
+      }
+      case 'europe_UK': {
+        setChoosedCountry(countryList[1]);
+        break;
+      }
+      case 'europe_Spain': {
+        setChoosedCountry(countryList[2]);
+        break;
+      }
+      case 'europe_Italia': {
+        setChoosedCountry(countryList[3]);
+        break;
+      }
+      case 'europe_France': {
+        setChoosedCountry(countryList[4]);
+        break;
+      }
+      case 'africa_Egypt': {
+        setChoosedCountry(countryList[5]);
+        break;
+      }
+      case 'asia_Korea': {
+        setChoosedCountry(countryList[6]);
+        break;
+      }
+      case 'asia_Japen': {
+        setChoosedCountry(countryList[7]);
+        break;
+      }
+    }
+  }, []);
 
   const countryList: CountryWordList[] = [
     {
@@ -66,31 +105,8 @@ export default function LoaderHello() {
   ];
 
   const [choosedCountry, setChoosedCountry] = useState<CountryWordList>(
-    countryList[0]
+    countryList[index]
   );
-
-  const country: string = window.location.href;
-
-  useEffect(() => {
-    console.log(country);
-    if (country === '미국') {
-      setChoosedCountry(countryList[0]);
-    } else if (country === '영국') {
-      setChoosedCountry(countryList[1]);
-    } else if (country === '스페인') {
-      setChoosedCountry(countryList[2]);
-    } else if (country === '이탈리아') {
-      setChoosedCountry(countryList[3]);
-    } else if (country === '프랑스') {
-      setChoosedCountry(countryList[4]);
-    } else if (country === '이집트') {
-      setChoosedCountry(countryList[5]);
-    } else if (country === '한국') {
-      setChoosedCountry(countryList[6]);
-    } else {
-      setChoosedCountry(countryList[7]);
-    }
-  }, []);
 
   return (
     <div
