@@ -11,6 +11,7 @@ interface LoginState {
   tier: string;
   level: number;
   exp: number;
+  sally: string;
 }
 
 interface loginPayload {
@@ -27,6 +28,7 @@ const initialState: LoginState = {
   tier: '',
   level: 1,
   exp: 1,
+  sally: 'yet',
 };
 
 type rankInfo = {
@@ -72,11 +74,21 @@ export const loginSlice = createSlice({
       state.level = action.payload.level;
       state.exp = action.payload.exp;
     },
+    addSallyMet: (state, action: PayloadAction<string>) => {
+      state.sally = action.payload;
+      sessionStorage.setItem('sally', action.payload);
+    },
   },
 });
 
-export const { login, logout, addNickname, addToken, addRankInfo } =
-  loginSlice.actions;
+export const {
+  login,
+  logout,
+  addNickname,
+  addToken,
+  addRankInfo,
+  addSallyMet,
+} = loginSlice.actions;
 export const wholeState = (state: RootState) => state.login;
 export const loginState = (state: RootState) => state.login.state;
 export const loginNickName = (state: RootState) => state.login.nickname;
@@ -86,4 +98,5 @@ export const myRank = (state: RootState) => state.login.rank;
 export const myTier = (state: RootState) => state.login.tier;
 export const myLevel = (state: RootState) => state.login.level;
 export const myExp = (state: RootState) => state.login.exp;
+export const metSally = (state: RootState) => state.login.sally;
 export default loginSlice.reducer;
