@@ -237,25 +237,27 @@ export default function Main() {
         console.log("quizData");
         console.log(quizData);
 
-        if (quizData.multiAnswerList!==null) {
-          setQuiz((prevState: any) => ({
-            ...prevState,
-            quizId: quizData.quizId,
-            nationName: quizData.nation.nationName,
-            level: quizData.level,
-            quizType: quizData.quizType,
-            category: quizData.catetory,
-            image: quizData.image,
-            content: quizData.content,
-            answer: quizData.answer,
-            multiFirst: quizData.multiAnswerList[0].answer,
-            multiSecond: quizData.multiAnswerList[1].answer,
-            multiThird: quizData.multiAnswerList[2].answer,
-            multiFourth: quizData.multiAnswerList[3].answer,
-            hint: quizData.hint,
-            hintType: quizData.hintType,
-            commentary: quizData.commentary,
-          }));
+        if (quizData.multiAnswerList) {
+          if(quizData.multiAnswerList[0] && quizData.multiAnswerList[1] && quizData.multiAnswerList[2] && quizData.multiAnswerList[3]) {
+            setQuiz((prevState: any) => ({
+              ...prevState,
+              quizId: quizData.quizId,
+              nationName: quizData.nation.nationName,
+              level: quizData.level,
+              quizType: quizData.quizType,
+              category: quizData.catetory,
+              image: quizData.image,
+              content: quizData.content,
+              answer: quizData.answer,
+              multiFirst: quizData.multiAnswerList[0].answer,
+              multiSecond: quizData.multiAnswerList[1].answer,
+              multiThird: quizData.multiAnswerList[2].answer,
+              multiFourth: quizData.multiAnswerList[3].answer,
+              hint: quizData.hint,
+              hintType: quizData.hintType,
+              commentary: quizData.commentary,
+            }));
+          }
         } else {
           setQuiz((prevState: any) => ({
             ...prevState,
@@ -1848,7 +1850,8 @@ export default function Main() {
 
   return (
     <>
-      <div className="w-screen h-screen bg-[#FFFDF4]">
+       <div className="w-full h-full bg-[#FFFDF4] ">
+
         {gameStart && mode && (
           <div
             className="w-[100px] h-[40px] rounded-[4px] ml-[40px] mt-[20px] flex justify-center items-center rounded-full  text-[18px] hover:text-white hover:cursor-pointer hover:bg-[#8DC2E8] outline outline-[4px] hover:outline-[0px] bg-white text-[#8DC2E8] shadow-[0_3px_10px_rgb(0,0,0,0.2)]"

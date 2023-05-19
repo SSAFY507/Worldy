@@ -2045,16 +2045,6 @@ export default function Game2D(props: any) {
       >
         {/* 왼쪽영역 */}
         <div className="w-[20%] h-full flex flex-col justify-start items-end mb-[60px]">
-          {/* 메타 데이터 영역 */}
-          {/* <div className="mt-[30px] mb-[30px] w-[300px] h-[180px] rounded-[4px] flex flex-col justify-center items-center bg-gray-200 text-[20px]">
-            <div>현재 턴 : {metaData.turn + 1}</div>
-            <div>턴 오버 : {metaData.turnOver ? "true" : "false"}</div>
-            <div>더 블 : {metaData.isDouble ? "더블" : "더블아님"}</div>
-            <div>현재위치 : {metaData.currentLocation}</div>
-            <div>
-              주사위 : [{metaData.dice1}, {metaData.dice2}]
-            </div>
-          </div> */}
           <div className="w-[320px] h-[920px] mb-[50px]  flex flex-col justify-around items-center">
             {pList.map((i, index) => {
               return (
@@ -3237,33 +3227,6 @@ export default function Game2D(props: any) {
               >
                 주사위 던지기
               </div>
-
-              {/* <div
-                id="shbutton"
-                className="w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px] absolute top-[290px]"
-                onClick={() => {
-                  playerTurn(metaData.turn);
-                }}
-              >
-                다른 사람 주사위
-              </div>
-
-              <div
-                id="shbutton"
-                className="w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px] absolute top-[360px]"
-                onClick={() => {
-                  setMetaData((prevState: any) => ({
-                    ...prevState,
-                    turnOver: true,
-                  }));
-                  setMode(0);
-                  calRanking();
-                  sendData();
-                }}
-              >
-                턴 종료
-              </div> */}
-
               <div
                 className="bg-white w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-gray-300 text-[20px] absolute top-[1360px]"
                 onClick={() => {
@@ -4264,15 +4227,14 @@ export default function Game2D(props: any) {
             </div>
           </div>
           <div
-            id="shbutton"
-            className="w-[140px] h-[40px] rounded-[4px] flex justify-center items-center text-white text-[16px] z-[80000]"
-            onClick={() => {
-              // 종료 API 요청
-              finishGame();
-            }}
-          >
-            게임 종료
-          </div>
+              className="w-[387px] h-[60px] rounded-[4px] flex justify-center items-center text-[#646161] text-[16px] z-[80000] mt-[30px] hover:bg-[#FF4D45] hover:text-white bg-gray-100/70"
+              onClick={() => {
+                // 종료 API 요청
+                finishGame();
+              }}
+            >
+              게임 종료
+            </div>
         </div>
       </div>
     </>
