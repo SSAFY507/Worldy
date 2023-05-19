@@ -204,7 +204,6 @@ const AppLayout = () => {
           /> */}
           <Route path='/payment' element={<Payment />} />
           <Route path='/hoons' element={<WorldMapTutorial />} />
-          <Route path='/3dgame' element={<Game3D />} />
           <Route path='/hello' element={<LoaderHello input={'asia_Korea'} />} />
         </Routes>
       </div>
