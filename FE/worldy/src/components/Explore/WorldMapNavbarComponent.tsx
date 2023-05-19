@@ -70,11 +70,7 @@ const WorldMapNavbarComponent = ({
     }
   };
 
-  useEffect(() => {
-    if (countryName) {
-      getDatasList();
-    }
-  }, [countryName]);
+  const [departure, setDeparture] = useState<boolean>(true);
 
   console.log(infoData, '');
 
@@ -136,6 +132,24 @@ const WorldMapNavbarComponent = ({
   }, [hoborAsset]);
 
   const nick = sessionStorage.getItem('nickname');
+
+  useEffect(() => {
+    setTimeout(() => {
+      setDeparture(false);
+    }, 9500);
+  });
+
+  useEffect(() => {
+    if (countryName) {
+      getDatasList();
+    }
+  }, [countryName]);
+
+  useEffect(() => {
+    if (doDDiyong) {
+      setDeparture(false);
+    }
+  }, [doDDiyong]);
 
   return (
     <div className='relative h-20 w-full bg-[#161617] flex flex-row justify-between px-[30px]'>
@@ -215,8 +229,8 @@ const WorldMapNavbarComponent = ({
         <span
           className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white font-PtdMedium  transition-all duration-[600ms] ease-out'
           style={{
-            fontSize: !doDDiyong ? '25px' : '10px',
-            opacity: !doDDiyong ? '100%' : '0%',
+            fontSize: departure ? '25px' : '10px',
+            opacity: departure ? '100%' : '0%',
           }}
         >
           {list.country}에 오신 {nick}님 환영합니다!

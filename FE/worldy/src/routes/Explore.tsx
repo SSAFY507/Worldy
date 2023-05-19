@@ -6,11 +6,16 @@ import WorldMap from '../components/Explore/WorldMap';
 import SHLoader from '../components/Loaders/SHLoader';
 import LoaderCompass from '../components/Loaders/LoaderCompass';
 import SallyTotu from '../assets/images/SallyTuto.png';
+import { useDispatch } from 'react-redux';
+import { addSallyMet } from '../_store/slices/loginSlice';
 
 const Explore = () => {
   const [doneLoader, setDoneLoader] = useState<boolean>(false);
-
+  const dispatch = useDispatch();
   useEffect(() => {
+    const met = sessionStorage.getItem('sally');
+    if (met === 'already') setSallyState(false);
+    else setSallyState(true);
     setTimeout(() => {
       setDoneLoader(true);
     }, 3000);
@@ -47,7 +52,10 @@ const Explore = () => {
               <div className='h-full w-[250px]  outline-red-300 flex flex-col justify-end items-center'>
                 <button
                   className='w-[200px] h-[50px] rounded-full text-[20px] bg-[#73ae73] hover:bg-[#73d673] text-white'
-                  onClick={() => setSallyState(false)}
+                  onClick={() => {
+                    setSallyState(false);
+                    dispatch(addSallyMet('already'));
+                  }}
                 >
                   출발하기
                 </button>
