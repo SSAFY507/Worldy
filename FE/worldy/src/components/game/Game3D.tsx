@@ -18,6 +18,8 @@ export interface PlayerInfoType {
 export default function Game3D(props: any) {
   const sendData = props.sendData;
 
+  const Swal = require('sweetalert2');
+
   const profileImg = sessionStorage.getItem('profileImg');
 
   const item = props.item;
@@ -112,7 +114,7 @@ export default function Game3D(props: any) {
   useEffect(() => {
     console.log('metaData.curcuit : ')
     console.log(metaData.curcuit)
-    if (metaData.curcuit >= 16) {
+    if (metaData.curcuit >= 8) {
       finishGame();
     }
   }, [metaData.curcuit])
@@ -1961,7 +1963,7 @@ export default function Game3D(props: any) {
     <>
       {/* 더블 모달 */}
       {metaData.isDouble ?
-      <div className="w-[200px] h-[200px] absolute top-[120px] left-[860px] z-[50]">
+      <div className="w-[250px] h-[250px] absolute top-[10%] left-[30%] z-[50] rotate-[-10deg]">
         <img src="/game/double.png" alt="" />
       </div>
       : null}
@@ -2925,9 +2927,23 @@ export default function Game3D(props: any) {
           <div className={`w-[20%] h-[1000px] flex flex-col justify-start items-start rounded-[4px] z-50`}>
            <div
               className="w-[387px] h-[60px] rounded-[10px] flex justify-center items-center mb-[20px] text-[#646161] z-[80000] mt-[10px] hover:bg-[#FF4D45] hover:text-white bg-gray-100/70 text-[20px]"
+              
               onClick={() => {
+                Swal.fire({
+                  title: '게임을 종료하시겠습니까?',
+                  icon: 'warning',
+                  iconColor: '#FA5B54',
+                  showCancelButton: true,
+                  confirmButtonColor: '#FA5B54',
+                  cancelButtonColor: '#999999',
+                  confirmButtonText: 'YES',
+                  cancelButtonText: 'NO',
+                }).then((result: any) => {
+                  if (result.isConfirmed) {
                 // 종료 API 요청
                 finishGame();
+                  }
+                });
               }}
             >
               게임 종료
@@ -3035,20 +3051,7 @@ export default function Game3D(props: any) {
                   })}
                 </div>
               </div>
-              <div className="z-30 flex justify-center items-center">
-                <Dice></Dice>
-                <div
-                  className={`w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px] ${myTurn && activeDice
-                    ? "bg-red-500 hover:cursor-pointer hover:bg-red-600"
-                    : "bg-gray-300 pointer-events-none"
-                    }`}
-                  onClick={() => {
-                    playerTurn(metaData.turn);
-                  }}
-                >
-                  주사위 던지기
-                </div>          
-              </div>
+
             </div>
             
             
@@ -3057,7 +3060,7 @@ export default function Game3D(props: any) {
 
             <div
               className={`w-[387px] h-[60px] rounded-[10px] flex justify-center items-center text-[20px] mt-[10px] ${myTurn && activeDice
-                ? "bg-red-500 hover:cursor-pointer hover:bg-red-600 text-white"
+                ? "gameglowing bg-red-500 hover:cursor-pointer hover:bg-red-600 text-white"
                 : " bg-gray-100/70 pointer-events-none text-[#646161]"
                 }`}
               onClick={() => {

@@ -123,7 +123,7 @@ export default function Game2D(props: any) {
   useEffect(() => {
     console.log('metaData.curcuit : ')
     console.log(metaData.curcuit)
-    if (metaData.curcuit >= 16) {
+    if (metaData.curcuit >= 8) {
       finishGame();
     }
   }, [metaData.curcuit])
@@ -1114,7 +1114,7 @@ export default function Game2D(props: any) {
   function getItem(turn: number) {
     console.log('getItem 실행')
     let n = Math.floor(Math.random() * 17);
-    // n = 7
+    n = 15;
     const i = item[n];
     // const pNum = (turn + 1);
 
@@ -2027,7 +2027,7 @@ export default function Game2D(props: any) {
 
       {/* 더블 모달 */}
       {metaData.isDouble ?
-        <div className="w-[200px] h-[200px] absolute top-[120px] left-[860px] z-[50]">
+        <div className="w-[200px] h-[200px] absolute top-[120px] left-[830px] z-[50] rotate-[-10deg]">
           <img src="/game/double.png" alt="" />
         </div>
         : null}
@@ -3218,7 +3218,7 @@ export default function Game2D(props: any) {
               <Dice></Dice>
               <div
                 className={`w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px] ${myTurn && activeDice
-                  ? "bg-red-500 hover:cursor-pointer hover:bg-red-600"
+                  ? "gameglowing bg-red-500 hover:cursor-pointer hover:bg-red-600"
                   : "bg-gray-300 pointer-events-none"
                   }`}
                 onClick={() => {
@@ -4123,7 +4123,7 @@ export default function Game2D(props: any) {
           className={`w-[20%] h-full flex flex-col justify-start items-start rounded-[4px]`}
         >
           <div
-            className={`w-[387px] h-[908px] mb-[40px]  flex flex-col justify-around items-center rounded-[24px] 
+            className={`w-[387px] h-[908px] mb-[20px]  flex flex-col justify-around items-center rounded-[24px] 
             ${myTurn && me.playerNum === 1 ? "bg-red-200/30" 
               : myTurn && me.playerNum === 2 ? "bg-green-200/30"
               : myTurn && me.playerNum === 3 ? "bg-blue-200/30" 
@@ -4227,14 +4227,28 @@ export default function Game2D(props: any) {
             </div>
           </div>
           <div
-              className="w-[387px] h-[60px] rounded-[4px] flex justify-center items-center text-[#646161] text-[16px] z-[80000] mt-[30px] hover:bg-[#FF4D45] hover:text-white bg-gray-100/70"
+              className="w-[387px] h-[60px] rounded-[20px] flex justify-center items-center mb-[20px] text-[#646161] z-[80000] mt-[5px] hover:bg-[#FF4D45] hover:text-white bg-gray-100/70 text-[20px]"
+                            
               onClick={() => {
+                Swal.fire({
+                  title: '게임을 종료하시겠습니까?',
+                  icon: 'warning',
+                  iconColor: '#FA5B54',
+                  showCancelButton: true,
+                  confirmButtonColor: '#FA5B54',
+                  cancelButtonColor: '#999999',
+                  confirmButtonText: 'YES',
+                  cancelButtonText: 'NO',
+                }).then((result: any) => {
+                  if (result.isConfirmed) {
                 // 종료 API 요청
                 finishGame();
+                  }
+                });
               }}
             >
               게임 종료
-            </div>
+          </div>
         </div>
       </div>
     </>

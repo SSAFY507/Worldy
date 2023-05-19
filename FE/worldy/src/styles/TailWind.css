@@ -24,15 +24,15 @@
 
   @keyframes gameglowing {
     0% {
-      box-shadow: 0 0 6px 1px #fff, 0 0 12px 1px #fff, 0 0 15px 2px #FF4D45,
+      box-shadow: 0 0 6px 1px #fff, 0 0 12px 1px #FFD8D6, 0 0 15px 2px #FF8984,
         0 0 20px 2px #FF4D45;
     }
     50% {
-      box-shadow: 0 0 6px 2px #fff, 0 0 12px 2px #fff, 0 0 15px 5px #FF4D45,
+      box-shadow: 0 0 6px 2px #fff, 0 0 12px 2px #FFD8D6, 0 0 15px 5px #FF8984,
         0 0 20px 5px #FF4D45;
     }
     100% {
-      box-shadow: 0 0 6px 1px #fff, 0 0 12px 1px #fff, 0 0 15px 2px #FF4D45,
+      box-shadow: 0 0 6px 1px #fff, 0 0 12px 1px #FFD8D6, 0 0 15px 2px #FF8984,
         0 0 20px 2px #FF4D45;
     }
   }
