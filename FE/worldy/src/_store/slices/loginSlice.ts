@@ -47,10 +47,10 @@ export const loginSlice = createSlice({
       sessionStorage.setItem('isLoggedIn', 'true');
       // sessionStorage.setItem('nickname', action.payload.nickname);
       sessionStorage.setItem('profileImg', action.payload.profileImg);
-      console.log('슬라이스에서의 로그인 로그인 로그인');
+      //console.log('슬라이스에서의 로그인 로그인 로그인');
     },
     logout: (state) => {
-      console.log('로그아웃로그아웃로그아웃로그아웃');
+      //console.log('로그아웃로그아웃로그아웃로그아웃');
       state.state = false;
       sessionStorage.removeItem('isLoggedIn');
       sessionStorage.removeItem('nickname');
@@ -64,7 +64,7 @@ export const loginSlice = createSlice({
     addToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
       sessionStorage.setItem('token', action.payload);
-      console.log('토큰 추가', action.payload);
+      //console.log('토큰 추가', action.payload);
     },
     addRankInfo: (state, action: PayloadAction<rankInfo>) => {
       state.rank = action.payload.rank;

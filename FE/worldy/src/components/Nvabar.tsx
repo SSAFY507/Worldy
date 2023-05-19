@@ -25,6 +25,8 @@ type NavListType = {
 };
 
 export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
+  const DOMAIN = process.env.REACT_APP_BASE_URL;
+  const DOMAIN_S = process.env.REACT_APP_BASE_URL_SHORTER;
   const navigate = useNavigate();
 
   const navList: NavListType[] = [
@@ -32,7 +34,7 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
     // { name: '게임 정보', path: '/info' },
     // { name: '업데이트', path: '/updates' },
     { name: '세계 탐험', path: '/explore' },
-    { name: '월디폴리', path: '/game' },
+    { name: '월디폴리', path: '/create' },
     { name: '고객 지원', path: '/support' },
   ];
 
@@ -43,12 +45,12 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
 
   const logoutAxios = async () => {
     const loginToken = sessionStorage.getItem('token');
-    console.log('로그아웃 시 토큰 : ', loginToken);
+    //console.log('로그아웃 시 토큰 : ', loginToken);
     try {
       const response = await CustomAxios({
         APIName: 'logout',
         APIType: 'get',
-        UrlQuery: 'https://k8a507.p.ssafy.io/api/user/logout',
+        UrlQuery: DOMAIN + '/user/logout',
         Token: loginToken,
       });
       setLogoutResult(response);
@@ -194,7 +196,7 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
               <a href='/'>
                 <img
                   src={WorldySoftLogo}
-                  className='h-[40px]'
+                  className='h-[45px]'
                   alt='Worldy Soft Comp'
                 />
               </a>

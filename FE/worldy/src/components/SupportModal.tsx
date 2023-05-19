@@ -10,6 +10,8 @@ import { useSelect } from '@react-three/drei';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
+import '../styles/SweetAlertStyles.css';
+
 type askTypeListType = {
   value: number;
   name: string;
@@ -22,6 +24,8 @@ export default function SupportModal({
   type: boolean;
   handleCloseModal: () => void;
 }) {
+  const DOMAIN = process.env.REACT_APP_BASE_URL;
+  const DOMAIN_S = process.env.REACT_APP_BASE_URL_SHORTER;
   const modalSize: number = 16;
 
   const [contentType, setContentType] = useState<number>();
@@ -121,15 +125,15 @@ export default function SupportModal({
   const things = useSelector(wholeState);
 
   useEffect(() => {
-    console.log('토근 왜 안나와', getToken);
+    //console.log('토근 왜 안나와', getToken);
   }, [getToken]);
 
   useEffect(() => {
-    console.log('전부', things);
+    //console.log('전부', things);
   }, [things]);
 
   const submitHelpAxios = async () => {
-    console.log('커스터엄 토큰 : ', getToken);
+    //console.log('커스터엄 토큰 : ', getToken);
     try {
       const requestBody = new Map([
         ['category', askTypeList[askType].name],
@@ -140,12 +144,12 @@ export default function SupportModal({
         APIName: 'writeHelp',
         APIType: 'post',
         // UrlQuery: 'https://localhost:9090/api/help/write',
-        UrlQuery: 'https://k8a507.p.ssafy.io/api/help/write',
+        UrlQuery: DOMAIN + '/help/write',
         Body: requestBody,
         Token: getToken,
       });
       setResult(response);
-      console.log('리퀘스트 바디', requestBody);
+      //console.log('리퀘스트 바디', requestBody);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -153,11 +157,11 @@ export default function SupportModal({
 
   // 요청 헤더 및 바디를 포함하는 POST 요청 함수를 정의합니다.
   async function submitHelpAxiosBasic() {
-    console.log('문의 토큰 : ', getToken);
+    //console.log('문의 토큰 : ', getToken);
 
     try {
       const response = await axios.post(
-        'https://k8a507.p.ssafy.io/api/help/write',
+        DOMAIN + '/help/write',
         // 요청 바디 데이터를 객체 형식으로 전달합니다.
         { category: askTypeList[askType].name, content: contentText },
         {
@@ -167,8 +171,8 @@ export default function SupportModal({
           },
         }
       );
-      console.log(response.data);
-      console.log('문으 ㅣ전송 성공');
+      //console.log(response.data);
+      //console.log('문으 ㅣ전송 성공');
     } catch (error) {
       console.error(`Error: ${error}`);
     }
@@ -180,12 +184,10 @@ export default function SupportModal({
     Swal.fire({
       title: '등록되었습니다.',
       confirmButtonText: '확인',
-      customClass: {
-        title: 'SWA2-support-title',
-
-        confirmButton: 'btn btn-success SWA2-support-confirmbtn',
-      },
       buttonsStyling: false,
+      customClass: {
+        confirmButton: 'swal2-confirm',
+      },
     });
   };
 

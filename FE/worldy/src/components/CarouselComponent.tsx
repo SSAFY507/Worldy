@@ -36,7 +36,7 @@ export default function CarouselComponent({
   // }, []);
 
   useEffect(() => {
-    console.log(images);
+    // console.log(images);
   }, [images]);
 
   // const [loadedAll, setLoadedAll] = useState<boolean>(false);
@@ -60,7 +60,7 @@ export default function CarouselComponent({
 
   const handleDonateState = () => {
     setDonateState(!donateState);
-    console.log('donateState', donateState);
+    // console.log('donateState', donateState);
   };
 
   const handleDonateStateRemain = (event: React.MouseEvent) => {
