@@ -36,7 +36,7 @@ const Explore = () => {
                   안녕? 세계 탐험으로 온 걸 환영해!
                 </span>
                 <span className='text-[28px] leading-[34px]'>
-                  원하는 대륙을 두 번 클릭한 다음
+                  원하는 대륙을 두 번 클릭한 다음,
                   <br />
                   목적지를 한번 더 클릭해서 나라에 들어갈 수 있어.
                 </span>
@@ -68,8 +68,8 @@ const Explore = () => {
   return (
     <div className='relative'>
       {!doneLoader && (
-        <div className='w-screen h-screen bg-gray-800 grid place-content-center pb-[80px]'>
-          <LoaderCompass />
+        <div className='w-screen h-screen bg-white grid place-content-center pb-[80px]'>
+          <SHLoader text='로더' />
         </div>
       )}
       {sallyState && <SallyToturial />}
