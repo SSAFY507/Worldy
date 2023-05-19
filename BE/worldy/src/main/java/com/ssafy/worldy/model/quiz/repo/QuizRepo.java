@@ -13,6 +13,6 @@ public interface QuizRepo extends JpaRepository<Quiz, Long> {
     @Query(value = "select * from quiz where nation_id = ?1 and publisher_type = 'gpt' order by RAND() limit 1;", nativeQuery = true)
     Quiz findAllNewsQuizByNationId(Long nationId);
 
-    @Query(value = "select * from quiz where nation_id = ?1 and publisher_type != 'gpt' and  order by RAND() limit 1;", nativeQuery = true)
+    @Query(value = "select * from quiz where nation_id = ?1 and publisher_type != 'gpt' order by RAND() limit 1;", nativeQuery = true)
     Quiz findRandQuizByNationId(Long nationId);
 }
