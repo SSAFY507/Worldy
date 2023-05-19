@@ -136,45 +136,47 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
 
   // const getArch = (counting: number) => {
   //   let tmpTurn = playerTurn;
-  //   alert(`${turn} 번째 턴. ${playerTurn}번째 플레이어가 주사위를 던집니다.`)
-  //   alert("작은 건물을 구매하시겠습니까?")
-  //   scene.current?.children[5].children.forEach((obj, idx) => {
-  //     console.log(counting)
-  //     if(worldMap.worldMap[counting].name + "_소" === obj.name)
-  //       obj.visible = true
-  //   })
+    // scene.current?.children[5].children.forEach((obj, idx) => {
+    //   console.log(counting)
+    //   if(worldMap[counting].name + "_소" === obj.name)
+    //     obj.visible = true
+    // })
   //   setPlayerTurn((tmpTurn + 1) % 4)
   //   setTurn(turn + 1)
   // }
 
-  // useEffect(() => {
-  //   if (diceData) {
-  //     let name
-  //     switch (playerInfo.playerIndex){
-  //       case 0:
-  //         name = "Pawn_0"
-  //         break
-  //       case 1:
-  //         name = "Pawn_1"
-  //         break
-  //       case 2:
-  //         name = "Pawn_2"
-  //         break
-  //       case 3:
-  //         name = "Pawn_3"
-  //         break
-  //       default:
-  //         alert("선택해 캐릭터")
-  //         name = ""
-  //         break
-  //     }
-  //     setPlayerMovedCount(playerInfo.currentIndex)
-  //     setPlayerTurn(playerInfo.playerIndex)
-  //     playerLoc.current =  scene.current?.getObjectByName(`${name}`)?.position!
-  //     console.log(playerLoc.current)
-  //     moveCounted(diceData)
-  //   }
-  // },[metaData])
+  useEffect(() => {
+    if (diceData) {
+      const isArch = [...player.p1.game.own, ...player.p2.game.own, ...player.p3.game.own, ...player.p4.game.own]
+      const isArchSet = new Set()
+      isArch.forEach ((number, idx) => {
+        isArchSet.add(mapAxis[number].name)
+      })
+      scene.current?.children[5].children.forEach((obj, idx) => {
+        // name이 6글자 이하인 객체들에 대해서 '_'가 존재하는 객체 
+        if (obj.name.length <7 && obj.name.includes('_')){
+          // 건물이 있는 나라를 찾고
+          if (isArchSet.has(obj.name.slice(0, obj.name.indexOf('_')))){
+            // 해당 건물의 종류를 찾아 
+            isArch.forEach((number, idx2) => {
+              if (worldMap[number].name === obj.name.slice(0, obj.name.indexOf('_'))) {
+                //해당 객체의 크기
+                const tmp = obj.name.slice(obj.name.indexOf('_')+1, obj.name.indexOf('_')+2)
+                //해당 객체의 크기에 따른 건물 이름
+                const name = checkArch[`${tmp}`]
+                // 해당 객체
+                const a:ArchType = worldMap[number].build
+                if (a[`${name}`]) {
+                  obj.visible = true
+                }
+              }
+            })
+          }
+          
+        }
+      })
+    }
+  },[metaData])
 
   useEffect(() => {
     setPlayerMovedCount(playerInfo.currentIndex)
@@ -229,7 +231,6 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
       //   await rotateCamera(presentDir);
       //   prevDir = presentDir;
       // }
-      console.log('presentDir', presentDir);
       await movePlayerDir(presentDir);
       // console.log('playerLoc', player0Loc.current);
     }
@@ -303,17 +304,17 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
   // /** 카메라 함수 */
   // const rotateCamera = (dir: number): Promise<void> => {
   //   return new Promise((resolve) => {
-  //     const newX = 170 * (dir % 2) * Math.pow(-1, dir % 3);
-  //     const newZ = 170 * ((dir + 1) % 2) * Math.pow(-1, Math.floor(dir / 2));
+  //     const newZ = 0 * (dir % 2) * Math.pow(-1, dir % 3);
+  //     const newX = 8 * ((dir + 1) % 2) * Math.pow(-1, Math.floor(dir / 2));
   //     gsap.to(cameraRef.current!.position, {
   //       duration: 1,
   //       x: newX,
-  //       y: 50,
+  //       y: 8,
   //       z: newZ,
   //       onUpdate: () => {
   //         cameraRef.current!.position.set(
   //           cameraRef.current!.position.x,
-  //           50,
+  //           8,
   //           cameraRef.current!.position.z
   //         );
   //       },
@@ -337,7 +338,6 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
       // SetupModel();
     });
   };
-
 
   /** 카메라 커스텀 함수 */
   const SetupCamera = () => {
@@ -456,6 +456,10 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
   const update = (time: number) => {
     time *= 0.01;
 
+    if (diceData) {
+
+    }
+
   };
 
   useEffect(() => {
@@ -486,7 +490,6 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
 
   return (
     <div className='absolute flex flex-col w-full h-full justify-start items-center'>
- 
       <div
       className=''
         style={{ backgroundColor: 'grey', width: '100%', height: 1000 }}
