@@ -441,6 +441,8 @@ export default function Game2D(props: any) {
 
   // 정렬
   if (updateRankingCheck) {
+    console.log("정렬중");
+    
     updateRanking();
     setUpdateRankingCheck(false);
   }
