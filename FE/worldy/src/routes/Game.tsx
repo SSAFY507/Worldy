@@ -41,7 +41,7 @@ export default function Game() {
     setLoaded(true);
   }, 1000);
   return (
-    <div className='w-screen h-screen'>
+    <div className='w-screen h-screen '>
       {
         showLoginModal && (
           <LoginModal
@@ -54,7 +54,7 @@ export default function Game() {
       {loaded ? (
         <Main />
       ) : (
-        <div className='w-full h-full bg-white pt-20'>
+        <div className='w-full h-full bg-white pt-20 bg-[#FFFDF4]'>
           <LoaderLinear />
         </div>
       )}

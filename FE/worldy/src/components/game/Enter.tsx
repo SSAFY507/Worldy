@@ -28,7 +28,7 @@ export default function Enter(props : any ) {
   if(gameWait) {
     setTimeout(function () {
       setStart(true);
-    }, 2500);
+    }, 3000);
   }
 
   // useEffect(() => {
