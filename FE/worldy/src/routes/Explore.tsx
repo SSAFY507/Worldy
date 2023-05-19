@@ -29,8 +29,8 @@ const Explore = () => {
           <div className='w-screen absolute bottom-0 left-0 h-[550px] bg-[rgba(0,0,0,0.5)] flex flex-row justify-start items-start pt-[60px] pl-[580px]'>
             <div className='w-full h-[250px] flex flex-row justify-start items-start z-30'>
               <div className='w-fit mr-[70px] h-[250px] flex flex-col justify-between items-start text-[rgba(220,220,220,1)] font-PtdRegular rounded-xl  outline-[rgba(255,255,255,0.8)] outline-[5px] '>
-                <span className='font-PtdExtraLight text-[#F9C53A] text-[25px]'>
-                  샐리
+                <span className='font-PtdExtraLight text-[#F9C53A] text-[20px]'>
+                  Sally
                 </span>
                 <span className='text-[40px] '>
                   안녕? 세계 탐험으로 온 걸 환영해!
