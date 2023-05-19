@@ -11,6 +11,7 @@ import { PlayerInfoType } from '../Game3D';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
 import WorldyMap from '../../../assets/lowpoly/WorldyPolyMap3.glb';
+import bg from '../../../assets/images/gameBg.png';
 import { gsap } from 'gsap';
 import pawn_0 from '../../../assets/lowpoly/pawn_0.glb';
 import pawn_1 from '../../../assets/lowpoly/pawn_1.glb';
@@ -146,10 +147,38 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
   //   setTurn(turn + 1)
   // }
 
+  // useEffect(() => {
+  //   if (diceData) {
+  //     let name
+  //     switch (playerInfo.playerIndex){
+  //       case 0:
+  //         name = "Pawn_0"
+  //         break
+  //       case 1:
+  //         name = "Pawn_1"
+  //         break
+  //       case 2:
+  //         name = "Pawn_2"
+  //         break
+  //       case 3:
+  //         name = "Pawn_3"
+  //         break
+  //       default:
+  //         alert("선택해 캐릭터")
+  //         name = ""
+  //         break
+  //     }
+  //     setPlayerMovedCount(playerInfo.currentIndex)
+  //     setPlayerTurn(playerInfo.playerIndex)
+  //     playerLoc.current =  scene.current?.getObjectByName(`${name}`)?.position!
+  //     console.log(playerLoc.current)
+  //     moveCounted(diceData)
+  //   }
+  // },[metaData])
+
   useEffect(() => {
     setPlayerMovedCount(playerInfo.currentIndex)
     setPlayerTurn(playerInfo.playerIndex)
-    requestAnimationFrame(render);
   }, [diceData])
 
   useEffect(() => {
@@ -295,6 +324,21 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
   //   });
   // };
 
+  /** 배경함수 */
+  const SetBackground = () => {
+    //2. 이미지를 배경으로 (방법 여러개지만, 여기서는 Texture 이용)
+    const loader = new THREE.TextureLoader();
+
+    loader.load(bg, (texture) => {
+      scene.current!.background = texture;
+
+      // SetupModel이 없는 상태에서 background를 받으려니 문제 생김!
+      // => Backround를 호출할 때, 모델을 호출해주자
+      // SetupModel();
+    });
+  };
+
+
   /** 카메라 커스텀 함수 */
   const SetupCamera = () => {
     const width = divContainer.current?.clientWidth || 0;
@@ -428,6 +472,7 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
       SetupLight();
       SetupModel();
       SetupControls();
+      SetBackground();
       // scene.current.background = new THREE.Color("#0000");
       // let light =new THREE.DirectionalLight(0xffff00, 10);
       // scene.current.add(light)

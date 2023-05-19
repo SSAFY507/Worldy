@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Route, useParams } from "react-router";
-import Room from "./Room";
+
 import CreateGame from "../create/CreateGame";
+import Enter from "./Enter";
 import Game2D from "./Game2D";
 import Game3D from "./Game3D";
+import Room from "./Room";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
+import { log } from "console";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router";
-import { log } from "console";
-import Enter from "./Enter";
 
 // 소켓 연결
 let socket;
@@ -237,26 +238,28 @@ export default function Main() {
         console.log("quizData");
         console.log(quizData);
 
-        if (quizData.multiAnswerList!==null) {
-          setQuiz((prevState: any) => ({
-            ...prevState,
-            quizId: quizData.quizId,
-            nationName: quizData.nation.nationName,
-            level: quizData.level,
-            quizType: quizData.quizType,
-            category: quizData.catetory,
-            image: quizData.image,
-            content: quizData.content,
-            answer: quizData.answer,
-            multiFirst: quizData.multiAnswerList[0].answer,
-            multiSecond: quizData.multiAnswerList[1].answer,
-            multiThird: quizData.multiAnswerList[2].answer,
-            multiFourth: quizData.multiAnswerList[3].answer,
-            hint: quizData.hint,
-            hintType: quizData.hintType,
-            commentary: quizData.commentary,
-          }));
-        } else {
+        if (quizData.multiAnswerList) {
+          if(quizData.multiAnswerList[0] && quizData.multiAnswerList[1] && quizData.multiAnswerList[2] && quizData.multiAnswerList[3]) {
+            setQuiz((prevState: any) => ({
+              ...prevState,
+              quizId: quizData.quizId,
+              nationName: quizData.nation.nationName,
+              level: quizData.level,
+              quizType: quizData.quizType,
+              category: quizData.catetory,
+              image: quizData.image,
+              content: quizData.content,
+              answer: quizData.answer,
+              multiFirst: quizData.multiAnswerList[0].answer,
+              multiSecond: quizData.multiAnswerList[1].answer,
+              multiThird: quizData.multiAnswerList[2].answer,
+              multiFourth: quizData.multiAnswerList[3].answer,
+              hint: quizData.hint,
+              hintType: quizData.hintType,
+              commentary: quizData.commentary,
+            }));
+          }
+        }  else {
           setQuiz((prevState: any) => ({
             ...prevState,
             quizId: quizData.quizId,
