@@ -527,7 +527,7 @@ export default function GameQuizModal({
           flipped ? 'opacity-0' : 'opacity-100'
         }`}
       >
-        <div className='h-[70px] w-full flex flex-col-reverse justify-start items-center rounded-t-xl bg-[#61C7BB]  outline-red-500'>
+        <div className='h-[70px] w-full flex flex-col-reverse justify-start items-center rounded-t-xl bg-[#61C7BB]'>
           <div className='w-full h-[55px] bg-[#F5F5F5] rounded-t-xl outline-red-300 flex flex-col jutsify-stretch items-center'>
             <div className='w-full h-[20px] outline-yellow-500 flex flex-row justify-center items-end'>
               <img
@@ -611,7 +611,7 @@ export default function GameQuizModal({
           !showBack ? 'opacity-0' : 'opacity-100'
         }`}
       >
-        <div className='h-[70px] w-full flex flex-col-reverse justify-start items-center rounded-t-xl bg-[#61C7BB]  outline-red-500'>
+        <div className='h-[70px] w-full flex flex-col-reverse justify-start items-center rounded-t-xl bg-[#61C7BB]'>
           <div className='w-full h-[55px] bg-[#eaeaea] rounded-t-xl  outline-red-300 flex flex-col jutsify-stretch items-center'>
             <div className='w-full h-[20px] outline-yellow-500 flex flex-row justify-center items-end'>
               <img
@@ -622,7 +622,7 @@ export default function GameQuizModal({
             </div>
           </div>
         </div>
-        <div className='w-full h-[200px] bg-[#eaeaea]  outline-red-500 flex flex-col justify-start items-start pt-[5px] px-[50px]'>
+        <div className='w-full h-[200px] bg-[#eaeaea] flex flex-col justify-start items-start pt-[5px] px-[50px]'>
           <span
             className={`w-full flex flex-row justify-start items-center text-[18px] font-PtdBold mb-[10px] ${
               correctState ? 'text-[#009B3E]' : 'text-[#E81C1C]'
