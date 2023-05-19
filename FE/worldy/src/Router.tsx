@@ -99,7 +99,7 @@ const AppLayout = () => {
 
   const exploreUrl = location.pathname.substr(0, 9);
   const monopolyUrl = location.pathname.substr(0, 9);
-  const gameUrl = location.pathname.substr(0, 5);
+  const gameUrl = location.pathname.length < 6 ? location.pathname.substr(0, 5): location.pathname.substr(0, 6);
 
   const [myPageRef, setMyPageRef] = useState<string>('');
 
@@ -146,7 +146,8 @@ const AppLayout = () => {
           exploreUrl !== '/payment' &&
           exploreUrl !== '/explore/' &&
           monopolyUrl !== '/monopoly' &&
-          gameUrl !== '/game' && <Navbar onLoginClick={handleLoginModal} />}
+          gameUrl !== '/game' &&
+          <Navbar onLoginClick={handleLoginModal} />}
         {showLoginModal && <LoginModal onClose={closeLoginModal} />}
         {/* Routes : 여러 컴퍼넌트 중 URL과 일치하는 '첫번째' Route 컴퍼넌트만 렌더링 */}
       </div>
