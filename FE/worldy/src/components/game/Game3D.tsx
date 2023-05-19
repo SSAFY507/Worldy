@@ -2919,7 +2919,7 @@ export default function Game3D(props: any) {
             </div>
 
           </div>
-
+          
         
           {/* 오른쪽 영역 */}
           <div className={`w-[20%] h-[750px] flex flex-col justify-start items-start rounded-[4px] z-50`}>
@@ -3026,6 +3026,20 @@ export default function Game3D(props: any) {
                   })}
                 </div>
               </div>
+              <div className="z-30 flex justify-center items-center">
+                <Dice></Dice>
+                <div
+                  className={`w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px] ${myTurn && activeDice
+                    ? "bg-red-500 hover:cursor-pointer hover:bg-red-600"
+                    : "bg-gray-300 pointer-events-none"
+                    }`}
+                  onClick={() => {
+                    playerTurn(metaData.turn);
+                  }}
+                >
+                  주사위 던지기
+                </div>          
+              </div>
             </div>
             <div
               id="shbutton"
@@ -3041,6 +3055,7 @@ export default function Game3D(props: any) {
 
         </div>
         <Game3DItem metaData={metaData} player={player} worldMap={worldMap} diceData={diceData} getPlayerTurn={getPlayerTurn} />
+
       </div>
     </>
   )
