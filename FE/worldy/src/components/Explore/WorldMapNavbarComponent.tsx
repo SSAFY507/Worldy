@@ -124,13 +124,18 @@ const WorldMapNavbarComponent = ({
   console.log(timeAPM);
   const [doDDiyong, setDoDDiyong] = useState<boolean>(false);
 
+  const [contentText, setContentText] = useState<string>('');
+
   useEffect(() => {
     if (hoborAsset) {
       setDoDDiyong(true);
+      setContentText(list.titlecontent);
     } else {
       setDoDDiyong(false);
     }
   }, [hoborAsset]);
+
+  const nick = sessionStorage.getItem('nickname');
 
   return (
     <div className='relative h-20 w-full bg-[#161617] flex flex-row justify-between px-[30px]'>
@@ -178,7 +183,7 @@ const WorldMapNavbarComponent = ({
           />
         </button>
         {selectAsset ? null : (
-          <div className='absolute top-[150px] w-[500px] flex flex-nowrap h-fit flex flex-col justify-start items-start  ml-[20px] pl-[20px]'>
+          <div className='absolute top-[150px] w-[500px] flex-nowrap h-fit flex flex-col justify-start items-start  ml-[20px] pl-[20px]'>
             <span className='text-[50px] text-white font-PtdExtraBold'>
               {list.country}
             </span>
@@ -188,23 +193,35 @@ const WorldMapNavbarComponent = ({
           </div>
         )}
       </div>
-      <div className='h-[80px] w-[80%]  outline-white overflow-hidden'>
+      <div className='h-[80px] w-[80%]  outline-white overflow-hidden relative'>
         <div
-          className='h-full w-full flex flex-row justify-center items-center transition-all duration-500 ease-out '
-          style={{ marginTop: doDDiyong ? '0px' : '60px' }}
+          className='h-full w-full flex flex-row justify-center items-center transition-all duration-[400ms] ease-out '
+          style={{
+            marginTop: doDDiyong ? '0px' : '60px',
+            opacity: doDDiyong ? '100%' : '10%',
+          }}
         >
-          {doDDiyong ? (
+          <>
             <BsExclamationCircle
               color={'white'}
               size={20}
               className='mr-[10px]'
             />
-          ) : null}
-          <span className=' text-[22px] font-PtdRegular text-white'>
-            {doDDiyong && list.titlecontent}
-          </span>
-          {/* <div className='w-1/4'></div> */}
+            <span className=' text-[22px] font-PtdRegular text-white'>
+              {contentText}
+            </span>
+          </>
         </div>
+        <span
+          className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white font-PtdMedium  transition-all duration-[600ms] ease-out'
+          style={{
+            fontSize: !doDDiyong ? '25px' : '10px',
+            opacity: !doDDiyong ? '100%' : '0%',
+          }}
+        >
+          {list.country}에 오신 {nick}님 환영합니다!
+        </span>
+        {/* <div className='w-1/4'></div> */}
       </div>
       <div className='relative h-full w-[20%]  outline-white flex flex-row justify-end items-center'>
         <img src={logoColoredBlue} alt='colored logo' className='w-[100px]' />
