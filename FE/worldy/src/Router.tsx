@@ -99,7 +99,7 @@ const AppLayout = () => {
 
   const exploreUrl = location.pathname.substr(0, 9);
   const monopolyUrl = location.pathname.substr(0, 9);
-  const gameUrl = location.pathname.length < 6 ? location.pathname.substr(0, 5): location.pathname.substr(0, 6);
+  const gameUrl = location.pathname.substr(0, 5);
 
   const [myPageRef, setMyPageRef] = useState<string>('');
 
