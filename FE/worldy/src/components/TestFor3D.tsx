@@ -134,7 +134,7 @@ function TestFor3D() {
       //   await rotateCamera(presentDir);
       //   prevDir = presentDir;
       // }
-      console.log('presentDir', presentDir);
+      //console.log('presentDir', presentDir);
       await movePlayerDir(presentDir);
     }
     rotateCamera(presentDir);
@@ -142,8 +142,8 @@ function TestFor3D() {
   };
 
   useEffect(() => {
-    console.log('count', count);
-    console.log('playerMovedCount', playerMovedCount);
+    //console.log('count', count);
+    //console.log('playerMovedCount', playerMovedCount);
   }, [playerMovedCount]);
 
   const bottomLine: JSX.Element[] = [];

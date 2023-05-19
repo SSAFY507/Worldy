@@ -15,8 +15,8 @@ import { useEffect, useRef, useState } from 'react';
 import { BiImage } from 'react-icons/bi';
 import { IoIosPhotos } from 'react-icons/io';
 import { JsxElement } from 'typescript';
-import QuizBlueText from '../assets/images/QuizBlueText.png';
-import ResultBlueText from '../assets/images/ResultBlueText.png';
+import QuizBlueText from '../assets/images/QuizBlue.png';
+import ResultBlueText from '../assets/images/ResultBlue.png';
 import tempImage1 from '../assets/images/thumb2.png';
 import tempImage2 from '../assets/images/Carousel5.png';
 import tempImage3 from '../assets/images/JoshCurious.png';
@@ -48,6 +48,10 @@ export default function QuizModal({
   input: ScrappedQuizType;
   closeModal: () => void;
 }) {
+  //console.log(input);
+
+  const userName: string | null = sessionStorage.getItem('nickname');
+
   const size: number = 200;
 
   const textSize: number = 200 / (input.content.length / 20);
@@ -60,7 +64,7 @@ export default function QuizModal({
   const handleComposition = (
     event: React.CompositionEvent<HTMLInputElement>
   ) => {
-    console.log('composition');
+    //console.log('composition');
     if (event.type === 'compositionend') {
       const target = event.target as HTMLInputElement;
       const index = inputRefs.current.indexOf(target);
@@ -79,7 +83,7 @@ export default function QuizModal({
   const handleInput = (event: React.FormEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
     const index = inputRefs.current.indexOf(target);
-    console.log('input');
+    //console.log('input');
     if (
       index !== -1 &&
       index < blankBoxSize - 1 &&
@@ -106,7 +110,7 @@ export default function QuizModal({
     const tempStringList: string[] = [...blankInputAnswer];
     tempStringList[i] = e.target.value;
     setBlankInputAnswer(tempStringList);
-    console.log('tempStringList', tempStringList);
+    //console.log('tempStringList', tempStringList);
     if (tempStringList.length === input.answer.length) {
       var tempString = '';
       for (let i = 0; i < tempStringList.length; i++) {
@@ -188,7 +192,7 @@ export default function QuizModal({
                 className={`${
                   submitAnswer === 'O' ? 'clickedOXBlue' : 'bg-[#F2F2F2]'
                 } beforeOXBlue w-[200px] h-[120px] mr-[20px] rounded-md shadow-md flex flex-row justify-center items-center`}
-                onClick={() => handleSubmitAnswer('O')}
+                onClick={() => handleSubmitAnswer('o')}
               >
                 <span className='text-[24px] font-PtdMedium'>O</span>
               </button>
@@ -196,7 +200,7 @@ export default function QuizModal({
                 className={`${
                   submitAnswer === 'X' ? 'clickedOXRed' : 'bg-[#F2F2F2]'
                 } beforeOXRed w-[200px] h-[120px] ml-[20px]  rounded-md shadow-md flex flex-row justify-center items-center`}
-                onClick={() => handleSubmitAnswer('X')}
+                onClick={() => handleSubmitAnswer('x')}
               >
                 <span className='text-[24px] font-PtdMedium'>X</span>
               </button>
@@ -253,8 +257,10 @@ export default function QuizModal({
         <div key={key}>
           <button
             className={`${
-              submitAnswer === prevInput.multiAnswerText ? 'clickedmulti' : ''
-            } beforemulti w-[200px] h-[80px] mx-[10px] rounded-md shadow-md bg-[#F2F2F2] flex flex-row justify-center items-center`}
+              submitAnswer === (key + 1).toString()
+                ? 'clickedmulti'
+                : 'bg-[#F2F2F2]'
+            } beforemulti w-[200px] h-[80px] font-PtdRegular mx-[10px] rounded-md shadow-md  flex flex-row justify-center items-center`}
             onClick={() => handleSubmitMultiAnswer(key + 1)}
           >
             <span
@@ -318,7 +324,11 @@ export default function QuizModal({
             </div>
           )}
         </div>
-        <div className='w-[500px] h-[150px]  outline-green-300 flex flex-row justify-between items-center'>
+        <div
+          className={`w-[500px] h-[150px]  outline-green-300 flex flex-row ${
+            input.answer.length === 1 ? 'justify-center' : 'justify-between'
+          } items-center`}
+        >
           {blankBoxComponent()}
         </div>
       </div>
@@ -334,8 +344,8 @@ export default function QuizModal({
   const [hintState, setHintState] = useState<boolean>(false);
   const handleHint = () => {
     setHintState(!hintState);
-    console.log('잉');
-    console.log('input.hint', input.hint);
+    //console.log('잉');
+    //console.log('input.hint', input.hint);
   };
 
   const quizHintContent = (): JSX.Element => {
@@ -481,7 +491,7 @@ export default function QuizModal({
   useEffect(() => {
     setTimeout(() => {
       setShowBack(true);
-      console.log('보기');
+      //console.log('보기');
     }, 1700);
   }, [flipped]);
 
@@ -579,7 +589,7 @@ export default function QuizModal({
           !showBack ? 'opacity-0' : 'opacity-100'
         }`}
       >
-        <div className='h-[70px] w-full flex flex-col-reverse justify-start items-center rounded-t-xl bg-[#61C7BB]  outline-red-500'>
+        <div className='h-[70px] w-full flex flex-col-reverse justify-start items-center rounded-t-xl bg-[#61C7BB]'>
           <div className='w-full h-[55px] bg-[#eaeaea] rounded-t-xl  outline-red-300 flex flex-col jutsify-stretch items-center'>
             <div className='w-full h-[20px] outline-yellow-500 flex flex-row justify-center items-end'>
               <img
@@ -600,7 +610,7 @@ export default function QuizModal({
             </div>
           </div>
         </div>
-        <div className='w-full h-[200px] bg-[#eaeaea]  outline-red-500 flex flex-col justify-start items-start pt-[5px] px-[50px]'>
+        <div className='w-full h-[200px] bg-[#eaeaea] flex flex-col justify-start items-start pt-[5px] px-[50px]'>
           <span
             className={`w-full flex flex-row justify-start items-center text-[18px] font-PtdBold mb-[10px] ${
               correctState ? 'text-[#009B3E]' : 'text-[#E81C1C]'
@@ -647,7 +657,9 @@ export default function QuizModal({
             </div>
           </div>
           <div className='w-full flex-1 outline-black flex flex-row justify-start items-center font-PtdRegular text-[#ACACAC]'>
-            <span>'닉네임 값 없다야'님이 입력한 답은 "{submitAnswer}"</span>
+            <span>
+              "{userName}"님이 입력한 답은 "{submitAnswer}"
+            </span>
           </div>
         </div>
         <div className='relative bg-[#F5F5F5] w-full h-[300px]  outline-blue-500'>

@@ -11,6 +11,7 @@ interface LoginState {
   tier: string;
   level: number;
   exp: number;
+  sally: string;
 }
 
 interface loginPayload {
@@ -27,6 +28,7 @@ const initialState: LoginState = {
   tier: '',
   level: 1,
   exp: 1,
+  sally: 'yet',
 };
 
 type rankInfo = {
@@ -47,10 +49,10 @@ export const loginSlice = createSlice({
       sessionStorage.setItem('isLoggedIn', 'true');
       // sessionStorage.setItem('nickname', action.payload.nickname);
       sessionStorage.setItem('profileImg', action.payload.profileImg);
-      console.log('슬라이스에서의 로그인 로그인 로그인');
+      //console.log('슬라이스에서의 로그인 로그인 로그인');
     },
     logout: (state) => {
-      console.log('로그아웃로그아웃로그아웃로그아웃');
+      //console.log('로그아웃로그아웃로그아웃로그아웃');
       state.state = false;
       sessionStorage.removeItem('isLoggedIn');
       sessionStorage.removeItem('nickname');
@@ -64,7 +66,7 @@ export const loginSlice = createSlice({
     addToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
       sessionStorage.setItem('token', action.payload);
-      console.log('토큰 추가', action.payload);
+      //console.log('토큰 추가', action.payload);
     },
     addRankInfo: (state, action: PayloadAction<rankInfo>) => {
       state.rank = action.payload.rank;
@@ -72,11 +74,21 @@ export const loginSlice = createSlice({
       state.level = action.payload.level;
       state.exp = action.payload.exp;
     },
+    addSallyMet: (state, action: PayloadAction<string>) => {
+      state.sally = action.payload;
+      sessionStorage.setItem('sally', action.payload);
+    },
   },
 });
 
-export const { login, logout, addNickname, addToken, addRankInfo } =
-  loginSlice.actions;
+export const {
+  login,
+  logout,
+  addNickname,
+  addToken,
+  addRankInfo,
+  addSallyMet,
+} = loginSlice.actions;
 export const wholeState = (state: RootState) => state.login;
 export const loginState = (state: RootState) => state.login.state;
 export const loginNickName = (state: RootState) => state.login.nickname;
@@ -86,4 +98,5 @@ export const myRank = (state: RootState) => state.login.rank;
 export const myTier = (state: RootState) => state.login.tier;
 export const myLevel = (state: RootState) => state.login.level;
 export const myExp = (state: RootState) => state.login.exp;
+export const metSally = (state: RootState) => state.login.sally;
 export default loginSlice.reducer;
