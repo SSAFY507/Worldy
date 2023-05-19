@@ -259,7 +259,7 @@ export default function Main() {
               commentary: quizData.commentary,
             }));
           }
-        }  else {
+        } else {
           setQuiz((prevState: any) => ({
             ...prevState,
             quizId: quizData.quizId,
@@ -963,7 +963,7 @@ export default function Main() {
       },
       {
         location: 5,
-        name: "홍콩",
+        name: "독도",
         price: {
           land: 100,
           villa: 0,
@@ -972,7 +972,7 @@ export default function Main() {
         },
         type: "city",
         landmark: "랜드마크없음",
-        contents: "자유무역도시 홍콩",
+        contents: "독도는 우리 땅 +100만원",
         continent: "아시아",
         owner: 0,
         option: 0,
@@ -1198,7 +1198,7 @@ export default function Main() {
         },
         type: "city",
         landmark: "크레타섬",
-        contents: "그리스 로마 문화의 시작 지중해",
+        contents: "그리스 로마 문화의 시작 지중해 +50만원",
         continent: "유럽",
         owner: 0,
         option: 0,
@@ -1424,7 +1424,7 @@ export default function Main() {
         },
         type: "city",
         landmark: "오아시스",
-        contents: "뜨거운 모래의 사막, 사하라",
+        contents: "뜨거운 모래의 사막, 사하라 -50만원",
         continent: "아프리카&오세아니아",
         owner: 0,
         option: 0,
@@ -1650,7 +1650,7 @@ export default function Main() {
         },
         type: "city",
         landmark: "파나마운하",
-        contents: "아메리카 대륙의 좁은 해협, 파나마",
+        contents: "아메리카 대륙의 좁은 해협, 파나마 -100만원",
         continent: "아메리카",
         owner: 0,
         option: 0,
@@ -1851,10 +1851,11 @@ export default function Main() {
 
   return (
     <>
-      <div className="w-screen h-screen bg-[#FFFDF4]">
+       <div className="w-full h-full bg-[#FFFDF4] ">
+
         {gameStart && mode && (
           <div
-            className="w-[100px] h-[40px] rounded-[4px] ml-[40px] mt-[20px] flex justify-center items-center rounded-full  text-[18px] hover:text-white hover:cursor-pointer hover:bg-[#8DC2E8] outline outline-[4px] hover:outline-[0px] bg-white text-[#8DC2E8] shadow-[0_3px_10px_rgb(0,0,0,0.2)]"
+            className="w-[70px] h-[25px] rounded-[4px] mt-[8px] ml-[5px] mb-[8px] flex justify-center items-center rounded-full  text-[15px] hover:text-white hover:cursor-pointer hover:bg-[#8DC2E8] outline outline-[4px] hover:outline-[0px] bg-white text-[#8DC2E8] shadow-[0_3px_10px_rgb(0,0,0,0.2)]"
             onClick={() => {
               setMode(!mode);
             }}
@@ -1865,7 +1866,7 @@ export default function Main() {
 
         {gameStart && !mode && (
             <div
-              className="w-[100px] h-[40px] rounded-[4px] ml-[40px] mt-[20px] flex justify-center items-center rounded-full  text-[18px] hover:text-white hover:cursor-pointer hover:bg-[#FF7777] outline outline-[4px] hover:outline-[0px] bg-white text-[#FF7777] shadow-[0_3px_10px_rgb(0,0,0,0.2)]"
+              className="w-[70px] h-[25px] rounded-[4px] mt-[8px] ml-[5px] mb-[8px] flex justify-center items-center rounded-full  text-[15px] hover:text-white hover:cursor-pointer hover:bg-[#FF7777] outline outline-[4px] hover:outline-[0px] bg-white text-[#FF7777] shadow-[0_3px_10px_rgb(0,0,0,0.2)]"
               onClick={() => {
                 setMode(!mode);
               }}
