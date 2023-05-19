@@ -96,7 +96,7 @@
   background-color: rgba(244, 244, 244, 1);
   margin-bottom: 12px;
   font-size: 15px;
-  border-radius: 10px 10px 10px 10px;
+  /* border-radius: 10px 10px 10px 10px; */
   width: 450px;
   height: 50px;
   margin-top: 30px;

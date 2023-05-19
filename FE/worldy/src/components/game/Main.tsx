@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Route, useParams } from "react-router";
-import Room from "./Room";
+
 import CreateGame from "../create/CreateGame";
+import Enter from "./Enter";
 import Game2D from "./Game2D";
 import Game3D from "./Game3D";
+import Room from "./Room";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
+import { log } from "console";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router";
-import { log } from "console";
-import Enter from "./Enter";
 
 // 소켓 연결
 let socket;
