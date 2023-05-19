@@ -229,11 +229,10 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
       //   await rotateCamera(presentDir);
       //   prevDir = presentDir;
       // }
-      console.log('presentDir', presentDir);
       await movePlayerDir(presentDir);
       // console.log('playerLoc', player0Loc.current);
     }
-    // rotateCamera(presentDir);
+    rotateCamera(presentDir);
     setPlayerMovedCount((playerMovedCount + count) % 40);
     // getArch((playerMovedCount + count) % 40);
   };
@@ -300,29 +299,29 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
     });
   };
 
-  // /** 카메라 함수 */
-  // const rotateCamera = (dir: number): Promise<void> => {
-  //   return new Promise((resolve) => {
-  //     const newX = 170 * (dir % 2) * Math.pow(-1, dir % 3);
-  //     const newZ = 170 * ((dir + 1) % 2) * Math.pow(-1, Math.floor(dir / 2));
-  //     gsap.to(cameraRef.current!.position, {
-  //       duration: 1,
-  //       x: newX,
-  //       y: 50,
-  //       z: newZ,
-  //       onUpdate: () => {
-  //         cameraRef.current!.position.set(
-  //           cameraRef.current!.position.x,
-  //           50,
-  //           cameraRef.current!.position.z
-  //         );
-  //       },
-  //       onComplete: () => {
-  //         resolve();
-  //       },
-  //     });
-  //   });
-  // };
+  /** 카메라 함수 */
+  const rotateCamera = (dir: number): Promise<void> => {
+    return new Promise((resolve) => {
+      const newZ = 0 * (dir % 2) * Math.pow(-1, dir % 3);
+      const newX = 8 * ((dir + 1) % 2) * Math.pow(-1, Math.floor(dir / 2));
+      gsap.to(cameraRef.current!.position, {
+        duration: 1,
+        x: newX,
+        y: 8,
+        z: newZ,
+        onUpdate: () => {
+          cameraRef.current!.position.set(
+            cameraRef.current!.position.x,
+            8,
+            cameraRef.current!.position.z
+          );
+        },
+        onComplete: () => {
+          resolve();
+        },
+      });
+    });
+  };
 
   /** 배경함수 */
   const SetBackground = () => {
@@ -337,7 +336,6 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
       // SetupModel();
     });
   };
-
 
   /** 카메라 커스텀 함수 */
   const SetupCamera = () => {
@@ -486,7 +484,6 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
 
   return (
     <div className='absolute flex flex-col w-full h-full justify-start items-center'>
- 
       <div
       className=''
         style={{ backgroundColor: 'grey', width: '100%', height: 1000 }}
