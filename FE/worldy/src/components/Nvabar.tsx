@@ -1,23 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import LogoWhite from '../assets/images/Logo-white.png';
-import WorldySoftLogo from '../assets/images/WorldySoftLogo.png';
-import { ImSearch } from 'react-icons/im';
-import { AiOutlineGlobal } from 'react-icons/ai';
-import LoginModal from './LoginModal';
-import ReactDOM from 'react-dom';
-import BUTTON_RED from './Button_Red';
 import '../styles/NavBarAnimation.css';
-import SallyPath from '../assets/images/SallyProfilePic.png';
 
+import React, { useEffect, useState } from 'react';
 import {
   loginNickName,
   loginProfileImg,
   loginState,
 } from '../_store/slices/loginSlice';
+
+import { AiOutlineGlobal } from 'react-icons/ai';
+import BUTTON_RED from './Button_Red';
+import CustomAxios from '../API/CustomAxios';
+import { ImSearch } from 'react-icons/im';
+import LoginModal from './LoginModal';
+import LogoWhite from '../assets/images/Logo-white.png';
+import ReactDOM from 'react-dom';
+import SallyPath from '../assets/images/SallyProfilePic.png';
+import Swal from 'sweetalert2';
+import WorldySoftLogo from '../assets/images/WorldySoftLogo.png';
 import { logout } from '../_store/slices/loginSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
-import CustomAxios from '../API/CustomAxios';
 
 type NavListType = {
   name: string;
@@ -255,7 +257,21 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
                   width={80}
                   height={35}
                   rounded={true}
-                  onClick={handleLoginModalClick}
+                  // onClick={handleLoginModalClick}
+                  onClick={
+                    Swal.fire({
+                      title: '😉맵 확장 중입니다.😉',
+                      icon: 'warning',
+                      iconColor: '#FA5B54',
+                      // showCancelButton: true,
+                      confirmButtonColor: '#FA5B54',
+                      // cancelButtonColor: '#999999',
+                      confirmButtonText: 'YES',
+                      // cancelButtonText: 'NO',
+                    }).then((result: any) => {
+                      navigate('/')
+                    })
+                  }
                   text='로그인'
                   fontFamily={'font-PtdRegular'}
                 />
