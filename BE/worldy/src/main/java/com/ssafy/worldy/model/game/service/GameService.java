@@ -34,17 +34,17 @@ public class GameService {
     @Transactional
     public void gameResult(GameResultDto gameResultDto) {
 
-        // 1등 나라 정보 갱신
-        for (Long nationId : gameResultDto.getFirst().getNationList()) saveResult(nationId, 1);
-
-        // 2등 나라 정보 갱신
-        for (Long nationId : gameResultDto.getSecond().getNationList()) saveResult(nationId, 2);
-
-        // 3등 나라 정보 갱신
-        for (Long nationId : gameResultDto.getThird().getNationList()) saveResult(nationId, 3);
-
-        // 4등 나라 정보 갱신
-        for (Long nationId : gameResultDto.getFourth().getNationList()) saveResult(nationId, 4);
+//        // 1등 나라 정보 갱신
+//        for (Long nationId : gameResultDto.getFirst().getNationList()) saveResult(nationId, 1);
+//
+//        // 2등 나라 정보 갱신
+//        for (Long nationId : gameResultDto.getSecond().getNationList()) saveResult(nationId, 2);
+//
+//        // 3등 나라 정보 갱신
+//        for (Long nationId : gameResultDto.getThird().getNationList()) saveResult(nationId, 3);
+//
+//        // 4등 나라 정보 갱신
+//        for (Long nationId : gameResultDto.getFourth().getNationList()) saveResult(nationId, 4);
 
         Double[] beforeMMR = new Double[4];
 
