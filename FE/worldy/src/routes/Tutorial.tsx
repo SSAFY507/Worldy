@@ -74,6 +74,40 @@ export default function Tutorial() {
   const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
   const [loadedAll, setLoadedAll] = useState<boolean>(false);
 
+  const [myRankInfo, setAxiosMyRankInfo] = useState<MyRankInfo>();
+
+  useEffect(() => {
+    dispatch(
+      addRankInfo({
+        rank: myRankInfo?.rank || 1,
+        tier: myRankInfo?.tier || 'Bronze',
+        level: myRankInfo?.level || 1,
+        exp: myRankInfo?.exp || 0,
+      })
+    );
+  }, [myRankInfo]);
+  useEffect(() => {
+    getRankInfoList();
+  }, []);
+
+  const getRankInfoList = async () => {
+    // console.log('Session에서의 가져오는 토큰', getLoginToken);
+    try {
+      const response = await CustomAxios({
+        APIName: 'getRankInfoList',
+        APIType: 'get',
+        UrlQuery: DOMAIN + `/game/ranking`,
+        Token: getLoginToken,
+      });
+      //console.log('닉네임 중복 체크 성공');
+      // console.log('랭크 리스트 받은 거: ', response);
+      setAxiosMyRankInfo(response.myRank);
+    } catch (error) {
+      // console.error('Error fetching data:', error);
+    }
+    //console.log('token이 무엇이냐 ', token);
+  };
+
   useEffect(() => {
     if (isLoaded) {
       setTimeout(() => {
@@ -161,7 +195,7 @@ export default function Tutorial() {
       //console.log('닉네임 중복 체크 성공');
       setCheckNicknameResult(response);
     } catch (error) {
-      console.error('닉네임 중복 확인 엑시오스 에러:', error);
+      // console.error('Error fetching data:', error);
     }
     //console.log('token이 무엇이냐 ', token);
   };
@@ -183,50 +217,18 @@ export default function Tutorial() {
   //   }
   // };
 
-  // const submitNickNameAxios = async () => {
-  //   try {
-  //     const response = await CustomAxios({
-  //       APIName: 'submitNickName',
-  //       APIType: 'put',
-  //       UrlQuery: DOMAIN + `/user/nickname/${nickName}`,
-  //       Token: getLoginToken,
-  //     });
-
-  //     setSubmitNicknameResult(response);
-  //   } catch (error) {
-  //     // console.error('Error fetching data:', error);
-  //   }
-  // };
-
   const submitNickNameAxios = async () => {
-    // try {
-    //   const response = await CustomAxios({
-    //     APIName: 'submitNickName',
-    //     APIType: 'put',
-    //     UrlQuery: DOMAIN + `/user/nickname/${nickName}`,
-    //     Token: getLoginToken,
-    //   });
-
-    //   setSubmitNicknameResult(response);
-    // } catch (error) {
-    //   // console.error('Error fetching data:', error);
-    // }
-        
     try {
-      const response = await axios.put(
-        DOMAIN + `/user/nickname/${nickName}`,
-        // 요청 바디 데이터를 객체 형식으로 전달합니다.
-        { },
-        {
-          headers: {
-            // 요청 헤더 정보를 설정합니다.
-            Authorization: `Bearer ${getLoginToken}`,
-          },
-        }
-      );
+      const response = await CustomAxios({
+        APIName: 'submitNickName',
+        APIType: 'put',
+        UrlQuery: DOMAIN + `/user/nickname/${nickName}`,
+        Token: getLoginToken,
+      });
+
+      setSubmitNicknameResult(response);
     } catch (error) {
-      console.error('닉네임 제출 액시오스 에러:', error);
-      // console.error(`Error: ${error}`);
+      // console.error('Error fetching data:', error);
     }
   };
 
