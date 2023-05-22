@@ -112,25 +112,25 @@ const AppLayout = () => {
   const checkLoginState = sessionStorage.getItem('isLoggedIn');
   const checkNickname = sessionStorage.getItem('nickname') || '';
 
-  useEffect(() => {
-    if (location.pathname !== '/user/kakao/callback')
-      if (checkLoginState && (checkNickname === '' || checkNickname === null)) {
-        //로그인돼있는데 닉네임 없으면 tutorial
-        navigate('/tutorial');
-        //console.log('닉네임 설정해주세요 (tutorial로 이동)');
-      } else if (!checkLoginState) {
-        const gameId = sessionStorage.getItem('gameId');
+  // useEffect(() => {
+  //   if (location.pathname !== '/user/kakao/callback')
+  //     if (checkLoginState && (checkNickname === '' || checkNickname === null)) {
+  //       //로그인돼있는데 닉네임 없으면 tutorial
+  //       navigate('/tutorial');
+  //       //console.log('닉네임 설정해주세요 (tutorial로 이동)');
+  //     } else if (!checkLoginState) {
+  //       const gameId = sessionStorage.getItem('gameId');
 
-        // 헤더 확인해서 roomId 있으면
-        if (gameId) {
-          navigate(`/game/${gameId}`); // 게임 uri로 입장 후 로그인 안돼있으면
-        } else {
-          navigate('/'); //로그인 안돼있으면 홈으로
-        }
+  //       // 헤더 확인해서 roomId 있으면
+  //       if (gameId) {
+  //         navigate(`/game/${gameId}`); // 게임 uri로 입장 후 로그인 안돼있으면
+  //       } else {
+  //         navigate('/'); //로그인 안돼있으면 홈으로
+  //       }
 
-        //console.log('로그인 해주세요(Home으로 이동)');
-      }
-  }, []);
+  //       //console.log('로그인 해주세요(Home으로 이동)');
+  //     }
+  // }, []);
 
   return (
     <div
