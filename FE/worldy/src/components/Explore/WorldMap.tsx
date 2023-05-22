@@ -156,24 +156,38 @@ const WorldMap = () => {
           ) {
             Swal.fire({
               title: `${name}으로 이동합니다.`,
-              confirmButtonText: '확인',
-              buttonsStyling: false,
+              confirmButtonText: 'YES',
+              // buttonsStyling: false,
+              showCancelButton: true,
+              cancelButtonText: 'NO',
               customClass: {
                 confirmButton: 'swal2-confirm',
               },
-            }).then(function () {
-              navigate(`/explore/${moveCountry}`);
+            }).then(function (result: any) {
+              if (result.isConfirmed) {
+                // ws.disconnect();
+                navigate(`/explore/${moveCountry}`);
+              }else{
+                navigate('/explore');
+              }
             });
           } else {
             Swal.fire({
               title: `${name}로 이동합니다.`,
-              confirmButtonText: '확인',
-              buttonsStyling: false,
+              confirmButtonText: 'YES',
+              // buttonsStyling: false,
+              showCancelButton: true,
+              cancelButtonText: 'NO',
               customClass: {
                 confirmButton: 'swal2-confirm',
               },
-            }).then(function () {
-              navigate(`/explore/${moveCountry}`);
+            }).then(function (result: any) {
+              if (result.isConfirmed) {
+                // ws.disconnect();
+                navigate(`/explore/${moveCountry}`);
+              }else{
+                navigate('/explore');
+              }
             });
           }
         } else {

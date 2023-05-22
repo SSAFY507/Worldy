@@ -164,14 +164,14 @@ const WorldMapNavbarComponent = ({
                 GetSelectAssetName('');
                 selectAsset = '';
                 // alert("나라로 이동합니다.");
-                Swal.fire({
-                  title: '나라로 이동합니다.',
-                  confirmButtonText: '확인',
-                  buttonsStyling: false,
-                  customClass: {
-                    confirmButton: 'swal2-confirm',
-                  },
-                });
+                // Swal.fire({
+                //   title: '나라로 이동합니다.',
+                //   confirmButtonText: '확인',
+                //   buttonsStyling: false,
+                //   customClass: {
+                //     confirmButton: 'swal2-confirm',
+                //   },
+                // });
               } else {
                 // Country Map인 경우, World Map 으로
                 // alert('대륙으로 이동합니다');
