@@ -257,21 +257,21 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
                   width={80}
                   height={35}
                   rounded={true}
-                  // onClick={handleLoginModalClick}
-                  onClick={
-                    Swal.fire({
-                      title: '😉맵 확장 중입니다.😉',
-                      icon: 'warning',
-                      iconColor: '#FA5B54',
-                      // showCancelButton: true,
-                      confirmButtonColor: '#FA5B54',
-                      // cancelButtonColor: '#999999',
-                      confirmButtonText: 'YES',
-                      // cancelButtonText: 'NO',
-                    }).then((result: any) => {
-                      navigate('/')
-                    })
-                  }
+                  onClick={handleLoginModalClick}
+                  // onClick={
+                  //   Swal.fire({
+                  //     title: '😉맵 확장 중입니다.😉',
+                  //     icon: 'warning',
+                  //     iconColor: '#FA5B54',
+                  //     // showCancelButton: true,
+                  //     confirmButtonColor: '#FA5B54',
+                  //     // cancelButtonColor: '#999999',
+                  //     confirmButtonText: 'YES',
+                  //     // cancelButtonText: 'NO',
+                  //   }).then((result: any) => {
+                  //     navigate('/')
+                  //   })
+                  // }
                   text='로그인'
                   fontFamily={'font-PtdRegular'}
                 />
