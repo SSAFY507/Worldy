@@ -38,9 +38,12 @@ public class UserService {
             throw new CustomException(CustomExceptionList.NICKNAME_ALREADY_USED);
         }
 
-        UserDto userDto = kakaoUserService.getUserDto(kakaoId);
-        userDto.setNickName(nickName);
-        userRepo.save(userDto.toEntity());
+        User user1 = userRepo.findByNickName(kakaoId).orElseThrow(()->new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
+        user1.updateNickName(nickName);
+
+//        UserDto userDto = kakaoUserService.getUserDto(kakaoId);
+//        userDto.setNickName(nickName);
+//        userRepo.save(userDto.toEntity());
 
         return "success";
     }
