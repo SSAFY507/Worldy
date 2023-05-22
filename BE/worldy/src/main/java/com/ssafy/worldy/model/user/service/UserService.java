@@ -5,12 +5,15 @@ import com.ssafy.worldy.exception.CustomExceptionList;
 import com.ssafy.worldy.model.user.dto.UserDto;
 import com.ssafy.worldy.model.user.entity.User;
 import com.ssafy.worldy.model.user.repo.UserRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class UserService {
 
     @Autowired
@@ -31,6 +34,7 @@ public class UserService {
     }
 
     // 닉네임 등록
+    @Transactional
     public String submitNickName(String nickName, String kakaoId) {
 
         Optional<User> user = userRepo.findByNickName(nickName);
@@ -38,9 +42,13 @@ public class UserService {
             throw new CustomException(CustomExceptionList.NICKNAME_ALREADY_USED);
         }
 
-        UserDto userDto = kakaoUserService.getUserDto(kakaoId);
-        userDto.setNickName(nickName);
-        userRepo.save(userDto.toEntity());
+        log.info("닉네임 저장");
+        User user1 = userRepo.findByKakaoId(kakaoId).orElseThrow(()->new CustomException(CustomExceptionList.MEMBER_NOT_FOUND));
+        user1.updateNickName(nickName);
+
+//        UserDto userDto = kakaoUserService.getUserDto(kakaoId);
+//        userDto.setNickName(nickName);
+//        userRepo.save(userDto.toEntity());
 
         return "success";
     }
