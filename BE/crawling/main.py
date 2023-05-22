@@ -20,7 +20,7 @@ nations = {"대한민국" : 9, "중국" : 7, "일본" : 8, "인도" : 4, "영국
 #----------------------- news crawling -----------------------
 
 
-@sched.scheduled_job('cron', hour='12', minute='0', id='news_crawling')
+@sched.scheduled_job('cron', hour='16', minute='0', id='news_crawling')
 def crawling_naver():
     for nation in nations.keys():
         news_naver.find_news(nation)
