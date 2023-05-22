@@ -8,6 +8,7 @@ import com.ssafy.worldy.model.user.repo.UserRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -33,6 +34,7 @@ public class UserService {
     }
 
     // 닉네임 등록
+    @Transactional
     public String submitNickName(String nickName, String kakaoId) {
 
         Optional<User> user = userRepo.findByNickName(nickName);
