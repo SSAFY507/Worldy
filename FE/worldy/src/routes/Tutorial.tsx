@@ -217,18 +217,49 @@ export default function Tutorial() {
   //   }
   // };
 
-  const submitNickNameAxios = async () => {
-    try {
-      const response = await CustomAxios({
-        APIName: 'submitNickName',
-        APIType: 'put',
-        UrlQuery: DOMAIN + `/user/nickname/${nickName}`,
-        Token: getLoginToken,
-      });
+  // const submitNickNameAxios = async () => {
+  //   try {
+  //     const response = await CustomAxios({
+  //       APIName: 'submitNickName',
+  //       APIType: 'put',
+  //       UrlQuery: DOMAIN + `/user/nickname/${nickName}`,
+  //       Token: getLoginToken,
+  //     });
 
-      setSubmitNicknameResult(response);
+  //     setSubmitNicknameResult(response);
+  //   } catch (error) {
+  //     // console.error('Error fetching data:', error);
+  //   }
+  // };
+
+  const submitNickNameAxios = async () => {
+    // try {
+    //   const response = await CustomAxios({
+    //     APIName: 'submitNickName',
+    //     APIType: 'put',
+    //     UrlQuery: DOMAIN + `/user/nickname/${nickName}`,
+    //     Token: getLoginToken,
+    //   });
+
+    //   setSubmitNicknameResult(response);
+    // } catch (error) {
+    //   // console.error('Error fetching data:', error);
+    // }
+        
+    try {
+      const response = await axios.post(
+        DOMAIN + `/user/nickname/${nickName}`,
+        // 요청 바디 데이터를 객체 형식으로 전달합니다.
+        { },
+        {
+          headers: {
+            // 요청 헤더 정보를 설정합니다.
+            Authorization: `Bearer ${getLoginToken}`,
+          },
+        }
+      );
     } catch (error) {
-      // console.error('Error fetching data:', error);
+      // console.error(`Error: ${error}`);
     }
   };
 
