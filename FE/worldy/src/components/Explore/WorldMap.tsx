@@ -157,17 +157,18 @@ const WorldMap = () => {
             Swal.fire({
               title: `${name}으로 이동합니다.`,
               confirmButtonText: 'YES',
-              // buttonsStyling: false,
+              buttonsStyling: false,
               showCancelButton: true,
               cancelButtonText: 'NO',
               customClass: {
                 confirmButton: 'swal2-confirm',
+                cancelButton: 'swal2-cancel',
               },
             }).then(function (result: any) {
               if (result.isConfirmed) {
                 // ws.disconnect();
                 navigate(`/explore/${moveCountry}`);
-              }else{
+              } else {
                 navigate('/explore');
               }
             });
@@ -175,17 +176,18 @@ const WorldMap = () => {
             Swal.fire({
               title: `${name}로 이동합니다.`,
               confirmButtonText: 'YES',
-              // buttonsStyling: false,
+              buttonsStyling: false,
               showCancelButton: true,
               cancelButtonText: 'NO',
               customClass: {
                 confirmButton: 'swal2-confirm',
+                cancelButton: 'swal2-cancel',
               },
             }).then(function (result: any) {
               if (result.isConfirmed) {
                 // ws.disconnect();
                 navigate(`/explore/${moveCountry}`);
-              }else{
+              } else {
                 navigate('/explore');
               }
             });
