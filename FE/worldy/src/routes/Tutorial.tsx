@@ -161,7 +161,7 @@ export default function Tutorial() {
       //console.log('닉네임 중복 체크 성공');
       setCheckNicknameResult(response);
     } catch (error) {
-      // console.error('Error fetching data:', error);
+      console.error('닉네임 중복 확인 엑시오스 에러:', error);
     }
     //console.log('token이 무엇이냐 ', token);
   };
@@ -194,7 +194,7 @@ export default function Tutorial() {
 
       setSubmitNicknameResult(response);
     } catch (error) {
-      // console.error('Error fetching data:', error);
+      console.error('닉네임 제출 액시오스 에러:', error);
     }
   };
 
