@@ -1947,9 +1947,9 @@ export default function Game3D(props: any) {
 
   // const [ playerData, setPlayerData ] = useState<Object>(metaData)
   const [diceData, setDiceData] = useState<number>(0)
-
-  const getPlayerTurn = (turn:any) => {
-    playerTurn(turn)
+  const [checkModal, setCheckModal] = useState<boolean>(false)
+  const getPlayerTurn = (check:boolean) => {
+    setCheckModal(check)
   }
   console.log(metaData)
 // export default function Game3D(props: any) {
@@ -1969,13 +1969,19 @@ export default function Game3D(props: any) {
       : null}
 
       {/* 퀴즈 모달 */}
-      {quizModalState && (
+      {quizModalState && checkModal && (
         <div className="shadow-md shadow-black w-fit h-fit">
-          <GameQuizModal input={quiz} closeModal={() => closeModal(false)} />
+          <GameQuizModal
+            input={quiz} 
+            closeModal={() => {
+              closeModal(false)
+              getPlayerTurn(false)
+            }} 
+          />
         </div>
       )}
       
-      <div className={`w-full h-full items-center ${quizModalState ? "blur-sm " : "" }`}>
+      <div className={`w-full h-full items-center ${quizModalState && checkModal ? "blur-sm " : "" }`}>
         <div className="w-full h-full flex justify-between absolute ml-[-40px]">
           {/* 왼쪽영역 */}
           <div className="w-[20%] h-[1000px] flex flex-col justify-start items-end z-50">
@@ -2919,14 +2925,47 @@ export default function Game3D(props: any) {
                     </div>
               </div>
             </div>
-
+        {/* 주사위 영역 */}
+          {/* <Dice></Dice>
+              <div
+                className={` z-100 w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px] ${myTurn && activeDice
+                  ? "gameglowing bg-red-500 hover:cursor-pointer hover:bg-red-600"
+                  : "bg-gray-300 pointer-events-none"
+                  }`}
+                onClick={() => {
+                  playerTurn(metaData.turn);
+                }}
+              >
+                주사위 던지기
+              </div>
+              <div
+                className=" z-100 bg-white w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-gray-300 text-[20px] absolute top-[1360px]"
+                onClick={() => {
+                  setMetaData((prevState: any) => ({
+                    ...prevState,
+                    turnOver: true,
+                  }));
+                  setMode(0);
+                  calRanking();
+                  sendData();
+                }}
+              >
+                턴 종료
+              </div>
+              <div
+                className=" z-100 bg-white w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-gray-300 text-[20px] absolute top-[1290px]"
+                onClick={() => {
+                  playerTurn(metaData.turn);
+                }}
+              >
+                다른 사람 주사위
+              </div> */}
           </div>
-          
-        
+                  
           {/* 오른쪽 영역 */}
           <div className={`w-[20%] h-[1000px] flex flex-col justify-start items-start rounded-[4px] z-50`}>
            <div
-              className="w-[387px] h-[60px] rounded-[10px] flex justify-center items-center mb-[20px] text-[#646161] z-[80000] mt-[10px] hover:bg-[#FF4D45] hover:text-white bg-gray-100/70 text-[20px]"
+              className="w-[387px] h-[60px] rounded-[10px] flex justify-center items-center mb-[20px] text-[#646161] z-[80000] mt-[10px] hover:bg-[#FF4D45] hover:text-white bg-gray-100/70 text-[20px] cursor-pointer"
               
               onClick={() => {
                 Swal.fire({
@@ -3072,7 +3111,7 @@ export default function Game3D(props: any) {
           </div>
 
         </div>
-        <Game3DItem metaData={metaData} player={player} worldMap={worldMap} diceData={diceData} getPlayerTurn={getPlayerTurn} />
+        <Game3DItem metaData={metaData} player={player} worldMap={worldMap} diceData={diceData} getPlayerTurn={getPlayerTurn} myIndex={me.playerNum}/>
 
       </div>
     </>
