@@ -152,10 +152,6 @@ const Game3DItem = ({diceData, metaData, player, worldMap, myIndex, getPlayerTur
   // }
   // new THREE.Vector3(mapAxis[player.p1.game.location].axis[0], mapAxis[player.p1.game.location].axis[1], mapAxis[player.p1.game.location].axis[2] )
   useEffect(() => {
-    console.log(playerLoc.current)
-    console.log(player1Loc.current)
-    console.log(player2Loc.current)
-    console.log(player3Loc.current)
     if (diceData) {
       const isArch = [...player.p1.game.own, ...player.p2.game.own, ...player.p3.game.own, ...player.p4.game.own]
       const isArchSet = new Set()
@@ -266,7 +262,7 @@ const Game3DItem = ({diceData, metaData, player, worldMap, myIndex, getPlayerTur
     }
     // rotateCamera(presentDir);
     setPlayerMovedCount((playerMovedCount + count) % 40);
-    // getArch((playerMovedCount + count) % 40);
+    getPlayerTurn(true)
   };
 
   /** 플레이어 움직임 함수 */
@@ -436,21 +432,11 @@ const Game3DItem = ({diceData, metaData, player, worldMap, myIndex, getPlayerTur
       scene.current?.add(obj3d)
     })
 
-    // // 플레이어
-    // const items = [
-    //   {url: pawn_0, location: player.p1.game.location},
-    //   {url: pawn_1, location: player.p2.game.location},
-    //   {url: pawn_2, location: player.p3.game.location},
-    //   {url: pawn_3, location: player.p4.game.location},
-    // ]
-
     console.log(myIndex)
     items.forEach((item, idx) => {
       gltfLoader.load(item.url, (glb) =>{
         const obj3d = glb.scene;
-        // obj3d.position.set(0, 0, 0);
         obj3d.scale.set(1, 1, 1);
-        // console.log(obj3d.position)
         obj3d.position.set(mapAxis[item.location].axis[0], obj3d.position.y-0.1, -mapAxis[item.location].axis[1])
         if ( idx === (myIndex-1)) {
           playerLoc.current = obj3d.position
@@ -514,9 +500,6 @@ const Game3DItem = ({diceData, metaData, player, worldMap, myIndex, getPlayerTur
       SetupModel();
       SetupControls();
       SetBackground();
-      // scene.current.background = new THREE.Color("#0000");
-      // let light =new THREE.DirectionalLight(0xffff00, 10);
-      // scene.current.add(light)
 
       window.onresize = resize;
       resize();

@@ -1947,9 +1947,9 @@ export default function Game3D(props: any) {
 
   // const [ playerData, setPlayerData ] = useState<Object>(metaData)
   const [diceData, setDiceData] = useState<number>(0)
-
-  const getPlayerTurn = (turn:any) => {
-    playerTurn(turn)
+  const [checkModal, setCheckModal] = useState<boolean>(false)
+  const getPlayerTurn = (check:boolean) => {
+    setCheckModal(check)
   }
   console.log(metaData)
 // export default function Game3D(props: any) {
@@ -1969,13 +1969,19 @@ export default function Game3D(props: any) {
       : null}
 
       {/* 퀴즈 모달 */}
-      {quizModalState && (
+      {quizModalState && checkModal && (
         <div className="shadow-md shadow-black w-fit h-fit">
-          <GameQuizModal input={quiz} closeModal={() => closeModal(false)} />
+          <GameQuizModal
+            input={quiz} 
+            closeModal={() => {
+              closeModal(false)
+              getPlayerTurn(false)
+            }} 
+          />
         </div>
       )}
       
-      <div className={`w-full h-full items-center ${quizModalState ? "blur-sm " : "" }`}>
+      <div className={`w-full h-full items-center ${quizModalState && checkModal ? "blur-sm " : "" }`}>
         <div className="w-full h-full flex justify-between absolute ml-[-40px]">
           {/* 왼쪽영역 */}
           <div className="w-[20%] h-[1000px] flex flex-col justify-start items-end z-50">
@@ -2919,8 +2925,8 @@ export default function Game3D(props: any) {
                     </div>
               </div>
             </div>
-                      {/* 주사위 영역 */}
-          <Dice></Dice>
+        {/* 주사위 영역 */}
+          {/* <Dice></Dice>
               <div
                 className={` z-100 w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px] ${myTurn && activeDice
                   ? "gameglowing bg-red-500 hover:cursor-pointer hover:bg-red-600"
@@ -2953,7 +2959,7 @@ export default function Game3D(props: any) {
                 }}
               >
                 다른 사람 주사위
-              </div>
+              </div> */}
           </div>
                   
           {/* 오른쪽 영역 */}
