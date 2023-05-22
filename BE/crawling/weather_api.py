@@ -45,8 +45,8 @@ def crawling_weather(nation, nation_id):
     print(wt_temp)
     print("---------------------------------")
 
-    # cur.execute(INSERT_WEATHER, (wt_name, str(wt_temp), str(nation_id)))
-    cur.execute(UPDATE_WEATHER, (wt_name, str(wt_temp), str(nation_id)))
+    cur.execute(INSERT_WEATHER, (wt_name, str(wt_temp), str(nation_id)))
+    # cur.execute(UPDATE_WEATHER, (wt_name, str(wt_temp), str(nation_id)))
     conn.commit()
     conn.close()
 
