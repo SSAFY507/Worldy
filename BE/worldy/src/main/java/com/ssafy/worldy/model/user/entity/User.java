@@ -73,6 +73,12 @@ public class User {
         this.refreshToken = refreshToken;
     }
 
+    // nickname 업데이트
+    public void updateNickName(String nickName){
+        this.nickName = nickName;
+    }
+
+
     // mmr 업데이트
     public void updateMmr(int mmr) {
         if(mmr<0) this.mmr = 0;
