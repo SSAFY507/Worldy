@@ -166,13 +166,13 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
                 const name = checkArch[`${tmp}`]
                 // 해당 객체
                 const a:ArchType = worldMap[number].build
-                if (a[`${name}`]) {
-                  obj.visible = true
+                if (a[`${name}`] && obj.visible === false) {
+                  gsap.to(obj, { visible: true, duration: 0 });
+                  gsap.to(obj.position, { y: obj.position.y + 0.15 , duration: 1 });
                 }
               }
             })
           }
-          
         }
       })
     }
@@ -373,6 +373,7 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
         // name이 6글자 이하인 객체들에 대해서 '_'가 존재하는 객체 
         if (obj.name.length <7 && obj.name.includes('_')){
           obj.visible = false
+          obj.position.y = 0.7
           // 건물이 있는 나라를 찾고
           if (isArchSet.has(obj.name.slice(0, obj.name.indexOf('_')))){
             // 해당 건물의 종류를 찾아 
@@ -385,7 +386,7 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
                 // 해당 객체
                 const a:ArchType = worldMap[number].build
                 if (a[`${name}`]) {
-                  obj.visible = true
+                  obj.visible =  true
                 }
               }
             })
