@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { AiOutlineExclamationCircle } from 'react-icons/ai';
-import QuizBlueText from '../assets/images/QuizBlueText.png';
-import ResultBlueText from '../assets/images/ResultBlueText.png';
+import QuizBlueText from '../assets/images/QuizBlue.png';
+import ResultBlueText from '../assets/images/ResultBlue.png';
 import { JsxElement } from 'typescript';
 import '../styles/QuizModalStyles.css';
 
@@ -255,7 +255,7 @@ export default function GameQuizModal({
         <div key={key}>
           <button
             className={`${
-              submitAnswer === prevInput.multiAnswerText
+              submitAnswer === (key + 1).toString()
                 ? 'gameclickedmulti'
                 : 'bg-[#F2F2F2]'
             } beforemulti w-[200px] h-[80px] mx-[10px] rounded-md shadow-md  flex flex-row justify-center items-center`}
@@ -416,10 +416,11 @@ export default function GameQuizModal({
   };
 
   const [flipped, setFlipped] = useState<boolean>(false);
-  const [correctState, setCorrectState] = useState<boolean | null>(null);
+  const [correctState, setCorrectState] = useState<boolean>(false);
   const submitAndFlip = () => {
     if (submitCheck) {
       setFlipped(true);
+      console.log('입력 정답', submitAnswer);
       setCorrectState(submitAnswer === input.answer);
     } else {
       setSubmitCheck(true);
@@ -584,7 +585,7 @@ export default function GameQuizModal({
         </div>
         <div className='w-full h-[10px] bg-[#61C7BB] relative flex flex-row justify-end items-center'>
           <div
-            className='absolute top-0 left-0 h-[10px] max-w-full bg-[#E0E0E0]'
+            className='absolute top-0 left-0 h-[10px] max-w-full bg-[#E0E0E0] rounded-l-xl'
             style={{ width: `${(timecount * 100) / limitTime}%` }}
           ></div>
         </div>
@@ -648,14 +649,18 @@ export default function GameQuizModal({
             </span>
           </div>
           <div
-            className={` w-full h-[50px] mt-[10px] rounded-[10px] overflow-hidden                                            ${
-              correctState === true ? '' : correctState === false ? '' : ''
+            className={` w-full h-[50px] mt-[10px] rounded-[10px] overflow-hidden ${
+              correctState === true
+                ? 'bg-[#26aaa5]'
+                : correctState === false
+                ? 'bg-[#4f4f4f]'
+                : ''
             }`}
           >
             <div
               className={`${
                 correctState === true
-                  ? 'gamecorrectanswer'
+                  ? 'gamecorrectanswer text-[#80ffe6]'
                   : correctState === false
                   ? 'gameincorrectanswer '
                   : ''
