@@ -42,6 +42,7 @@ import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 import { useNavigate } from 'react-router';
 import { useSelector } from 'react-redux';
 import SHLoader from '../components/Loaders/SHLoader';
+import GameQuizModal from '../components/GameQuizModal';
 
 type MyPageMenuType = {
   icon: React.ReactNode;
@@ -1052,6 +1053,26 @@ export default function MyPage({
       </div>
     );
   };
+
+  // const testquiz: ScrappedQuizType = {
+  //   quizId: 1, //퀴즈 id
+  //   nationName: '대한민국', //국가명
+  //   level: 1, //퀴즈 수준
+  //   quizType: 'multi', //퀴즈 유형
+  //   category: '역사', //카테고리
+  //   image: '', //이미지
+  //   content: '헉헉헉', //문제
+  //   answer: '3', //정답
+  //   multiFirst: '헉', //1번
+  //   multiSecond: '헉헉', //2번
+  //   multiThird: '헉헉헉', //3번
+  //   multiFourth: '헉헉헉헉', //4번
+  //   hint: '학',
+  //   hintType: true, //힌트
+  //   userAnswer: null, //유저가 적은 정답(맞았으면 null)
+  //   success: true, //맞춘 문제인가
+  //   commentary: '잉',
+  // };
 
   return (
     <div
