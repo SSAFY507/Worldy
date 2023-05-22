@@ -26,12 +26,12 @@ const Explore = () => {
   const SallyToturial = (): JSX.Element => {
     return (
       <div
-        className={`absolute flex flex-col justify-end items-center w-screen h-full bg-[rgba(0,0,0,0.5)] z-50 ${
+        className={`absolute flex flex-col justify-end items-center w-screen h-full bg-[rgba(100,100,100,0.4)] z-50 ${
           doneLoader ? 'opacity-100' : 'opacity-0'
         }`}
       >
         <div className='w-screen h-[800px] relative pl-[100px] outline-white flex flex-row justify-start items-end'>
-          <div className='w-screen absolute bottom-0 left-0 h-[550px] bg-[rgba(0,0,0,0.5)] flex flex-row justify-start items-start pt-[60px] pl-[580px]'>
+          <div className='w-screen absolute bottom-0 left-0 h-[550px] bg-[rgba(0,0,0,0.8)] flex flex-row justify-start items-start pt-[60px] pl-[580px]'>
             <div className='w-full h-[250px] flex flex-row justify-start items-start z-30'>
               <div className='w-fit mr-[70px] h-[250px] flex flex-col justify-between items-start text-[rgba(220,220,220,1)] font-PtdExtraLight rounded-xl  outline-[rgba(255,255,255,0.8)] outline-[5px] '>
                 <span className='font-PtdExtraLight text-[#F9C53A] text-[20px]'>
@@ -81,7 +81,7 @@ const Explore = () => {
         </div>
       )}
       {sallyState && <SallyToturial />}
-      <div className={`${sallyState ? 'blur-sm' : ''}`}>
+      <div className={`${sallyState ? '' : ''}`}>
         <WorldMap />
       </div>
     </div>

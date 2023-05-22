@@ -177,7 +177,7 @@ const WorldMapNavbarComponent = ({
                 // alert('대륙으로 이동합니다');
                 Swal.fire({
                   title: '대륙으로 이동합니다.',
-                  confirmButtonText: '확인',
+                  confirmButtonText: 'YES',
                   buttonsStyling: false,
                   customClass: {
                     confirmButton: 'swal2-confirm',
@@ -238,12 +238,16 @@ const WorldMapNavbarComponent = ({
         {/* <div className='w-1/4'></div> */}
       </div>
       <div className='relative h-full w-[20%]  outline-white flex flex-row justify-end items-center'>
-        <img src={logoColoredBlue} alt='colored logo' className='w-[100px] cursor-pointer' 
+        <img
+          src={logoColoredBlue}
+          alt='colored logo'
+          className='w-[100px] cursor-pointer'
           onClick={() => {
             GetSelectAssetName('');
             selectAsset = '';
             navigate('/');
-          }}/>
+          }}
+        />
         {/* <div className='absolute top-[80px] -right-[30px] w-[400px] h-[20px]  bg-[#65ADFF]' /> */}
         {selectAsset ? null : (
           <div className='absolute top-[110px] -right-[20px] w-[400px] h-[280px] p-[40px] outline-white flex flex-col justify-between items-center'>

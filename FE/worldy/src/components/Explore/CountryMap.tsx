@@ -199,7 +199,7 @@ const CountryMap = ({
         // alert('대륙으로 이동합니다');
         Swal.fire({
           title: '대륙으로 이동합니다.',
-          confirmButtonText: '확인',
+          confirmButtonText: 'YES',
           buttonsStyling: false,
           customClass: {
             confirmButton: 'swal2-confirm',
@@ -251,16 +251,42 @@ const CountryMap = ({
   /** 모델 커스텀 함수 */
   const SetupModel = () => {
     const gltfLoader = new GLTFLoader();
-    const items = [{url: africa_Egypt, name: 'africa_Egypt', angle: [0, 265, 0], size: 0.5, },
+    const items = [
+      {
+        url: africa_Egypt,
+        name: 'africa_Egypt',
+        angle: [0, 265, 0],
+        size: 0.5,
+      },
       { url: asia_China, name: 'asia_China', angle: [0, 265, 0], size: 0.5 },
       { url: asia_India, name: 'asia_india', angle: [0, 265, 0], size: 0.5 },
       { url: asia_Japen, name: 'asia_Japen', angle: [0, 265, 0], size: 0.5 },
       { url: asia_Korea, name: 'asia_Korea', angle: [0, 265, 0], size: 0.5 },
-      { url: europe_France, name: 'europe_France', angle: [0, 265, 0], size: 0.5 },
-      { url: europe_Italia, name: 'europe_Italia', angle: [0, 265, 0], size: 0.5 },
-      { url: europe_Spain, name: 'europe_Spain', angle: [0, 265, 0], size: 0.5 },
+      {
+        url: europe_France,
+        name: 'europe_France',
+        angle: [0, 265, 0],
+        size: 0.5,
+      },
+      {
+        url: europe_Italia,
+        name: 'europe_Italia',
+        angle: [0, 265, 0],
+        size: 0.5,
+      },
+      {
+        url: europe_Spain,
+        name: 'europe_Spain',
+        angle: [0, 265, 0],
+        size: 0.5,
+      },
       { url: europe_UK, name: 'europe_UK', angle: [0, 265, 0], size: 0.5 },
-      { url: northAmerica_America, name: 'northAmerica_America', angle: [0, 265, 0], size: 0.5 },
+      {
+        url: northAmerica_America,
+        name: 'northAmerica_America',
+        angle: [0, 265, 0],
+        size: 0.5,
+      },
     ];
     items.forEach((item, index) => {
       if (item.name === countryName) {
