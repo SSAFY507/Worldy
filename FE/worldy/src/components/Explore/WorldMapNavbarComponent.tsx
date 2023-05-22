@@ -1,3 +1,5 @@
+import '../../styles/SweetAlertStyles.css';
+
 import * as React from 'react';
 
 import { useEffect, useState } from 'react';
@@ -8,12 +10,10 @@ import CustomAxios from '../../API/CustomAxios';
 import ExchangeRateIcon from '../../assets/images/ExchangeRateIcon.png';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import Moon from '../../assets/images/Moon.png';
+import Swal from 'sweetalert2';
 import { countryLst } from './CountrySpeak';
 import logoColoredBlue from '../../assets/images/LogoColoredBlue.png';
 import { useNavigate } from 'react-router';
-import Swal from 'sweetalert2';
-
-import '../../styles/SweetAlertStyles.css';
 
 interface Props {
   hoborAsset: string;
@@ -164,14 +164,14 @@ const WorldMapNavbarComponent = ({
                 GetSelectAssetName('');
                 selectAsset = '';
                 // alert("나라로 이동합니다.");
-                Swal.fire({
-                  title: '나라로 이동합니다.',
-                  confirmButtonText: '확인',
-                  buttonsStyling: false,
-                  customClass: {
-                    confirmButton: 'swal2-confirm',
-                  },
-                });
+                // Swal.fire({
+                //   title: '나라로 이동합니다.',
+                //   confirmButtonText: '확인',
+                //   buttonsStyling: false,
+                //   customClass: {
+                //     confirmButton: 'swal2-confirm',
+                //   },
+                // });
               } else {
                 // Country Map인 경우, World Map 으로
                 // alert('대륙으로 이동합니다');
@@ -238,7 +238,12 @@ const WorldMapNavbarComponent = ({
         {/* <div className='w-1/4'></div> */}
       </div>
       <div className='relative h-full w-[20%]  outline-white flex flex-row justify-end items-center'>
-        <img src={logoColoredBlue} alt='colored logo' className='w-[100px]' />
+        <img src={logoColoredBlue} alt='colored logo' className='w-[100px] cursor-pointer' 
+          onClick={() => {
+            GetSelectAssetName('');
+            selectAsset = '';
+            navigate('/');
+          }}/>
         {/* <div className='absolute top-[80px] -right-[30px] w-[400px] h-[20px]  bg-[#65ADFF]' /> */}
         {selectAsset ? null : (
           <div className='absolute top-[110px] -right-[20px] w-[400px] h-[280px] p-[40px] outline-white flex flex-col justify-between items-center'>
