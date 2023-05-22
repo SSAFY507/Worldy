@@ -18,7 +18,7 @@ import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
 import Swal from 'sweetalert2';
-import africa_Egypt from '../../assets/lowpoly/Country_France.glb';
+import africa_Egypt from '../../assets/lowpoly/Country_Egypt.glb';
 import asia_China from '../../assets/lowpoly/Country_France.glb';
 import asia_India from '../../assets/lowpoly/Country_France.glb';
 import asia_Japen from '../../assets/lowpoly/Country_France.glb';
