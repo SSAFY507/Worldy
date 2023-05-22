@@ -41,7 +41,7 @@ def find_news(nation):
         send_txt = send.select_one("a.api_txt_lines.dsc_txt_wrap").text
         send_url = send.select_one("a.news_tit").get("href")
 
-        cur.execute(INSERT_NEWS, (str(nations[nation]), send_title, send_txt, send_img, send_url, str(cnt)))
+        cur.execute(UPDATE_NEWS, (str(nations[nation]), send_title, send_txt, send_img, send_url, str(cnt)))
         print(cnt, send_img, ": 입력 완료")
         print(cnt, send_title, ": 입력 완료")
         print(cnt, send_txt, ": 입력 완료")
