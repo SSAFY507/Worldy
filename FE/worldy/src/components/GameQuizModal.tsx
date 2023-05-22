@@ -585,7 +585,7 @@ export default function GameQuizModal({
         </div>
         <div className='w-full h-[10px] bg-[#61C7BB] relative flex flex-row justify-end items-center'>
           <div
-            className='absolute top-0 left-0 h-[10px] max-w-full bg-[#E0E0E0]'
+            className='absolute top-0 left-0 h-[10px] max-w-full bg-[#E0E0E0] rounded-l-xl'
             style={{ width: `${(timecount * 100) / limitTime}%` }}
           ></div>
         </div>
