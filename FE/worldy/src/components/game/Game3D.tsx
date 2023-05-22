@@ -2926,7 +2926,7 @@ export default function Game3D(props: any) {
           {/* 오른쪽 영역 */}
           <div className={`w-[20%] h-[1000px] flex flex-col justify-start items-start rounded-[4px] z-50`}>
            <div
-              className="w-[387px] h-[60px] rounded-[10px] flex justify-center items-center mb-[20px] text-[#646161] z-[80000] mt-[10px] hover:bg-[#FF4D45] hover:text-white bg-gray-100/70 text-[20px]"
+              className="w-[387px] h-[60px] rounded-[10px] flex justify-center items-center mb-[20px] text-[#646161] z-[80000] mt-[10px] hover:bg-[#FF4D45] hover:text-white bg-gray-100/70 text-[20px] cursor-pointer"
               
               onClick={() => {
                 Swal.fire({
@@ -3072,7 +3072,7 @@ export default function Game3D(props: any) {
           </div>
 
         </div>
-        <Game3DItem metaData={metaData} player={player} worldMap={worldMap} diceData={diceData} getPlayerTurn={getPlayerTurn} />
+        <Game3DItem metaData={metaData} player={player} worldMap={worldMap} diceData={diceData} getPlayerTurn={getPlayerTurn} myIndex={me.playerNum}/>
 
       </div>
     </>

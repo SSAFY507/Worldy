@@ -31,7 +31,7 @@ interface playerContainter {
 }
 
 interface Props {
-  // playerInfo :PlayerInfoType
+  myIndex: number
   metaData: MetadataType
   diceData: number
   player: NewPlayer
@@ -98,7 +98,7 @@ const checkArch:ArchType = {
   대: "landmark"
 }
 
-const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props) => {
+const Game3DItem = ({diceData, metaData, player, worldMap, myIndex, getPlayerTurn}: Props) => {
   const playerInfo = { playerIndex: metaData.turn,  currentIndex: metaData.currentLocation}
 
   const arch = new Set(
@@ -116,9 +116,9 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
   const controls = useRef<OrbitControls |null>(null);
 
   const playerLoc = useRef<THREE.Vector3 | null>(null);
-  // const player1Loc = useRef<THREE.Vector3 | null>(null);
-  // const player2Loc = useRef<THREE.Vector3 | null>(null);
-  // const player3Loc = useRef<THREE.Vector3 | null>(null);
+  const player1Loc = useRef<THREE.Vector3 | null>(null);
+  const player2Loc = useRef<THREE.Vector3 | null>(null);
+  const player3Loc = useRef<THREE.Vector3 | null>(null);
 
   // const [player0Index, setPlayer0Index] = useState<number>(0);
   // const [player1Index, setPlayer1Index] = useState<number>(0);
@@ -146,6 +146,10 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
   // }
 
   useEffect(() => {
+    console.log(playerLoc)
+    console.log(player1Loc)
+    console.log(player2Loc)
+    console.log(player3Loc)
     if (diceData) {
       const isArch = [...player.p1.game.own, ...player.p2.game.own, ...player.p3.game.own, ...player.p4.game.own]
       const isArchSet = new Set()
@@ -405,6 +409,8 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
 
       scene.current?.add(obj3d)
     })
+
+    // 플레이어
     const items = [
       {url: pawn_0, location: player.p1.game.location},
       {url: pawn_1, location: player.p2.game.location},
@@ -412,15 +418,24 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
       {url: pawn_3, location: player.p4.game.location},
     ]
 
+    console.log(myIndex)
     items.forEach((item, idx) => {
       gltfLoader.load(item.url, (glb) =>{
         const obj3d = glb.scene;
         // obj3d.position.set(0, 0, 0);
         obj3d.scale.set(1, 1, 1);
-        console.log(obj3d.position)
+        // console.log(obj3d.position)
         obj3d.position.set(mapAxis[item.location].axis[0], obj3d.position.y-0.1, -mapAxis[item.location].axis[1])
-        if (playerInfo.playerIndex === idx) {
+        if (playerInfo.playerIndex === (myIndex-1)) {
           playerLoc.current = obj3d.position
+        } else {
+          if (!player1Loc.current) {
+            player1Loc.current = obj3d.position
+          } else if (!player2Loc.current) {
+            player2Loc.current = obj3d.position
+          } else { 
+            player3Loc.current = obj3d.position
+          }
         }
         scene.current?.add(obj3d)
       })
