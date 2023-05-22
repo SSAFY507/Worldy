@@ -36,7 +36,7 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
     // { name: '게임 정보', path: '/info' },
     // { name: '업데이트', path: '/updates' },
     { name: '세계 탐험', path: '/explore' },
-    { name: '월디폴리', path: '/create' },
+    { name: '월디게임', path: '/create' },
     { name: '고객 지원', path: '/support' },
   ];
 
