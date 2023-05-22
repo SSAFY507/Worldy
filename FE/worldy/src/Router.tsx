@@ -36,6 +36,7 @@ import WorldMapTutorial from './components/Explore/WorldMapTutorial';
 import { loginState } from './_store/slices/loginSlice';
 import pathBI from './assets/images/MainPageBackground.png';
 import { useSelector } from 'react-redux';
+import OpenAPI from './routes/OpenAPI';
 
 //import Updates from "./routes/Updates";
 
@@ -204,6 +205,7 @@ const AppLayout = () => {
           <Route path='/payment' element={<Payment />} />
           <Route path='/hoons' element={<WorldMapTutorial />} />
           <Route path='/hello' element={<LoaderHello input={'asia_Korea'} />} />
+          <Route path='/openapi' element={<OpenAPI />} />
         </Routes>
       </div>
     </div>
