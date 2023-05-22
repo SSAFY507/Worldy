@@ -74,40 +74,6 @@ export default function Tutorial() {
   const { loadedImages, isLoaded } = useLoadImagesHook(myImageList);
   const [loadedAll, setLoadedAll] = useState<boolean>(false);
 
-  const [myRankInfo, setAxiosMyRankInfo] = useState<MyRankInfo>();
-
-  useEffect(() => {
-    dispatch(
-      addRankInfo({
-        rank: myRankInfo?.rank || 1,
-        tier: myRankInfo?.tier || 'Bronze',
-        level: myRankInfo?.level || 1,
-        exp: myRankInfo?.exp || 0,
-      })
-    );
-  }, [myRankInfo]);
-  useEffect(() => {
-    getRankInfoList();
-  }, []);
-
-  const getRankInfoList = async () => {
-    // console.log('Session에서의 가져오는 토큰', getLoginToken);
-    try {
-      const response = await CustomAxios({
-        APIName: 'getRankInfoList',
-        APIType: 'get',
-        UrlQuery: DOMAIN + `/game/ranking`,
-        Token: getLoginToken,
-      });
-      //console.log('닉네임 중복 체크 성공');
-      // console.log('랭크 리스트 받은 거: ', response);
-      setAxiosMyRankInfo(response.myRank);
-    } catch (error) {
-      // console.error('Error fetching data:', error);
-    }
-    //console.log('token이 무엇이냐 ', token);
-  };
-
   useEffect(() => {
     if (isLoaded) {
       setTimeout(() => {
