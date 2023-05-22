@@ -19,7 +19,8 @@
 
 /* ////////////////////////////// */
 
-.beforeOXBlue {
+.beforeOXBlue,
+.gamebeforeOXBlue {
   --green: #1bfdd0;
   font-size: 15px;
   padding: 0.7em 2.7em;
@@ -36,7 +37,8 @@
   align-items: center;
 }
 
-.beforeOXBlue:before {
+.beforeOXBlue:before,
+.gamebeforeOXBlue:before {
   content: '';
   position: absolute;
   left: -50px;
@@ -53,7 +55,8 @@
   );
 }
 
-.clickedOXBlue {
+.clickedOXBlue,
+.gameclickedOXBlue {
   background: linear-gradient(
     to right,
     rgba(22, 236, 222, 0.1) 1%,
@@ -67,18 +70,20 @@
     0 0 9px 3px rgba(195, 233, 255, 0.2);
 }
 
-.gameclickedOXBlue {
+/* .gameclickedOXBlue {
   background-color: #58e5d5;
   color: #dbf8f4;
   box-shadow: inset 0 0 20px rgba(195, 233, 255, 0.6),
     0 0 9px 3px rgba(195, 233, 255, 0.2);
-}
+} */
 
-.clickedOXBlue:before {
+.clickedOXBlue:before,
+.gameclickedOXBlue:before {
   transform: translateX(250px);
 }
 /* //////////////// */
-.beforeOXRed {
+.beforeOXRed,
+.gamebeforeOXRed {
   --red: #ff5c5c;
   font-size: 15px;
   padding: 0.7em 2.7em;
@@ -95,14 +100,15 @@
   align-items: center;
 }
 
-.gameclickedOXRed {
+/* .gameclickedOXRed {
   background-color: #ff5c5c;
   color: #dbf8f4;
   box-shadow: inset 0 0 20px rgba(195, 233, 255, 0.6),
     0 0 9px 3px rgba(195, 233, 255, 0.2);
-}
+} */
 
-.beforeOXRed:before {
+.beforeOXRed:before,
+.gamebeforeOXRed:before {
   content: '';
   position: absolute;
   right: -50px;
@@ -119,7 +125,8 @@
   );
 }
 
-.clickedOXRed {
+.clickedOXRed,
+.gameclickedOXRed {
   background: linear-gradient(
     to right,
     rgba(255, 47, 81, 0.1) 1%,
@@ -133,7 +140,8 @@
     0 0 9px 3px rgba(255, 193, 204, 0.2);
 }
 
-.clickedOXRed:before {
+.clickedOXRed:before,
+.gameclickedOXRed:before {
   transform: translateX(-250px);
 }
 
@@ -226,7 +234,8 @@
 
 /* ///////////////////////////////////////// */
 
-.correctanswer {
+.correctanswer,
+.gamecorrectanswer {
   --green: #1bfdd0;
   padding: 0.7em 2.7em;
   letter-spacing: 0.06em;
@@ -250,7 +259,8 @@
     0 0 9px 3px rgba(27, 253, 156, 0.1);
 }
 
-.correctanswer:before {
+.correctanswer:before,
+.gamecorrectanswer:before {
   content: '';
   position: absolute;
   left: -4em;
@@ -267,7 +277,8 @@
   );
 }
 
-.incorrectanswer {
+.incorrectanswer,
+.gameincorrectanswer {
   --red: #8b8b8b;
   background: var(-red);
   padding: 0.7em 2.7em;
@@ -294,7 +305,8 @@
 }
 
 /* /////////////////////////////// */
-.beforemulti {
+.beforemulti,
+.gamebeforemulti {
   font-size: 15px;
   padding: 0.7em 2.7em;
   letter-spacing: 0.06em;
@@ -309,7 +321,8 @@
   align-items: center;
 }
 
-.beforemulti:before {
+.beforemulti:before,
+.gamebeforemulti:before {
   content: '';
   position: absolute;
   left: -50px;
@@ -326,7 +339,8 @@
   );
 }
 
-.clickedmulti {
+.clickedmulti,
+.gameclickedmulti {
   background: linear-gradient(
     to right,
     rgba(27, 253, 238, 0.1) 1%,
@@ -340,17 +354,18 @@
     0 0 9px 3px rgba(0, 200, 209, 0.2);
 }
 
-.gameclickedmulti {
+/* .gameclickedmulti, {
   background-color: #58e5d5;
   color: #dbf8f4;
-}
+} */
 
-.clickedmulti:before {
+.clickedmulti:before,
+.gameclickedmulti:before {
   transform: translateX(250px);
 }
 /* /////////////////////////// */
 
-.gamecorrectanswer {
+/* .gamecorrectanswer {
   --green: #61c7bb;
   padding: 0.7em 2.7em;
   letter-spacing: 0.06em;
@@ -405,4 +420,4 @@
     rgba(201, 201, 201, 0.1) 100%
   );
   color: var(--green);
-}
+} */
