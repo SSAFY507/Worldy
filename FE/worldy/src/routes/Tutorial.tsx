@@ -213,7 +213,7 @@ export default function Tutorial() {
     // }
         
     try {
-      const response = await axios.post(
+      const response = await axios.put(
         DOMAIN + `/user/nickname/${nickName}`,
         // 요청 바디 데이터를 객체 형식으로 전달합니다.
         { },
