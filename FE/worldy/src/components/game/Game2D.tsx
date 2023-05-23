@@ -4243,7 +4243,7 @@ export default function Game2D(props: any) {
             </div>
           </div>
           <div
-              className="w-[387px] h-[60px] rounded-[20px] flex justify-center items-center mb-[20px] text-[#646161] z-[80000] mt-[5px] hover:bg-[#FF4D45] hover:text-white bg-gray-100/70 text-[20px]"
+              className="w-[387px] h-[60px] rounded-[20px] flex justify-center items-center mb-[20px] text-[#646161] z-[80000] mt-[5px] hover:bg-[#FF4D45] hover:text-white bg-gray-100/70 text-[20px] cursor-pointer"
                             
               onClick={() => {
                 Swal.fire({

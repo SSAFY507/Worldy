@@ -412,7 +412,10 @@ const Game3DItem = ({diceData, metaData, player, worldMap, myIndex, getPlayerTur
                 // 해당 객체
                 const a:ArchType = worldMap[number].build
                 if (a[`${name}`]) {
-                  obj.visible =  true
+                  gsap.to(obj, { visible: true, duration: 0 });
+                  gsap.to(obj.position, { y: obj.position.y + 0.15 , duration: 1 });
+                  // obj.visible =  true
+                  // obj.position.y = 0.85
                 }
               }
             })
