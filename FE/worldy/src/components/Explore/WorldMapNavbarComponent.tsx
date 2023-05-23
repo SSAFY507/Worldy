@@ -37,6 +37,16 @@ interface InfoType {
 
 const DOMAIN = process.env.REACT_APP_BASE_URL;
 
+const countryUnit:ListType = {
+  asia_Korea: '₩',
+  africa_Egypt: 'E£',
+  europe_France: '€',
+  europe_Italia: '€',
+  europe_Spain: '€',
+  europe_UK: '£',
+  northAmerica_America: '$',
+}
+
 const switchTrans: ListType = {
   paintBox: '틀림 그림 찾기에 도전해보세요!',
   quizBox: '퀴즈를 풀어보세요!',
@@ -315,7 +325,7 @@ const WorldMapNavbarComponent = ({
                 </div>
                 <div className='w-full h-fit  outline-white flex flex-row justify-start items-center'>
                   <span className='text-white font-PtdSemiBOld text-[24px]'>
-                    {`${infoList.amountvia}`}
+                    {`${infoList.amountvia}` + `${countryUnit[countryName]}`}
                     {/* {`${infoList.amountvia} ${infoList.pref}`} */}
                   </span>
                 </div>
