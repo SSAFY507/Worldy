@@ -89,16 +89,6 @@ const WorldMap = () => {
     WorldBasemap: basemap,
   };
 
-  // const isLoaded = useLoadGlbsHook(myGlbList);
-  // const [loadedAll, setLoadedAll] = useState<boolean>(false);
-  // useEffect(() => {
-  //   if (isLoaded) {
-  //     setTimeout(() => {
-  //       setLoadedAll(true);
-  //       //console.log(loadedImages);
-  //     }, 1000);    }
-  // }, [isLoaded]);
-
   const navigate = useNavigate();
 
   /** 마우스 추적 */
@@ -498,9 +488,6 @@ const WorldMap = () => {
     loader.load(bg, (texture) => {
       scene.current!.background = texture;
 
-      // SetupModel이 없는 상태에서 background를 받으려니 문제 생김!
-      // => Backround를 호출할 때, 모델을 호출해주자
-      // SetupModel();
     });
   };
 
@@ -729,107 +716,101 @@ const WorldMap = () => {
         0
       );
 
-      // const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.4);
-
-      // hemiLight.position.set(-20, 50, 0);
-      // // Add hemisphere light to scene
-      // scene.current?.add(hemiLight);
-
       const light = SetupLight(
-        '#0xffffff',
+        0xffffff,
         0.5,
         new THREE.Vector3(-2, 10, 6),
         new THREE.Vector3(0, 0, 0)
       );
       const light2 = SetupLight(
-        '#0xffffff',
+        0xffffff,
         0.5,
         new THREE.Vector3(-2, 10, -6),
         new THREE.Vector3(0, 0, 0)
       );
       const light3 = SetupLight(
-        '#0xffffff',
+        0xffffff,
         0.5,
         new THREE.Vector3(-2, -10, 6),
         new THREE.Vector3(0, 0, 0)
       );
       const light4 = SetupLight(
-        '#0xffffff',
+        0xffffff,
         0.5,
         new THREE.Vector3(-2, -10, -6),
         new THREE.Vector3(0, 0, 0)
       );
 
       const light5 = SetupLight(
-        '#0xffffff',
+        0xffffff,
         0.5,
         new THREE.Vector3(2, 10, 6),
         new THREE.Vector3(0, 0, 0)
       );
       const light6 = SetupLight(
-        '#0xffffff',
+        0xffffff,
         0.5,
         new THREE.Vector3(2, 10, -6),
         new THREE.Vector3(0, 0, 0)
       );
       const light7 = SetupLight(
-        '#0xffffff',
+        0xffffff,
         0.5,
         new THREE.Vector3(2, -10, 6),
         new THREE.Vector3(0, 0, 0)
       );
       const light8 = SetupLight(
-        '#0xffffff',
+        0xffffff,
         0.5,
         new THREE.Vector3(2, -10, -6),
         new THREE.Vector3(0, 0, 0)
       );
 
       const right = SetupLight(
-        '#0xffffff',
+        0xffffff,
         0.1,
         new THREE.Vector3(-2, 2, 6),
         new THREE.Vector3(0, 0, 0)
       );
       const right2 = SetupLight(
-        '#0xffffff',
+        0xffffff,
         0.1,
         new THREE.Vector3(-2, 2, -6),
         new THREE.Vector3(0, 0, 0)
       );
       const right3 = SetupLight(
-        '#0xffffff',
+        0xffffff,
         0.1,
         new THREE.Vector3(-2, -2, 6),
         new THREE.Vector3(0, 0, 0)
       );
       const right4 = SetupLight(
-        '#0xffffff',
+        0xffffff,
         0.1,
         new THREE.Vector3(-2, -2, -6),
         new THREE.Vector3(0, 0, 0)
       );
 
       const right5 = SetupLight(
-        '#0xffffff',
+        0xffffff,
         0.1,
         new THREE.Vector3(2, 2, 6),
         new THREE.Vector3(0, 0, 0)
       );
       const right6 = SetupLight(
-        '#0xffffff',
+        0xffffff,
         0.1,
         new THREE.Vector3(2, 2, -6),
         new THREE.Vector3(0, 0, 0)
       );
       const right7 = SetupLight(
-        '#0xffffff',
+        0xffffff,
         0.1,
         new THREE.Vector3(2, -2, 6),
         new THREE.Vector3(0, 0, 0)
       );
       const right8 = SetupLight(
-        '#0xffffff',
+        0xffffff,
         0.1,
         new THREE.Vector3(2, -2, -6),
         new THREE.Vector3(0, 0, 0)
@@ -866,20 +847,11 @@ const WorldMap = () => {
   }, []);
 
   return (
-    // <>
-    //   {loadedAll ?  (
     <div
       className=''
       style={{ backgroundColor: 'grey', width: '100%', height: 1000 }}
       ref={divContainer}
     />
-    //   ) : (
-    //     <div className='w-full h-[1000px] bg-white'>
-    //       < LoaderPyramid text='🧳세계 탐험 가보자고!🧳' />
-    //     </div>
-    //   )
-    //   }
-    // </>
   );
 };
 
