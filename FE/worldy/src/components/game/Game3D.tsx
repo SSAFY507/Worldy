@@ -2013,7 +2013,6 @@ export default function Game3D(props: any) {
     cashRef.current.muted = true;
     cashRef.current.play();
     cashRef.current.muted = false;
-    cashRef.current.pause();
   }
 
   return (
