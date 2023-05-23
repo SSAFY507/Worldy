@@ -1,29 +1,30 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
-import Logowhite from '../assets/images/Logo-white.png';
 
-import CarouselComponent from '../components/CarouselComponent';
-import Carousel1Icon from '../assets/images/Carousel1Icon.png';
-import Carousel2Icon from '../assets/images/Carousel2Icon.png';
-import Carousel3Icon from '../assets/images/Carousel3Icon.png';
-import Carousel4Icon from '../assets/images/Carousel4Icon.png';
-import Carousel5Icon from '../assets/images/Carousel5Icon.png';
+import { useEffect, useState } from 'react';
+
 import Carousel1 from '../assets/images/Carousel1.png';
+import Carousel1Icon from '../assets/images/Carousel1Icon.png';
 import Carousel2 from '../assets/images/Carousel2.png';
+import Carousel2Icon from '../assets/images/Carousel2Icon.png';
 import Carousel3 from '../assets/images/Carousel3.png';
+import Carousel3Icon from '../assets/images/Carousel3Icon.png';
 import Carousel4 from '../assets/images/Carousel4.png';
+import Carousel4Icon from '../assets/images/Carousel4Icon.png';
 import Carousel5 from '../assets/images/Carousel5.png';
+import Carousel5Icon from '../assets/images/Carousel5Icon.png';
+import CarouselComponent from '../components/CarouselComponent';
+import CustomAxios from '../API/CustomAxios';
+import LoaderLinear from '../components/Loaders/LoaderLinear';
+import Logowhite from '../assets/images/Logo-white.png';
+import { addRankInfo } from '../_store/slices/loginSlice';
 import thumb1 from '../assets/images/thumb1.png';
 import thumb2 from '../assets/images/thumb2.png';
 import thumb3 from '../assets/images/thumb3.png';
 import thumb4 from '../assets/images/thumb4.png';
 import thumb5 from '../assets/images/thumb5.png';
-import LoaderLinear from '../components/Loaders/LoaderLinear';
-import { useNavigate } from 'react-router';
-import useLoadImagesHook from '../_hooks/useLoadImagesHook';
 import { useDispatch } from 'react-redux';
-import { addRankInfo } from '../_store/slices/loginSlice';
-import CustomAxios from '../API/CustomAxios';
+import useLoadImagesHook from '../_hooks/useLoadImagesHook';
+import { useNavigate } from 'react-router';
 
 type ImageListType = {
   headerImage: string;
@@ -96,7 +97,7 @@ export default function MainPageAfterLogin({
   const navigate = useNavigate();
 
   const moveToWDPL = () => {
-    navigate('/monopoly');
+    navigate('/create');
   };
 
   const moveToWDADV = () => {
