@@ -14,6 +14,20 @@ export interface PlayerInfoType {
   currentIndex: number,
   turn: number
 }
+// 1p: 일본(4, 4), 이탈리아(1, 5)
+// 2p: 인도(1. 3)
+// 3p: 헝가리(5, 6)
+// 4p: 일본(3, 5)
+// 1p: 보물상자(6, 4)
+const defaultDice = [
+  {dice1: 4, dice2: 4},
+  {dice1: 1, dice2: 5},
+  {dice1: 1, dice2: 3},
+  {dice1: 5, dice2: 6},
+  {dice1: 3, dice2: 5},
+  {dice1: 5, dice2: 4},
+  {dice1: 1, dice2: 6},
+]
 
 export default function Game3D(props: any) {
   const sendData = props.sendData;
@@ -411,7 +425,6 @@ export default function Game3D(props: any) {
     setUpdateRankingCheck(true)
   }
 
-
   /** 순위 정렬 함수 */
   function updateRanking() {
 
@@ -523,22 +536,35 @@ export default function Game3D(props: any) {
     } else if (turn === 3) {
       p = player.p4;
     }
-
+    let dice1 = 0
+    let dice2 = 0
     console.log(p.name + "님 턴");
-    const dice1 = Math.floor(Math.random() * 6 + 1);
-    const dice2 = Math.floor(Math.random() * 6 + 1);
+    console.log('##############################################################################')
+    console.log(metaData)
+    if (metaData.totalTurn < 7 ) {
+      console.log('ready')
+      dice1 = defaultDice[metaData.totalTurn].dice1;
+      dice2 = defaultDice[metaData.totalTurn].dice2;
+    } else {
+      console.log('end')
+      dice1 = Math.floor(Math.random() * 6 + 1);
+      dice2 = Math.floor(Math.random() * 6 + 1);     
+    }
+    console.log('##############################################################################')
+
     const dice = dice1 + dice2;
     let isDouble = false;
     if (dice1 === dice2) {
       isDouble = true;
     }
     
-    setMetaData((prevState: any) => ({
+    setMetaData((prevState: MetadataType) => ({
       ...prevState,
       dice1: dice1,
       dice2: dice2,
       dice: dice,
       isDouble: isDouble,
+      totalTurn: prevState.totalTurn + 1
     }));
 
     // 이거 3D용 주사위 추가

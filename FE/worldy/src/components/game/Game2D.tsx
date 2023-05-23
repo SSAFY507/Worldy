@@ -8,6 +8,16 @@ import Swal from "sweetalert2";
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 
+const defaultDice = [
+  {dice1: 4, dice2: 4},
+  {dice1: 1, dice2: 5},
+  {dice1: 1, dice2: 3},
+  {dice1: 5, dice2: 6},
+  {dice1: 3, dice2: 5},
+  {dice1: 5, dice2: 4},
+  {dice1: 1, dice2: 6},
+]
+
 export default function Game2D(props: any) {
   const sendData = props.sendData;
 
@@ -560,9 +570,16 @@ export default function Game2D(props: any) {
       p = player.p4;
     }
 
+    let dice1 = 0
+    let dice2 = 0
     console.log(p.name + "님 턴");
-    const dice1 = Math.floor(Math.random() * 6 + 1);
-    const dice2 = Math.floor(Math.random() * 6 + 1);
+    if (metaData.totalTurn < 7 ) {
+      dice1 = defaultDice[metaData.totalTurn].dice1;
+      dice2 = defaultDice[metaData.totalTurn].dice2;
+    } else {
+      dice1 = Math.floor(Math.random() * 6 + 1);
+      dice2 = Math.floor(Math.random() * 6 + 1);     
+    }
     const dice = dice1 + dice2;
     let isDouble = false;
     if (dice1 === dice2) {
@@ -575,6 +592,7 @@ export default function Game2D(props: any) {
       dice2: dice2,
       dice: dice,
       isDouble: isDouble,
+      totalTurn: prevState.totalTurn + 1
     }));
     showDice(dice1, dice2);
 
