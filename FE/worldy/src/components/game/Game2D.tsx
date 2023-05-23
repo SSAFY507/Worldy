@@ -2073,7 +2073,6 @@ export default function Game2D(props: any) {
     cashRef.current.muted = true;
     cashRef.current.play();
     cashRef.current.muted = false;
-    cashRef.current.pause();
   }
   
   return (
