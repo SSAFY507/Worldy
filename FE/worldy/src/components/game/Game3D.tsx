@@ -1963,7 +1963,7 @@ export default function Game3D(props: any) {
     <>
       {/* 더블 모달 */}
       {metaData.isDouble ?
-      <div className="w-[250px] h-[250px] absolute top-[10%] left-[30%] z-[50] rotate-[-10deg]">
+      <div className="w-[250px] h-[250px] absolute top-[10%] left-[30%] z-[50] rotate-[-30deg] animate-[wiggle_1s_ease-in-out_infinite] ">
         <img src="/game/double.png" alt="" />
       </div>
       : null}
@@ -2940,7 +2940,7 @@ export default function Game3D(props: any) {
               </div>
             </div>
         {/* 주사위 영역 */}
-          {/* <Dice></Dice>
+          <Dice></Dice>
               <div
                 className={` z-100 w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px] ${myTurn && activeDice
                   ? "gameglowing bg-red-500 hover:cursor-pointer hover:bg-red-600"
@@ -2973,7 +2973,7 @@ export default function Game3D(props: any) {
                 }}
               >
                 다른 사람 주사위
-              </div> */}
+              </div>
           </div>
                   
           {/* 오른쪽 영역 */}
