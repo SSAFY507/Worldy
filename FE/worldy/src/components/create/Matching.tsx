@@ -158,7 +158,7 @@ export default function Matching(props: any) {
           </div>
           <button
             className='flex flex-col justify-center items-center w-[180px] h-[70px] mt-[150px] bg-white/50 hover:bg-[#FA5B54] 
-              font-PtdSemiBOld text-[25px] rounded-[6px] text-white'
+              font-PtdSemiBOld text-[22px] rounded-[6px] text-white'
             onClick={() => {
               Swal.fire({
                 title: '게임 매칭을 취소하시겠습니까?',
