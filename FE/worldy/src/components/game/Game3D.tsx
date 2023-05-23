@@ -1961,12 +1961,21 @@ export default function Game3D(props: any) {
 
   return (
     <>
-      {/* 더블 모달 */}
-      {metaData.isDouble ?
-      <div className="w-[250px] h-[250px] absolute top-[10%] left-[30%] z-[50] rotate-[-30deg] animate-[wiggle_1s_ease-in-out_infinite] ">
-        <img src="/game/double.png" alt="" />
-      </div>
-      : null}
+      {/* 내 턴 */}
+      { myTurn? (
+          <div className="w-full h-full absolute  grid place-content-center z-[50]
+          animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate">
+            <img src="/game/myturn.png" className="w-[500px]" alt="" />
+          </div>
+        ) : null}
+  
+        {/* 더블 모달 */}
+        {metaData.isDouble ?(
+          <div className="w-full h-full absolute  grid place-content-center z-[50]
+          animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate">
+            <img src="/game/double.png" className="w-[500px]" alt="" />
+          </div>
+        ) : null}
 
       {/* 퀴즈 모달 */}
       {quizModalState && checkModal && (

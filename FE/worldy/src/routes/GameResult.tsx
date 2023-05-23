@@ -4,10 +4,13 @@ import { useLocation } from "react-router";
 import { SiPowerapps } from 'react-icons/si';
 import { RiVipCrownFill } from 'react-icons/ri';
 import pathLC from '../assets/images/LogoColored.png';
+import { useNavigate } from 'react-router-dom';
 
 export default function GameResult() {
   const location = useLocation();
   const gameResult = location.state;
+
+  const navigate = useNavigate();
 
   const setTierColor = (input: string): string => {
     if (input === 'Platinum') return '#86FFF8';
@@ -104,6 +107,18 @@ export default function GameResult() {
           ))}
         </div>
       </div>
+      <div className='flex justify-center items-center'>
+          <button
+            className='flex flex-col justify-center items-center w-[180px] h-[60px] mt-[110px] bg-white/50 hover:bg-[#FA5B54] 
+              font-PtdSemiBOld text-[18px] rounded-[6px] text-white'
+            onClick={() => {
+              navigate('/');
+            }}
+          >
+            <div className='mb-[5px]'>홈으로</div>
+            <div>돌아가기</div>
+          </button>
+          </div>
       </div>
 
     </>
