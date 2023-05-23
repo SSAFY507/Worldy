@@ -539,8 +539,6 @@ export default function Game3D(props: any) {
     let dice1 = 0
     let dice2 = 0
     console.log(p.name + "님 턴");
-    console.log('##############################################################################')
-    console.log(metaData)
     if (metaData.totalTurn < 7 ) {
       console.log('ready')
       dice1 = defaultDice[metaData.totalTurn].dice1;
@@ -550,7 +548,6 @@ export default function Game3D(props: any) {
       dice1 = Math.floor(Math.random() * 6 + 1);
       dice2 = Math.floor(Math.random() * 6 + 1);     
     }
-    console.log('##############################################################################')
 
     const dice = dice1 + dice2;
     let isDouble = false;
@@ -2801,6 +2798,7 @@ export default function Game3D(props: any) {
                               </div>
                             </div>
                           )}
+
                           {/* 7. 구매완료*/}
                           {mode === 7 && (
                             <div className="flex flex-col justify-center itmes-center">
@@ -2829,6 +2827,7 @@ export default function Game3D(props: any) {
                               <div className="text-[24px] font-PtdBold">게임 스타트! 주사위를 던지세요</div>
                             </div>
                           )}
+
                           {/* 9. city일 떄*/}
                           {mode === 9 && (
                             <div className="flex flex-col justify-center itmes-center">
@@ -2851,6 +2850,7 @@ export default function Game3D(props: any) {
                               </div>
                             </div>
                           )}
+
                           {/* 10. 보물상자 자유이동일 떄*/}
                           {mode === 10 && (
                             <div className="flex flex-col justify-center itmes-center">
@@ -2868,6 +2868,7 @@ export default function Game3D(props: any) {
                               </div>
                             </div>
                           )}
+
                           {/* 11. 보물상자 몇칸이동일 떄*/}
                           {mode === 11 && (
                             <div className="flex flex-col justify-center itmes-center">
@@ -2886,6 +2887,7 @@ export default function Game3D(props: any) {
                               </div>
                             </div>
                           )}
+
                           {/* 12. 보물상자 돈 입금/출금*/}
                           {mode === 12 && (
                             <div className="flex flex-col justify-center itmes-center">
@@ -2908,6 +2910,7 @@ export default function Game3D(props: any) {
                               </div>
                             </div>
                           )}
+
                           {/* 보물상자 국세청 이동 */}
                           {mode === 13 && (
                             <div className="flex flex-col justify-center itmes-center">
@@ -2925,6 +2928,7 @@ export default function Game3D(props: any) {
                               </div>
                             </div>
                           )}
+
                           {/* 14  무인도인 경우 */}
                           {mode === 14 && (
                             <div className="flex flex-col justify-center itmes-center">
@@ -2953,6 +2957,7 @@ export default function Game3D(props: any) {
                               </div>
                             </div>
                           )}
+
                           {/* 15  국세청 세금 */}
                           {mode === 15 && (
                             <div className="flex flex-col justify-center itmes-center">
@@ -2978,6 +2983,7 @@ export default function Game3D(props: any) {
                               </div>
                             </div>
                           )}
+                          
                           {/* 16  올림픽 */}
                           {mode === 16 && (
                             <div className="flex flex-col justify-center itmes-center">
@@ -3047,9 +3053,10 @@ export default function Game3D(props: any) {
           </div>
                   
           {/* 오른쪽 영역 */}
-          <div className={`w-[20%] h-[1000px] flex flex-col justify-start items-start rounded-[4px] z-50`}>
+          <div className={`w-[20%] h-[1100px] flex flex-col justify-start items-start rounded-[4px] z-50`}>
            <div
-              className="w-[387px] h-[60px] rounded-[10px] flex justify-center items-center mb-[20px] text-[#646161] z-[80000] mt-[10px] hover:bg-[#FF4D45] hover:text-white bg-gray-100/70 text-[20px] cursor-pointer"
+              // className="w-[387px] h-[60px] rounded-[10px] flex justify-center items-center mb-[20px] text-[#646161] z-[80000] mt-[10px] hover:bg-[#FF4D45] hover:text-white bg-gray-100/70 text-[20px] cursor-pointer"
+              className="w-[336px] h-[60px] rounded-[10px] flex justify-center items-center ml-[25px] mb-[20px] text-[#646161] z-[80000] mt-[10px] hover:bg-[#FF4D45] hover:text-white bg-gray-100/70 text-[20px] cursor-pointer"
               
               onClick={() => {
                 Swal.fire({
@@ -3080,8 +3087,8 @@ export default function Game3D(props: any) {
                 }
               `}
               >
-              <div className="w-[336px] h-[181px] bg-white rounded-[11px] flex flex-col justify-center items-center shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
-                <div className="w-[250px] h-[140px]">
+              <div className="w-[336px] h-[200px] bg-white rounded-[11px] flex flex-col justify-center items-center shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
+                <div className="w-[250px] h-[150px]">
                   <div className="flex justify-between items-center text-[#C0C0C0]">
                         <div className="text-[12px]">내 정보</div>
                         <div className={`text-[15px] font-PtdBold ml-[10px]
@@ -3128,7 +3135,7 @@ export default function Game3D(props: any) {
                   </div>
                 </div>
               </div>
-              <div className="w-[336px] h-[400px] bg-white rounded-[8px] mb-[10px] flex flex-col justify-center items-center shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
+              <div className="w-[336px] h-[500px] bg-white rounded-[8px] mb-[10px] flex flex-col justify-center items-center shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
                 <div className="w-[260px] h-[570px] justify-center items-center">
                   <div className="flex items-center flex-start text-[#C0C0C0]">
                       <div className="text-[12px] mb-[10px] mt-[20px]">소유 자산</div>
@@ -3174,7 +3181,6 @@ export default function Game3D(props: any) {
                   })}
                 </div>
               </div>
-
             </div>
             
             
@@ -3182,7 +3188,8 @@ export default function Game3D(props: any) {
             <Dice></Dice>
 
             <div
-              className={`w-[387px] h-[60px] rounded-[10px] flex justify-center items-center text-[20px] mt-[10px] ${myTurn && activeDice
+              // className={`w-[387px] h-[60px] rounded-[10px] flex justify-center items-center text-[20px] mt-[10px] ${myTurn && activeDice
+              className={`w-[336px] h-[60px] rounded-[10px] flex justify-center items-center text-[20px] ml-[25px] mt-[10px] ${myTurn && activeDice
                 ? "gameglowing bg-red-500 hover:cursor-pointer hover:bg-red-600 text-white"
                 : " bg-gray-100/70 pointer-events-none text-[#646161]"
                 }`}
