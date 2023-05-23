@@ -16,10 +16,10 @@ public class OpenAPIController {
     private final QuizService quizService;
 
     @GetMapping("/quiz")
-    public ResponseEntity<OpenAPIQuizDto> getHiddenCatch(@RequestParam("nationId") Long nationId, @RequestParam("quizType") String quizType,
+    public ResponseEntity<OpenAPIQuizDto> getHiddenCatch(@RequestParam("nationId") String nationId, @RequestParam("quizType") String quizType,
                                                          @RequestParam("category") String category){
 
-        OpenAPIQuizDto openAPIQuizDto = quizService.getOpenAPIQuizDto(nationId, quizType, category);
+        OpenAPIQuizDto openAPIQuizDto = quizService.getOpenAPIQuizDto(Long.parseLong(nationId), quizType, category);
         return new ResponseEntity<>(openAPIQuizDto, HttpStatus.OK);
     }
 }
