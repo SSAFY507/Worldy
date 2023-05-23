@@ -2005,11 +2005,19 @@ export default function Game3D(props: any) {
         turnRef.current.pause();
       }
   },[myTurn])
-  
+
+  const cashRef = useRef(new Audio());
+  function cashSound() {
+    cashRef.current.volume = 0.5;
+    cashRef.current.play();
+  }
+
   return (
     <>
       <audio src="/game/double.mp3" ref={doubleRef} ></audio>
       <audio src="/game/turn2.mp3" ref={turnRef} ></audio>
+      <audio src="/game/cash.mp3" ref={cashRef} ></audio>
+
       {/* 내 턴 */}
       { myTurn? (
           <div className="w-full h-full absolute  grid place-content-center z-[100]
@@ -2395,6 +2403,7 @@ export default function Game3D(props: any) {
                                       worldMap[metaData.currentLocation],
                                       buyOption
                                     );
+                                    cashSound();
                                   }}
                                 >
                                   구입하기
@@ -2621,6 +2630,7 @@ export default function Game3D(props: any) {
                                             worldMap[metaData.currentLocation],
                                             buildOption
                                           );
+                                          cashSound();
                                         }}
                                       >
                                         건설하기
@@ -2733,6 +2743,7 @@ export default function Game3D(props: any) {
                                   }));
                                   setMode(0);
                                   sendData();
+                                  cashSound();
                                 }}
                               >
                                 통행료 {worldMap[metaData.currentLocation].toll} 만원
@@ -2764,6 +2775,7 @@ export default function Game3D(props: any) {
                                     }));
                                     setMode(0);
                                     sendData();
+                                    cashSound();
                                   }}
                                 >
                                   확인
