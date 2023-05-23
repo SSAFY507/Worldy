@@ -18,4 +18,7 @@ public interface QuizRepo extends JpaRepository<Quiz, Long> {
 
     @Query(value = "select * from quiz where nation_id = ?1 and quiz_type = ?2 and category = ?3 order by RAND() limit 1;", nativeQuery = true)
     Quiz findQuizByNationIdAndQUizTypeAndCategory(Long nationId, String quizType, String category);
+
+    @Query(value = "select * from quiz where quiz_id = ?1;", nativeQuery = true)
+    Quiz findAllNewsQuizByQuizId(Long quizId);
 }
