@@ -175,4 +175,49 @@ public class QuizService {
 
         userRepo.save(user);
     }
+
+    public OpenAPIQuizDto getOpenAPIQuizDto(Long nationId, String quizType, String category){
+
+        Quiz quiz = quizRepo.findQuizByNationIdAndQUizTypeAndCategory(nationId, quizType, category);
+
+        log.info(nationId + " " + quizType + " " + category);
+
+        String strQuizType = "";
+        String strCategory = "";
+
+        if(quizType.equals("ox")) strQuizType = "OX";
+        else if(quizType.equals("blank")) strQuizType = "빈칸 문제";
+        else strQuizType = "객관식";
+
+        if(category.equals("cul")) strCategory = "문화/역사";
+        else if(category.equals("aff")) strCategory = "시사/상식";
+        else strCategory = "기타";
+
+        log.info(strQuizType + " " + strCategory);
+
+        List<OpenAPIMultiAnswerDto> multiAnswerList = null;
+
+        // 퀴즈 타입이 객관식이면 객관식 보기 조회
+        if(quiz.getQuizType().equals("multi")) {
+            multiAnswerList = new ArrayList<>();
+
+            List<MultiAnswer> multiAnswers = multiAnswerRepo.findByQuiz(quiz);
+            for (MultiAnswer multiAnswer : multiAnswers) {
+                multiAnswerList.add(multiAnswer.toOpenAPIMultiAnswerDto());
+            }
+        }
+
+        return OpenAPIQuizDto.builder()
+                .nation(quiz.getNation().getNationName())
+                .quizType(strQuizType)
+                .category(strCategory)
+                .level(quiz.getLevel())
+                .image(quiz.getImage())
+                .content(quiz.getContent())
+                .answer(quiz.getAnswer())
+                .hint(quiz.getHint())
+                .commentary(quiz.getCommentary())
+                .multiAnswerList(multiAnswerList)
+                .build();
+    }
 }
