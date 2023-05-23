@@ -110,6 +110,13 @@ const Game3DItem = ({diceData, metaData, player, worldMap, myIndex, getPlayerTur
     {url: pawn_3, location: player.p4.game.location},
   ]
 
+  const isArch = [...player.p1.game.own, ...player.p2.game.own, ...player.p3.game.own, ...player.p4.game.own]
+  const isArchSet = new Set()
+  isArch.forEach ((number, idx) => {
+    isArchSet.add(mapAxis[number].name)
+  })
+  
+
   // const arch = new Set(
   //   ["호주", "영국", "칠레", "페루", "브라질",
   //     "멕시코", "캐나다", "미국", "싱가포르", "중국",
@@ -138,28 +145,10 @@ const Game3DItem = ({diceData, metaData, player, worldMap, myIndex, getPlayerTur
   const [playerTurn, setPlayerTurn] = useState<number>(0)
 
   const dist = 1;
-
-
-  // const getArch = (counting: number) => {
-  //   let tmpTurn = playerTurn;
-    // scene.current?.children[5].children.forEach((obj, idx) => {
-    //   console.log(counting)
-    //   if(worldMap[counting].name + "_소" === obj.name)
-    //     obj.visible = true
-    // })
-  //   setPlayerTurn((tmpTurn + 1) % 4)
-  //   setTurn(turn + 1)
-  // }
-  // new THREE.Vector3(mapAxis[player.p1.game.location].axis[0], mapAxis[player.p1.game.location].axis[1], mapAxis[player.p1.game.location].axis[2] )
   useEffect(() => {
     if (diceData) {
-      const isArch = [...player.p1.game.own, ...player.p2.game.own, ...player.p3.game.own, ...player.p4.game.own]
-      const isArchSet = new Set()
-      isArch.forEach ((number, idx) => {
-        isArchSet.add(mapAxis[number].name)
-      })
       scene.current?.children[5].children.forEach((obj, idx) => {
-        // name이 6글자 이하인 객체들에 대해서 '_'가 존재하는 객체 
+        // 건물 인식해서 짓기
         if (obj.name.length <7 && obj.name.includes('_')){
           // 건물이 있는 나라를 찾고
           if (isArchSet.has(obj.name.slice(0, obj.name.indexOf('_')))){
@@ -181,6 +170,7 @@ const Game3DItem = ({diceData, metaData, player, worldMap, myIndex, getPlayerTur
           }
         }
       })
+      // 현재 유저 인식
       switch (playerInfo.playerIndex) {
         case 0:
           currentPlayer.current = playerLoc.current
@@ -214,36 +204,6 @@ const Game3DItem = ({diceData, metaData, player, worldMap, myIndex, getPlayerTur
       moveCounted(diceData)
     }
   }, [diceData])
-
-  // useEffect(() => {
-  //   if (turn > -1) {
-  //     let tmpTurn = playerTurn;
-  //     alert(`${turn} 번째 턴. ${playerTurn}번째 플레이어가 주사위를 던집니다.`)
-  //     alert("작은 건물을 구매하시겠습니까?")
-  //     scene.current?.children[5].children.forEach((obj, idx) => {
-  //       if(worldMap.worldMap[tmpTurn].name + "_소" === obj.name)
-  //         obj.visible = true
-  //     })
-  //     setPlayerTurn((tmpTurn + 1) % 4)
-  //   }
-  //   setTurn(turn + 1)
-
-  // },[playerMovedCount])
-
- /** 주사위 굴리는 함수 */
-  const getRandomInt = () => {
-    const newDice = Math.floor(Math.random() * (13 - 1) + 1);
-    // setRolledDice(newDice);
-    moveCounted(newDice);
-  };
-
-  /** 입력한 input의 count handle 함수 */
-  const handleCount = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event)
-    if (event.target.value) setCount(parseInt(event.target.value));
-    console.log(count)
-
-  };
 
   /** 플레이어 몇 칸 움직이고 카메라 움직일 거니 */ 
   const moveCounted = async (count: number) => {
@@ -387,12 +347,6 @@ const Game3DItem = ({diceData, metaData, player, worldMap, myIndex, getPlayerTur
   const SetupModel = () => {
     const gltfLoader = new GLTFLoader();
 
-    const isArch = [...player.p1.game.own, ...player.p2.game.own, ...player.p3.game.own, ...player.p4.game.own]
-    const isArchSet = new Set()
-    isArch.forEach ((number, idx) => {
-      isArchSet.add(mapAxis[number].name)
-    })
-    
     gltfLoader.load(WorldyMap, (glb) => {
       const obj3d = glb.scene;
       obj3d.children.forEach((obj, idx) =>{
