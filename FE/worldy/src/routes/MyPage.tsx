@@ -26,7 +26,7 @@ import {
 } from '../_store/slices/loginSlice';
 import { useEffect, useRef, useState } from 'react';
 
-import { AiOutlineBulb } from 'react-icons/ai';
+import { AiOutlineApi, AiOutlineBulb } from 'react-icons/ai';
 import CustomAxios from '../API/CustomAxios';
 import { FiArrowUpRight } from 'react-icons/fi';
 import { IoMdPower } from 'react-icons/io';
@@ -175,7 +175,7 @@ export default function MyPage({
       icon: <RiQuestionAnswerFill />,
       title: 'Q&A',
       onMove: () => scrollToContent(QARef),
-      move: true,
+      move: false,
     },
     // {
     //   icon: <MdAccessTimeFilled />,
@@ -188,6 +188,12 @@ export default function MyPage({
       title: '로그아웃',
       onMove: () => scrollToContent(logoutRef),
       move: false,
+    },
+    {
+      icon: <AiOutlineApi />,
+      title: 'Open API',
+      onMove: () => navigate('/openapi'),
+      move: true,
     },
   ];
 
