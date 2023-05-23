@@ -1963,16 +1963,16 @@ export default function Game3D(props: any) {
     <>
       {/* 내 턴 */}
       { myTurn? (
-          <div className="w-full h-full absolute  grid place-content-center z-[50]
-          animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate">
+          <div className="w-full h-full absolute  grid place-content-center z-[100]
+          animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate backdrop-blur-sm">
             <img src="/game/myturn.png" className="w-[500px]" alt="" />
           </div>
         ) : null}
   
         {/* 더블 모달 */}
         {metaData.isDouble ?(
-          <div className="w-full h-full absolute  grid place-content-center z-[50]
-          animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate">
+          <div className="w-full h-full absolute  grid place-content-center z-[100]
+          animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate backdrop-blur-sm ">
             <img src="/game/double.png" className="w-[500px]" alt="" />
           </div>
         ) : null}

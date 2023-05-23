@@ -2024,60 +2024,12 @@ export default function Game2D(props: any) {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
-  const [blur, setBlur] = useState<boolean>(false)
-
-  useEffect(() => {
-    if(myTurn && metaData.turn === me.playerNum) {
-   
-      console.log("dfadafdasfdwf");
-      
-      console.log(me.playerNum);
-      console.log(metaData.turn+1);
-      
-      
-      setBlur(true);
-
-      setTimeout(() => {
-        setBlur(false);
-      }, 1000);
-    } 
-  }, [myTurn])
-
-  // const isBlur = () => {
-  //       if(myTurn) {
-      
-  //     console.log("dfadafdasfdwf");
-      
-  //     console.log(me.playerNum);
-  //     console.log(metaData.turn+1);
-      
-      
-  //     setBlur(true);
-
-  //     setTimeout(() => {
-  //       setBlur(false);
-  //     }, 1000);
-  //   }
-  // }
-
-  const [blur2, setBlur2] = useState<boolean>(false)
-
-  useEffect(() => {
-    if(metaData.isDouble) {
-      setBlur2(true);
-
-      setTimeout(() => {
-        setBlur2(false);
-      }, 1000);
-    }
-  }, [metaData.isDouble])
-
   return (
     <>
       {/* 내 턴 */}
       { myTurn? (  
         <div className="w-full h-full absolute  grid place-content-center z-[50]
-        animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate">
+        animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate backdrop-blur-sm">
           <img src="/game/myturn.png" className="w-[500px]" alt="" />
         </div>
       ) : null}
@@ -2085,7 +2037,7 @@ export default function Game2D(props: any) {
       {/* 더블 모달 */}
       {metaData.isDouble ?(
         <div className="w-full h-full absolute  grid place-content-center z-[50]
-        animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate">
+        animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate  backdrop-blur-sm">
           <img src="/game/double.png" className="w-[500px]" alt="" />
         </div>
       ) : null}
@@ -2098,8 +2050,8 @@ export default function Game2D(props: any) {
       )}
 
       <div
-        className={`w-full h-full bg-[#FFFDF4] flex justify-center items-center ${quizModalState ? "blur-sm " : ""
-          }`}
+        className={`w-full h-full bg-[#FFFDF4] flex justify-center items-center ${quizModalState ? "blur-sm " : ""}
+        `}
       >
         {/* 왼쪽영역 */}
         <div className="w-[20%] h-full flex flex-col justify-start items-end mb-[60px]">
