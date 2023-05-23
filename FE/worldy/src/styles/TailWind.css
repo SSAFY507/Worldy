@@ -24,20 +24,96 @@
 
   @keyframes gameglowing {
     0% {
-      box-shadow: 0 0 6px 1px #fff, 0 0 12px 1px #FFD8D6, 0 0 15px 2px #FF8984,
+      box-shadow: 0 0 6px 1px #fff, 0 0 12px 1px #FF8984, 0 0 15px 2px #FF4D45,
         0 0 20px 2px #FF4D45;
     }
     50% {
-      box-shadow: 0 0 6px 2px #fff, 0 0 12px 2px #FFD8D6, 0 0 15px 5px #FF8984,
+      box-shadow: 0 0 6px 2px #fff, 0 0 12px 2px #FF8984, 0 0 15px 5px #FF4D45,
         0 0 20px 5px #FF4D45;
     }
     100% {
-      box-shadow: 0 0 6px 1px #fff, 0 0 12px 1px #FFD8D6, 0 0 15px 2px #FF8984,
+      box-shadow: 0 0 6px 1px #fff, 0 0 12px 1px #FF8984, 0 0 15px 2px #FF4D45,
         0 0 20px 2px #FF4D45;
     }
   }
 
   .gameglowing {
     animation: gameglowing 1s infinite;
+  }
+
+  @keyframes user1glowing {
+    0% {
+      box-shadow: 0 0 6px 1px #fff, 0 0 12px 1px #fff, 0 0 15px 2px #FF8984,
+        0 0 20px 2px #FF8984;
+    }
+    50% {
+      box-shadow: 0 0 6px 2px #fff, 0 0 12px 2px #fff, 0 0 15px 2px #FF8984,
+        0 0 20px 5px #FF8984;
+    }
+    100% {
+      box-shadow: 0 0 6px 1px #fff, 0 0 12px 1px #fff, 0 0 15px 2px #FF8984,
+        0 0 20px 2px #FF8984;
+    }
+  }
+
+  .user1glowing {
+    animation: user1glowing 1s infinite;
+  }
+
+  @keyframes user2glowing {
+    0% {
+      box-shadow: 0 0 6px 1px #fff, 0 0 12px 1px #fff, 0 0 15px 2px #9DDFB5,
+        0 0 20px 2px #4ADE80;
+    }
+    50% {
+      box-shadow: 0 0 6px 2px #fff, 0 0 12px 2px #fff, 0 0 15px 2px #9DDFB5,
+        0 0 20px 5px #4ADE80;
+    }
+    100% {
+      box-shadow: 0 0 6px 1px #fff, 0 0 12px 1px #fff, 0 0 15px 2px #9DDFB5,
+        0 0 20px 2px #4ADE80;
+    }
+  }
+
+  .user2glowing {
+    animation: user2glowing 1s infinite;
+  }
+
+  @keyframes user3glowing {
+    0% {
+      box-shadow: 0 0 6px 1px #fff, 0 0 12px 1px #C7E0FF, 0 0 15px 2px #ACD1FF,
+        0 0 20px 2px #60A5FA;
+    }
+    50% {
+      box-shadow: 0 0 6px 2px #fff, 0 0 12px 2px #C7E0FF, 0 0 15px 2px #ACD1FF,
+        0 0 20px 5px #60A5FA;
+    }
+    100% {
+      box-shadow: 0 0 6px 1px #fff, 0 0 12px 1px #C7E0FF, 0 0 15px 2px #ACD1FF,
+        0 0 20px 2px #60A5FA;
+    }
+  }
+
+  .user3glowing {
+    animation: user3glowing 1s infinite;
+  }
+
+  @keyframes user4glowing {
+    0% {
+      box-shadow: 0 0 6px 1px #fff, 0 0 12px 1px #fff, 0 0 15px 2px #D8B0FF,
+        0 0 20px 2px #C084FC;
+    }
+    50% {
+      box-shadow: 0 0 6px 2px #fff, 0 0 12px 2px #fff, 0 0 15px 2px #D8B0FF,
+        0 0 20px 5px #C084FC;
+    }
+    100% {
+      box-shadow: 0 0 6px 1px #fff, 0 0 12px 1px #fff, 0 0 15px 2px #D8B0FF,
+        0 0 20px 2px #C084FC;
+    }
+  }
+
+  .user4glowing {
+    animation: user4glowing 1s infinite;
   }
 }

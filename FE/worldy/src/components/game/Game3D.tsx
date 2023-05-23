@@ -1983,12 +1983,26 @@ export default function Game3D(props: any) {
               {pList.map((i, index) => {
                 return (
                   <div key={index}>
+                     <div className="w-[60px] h-[60px] relative top-[50%] left-[-60px]">
+                    { (metaData.turn + 1 === i.playerNum) && i.playerNum === 1 ?
+                      <img className="w-[60px] h-[60px] relative rotate-[-90deg]" src="/game/p1_point.gif"></img>
+                      : null}
+                    { (metaData.turn + 1 === i.playerNum) && i.playerNum === 2 ?
+                      <img className="w-[60px] h-[60px] relative rotate-[-90deg]" src="/game/p2_point.gif"></img>
+                      : null}
+                    { (metaData.turn + 1 === i.playerNum) && i.playerNum === 3 ?
+                      <img className="w-[60px] h-[60px] relative rotate-[-90deg]" src="/game/p3_point.gif"></img>
+                      : null}
+                    {(metaData.turn + 1 === i.playerNum) && i.playerNum === 4 ?
+                      <img className="w-[60px] h-[60px] relative rotate-[-90deg]" src="/game/p4_point.gif"></img>
+                    : null}
+                    </div>
                     <div
-                      className={`w-[350px] h-[180px] rounded-[8px] flex flex-col justify-center items-center shadow-[0_3px_10px_rgb(0,0,0,0.2)]
-                      ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 1 ? "bg-red-200/30" 
-                        : (metaData.turn + 1 === i.playerNum) && i.playerNum === 2 ? "bg-green-200/30"
-                        : (metaData.turn + 1 === i.playerNum) && i.playerNum === 3 ? "bg-blue-200/30" 
-                        : (metaData.turn + 1 === i.playerNum) && i.playerNum === 4 ? "bg-purple-200/30" : "bg-white "
+                      className={`w-[350px] h-[180px] rounded-[8px] flex flex-col justify-center items-center
+                      ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 1 ? "bg-red-200/40 user1glowing"  
+                      : (metaData.turn + 1 === i.playerNum) && i.playerNum === 2 ? "bg-green-200/40 user2glowing"
+                      : (metaData.turn + 1 === i.playerNum) && i.playerNum === 3 ? "bg-blue-200/40 user3glowing" 
+                      : (metaData.turn + 1 === i.playerNum) && i.playerNum === 4 ? "bg-purple-200/40 user4glowing" : "bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)]"
                       }
                       `}
                     >
@@ -2009,7 +2023,7 @@ export default function Game3D(props: any) {
                           {i.playerNum === 2 ? <img src={user2.profileImg} className="w-[40px] h-[40px] rounded-full object-cover"></img> : null}
                           {i.playerNum === 3 ? <img src={user3.profileImg} className="w-[40px] h-[40px] rounded-full object-cover"></img> : null}
                           {i.playerNum === 4 ? <img src={user4.profileImg} className="w-[40px] h-[40px] rounded-full object-cover"></img> : null}
-                          <div className="text-[20px] font-PtdBold ml-[-7px] w-[130px]">{i.name}</div>
+                          <div className="text-[20px] font-PtdBold ml-[-7px] w-[130px] truncate">{i.name}</div>
                           <div className={`text-[14px] text-white flex justify-center items-center w-[50px] h-[30px] rounded-full ml-[10px]
                           ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 1 ? 'bg-red-400' : ''}
                           ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 2 ? 'bg-green-400' : ''}
