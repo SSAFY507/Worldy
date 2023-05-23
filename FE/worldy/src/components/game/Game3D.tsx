@@ -539,8 +539,6 @@ export default function Game3D(props: any) {
     let dice1 = 0
     let dice2 = 0
     console.log(p.name + "님 턴");
-    console.log('##############################################################################')
-    console.log(metaData)
     if (metaData.totalTurn < 7 ) {
       console.log('ready')
       dice1 = defaultDice[metaData.totalTurn].dice1;
@@ -550,7 +548,6 @@ export default function Game3D(props: any) {
       dice1 = Math.floor(Math.random() * 6 + 1);
       dice2 = Math.floor(Math.random() * 6 + 1);     
     }
-    console.log('##############################################################################')
 
     const dice = dice1 + dice2;
     let isDouble = false;
@@ -2766,6 +2763,7 @@ export default function Game3D(props: any) {
                               </div>
                             </div>
                           )}
+
                           {/* 7. 구매완료*/}
                           {mode === 7 && (
                             <div className="flex flex-col justify-center itmes-center">
@@ -2794,6 +2792,7 @@ export default function Game3D(props: any) {
                               <div className="text-[24px] font-PtdBold">게임 스타트! 주사위를 던지세요</div>
                             </div>
                           )}
+
                           {/* 9. city일 떄*/}
                           {mode === 9 && (
                             <div className="flex flex-col justify-center itmes-center">
@@ -2816,6 +2815,7 @@ export default function Game3D(props: any) {
                               </div>
                             </div>
                           )}
+
                           {/* 10. 보물상자 자유이동일 떄*/}
                           {mode === 10 && (
                             <div className="flex flex-col justify-center itmes-center">
@@ -2833,6 +2833,7 @@ export default function Game3D(props: any) {
                               </div>
                             </div>
                           )}
+
                           {/* 11. 보물상자 몇칸이동일 떄*/}
                           {mode === 11 && (
                             <div className="flex flex-col justify-center itmes-center">
@@ -2851,6 +2852,7 @@ export default function Game3D(props: any) {
                               </div>
                             </div>
                           )}
+
                           {/* 12. 보물상자 돈 입금/출금*/}
                           {mode === 12 && (
                             <div className="flex flex-col justify-center itmes-center">
@@ -2873,6 +2875,7 @@ export default function Game3D(props: any) {
                               </div>
                             </div>
                           )}
+
                           {/* 보물상자 국세청 이동 */}
                           {mode === 13 && (
                             <div className="flex flex-col justify-center itmes-center">
@@ -2890,6 +2893,7 @@ export default function Game3D(props: any) {
                               </div>
                             </div>
                           )}
+
                           {/* 14  무인도인 경우 */}
                           {mode === 14 && (
                             <div className="flex flex-col justify-center itmes-center">
@@ -2918,6 +2922,7 @@ export default function Game3D(props: any) {
                               </div>
                             </div>
                           )}
+
                           {/* 15  국세청 세금 */}
                           {mode === 15 && (
                             <div className="flex flex-col justify-center itmes-center">
@@ -2943,6 +2948,7 @@ export default function Game3D(props: any) {
                               </div>
                             </div>
                           )}
+                          
                           {/* 16  올림픽 */}
                           {mode === 16 && (
                             <div className="flex flex-col justify-center itmes-center">
@@ -3139,7 +3145,6 @@ export default function Game3D(props: any) {
                   })}
                 </div>
               </div>
-
             </div>
             
             

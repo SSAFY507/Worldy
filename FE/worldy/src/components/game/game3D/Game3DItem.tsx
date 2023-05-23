@@ -8,9 +8,11 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { PlayerInfoType } from '../Game3D';
+import { RectAreaLightHelper } from "three/examples/jsm/helpers/RectAreaLightHelper.js";
+import { RectAreaLightUniformsLib } from "three/examples/jsm/lights/RectAreaLightUniformsLib.js";
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
-import WorldyMap from '../../../assets/lowpoly/WorldyPolyMap3.glb';
+import WorldyMap from '../../../assets/lowpoly/WorldyPolyMap4.glb';
 import bg from '../../../assets/images/gameBg.png';
 import { gsap } from 'gsap';
 import pawn_0 from '../../../assets/lowpoly/pawn_0.glb';
@@ -336,11 +338,28 @@ const Game3DItem = ({diceData, metaData, player, worldMap, myIndex, getPlayerTur
 
   /** 조명 커스텀 함수 */
   const SetupLight = () => {
-    const color = 0xffffff;
-    const intensity = 2;
-    const light = new THREE.DirectionalLight(color, intensity);
-    light.position.set(0, 5, 6);
+    //6. RectAreaLight : 광원의 위치에서 사방으로 퍼져나감
+    RectAreaLightUniformsLib.init(); 
+    // 빛의 색상, 빛의 세기, 광원의 가로길이, 광원의 세로길이
+    const light = new THREE.RectAreaLight(0xffffff, 2, 50, 50);
+    light.position.set(0, 5, 0);
+    light.rotation.x = THREE.MathUtils.degToRad(-90);
+
+
     scene.current?.add(light);
+    // lightRef.current = light
+    // // Add lights
+    // const hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1.5);
+
+    // hemiLight.position.set(0, 50, 0);
+    // // Add hemisphere light to scene
+    // scene.current?.add(hemiLight);
+    
+    // const color = 0xffffff;
+    // const intensity = 2;
+    // const light = new THREE.DirectionalLight(color, intensity);
+    // light.position.set(0, 5, 6);
+    // scene.current?.add(light);
   };
 
   /** 모델 커스텀 함수 */
