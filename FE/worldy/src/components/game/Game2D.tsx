@@ -1116,7 +1116,7 @@ export default function Game2D(props: any) {
   function getItem(turn: number) {
     console.log('getItem 실행')
     let n = Math.floor(Math.random() * 17);
-    n = 15;
+    n = 2;
     const i = item[n];
     // const pNum = (turn + 1);
 
