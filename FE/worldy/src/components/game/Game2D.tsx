@@ -1,6 +1,6 @@
 import "./dice.css";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import Dice from "./Dice";
 import GameQuizModal from "../GameQuizModal";
@@ -2042,69 +2042,52 @@ export default function Game2D(props: any) {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
-  const [blur, setBlur] = useState<boolean>(false)
+  const doubleRef = useRef(new Audio());
+  
+  useEffect(()=>{
+      if(metaData.isDouble) {
+        doubleRef.current.volume = 0.5;
+        doubleRef.current.play();
+      } else {
+        doubleRef.current.pause();
+      }
+  },[metaData.isDouble])
+  
+  const turnRef = useRef(new Audio());
+  useEffect(()=>{
+      if(myTurn) {
+        turnRef.current.volume = 0.5;
+        turnRef.current.play();
+      } else {
+        turnRef.current.pause();
+      }
+  },[myTurn])
 
-  useEffect(() => {
-    if(myTurn && metaData.turn === me.playerNum) {
-   
-      console.log("dfadafdasfdwf");
-      
-      console.log(me.playerNum);
-      console.log(metaData.turn+1);
-      
-      
-      setBlur(true);
-
-      setTimeout(() => {
-        setBlur(false);
-      }, 1000);
-    } 
-  }, [myTurn])
-
-  // const isBlur = () => {
-  //       if(myTurn) {
-      
-  //     console.log("dfadafdasfdwf");
-      
-  //     console.log(me.playerNum);
-  //     console.log(metaData.turn+1);
-      
-      
-  //     setBlur(true);
-
-  //     setTimeout(() => {
-  //       setBlur(false);
-  //     }, 1000);
-  //   }
-  // }
-
-  const [blur2, setBlur2] = useState<boolean>(false)
-
-  useEffect(() => {
-    if(metaData.isDouble) {
-      setBlur2(true);
-
-      setTimeout(() => {
-        setBlur2(false);
-      }, 1000);
-    }
-  }, [metaData.isDouble])
-
+  const cashRef = useRef(new Audio());
+  function cashSound() {
+    cashRef.current.volume = 0.5;
+    cashRef.current.play();
+  }
+  
   return (
     <>
+      <audio src="/game/double.mp3" ref={doubleRef} ></audio>
+      <audio src="/game/turn2.mp3" ref={turnRef} ></audio>
+      <audio src="/game/cash.mp3" ref={cashRef} ></audio>
+
       {/* 내 턴 */}
       { myTurn? (  
         <div className="w-full h-full absolute  grid place-content-center z-[50]
-        animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate">
-          <img src="/game/myturn.png" className="w-[500px]" alt="" />
+        animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate backdrop-blur-sm">
+          <img src="/game/myturn.png" className="w-[450px]" alt="" />
         </div>
       ) : null}
-
+    
       {/* 더블 모달 */}
       {metaData.isDouble ?(
         <div className="w-full h-full absolute  grid place-content-center z-[50]
-        animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate">
-          <img src="/game/double.png" className="w-[500px]" alt="" />
+        animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate  backdrop-blur-sm">
+          <img src="/game/double.png" className="w-[450px]" alt="" />
         </div>
       ) : null}
 
@@ -2116,8 +2099,8 @@ export default function Game2D(props: any) {
       )}
 
       <div
-        className={`w-full h-full bg-[#FFFDF4] flex justify-center items-center ${quizModalState ? "blur-sm " : ""
-          }`}
+        className={`w-full h-full bg-[#FFFDF4] flex justify-center items-center ${quizModalState ? "blur-sm " : ""}
+        `}
       >
         {/* 왼쪽영역 */}
         <div className="w-[20%] h-full flex flex-col justify-start items-end mb-[60px]">
@@ -3604,6 +3587,7 @@ export default function Game2D(props: any) {
                                 worldMap[metaData.currentLocation],
                                 buyOption
                               );
+                              cashSound();
                             }}
                           >
                             구입하기
@@ -3830,6 +3814,7 @@ export default function Game2D(props: any) {
                                       worldMap[metaData.currentLocation],
                                       buildOption
                                     );
+                                    cashSound();
                                   }}
                                 >
                                   건설하기
@@ -3942,6 +3927,7 @@ export default function Game2D(props: any) {
                             }));
                             setMode(0);
                             sendData();
+                            cashSound();
                           }}
                         >
                           통행료 {worldMap[metaData.currentLocation].toll} 만원
@@ -4041,6 +4027,7 @@ export default function Game2D(props: any) {
                               }));
                               setMode(0);
                               sendData();
+                              cashSound();
                             }}
                           >
                             확인
@@ -4168,6 +4155,7 @@ export default function Game2D(props: any) {
                               }));
                               setMode(0);
                               sendData();
+                              cashSound();
                             }}
                           >
                             {tmpTax}만원 납부하기
