@@ -332,7 +332,13 @@ const Game3DItem = ({diceData, metaData, player, worldMap, myIndex, getPlayerTur
     const width = divContainer.current?.clientWidth || 0;
     const height = divContainer.current?.clientHeight || 0;
     const cam = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    cam.position.set(0, 8, 8);
+    cam.position.set(0, 6, 6);
+    cam.rotation.set(
+      THREE.MathUtils.degToRad(0), 
+      THREE.MathUtils.degToRad(-30), 
+      THREE.MathUtils.degToRad(30)
+    )
+    // cam.lookAt(0, 0, -4)
     cameraRef.current = cam;
   };
 
@@ -413,7 +419,11 @@ const Game3DItem = ({diceData, metaData, player, worldMap, myIndex, getPlayerTur
       gltfLoader.load(item.url, (glb) =>{
         const obj3d = glb.scene;
         obj3d.scale.set(1, 1, 1);
-        obj3d.position.set(mapAxis[item.location].axis[0], obj3d.position.y-0.1, -mapAxis[item.location].axis[1])
+        if (diceData) {
+          obj3d.position.set(mapAxis[item.location].axis[0], obj3d.position.y-0.1, -mapAxis[item.location].axis[1])
+        } else {
+          obj3d.position.set(mapAxis[item.location].axis[0], obj3d.position.y, -mapAxis[item.location].axis[1])
+        }
         if ( idx === (myIndex-1)) {
           playerLoc.current = obj3d.position
         } else {
