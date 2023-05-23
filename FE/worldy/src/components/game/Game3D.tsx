@@ -1084,7 +1084,7 @@ export default function Game3D(props: any) {
   function getItem(turn: number) {
     console.log('getItem 실행')
     let n = Math.floor(Math.random() * 17);
-    // n = 7
+    n = 2
     const i = item[n];
     // const pNum = (turn + 1);
 
@@ -1961,12 +1961,21 @@ export default function Game3D(props: any) {
 
   return (
     <>
-      {/* 더블 모달 */}
-      {metaData.isDouble ?
-      <div className="w-[250px] h-[250px] absolute top-[10%] left-[30%] z-[50] rotate-[-30deg] animate-[wiggle_1s_ease-in-out_infinite] ">
-        <img src="/game/double.png" alt="" />
-      </div>
-      : null}
+      {/* 내 턴 */}
+      { myTurn? (
+          <div className="w-full h-full absolute  grid place-content-center z-[50]
+          animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate">
+            <img src="/game/myturn.png" className="w-[500px]" alt="" />
+          </div>
+        ) : null}
+  
+        {/* 더블 모달 */}
+        {metaData.isDouble ?(
+          <div className="w-full h-full absolute  grid place-content-center z-[50]
+          animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate">
+            <img src="/game/double.png" className="w-[500px]" alt="" />
+          </div>
+        ) : null}
 
       {/* 퀴즈 모달 */}
       {quizModalState && checkModal && (
@@ -2940,7 +2949,7 @@ export default function Game3D(props: any) {
               </div>
             </div>
         {/* 주사위 영역 */}
-          <Dice></Dice>
+          {/* <Dice></Dice>
               <div
                 className={` z-100 w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px] ${myTurn && activeDice
                   ? "gameglowing bg-red-500 hover:cursor-pointer hover:bg-red-600"
@@ -2973,7 +2982,7 @@ export default function Game3D(props: any) {
                 }}
               >
                 다른 사람 주사위
-              </div>
+              </div> */}
           </div>
                   
           {/* 오른쪽 영역 */}

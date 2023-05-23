@@ -1,6 +1,6 @@
 import "./dice.css";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import Dice from "./Dice";
 import GameQuizModal from "../GameQuizModal";
@@ -2024,15 +2024,71 @@ export default function Game2D(props: any) {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
+  const [blur, setBlur] = useState<boolean>(false)
+
+  useEffect(() => {
+    if(myTurn && metaData.turn === me.playerNum) {
+   
+      console.log("dfadafdasfdwf");
+      
+      console.log(me.playerNum);
+      console.log(metaData.turn+1);
+      
+      
+      setBlur(true);
+
+      setTimeout(() => {
+        setBlur(false);
+      }, 1000);
+    } 
+  }, [myTurn])
+
+  // const isBlur = () => {
+  //       if(myTurn) {
+      
+  //     console.log("dfadafdasfdwf");
+      
+  //     console.log(me.playerNum);
+  //     console.log(metaData.turn+1);
+      
+      
+  //     setBlur(true);
+
+  //     setTimeout(() => {
+  //       setBlur(false);
+  //     }, 1000);
+  //   }
+  // }
+
+  const [blur2, setBlur2] = useState<boolean>(false)
+
+  useEffect(() => {
+    if(metaData.isDouble) {
+      setBlur2(true);
+
+      setTimeout(() => {
+        setBlur2(false);
+      }, 1000);
+    }
+  }, [metaData.isDouble])
+
   return (
     <>
+      {/* 내 턴 */}
+      { myTurn? (  
+        <div className="w-full h-full absolute  grid place-content-center z-[50]
+        animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate">
+          <img src="/game/myturn.png" className="w-[500px]" alt="" />
+        </div>
+      ) : null}
 
       {/* 더블 모달 */}
-      {metaData.isDouble ?
-        <div className="w-[200px] h-[200px] absolute top-[120px] left-[830px] z-[50] rotate-[-10deg]">
-          <img src="/game/double.png" alt="" />
+      {metaData.isDouble ?(
+        <div className="w-full h-full absolute  grid place-content-center z-[50]
+        animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate">
+          <img src="/game/double.png" className="w-[500px]" alt="" />
         </div>
-        : null}
+      ) : null}
 
       {/* 퀴즈 모달 */}
       {quizModalState && (
