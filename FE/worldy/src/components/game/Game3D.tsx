@@ -1987,7 +1987,9 @@ export default function Game3D(props: any) {
   useEffect(()=>{
     if(metaData.isDouble) {
       doubleRef.current.volume = 0.5;
+      doubleRef.current.muted = false;
       doubleRef.current.play();
+      doubleRef.current.muted = true;
     } else {
       doubleRef.current.pause();
     }
@@ -1997,7 +1999,9 @@ export default function Game3D(props: any) {
   useEffect(()=>{
       if(myTurn) {
         turnRef.current.volume = 0.5;
+        turnRef.current.muted = false;
         turnRef.current.play();
+        turnRef.current.muted = true;
       } else {
         turnRef.current.pause();
       }
@@ -2006,7 +2010,10 @@ export default function Game3D(props: any) {
   const cashRef = useRef(new Audio());
   function cashSound() {
     cashRef.current.volume = 0.5;
+    cashRef.current.muted = false;
     cashRef.current.play();
+    cashRef.current.muted = true;
+    cashRef.current.pause();
   }
 
   return (
