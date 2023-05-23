@@ -1,6 +1,7 @@
 package com.ssafy.worldy.model.quiz.entity;
 
 import com.ssafy.worldy.model.quiz.dto.MultiAnswerDto;
+import com.ssafy.worldy.model.quiz.dto.OpenAPIMultiAnswerDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,12 @@ public class MultiAnswer {
         return MultiAnswerDto.builder()
                 .multiAnswerId(this.multiAnswerId)
                 .quizDto(this.quiz.toDto())
+                .answer(this.answer)
+                .num(this.num).build();
+    }
+
+    public OpenAPIMultiAnswerDto toOpenAPIMultiAnswerDto() {
+        return OpenAPIMultiAnswerDto.builder()
                 .answer(this.answer)
                 .num(this.num).build();
     }
