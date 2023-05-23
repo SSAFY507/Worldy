@@ -106,7 +106,10 @@ export default function OpenAPI() {
             Worldy Games에서 제공하는 퀴즈 API를 무료로 사용해보세요.
           </span>
           <div className='w-full pr-[300px] h-[40px] outline-white mt-[20px] flex flex-row justify-between items-center'>
-            <button className='bg-gray-100 rounded-sm grid place-content-center w-[48%] h-full'>
+            <button
+              className='bg-gray-100 rounded-sm grid place-content-center w-[48%] h-full'
+              onClick={() => scrollToContent(quizInfoGetRef)}
+            >
               더 알아보기
             </button>
             <button className='bg-[#25CABB] rounded-sm text-white grid place-content-center w-[48%] h-full'>
@@ -189,19 +192,18 @@ export default function OpenAPI() {
   const openAPIQuizAxios = async () => {
     const DOMAIN = process.env.REACT_APP_BASE_URL;
     const getLoginToken = sessionStorage.getItem('token');
-
     try {
       const response = await CustomAxios({
         APIName: 'openAPIQuizAxios',
         APIType: 'get',
         UrlQuery:
           DOMAIN +
-          `/get/quiz?nationID=${inputNationID}&quizType=${inputQuizType}&category=${inputCategory}`,
+          `/get/quiz?nationId=${inputNationID}&quizType=${inputQuizType}&category=${inputCategory}`,
         Token: getLoginToken,
       });
       //console.log('닉네임 중복 체크 성공');
       //console.log('랭크 리스트 받은 거: ', response);
-      setResponseData(response);
+      setResponseData(JSON.stringify(response, null, 2));
     } catch (error) {
       console.error('openAPI Quiz Axios Error:', error);
     }
@@ -385,8 +387,8 @@ export default function OpenAPI() {
       <div className=' w-[95%] min-h-[100px] h-fit outline-white flex flex-col justify-stretch items-start bg-[rgb(39,32,32)]'>
         <div className='w-full h-fit outline-white flex flex-col justify-start items-start py-[50px] px-[50px]'>
           <div className='w-full h-fit flex flex-col justify-start items-start'>
-            <span className='flex flex-row justify-start items-center text-[14px]  font-PtdRegular text-white'>
-              Example Response
+            <span className='flex flex-row justify-start items-center text-[18px]  font-PtdRegular text-white'>
+              Response
             </span>
             <div className='w-[140px] h-[20px] text-[14px] flex flex-row justify-between items-center mt-[25px]'>
               <span className=' text-white font-PtdRegular border-0 border-b-[1.5px] border-solid border-[#FF4D45] pb-[5px] px-[2px]'>
@@ -409,8 +411,8 @@ export default function OpenAPI() {
                   <RiFileCopyLine size={27} />
                 </button>
               </div>
-              <div className='w-full h-[100px] text-white font-PtdLight text-[14px] mt-[15px] px-[5px]'>
-                {responseData}
+              <div className='w-full h-fit text-white font-PtdLight leading-[18px] text-[14px] mt-[15px] mb-[20px] px-[5px] whitespace-pre-wrap '>
+                <pre className='whitespace-pre-wrap'>{responseData}</pre>
               </div>
             </div>
           </div>
@@ -437,6 +439,7 @@ export default function OpenAPI() {
                     item !== '올림픽' &&
                     item !== '국세청' && (
                       <div
+                        key={key}
                         className='py-[6px] w-full flex flex-row justify-between items-center'
                         style={
                           key !== 0
