@@ -1,6 +1,6 @@
 import "./dice.css";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef} from "react";
 
 import Dice from "./Dice";
 import Game3DItem from './game3D/Game3DItem'
@@ -1982,21 +1982,52 @@ export default function Game3D(props: any) {
     turn: 0
   }
 
+  const doubleRef = useRef(new Audio());
+  
+  useEffect(()=>{
+    if(metaData.isDouble) {
+      doubleRef.current.volume = 0.5;
+      doubleRef.current.play();
+    } else {
+      doubleRef.current.pause();
+    }
+  },[metaData.isDouble])
+
+  const turnRef = useRef(new Audio());
+  useEffect(()=>{
+      if(myTurn) {
+        turnRef.current.volume = 0.5;
+        turnRef.current.play();
+      } else {
+        turnRef.current.pause();
+      }
+  },[myTurn])
+
+  const cashRef = useRef(new Audio());
+  function cashSound() {
+    cashRef.current.volume = 0.5;
+    cashRef.current.play();
+  }
+
   return (
     <>
+      <audio src="/game/double.mp3" ref={doubleRef} ></audio>
+      <audio src="/game/turn2.mp3" ref={turnRef} ></audio>
+      <audio src="/game/cash.mp3" ref={cashRef} ></audio>
+
       {/* 내 턴 */}
       { myTurn? (
-          <div className="w-full h-full absolute  grid place-content-center z-[50]
-          animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate">
-            <img src="/game/myturn.png" className="w-[500px]" alt="" />
+          <div className="w-full h-full absolute  grid place-content-center z-[100]
+          animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate backdrop-blur-sm">
+            <img src="/game/myturn.png" className="w-[450px]" alt="" />
           </div>
         ) : null}
   
         {/* 더블 모달 */}
         {metaData.isDouble ?(
-          <div className="w-full h-full absolute  grid place-content-center z-[50]
-          animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate">
-            <img src="/game/double.png" className="w-[500px]" alt="" />
+          <div className="w-full h-full absolute  grid place-content-center z-[100]
+          animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate backdrop-blur-sm ">
+            <img src="/game/double.png" className="w-[450px]" alt="" />
           </div>
         ) : null}
 
@@ -2369,6 +2400,7 @@ export default function Game3D(props: any) {
                                       worldMap[metaData.currentLocation],
                                       buyOption
                                     );
+                                    cashSound();
                                   }}
                                 >
                                   구입하기
@@ -2595,6 +2627,7 @@ export default function Game3D(props: any) {
                                             worldMap[metaData.currentLocation],
                                             buildOption
                                           );
+                                          cashSound();
                                         }}
                                       >
                                         건설하기
@@ -2707,6 +2740,7 @@ export default function Game3D(props: any) {
                                   }));
                                   setMode(0);
                                   sendData();
+                                  cashSound();
                                 }}
                               >
                                 통행료 {worldMap[metaData.currentLocation].toll} 만원
@@ -2738,6 +2772,7 @@ export default function Game3D(props: any) {
                                     }));
                                     setMode(0);
                                     sendData();
+                                    cashSound();
                                   }}
                                 >
                                   확인
@@ -2941,6 +2976,7 @@ export default function Game3D(props: any) {
                                     }));
                                     setMode(0);
                                     sendData();
+                                    cashSound();
                                   }}
                                 >
                                   {tmpTax}만원 납부하기
