@@ -7,6 +7,7 @@ import { RiFileCopyLine } from 'react-icons/ri';
 import CustomAxios from '../API/CustomAxios';
 import { FiRotateCcw } from 'react-icons/fi';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
+import pathBg from '../assets/images/OpenAPIBg.png';
 
 type OpenAPIMenuType = {
   title: string;
@@ -85,7 +86,7 @@ export default function OpenAPI() {
       >
         <span
           className={`w-full ml-[.5em] text-[1.2em] text-white font-PtdMedium flex flex-row justify-start items-center
-          ${openAPIMenuHoverState === key ? 'text-[#1a31af]' : 'text-white'}
+          ${openAPIMenuHoverState === key ? 'text-[#2942ca]' : 'text-white'}
           `}
         >
           {input.title}
@@ -400,7 +401,7 @@ export default function OpenAPI() {
             </div>
             <div className='w-full min-h-[200px] h-fit flex flex-col justify-start items-start my-[20px] bg-[#2c2c2cb7] rounded-md outline outline-[1px] outline-[#484848] text-white font-PtdLight p-[10px]'>
               <div className='w-full h-[30px] flex flex-row justify-between items-center'>
-                <button className='w-[60px] h-[30px] text-[12px] font-PtdLight rounded-md bg-[#212121]'>
+                <button className='w-[60px] h-[30px] text-[12px] font-PtdLight rounded-md bg-[#0b0b0b]'>
                   JSON
                 </button>
                 <button
@@ -422,14 +423,17 @@ export default function OpenAPI() {
   };
 
   return (
-    <div className='w-full h-full flex flex-row justify-center items-center overflow-y-clip bg-[#02020e]'>
+    <div
+      className='w-full h-full flex flex-row justify-center items-center overflow-y-clip bg-[#02020e]'
+      style={{ backgroundImage: `url(${pathBg})`, backgroundSize: '100%' }}
+    >
       {loadedAll ? (
         <>
           <div
             className={`relative w-[80%] h-full  flex flex-row justify-stretch items-center  `}
           >
             {nationCodeState && (
-              <div className='absolute z-40 top-[20px] -left-[160px] w-[150px] h-fit  bg-[rgba(255,255,255,0.3)] outline outline-[1.5px] outline-white rounded-md flex flex-col justify-start items-start p-[8px] text-white font-PtdRegular'>
+              <div className='absolute z-40 top-[20px] -left-[160px] w-[150px] h-fit  bg-[rgba(100,100,100,0.3)] outline outline-[1.5px] outline-white rounded-md flex flex-col justify-start items-start p-[8px] text-white font-PtdRegular'>
                 {nationCode.map(
                   (item, key) =>
                     item !== '보물상자' &&
