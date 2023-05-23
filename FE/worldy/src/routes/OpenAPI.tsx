@@ -42,7 +42,7 @@ export default function OpenAPI() {
 
   const QuizAPIMenuItems: OpenAPIMenuType[] = [
     {
-      title: 'Quiz Open API',
+      title: '퀴즈 Open API',
       onMove: () => {
         setChangeAPIState(false);
         scrollToContent(firstRef);
@@ -72,7 +72,7 @@ export default function OpenAPI() {
   ];
   const DiffImagesAPIMenuItems: OpenAPIMenuType[] = [
     {
-      title: 'Diff Images Open API',
+      title: '틀린 그림 찾기 Open API',
       onMove: () => {
         setChangeAPIState(true);
         scrollToContent(firstRef);
@@ -169,7 +169,7 @@ export default function OpenAPI() {
         '
         >
           <span className='text-white font-PtdBold text-[40px] mb-[.5em]'>
-            Quiz Open API
+            퀴즈 Open API
           </span>
           <span className='text-white font-PtdLight text-[16px] leading-[22px]'>
             Worldy Games에서 제공하는 퀴즈 모듈은 OpenAI와 Selenium 동적 크롤링
@@ -201,7 +201,7 @@ export default function OpenAPI() {
         '
         >
           <span className='text-white font-PtdBold text-[40px] mb-[.5em]'>
-            Find Difference
+            틀린 그림 찾기
             <br />
             Open API
           </span>
@@ -744,14 +744,14 @@ export default function OpenAPI() {
                   }
                   transition-all duration-[800ms] ease-out`}
                 >
-                  {DiffImagesInfoGetContent()}
+                  {QuizInfoGetContent()}
                 </div>
                 <div
                   className={`w-1/2 ${
                     !changeAPIState ? 'opacity-0' : 'opacity-100'
                   } transition-all duration-[800ms] ease-out`}
                 >
-                  {QuizInfoGetContent()}
+                  {DiffImagesInfoGetContent()}
                 </div>
               </div>
               <div
