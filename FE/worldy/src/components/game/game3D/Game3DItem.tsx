@@ -31,7 +31,7 @@ interface playerContainter {
 }
 
 interface Props {
-  // playerInfo :PlayerInfoType
+  myIndex: number
   metaData: MetadataType
   diceData: number
   player: NewPlayer
@@ -98,16 +98,25 @@ const checkArch:ArchType = {
   대: "landmark"
 }
 
-const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props) => {
+const Game3DItem = ({diceData, metaData, player, worldMap, myIndex, getPlayerTurn}: Props) => {
+  // playerIndex => 현재 차례인 유저, currentIndex => 현재 있는 위치
   const playerInfo = { playerIndex: metaData.turn,  currentIndex: metaData.currentLocation}
 
-  const arch = new Set(
-    ["호주", "영국", "칠레", "페루", "브라질",
-      "멕시코", "캐나다", "미국", "싱가포르", "중국",
-      "일본", "대한민국", "인도", "사우디", "뉴질랜드", 
-      "이집트", "남아공", "모로코", "소말리아", "가나", 
-      "프랑스", "독일", "스위스", "이탈리아", "스페인", 
-      "헝가리", "태국"])
+  // 플레이어
+  const items = [
+    {url: pawn_0, location: player.p1.game.location},
+    {url: pawn_1, location: player.p2.game.location},
+    {url: pawn_2, location: player.p3.game.location},
+    {url: pawn_3, location: player.p4.game.location},
+  ]
+
+  // const arch = new Set(
+  //   ["호주", "영국", "칠레", "페루", "브라질",
+  //     "멕시코", "캐나다", "미국", "싱가포르", "중국",
+  //     "일본", "대한민국", "인도", "사우디", "뉴질랜드", 
+  //     "이집트", "남아공", "모로코", "소말리아", "가나", 
+  //     "프랑스", "독일", "스위스", "이탈리아", "스페인", 
+  //     "헝가리", "태국"])
 
   const divContainer = useRef<HTMLDivElement>(null);
   const renderer = useRef<THREE.WebGLRenderer | null>(null);
@@ -116,17 +125,14 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
   const controls = useRef<OrbitControls |null>(null);
 
   const playerLoc = useRef<THREE.Vector3 | null>(null);
-  // const player1Loc = useRef<THREE.Vector3 | null>(null);
-  // const player2Loc = useRef<THREE.Vector3 | null>(null);
-  // const player3Loc = useRef<THREE.Vector3 | null>(null);
+  const player1Loc = useRef<THREE.Vector3 | null>(null);
+  const player2Loc = useRef<THREE.Vector3 | null>(null);
+  const player3Loc = useRef<THREE.Vector3 | null>(null);
 
-  // const [player0Index, setPlayer0Index] = useState<number>(0);
-  // const [player1Index, setPlayer1Index] = useState<number>(0);
-  // const [player2Index, setPlayer2Index] = useState<number>(0);
-  // const [player3Index, setPlayer3Index] = useState<number>(0);
+  const currentPlayer = useRef<THREE.Vector3 | null>(null);
 
-  const [turn, setTurn] = useState<number>(0);
-  const [rolledDice, setRolledDice] = useState<number>(0);
+  // const [turn, setTurn] = useState<number>(0);
+  // const [rolledDice, setRolledDice] = useState<number>(0);
   const [playerMovedCount, setPlayerMovedCount] = useState<number>(0);
   const [count, setCount] = useState<number>(0);
   const [playerTurn, setPlayerTurn] = useState<number>(0)
@@ -144,7 +150,7 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
   //   setPlayerTurn((tmpTurn + 1) % 4)
   //   setTurn(turn + 1)
   // }
-
+  // new THREE.Vector3(mapAxis[player.p1.game.location].axis[0], mapAxis[player.p1.game.location].axis[1], mapAxis[player.p1.game.location].axis[2] )
   useEffect(() => {
     if (diceData) {
       const isArch = [...player.p1.game.own, ...player.p2.game.own, ...player.p3.game.own, ...player.p4.game.own]
@@ -166,22 +172,42 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
                 const name = checkArch[`${tmp}`]
                 // 해당 객체
                 const a:ArchType = worldMap[number].build
-                if (a[`${name}`]) {
-                  obj.visible = true
+                if (a[`${name}`] && obj.visible === false) {
+                  gsap.to(obj, { visible: true, duration: 0 });
+                  gsap.to(obj.position, { y: obj.position.y + 0.15 , duration: 1 });
                 }
               }
             })
           }
-          
         }
       })
+      switch (playerInfo.playerIndex) {
+        case 0:
+          currentPlayer.current = playerLoc.current
+          setPlayerMovedCount(player.p1.game.location)
+          break
+        case 1:
+          currentPlayer.current = player1Loc.current
+          setPlayerMovedCount(player.p2.game.location)
+          break
+        case 2:
+          currentPlayer.current = player2Loc.current
+          setPlayerMovedCount(player.p3.game.location)
+          break
+        case 3:
+          currentPlayer.current = player3Loc.current
+          setPlayerMovedCount(player.p4.game.location)
+          break
+        default:
+          alert("유저선택오류")
+          break
+      }
     }
   },[metaData])
 
-  useEffect(() => {
-    setPlayerMovedCount(playerInfo.currentIndex)
-    setPlayerTurn(playerInfo.playerIndex)
-  }, [diceData])
+  // useEffect(() => {
+  //   setPlayerTurn(playerInfo.playerIndex)
+  // }, [diceData])
 
   useEffect(() => {
     if (diceData) {
@@ -236,47 +262,47 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
     }
     // rotateCamera(presentDir);
     setPlayerMovedCount((playerMovedCount + count) % 40);
-    // getArch((playerMovedCount + count) % 40);
+    getPlayerTurn(true)
   };
 
   /** 플레이어 움직임 함수 */
   const movePlayerDir = (dir: number): Promise<void> => {
-    console.log('현재', playerLoc.current);
+    console.log('현재', currentPlayer.current);
     return new Promise((resolve) => {
       //   const newPosition: localPosition = player;
       const newX =
-        playerLoc.current!.x +
+        currentPlayer.current!.x +
         (dir === 0 ? -dist / 2 : (dir === 2 ? dist / 2 : 0));
-      const newY = playerLoc.current!.y + 0.5;
+      const newY = currentPlayer.current!.y + 0.5;
       const newZ =
-        playerLoc.current!.z +
+        currentPlayer.current!.z +
         (dir === 3 ? dist / 2 : (dir === 1 ? -dist / 2 : 0));
       console.log('newX : ' + newX);
       console.log('newY : ' + newY);
       console.log('newZ : ' + newZ);
-      gsap.to(playerLoc.current!, {
+      gsap.to(currentPlayer.current!, {
         duration: 0.2,
         ease: 'power0.inOut',
         x: newX,
         y: newY,
         z: newZ,
         onUpdate: () => {
-          playerLoc.current!.set(
-            playerLoc.current!.x,
-            playerLoc.current!.y,
-            playerLoc.current!.z
+          currentPlayer.current!.set(
+            currentPlayer.current!.x,
+            currentPlayer.current!.y,
+            currentPlayer.current!.z
           );
         },
         onComplete: () => {
-          console.log('점프', playerLoc.current!);
+          console.log('점프', currentPlayer.current!);
           const newnewX =
-            playerLoc.current!.x +
+            currentPlayer.current!.x +
             (dir === 0 ? -dist / 2 : dir === 2 ? dist / 2 : 0);
-          const newnewY = playerLoc.current!.y - 0.5;
+          const newnewY = currentPlayer.current!.y - 0.5;
           const newnewZ =
-            playerLoc.current!.z +
+            currentPlayer.current!.z +
             (dir === 3 ? dist / 2 : dir === 1 ? -dist / 2 : 0);
-          gsap.to(playerLoc.current!, {
+          gsap.to(currentPlayer.current!, {
             delay: 0.01,
             duration: 0.2,
             ease: 'power0.out',
@@ -285,14 +311,14 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
             y: newnewY,
             z: newnewZ,
             onUpdate: () => {
-              playerLoc.current!.set(
-                playerLoc.current!.x,
-                playerLoc.current!.y,
-                playerLoc.current!.z
+              currentPlayer.current!.set(
+                currentPlayer.current!.x,
+                currentPlayer.current!.y,
+                currentPlayer.current!.z
               );
             },
             onComplete: () => {
-              console.log('착지', playerLoc.current);
+              console.log('착지', currentPlayer.current);
               resolve();
             },
           });
@@ -373,6 +399,7 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
         // name이 6글자 이하인 객체들에 대해서 '_'가 존재하는 객체 
         if (obj.name.length <7 && obj.name.includes('_')){
           obj.visible = false
+          obj.position.y = 0.7
           // 건물이 있는 나라를 찾고
           if (isArchSet.has(obj.name.slice(0, obj.name.indexOf('_')))){
             // 해당 건물의 종류를 찾아 
@@ -385,7 +412,10 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
                 // 해당 객체
                 const a:ArchType = worldMap[number].build
                 if (a[`${name}`]) {
-                  obj.visible = true
+                  gsap.to(obj, { visible: true, duration: 0 });
+                  gsap.to(obj.position, { y: obj.position.y + 0.15 , duration: 1 });
+                  // obj.visible =  true
+                  // obj.position.y = 0.85
                 }
               }
             })
@@ -404,22 +434,23 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
 
       scene.current?.add(obj3d)
     })
-    const items = [
-      {url: pawn_0, location: player.p1.game.location},
-      {url: pawn_1, location: player.p2.game.location},
-      {url: pawn_2, location: player.p3.game.location},
-      {url: pawn_3, location: player.p4.game.location},
-    ]
 
+    console.log(myIndex)
     items.forEach((item, idx) => {
       gltfLoader.load(item.url, (glb) =>{
         const obj3d = glb.scene;
-        // obj3d.position.set(0, 0, 0);
         obj3d.scale.set(1, 1, 1);
-        console.log(obj3d.position)
         obj3d.position.set(mapAxis[item.location].axis[0], obj3d.position.y-0.1, -mapAxis[item.location].axis[1])
-        if (playerInfo.playerIndex === idx) {
+        if ( idx === (myIndex-1)) {
           playerLoc.current = obj3d.position
+        } else {
+          if (player1Loc.current === null) {
+            player1Loc.current = obj3d.position
+          } else if (player2Loc.current === null) {
+            player2Loc.current = obj3d.position
+          } else { 
+            player3Loc.current = obj3d.position
+          }
         }
         scene.current?.add(obj3d)
       })
@@ -455,11 +486,6 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
 
   const update = (time: number) => {
     time *= 0.01;
-
-    if (diceData) {
-
-    }
-
   };
 
   useEffect(() => {
@@ -477,9 +503,6 @@ const Game3DItem = ({diceData, metaData, player, worldMap, getPlayerTurn}: Props
       SetupModel();
       SetupControls();
       SetBackground();
-      // scene.current.background = new THREE.Color("#0000");
-      // let light =new THREE.DirectionalLight(0xffff00, 10);
-      // scene.current.add(light)
 
       window.onresize = resize;
       resize();

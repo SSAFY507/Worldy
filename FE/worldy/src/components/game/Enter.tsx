@@ -2,7 +2,13 @@ import * as React from 'react';
 import { useState, useEffect } from 'react';
 
 import { SiPowerapps } from 'react-icons/si';
+import Swal from 'sweetalert2';
+
+import { useNavigate } from 'react-router-dom';
+
 export default function Enter(props : any ) {
+
+  const Swal = require('sweetalert2');
 
   const user1Check = props.user1Check;
   const user2Check = props.user2Check;
@@ -15,6 +21,8 @@ export default function Enter(props : any ) {
   const user4 = props.user4;
 
   const gameWait = props.gameWait;
+
+  const navigate = useNavigate();
 
   const setTierColor = (input: string): string => {
     if (input === 'Platinum') return '#86FFF8';
@@ -276,6 +284,31 @@ export default function Enter(props : any ) {
               }
               
             </div>
+          </div>
+          <div className='flex justify-center items-center'>
+          <button
+            className='flex flex-col justify-center items-center w-[180px] h-[70px] mt-[110px] bg-white/50 hover:bg-[#FA5B54] 
+              font-PtdSemiBOld text-[22px] rounded-[6px] text-white'
+            onClick={() => {
+              Swal.fire({
+                title: '게임을 취소하시겠습니까?',
+                icon: 'warning',
+                iconColor: '#FA5B54',
+                showCancelButton: true,
+                confirmButtonColor: '#FA5B54',
+                cancelButtonColor: '#999999',
+                confirmButtonText: 'YES',
+                cancelButtonText: 'NO',
+              }).then((result: any) => {
+                if (result.isConfirmed) {
+                  // ws.disconnect();
+                  navigate('/create');
+                }
+              });
+            }}
+          >
+            게임 취소
+          </button>
           </div>
         </div>
       </div>

@@ -1,3 +1,5 @@
+import '../../styles/SweetAlertStyles.css';
+
 import * as THREE from 'three';
 
 import {
@@ -18,6 +20,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { OutlinePass } from 'three/examples/jsm/postprocessing/OutlinePass.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
+import Swal from 'sweetalert2';
 import africa from '../../assets/lowpoly/africa.glb';
 import asia from '../../assets/lowpoly/asia.glb';
 import basemap from '../../assets/lowpoly/basemap.glb';
@@ -29,9 +32,6 @@ import oceania from '../../assets/lowpoly/oceania.glb';
 import southAmerica from '../../assets/lowpoly/southAmerica.glb';
 import useLoadGlbsHook from '../../_hooks/useLoadGlbsHook';
 import { useNavigate } from 'react-router';
-import Swal from 'sweetalert2';
-
-import '../../styles/SweetAlertStyles.css';
 
 export interface CountryType {
   [key: string]: string;
@@ -156,24 +156,40 @@ const WorldMap = () => {
           ) {
             Swal.fire({
               title: `${name}으로 이동합니다.`,
-              confirmButtonText: '확인',
+              confirmButtonText: 'YES',
               buttonsStyling: false,
+              showCancelButton: true,
+              cancelButtonText: 'NO',
               customClass: {
                 confirmButton: 'swal2-confirm',
+                cancelButton: 'swal2-cancel',
               },
-            }).then(function () {
-              navigate(`/explore/${moveCountry}`);
+            }).then(function (result: any) {
+              if (result.isConfirmed) {
+                // ws.disconnect();
+                navigate(`/explore/${moveCountry}`);
+              } else {
+                navigate('/explore');
+              }
             });
           } else {
             Swal.fire({
               title: `${name}로 이동합니다.`,
-              confirmButtonText: '확인',
+              confirmButtonText: 'YES',
               buttonsStyling: false,
+              showCancelButton: true,
+              cancelButtonText: 'NO',
               customClass: {
                 confirmButton: 'swal2-confirm',
+                cancelButton: 'swal2-cancel',
               },
-            }).then(function () {
-              navigate(`/explore/${moveCountry}`);
+            }).then(function (result: any) {
+              if (result.isConfirmed) {
+                // ws.disconnect();
+                navigate(`/explore/${moveCountry}`);
+              } else {
+                navigate('/explore');
+              }
             });
           }
         } else {

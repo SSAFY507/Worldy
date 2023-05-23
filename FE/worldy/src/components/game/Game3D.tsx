@@ -1947,9 +1947,9 @@ export default function Game3D(props: any) {
 
   // const [ playerData, setPlayerData ] = useState<Object>(metaData)
   const [diceData, setDiceData] = useState<number>(0)
-
-  const getPlayerTurn = (turn:any) => {
-    playerTurn(turn)
+  const [checkModal, setCheckModal] = useState<boolean>(false)
+  const getPlayerTurn = (check:boolean) => {
+    setCheckModal(check)
   }
   console.log(metaData)
 // export default function Game3D(props: any) {
@@ -1963,19 +1963,25 @@ export default function Game3D(props: any) {
     <>
       {/* 더블 모달 */}
       {metaData.isDouble ?
-      <div className="w-[250px] h-[250px] absolute top-[10%] left-[30%] z-[50] rotate-[-10deg]">
+      <div className="w-[250px] h-[250px] absolute top-[10%] left-[30%] z-[50] rotate-[-30deg] animate-[wiggle_1s_ease-in-out_infinite] ">
         <img src="/game/double.png" alt="" />
       </div>
       : null}
 
       {/* 퀴즈 모달 */}
-      {quizModalState && (
+      {quizModalState && checkModal && (
         <div className="shadow-md shadow-black w-fit h-fit">
-          <GameQuizModal input={quiz} closeModal={() => closeModal(false)} />
+          <GameQuizModal
+            input={quiz} 
+            closeModal={() => {
+              closeModal(false)
+              getPlayerTurn(false)
+            }} 
+          />
         </div>
       )}
       
-      <div className={`w-full h-full items-center ${quizModalState ? "blur-sm " : "" }`}>
+      <div className={`w-full h-full items-center ${quizModalState && checkModal ? "blur-sm " : "" }`}>
         <div className="w-full h-full flex justify-between absolute ml-[-40px]">
           {/* 왼쪽영역 */}
           <div className="w-[20%] h-[1000px] flex flex-col justify-start items-end z-50">
@@ -1983,12 +1989,26 @@ export default function Game3D(props: any) {
               {pList.map((i, index) => {
                 return (
                   <div key={index}>
+                     <div className="w-[60px] h-[60px] relative top-[50%] left-[-60px]">
+                    { (metaData.turn + 1 === i.playerNum) && i.playerNum === 1 ?
+                      <img className="w-[60px] h-[60px] relative rotate-[-90deg]" src="/game/p1_point.gif"></img>
+                      : null}
+                    { (metaData.turn + 1 === i.playerNum) && i.playerNum === 2 ?
+                      <img className="w-[60px] h-[60px] relative rotate-[-90deg]" src="/game/p2_point.gif"></img>
+                      : null}
+                    { (metaData.turn + 1 === i.playerNum) && i.playerNum === 3 ?
+                      <img className="w-[60px] h-[60px] relative rotate-[-90deg]" src="/game/p3_point.gif"></img>
+                      : null}
+                    {(metaData.turn + 1 === i.playerNum) && i.playerNum === 4 ?
+                      <img className="w-[60px] h-[60px] relative rotate-[-90deg]" src="/game/p4_point.gif"></img>
+                    : null}
+                    </div>
                     <div
-                      className={`w-[350px] h-[180px] rounded-[8px] flex flex-col justify-center items-center shadow-[0_3px_10px_rgb(0,0,0,0.2)]
-                      ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 1 ? "bg-red-200/30" 
-                        : (metaData.turn + 1 === i.playerNum) && i.playerNum === 2 ? "bg-green-200/30"
-                        : (metaData.turn + 1 === i.playerNum) && i.playerNum === 3 ? "bg-blue-200/30" 
-                        : (metaData.turn + 1 === i.playerNum) && i.playerNum === 4 ? "bg-purple-200/30" : "bg-white "
+                      className={`w-[350px] h-[180px] rounded-[8px] flex flex-col justify-center items-center
+                      ${(metaData.turn + 1 === i.playerNum) && i.playerNum === 1 ? "bg-red-200/40 user1glowing"  
+                      : (metaData.turn + 1 === i.playerNum) && i.playerNum === 2 ? "bg-green-200/40 user2glowing"
+                      : (metaData.turn + 1 === i.playerNum) && i.playerNum === 3 ? "bg-blue-200/40 user3glowing" 
+                      : (metaData.turn + 1 === i.playerNum) && i.playerNum === 4 ? "bg-purple-200/40 user4glowing" : "bg-white shadow-[0_3px_10px_rgb(0,0,0,0.2)]"
                       }
                       `}
                     >
@@ -2009,7 +2029,7 @@ export default function Game3D(props: any) {
                           {i.playerNum === 2 ? <img src={user2.profileImg} className="w-[40px] h-[40px] rounded-full object-cover"></img> : null}
                           {i.playerNum === 3 ? <img src={user3.profileImg} className="w-[40px] h-[40px] rounded-full object-cover"></img> : null}
                           {i.playerNum === 4 ? <img src={user4.profileImg} className="w-[40px] h-[40px] rounded-full object-cover"></img> : null}
-                          <div className="text-[20px] font-PtdBold ml-[-7px] w-[130px]">{i.name}</div>
+                          <div className="text-[20px] font-PtdBold ml-[-7px] w-[130px] truncate">{i.name}</div>
                           <div className={`text-[14px] text-white flex justify-center items-center w-[50px] h-[30px] rounded-full ml-[10px]
                           ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 1 ? 'bg-red-400' : ''}
                           ${rankPlayerData.rankPlayer[0].nickName && i.playerNum === 2 ? 'bg-green-400' : ''}
@@ -2919,14 +2939,47 @@ export default function Game3D(props: any) {
                     </div>
               </div>
             </div>
-
+        {/* 주사위 영역 */}
+          <Dice></Dice>
+              <div
+                className={` z-100 w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-white text-[20px] ${myTurn && activeDice
+                  ? "gameglowing bg-red-500 hover:cursor-pointer hover:bg-red-600"
+                  : "bg-gray-300 pointer-events-none"
+                  }`}
+                onClick={() => {
+                  playerTurn(metaData.turn);
+                }}
+              >
+                주사위 던지기
+              </div>
+              <div
+                className=" z-100 bg-white w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-gray-300 text-[20px] absolute top-[1360px]"
+                onClick={() => {
+                  setMetaData((prevState: any) => ({
+                    ...prevState,
+                    turnOver: true,
+                  }));
+                  setMode(0);
+                  calRanking();
+                  sendData();
+                }}
+              >
+                턴 종료
+              </div>
+              <div
+                className=" z-100 bg-white w-[380px] h-[60px] rounded-[4px] flex justify-center items-center text-gray-300 text-[20px] absolute top-[1290px]"
+                onClick={() => {
+                  playerTurn(metaData.turn);
+                }}
+              >
+                다른 사람 주사위
+              </div>
           </div>
-          
-        
+                  
           {/* 오른쪽 영역 */}
           <div className={`w-[20%] h-[1000px] flex flex-col justify-start items-start rounded-[4px] z-50`}>
            <div
-              className="w-[387px] h-[60px] rounded-[10px] flex justify-center items-center mb-[20px] text-[#646161] z-[80000] mt-[10px] hover:bg-[#FF4D45] hover:text-white bg-gray-100/70 text-[20px]"
+              className="w-[387px] h-[60px] rounded-[10px] flex justify-center items-center mb-[20px] text-[#646161] z-[80000] mt-[10px] hover:bg-[#FF4D45] hover:text-white bg-gray-100/70 text-[20px] cursor-pointer"
               
               onClick={() => {
                 Swal.fire({
@@ -3072,7 +3125,7 @@ export default function Game3D(props: any) {
           </div>
 
         </div>
-        <Game3DItem metaData={metaData} player={player} worldMap={worldMap} diceData={diceData} getPlayerTurn={getPlayerTurn} />
+        <Game3DItem metaData={metaData} player={player} worldMap={worldMap} diceData={diceData} getPlayerTurn={getPlayerTurn} myIndex={me.playerNum}/>
 
       </div>
     </>

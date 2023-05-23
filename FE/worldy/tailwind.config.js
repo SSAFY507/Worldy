@@ -17,6 +17,16 @@ module.exports = {
         PtdSemiBOld: ['Ptd-SemiBold', 'sans-serif'],
         PtdThin: ['Ptd-Thin', 'sans-serif'],
       },
+      keyframes: {
+        wiggle: {
+          '0%, 100%': { transform: 'rotate(-15deg)' },
+          '50%': { transform: 'rotate(-9deg)' },
+        },
+      },
+      
+      animation: {
+        wiggle: 'wiggle 1s ease-in-out infinite',
+      }
     },
   },
   plugins: [],
