@@ -22,14 +22,13 @@ import africa_Egypt from '../../assets/lowpoly/Country_Egypt.glb';
 import asia_China from '../../assets/lowpoly/Country_France.glb';
 import asia_India from '../../assets/lowpoly/Country_France.glb';
 import asia_Japen from '../../assets/lowpoly/Country_France.glb';
-import asia_Korea from '../../assets/lowpoly/Country_France.glb';
+import asia_Korea from '../../assets/lowpoly/Country_Korea.glb';
 import bg from '../../assets/images/WorldBackground.jpg';
-import { current } from '@reduxjs/toolkit';
 import europe_France from '../../assets/lowpoly/Country_France.glb';
-import europe_Italia from '../../assets/lowpoly/Country_France.glb';
-import europe_Spain from '../../assets/lowpoly/Country_France.glb';
-import europe_UK from '../../assets/lowpoly/Country_France.glb';
-import northAmerica_America from '../../assets/lowpoly/Country_France.glb';
+import europe_Italia from '../../assets/lowpoly/Country_Italia.glb';
+import europe_Spain from '../../assets/lowpoly/Country_Spain.glb';
+import europe_UK from '../../assets/lowpoly/Country_UK.glb';
+import northAmerica_America from '../../assets/lowpoly/Country_America.glb';
 import { useNavigate } from 'react-router';
 
 // import bg from '../../assets/images/WorldBackground.jpg';
@@ -200,7 +199,7 @@ const CountryMap = ({
         // alert('대륙으로 이동합니다');
         Swal.fire({
           title: '대륙으로 이동합니다.',
-          confirmButtonText: '확인',
+          confirmButtonText: 'YES',
           buttonsStyling: false,
           customClass: {
             confirmButton: 'swal2-confirm',
