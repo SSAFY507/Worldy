@@ -231,6 +231,7 @@ export default function Main() {
           dice: received.dice,
           isDouble: received.isDouble,
           turn: received.turn,
+          totalTurn: received.totalTurn,
         }));
       } else if (received.type === "quiz") {
         quizData = received.quizDto;
@@ -759,6 +760,7 @@ export default function Main() {
     itemMsg2: '아이템 메시지2',
     fund: 0,
     curcuit: 0,
+    totalTurn: 0,
   });
   const [turnOver, setTurnOver] = useState<boolean>(false);
 
