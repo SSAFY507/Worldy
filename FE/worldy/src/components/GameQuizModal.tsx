@@ -613,10 +613,14 @@ export default function GameQuizModal({
     if(flipped) {
       if(correctState) {
         answerRef.current.volume = 0.5;
+        answerRef.current.muted = false;
         answerRef.current.play();
+        answerRef.current.muted = true;
       } else if (!correctState ) {
         wrongRef.current.volume = 0.3;
+        wrongRef.current.muted = false;
         wrongRef.current.play();
+        wrongRef.current.muted = true;
       }
     }
   },[flipped])
