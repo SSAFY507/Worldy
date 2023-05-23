@@ -210,4 +210,5 @@ type MetadataType = {
   itemMsg2: string,
   fund: number,
   curcuit: number,
+  totalTurn: number,
 }
