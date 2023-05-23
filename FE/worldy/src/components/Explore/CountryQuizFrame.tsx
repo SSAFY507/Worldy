@@ -180,7 +180,8 @@ const CountryQuizFrame = ({ selectAsset }: Props) => {
     setCounting(num);
     if (countryId) {
       if (selectAsset === 'quizBox') {
-        getDatasList('quizBox', `/quiz/nation/${countryId}`);
+        // getDatasList('quizBox', `/quiz/nation/${countryId}`);
+        getDatasList('quizBox', `/quiz/nation/2`);
       } else {
         getDatasList('paintBox', `/quiz/hidden/${countryId}`);
       }
@@ -242,7 +243,8 @@ const CountryQuizFrame = ({ selectAsset }: Props) => {
   useEffect(() => {
     if (countryId) {
       if (selectAsset === 'quizBox') {
-        getDatasList('quizBox', `/quiz/nation/${countryId}`);
+        // getDatasList('quizBox', `/quiz/nation/${countryId}`);
+        getDatasList('quizBox', `/quiz/nation/1`);
       } else {
         getDatasList('paintBox', `/quiz/hidden/${countryId}`);
       }
