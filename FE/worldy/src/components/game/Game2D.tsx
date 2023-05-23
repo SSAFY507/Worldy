@@ -1,6 +1,6 @@
 import "./dice.css";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import Dice from "./Dice";
 import GameQuizModal from "../GameQuizModal";
@@ -2042,21 +2042,52 @@ export default function Game2D(props: any) {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
+  const doubleRef = useRef(new Audio());
+  
+  useEffect(()=>{
+      if(metaData.isDouble) {
+        doubleRef.current.volume = 0.5;
+        doubleRef.current.play();
+      } else {
+        doubleRef.current.pause();
+      }
+  },[metaData.isDouble])
+  
+  const turnRef = useRef(new Audio());
+  useEffect(()=>{
+      if(myTurn) {
+        turnRef.current.volume = 0.5;
+        turnRef.current.play();
+      } else {
+        turnRef.current.pause();
+      }
+  },[myTurn])
+
+  const cashRef = useRef(new Audio());
+  function cashSound() {
+    cashRef.current.volume = 0.5;
+    cashRef.current.play();
+  }
+  
   return (
     <>
+      <audio src="/game/double.mp3" ref={doubleRef} ></audio>
+      <audio src="/game/turn2.mp3" ref={turnRef} ></audio>
+      <audio src="/game/cash.mp3" ref={cashRef} ></audio>
+
       {/* 내 턴 */}
       { myTurn? (  
         <div className="w-full h-full absolute  grid place-content-center z-[50]
         animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate backdrop-blur-sm">
-          <img src="/game/myturn.png" className="w-[500px]" alt="" />
+          <img src="/game/myturn.png" className="w-[450px]" alt="" />
         </div>
       ) : null}
-
+    
       {/* 더블 모달 */}
       {metaData.isDouble ?(
         <div className="w-full h-full absolute  grid place-content-center z-[50]
         animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate  backdrop-blur-sm">
-          <img src="/game/double.png" className="w-[500px]" alt="" />
+          <img src="/game/double.png" className="w-[450px]" alt="" />
         </div>
       ) : null}
 
@@ -3279,6 +3310,7 @@ export default function Game2D(props: any) {
                   setMode(0);
                   calRanking();
                   sendData();
+                  cashSound();
                 }}
               >
                 턴 종료
@@ -3964,6 +3996,7 @@ export default function Game2D(props: any) {
                               }));
                               setMode(0);
                               sendData();
+                              cashSound();
                             }}
                           >
                             턴 종료
@@ -3993,6 +4026,7 @@ export default function Game2D(props: any) {
                               }));
                               setMode(0);
                               sendData();
+                              cashSound();
                             }}
                           >
                             확인

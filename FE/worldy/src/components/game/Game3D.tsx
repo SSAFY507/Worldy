@@ -1,6 +1,6 @@
 import "./dice.css";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef} from "react";
 
 import Dice from "./Dice";
 import Game3DItem from './game3D/Game3DItem'
@@ -1985,13 +1985,36 @@ export default function Game3D(props: any) {
     turn: 0
   }
 
+  const doubleRef = useRef(new Audio());
+  
+  useEffect(()=>{
+    if(metaData.isDouble) {
+      doubleRef.current.volume = 0.5;
+      doubleRef.current.play();
+    } else {
+      doubleRef.current.pause();
+    }
+  },[metaData.isDouble])
+
+  const turnRef = useRef(new Audio());
+  useEffect(()=>{
+      if(myTurn) {
+        turnRef.current.volume = 0.5;
+        turnRef.current.play();
+      } else {
+        turnRef.current.pause();
+      }
+  },[myTurn])
+  
   return (
     <>
+      <audio src="/game/double.mp3" ref={doubleRef} ></audio>
+      <audio src="/game/turn2.mp3" ref={turnRef} ></audio>
       {/* 내 턴 */}
       { myTurn? (
           <div className="w-full h-full absolute  grid place-content-center z-[100]
           animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate backdrop-blur-sm">
-            <img src="/game/myturn.png" className="w-[500px]" alt="" />
+            <img src="/game/myturn.png" className="w-[450px]" alt="" />
           </div>
         ) : null}
   
@@ -1999,7 +2022,7 @@ export default function Game3D(props: any) {
         {metaData.isDouble ?(
           <div className="w-full h-full absolute  grid place-content-center z-[100]
           animate-jump-in animate-twice animate-delay-[3ms] animate-ease-out animate-alternate backdrop-blur-sm ">
-            <img src="/game/double.png" className="w-[500px]" alt="" />
+            <img src="/game/double.png" className="w-[450px]" alt="" />
           </div>
         ) : null}
 

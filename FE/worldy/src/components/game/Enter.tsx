@@ -36,7 +36,7 @@ export default function Enter(props : any ) {
   if(gameWait) {
     setTimeout(function () {
       setStart(true);
-    }, 3000);
+    }, 2900);
   }
 
   // useEffect(() => {
@@ -65,7 +65,7 @@ export default function Enter(props : any ) {
         <div className='flex flex-col justify-center items-center'>
          
           <img
-              className='mt-[10px] w-[1000px] object-cover'
+              className='mt-[10px] w-[1350px] object-cover'
               src={'/game/timer.gif'}
               alt='WORLDY GAME'
           />
@@ -76,7 +76,7 @@ export default function Enter(props : any ) {
         <div className='flex flex-col justify-center items-center'>
          
           <img
-              className='mt-[10px] w-[1000px] object-cover'
+              className='mt-[10px] w-[1350px] object-cover'
               src={'/game/start.gif'}
               alt='WORLDY GAME'
           />
