@@ -21,4 +21,5 @@ public class MetaData {
     private String itemMsg2;
     private int circuit;
     private int fund;
+    private int totalTurn;
 }
