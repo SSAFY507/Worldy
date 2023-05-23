@@ -4155,6 +4155,7 @@ export default function Game2D(props: any) {
                               }));
                               setMode(0);
                               sendData();
+                              cashSound();
                             }}
                           >
                             {tmpTax}만원 납부하기

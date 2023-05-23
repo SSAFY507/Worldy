@@ -605,6 +605,22 @@ export default function GameQuizModal({
     );
   };
 
+  
+  const answerRef = useRef(new Audio());
+  const wrongRef = useRef(new Audio());
+
+  useEffect(()=>{
+    if(flipped) {
+      if(correctState) {
+        answerRef.current.volume = 0.5;
+        answerRef.current.play();
+      } else if (!correctState ) {
+        wrongRef.current.volume = 0.3;
+        wrongRef.current.play();
+      }
+    }
+  },[flipped])
+
   const backContainer = (): JSX.Element => {
     return (
       <div
@@ -612,6 +628,9 @@ export default function GameQuizModal({
           !showBack ? 'opacity-0' : 'opacity-100'
         }`}
       >
+        <audio src="/game/wrong.mp3" ref={wrongRef} ></audio>
+        <audio src="/game/answer.mp3" ref={answerRef} ></audio>
+
         <div className='h-[70px] w-full flex flex-col-reverse justify-start items-center rounded-t-xl bg-[#61C7BB]'>
           <div className='w-full h-[55px] bg-[#eaeaea] rounded-t-xl  outline-red-300 flex flex-col jutsify-stretch items-center'>
             <div className='w-full h-[20px] outline-yellow-500 flex flex-row justify-center items-end'>
