@@ -46,11 +46,11 @@ public class QuizService {
     public List<QuizDto> getNationQuizDto(Long nationId){
 
         // 퀴즈를 고르는 기준이 필요! 지금은 그냥 랜덤으로
-//        Quiz quiz = quizRepo.findRandQuizByNationId(nationId);
-        Long quizId = 30L;
-        if(nationId == 2) quizId = 31L;
-
-        Quiz quiz = quizRepo.findAllNewsQuizByQuizId(quizId);
+        Quiz quiz = quizRepo.findRandQuizByNationId(nationId);
+//        Long quizId = 30L;
+//        if(nationId == 2) quizId = 31L;
+//
+//        Quiz quiz = quizRepo.findAllNewsQuizByQuizId(quizId);
 
         List<MultiAnswerDto> multiAnswerList = null;
 
