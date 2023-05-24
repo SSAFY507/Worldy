@@ -605,25 +605,45 @@ export default function GameQuizModal({
     );
   };
 
-  
-  const answerRef = useRef(new Audio());
-  const wrongRef = useRef(new Audio());
+  const audioRef = useRef(new Audio());
+  const [audioSrc, setAudioSrc] = useState<string>('');
 
   useEffect(()=>{
     if(flipped) {
       if(correctState) {
-        answerRef.current.volume = 0.5;
-        answerRef.current.muted = true;
-        answerRef.current.play();
-        answerRef.current.muted = false;
+        setAudioSrc('/game/answer.mp3')
+        audioRef.current.volume = 0.5;
+        audioRef.current.muted = true;
+        audioRef.current.play();
+        audioRef.current.muted = false;
       } else if (!correctState ) {
-        wrongRef.current.volume = 0.3;
-        wrongRef.current.muted = true;
-        wrongRef.current.play();
-        wrongRef.current.muted = false;
+        setAudioSrc('/game/wrong.mp3')
+        audioRef.current.volume = 0.3;
+        audioRef.current.muted = true;
+        audioRef.current.play();
+        audioRef.current.muted = false;
       }
     }
   },[flipped])
+
+  // const answerRef = useRef(new Audio());
+  // const wrongRef = useRef(new Audio());
+
+  // useEffect(()=>{
+  //   if(flipped) {
+  //     if(correctState) {
+  //       answerRef.current.volume = 0.5;
+  //       answerRef.current.muted = true;
+  //       answerRef.current.play();
+  //       answerRef.current.muted = false;
+  //     } else if (!correctState ) {
+  //       wrongRef.current.volume = 0.3;
+  //       wrongRef.current.muted = true;
+  //       wrongRef.current.play();
+  //       wrongRef.current.muted = false;
+  //     }
+  //   }
+  // },[flipped])
 
   const backContainer = (): JSX.Element => {
     return (
@@ -632,8 +652,9 @@ export default function GameQuizModal({
           !showBack ? 'opacity-0' : 'opacity-100'
         }`}
       >
-        <audio src="/game/wrong.mp3" ref={wrongRef} ></audio>
-        <audio src="/game/answer.mp3" ref={answerRef} ></audio>
+        {/* <audio src="/game/wrong.mp3" ref={wrongRef} ></audio>
+        <audio src="/game/answer.mp3" ref={answerRef} ></audio> */}
+        <audio src={audioSrc} ref={audioRef} ></audio>
 
         <div className='h-[70px] w-full flex flex-col-reverse justify-start items-center rounded-t-xl bg-[#61C7BB]'>
           <div className='w-full h-[55px] bg-[#eaeaea] rounded-t-xl  outline-red-300 flex flex-col jutsify-stretch items-center'>
