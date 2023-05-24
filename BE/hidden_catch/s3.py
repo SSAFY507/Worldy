@@ -18,7 +18,7 @@ s3 = boto3.resource(
 # S3에서 가져온 이미지를 틀린 그림을 만들기 위해 임시로 저장하기
 def get_img(nation_code):
     img_num = random.randrange(1,6)
-    img_num = 1
+    # img_num = 1
     bucket = s3.Bucket(config.BUCKET_NAME)
     object = bucket.Object("hidden_catch/" + nation_code + "/original/" + str(img_num) + ".jpg")
     response = object.get()
