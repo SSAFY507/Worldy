@@ -2042,11 +2042,11 @@ export default function Game2D(props: any) {
   }
 
   const audioRef = useRef(new Audio());
-  // const [audioSrc, setAudioSrc] = useState<string>('');
+  const [audioSrc, setAudioSrc] = useState<string>('');
 
   useEffect(()=>{
       if(metaData.isDouble) {
-        audioRef.current.src = '/game/double.mp3';
+        audioRef.current.src = '/game/double.mp3'
         audioRef.current.volume = 0.5;
         audioRef.current.muted = true;
         audioRef.current.play();
@@ -2066,7 +2066,7 @@ export default function Game2D(props: any) {
     } else {
       audioRef.current.pause();
     }
-},[myTurn])
+  },[myTurn])
 
   function cashSound() {
     audioRef.current.src = '/game/cash.mp3';
@@ -2074,6 +2074,9 @@ export default function Game2D(props: any) {
     audioRef.current.muted = true;
     audioRef.current.play();
     audioRef.current.muted = false;
+    setTimeout(() => {
+      audioRef.current.pause();
+    }, 1100);
   }
   
   // const turnRef = useRef(new Audio());
@@ -2096,20 +2099,20 @@ export default function Game2D(props: any) {
   //   cashRef.current.muted = false;
   // }
 
-  // const audioPlay = () => {
-  //   if(metaData.isDouble) {
-  //     return  <audio src='/game/double.mp3' ref={audioRef} ></audio>
-  //   } else if (myTurn) {
-  //     return  <audio src='/game/turn2.mp3' ref={audioRef} ></audio>
-  //   } 
-  // }
+  const audioPlay = () => {
+    if(metaData.isDouble) {
+      return  <audio src='/game/double.mp3' ref={audioRef} ></audio>
+    } else if (myTurn) {
+      return  <audio src='/game/turn2.mp3' ref={audioRef} ></audio>
+    } 
+  }
   
   return (
     <>
-      <audio src='' ref={audioRef} ></audio>
+      {/* <audio src={audioSrc} ref={audioRef} ></audio> */}
       {/* <audio src="/game/turn2.mp3" ref={turnRef} ></audio>
       <audio src="/game/cash.mp3" ref={cashRef} ></audio> */}
-      {/* {audioPlay()} */}
+      {audioPlay()}
 
       {/* 내 턴 */}
       { myTurn? (  
