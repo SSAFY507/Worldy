@@ -3591,7 +3591,7 @@ export default function Game2D(props: any) {
                                 worldMap[metaData.currentLocation],
                                 buyOption
                               );
-                              cashSound();
+                              // cashSound();
                             }}
                           >
                             구입하기
@@ -3818,7 +3818,7 @@ export default function Game2D(props: any) {
                                       worldMap[metaData.currentLocation],
                                       buildOption
                                     );
-                                    cashSound();
+                                    // cashSound();
                                   }}
                                 >
                                   건설하기
@@ -3931,7 +3931,7 @@ export default function Game2D(props: any) {
                             }));
                             setMode(0);
                             sendData();
-                            cashSound();
+                            // cashSound();
                           }}
                         >
                           통행료 {worldMap[metaData.currentLocation].toll} 만원
@@ -4031,7 +4031,7 @@ export default function Game2D(props: any) {
                               }));
                               setMode(0);
                               sendData();
-                              cashSound();
+                              // cashSound();
                             }}
                           >
                             확인
@@ -4159,7 +4159,7 @@ export default function Game2D(props: any) {
                               }));
                               setMode(0);
                               sendData();
-                              cashSound();
+                              // cashSound();
                             }}
                           >
                             {tmpTax}만원 납부하기
