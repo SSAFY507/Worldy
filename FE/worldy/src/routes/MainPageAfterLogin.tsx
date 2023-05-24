@@ -16,6 +16,7 @@ import CarouselComponent from '../components/CarouselComponent';
 import CustomAxios from '../API/CustomAxios';
 import LoaderLinear from '../components/Loaders/LoaderLinear';
 import Logowhite from '../assets/images/Logo-white.png';
+import Swal from 'sweetalert2';
 import { addRankInfo } from '../_store/slices/loginSlice';
 import thumb1 from '../assets/images/thumb1.png';
 import thumb2 from '../assets/images/thumb2.png';
@@ -97,7 +98,8 @@ export default function MainPageAfterLogin({
   const navigate = useNavigate();
 
   const moveToWDPL = () => {
-    navigate('/create');
+    // navigate('/create');
+    navigate('/');
   };
 
   const moveToWDADV = () => {
@@ -133,7 +135,17 @@ export default function MainPageAfterLogin({
       image: Carousel1,
       textBlack: true,
       thumb: thumb1,
-      buttonClick: () => moveToWDPL(),
+      buttonClick: () => {
+        Swal.fire({
+          title: '업데이트 중입니다..',
+          confirmButtonText: '확인',
+          buttonsStyling: false,
+          customClass: {
+            confirmButton: 'swal2-confirm',
+          }
+      })
+        moveToWDPL()
+      },
       // loaded: loadC1Bg,
     },
     {
