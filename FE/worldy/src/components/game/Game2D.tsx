@@ -2041,79 +2041,44 @@ export default function Game2D(props: any) {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
   }
 
-  const audioRef = useRef(new Audio());
-  const [audioSrc, setAudioSrc] = useState<string>('');
-
+  const doubleRef = useRef(new Audio());
   useEffect(()=>{
       if(metaData.isDouble) {
-        audioRef.current.src = '/game/double.mp3'
-        audioRef.current.volume = 0.5;
-        audioRef.current.muted = true;
-        audioRef.current.play();
-        audioRef.current.muted = false;
-      } else {
-        audioRef.current.pause();
+        doubleRef.current.volume = 0.5;
+        doubleRef.current.muted = true;
+        doubleRef.current.play();
+        doubleRef.current.muted = false;
+      }  else {
+        doubleRef.current.pause();
       }
   },[metaData.isDouble])
 
+  const turnRef = useRef(new Audio());
   useEffect(()=>{
     if(myTurn) {
-      audioRef.current.src = '/game/turn2.mp3';
-      audioRef.current.volume = 0.5;
-      audioRef.current.muted = true;
-      audioRef.current.play();
-      audioRef.current.muted = false;
-    } else {
-      audioRef.current.pause();
-    }
+        turnRef.current.volume = 0.5;
+        turnRef.current.muted = true;
+        turnRef.current.play();
+        turnRef.current.muted = false;
+      } else {
+        turnRef.current.pause();
+      }
   },[myTurn])
 
+  const cashRef = useRef(new Audio());
   function cashSound() {
-    audioRef.current.src = '/game/cash.mp3';
-    audioRef.current.volume = 0.5;
-    audioRef.current.muted = true;
-    audioRef.current.play();
-    audioRef.current.muted = false;
-    setTimeout(() => {
-      audioRef.current.pause();
-    }, 1100);
-  }
-  
-  // const turnRef = useRef(new Audio());
-  // useEffect(()=>{
-  //     if(myTurn) {
-  //       turnRef.current.volume = 0.5;
-  //       turnRef.current.muted = true;
-  //       turnRef.current.play();
-  //       turnRef.current.muted = false;
-  //     } else {
-  //       turnRef.current.pause();
-  //     }
-  // },[myTurn])
-
-  // const cashRef = useRef(new Audio());
-  // function cashSound() {
-  //   cashRef.current.volume = 0.5;
-  //   cashRef.current.muted = true;
-  //   cashRef.current.play();
-  //   cashRef.current.muted = false;
-  // }
-
-  const audioPlay = () => {
-    if(metaData.isDouble) {
-      return  <audio src='/game/double.mp3' ref={audioRef} ></audio>
-    } else if (myTurn) {
-      return  <audio src='/game/turn2.mp3' ref={audioRef} ></audio>
-    } 
+    cashRef.current.volume = 0.5;
+    cashRef.current.muted = true;
+    cashRef.current.play();
+    cashRef.current.muted = false;
   }
   
   return (
     <>
-      {/* <audio src={audioSrc} ref={audioRef} ></audio> */}
-      {/* <audio src="/game/turn2.mp3" ref={turnRef} ></audio>
-      <audio src="/game/cash.mp3" ref={cashRef} ></audio> */}
-      {audioPlay()}
-
+      <audio src="/game/double.mp3" ref={doubleRef} ></audio>
+      <audio src="/game/turn2.mp3" ref={turnRef} ></audio>
+      <audio src="/game/cash.mp3" ref={cashRef} ></audio>
+   
       {/* 내 턴 */}
       { myTurn? (  
         <div className="w-full h-full absolute  grid place-content-center z-[50]
