@@ -2075,9 +2075,9 @@ export default function Game2D(props: any) {
   
   return (
     <>
-      <audio src="/game/double.mp3" ref={doubleRef} ></audio>
-      <audio src="/game/turn2.mp3" ref={turnRef} ></audio>
-      <audio src="/game/cash.mp3" ref={cashRef} ></audio>
+      <audio src="/game/double.mp3" ref={doubleRef} muted></audio>
+      <audio src="/game/turn2.mp3" ref={turnRef} muted></audio>
+      <audio src="/game/cash.mp3" ref={cashRef} muted></audio>
    
       {/* 내 턴 */}
       { myTurn? (  
