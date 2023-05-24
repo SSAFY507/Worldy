@@ -11,6 +11,7 @@ import com.ssafy.worldy.model.adventure.repo.NewsRepo;
 import com.ssafy.worldy.model.adventure.repo.WeatherRepo;
 import com.ssafy.worldy.util.FastAPIUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AdventureService {
 
     private final NewsRepo newsRepo;
@@ -54,6 +56,8 @@ public class AdventureService {
 
         Nation nation = nationRepo.findByNationId(nationId).get();
         String nationName = nation.getNationName();
+
+        log.info("nation name " + nationName);
 
         FastAPIUtil fastAPIUtil = new FastAPIUtil();
 
@@ -110,6 +114,8 @@ public class AdventureService {
             time -= 6;
             if(time < 0) time *= -1;
         }
+
+        log.info("time " + time);
 
         // 날씨 가져오기
         WeatherDto weatherDto = getWeatherDto(nationId);
