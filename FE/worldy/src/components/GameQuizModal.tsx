@@ -605,26 +605,26 @@ export default function GameQuizModal({
     );
   };
 
-  const audioRef = useRef(new Audio());
+  // const audioRef = useRef(new Audio());
   // const [audioSrc, setAudioSrc] = useState<string>('');
 
-  useEffect(()=>{
-    if(flipped) {
-      if(correctState) {
-        audioRef.current.src = '/game/answer.mp3';
-        audioRef.current.volume = 0.5;
-        audioRef.current.muted = true;
-        audioRef.current.play();
-        audioRef.current.muted = false;
-      } else if (!correctState ) {
-        audioRef.current.src = '/game/wrong.mp3';
-        audioRef.current.volume = 0.3;
-        audioRef.current.muted = true;
-        audioRef.current.play();
-        audioRef.current.muted = false;
-      }
-    }
-  },[flipped])
+  // useEffect(()=>{
+  //   if(flipped) {
+  //     if(correctState) {
+  //       audioRef.current.src = '/game/answer.mp3';
+  //       audioRef.current.volume = 0.5;
+  //       audioRef.current.muted = true;
+  //       audioRef.current.play();
+  //       audioRef.current.muted = false;
+  //     } else if (!correctState ) {
+  //       audioRef.current.src = '/game/wrong.mp3';
+  //       audioRef.current.volume = 0.3;
+  //       audioRef.current.muted = true;
+  //       audioRef.current.play();
+  //       audioRef.current.muted = false;
+  //     }
+  //   }
+  // },[flipped])
 
   // const answerRef = useRef(new Audio());
   // const wrongRef = useRef(new Audio());
@@ -654,7 +654,7 @@ export default function GameQuizModal({
       >
         {/* <audio src="/game/wrong.mp3" ref={wrongRef} ></audio>
         <audio src="/game/answer.mp3" ref={answerRef} ></audio> */}
-        <audio src='' ref={audioRef} muted></audio>
+        {/* <audio src='' ref={audioRef} muted></audio> */}
 
         <div className='h-[70px] w-full flex flex-col-reverse justify-start items-center rounded-t-xl bg-[#61C7BB]'>
           <div className='w-full h-[55px] bg-[#eaeaea] rounded-t-xl  outline-red-300 flex flex-col jutsify-stretch items-center'>

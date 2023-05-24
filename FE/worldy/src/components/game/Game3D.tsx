@@ -1982,43 +1982,43 @@ export default function Game3D(props: any) {
     turn: 0
   }
 
-  const doubleRef = useRef(new Audio());
-  useEffect(()=>{
-      if(metaData.isDouble) {
-        doubleRef.current.volume = 0.5;
-        doubleRef.current.muted = true;
-        doubleRef.current.play();
-        doubleRef.current.muted = false;
-      }  else {
-        doubleRef.current.pause();
-      }
-  },[metaData.isDouble])
+  // const doubleRef = useRef(new Audio());
+  // useEffect(()=>{
+  //     if(metaData.isDouble) {
+  //       doubleRef.current.volume = 0.5;
+  //       doubleRef.current.muted = true;
+  //       doubleRef.current.play();
+  //       doubleRef.current.muted = false;
+  //     }  else {
+  //       doubleRef.current.pause();
+  //     }
+  // },[metaData.isDouble])
 
-  const turnRef = useRef(new Audio());
-  useEffect(()=>{
-    if(myTurn) {
-        turnRef.current.volume = 0.5;
-        turnRef.current.muted = true;
-        turnRef.current.play();
-        turnRef.current.muted = false;
-      } else {
-        turnRef.current.pause();
-      }
-  },[myTurn])
+  // const turnRef = useRef(new Audio());
+  // useEffect(()=>{
+  //   if(myTurn) {
+  //       turnRef.current.volume = 0.5;
+  //       turnRef.current.muted = true;
+  //       turnRef.current.play();
+  //       turnRef.current.muted = false;
+  //     } else {
+  //       turnRef.current.pause();
+  //     }
+  // },[myTurn])
 
-  const cashRef = useRef(new Audio());
-  function cashSound() {
-    cashRef.current.volume = 0.5;
-    cashRef.current.muted = true;
-    cashRef.current.play();
-    cashRef.current.muted = false;
-  }
+  // const cashRef = useRef(new Audio());
+  // function cashSound() {
+  //   cashRef.current.volume = 0.5;
+  //   cashRef.current.muted = true;
+  //   cashRef.current.play();
+  //   cashRef.current.muted = false;
+  // }
 
   return (
     <>
-      <audio src="/game/double.mp3" ref={doubleRef} ></audio>
-      <audio src="/game/turn2.mp3" ref={turnRef} ></audio>
-      <audio src="/game/cash.mp3" ref={cashRef} ></audio>
+      {/* <audio src="/game/double.mp3" ref={doubleRef} muted></audio>
+      <audio src="/game/turn2.mp3" ref={turnRef} muted></audio>
+      <audio src="/game/cash.mp3" ref={cashRef} muted></audio> */}
 
       {/* 내 턴 */}
       { myTurn? (
