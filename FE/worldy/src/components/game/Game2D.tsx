@@ -1452,7 +1452,6 @@ export default function Game2D(props: any) {
 
   }
 
-
   // 턴 오버 함수
   // function turnOVer() {
   //   setMetaData((prevState: any) => ({
@@ -2096,12 +2095,21 @@ export default function Game2D(props: any) {
   //   cashRef.current.play();
   //   cashRef.current.muted = false;
   // }
+
+  const audioPlay = () => {
+    if(metaData.isDouble) {
+      return  <audio src='/game/double.mp3' ref={audioRef} ></audio>
+    } else if (myTurn) {
+      return  <audio src='/game/turn2.mp3' ref={audioRef} ></audio>
+    } 
+  }
   
   return (
     <>
-      <audio src={audioSrc} ref={audioRef} ></audio>
+      {/* <audio src={audioSrc} ref={audioRef} ></audio> */}
       {/* <audio src="/game/turn2.mp3" ref={turnRef} ></audio>
       <audio src="/game/cash.mp3" ref={cashRef} ></audio> */}
+      {audioPlay()}
 
       {/* 내 턴 */}
       { myTurn? (  
