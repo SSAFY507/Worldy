@@ -654,7 +654,7 @@ export default function GameQuizModal({
       >
         {/* <audio src="/game/wrong.mp3" ref={wrongRef} ></audio>
         <audio src="/game/answer.mp3" ref={answerRef} ></audio> */}
-        <audio src='' ref={audioRef} ></audio>
+        <audio src='' ref={audioRef} muted></audio>
 
         <div className='h-[70px] w-full flex flex-col-reverse justify-start items-center rounded-t-xl bg-[#61C7BB]'>
           <div className='w-full h-[55px] bg-[#eaeaea] rounded-t-xl  outline-red-300 flex flex-col jutsify-stretch items-center'>
