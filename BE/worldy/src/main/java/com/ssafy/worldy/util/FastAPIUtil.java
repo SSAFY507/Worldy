@@ -19,6 +19,8 @@ public class FastAPIUtil {
     public JSONObject getRequestFastAPI(String requestUrl) {
         RestTemplate rt = new RestTemplate();
 
+        log.info("보내기 직전");
+
         ResponseEntity<String> response = rt.getForEntity(
                 requestUrl,
                 String.class
