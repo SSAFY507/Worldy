@@ -43,11 +43,15 @@ const Explore = () => {
                 </span>
                 <span className='text-[25px]  text-white leading-[34px] '>
                   원하는 대륙을{' '}
-                  <p className='underline-offset-2 underline'>더블 클릭</p>한
-                  다음,
+                  <span className='underline-offset-2 underline'>
+                    더블 클릭
+                  </span>
+                  한 다음,
                   <br />
                   목적지를{' '}
-                  <p className='underline-offset-2 underline'>한 번 더 클릭</p>
+                  <span className='underline-offset-2 underline'>
+                    한 번 더 클릭
+                  </span>
                   해서 각 나라에 들어갈 수 있어.
                 </span>
                 <span className='text-[25px] text-white '>
