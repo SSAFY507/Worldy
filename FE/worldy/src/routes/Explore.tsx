@@ -7,15 +7,16 @@ import SHLoader from '../components/Loaders/SHLoader';
 import LoaderCompass from '../components/Loaders/LoaderCompass';
 import SallyTotu from '../assets/images/SallyTuto.png';
 import { useDispatch } from 'react-redux';
-import { addSallyMet } from '../_store/slices/loginSlice';
+import { BsBoxArrowUpRight } from 'react-icons/bs';
+// import { addSallyMet } from '../_store/slices/loginSlice';
 
 const Explore = () => {
   const [doneLoader, setDoneLoader] = useState<boolean>(false);
   const dispatch = useDispatch();
   useEffect(() => {
-    const met = sessionStorage.getItem('sally');
-    if (met === 'already') setSallyState(false);
-    else setSallyState(true);
+    // const met = sessionStorage.getItem('sally');
+    // if (met === 'already') setSallyState(false);
+    // else setSallyState(true);
     setTimeout(() => {
       setDoneLoader(true);
     }, 3000);
@@ -26,7 +27,7 @@ const Explore = () => {
   const SallyToturial = (): JSX.Element => {
     return (
       <div
-        className={`absolute flex flex-col justify-end items-center w-screen h-full bg-[rgba(100,100,100,0.4)] z-50 ${
+        className={`absolute flex flex-col justify-end items-center w-screen h-full bg-[rgba(100,100,100,0)] z-50 ${
           doneLoader ? 'opacity-100' : 'opacity-0'
         }`}
       >
@@ -37,13 +38,17 @@ const Explore = () => {
                 <span className='font-PtdExtraLight text-[#F9C53A] text-[20px]'>
                   Sally
                 </span>
-                <span className='text-[30px] '>
+                <span className='text-[25px]  text-white'>
                   안녕? 세계 탐험으로 온 걸 환영해!
                 </span>
-                <span className='text-[25px] leading-[34px]'>
-                  원하는 대륙을 더블 클릭한 다음,
+                <span className='text-[25px]  text-white leading-[34px] '>
+                  원하는 대륙을{' '}
+                  <p className='underline-offset-2 underline'>더블 클릭</p>한
+                  다음,
                   <br />
-                  목적지를 한 번 더 클릭해서 각 나라에 들어갈 수 있어.
+                  목적지를{' '}
+                  <p className='underline-offset-2 underline'>한 번 더 클릭</p>
+                  해서 각 나라에 들어갈 수 있어.
                 </span>
                 <span className='text-[25px] text-white '>
                   자, 네가 가고싶은 나라는 어디니?
@@ -51,13 +56,16 @@ const Explore = () => {
               </div>
               <div className='h-full w-[250px]  outline-red-300 flex flex-col justify-end items-center'>
                 <button
-                  className='w-[200px] h-[50px] rounded-full text-[20px] bg-[#73ae73] hover:bg-[#73d673] text-white'
+                  className='w-[200px] h-[50px] rounded-md text-[20px] bg-buttonRed hover:bg-[rgba(255,18,5,1)] text-white'
                   onClick={() => {
                     setSallyState(false);
-                    dispatch(addSallyMet('already'));
+                    // dispatch(addSallyMet('already'));
                   }}
                 >
-                  출발하기
+                  <span className='flex flex-row justify-center items-center'>
+                    출발하기
+                    <BsBoxArrowUpRight size={16} className='ml-[20px]' />
+                  </span>
                 </button>
               </div>
             </div>

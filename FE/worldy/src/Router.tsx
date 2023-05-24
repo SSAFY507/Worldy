@@ -204,7 +204,7 @@ const AppLayout = () => {
           /> */}
           <Route path='/payment' element={<Payment />} />
           <Route path='/hoons' element={<WorldMapTutorial />} />
-          <Route path='/hello' element={<LoaderHello input={'asia_Korea'} />} />
+          {/* <Route path='/hello' element={<LoaderHello input={'asia_Korea'} />} /> */}
           <Route path='/openapi' element={<OpenAPI />} />
         </Routes>
       </div>
