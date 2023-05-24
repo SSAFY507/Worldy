@@ -1983,11 +1983,11 @@ export default function Game3D(props: any) {
   }
 
   const audioRef = useRef(new Audio());
-  const [audioSrc, setAudioSrc] = useState<string>('');
+  // const [audioSrc, setAudioSrc] = useState<string>('');
 
   useEffect(()=>{
       if(metaData.isDouble) {
-        setAudioSrc('/game/double.mp3')
+        audioRef.current.src = '/game/double.mp3';
         audioRef.current.volume = 0.5;
         audioRef.current.muted = true;
         audioRef.current.play();
@@ -1999,7 +1999,7 @@ export default function Game3D(props: any) {
 
   useEffect(()=>{
     if(myTurn) {
-      setAudioSrc('/game/turn2.mp3')
+      audioRef.current.src = '/game/turn2.mp3';
       audioRef.current.volume = 0.5;
       audioRef.current.muted = true;
       audioRef.current.play();
@@ -2010,16 +2010,19 @@ export default function Game3D(props: any) {
 },[myTurn])
 
   function cashSound() {
-    setAudioSrc('/game/cash.mp3')
+    audioRef.current.src = '/game/cash.mp3';
     audioRef.current.volume = 0.5;
     audioRef.current.muted = true;
     audioRef.current.play();
     audioRef.current.muted = false;
+    setTimeout(() => {
+      audioRef.current.pause();
+    }, 1100);
   }
 
   return (
     <>
-      <audio src={audioSrc} ref={audioRef} ></audio>
+      <audio src='' ref={audioRef} ></audio>
 
       {/* 내 턴 */}
       { myTurn? (
