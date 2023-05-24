@@ -1,5 +1,13 @@
+import '../../styles/CountryQuizFrameStyles.css';
+
 import React, { useEffect, useState } from 'react';
 
+import Count1Blue from '../../assets/images/Count1Blue.png';
+import Count1Purple from '../../assets/images/Count1Purple.png';
+import Count2Blue from '../../assets/images/Count2Blue.png';
+import Count2Purple from '../../assets/images/Count2Purple.png';
+import Count3Blue from '../../assets/images/Count3Blue.png';
+import Count3Purple from '../../assets/images/Count3Purple.png';
 import CountryPaintDetailModal from './CountryPaintDetailModal';
 import CountryQuizDetailModal from './CountryQuizDetailModal';
 import CustomAxios from '../../API/CustomAxios';
@@ -7,29 +15,20 @@ import { ReactComponent as GOne } from '../../assets/images/1.svg';
 import { ReactComponent as GStart } from '../../assets/images/START.svg';
 import { ReactComponent as GThree } from '../../assets/images/3.svg';
 import { ReactComponent as GTwo } from '../../assets/images/2.svg';
-import Count1Blue from '../../assets/images/Count1Blue.png';
-import Count2Blue from '../../assets/images/Count2Blue.png';
-import Count3Blue from '../../assets/images/Count3Blue.png';
-import StartBlue from '../../assets/images/StartBlue.png';
-
-import Count1Purple from '../../assets/images/Count1Purple.png';
-import Count2Purple from '../../assets/images/Count2Purple.png';
-import Count3Purple from '../../assets/images/Count3Purple.png';
-import StartPurple from '../../assets/images/StartPurple.png';
 import { ReactComponent as POne } from '../../assets/images/p1.svg';
 import { ReactComponent as PStart } from '../../assets/images/pSTART.svg';
 import { ReactComponent as PThree } from '../../assets/images/p3.svg';
 import { ReactComponent as PTwo } from '../../assets/images/p2.svg';
 import PaintTitleIcon from '../../assets/images/QuizPurple.png';
 import QuizModal from '../QuizModal';
+import QuizTextB from '../../assets/images/QuizBlue.png';
+import QuizTextP from '../../assets/images/QuizPurple.png';
 import QuizTitleIcon from '../../assets/images/QuizBlue.png';
 import { ScrappedQuizType } from '../../routes/MyPage';
+import StartBlue from '../../assets/images/StartBlue.png';
+import StartPurple from '../../assets/images/StartPurple.png';
 import { countryLst } from './CountrySpeak';
 import { useParams } from 'react-router';
-import QuizTextP from '../../assets/images/QuizPurple.png';
-import QuizTextB from '../../assets/images/QuizBlue.png';
-
-import '../../styles/CountryQuizFrameStyles.css';
 
 // const tempScrappedQuizList: ScrappedQuizType[] = [
 //   {
@@ -180,8 +179,8 @@ const CountryQuizFrame = ({ selectAsset }: Props) => {
     setCounting(num);
     if (countryId) {
       if (selectAsset === 'quizBox') {
-        // getDatasList('quizBox', `/quiz/nation/${countryId}`);
-        getDatasList('quizBox', `/quiz/nation/2`);
+        getDatasList('quizBox', `/quiz/nation/${countryId}`);
+        // getDatasList('quizBox', `/quiz/nation/2`);
       } else {
         getDatasList('paintBox', `/quiz/hidden/${countryId}`);
       }
@@ -243,8 +242,8 @@ const CountryQuizFrame = ({ selectAsset }: Props) => {
   useEffect(() => {
     if (countryId) {
       if (selectAsset === 'quizBox') {
-        // getDatasList('quizBox', `/quiz/nation/${countryId}`);
-        getDatasList('quizBox', `/quiz/nation/1`);
+        getDatasList('quizBox', `/quiz/nation/${countryId}`);
+        // getDatasList('quizBox', `/quiz/nation/1`);
       } else {
         getDatasList('paintBox', `/quiz/hidden/${countryId}`);
       }
