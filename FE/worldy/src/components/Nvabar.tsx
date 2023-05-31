@@ -36,8 +36,7 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
     // { name: '게임 정보', path: '/info' },
     // { name: '업데이트', path: '/updates' },
     { name: '세계 탐험', path: '/explore' },
-    // { name: '월디게임', path: '/create' },
-    { name: '월디게임', path: '/' },
+    { name: '월디게임', path: '/create' },
     { name: '고객 지원', path: '/support' },
     { name: '오픈소스', path: '/openapi' },
   ];
@@ -221,26 +220,6 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
                       </div>
                     </button>
                   ) : (
-                    item.name === '월디게임' 
-                    ? 
-                    <div>
-                      <div
-                        id='NavBarButtons-Animation'
-                        className=' w-20 text-lg h-10 flex flex-row items-center justify-center text-center text-white font-PtdRegular '
-                        onClick={() => 
-                          Swal.fire({
-                            title: '업데이트 중입니다..',
-                            confirmButtonText: '확인',
-                            buttonsStyling: false,
-                            customClass: {
-                              confirmButton: 'swal2-confirm',
-                            }
-                        })
-                      }>
-                        {item.name}
-                      </div>
-                    </div>
-                    :
                     <a href={item.path}>
                       <div
                         id='NavBarButtons-Animation'
@@ -280,21 +259,6 @@ export default function Navbar({ onLoginClick }: { onLoginClick: () => void }) {
                   height={35}
                   rounded={true}
                   onClick={handleLoginModalClick}
-                  // onClick={handleLoginModalClick}
-                  // // onClick={
-                  // //   Swal.fire({
-                  // //     title: '😉맵 확장 중입니다.😉',
-                  // //     icon: 'warning',
-                  // //     iconColor: '#FA5B54',
-                  // //     // showCancelButton: true,
-                  // //     confirmButtonColor: '#FA5B54',
-                  // //     // cancelButtonColor: '#999999',
-                  // //     confirmButtonText: 'YES',
-                  // //     // cancelButtonText: 'NO',
-                  // //   }).then((result: any) => {
-                  // //     navigate('/')
-                  // //   })
-                  // // }
                   text='로그인'
                   fontFamily={'font-PtdRegular'}
                 />
