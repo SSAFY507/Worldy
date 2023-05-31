@@ -26,6 +26,7 @@ import Matching from './components/create/Matching';
 import Monopoly from './routes/Monopoly';
 import MyPage from './routes/MyPage';
 import Navbar from './components/Nvabar';
+import OpenAPI from './routes/OpenAPI';
 import PayResult from './routes/PayResult';
 import PaySuccess from './routes/PayResult';
 import Payment from './routes/Payment';
@@ -36,7 +37,6 @@ import WorldMapTutorial from './components/Explore/WorldMapTutorial';
 import { loginState } from './_store/slices/loginSlice';
 import pathBI from './assets/images/MainPageBackground.png';
 import { useSelector } from 'react-redux';
-import OpenAPI from './routes/OpenAPI';
 
 //import Updates from "./routes/Updates";
 
@@ -184,12 +184,7 @@ const AppLayout = () => {
               <MyPage setRef={myPageRef} handleQnaModal={handleQnaModal} />
             }
           />
-          <Route path='/create' element={<Create />} />
-          <Route path='/game' element={<Game />} />
-          <Route path='/game/:id' element={<Game />} />
           <Route path='/game/result' element={<GameResult />} />
-          <Route path='/socket' element={<Socket />} />
-          <Route path='/tutorial' element={<Tutorial />} />
           <Route path='/create' element={<Create />} />
           <Route path='/ready' element={<Matching />} />
           <Route path='/game' element={<Game />} />
