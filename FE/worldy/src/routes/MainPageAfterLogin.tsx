@@ -98,8 +98,7 @@ export default function MainPageAfterLogin({
   const navigate = useNavigate();
 
   const moveToWDPL = () => {
-    // navigate('/create');
-    navigate('/');
+    navigate('/create');
   };
 
   const moveToWDADV = () => {
@@ -135,17 +134,7 @@ export default function MainPageAfterLogin({
       image: Carousel1,
       textBlack: true,
       thumb: thumb1,
-      buttonClick: () => {
-        Swal.fire({
-          title: '업데이트 중입니다..',
-          confirmButtonText: '확인',
-          buttonsStyling: false,
-          customClass: {
-            confirmButton: 'swal2-confirm',
-          }
-      })
-        moveToWDPL()
-      },
+      buttonClick: () => moveToWDPL()
       // loaded: loadC1Bg,
     },
     {
